@@ -3,10 +3,10 @@
  * Healthcheck - Analysis: Service and Supplies Logistics
  */
 
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
@@ -27,7 +27,7 @@ $cellWidths             = array(
 );
 $totalNetSavings        = 0;
 $tonerOrderSavingsTable = $section->addTable($this->styles->tables->utilization->tablestyle);
-$tonerOrderSavingsTable->addRow();
+$tonerOrderSavingsTable->addRow(null, $this->styles->tables->rowheader);
 $tonerOrderSavingsTable->addCell($cellWidths [0], $this->styles->tables->utilization->cellHeader)->addText('SKU', 'bold_text', 'nospacing_centeralign');
 $tonerOrderSavingsTable->addCell($cellWidths [1], $this->styles->tables->utilization->cellHeader)->addText('VPN', 'bold_text', 'nospacing_centeralign');
 $tonerOrderSavingsTable->addCell($cellWidths [2], $this->styles->tables->utilization->cellHeader)->addText('Qty', 'bold_text', 'nospacing_centeralign');
@@ -39,7 +39,7 @@ $tonerOrderSavingsTable->addCell($cellWidths [7], $this->styles->tables->utiliza
 /* @var $device Proposalgen_Model_DeviceInstance */
 foreach ($healthcheckViewModel->getClientTonerOrders() as $clientTonerOrder)
 {
-    $tonerOrderSavingsTable->addRow($this->styles->tables->utilization->rowheight);
+    $tonerOrderSavingsTable->addRow($this->styles->tables->utilization->rowheight, $this->styles->tables->rowstyle);
     $tonerOrderSavingsTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($clientTonerOrder->dealerSku, null, 'nospacing_centeralign');
     $tonerOrderSavingsTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText($clientTonerOrder->oemSku, null, 'nospacing_centeralign');
     $tonerOrderSavingsTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format($clientTonerOrder->quantity), null, 'nospacing_rightalign');
@@ -60,6 +60,6 @@ foreach ($healthcheckViewModel->getClientTonerOrders() as $clientTonerOrder)
         $tonerOrderSavingsTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText("-", null, 'nospacing_centeralign');
     }
 }
-$tonerOrderSavingsTable->addRow($this->styles->tables->utilization->rowheight);
-$tonerOrderSavingsTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader, 7)->addText('', null, 'nospacing_centeralign');
-$tonerOrderSavingsTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader, 1)->addText($this->currency($totalNetSavings), null, 'nospacing_rightalign');
+$tonerOrderSavingsTable->addRow($this->styles->tables->rowheight);
+$tonerOrderSavingsTable->addCell($cellWidths [3], array_merge($this->styles->tables->utilization->cellFooter, $this->styles->tables->gridSpan7))->addText('', null, 'nospacing_centeralign');
+$tonerOrderSavingsTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellFooter, 1)->addText($this->currency($totalNetSavings), null, 'nospacing_rightalign');

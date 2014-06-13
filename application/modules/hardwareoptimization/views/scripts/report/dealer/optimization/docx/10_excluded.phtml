@@ -6,7 +6,7 @@
  * as well as related devices information
  */
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $optimization Hardwareoptimization_ViewModel_Optimization */
@@ -20,7 +20,7 @@ $totalNumberOfDevices = $optimization->getDevices()->excludedDeviceInstances->ge
 
 
 $section->addTextBreak();
-$headerTextRun = $section->createTextRun(array("spaceAfter" => 0));
+$headerTextRun = $section->addTextRun(array("spaceAfter" => 0));
 $headerTextRun->addText('Excluded Devices', 'titlepageHeaderFont');
 $headerTextRun->addText(sprintf(' (%1$s)', number_format($totalNumberOfDevices)));
 $section->addText("Devices that have either been manually excluded or haven't been mapped during previous steps.");
@@ -29,7 +29,7 @@ $section->addText("Devices that have either been manually excluded or haven't be
 $tcStyle = $this->styles->tables->excluded;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
-$table->addRow($tcStyle->body->rowheight);
+$table->addRow($tcStyle->body->rowheight, $this->styles->tables->tablestyle->rowheader);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial Number', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
@@ -40,10 +40,9 @@ $table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addTe
 // Begin with data rows
 foreach ($excludedDeviceInstances as $deviceInstance)
 {
-    $table->addRow($tcStyle->body->rowheight);
     $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
 
-    $table->addRow($tcStyle->body->rowheight);
+    $table->addRow($tcStyle->body->rowheight, $this->styles->tables->tablestyle->rowstyle);
     $table->addCell($tcStyle->col1Width, $style)->addText($deviceInstance->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
     $table->addCell($tcStyle->col2Width, $style)->addText($deviceInstance->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
     $table->addCell($tcStyle->col3Width, $style)->addText($deviceInstance->ipAddress, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
@@ -54,7 +53,6 @@ foreach ($excludedDeviceInstances as $deviceInstance)
 
 foreach ($unmappedInstances as $deviceInstance)
 {
-    $table->addRow($tcStyle->body->rowheight);
     $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
 
     $table->addRow($tcStyle->body->rowheight);

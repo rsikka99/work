@@ -6,7 +6,7 @@
  * as well as related devices information
  */
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 /* @var $optimization Memjetoptimization_ViewModel_Optimization */
 $optimization = $this->optimization;
@@ -18,7 +18,7 @@ $memjetOptimizationDevices = $this->memjetOptimizationDevices;
 $costPerPageSetting        = $optimization->getCostPerPageSettingForDealer();
 
 $section->addTextBreak();
-$headerTextRun = $section->createTextRun();
+$headerTextRun = $section->addTextRun();
 $headerTextRun->addText('Suggested Replacement Devices', 'titlepageHeaderFont');
 $headerTextRun->addText(' (' . count($memjetOptimizationDevices->replaced) . ' of ' . $memjetOptimizationDevices->getDeviceCount() . ')');
 $costThreshold = number_format($memjetOptimization->getMemjetOptimizationSetting()->costThreshold);
@@ -28,12 +28,12 @@ $section->addText('The following devices have been targeted for replacement.');
 $tcStyle = $this->styles->tables->replacement;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
-$table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->span5Width, $tcStyle->header->header->cellStyle, 5)->addText('Current', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->span4Width, $tcStyle->header->header->cellStyle, 4)->addText('Replacement', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->span3Width, $tcStyle->header->header->cellStyle, 3)->addText('Statistics', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addRow($tcStyle->body->rowheight,$tcStyle->rowHeader);
+$table->addCell($tcStyle->span5Width, $tcStyle->cellspan5)->addText('Current', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->span4Width, $tcStyle->cellspan4)->addText('Replacement', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->span3Width, $tcStyle->cellspan3)->addText('Statistics', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 // Table sub header
-$table->addRow($tcStyle->body->rowheight);
+$table->addRow($tcStyle->body->rowheight,$tcStyle->rowHeader);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->sub_header->cellStyle)->addText('Device Name', $tcStyle->header->sub_header->fontStyle, $tcStyle->header->sub_header->paragraphStyle);
 $table->addCell($tcStyle->col2Width, $tcStyle->header->sub_header->cellStyle)->addText('Serial / IP Address', $tcStyle->header->sub_header->fontStyle, $tcStyle->header->sub_header->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->sub_header->cellStyle)->addText('Mono CPP', $tcStyle->header->sub_header->fontStyle, $tcStyle->header->sub_header->paragraphStyle);

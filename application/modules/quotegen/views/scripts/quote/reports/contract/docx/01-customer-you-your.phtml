@@ -1,6 +1,6 @@
 <?php
-/* @var $section PHPWord_Section */
-$section   = $this->section;
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
 
 /* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
 $contractTemplateSection = $this->contractTemplateSection;
@@ -11,15 +11,17 @@ $noSpacing = $this->paragraphStyle->noSpacing;
 $labelFont = $this->fontStyle->label;
 
 $customerTable = $section->addTable($this->tableStyle->standard);
-$customerTable->addRow();
-$customerTable->addCell($tableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $noSpacing);
+$customerTable->addRow(300);
+$customerTable->addCell($tableSpan ['span8'], $this->cellStyle->invertBackground)->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $noSpacing);
 
-$customerTable->addRow();
-$textRun = $customerTable->addCell($tableSpan ['span8'], $this->cellStyle->bottomBorder, 8)->createTextRun($noSpacing);
+$customerTable->addRow(200);
+$textRun = $customerTable->addCell($tableSpan ['span8'], $this->cellStyle->bottomBorder)->addTextRun($noSpacing);
+
 $textRun->addText(" FULL LEGAL NAME: ", $labelFont);
 $textRun->addText(" {$this->company->name}", $this->fontStyle->bold);
 
-$customerTable->addRow();
-$textRun = $customerTable->addCell($tableSpan ['span8'], null, 8)->createTextRun($noSpacing);
+$customerTable->addRow(200);
+$textRun = $customerTable->addCell($tableSpan ['span8'], $this->cellStyle->borderTop)->addTextRun($noSpacing);
+
 $textRun->addText(" ADDRESS: ", $labelFont);
 $textRun->addText(" {$this->company->address}", $this->fontStyle->bold);

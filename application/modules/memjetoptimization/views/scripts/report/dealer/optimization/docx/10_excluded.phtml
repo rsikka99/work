@@ -6,7 +6,7 @@
  * as well as related devices information
  */
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 /* @var $optimization Memjetoptimization_ViewModel_Optimization */
 $optimization = $this->optimization;
@@ -15,7 +15,7 @@ $memjetOptimizationDevices = $this->memjetOptimizationDevices;
 
 
 $section->addTextBreak();
-$headerTextRun = $section->createTextRun(array("spaceAfter" => 0));
+$headerTextRun = $section->addTextRun(array("spaceAfter" => 0));
 $headerTextRun->addText('Excluded Devices', 'titlepageHeaderFont');
 $headerTextRun->addText(' (' . count($memjetOptimizationDevices->excluded) . ')');
 $section->addText("Devices that have either been manually excluded or haven't been mapped during previous steps.");
@@ -24,10 +24,10 @@ $section->addText("Devices that have either been manually excluded or haven't be
 $tcStyle = $this->styles->tables->excluded;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
-$table->addRow($tcStyle->body->rowheight);
+$table->addRow($tcStyle->body->rowheight, $tcStyle->rowHeader);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Serial Number', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial Number', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 
@@ -37,13 +37,12 @@ foreach ($memjetOptimizationDevices->excluded as $device)
     $masterDevice = $device->getMasterDevice();
     $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
 
-    $table->addRow($tcStyle->body->rowheight);
     $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
 
     $table->addRow($tcStyle->body->rowheight);
     $table->addCell($tcStyle->col1Width, $style)->addText($device->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-    $table->addCell($tcStyle->col2Width, $style)->addText($device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
-    $table->addCell($tcStyle->col3Width, $style)->addText($device->serialNumber, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col2Width, $style)->addText($device->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+    $table->addCell($tcStyle->col3Width, $style)->addText($device->ipAddress, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell2->paragraphStyle);
     $table->addCell($tcStyle->col4Width, $style)->addText($this->formatPageVolume($device->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
     $table->addCell($tcStyle->col5Width, $style)->addText($this->formatPageVolume($device->getPageCounts()->getColorPageCount()->getMonthly()), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
 }

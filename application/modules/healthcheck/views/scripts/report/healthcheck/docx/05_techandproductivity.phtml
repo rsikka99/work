@@ -3,10 +3,10 @@
  * Healthcheck - Analysis: Technology Reliability and User Productivity
  */
 
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord*/
 $phpWord = $this->phpword;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
@@ -15,12 +15,12 @@ $graphs               = $healthcheckViewModel->getGraphs();
 
 $section->addPageBreak();
 $section->addTitle("Analysis: Technology Reliability and User Productivity", 1);
+
 $section->addTitle('Age of Printing Devices', 2);
+
 $section->addText(sprintf('We estimate the average age of your printing devices is %1$s year(s); a good industry average is 3 years. Devices over 5 years old receive, on average, one repair per year.', number_format($healthcheckViewModel->getAverageAgeOfDevices(), 1)));
 
-$imageTable = $section->addTable(array(
-    'borderBottomSize' => 1
-));
+$imageTable = $section->addTable();
 $imageTable->addRow();
 $cell = $imageTable->addCell(9028.8, array(
     'valign' => 'center'
@@ -33,6 +33,7 @@ $section->addText('The breakdown of the age of your printing devices is shown ab
 $section->addTextBreak();
 
 $section->addTitle('Technology Features and Functionality', 2);
+
 $section->addText('The ability to scan and fax documents from convenient locations helps to improve document workflow and productivity, and scanning can also help reduce the number of pages printed. Color printing capabilities are important if you are generating client-facing or other important documents in-house.');
 $section->addText('The charts below show the percentage of your printing devices that are capable of copying, duplex printing, and color printing.');
 

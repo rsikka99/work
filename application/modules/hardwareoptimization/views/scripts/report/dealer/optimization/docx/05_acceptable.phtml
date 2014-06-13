@@ -6,7 +6,7 @@
  * as well as related devices information
  */
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $optimization Hardwareoptimization_ViewModel_Optimization */
@@ -18,16 +18,18 @@ $acceptableDeviceInstances = $this->deviceInstances[Hardwareoptimization_Model_H
 $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
 
 $section->addTextBreak();
-$headerTextRun = $section->createTextRun();
+$headerTextRun = $section->addTextRun();
 $headerTextRun->addText('Acceptable Devices', 'titlepageHeaderFont');
 $headerTextRun->addText(sprintf(' (%1$s of %2$s)', number_format(count($acceptableDeviceInstances)), number_format($this->totalDevices)));
+
 $section->addText("The following devices have been deemed productive and fall within the target cost per page.");
 
 // Table with values
 $tcStyle = $this->styles->tables->acceptable;
 $table   = $section->addTable($tcStyle->tablestyle);
+
 // Table header
-$table->addRow($tcStyle->body->rowheight);
+$table->addRow($tcStyle->body->rowheight,$tcStyle->rowheader);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
@@ -39,7 +41,7 @@ $table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addTe
 // Begin with data rows
 foreach ($acceptableDeviceInstances as $deviceInstance)
 {
-    $table->addRow($tcStyle->body->rowheight);
+    $table->addRow($tcStyle->body->rowheight,$this->styles->tables->tablestyle->rowstyle);
     $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
 
     $cell = $table->addCell($tcStyle->collWidth, $style);

@@ -1,5 +1,5 @@
 <?php
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
@@ -21,7 +21,7 @@ $h3Color                   = "000000";
 /**
  * Document Properties
  */
-$properties = $phpWord->getProperties();
+$properties = $phpWord->getDocumentProperties();
 $properties->setCreator('MPS Assessment Software');
 $properties->setCompany('MPS Assessment Software');
 $properties->setCategory('Customer Report');
@@ -31,29 +31,35 @@ $properties->setCreated(time());
 $properties->setModified(time());
 $properties->setSubject('MPS Assessment Software');
 
-$titlePageSection = $phpWord->createSection(array(
+$titlePageSection = $phpWord->addSection(array(
     'orientation'  => null,
     'marginLeft'   => 1420,
     'marginRight'  => 720,
     'marginTop'    => 720,
     'marginBottom' => 720
 ));
-$section          = $phpWord->createSection();
+$section          = $phpWord->addSection();
 
 // Title page
 $phpWord->addParagraphStyle('titleStyle1', array(
     'align'      => 'center',
     'spaceAfter' => 100,
-    'bgColor'    => $titlePageBackgroundColor1
+    'bgColor'    => $titlePageBackgroundColor1,
+    'shading'    => array(
+        'fill' => $titlePageBackgroundColor1,
+    )
 ));
 $phpWord->addParagraphStyle('titleStyle2', array(
     'spaceAfter'  => 50,
     'spaceBefore' => 50,
-    'bgColor'     => $titlePageBackgroundColor2
+    'bgColor'     => $titlePageBackgroundColor2,
 ));
 $phpWord->addParagraphStyle('titleStyle3', array(
     'spaceAfter' => 100,
-    'bgColor'    => $titlePageBackgroundColor2
+    'bgColor'    => $titlePageBackgroundColor2,
+    'shading'    => array(
+        'fill' => $titlePageBackgroundColor2,
+    )
 ));
 $phpWord->addFontStyle('titlepage_title', array(
     'size'  => 24,
@@ -168,9 +174,11 @@ $phpWord->addTitleStyle(2, array(
     'size'   => 12,
     'color'  => $h2Color,
     'bold'   => true,
-    'italic' => true
+    'italic' => true,
 ), array(
-    'bgColor' => $h2Background
+    'shading' => array(
+        'fill' => $h2Background,
+    )
 ));
 // H3 Style #5881BC
 $phpWord->addTitleStyle(3, array(
@@ -194,19 +202,31 @@ $phpWord->addFontStyle('heading3', array(
  */
 $styles = (object)array(
     "tables" => (object)array(
+            "underline"           => array(
+                "borderTopSize" => 1,
+            ),
+            "rowheader"           => array(
+                'tblHeader' => true,
+                'cantSplit' => true,
+            ),
+            "rowstyle"            => array(
+                "cantSplit" => true,
+            ),
             "grades"              => (object)array(
                     "tablestyle" => array(
-                        'cellMarginTop'    => 100,
-                        'cellMarginRight'  => 100,
-                        'cellMarginBottom' => 100,
-                        'cellMarginLeft'   => 100
+                        'cellMarginTop'     => 100,
+                        'cellMarginRight'   => 100,
+                        'cellMarginBottom'  => 100,
+                        'cellMarginLeft'    => 100,
+                        'borderBottomSize'  => 10,
+                        'borderBottomColor' => 'black',
                     ),
                     "cell1"      => array(
                         "bgColor"          => "F0F0F0",
                         "borderTopSize"    => 1,
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1
+                        "borderLeftSize"   => 1,
                     ),
                     "cell2"      => array(
                         "bgColor"          => "F0F0F0",
@@ -214,7 +234,7 @@ $styles = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "valign"           => "center"
+                        "valign"           => "center",
                     )
                 ),
             "singleimage"         => (object)array(
@@ -246,10 +266,12 @@ $styles = (object)array(
                 ),
             "savings"             => (object)array(
                     "tablestyle" => array(
-                        'cellMarginTop'    => 100,
-                        'cellMarginRight'  => 100,
-                        'cellMarginBottom' => 100,
-                        'cellMarginLeft'   => 100
+                        'cellMarginTop'     => 100,
+                        'cellMarginRight'   => 100,
+                        'cellMarginBottom'  => 100,
+                        'cellMarginLeft'    => 100,
+                        'borderBottomSize'  => 10,
+                        'borderBottomColor' => 'black',
                     ),
                     "cell1"      => array(
                         "bgColor"          => "F0F0F0",
@@ -262,10 +284,12 @@ $styles = (object)array(
                 ),
             "utilization"         => (object)array(
                     "tablestyle" => array(
-                        'cellMarginTop'    => 100,
-                        'cellMarginRight'  => 100,
-                        'cellMarginBottom' => 100,
-                        'cellMarginLeft'   => 100
+                        'cellMarginTop'     => 100,
+                        'cellMarginRight'   => 100,
+                        'cellMarginBottom'  => 100,
+                        'cellMarginLeft'    => 100,
+                        'borderBottomSize'  => 10,
+                        'borderBottomColor' => 'black',
                     ),
                     "rowheight"  => 400,
                     "cell1"      => array(
@@ -299,10 +323,12 @@ $styles = (object)array(
                 ),
             "highriskdevices"     => (object)array(
                     "tablestyle" => array(
-                        'cellMarginTop'    => 100,
-                        'cellMarginRight'  => 100,
-                        'cellMarginBottom' => 100,
-                        'cellMarginLeft'   => 100
+                        'cellMarginTop'     => 100,
+                        'cellMarginRight'   => 100,
+                        'cellMarginBottom'  => 100,
+                        'cellMarginLeft'    => 100,
+                        'borderBottomSize'  => 10,
+                        'borderBottomColor' => 'black',
                     ),
                     "rowheight"  => 400,
                     "cell1"      => array(
@@ -350,10 +376,12 @@ $styles = (object)array(
                 ),
             "highenergy"          => (object)array(
                     "tablestyle" => array(
-                        'cellMarginTop'    => 100,
-                        'cellMarginRight'  => 100,
-                        'cellMarginBottom' => 100,
-                        'cellMarginLeft'   => 100
+                        'cellMarginTop'     => 100,
+                        'cellMarginRight'   => 100,
+                        'cellMarginBottom'  => 100,
+                        'cellMarginLeft'    => 100,
+                        'borderBottomSize'  => 10,
+                        'borderBottomColor' => 'black',
                     ),
                     "rowheight"  => 400,
                     "cell1"      => array(
@@ -390,7 +418,7 @@ $styles = (object)array(
                         'cellMarginTop'    => 100,
                         'cellMarginRight'  => 100,
                         'cellMarginBottom' => 100,
-                        'cellMarginLeft'   => 100
+                        'cellMarginLeft'   => 100,
                     ),
                     "rowheight"  => null,
                     "cell1"      => array(
@@ -405,9 +433,9 @@ $styles = (object)array(
                         'cellMarginTop'    => 50,
                         'cellMarginRight'  => 100,
                         'cellMarginBottom' => 50,
-                        'cellMarginLeft'   => 100
+                        'cellMarginLeft'   => 100,
                     ),
-                    "rowheight"   => null,
+                    "rowheight"   => 300,
                     "col1Width"   => 7500,
                     "col2Width"   => 1528,
                     "cell1"       => array(
@@ -421,16 +449,22 @@ $styles = (object)array(
                         'borderBottomSize' => 1
                     ),
                     "cell2Border" => array(
-                        "valign"           => "center",
-                        'borderBottomSize' => 1
-                    )
+                        "valign"            => "center",
+                        'borderBottomSize'  => 10,
+                        'borderBottomColor' => 'black',
+                    ),
+                    "underline"   => array(
+                        "borderTopSize" => 1,
+                    ),
                 ),
             "mostexpensive"       => (object)array(
                     "tablestyle" => array(
-                        'cellMarginTop'    => 100,
-                        'cellMarginRight'  => 100,
-                        'cellMarginBottom' => 100,
-                        'cellMarginLeft'   => 100
+                        'cellMarginTop'     => 100,
+                        'cellMarginRight'   => 100,
+                        'cellMarginBottom'  => 100,
+                        'cellMarginLeft'    => 100,
+                        'borderBottomSize'  => 10,
+                        'borderBottomColor' => 'black',
                     ),
                     "rowheight"  => 400,
                     "col1Width"  => 3611.2,
@@ -496,7 +530,7 @@ $this->partial("report/assessment/docx/06_environmental.phtml", $data);
 $this->partial("report/assessment/docx/07_expense.phtml", $data);
 $this->partial("report/assessment/docx/08_summary.phtml", $data);
 
-$objWriter = PHPWord_IOFactory::createWriter($phpWord, 'Word2007');
+$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
 $objWriter->save($this->savePath);
 
 echo $this->baseUrl($this->publicFileName);

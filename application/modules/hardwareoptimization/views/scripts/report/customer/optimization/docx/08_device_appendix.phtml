@@ -11,12 +11,14 @@ $customerOptimization = $this->customerOptimization;
 /* @var $graphs array */
 $graphs = $this->graphs;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 $deviceInstances = $optimization->getDevicesGroupedByAction();
 
 $totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->getCount();
+
+$section->addPageBreak();
 
 $section->addTitle('Device Appendix (' . number_format($totalNumberOfDevices) . " devices)", 2);
 
@@ -31,8 +33,11 @@ $this->partial('report/customer/optimization/docx/device_table.phtml',
         "totalNumberOfDevices"   => $totalNumberOfDevices,
         "showReason"             => false,
         "tcStyle"                => $this->devicetables->tables->acceptable,
+        "tableStyle"             => $this->styles->tables,
     )
 );
+
+$section->addTextBreak();
 
 $this->partial('report/customer/optimization/docx/device_table.phtml',
     array(
@@ -45,8 +50,11 @@ $this->partial('report/customer/optimization/docx/device_table.phtml',
         "totalNumberOfDevices"   => $totalNumberOfDevices,
         "showReason"             => true,
         "tcStyle"                => $this->devicetables->tables->replacement,
+        "tableStyle"             => $this->styles->tables,
     )
 );
+
+$section->addTextBreak();
 
 $this->partial('report/customer/optimization/docx/device_table.phtml',
     array(
@@ -59,8 +67,11 @@ $this->partial('report/customer/optimization/docx/device_table.phtml',
         "totalNumberOfDevices"   => $totalNumberOfDevices,
         "showReason"             => false,
         "tcStyle"                => $this->devicetables->tables->retire,
+        "tableStyle"             => $this->styles->tables,
     )
 );
+
+$section->addTextBreak();
 
 $this->partial('report/customer/optimization/docx/device_table.phtml',
     array(
@@ -73,6 +84,7 @@ $this->partial('report/customer/optimization/docx/device_table.phtml',
         "totalNumberOfDevices"   => $totalNumberOfDevices,
         "showReason"             => true,
         "tcStyle"                => $this->devicetables->tables->flagged,
+        "tableStyle"             => $this->styles->tables,
     )
 );
 ?>

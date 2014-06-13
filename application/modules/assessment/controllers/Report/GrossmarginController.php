@@ -67,7 +67,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 $this->initCSVGrossMargin();
                 break;
             case "docx" :
-                $this->view->phpword = new PHPWord();
+                $this->view->phpword = new \PhpOffice\PhpWord\PhpWord();
                 $assessmentViewModel = $this->getAssessmentViewModel();
                 $graphs              = $this->cachePNGImages($assessmentViewModel->getGraphs(), true);
                 $assessmentViewModel->setGraphs($graphs);

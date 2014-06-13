@@ -1,12 +1,12 @@
 <?php
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 
 // Initialize some properties
-$properties = $phpWord->getProperties();
+$properties = $phpWord->getDocumentProperties();
 $properties->setCreator('MPS Assessment Software');
 $properties->setCompany('MPS Assessment Software');
 $properties->setCategory('Customer Report');
@@ -21,7 +21,7 @@ $properties->setSubject('MPS Assessment Software');
  */
 
 // This section is landscape with 0.5" margins insead of 1"
-$mainSection = $phpWord->createSection(array(
+$mainSection = $phpWord->addSection(array(
     'orientation'  => 'portrait',
     'marginLeft'   => 720,
     'marginRight'  => 720,
@@ -133,6 +133,13 @@ $costAnalysis = (object)array(
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50
     ),
+    "rowheader"  => array(
+        'tblHeader' => true,
+        'cantSplit' => true,
+    ),
+    "rowstyle"   => array(
+        "cantSplit" => true,
+    ),
     "col1Width"  => $widthTwips * 0.20,
     "col2Width"  => $widthTwips * 0.1333,
     "col3Width"  => $widthTwips * 0.1333,
@@ -181,7 +188,7 @@ $data = array(
 $this->partial("report/costanalysis/docx/01_header.phtml", $data);
 $this->partial("report/costanalysis/docx/02_maintable.phtml", $data);
 
-$objWriter = PHPWord_IOFactory::createWriter($this->phpword, 'Word2007');
+$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($this->phpword, 'Word2007');
 $objWriter->save($this->savePath);
 
 /**

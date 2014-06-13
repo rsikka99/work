@@ -4,11 +4,11 @@ $optimization = $this->optimization;
 /* @var $hardwareOptimization Memjetoptimization_Model_Memjet_Optimization */
 $memjetOptimization = $this->memjetOptimization;
 
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
 // Initialize some properties
-$properties = $phpWord->getProperties();
+$properties = $phpWord->getDocumentProperties();
 $properties->setCreator('MPS Assessment Software');
 $properties->setTitle('Dealer Memjet Optimization Report');
 $properties->setDescription('MPS Assessment Software');
@@ -21,7 +21,7 @@ $properties->setLastModifiedBy('MPS Assessment Software');
  */
 
 // This section is landscape with 0.5" margins insead of 1"
-$mainSection = $phpWord->createSection(array(
+$mainSection = $phpWord->addSection(array(
     'orientation'  => 'landscape',
     'marginLeft'   => 720,
     'marginRight'  => 720,
@@ -63,16 +63,25 @@ $phpWord->addTitleStyle(2, array(
 $this->phpword->addParagraphStyle('titleStyle1', array(
     'align'      => 'center',
     'spaceAfter' => 100,
-    'bgColor'    => $titlePageBackgroundColor
+    'bgColor'    => $titlePageBackgroundColor,
+    'shading'    => array(
+        'fill' => $titlePageBackgroundColor,
+    )
 ));
 $phpWord->addParagraphStyle('titleStyle2', array(
     'spaceAfter'  => 50,
     'spaceBefore' => 50,
-    'bgColor'     => $titlePageBackgroundColor2
+    'bgColor'     => $titlePageBackgroundColor2,
+    'shading'     => array(
+        'fill' => $titlePageBackgroundColor2,
+    )
 ));
 $phpWord->addParagraphStyle('titleStyle3', array(
     'spaceAfter' => 100,
-    'bgColor'    => $titlePageBackgroundColor2
+    'bgColor'    => $titlePageBackgroundColor2,
+    'shading'    => array(
+        'fill' => $titlePageBackgroundColor2,
+    )
 ));
 $phpWord->addFontStyle('titlepage_title', array(
     'size'  => 24,
@@ -175,7 +184,8 @@ $standard_cell_no_right_border  = (object)array(
 );
 $standard_header                = (object)array(
     "cellStyle"      => array(
-        'bgColor' => $header_color
+        'bgColor'   => $header_color,
+        'cantSplit' => true,
     ),
     "fontStyle"      => array(
         'bold' => true
@@ -187,7 +197,8 @@ $standard_header                = (object)array(
 );
 $standard_sub_header            = (object)array(
     "cellStyle"      => array(
-        'bgColor' => $sub_header_color
+        'bgColor'   => $sub_header_color,
+        'cantSplit' => true,
     ),
     "fontStyle"      => array(
         'bold' => true
@@ -198,6 +209,15 @@ $standard_sub_header            = (object)array(
     )
 );
 
+$gridSpan = array(
+    'gridSpan2' => array(
+        'gridSpan' => 2,
+    ),
+    'gridspan3' => array(
+        'gridSpan' => 3,
+    )
+);
+
 $compareTable = (object)array(
     "tablestyle" => array(
         'cellMarginTop'    => 50,
@@ -205,11 +225,15 @@ $compareTable = (object)array(
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50
     ),
+    "headerCell" => array(
+        "gridSpan" => 2,
+        'bgColor'  => $header_color,
+    ),
     "colWidth"   => $widthTwips * 0.25,
     "span2Width" => $widthTwips / 2,
     "spanAll"    => $widthTwips,
     "body"       => (object)array(
-            "rowheight" => null,
+            "rowheight" => 400,
             "cell1"     => $standard_cell,
             "cell2"     => $standard_cell,
             "cell3"     => $standard_cell,
@@ -218,6 +242,7 @@ $compareTable = (object)array(
     "header"     => (object)array(
             'header'     => $standard_header,
             'sub_header' => $standard_sub_header,
+            'gridSpans'  => $gridSpan,
         )
 );
 
@@ -231,6 +256,21 @@ $replacementTable = (object)array(
         'cellMarginRight'  => 50,
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50
+    ),
+    "rowHeader"  => array(
+        "tblHeader" => true,
+    ),
+    "cellspan5"  => array(
+        'gridSpan' => 5,
+        'bgColor'  => $header_color
+    ),
+    "cellspan4"  => array(
+        'gridSpan' => 4,
+        'bgColor'  => $header_color
+    ),
+    "cellspan3"  => array(
+        'gridSpan' => 3,
+        'bgColor'  => $header_color
     ),
     "span5Width" => $replacementSpan5Width,
     "span4Width" => $replacementSpan4Width,
@@ -307,6 +347,9 @@ $acceptableTable   = (object)array(
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50
     ),
+    "rowHeader"  => array(
+        "tblHeader" => true,
+    ),
     "col1Width"  => $widthTwips * 0.25,
     "col2Width"  => $widthTwips * 0.15,
     "col3Width"  => $widthTwips * 0.120,
@@ -362,6 +405,9 @@ $retireTable       = (object)array(
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50
     ),
+    "rowHeader"  => array(
+        "tblHeader" => true,
+    ),
     "col1Width"  => $widthTwips * 0.25,
     "col2Width"  => $widthTwips * 0.15,
     "col3Width"  => $widthTwips * 0.075,
@@ -373,7 +419,7 @@ $retireTable       = (object)array(
     "col9Width"  => $widthTwips * 0.075,
     "col10Width" => $widthTwips * 0.075,
     "body"       => (object)array(
-            "rowheight" => null,
+            "rowheight" => 400,
             "cell1"     => $standard_cell_left_device_name,
             "cell2"     => $standard_cell_left,
             "cell3"     => $standard_cell,
@@ -395,6 +441,10 @@ $flaggedTable      = (object)array(
         'cellMarginRight'  => 50,
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50
+    ),
+    "rowHeader"  => array(
+        'tblHeader' => true,
+        'cantSplit' => true,
     ),
     "col1Width"  => $widthTwips * 0.25,
     "col2Width"  => $widthTwips * 0.15,
@@ -424,13 +474,17 @@ $leasedTable       = (object)array(
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50,
     ),
+    "rowHeader"  => array(
+        'tblHeader' => true,
+        'cantSplit' => true,
+    ),
     "col1Width"  => $widthTwips * 0.25,
     "col2Width"  => $widthTwips * 0.25,
     "col3Width"  => $widthTwips * 0.20,
     "col4Width"  => $widthTwips * 0.15,
     "col5Width"  => $widthTwips * 0.15,
     "body"       => (object)array(
-            "rowheight" => null,
+            "rowheight" => 400,
             "cell1"     => $standard_cell_left,
             "cell2"     => $standard_cell_left,
             "cell3"     => $standard_cell_left,
@@ -448,13 +502,17 @@ $excludedTable     = (object)array(
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50
     ),
+    "rowHeader"  => array(
+        'tblHeader' => true,
+        'cantSplit' => true,
+    ),
     "col1Width"  => $widthTwips * 0.25,
     "col2Width"  => $widthTwips * 0.25,
     "col3Width"  => $widthTwips * 0.20,
     "col4Width"  => $widthTwips * 0.15,
     "col5Width"  => $widthTwips * 0.15,
     "body"       => (object)array(
-            "rowheight" => null,
+            "rowheight" => 400,
             "cell1"     => $standard_cell_left,
             "cell2"     => $standard_cell_left,
             "cell3"     => $standard_cell,
@@ -532,7 +590,7 @@ $this->partial("report/dealer/optimization/docx/08_flagged.phtml", $data);
 $this->partial("report/dealer/optimization/docx/09_leased.phtml", $data);
 $this->partial("report/dealer/optimization/docx/10_excluded.phtml", $data);
 
-$objWriter = PHPWord_IOFactory::createWriter($this->phpword, 'Word2007');
+$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($this->phpword, 'Word2007');
 $objWriter->save($this->savePath);
 
 /**

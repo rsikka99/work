@@ -10,11 +10,11 @@ $deviceInstances = $optimization->getDevicesGroupedByAction();
 
 $totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->getCount();
 
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
 // Initialize some properties
-$properties = $phpWord->getProperties();
+$properties = $phpWord->getDocumentProperties();
 $properties->setCreator('MPS Assessment Software');
 $properties->setTitle('Dealer Hardware Optimization Report');
 $properties->setCategory('Dealer Report');
@@ -26,7 +26,7 @@ $properties->setLastModifiedBy('MPS Assessment Software');
  */
 
 // This section is landscape with 0.5" margins insead of 1"
-$mainSection = $phpWord->createSection(array(
+$mainSection = $phpWord->addSection(array(
     'orientation'  => 'landscape',
     'marginLeft'   => 720,
     'marginRight'  => 720,
@@ -57,10 +57,13 @@ $h3Color                   = My_Brand::$reportHeadingColor;
 $phpWord->addFontStyle('titlepageHeaderFont', array('bold' => true, 'size' => 12));
 $phpWord->addFontStyle('documentHeader', array('bold' => true, 'size' => 16));
 $phpWord->addParagraphStyle('documentHeader', array('align' => 'center'));
-$this->phpword->addParagraphStyle('titleStyle1', array(
+
+$phpWord->addParagraphStyle('titleStyle1', array(
     'align'      => 'center',
     'spaceAfter' => 100,
-    'bgColor'    => $titlePageBackgroundColor
+    'shading'    => array(
+        'fill' => $titlePageBackgroundColor,
+    )
 ));
 $phpWord->addParagraphStyle('titleStyle2', array(
     'spaceAfter'  => 50,
@@ -69,7 +72,9 @@ $phpWord->addParagraphStyle('titleStyle2', array(
 ));
 $phpWord->addParagraphStyle('titleStyle3', array(
     'spaceAfter' => 100,
-    'bgColor'    => $titlePageBackgroundColor2
+    'shading'    => array(
+        'fill' => $titlePageBackgroundColor2,
+    )
 ));
 $phpWord->addFontStyle('titlepage_title', array(
     'size'  => 24,
@@ -85,7 +90,7 @@ $phpWord->addFontStyle('titlepage_subtitle', array(
 
 $phpWord->addFontStyle('titlepage_address', array(
     'size'  => 12,
-    'color' => $titlePageTextColor2
+    'color' => $titlePageTextColor2,
 ));
 $phpWord->addTitleStyle(2, array(
     'size'   => 12,
@@ -202,11 +207,19 @@ $compareTable = (object)array(
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50
     ),
+    "headercell" => array(
+        "gridSpan" => 2,
+        'bgColor'  => $header_color,
+    ),
+    "rowstyle"   => array(
+        "cantSplit" => true,
+    ),
     "colWidth"   => $widthTwips * 0.25,
+
     "span2Width" => $widthTwips / 2,
     "spanAll"    => $widthTwips,
     "body"       => (object)array(
-            "rowheight" => null,
+            "rowheight" => 400,
             "cell1"     => $standard_cell,
             "cell2"     => $standard_cell,
             "cell3"     => $standard_cell,
@@ -228,6 +241,18 @@ $replacementTable = (object)array(
         'cellMarginRight'  => 50,
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50
+    ),
+    "cellspan5"  => array(
+        'gridSpan' => 5,
+        'bgColor'  => $header_color
+    ),
+    "cellspan4"  => array(
+        'gridSpan' => 4,
+        'bgColor'  => $header_color
+    ),
+    "cellspan3"  => array(
+        'gridSpan' => 3,
+        'bgColor'  => $header_color
     ),
     "span5Width" => $replacementSpan5Width,
     "span4Width" => $replacementSpan4Width,
@@ -304,6 +329,9 @@ $acceptableTable   = (object)array(
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50
     ),
+    "rowheader"  => array(
+        "tblHeader" => true,
+    ),
     "col1Width"  => $widthTwips * 0.25,
     "col2Width"  => $widthTwips * 0.15,
     "col3Width"  => $widthTwips * 0.120,
@@ -359,6 +387,9 @@ $retireTable       = (object)array(
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50
     ),
+    "rowHeader"  => array(
+        "tblHeader" => true,
+    ),
     "col1Width"  => $widthTwips * 0.25,
     "col2Width"  => $widthTwips * 0.15,
     "col3Width"  => $widthTwips * 0.075,
@@ -370,7 +401,7 @@ $retireTable       = (object)array(
     "col9Width"  => $widthTwips * 0.075,
     "col10Width" => $widthTwips * 0.075,
     "body"       => (object)array(
-            "rowheight" => null,
+            "rowheight" => 400,
             "cell1"     => $standard_cell_left_device_name,
             "cell2"     => $standard_cell_left,
             "cell3"     => $standard_cell,
@@ -393,6 +424,9 @@ $flaggedTable      = (object)array(
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50
     ),
+    "rowHeader"  => array(
+        "tblHeader" => true,
+    ),
     "col1Width"  => $widthTwips * 0.25,
     "col2Width"  => $widthTwips * 0.15,
     "col3Width"  => $widthTwips * 0.120,
@@ -401,7 +435,7 @@ $flaggedTable      = (object)array(
     "col6Width"  => $widthTwips * 0.120,
     "col7Width"  => $widthTwips * 0.120,
     "body"       => (object)array(
-            "rowheight" => null,
+            "rowheight" => 400,
             "cell1"     => $standard_cell_left_device_name,
             "cell2"     => $standard_cell_left,
             "cell3"     => $standard_cell,
@@ -486,6 +520,16 @@ $doubleCenterTable = (object)array(
         )
 );
 
+$tableStyle = (object)array(
+    "rowheader" => array(
+        'tblHeader' => true,
+        'cantSplit' => true,
+    ),
+    "rowstyle"  => array(
+        "cantSplit" => true,
+    ),
+);
+
 /**
  * Here we put all our table styles into an object that gets passed to each of
  * the view scripts
@@ -501,6 +545,7 @@ $styles                      = (object)array(
             "leased"      => $leasedTable,
             "excluded"    => $excludedTable,
             "twocenter"   => $doubleCenterTable,
+            "tablestyle"  => $tableStyle,
         ));
 $hardwareOptimizationDevices = new Hardwareoptimization_Model_Optimization_Dealer($hardwareOptimization);
 /**
@@ -513,6 +558,7 @@ $data = array(
     "section"                     => $mainSection,
     "hardwareOptimizationDevices" => $hardwareOptimizationDevices,
     "graphs"                      => $this->graphs,
+    "dealerLogoFile"              => $this->dealerLogoFile,
     "styles"                      => $styles,
     "deviceInstances"             => $deviceInstances,
     "totalDevices"                => $totalNumberOfDevices,
@@ -533,7 +579,9 @@ $this->partial("report/dealer/optimization/docx/08_flagged.phtml", $data);
 $this->partial("report/dealer/optimization/docx/09_leased.phtml", $data);
 $this->partial("report/dealer/optimization/docx/10_excluded.phtml", $data);
 
-$objWriter = PHPWord_IOFactory::createWriter($this->phpword, 'Word2007');
+
+$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($this->phpword, 'Word2007');
+
 $objWriter->save($this->savePath);
 
 /**

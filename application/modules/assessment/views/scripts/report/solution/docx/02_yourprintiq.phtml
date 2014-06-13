@@ -2,7 +2,7 @@
 /**
  * Solution - Your PrintIQ� Solution
  */
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
@@ -12,7 +12,7 @@ $assessmentViewModel = $this->assessmentViewModel;
  * Variables
  */
 $numberListStyle    = array(
-    'listType' => PHPWord_Style_ListItem::TYPE_NUMBER
+    'listType' => \PhpOffice\PhpWord\Style\ListItem::TYPE_NUMBER
 );
 $listParagraphStyle = array(
     'spaceAfter' => 100
@@ -26,6 +26,7 @@ $section->addTitle('Your Solution', 1);
 $section->addText(sprintf('Based on your %1$s Smart Assessment, we have developed a choice of managed print solutions to meet your specific business needs.', $this->brandName));
 
 $section->addTitle('Managed Print Solution Objectives', 2);
+
 $section->addText('Your managed print solution is designed to meet the following objectives:', 0, null, null, $listParagraphStyle);
 $section->addListItem('Allow your printing costs to be accurately measured, controlled and budgeted', 0, null, null, $listParagraphStyle);
 $section->addListItem('Free your working capital tied to excess printer supplies inventory', 0, null, null, $listParagraphStyle);
@@ -36,7 +37,6 @@ $section->addListItem('Reduce your environmental impact from office printing', 0
 $section->addTextBreak();
 
 $section->addTitle('Solution Recommendations', 2);
-$section->addText('To achieve the above objectives, we make the following recommendations:');
 
 $section->addListItem('Continue remote print management', 0, 'bold_text', $numberListStyle, $listParagraphStyle);
 $section->addListItem('Software is provided free of charge so we can monitor the status of your printing devices. and supply levels', 1, null, null, $listParagraphStyle);

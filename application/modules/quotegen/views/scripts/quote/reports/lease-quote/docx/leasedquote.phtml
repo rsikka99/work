@@ -6,7 +6,7 @@ $commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
 // Render the elements in the theme
 $this->render("{$commonPartsBasePath}/styles.phtml");
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 $section->addPageBreak();
 $section->addTitle($this->translate($this->docStrings->quoteHeader), 1);
@@ -23,7 +23,7 @@ foreach ($this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
     {
         $table = $section->addTable($tcStyle->tablestyle);
 
-        $table->addRow($tcStyle->header->rowheight);
+        $table->addRow($tcStyle->header->rowheight, $tcStyle->header->rowStyle);
         $table->addCell($tcStyle->col1Width, $tcStyle->header->cell1->cellStyle)->addText('Item', $tcStyle->header->cell1->fontStyle, $tcStyle->header->cell1->paragraphStyle);
         $table->addCell($tcStyle->col2Width, $tcStyle->header->cell2->cellStyle)->addText('SKU', $tcStyle->header->cell2->fontStyle, $tcStyle->header->cell2->paragraphStyle);
         $table->addCell($tcStyle->col3Width, $tcStyle->header->cell3->cellStyle)->addText('Description and Features', $tcStyle->header->cell3->fontStyle, $tcStyle->header->cell3->paragraphStyle);
@@ -74,8 +74,7 @@ foreach ($this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
 
         // Show subtotal line
         $table->addRow($tcStyle->subtotal->rowheight);
-        $table->addCell($tcStyle->cell1Width, $tcStyle->subtotal->cell1->cellStyle)->addText('');
-        $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cellStyle, 2)->addText($this->translate('Subtotal for group ' . $quoteDeviceGroup->name), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
+        $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cell2Span3)->addText($this->translate('Subtotal for group ' . $quoteDeviceGroup->name), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
         $table->addCell($tcStyle->cell4Width, $tcStyle->subtotal->cell3->cellStyle)->addText($this->currency($quoteDeviceGroup->calculateMonthlyLeasePrice()), $tcStyle->subtotal->cell3->fontStyle, $tcStyle->subtotal->cell3->paragraphStyle);
 
         $groupCount++;
@@ -86,16 +85,16 @@ $table = $section->addTable($tcStyle->tablestyle);
 
 // Show CPP
 $table->addRow($tcStyle->cpp->rowheight);
-$table->addCell($tcStyle->span123Width, $tcStyle->cpp->cell1->cellStyle, 3)->addText('Monochrome Overage Rate Per Page', $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
+$table->addCell($tcStyle->span123Width, $tcStyle->cpp->cell1->cellStyle)->addText('Monochrome Overage Rate Per Page', $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell2->cellStyle)->addText($this->formatCostPerPage($quote->calculateMonochromeOverageRatePerPage()), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
 
 $table->addRow($tcStyle->cpp->rowheight);
-$table->addCell($tcStyle->span123Width, $tcStyle->cpp->cell1->cellStyle, 3)->addText('Color Overage Rate Per Page', $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
+$table->addCell($tcStyle->span123Width, $tcStyle->cpp->cell1->cellStyle)->addText('Color Overage Rate Per Page', $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell2->cellStyle)->addText($this->formatCostPerPage($quote->calculateColorOverageRatePerPage()), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
 
 // Show monthly total
 $table->addRow($tcStyle->monthlyTotal->rowheight);
-$table->addCell($tcStyle->span123Width, $tcStyle->monthlyTotal->cell1->cellStyle, 3)->addText('Monthly Total (Term: ' . $quote->leaseTerm . ' Months)', $tcStyle->monthlyTotal->cell1->fontStyle, $tcStyle->monthlyTotal->cell1->paragraphStyle);
+$table->addCell($tcStyle->span123Width, $tcStyle->monthlyTotal->cell1->cellStyle)->addText('Monthly Total (Term: ' . $quote->leaseTerm . ' Months)', $tcStyle->monthlyTotal->cell1->fontStyle, $tcStyle->monthlyTotal->cell1->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->monthlyTotal->cell2->cellStyle)->addText($this->currency($quote->calculateQuoteMonthlyLeaseSubtotal()), $tcStyle->monthlyTotal->cell2->fontStyle, $tcStyle->monthlyTotal->cell2->paragraphStyle);
 
 $section->addTextBreak();

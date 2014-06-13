@@ -3,11 +3,11 @@
 $optimization = $this->optimization;
 /* @var $memjetOptimization Memjetoptimization_Model_Memjet_Optimization */
 $memjetOptimization = $this->memjetOptimization;
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
 // Initialize some properties
-$properties = $phpWord->getProperties();
+$properties = $phpWord->getDocumentProperties();
 $properties->setCreator('MPS Assessment Software');
 $properties->setTitle('Customer Memjet Optimization Report');
 $properties->setDescription('MPS Assessment Software');
@@ -48,7 +48,7 @@ $highlight_color  = "ebc7a4";
 // H2 Style #5881BC
 $phpWord->addTitleStyle(2, array(
     'size'   => 12,
-    'color'  => My_Brand::$reportSubHeadingColor,
+    'color'  => 'white', /*My_Brand::$reportSubHeadingColor,*/
     'bold'   => true,
     'italic' => true
 ), array(
@@ -57,16 +57,25 @@ $phpWord->addTitleStyle(2, array(
 $this->phpword->addParagraphStyle('titleStyle1', array(
     'align'      => 'center',
     'spaceAfter' => 100,
-    'bgColor'    => $titlePageBackgroundColor
+    'bgColor'    => $titlePageBackgroundColor,
+    'shading'    => array(
+        'fill' => $titlePageBackgroundColor,
+    )
 ));
 $phpWord->addParagraphStyle('titleStyle2', array(
     'spaceAfter'  => 50,
     'spaceBefore' => 50,
-    'bgColor'     => $titlePageBackgroundColor2
+    'bgColor'     => $titlePageBackgroundColor2,
+    'shading'    => array(
+        'fill' => $titlePageBackgroundColor2,
+    )
 ));
 $phpWord->addParagraphStyle('titleStyle3', array(
     'spaceAfter' => 100,
-    'bgColor'    => $titlePageBackgroundColor2
+    'bgColor'    => $titlePageBackgroundColor2,
+    'shading'    => array(
+        'fill' => $titlePageBackgroundColor2,
+    )
 ));
 $phpWord->addFontStyle('titlepage_title', array(
     'size'  => 24,
@@ -86,6 +95,13 @@ $phpWord->addFontStyle('titlepage_address', array(
 ));
 $styles = (object)array(
     "tables" => (object)array(
+            "rowheader"          => array(
+                'tblHeader' => true,
+                'cantSplit' => true,
+            ),
+            "rowstyle"           => array(
+                "cantSplit" => true,
+            ),
             "singleimage"        => (object)array(
                     "tablestyle" => array(),
                     "cell1"      => array(
@@ -418,7 +434,7 @@ $this->partial("report/customer/optimization/docx/03_replacement.phtml", $data);
 $this->partial("report/customer/optimization/docx/04_flagged.phtml", $data);
 $this->partial("report/customer/optimization/docx/05_retire.phtml", $data);
 $this->partial("report/customer/optimization/docx/06_acceptable.phtml", $data);
-$objWriter = PHPWord_IOFactory::createWriter($phpWord, 'Word2007');
+$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
 $objWriter->save($this->savePath);
 
 echo $this->baseUrl($this->publicFileName);

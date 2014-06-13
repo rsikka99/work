@@ -3,10 +3,10 @@
  * Assessment - Analysis: Expense
  */
 
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 $section->addPageBreak();
 
@@ -16,6 +16,7 @@ $assessmentViewModel = $this->assessmentViewModel;
 $graphs = $assessmentViewModel->getGraphs();
 
 $section->addTitle("Analysis: Expense", 1);
+
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
 $gradeTable->addRow();
 $gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($assessmentViewModel->getRanking()->getExpense()->RankingText);
@@ -28,15 +29,18 @@ $section->addTitle('Total Estimated Annual Printing Costs', 2);
 $section->addText('Combining all costs, your current estimated annual printing expenses are as follows. Please note that our estimated costs may not match your actual purchases, due to factors including inventory on hand, returns, timing of the assessment, etc., but our estimates should be a good representation of your average costs since they are based on actual observed usage.');
 
 $annualPrintingCostsTable = $section->addTable($this->styles->tables->expenseSummaryTable->tablestyle);
+
 $annualPrintingCostsTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $annualPrintingCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText('Annual cost of hardware on leases', null, 'nospacing');
 $annualPrintingCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->getEstimatedAnnualCostOfLeaseMachines()), null, 'nospacing_rightalign');
+
 $annualPrintingCostsTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $annualPrintingCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border)->addText('Annual cost of hardware not on leases', null, 'nospacing');
 $annualPrintingCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText($this->currency($assessmentViewModel->getTotalPurchasedAnnualCost()), null, 'nospacing_rightalign');
+
 $annualPrintingCostsTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$annualPrintingCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText('TOTAL ESTIMATED ANNUAL PRINTING COSTS', 'bold_text', 'nospacing');
-$annualPrintingCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->calculateEstimatedAnnualCostOfPrinting()), 'bold_text', 'nospacing_rightalign');
+$annualPrintingCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, array_merge($this->styles->tables->expenseSummaryTable->cell1, $this->styles->tables->underline))->addText('TOTAL ESTIMATED ANNUAL PRINTING COSTS', 'bold_text', 'nospacing');
+$annualPrintingCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, array_merge($this->styles->tables->expenseSummaryTable->cell2, $this->styles->tables->underline))->addText($this->currency($assessmentViewModel->calculateEstimatedAnnualCostOfPrinting()), 'bold_text', 'nospacing_rightalign');
 
 $section->addTextBreak();
 $section->addTitle('Cost of Hardware Assumed to be Leased', 2);
@@ -57,29 +61,36 @@ $cell = $assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryT
 $cell->addText('Estimated annual total lease payments', null, 'nospacing');
 $cell->addText(sprintf('Based on $%1$s per month per device', number_format($assessmentViewModel->assessment->getAssessmentSettings()->monthlyLeasePayment)), 'small_italic_text', 'nospacing');
 
-
 $assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText($this->currency($assessmentViewModel->getCombinedAnnualLeasePayments()), null, 'nospacing_rightalign');
+
 $assumedLeasedCostsTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText('Estimated per-page lease cost', 'bold_text', 'nospacing');
-$assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->formatCostPerPage($assessmentViewModel->getPerPageLeaseCost()), 'bold_text', 'nospacing_rightalign');
+$assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, array_merge($this->styles->tables->expenseSummaryTable->cell1, $this->styles->tables->underline))->addText('Estimated per-page lease cost', 'bold_text', 'nospacing');
+$assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, array_merge($this->styles->tables->expenseSummaryTable->cell2, $this->styles->tables->underline))->addText($this->formatCostPerPage($assessmentViewModel->getPerPageLeaseCost(), 4), 'bold_text', 'nospacing_rightalign');
+
 $assumedLeasedCostsTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText('Estimated monochrome per-page charge', null, 'nospacing');
 $assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->formatCostPerPage($assessmentViewModel->getLeasedBlackAndWhiteCharge()), null, 'nospacing_rightalign');
+
 $assumedLeasedCostsTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border)->addText('Estimated color per-page charge', null, 'nospacing');
 $assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText($this->formatCostPerPage($assessmentViewModel->getLeasedColorCharge()), null, 'nospacing_rightalign');
+
 $assumedLeasedCostsTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText('Estimated all-in cost for a monochrome page', 'bold_text', 'nospacing');
-$assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->formatCostPerPage($assessmentViewModel->getLeasedEstimatedBlackAndWhiteCPP()), 'bold_text', 'nospacing_rightalign');
+$assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, array_merge($this->styles->tables->expenseSummaryTable->cell1, $this->styles->tables->underline))->addText('Estimated all-in cost for a monochrome page', 'bold_text', 'nospacing');
+$assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, array_merge($this->styles->tables->expenseSummaryTable->cell2, $this->styles->tables->underline))->addText($this->formatCostPerPage($assessmentViewModel->getLeasedEstimatedBlackAndWhiteCPP(), 4), 'bold_text', 'nospacing_rightalign');
+
 $assumedLeasedCostsTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border)->addText('Estimated all-in cost for a color page', 'bold_text', 'nospacing');
 $assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText($this->formatCostPerPage($assessmentViewModel->getLeasedEstimatedColorCPP()), 'bold_text', 'nospacing_rightalign');
+
 $assumedLeasedCostsTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText('TOTAL ESTIMATED ANNUAL COST', 'bold_text', 'nospacing');
-$assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->getEstimatedAnnualCostOfLeaseMachines()), 'bold_text', 'nospacing_rightalign');
+$assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, array_merge($this->styles->tables->expenseSummaryTable->cell1, $this->styles->tables->underline))->addText('TOTAL ESTIMATED ANNUAL COST', 'bold_text', 'nospacing');
+$assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, array_merge($this->styles->tables->expenseSummaryTable->cell2, $this->styles->tables->underline))->addText($this->currency($assessmentViewModel->getEstimatedAnnualCostOfLeaseMachines()), 'bold_text', 'nospacing_rightalign');
 
 $section->addPageBreak();
+
 $section->addTitle('Cost of Hardware Suitable for Transfer to a Managed Print Solution', 2);
+
 $section->addText(sprintf('Your %1$s print devices that are assumed to not be attached to leases may be suitable for transfer to a managed print program. Currently, you are paying for supplies and service separately for these devices and your internal IT staff spends time servicing them when they break down.', number_format(count($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances()))));
 $section->addText(sprintf('The costs below are based on data collected using remote monitoring software and your questionnaire responses. It also assumes a monochrome page coverage of %1$s%% and color coverage of %2$s%%.', number_format($assessmentViewModel->getPageCoverageBlackAndWhite()), number_format($assessmentViewModel->getPageCoverageColor())));
 
@@ -98,8 +109,8 @@ $cell->addText('Based on your questionnaire responses.', 'small_italic_text', 'n
 $suppliesTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText($this->currency($assessmentViewModel->getCostOfExecutingSuppliesOrders()), null, 'nospacing_rightalign');
 
 $suppliesTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$suppliesTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText('Total estimated annual supplies-related expense', 'bold_text', 'nospacing');
-$suppliesTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->getEstimatedAnnualSupplyRelatedExpense()), 'bold_text', 'nospacing_rightalign');
+$suppliesTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, array_merge($this->styles->tables->expenseSummaryTable->cell1, $this->styles->tables->expenseSummaryTable->underline))->addText('Total estimated annual supplies-related expense', 'bold_text', 'nospacing');
+$suppliesTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, array_merge($this->styles->tables->expenseSummaryTable->cell2, $this->styles->tables->expenseSummaryTable->underline))->addText($this->currency($assessmentViewModel->getEstimatedAnnualSupplyRelatedExpense()), 'bold_text', 'nospacing_rightalign');
 
 $section->addTitle('Service', 3);
 $serviceTable = $section->addTable($this->styles->tables->expenseSummaryTable->tablestyle);
@@ -116,8 +127,8 @@ $cell->addText('Based on your questionnaire responses.', 'small_italic_text', 'n
 $serviceTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText($this->currency($assessmentViewModel->getAnnualITCost()), null, 'nospacing_rightalign');
 
 $serviceTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$serviceTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText('Total estimated annual cost of service', 'bold_text', 'nospacing');
-$serviceTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->getEstimatedAnnualCostOfService()), 'bold_text', 'nospacing_rightalign');
+$serviceTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, array_merge($this->styles->tables->expenseSummaryTable->cell1, $this->styles->tables->expenseSummaryTable->underline))->addText('Total estimated annual cost of service', 'bold_text', 'nospacing');
+$serviceTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, array_merge($this->styles->tables->expenseSummaryTable->cell2, $this->styles->tables->expenseSummaryTable->underline))->addText($this->currency($assessmentViewModel->getEstimatedAnnualCostOfService()), 'bold_text', 'nospacing_rightalign');
 
 $section->addTitle('Hardware', 3);
 $hardwareTable = $section->addTable($this->styles->tables->expenseSummaryTable->tablestyle);
@@ -128,8 +139,8 @@ $cell->addText(sprintf('Based on the age of your devices and an average purchase
 $hardwareTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText($this->currency($assessmentViewModel->getAnnualCostOfHardwarePurchases()), null, 'nospacing_rightalign');
 
 $hardwareTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$hardwareTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText('TOTAL ESTIMATED ANNUAL COST', 'bold_text', 'nospacing');
-$hardwareTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->getTotalPurchasedAnnualCost()), 'bold_text', 'nospacing_rightalign');
+$hardwareTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, array_merge($this->styles->tables->expenseSummaryTable->cell1, $this->styles->tables->expenseSummaryTable->underline))->addText('TOTAL ESTIMATED ANNUAL COST', 'bold_text', 'nospacing');
+$hardwareTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, array_merge($this->styles->tables->expenseSummaryTable->cell2, $this->styles->tables->expenseSummaryTable->underline))->addText($this->currency($assessmentViewModel->getTotalPurchasedAnnualCost()), 'bold_text', 'nospacing_rightalign');
 
 $hardwareTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $hardwareTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText('Predicted average annual monochrome prints', null, 'nospacing');
@@ -151,7 +162,7 @@ $section->addTextBreak();
 $section->addText(sprintf('Through our %1$s program, we can wrap supplies and service for these machines into a single cost-per-page rate. By partnering with %2$s as your single-source provider, your printing devices will be efficiently managed and your staff can get back to concentrating on their core responsibilities. Out of these devices, below are the top three most expensive to operate:', $this->brandName, $this->companyName));
 
 $expensiveTable = $section->addTable($this->styles->tables->mostexpensive->tablestyle);
-$expensiveTable->addRow($this->styles->tables->mostexpensive->rowheight);
+$expensiveTable->addRow($this->styles->tables->mostexpensive->rowheight, $this->styles->tables->rowheader);
 $expensiveTable->addCell($this->styles->tables->mostexpensive->col1Width, $this->styles->tables->mostexpensive->cell1)->addText('Printing Device', 'bold_text', 'nospacing_centeralign');
 $expensiveTable->addCell($this->styles->tables->mostexpensive->col2Width, $this->styles->tables->mostexpensive->cell2)->addText('Serial No.', 'bold_text', 'nospacing_centeralign');
 $expensiveTable->addCell($this->styles->tables->mostexpensive->col3Width, $this->styles->tables->mostexpensive->cell3)->addText('Monthly Volume', 'bold_text', 'nospacing_centeralign');
@@ -160,15 +171,17 @@ $rowCounter = 0;
 /* @var $device Proposalgen_Model_DeviceInstance */
 foreach ($assessmentViewModel->getMostExpensiveDevices() as $device)
 {
-    $expensiveTable->addRow();
+    $expensiveTable->addRow($this->styles->tables->mostexpensive->rowheight, $this->styles->tables->rowstyle);
     $expensiveTable->addCell($this->styles->tables->mostexpensive->col1Width, $this->styles->tables->mostexpensive->cell1)->addText($device->getDeviceName(), null, 'nospacing');
-    $expensiveTable->addCell($this->styles->tables->mostexpensive->col2Width, $this->styles->tables->mostexpensive->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing_centeralign');
+    $expensiveTable->addCell($this->styles->tables->mostexpensive->col2Width, $this->styles->tables->mostexpensive->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing');
     $expensiveTable->addCell($this->styles->tables->mostexpensive->col3Width, $this->styles->tables->mostexpensive->cell3)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
     $expensiveTable->addCell($this->styles->tables->mostexpensive->col4Width, $this->styles->tables->mostexpensive->cell4)->addText($this->currency($device->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer())
-        ), null, 'nospacing_centeralign');
+    ), null, 'nospacing_centeralign');
     $rowCounter++;
     if ($rowCounter >= 3)
     {
         break;
     }
 }
+
+

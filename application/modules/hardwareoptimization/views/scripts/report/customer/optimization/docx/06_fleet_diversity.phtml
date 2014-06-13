@@ -11,9 +11,8 @@ $customerOptimization = $this->customerOptimization;
 /* @var $graphs array */
 $graphs = $this->graphs;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
-
 
 $section->addTitle('Number of Printing Device Models and Supply Types', 2);
 $section->addText(sprintf('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.', number_format($optimization->getDevices()->purchasedDeviceInstances->getCount()), number_format($optimization->getNumberOfUniqueModels()), number_format($optimization->getDevices()->leasedDeviceInstances->getCount()), number_format($optimization->getDevices()->purchasedDeviceInstances->getCount()), number_format($optimization->getNumberOfUniquePurchasedModels()), number_format($optimization->getNumberOfUniquePurchasedToners()), number_format($optimization->getCashHeldInInventory())));

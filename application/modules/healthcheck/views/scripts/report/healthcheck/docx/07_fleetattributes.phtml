@@ -2,10 +2,10 @@
 /**
  * Healthcheck - Analysis: Expense
  */
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
@@ -14,6 +14,7 @@ $graphs               = $healthcheckViewModel->getGraphs();
 
 $section->addPageBreak();
 $section->addTitle("Fleet Attributes", 1);
+
 $section->addText("The following provides a summary of your existing printing devices.");
 $section->addText("Leased devices are shown in gray.");
 
@@ -30,10 +31,12 @@ $cellWidths = array(
 $tcStyle    = $this->styles->tables->fleetattributes;
 /**
  * Optimized Devices
+ * TODO: fix column widths - same as underutilized, but formats differently
  */
 $section->addTitle("Optimized Devices - No Changes Necessary", 2);
+
 $optimizedDevicesTable = $section->addTable($tcStyle->tablestyle);
-$optimizedDevicesTable->addRow($tcStyle->rowheight);
+$optimizedDevicesTable->addRow($tcStyle->rowheight, $tcStyle->rowheader);
 $optimizedDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'bold_text', 'nospacing_centeralign');
 $optimizedDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'bold_text', 'nospacing_centeralign');
 $optimizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
@@ -45,7 +48,7 @@ foreach ($healthcheckViewModel->getOptimizedDevices() as $device)
 {
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
 
-    $optimizedDevicesTable->addRow();
+    $optimizedDevicesTable->addRow(null, $tcStyle->rowstyle);
     $cell = $optimizedDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
     $cell->addText($deviceName, null, array('spaceAfter' => 0));
     $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
@@ -58,23 +61,13 @@ foreach ($healthcheckViewModel->getOptimizedDevices() as $device)
 }
 $section->addPageBreak();
 
-$cellWidths = array(
-    0,
-    1000,
-    1000,
-    0,
-    1000,
-    0,
-    0,
-    1000
-);
-
 /**
  * Underutilized Devices
  */
 $section->addTitle("Underutilized Devices", 2);
+
 $UnderutilizedDevicesTable = $section->addTable($tcStyle->tablestyle);
-$UnderutilizedDevicesTable->addRow($tcStyle->rowheight);
+$UnderutilizedDevicesTable->addRow($tcStyle->rowheight, $tcStyle->rowheader);
 $UnderutilizedDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'bold_text', 'nospacing_centeralign');
 $UnderutilizedDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'bold_text', 'nospacing_centeralign');
 $UnderutilizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
@@ -84,13 +77,12 @@ $UnderutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addT
 $UnderutilizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText('Reports Toner Levels', 'bold_text', 'nospacing_centeralign');
 $UnderutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'bold_text', 'nospacing_centeralign');
 $UnderutilizedDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText('Suggested Action', 'bold_text', 'nospacing_centeralign');
-
 /* @var $device Proposalgen_Model_DeviceInstance */
 foreach ($healthcheckViewModel->getUnderutilizedDevices() as $device)
 {
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
 
-    $UnderutilizedDevicesTable->addRow();
+    $UnderutilizedDevicesTable->addRow(null, $tcStyle->rowstyle);
     $cell = $UnderutilizedDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
     $cell->addText($deviceName, null, array('spaceAfter' => 0));
     $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
@@ -110,8 +102,9 @@ $section->addPageBreak();
  * Overutilized Devices
  */
 $section->addTitle("Overutilized Devices", 2);
+
 $OverutilizedDevicesTable = $section->addTable($tcStyle->tablestyle);
-$OverutilizedDevicesTable->addRow($tcStyle->rowheight);
+$OverutilizedDevicesTable->addRow($tcStyle->rowheight, $tcStyle->rowheader);
 $OverutilizedDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'bold_text', 'nospacing_centeralign');
 $OverutilizedDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'bold_text', 'nospacing_centeralign');
 $OverutilizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
@@ -127,7 +120,7 @@ foreach ($healthcheckViewModel->getOverutilizedDevices() as $device)
 {
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
 
-    $OverutilizedDevicesTable->addRow();
+    $OverutilizedDevicesTable->addRow(null, $tcStyle->rowstyle);
     $cell = $OverutilizedDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
     $cell->addText($deviceName, null, array('spaceAfter' => 0));
     $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
@@ -143,7 +136,7 @@ foreach ($healthcheckViewModel->getOverutilizedDevices() as $device)
 }
 
 $cellWidths = array(
-    0,
+    6500,
     500,
     500,
     500,
@@ -157,8 +150,10 @@ $section->addPageBreak();
  * Old Devices
  */
 $section->addTitle("Old Devices", 2);
+
 $oldDevicesTable = $section->addTable($tcStyle->tablestyle);
-$oldDevicesTable->addRow($tcStyle->rowheight);
+$row             = $oldDevicesTable->addRow($tcStyle->rowheight, $tcStyle->rowheader);
+$row->getStyle()->setCantSplit(true);
 $oldDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'bold_text', 'nospacing_centeralign');
 $oldDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'bold_text', 'nospacing_centeralign');
 $oldDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
@@ -173,7 +168,7 @@ foreach ($healthcheckViewModel->getOldDevices() as $device)
 {
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
 
-    $oldDevicesTable->addRow();
+    $oldDevicesTable->addRow(null, $tcStyle->rowstyle);
     $cell = $oldDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
     $cell->addText($deviceName, null, array('spaceAfter' => 0));
     $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
@@ -193,8 +188,9 @@ $section->addPageBreak();
  * Devices Not Reporting Toner Levels
  */
 $section->addTitle("Devices Not Reporting Toner Levels", 2);
+
 $notReportingTonerDevicesTable = $section->addTable($tcStyle->tablestyle);
-$notReportingTonerDevicesTable->addRow($tcStyle->rowheight);
+$notReportingTonerDevicesTable->addRow($tcStyle->rowheight, $tcStyle->rowheader);
 $notReportingTonerDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'bold_text', 'nospacing_centeralign');
 $notReportingTonerDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'bold_text', 'nospacing_centeralign');
 $notReportingTonerDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
@@ -209,7 +205,7 @@ foreach ($healthcheckViewModel->getDevicesNotReportingTonerLevels() as $device)
 {
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
 
-    $notReportingTonerDevicesTable->addRow();
+    $notReportingTonerDevicesTable->addRow(null, $tcStyle->rowstyle);
     $cell = $notReportingTonerDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
     $cell->addText($deviceName, null, array('spaceAfter' => 0));
     $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));

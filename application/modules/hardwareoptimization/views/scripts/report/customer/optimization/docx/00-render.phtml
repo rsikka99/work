@@ -8,18 +8,18 @@ $customerOptimization = new Hardwareoptimization_Model_Optimization_Customer($ha
 
 $graphs = $customerOptimization->getGraphs();
 
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
 // Initialize some properties
-$properties = $phpWord->getProperties();
+$properties = $phpWord->getDocumentProperties();
 $properties->setCreator('MPS Assessment Software');
 $properties->setTitle('Customer Hardware Optimization Report');
 $properties->setDescription('MPS Assessment Software');
 $properties->setCategory('Customer Report');
 $properties->setLastModifiedBy('MPS Assessment Software');
 
-$section          = $phpWord->createSection(array(
+$section          = $phpWord->addSection(array(
     'orientation'  => null,
     'marginLeft'   => 375,
     'marginRight'  => 375,
@@ -47,6 +47,7 @@ $h2Background              = My_Brand::$reportHeadingBackgroundColor;
 $h2Color                   = My_Brand::$reportSubHeadingColor;
 $h3Color                   = My_Brand::$reportHeadingColor;
 
+
 /**
  * Paragraph styles
  */
@@ -58,12 +59,18 @@ $phpWord->addTitleStyle(2, array(
     'bold'   => true,
     'italic' => true
 ), array(
-    'bgColor' => $h2Background,
+    'shading' => array(
+        'fill' => $h2Background,
+    )
 ));
-$this->phpword->addParagraphStyle('titleStyle1', array(
+
+
+$phpWord->addParagraphStyle('titleStyle1', array(
     'align'      => 'center',
     'spaceAfter' => 100,
-    'bgColor'    => $titlePageBackgroundColor
+    'shading'    => array(
+        'fill' => $titlePageBackgroundColor,
+    )
 ));
 $phpWord->addParagraphStyle('titleStyle2', array(
     'spaceAfter'  => 50,
@@ -72,7 +79,9 @@ $phpWord->addParagraphStyle('titleStyle2', array(
 ));
 $phpWord->addParagraphStyle('titleStyle3', array(
     'spaceAfter' => 100,
-    'bgColor'    => $titlePageBackgroundColor2
+    'shading'    => array(
+        'fill' => $titlePageBackgroundColor2,
+    )
 ));
 $phpWord->addFontStyle('titlepage_title', array(
     'size'  => 24,
@@ -90,8 +99,16 @@ $phpWord->addFontStyle('titlepage_address', array(
     'size'  => 12,
     'color' => $titlePageTextColor
 ));
+
 $styles = (object)array(
     "tables" => (object)array(
+            "rowheader"          => array(
+                'tblHeader' => true,
+                'cantSplit' => true,
+            ),
+            "rowstyle"           => array(
+                "cantSplit" => true,
+            ),
             "singleimage"        => (object)array(
                     "tablestyle" => array(),
                     "cell1"      => array(
@@ -126,6 +143,7 @@ $styles = (object)array(
                         'cellMarginBottom' => 100,
                         'cellMarginLeft'   => 100
                     ),
+
                     "rowheight"  => null,
                     "cell1"      => array(
                         "valign" => "center"
@@ -140,6 +158,7 @@ $styles = (object)array(
                 "align" => "center"
             )
         ),
+
 );
 
 $standard_cell = (object)array(
@@ -306,7 +325,7 @@ $suggestedDevices = (object)array(
             "cell4"     => $standard_cell_vcenter,
             "cell5"     => $standard_cell_vcenter,
             "cell6"     => $standard_cell_vcenter_no_right_border,
-            "cell7" => $standard_cell_left
+            "cell7"     => $standard_cell_left
         ),
     "header"     => (object)array(
             'header'     => $standard_header,
@@ -314,7 +333,7 @@ $suggestedDevices = (object)array(
         ),
 );
 
-$retiredDevices   = (object)array(
+$retiredDevices = (object)array(
     "tablestyle" => array(
         'cellMarginTop'    => 50,
         'cellMarginRight'  => 50,
@@ -342,7 +361,7 @@ $retiredDevices   = (object)array(
         ),
 );
 
-$flaggedDevices   = (object)array(
+$flaggedDevices = (object)array(
     "tablestyle" => array(
         'cellMarginTop'    => 50,
         'cellMarginRight'  => 50,
@@ -364,7 +383,7 @@ $flaggedDevices   = (object)array(
             "cell4"     => $standard_cell_vcenter,
             "cell5"     => $standard_cell_vcenter,
             "cell6"     => $standard_cell_vcenter_no_right_border,
-            "cell7" => $standard_cell_left
+            "cell7"     => $standard_cell_left
         ),
     "header"     => (object)array(
             'header'     => $standard_header,
@@ -435,7 +454,7 @@ $this->partial("report/customer/optimization/docx/05_age_of_fleet.phtml", $data)
 $this->partial("report/customer/optimization/docx/06_fleet_diversity.phtml", $data);
 $this->partial("report/customer/optimization/docx/07_color_usage.phtml", $data);
 $this->partial("report/customer/optimization/docx/08_device_appendix.phtml", $data);
-$objWriter = PHPWord_IOFactory::createWriter($phpWord, 'Word2007');
+$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
 $objWriter->save($this->savePath);
 
 echo $this->baseUrl($this->publicFileName);

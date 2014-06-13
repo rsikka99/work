@@ -3,10 +3,10 @@
  * Healthcheck - 3 Smart Steps to Success with Managed Print
  */
 
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 $section->addPageBreak();
 
@@ -15,10 +15,10 @@ $healthcheckViewModel = $this->healthcheckViewModel;
 
 $section->addTitle("Next Steps", 1);
 
-$section->addListItem(sprintf('Financial: Review your toner usage and costs, and whether you can switch any of your OEM toners to %1$s\'s compatible toners.', $this->companyName), null, null, array('listType' => PHPWord_Style_ListItem::TYPE_NUMBER));
-$section->addListItem("Environmental: Review how many pages you are printing on both sides of the paper, and consider how much you could decrease your environmental impact by printing more on both sides.", null, null, array('listType' => PHPWord_Style_ListItem::TYPE_NUMBER));
-$section->addListItem("Hardware Usage: Review your devices to see where some of your page volumes could be shifted to other devices.", null, null, array('listType' => PHPWord_Style_ListItem::TYPE_NUMBER));
-$section->addListItem("MPS: Consider a managed print program that will allow your printing devices to be remotely managed with a set cost per page, saving you time and money and allowing you to focus more on your business.", null, null, array('listType' => PHPWord_Style_ListItem::TYPE_NUMBER));
+$section->addListItem(sprintf('Financial: Review your toner usage and costs, and whether you can switch any of your OEM toners to %1$s\'s compatible toners.', $this->companyName), null, null, array('listType' => \PhpOffice\PhpWord\Style\ListItem::TYPE_NUMBER));
+$section->addListItem("Environmental: Review how many pages you are printing on both sides of the paper, and consider how much you could decrease your environmental impact by printing more on both sides.", null, null, array('listType' => \PhpOffice\PhpWord\Style\ListItem::TYPE_NUMBER));
+$section->addListItem("Hardware Usage: Review your devices to see where some of your page volumes could be shifted to other devices.", null, null, array('listType' => \PhpOffice\PhpWord\Style\ListItem::TYPE_NUMBER));
+$section->addListItem("MPS: Consider a managed print program that will allow your printing devices to be remotely managed with a set cost per page, saving you time and money and allowing you to focus more on your business.", null, null, array('listType' => \PhpOffice\PhpWord\Style\ListItem::TYPE_NUMBER));
 
 $section->addTextBreak();
 

@@ -3,9 +3,9 @@
  * Assessment - Analysis: Service and Supplies Logistics
  */
 
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 $section->addPageBreak();
@@ -16,11 +16,13 @@ $graphs              = $assessmentViewModel->getGraphs();
 
 
 $section->addTitle('Analysis: Service and Supplies Logistics', 1);
+
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
 $gradeTable->addRow();
 $gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($assessmentViewModel->getRanking()->getSuppliesAndServiceLogistics()->RankingText, null, 'nospacing');
 $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($assessmentViewModel->getRanking()->getSuppliesAndServiceLogistics()->Rank, 1), 'gradeFont', 'gradeParagraph');
 $section->addTextBreak();
+
 $section->addTitle('Printing Device Management Breakdown', 2);
 $section->addText('Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.');
 
@@ -45,7 +47,7 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
     $inkJetString = '10% to 25%';
 }
 
-$textRun = $section->createTextRun();
+$textRun = $section->addTextRun();
 $textRun->addText('Based on your questionnaire, ');
 $textRun->addText(sprintf('%1$s of your printing is done on inkjet devices. ', $inkJetString), array(
     'bold' => true
@@ -62,6 +64,7 @@ $section->addPageBreak();
 
 $section->addTitle('Efficiency of Break-Fix Service', 2);
 $section->addText('Based on your questionnaire responses, we discovered the following:');
+
 // Efficiency of Break-Fix Service table
 $cellWidths = array(
     7500,
@@ -79,9 +82,7 @@ $cell = $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTab
 $cell->addText('Annual downtime resulting from printer breakdowns', 'bold_text', 'nospacing');
 $cell->addText('(Based on an 8 hour work day)', 'bold_text', 'nospacing');
 $table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($assessmentViewModel->getAnnualDowntimeFromBreakdowns()), 'bold_text', 'nospacing_rightalign');
-
 $section->addText(sprintf('%1$s can provide next-day service for your printer fleet.', $this->companyName), 'small_italic_text');
-
 
 $section->addTitle('Number of Vendors', 2);
 $section->addText('Based on your questionnaire responses, we discovered the following:');
@@ -104,13 +105,11 @@ $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell
 $table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText($this->currency($assessmentViewModel->getCostOfExecutingSuppliesOrders()), 'bold_text', 'nospacing_rightalign');
 $section->addText(sprintf('Time spent dealing with multiple vendors could be better spent focusing on your core business tasks. %1$s can bundle your supplies and service into a single invoice - and if you need new hardware, that can be included too.', $this->companyName), 'small_italic_text');
 
-
 $section->addTitle('Number of Printing Device Models and Supply Types', 2);
 $section->addText(sprintf('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.', number_format($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount()), number_format($assessmentViewModel->getNumberOfUniqueModels()), number_format(count($assessmentViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances())), number_format(count($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances())), number_format($assessmentViewModel->getNumberOfUniquePurchasedModels()), number_format($assessmentViewModel->getNumberOfUniquePurchasedToners()), number_format($assessmentViewModel->getCashHeldInInventory())));
 
-$imageTable = $section->addTable(array(
-    'borderBottomSize' => 1
-));
+
+$imageTable = $section->addTable();
 $imageTable->addRow();
 $cell = $imageTable->addCell(9028.8, array(
     'valign' => 'center'

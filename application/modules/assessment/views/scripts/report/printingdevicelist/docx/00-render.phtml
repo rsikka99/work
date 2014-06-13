@@ -1,12 +1,12 @@
 <?php
-/* @var $phpword PHPWord */
+/* @var $phpword \PhpOffice\PhpWord\PhpWord */
 $phpword = $this->phpword;
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 
 // Initialize some properties
-$properties = $phpword->getProperties();
+$properties = $phpword->getDocumentProperties();
 $properties->setCreator('MPS Assessment Software');
 $properties->setCompany('MPS Assessment Software');
 $properties->setTitle('Printing Device List');
@@ -21,7 +21,7 @@ $properties->setSubject('MPS Assessment Software');
  */
 
 // This section is landscape with 0.5" margins insead of 1"
-$mainSection = $phpword->createSection(array(
+$mainSection = $phpword->addSection(array(
     'orientation'  => 'portrait',
     'marginLeft'   => 720,
     'marginRight'  => 720,
@@ -121,11 +121,20 @@ $highlight_color = "f6ff8f";
 /* PORTRAIT FULL WIDTH TABLE = 10400 twips */
 
 $includeTable = (object)array(
+    "rowheader"   => array(
+        'tblHeader' => true,
+        'cantSplit' => true,
+    ),
+    "rowstyle"    => array(
+        "cantSplit" => true,
+    ),
     "tablestyle"  => array(
-        'cellMarginTop'    => 50,
-        'cellMarginRight'  => 50,
-        'cellMarginBottom' => 50,
-        'cellMarginright'  => 50
+        'cellMarginTop'     => 50,
+        'cellMarginRight'   => 50,
+        'cellMarginBottom'  => 50,
+        'cellMarginright'   => 50,
+        'borderBottomSize'  => 10,
+        'borderBottomColor' => 'black',
     ),
     "col1Width"   => 2200,
     "col2Width"   => 2200,
@@ -173,11 +182,20 @@ $includeTable = (object)array(
 );
 
 $excludeTable = (object)array(
+    "rowheader"   => array(
+        'tblHeader' => true,
+        'cantSplit' => true,
+    ),
+    "rowstyle"    => array(
+        "cantSplit" => true,
+    ),
     "tablestyle"  => array(
-        'cellMarginTop'    => 50,
-        'cellMarginRight'  => 50,
-        'cellMarginBottom' => 50,
-        'cellMarginright'  => 50
+        'cellMarginTop'     => 50,
+        'cellMarginRight'   => 50,
+        'cellMarginBottom'  => 50,
+        'cellMarginright'   => 50,
+        'borderBottomSize'  => 10,
+        'borderBottomColor' => 'black',
     ),
     "col1Width"   => 2600,
     "col2Width"   => 2600,
@@ -228,10 +246,16 @@ $excludeTable = (object)array(
  * the view scripts
  */
 $styles = (object)array(
-    "tables" => (object)array(
+    "tables"    => (object)array(
             "includeTable" => $includeTable,
             "excludeTable" => $excludeTable
-        )
+        ),
+    "underline" => (object)array(
+            "tablestyle" => array(
+                'borderTopSize'  => 10,
+                'borderTopColor' => 'black',
+            )
+        ),
 );
 
 /**
@@ -253,7 +277,7 @@ $this->partial("/report/printingdevicelist/docx/01_header.phtml", $data);
 $this->partial("/report/printingdevicelist/docx/02_included.phtml", $data);
 $this->partial("/report/printingdevicelist/docx/03_excluded.phtml", $data);
 
-$objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
+$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpword, 'Word2007');
 $objWriter->save($this->savePath);
 
 /**

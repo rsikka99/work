@@ -2,7 +2,7 @@
 /**
  * Solution - Solution 1: PrintIQ�
  */
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
@@ -20,9 +20,11 @@ $listParagraphStyle = array(
  */
 $section->addPageBreak();
 $section->addTitle(sprintf('Solution: %1$s', $this->brandName), 1);
+
 $section->addText(sprintf('Get the most out of your existing printing assets with the %1$s program. %2$s will take over the management of your current printing equipment and wrap your supplies and service into a single invoice.', $this->brandName, $this->companyName));
 
 $section->addTitle('Program Components', 2);
+
 $section->addText(sprintf('Pay by the page with the %1$s program:', $this->brandName));
 $section->addListItem(sprintf('$%1$s for monochrome pages', $this->NumberFormat($assessmentViewModel->getMPSBlackAndWhiteCPP(), 8)), 0, 'bold_text', null, $listParagraphStyle);
 $section->addListItem(sprintf('$%1$s for color pages', $this->NumberFormat($assessmentViewModel->getMPSColorCPP(), 8)), 0, 'bold_text', null, $listParagraphStyle);
@@ -39,9 +41,13 @@ $section->addText(sprintf('Based on information from your %1$s Smart Assessment,
 // Insert Table
 $tc    = $this->styles->tables->estimatedAnnualSavings;
 $table = $section->addTable($tc->tablestyle);
-$table->addRow($tc->header->rowheight);
-$cell = $table->addCell($tc->headerCol1Width, $tc->header->cell1->cellStyle, 2)->addText('Current Scenario', $tc->header->cell1->fontStyle, $tc->header->cell1->paragraphStyle);
-$cell = $table->addCell($tc->headerCol2Width, $tc->header->cell2->cellStyle, 2)->addText('Proposed Scenario', $tc->header->cell2->fontStyle, $tc->header->cell2->paragraphStyle);
+$table->addRow($tc->header->rowheight, $tc->rowheader);
+
+$cell = $table->addCell($tc->headerCol1Width, $tc->header->cell1->cellspan);
+$cell->addText('Current Scenario', $tc->header->cell1->fontStyle, $tc->header->cell1->paragraphStyle);
+
+$cell = $table->addCell($tc->headerCol2Width, $tc->header->cell2->cellspan);
+$cell->addText('Proposed Scenario', $tc->header->cell2->fontStyle, $tc->header->cell2->paragraphStyle);
 
 $table->addRow($tc->body->rowheight);
 $cell = $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('Ink and toner', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
@@ -112,6 +118,7 @@ $cell = $table->addCell($tc->col4Width, $tc->footer->cell4->cellStyle)->addText(
 
 
 $section->addText(sprintf('Note that although the page volumes from all of your purchased devices were included in our savings calculations, not all of them may qualify for our managed print services program or just-in-time supplies fulfillment. Volumes from unqualified devices would have to be merged to an existing or new qualified device to be included in the program. Please see the Appendix for a complete printing device list with details on compatibility with the %1$s program.', $this->brandName), 'small_italic_text');
+$section->addTextBreak(1);
 
 $tc    = $this->styles->tables->totalAnnualSavings;
 $table = $section->addTable($tc->tablestyle);
@@ -119,7 +126,5 @@ $table = $section->addTable($tc->tablestyle);
 $table->addRow($tc->body->rowheight);
 $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf('Total annual savings with %1$s', $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
 $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText($this->currency($assessmentViewModel->getPrintIQSavings()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
-
-
 
 // EOF

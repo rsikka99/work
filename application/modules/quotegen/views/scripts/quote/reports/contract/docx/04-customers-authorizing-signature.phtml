@@ -1,6 +1,8 @@
 <?php
-/* @var $section PHPWord_Section */
-$section   = $this->section;
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+
+$section = $this->section;
+
 
 /* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
 $contractTemplateSection = $this->contractTemplateSection;
@@ -10,8 +12,8 @@ $noSpacing = $this->paragraphStyle->noSpacing;
 $labelFont = $this->fontStyle->label;
 
 $customerSignatureTable = $section->addTable($this->tableStyle->standard);
-$customerSignatureTable->addRow();
-$customerSignatureTable->addCell($tableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $noSpacing);
+$customerSignatureTable->addRow(300);
+$customerSignatureTable->addCell($tableSpan ['span8'], $this->cellStyle->fullWidthGridSpan4)->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $noSpacing);
 
 /**
  * Signature Text
@@ -23,8 +25,8 @@ $guarantyHtml->loadHTML($contractTemplateSection->getContractSectionText());
 foreach ($guarantyHtml->getElementsByTagName('p') as $paragraphNode)
 {
     $customerSignatureTable->addRow();
-    $cell    = $customerSignatureTable->addCell($tableSpan ['span8'], null, 8);
-    $textRun = $cell->createTextRun($this->paragraphStyle->justified);
+    $cell    = $customerSignatureTable->addCell($tableSpan ['span8'], $this->cellStyle->gridSpan4);
+    $textRun = $cell->addTextRun($this->paragraphStyle->justified);
 
     $childNodes = $paragraphNode->childNodes;
     for ($i = 0; $i < $childNodes->length; $i++)
@@ -48,11 +50,11 @@ foreach ($guarantyHtml->getElementsByTagName('p') as $paragraphNode)
  */
 $customerSignatureTable->addRow(350);
 $customerSignatureTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomBorderBAlign)->addText('(As Stated Above)', null, $noSpacing);
-$customerSignatureTable->addCell($tableSpan ['span3'], $this->cellStyle->borderBAlign, 3)->addText('X', null, $noSpacing);
-$customerSignatureTable->addCell($tableSpan ['span3'], $this->cellStyle->bottomBorderBAlign, 3)->addText('', null, $noSpacing);
+$customerSignatureTable->addCell($tableSpan ['span3'], $this->cellStyle->borderBAlign)->addText('X', null, $noSpacing);
+$customerSignatureTable->addCell($tableSpan ['span3'], $this->cellStyle->bottomBorderBAlign)->addText('', null, $noSpacing);
 $customerSignatureTable->addCell($tableSpan ['span1'], $this->cellStyle->bottomBorderBAlign)->addText('', null, $noSpacing);
 $customerSignatureTable->addRow();
-$customerSignatureTable->addCell($tableSpan ['span1'], null)->addText('CUSTOMER', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
-$customerSignatureTable->addCell($tableSpan ['span3'], null, 3)->addText('SIGNATURE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
-$customerSignatureTable->addCell($tableSpan ['span3'], null, 3)->addText('PRINT NAME & TITLE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
-$customerSignatureTable->addCell($tableSpan ['span1'], null)->addText('DATE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$customerSignatureTable->addCell($tableSpan ['span1'], $this->cellStyle->borderTop)->addText('CUSTOMER', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$customerSignatureTable->addCell($tableSpan ['span3'], $this->cellStyle->borderTop)->addText('SIGNATURE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$customerSignatureTable->addCell($tableSpan ['span3'], $this->cellStyle->borderTop)->addText('PRINT NAME & TITLE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$customerSignatureTable->addCell($tableSpan ['span1'], $this->cellStyle->borderTop)->addText('DATE', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);

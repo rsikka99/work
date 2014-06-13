@@ -3,10 +3,10 @@
  * Healthcheck - Analysis: Service and Supplies Logistics
  */
 
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
@@ -14,6 +14,7 @@ $healthcheckViewModel = $this->healthcheckViewModel;
 $graphs               = $healthcheckViewModel->getGraphs();
 
 $section->addTitle('Printing Device Management Breakdown', 2);
+
 $section->addText('Different types of printing devices are managed in different ways: newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.');
 
 $section->addTextBreak(2);
@@ -23,7 +24,8 @@ $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage(
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs['PagesWithOrWithoutJIT']);
 $section->addTextBreak(2);
 
-$section->addTitle('Number of Printing Device Models and Supply Types', 2); //
+$section->addTitle('Number of Printing Device Models and Supply Types', 2);
+
 $section->addText(sprintf('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. Models with less than or equal to 0.7%% of the total device count are put into the "Other" group.'
     , number_format(count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances())) //1
     , number_format($healthcheckViewModel->getNumberOfUniqueModels()) //2
@@ -117,6 +119,7 @@ $section->addTextBreak(2);
 // END TABLE
 
 $section->addTitle('Number of Printing Device Vendors', 2);
+
 $section->addText(sprintf('Out of your %1$s networked printing devices, you have %2$s different vendors. Each section of the chart below represents a single vendor name.'
     , $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()
     , count($healthcheckViewModel->getDeviceVendorCount())
@@ -126,6 +129,7 @@ $imageTable->addRow();
 $imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['PercentPerDeviceBrand'], array('align' => 'center'));
 
 $section->addTitle(sprintf('Number of Printing Devices Compatible with %1$s', My_Brand::$companyNameFull), 2);
+
 $section->addText(sprintf('Out of your %1$s networked printing devices, you have %2$s that are managed, %3$s that are not compatible and %4$s devices compatible with %5$s. These non compatible devices are shown in the fleet attributes section below. A complete list of all devices and their %6$s compatibility can be found in the Appendix.'
     , $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()
     , $healthcheckViewModel->getDevices()->isManagedDeviceInstances->getCount()
@@ -146,6 +150,7 @@ $cellWidths = array(
 );
 $section->addPageBreak();
 $section->addTitle('Estimated OEM Toner Costs vs. Estimated Compatible Toner Costs', 2);
+
 $section->addText(sprintf('You are saving money by moving to Private Brand Toner for the machines that are on your %1$s Program.'), $this->jit);
 $section->addText(sprintf('%1$s analyzed your usage on your ink and toner spend and you can save an additional %2$s over the next 6 months by moving to the suggested items on the attached analysis. ',
         $this->brandName,

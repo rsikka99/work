@@ -1,20 +1,18 @@
 <?php
 
-/* @var $phpword PHPWord */
+/* @var $phpword \PhpOffice\PhpWord\PhpWord */
 $phpword = $this->phpword;
 /* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
 $hardwareOptimization = $this->hardwareOptimization;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section         = $this->section;
 $titleImageStyle = array(
     'align' => 'center'
 );
 
 // Table to fix the issue of images being different sizes
-$imageTable = $section->addTable(array(
-    'borderBottomSize' => 1
-));
+$imageTable = $section->addTable(array());
 $imageTable->addRow(5760);
 $cell = $imageTable->addCell(15000.8, array(
     'valign' => 'center'
@@ -54,3 +52,4 @@ if ($addressCount < 11)
         $section->addText(' ', 'titlepage_address', 'titleStyle3');
     }
 }
+

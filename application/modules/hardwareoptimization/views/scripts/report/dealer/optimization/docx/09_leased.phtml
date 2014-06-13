@@ -7,7 +7,7 @@
  */
 
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $optimization Hardwareoptimization_ViewModel_Optimization */
@@ -18,7 +18,7 @@ $leasedDeviceInstances = $optimization->getDevices()->leasedDeviceInstances->get
 $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
 
 $section->addTextBreak();
-$headerTextRun = $section->createTextRun();
+$headerTextRun = $section->addTextRun();
 $headerTextRun->addText('Leased Devices', 'titlepageHeaderFont');
 $headerTextRun->addText(sprintf(' (%1$s)', number_format(count($leasedDeviceInstances))));
 $section->addText("The following devices have been deemed productive and fall within the target costs per pages.");
@@ -28,7 +28,7 @@ $tcStyle = $this->styles->tables->leased;
 $table   = $section->addTable($tcStyle->tablestyle);
 
 // Table header
-$table->addRow($tcStyle->body->rowheight);
+$table->addRow($tcStyle->body->rowheight,$this->styles->tables->tablestyle->rowheader);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial Number', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
@@ -38,7 +38,7 @@ $table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addTe
 // Begin with data rows
 foreach ($leasedDeviceInstances as $deviceInstance)
 {
-    $table->addRow($tcStyle->body->rowheight);
+    $table->addRow($tcStyle->body->rowheight,$this->styles->tables->tablestyle->rowstyle);
     $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
 
     $table->addCell($tcStyle->col1Width, $style)->addText($deviceInstance->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);

@@ -3,20 +3,22 @@
  * Assessment - Report Card
  */
 
-/* @var $phpword PHPWord */
+/* @var $phpword \PhpOffice\PhpWord\PhpWord */
 $phpword = $this->phpword;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 
 $section->addTitle(sprintf('Your %1$s Smart Assessment', $this->brandName), 1);
+
 $section->addText(sprintf('It can be a challenge to understand your printing needs, and there are many factors to consider: hardware functionality, supplies delivery, service, parts, maintenance kits, IT time spent supporting printers -- and the cost for all of this. This free %1$s Smart Assessment will allow you to make sense of your printing needs and costs. %2$s can help you get your office print under control with our smart and flexible managed print services solutions.', $this->brandName, $this->companyName));
 
 $section->addTitle('Score Card', 2);
 $section->addText('Your office printing environment was graded across five categories on a scale of 1 to 10. A score of 1 indicates a low-efficiency or high-cost scenario. A score of 10 indicates a high-efficiency or low-cost scenario. Your results are below:');
+
 
 $reportCardTable = $section->addTable($this->styles->tables->grades->tablestyle);
 $rowHeight       = 800;
@@ -75,7 +77,7 @@ $savingsTable = $section->addTable($this->styles->tables->savings->tablestyle);
 $savingsTable->addRow(720);
 $cell = $savingsTable->addCell(9028, $this->styles->tables->savings->cell1);
 
-$textrun = $cell->createTextRun('savingsParagraph');
+$textrun = $cell->addTextRun('savingsParagraph');
 $textrun->addText(sprintf('Our %1$s program could provide you with annual savings of up to ', $this->brandName), 'savingsFont');
 $textrun->addText($this->currency($assessmentViewModel->getPrintIQSavings()), 'savingsAmountFont');
 $textrun->addText('.', 'savingsFont');

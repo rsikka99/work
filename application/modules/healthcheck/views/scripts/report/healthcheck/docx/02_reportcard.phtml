@@ -1,15 +1,16 @@
 <?php
 /** Healthcheck - Report Card */
 
-/* @var $phpword PHPWord */
+/* @var $phpword \PhpOffice\PhpWord\PhpWord */
 $phpword = $this->phpword;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
 
 $section->addTitle(sprintf('Your %1$s Health Check', $this->brandName), 1);
+
 $section->addText(sprintf('Does your fleet of printing hardware deliver your users and business the greatest return on investment? How many trees and how much water is consumed by the paper you used every year? This free %1$s Health Check will break down your current fleet and show you how you can lower your supplies costs, which devices are printing too much and which devices are printing too little, and the environmental impact of your fleet.', $this->brandName));
 $section->addText("Data used in this Health Check is compiled using remote monitoring software, from the past 30 days.");

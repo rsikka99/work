@@ -6,22 +6,27 @@
  * information in the cost analysis.
  */
 
+
 /* @var $optimization Hardwareoptimization_ViewModel_Optimization */
 $optimization = $this->optimization;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
-$section->addTextBreak();
-$section->addText('Cost Analyst Summary', array('bold' => true, 'size' => 12));
+$section->addPageBreak();
+$section->addText('Cost Analysis Summary', array('bold' => true, 'size' => 12));
 
 // Table with values
 $tcStyle = $this->styles->tables->compare;
-$table   = $section->addTable($tcStyle->tablestyle);;
+$table   = $section->addTable($tcStyle->tablestyle);
 
-$table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->span2Width, $tcStyle->header->header->cellStyle, 2)->addText('Current Fleet', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->span2Width, $tcStyle->header->header->cellStyle, 2)->addText('Optimized', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addRow($tcStyle->body->rowheight,$this->tableStyle->rowheader);
+$cell1 = $table->addCell($tcStyle->span2Width, $tcStyle->headercell);
+$cell1->addText('Current Fleet', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+
+$cell2 = $table->addCell($tcStyle->span2Width, $tcStyle->headercell);
+$cell2->addText('Optimized', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+
 
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Monochrome CPP:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);

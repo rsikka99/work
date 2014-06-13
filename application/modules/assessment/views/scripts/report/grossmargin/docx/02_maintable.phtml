@@ -4,7 +4,7 @@
  *
  * This script contains everything for the main table of the cost analysis.
  */
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
@@ -27,13 +27,19 @@ $tcStyle = $this->styles->tables->grossMargin;
 $table   = $section->addTable($tcStyle->tablestyle);
 
 // Table header
-$table->addRow($tcStyle->header->rowheight, $tcStyle->header->fontStyle);
+$table->addRow($tcStyle->header->rowheight,$tcStyle->rowheader);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->nobottomborder)->addText(null, $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->colSpanWidth, $tcStyle->header->cell, 5)->addText('Black And White', $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->colSpanWidth, $tcStyle->header->cell, 5)->addText('Color', $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->colSpanWidth, $tcStyle->header->cell, 2)->addText('Toner SKUs', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
-$table->addRow($tcStyle->header->rowheight, $tcStyle->header->fontStyle);
+$blackAndWhite = $table->addCell($tcStyle->colSpanWidth, $tcStyle->header->headercelllarge, 5);
+$blackAndWhite->addText('Black And White', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+
+$color = $table->addCell($tcStyle->colSpanWidth, $tcStyle->header->headercelllarge, 5);
+$color->addText('Color', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+
+$tonerSkus = $table->addCell($tcStyle->colSpanWidth, $tcStyle->header->headercellsmall, 2);
+$tonerSkus->addText('Toner SKUs', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+
+$table->addRow($tcStyle->header->rowheight,$tcStyle->rowheader);
 
 $column1 = $table->addCell($tcStyle->col1Width, $tcStyle->header->notopborder);
 $column1->addText('Device Name', $tcStyle->header->fontStyle, $tcStyle->centeralign);
@@ -131,7 +137,7 @@ foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDevice
     $mono_toner_class  = ($completeMonoToners) ? $tcStyle->row->cell : $tcStyle->row->highlightcell;
     $color_toner_class = ($completeColorToners) ? $tcStyle->row->cell : $tcStyle->row->highlightcell;
 
-    $table->addRow($tcStyle->cell->rowheight);
+    $table->addRow($tcStyle->rowheight->cell,$tcStyle->rowstyle);
     $column1 = $table->addCell($tcStyle->col1Width, $tcStyle->row->cell);
     $column1->addText($this->translate(str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName())), $tcStyle->row->fontStyle, $tcStyle->leftalign);
     $column1->addText("(" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")", $tcStyle->row->fontStyle, $tcStyle->leftalign);
@@ -171,7 +177,7 @@ foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDevice
 }
 
 // Table footer (totals row)
-$table->addRow($tcStyle->footer->rowheight);
+$table->addRow($tcStyle->footer->rowheight,$tcStyle->rowstyle);
 $table->addCell($tcStyle->col1Width, $tcStyle->footer->cell)->addText('Totals for ' . number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getCount()) . ' devices:', $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col2Width, $tcStyle->footer->cell)->addText($this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col3Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);

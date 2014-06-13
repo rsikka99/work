@@ -45,7 +45,7 @@ class Healthcheck_Report_Printiq_HealthcheckController extends Healthcheck_Libra
                 {
                     case "docx" :
                         // Add DOCX Logic here
-                        $this->view->phpword = new PHPWord();
+                        $this->view->phpword = new \PhpOffice\PhpWord\PhpWord();
                         break;
                     case "html" :
                     default :
@@ -78,7 +78,7 @@ class Healthcheck_Report_Printiq_HealthcheckController extends Healthcheck_Libra
                 throw new Exception("CSV Format not available through this page yet!");
                 break;
             case "docx" :
-                $this->view->phpword = new PHPWord();
+                $this->view->phpword = new \PhpOffice\PhpWord\PhpWord();
                 $healthcheck         = $this->getHealthcheckViewModel();
                 $graphs              = $this->cachePNGImages($healthcheck->getGraphs(), true);
                 $healthcheck->setGraphs($graphs);

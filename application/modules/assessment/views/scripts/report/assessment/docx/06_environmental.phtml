@@ -3,10 +3,10 @@
  * Assessment - Analysis: Environmental Impact
  */
 
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 $section->addPageBreak();
 
@@ -15,6 +15,7 @@ $assessmentViewModel = $this->assessmentViewModel;
 $graphs              = $assessmentViewModel->getGraphs();
 
 $section->addTitle("Analysis: Environmental Impact", 1);
+
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
 $gradeTable->addRow();
 $gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($assessmentViewModel->getRanking()->getEnvironmentalFriendliness()->RankingText);
@@ -23,6 +24,7 @@ $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number
 $section->addTextBreak();
 
 $section->addTitle('Energy Consumption', 2);
+$section->addTextBreak();
 $section->addText(sprintf('You are currently using an estimated average of %1$s kWh per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.', number_format($assessmentViewModel->getAveragePowerUsagePerMonth()), number_format($assessmentViewModel->getAveragePowerCostPerMonth()), number_format($assessmentViewModel->assessment->getAssessmentSettings()->kilowattsPerHour, 2)));
 $section->addText('The following lists the devices with the highest average power consumption per month.');
 
@@ -34,7 +36,7 @@ $cellWidths = array(
 );
 
 $highEnergyTable = $section->addTable($this->styles->tables->highenergy->tablestyle);
-$highEnergyTable->addRow($this->styles->tables->highriskdevices->rowheight);
+$highEnergyTable->addRow($this->styles->tables->highriskdevices->rowheight, $this->styles->tables->rowheader);
 $highEnergyTable->addCell($cellWidths [0], $this->styles->tables->highriskdevices->cell1)->addText('High Risk Devices', 'bold_text', 'nospacing_centeralign');
 $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText('Serial No.', 'bold_text', 'nospacing_centeralign');
 $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText('Avg. kWh Consumption Per Month Count', 'bold_text', 'nospacing_centeralign');
@@ -43,9 +45,9 @@ $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevice
 $rowCount = 0;
 foreach ($assessmentViewModel->getHighPowerConsumptionDevices() as $device)
 {
-    $highEnergyTable->addRow();
+    $highEnergyTable->addRow($this->styles->tables->highriskdevices->rowheight, $this->styles->tables->rowstyle);
     $highEnergyTable->addCell($cellWidths [0], $this->styles->tables->highriskdevices->cell1)->addText($device->getDeviceName(), null, 'nospacing');
-    $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing_centeralign');
+    $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing');
     $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(number_format($device->getAverageMonthlyPowerConsumption()) . ' kWh', null, 'nospacing_centeralign');
     $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText($this->currency($device->getAverageMonthlyPowerCost()), null, 'nospacing_centeralign');
     $rowCount++;
@@ -58,10 +60,11 @@ foreach ($assessmentViewModel->getHighPowerConsumptionDevices() as $device)
 $section->addTextBreak();
 
 $section->addTitle('Green Features: Duplexing and Scanning', 2);
-
 $section->addText('If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplexing and scanning capabilities:');
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs [13]);
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs [14]);
+
+$section->addPageBreak();

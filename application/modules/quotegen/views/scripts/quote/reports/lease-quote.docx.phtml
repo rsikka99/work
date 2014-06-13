@@ -10,8 +10,7 @@ if (!is_dir($savePath))
         throw new Exception("Could not open cache folder! PATH:" . $savePath, 0);
     }
 }
-$savePath = $savePath . $filename;
-
+$savePath   = $savePath . $filename;
 $linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/quote/{$this->quoteId}/{$filename}");
 
 // This may not need to be removed from here
@@ -23,13 +22,13 @@ $commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
 $quote = $this->Quote();
 /* @var $quote Quotegen_Model_Quote */
 
-/* @var $phpword PHPWord */
+/* @var $phpword \PhpOffice\PhpWord\PhpWord */
 $phpword = $this->phpword;
 
 /**
  * Document Properties
  */
-$properties = $phpword->getProperties();
+$properties = $phpword->getDocumentProperties();
 $properties->setCreator('Demo Report');
 $properties->setCompany('Demo Report');
 $properties->setTitle('Demo Report');
@@ -41,14 +40,14 @@ $properties->setModified(time());
 $properties->setSubject('Demo Report');
 $properties->setKeywords('demo, assessment, report');
 
-$titlepageSection = $phpword->createSection(array(
+$titlepageSection = $phpword->addSection(array(
     'orientation'  => null,
     'marginLeft'   => 720,
     'marginRight'  => 720,
     'marginTop'    => 720,
     'marginBottom' => 720
 ));
-$section          = $phpword->createSection();
+$section          = $phpword->addSection();
 
 // Render our style defaults?
 $this->render("{$commonPartsBasePath}/styles.phtml");
@@ -62,11 +61,15 @@ $phpword->addParagraphStyle('titleStyle1', array(
 $phpword->addParagraphStyle('titleStyle2', array(
     'spaceAfter'  => 100,
     'spaceBefore' => 100,
-    'bgColor'     => '4C4C4C'
+    'shading'     => array(
+        'fill' => '4C4C4C',
+    )
 ));
 $phpword->addParagraphStyle('titleStyle3', array(
     'spaceAfter' => 200,
-    'bgColor'    => '7F7F7F'
+    'shading'    => array(
+        'fill' => '7F7F7F',
+    )
 ));
 $phpword->addFontStyle('titlepage_title', array(
     'size'  => 24,
@@ -220,7 +223,7 @@ $trueCostsTable = (object)array(
         'cellMarginTop'    => 90,
         'cellMarginRight'  => 50,
         'cellMarginBottom' => 90,
-        'cellMarginLeft'   => 50
+        'cellMarginLeft'   => 50,
     ),
     "col1Width"  => 2347.38,
     "col2Width"  => 3764.88,
@@ -304,10 +307,12 @@ $trueCostsTable = (object)array(
 
 $leaseQuoteTable = (object)array(
     "tablestyle"   => array(
-        'cellMarginTop'    => 25,
-        'cellMarginRight'  => 100,
-        'cellMarginBottom' => 25,
-        'cellMarginLeft'   => 100
+        'cellMarginTop'     => 25,
+        'cellMarginRight'   => 100,
+        'cellMarginBottom'  => 25,
+        'cellMarginLeft'    => 100,
+        'borderBottomSize'  => 1,
+        'borderBottomColor' => 'BFBFBF',
     ),
     "col1Width"    => 2257,
     "col2Width"    => 1986,
@@ -317,6 +322,9 @@ $leaseQuoteTable = (object)array(
     "span23Width"  => 5688,
     "header"       => (object)array(
             "rowheight" => null,
+            "rowStyle"  => array(
+                'tblHeader' => true,
+            ),
             "cell1"     => (object)array(
                     "cellStyle"      => array(
                         "borderTopSize"    => 1,
@@ -524,7 +532,7 @@ $leaseQuoteTable = (object)array(
                 )
         ),
     "subtotal"     => (object)array(
-            "rowheight" => null,
+            "rowheight" => 500,
             "cell1"     => (object)array(
                     "cellStyle"      => array(
                         "borderTopSize"    => 1,
@@ -549,6 +557,16 @@ $leaseQuoteTable = (object)array(
                         "bgColor"          => 'D9D9D9',
                         "valign"           => 'center',
                         "borderColor"      => 'BFBFBF'
+                    ),
+                    "cell2Span3"     => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "bgColor"          => 'D9D9D9',
+                        "valign"           => 'center',
+                        "borderColor"      => 'BFBFBF',
+                        "gridSpan"         => 3,
                     ),
                     "fontStyle"      => array(
                         'bold' => true,
@@ -620,7 +638,7 @@ $leaseQuoteTable = (object)array(
                 )
         ),
     'monthlyTotal' => (object)array(
-            "rowheight" => null,
+            "rowheight" => 500,
             "cell1"     => (object)array(
                     "cellStyle"      => array(
                         "borderTopSize"    => 1,
@@ -629,7 +647,8 @@ $leaseQuoteTable = (object)array(
                         "borderLeftSize"   => 1,
                         "borderColor"      => 'BFBFBF',
                         "bgColor"          => 'D9D9D9',
-                        "align"            => 'right'
+                        "align"            => 'right',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         "bold" => true,
@@ -769,7 +788,7 @@ $this->partial("{$commonPartsBasePath}/01_prependDocuments.phtml", $data);
 $this->partial("{$basePath}/leasedquote.phtml", $data);
 $this->partial("{$commonPartsBasePath}/02_appendDocuments.phtml", $data);
 
-$objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
+$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpword, 'Word2007');
 
 try
 {

@@ -4,7 +4,7 @@
  *
  * This script contains everything for the main table of the cost analysis.
  */
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
@@ -20,13 +20,12 @@ $assessmentViewModel = $this->assessmentViewModel;
  * Section starts here
  */
 // You would normally put this here if you needed it but in the cost analysis we do not need it.
-// $section->addPageBreak();
 
 $tcStyle = $this->styles->tables->includeTable;
 
 // Included Table header
 $table = $section->addTable($tcStyle->tablestyle);
-$table->addRow($tcStyle->header->rowheight, $tcStyle->header->fontStyle);
+$table->addRow($tcStyle->header->rowheight, $tcStyle->rowheader);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->cell)->addText('Manufacturer', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col2Width, $tcStyle->header->cell)->addText('Model', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText('IP Address', $tcStyle->header->fontStyle, $tcStyle->centeralign);
@@ -39,11 +38,11 @@ $table->addCell($tcStyle->col6Width, $tcStyle->header->cell)->addText(sprintf('%
 foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
     /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
 {
-    $table->addRow($tcStyle->cell->rowheight);
+    $table->addRow($tcStyle->cell->rowheight, $tcStyle->rowstyle);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText($deviceInstance->getMasterDevice()->getManufacturer()->fullname, $tcStyle->row->fontStyle, $tcStyle->leftalign);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText($deviceInstance->getMasterDevice()->modelName, $tcStyle->row->fontStyle, $tcStyle->leftalign);
-    $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->ipAddress) ? $deviceInstance->ipAddress : "Unknown", $tcStyle->row->fontStyle, $tcStyle->centeralign);
-    $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->serialNumber) ? $deviceInstance->serialNumber : "Unknown", $tcStyle->row->fontStyle, $tcStyle->centeralign);
+    $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->ipAddress) ? $deviceInstance->ipAddress : "Unknown", $tcStyle->row->fontStyle, $tcStyle->leftalign);
+    $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->serialNumber) ? $deviceInstance->serialNumber : "Unknown", $tcStyle->row->fontStyle, $tcStyle->leftalign);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText($deviceInstance->getAge(), $tcStyle->row->fontStyle, $tcStyle->centeralign);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->isLeased) ? "Leased" : "Purchased", $tcStyle->row->fontStyle, $tcStyle->centeralign);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()), $tcStyle->row->fontStyle, $tcStyle->rightalign);

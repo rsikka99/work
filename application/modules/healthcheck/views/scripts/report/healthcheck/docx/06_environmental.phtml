@@ -3,11 +3,13 @@
  * Healthcheck - Analysis: Environmental Impact
  */
 
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
+
+$tcStyle    = $this->styles->tables->fleetattributes;
 
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
@@ -16,7 +18,9 @@ $graphs               = $healthcheckViewModel->getGraphs();
 
 $section->addPageBreak();
 $section->addTitle("Analysis: Environmental Impact", 1);
+
 $section->addTitle('Forest and Water Consumption', 2);
+
 $section->addText(sprintf('Did you know that it takes one average-sized tree to produce %2$s pages of standard 20lb office paper? Paper production also uses a tremendous amount of water and other solvents to produce traditional white copy paper. Based on your annual page volume we estimate the following tree and water requirements to produce documents for %1$s:', $healthcheckViewModel->healthcheck->getClient()->companyName, number_format(Healthcheck_ViewModel_Healthcheck::PAGES_PER_TREE)));
 $cellWidths  = array(
     350,
@@ -35,6 +39,7 @@ $imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)-
 
 
 $section->addTitle('Energy Consumption', 2);
+
 $section->addText(sprintf('You are currently using an estimated average of %1$s kilowatt hours (kWh) per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.', number_format($healthcheckViewModel->getAveragePowerUsagePerMonth()), number_format($healthcheckViewModel->getAveragePowerCostPerMonth()), number_format($healthcheckViewModel->healthcheck->getHealthcheckSettings()->kilowattsPerHour, 2)));
 $section->addText('The following lists the devices with the highest average power consumption per month.');
 
@@ -46,7 +51,7 @@ $cellWidths = array(
 );
 
 $highEnergyTable = $section->addTable($this->styles->tables->highenergy->tablestyle);
-$highEnergyTable->addRow($this->styles->tables->highriskdevices->rowheight);
+$highEnergyTable->addRow(400,null);
 $highEnergyTable->addCell($cellWidths [0], $this->styles->tables->utilization->cellHeader)->addText('High Risk Devices', 'bold_text', 'nospacing_centeralign');
 $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->utilization->cellHeader)->addText('Serial No.', 'bold_text', 'nospacing_centeralign');
 $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->utilization->cellHeader)->addText('Avg. kWh Consumption Per Month Count', 'bold_text', 'nospacing_centeralign');
@@ -55,11 +60,11 @@ $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->utilization->c
 $rowCount = 0;
 foreach ($healthcheckViewModel->getHighPowerConsumptionDevices() as $device)
 {
-    $highEnergyTable->addRow();
+    $highEnergyTable->addRow($this->styles->tables->utilization->rowheight,$tcStyle->rowstyle);
     $highEnergyTable->addCell($cellWidths [0], $this->styles->tables->highriskdevices->cell1)->addText($device->getDeviceName(), null, 'nospacing');
-    $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing_centeralign');
+    $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing');
     $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(number_format($device->getAverageMonthlyPowerConsumption()) . ' kWh', null, 'nospacing_centeralign');
-    $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText($this->currency($device->getAverageMonthlyPowerCost()), null, 'nospacing_centeralign');
+    $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText(($device->getAverageMonthlyPowerCost()), null, 'nospacing_centeralign');
     $rowCount++;
     if ($rowCount >= 3)
     {
@@ -72,7 +77,7 @@ $section->addTextBreak();
 $section->addTitle('Green Features: Duplex Printing and Scanning', 2);
 
 $section->addText('If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner and e-mailing documents instead of printing copies for distribution.');
-$textrun = $section->createTextRun();
+$textrun = $section->addTextRun();
 $textrun->addText('By printing 25% more documents on both sides of the page than you are now, you could save ');
 $textrun->addText(sprintf('%1$s trees and %2$s gallons of water used in paper production per year.', number_format($healthcheckViewModel->calculateQuarterOfNumberOfTreesUsed()), number_format($healthcheckViewModel->calculateQuarterOfNumberOfGallonsWaterUsed())));
 $section->addText('The following charts show how many of your printing devices have duplex printing and scanning capabilities:');

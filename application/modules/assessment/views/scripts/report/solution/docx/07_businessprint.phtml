@@ -2,14 +2,16 @@
 /**
  * Solution - Let {company_name} Take Care of Your Business Print
  */
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 
 $section->addPageBreak();
+
 $section->addTitle(sprintf('Let %1$s Take Care of Your Business Print', $this->companyName), 1);
+
 $section->addText(sprintf('With %1$s as your single point of contact for your office printing needs, your business will be taken care of:', $this->companyName));
 
 $section->addTitle('Just-in-Time Supplies', 2);

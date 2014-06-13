@@ -45,7 +45,7 @@ class Memjetoptimization_Report_Customer_OptimizationController extends Memjetop
             case "docx" :
                 $customerOptimization   = new Memjetoptimization_Model_Optimization_Customer($this->_memjetOptimization);
                 $graphs                 = $this->cachePNGImages($customerOptimization->getGraphs(), true);
-                $this->view->phpword    = new PHPWord();
+                $this->view->phpword    = new \PhpOffice\PhpWord\PhpWord();
                 $this->view->wordStyles = $this->getWordStyles();
                 $this->view->graphs     = $graphs;
 

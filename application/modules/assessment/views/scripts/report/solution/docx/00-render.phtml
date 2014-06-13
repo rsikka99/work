@@ -1,5 +1,5 @@
 <?php
-/* @var $phpword PHPWord */
+/* @var $phpword \PhpOffice\PhpWord\PhpWord */
 $phpword = $this->phpword;
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
@@ -22,7 +22,7 @@ $textHighlightColor = "0096D6";
 /**
  * Document Properties
  */
-$properties = $phpword->getProperties();
+$properties = $phpword->getDocumentProperties();
 $properties->setCreator('MPS Assessment Software');
 $properties->setCompany('MPS Assessment Software');
 $properties->setTitle('Solution');
@@ -32,14 +32,14 @@ $properties->setCreated(time());
 $properties->setModified(time());
 $properties->setSubject('MPS Assessment Software');
 
-$titlePageSection = $phpword->createSection(array(
+$titlePageSection = $phpword->addSection(array(
     'orientation'  => null,
     'marginLeft'   => 1420,
     'marginRight'  => 720,
     'marginTop'    => 720,
     'marginBottom' => 720
 ));
-$section          = $phpword->createSection();
+$section          = $phpword->addSection();
 /**
  * Footer
  */
@@ -56,7 +56,10 @@ $section          = $phpword->createSection();
 $phpword->addParagraphStyle('titleStyle1', array(
     'align'      => 'center',
     'spaceAfter' => 100,
-    'bgColor'    => $titlePageBackgroundColor1
+    //    'bgColor'    => $titlePageBackgroundColor1,
+    'shading'    => array(
+        'fill' => $titlePageBackgroundColor1,
+    )
 ));
 $phpword->addParagraphStyle('titleStyle2', array(
     'spaceAfter'  => 50,
@@ -65,7 +68,10 @@ $phpword->addParagraphStyle('titleStyle2', array(
 ));
 $phpword->addParagraphStyle('titleStyle3', array(
     'spaceAfter' => 100,
-    'bgColor'    => $titlePageBackgroundColor2
+    //    'bgColor'    => $titlePageBackgroundColor2
+    'shading'    => array(
+        'fill' => $titlePageBackgroundColor2,
+    )
 ));
 $phpword->addFontStyle('titlepage_title', array(
     'size'  => 24,
@@ -175,9 +181,7 @@ $phpword->addTitleStyle(1, array(
     'size'  => 15,
     'color' => $h1Color,
     'bold'  => true
-), array(
-    'borderBottomSize' => 1
-));
+), array());
 // H2 Style #5881BC
 $phpword->addTitleStyle(2, array(
     'size'   => 12,
@@ -185,7 +189,9 @@ $phpword->addTitleStyle(2, array(
     'bold'   => true,
     'italic' => true
 ), array(
-    'bgColor' => $h2Background
+    'shading' => array(
+        'fill' => $h2Background,
+    )
 ));
 // H3 Style #5881BC
 $phpword->addTitleStyle(3, array(
@@ -310,11 +316,20 @@ $addtionalReplacementsTable = (object)array(
  * True costs table styles
  */
 $trueCostsTable = (object)array(
+    "rowheader"  => array(
+        'tblHeader' => true,
+        'cantSplit' => true,
+    ),
+    "rowstyle"   => array(
+        "cantSplit" => true,
+    ),
     "tablestyle" => array(
-        'cellMarginTop'    => 100,
-        'cellMarginRight'  => 100,
-        'cellMarginBottom' => 100,
-        'cellMarginLeft'   => 100
+        'cellMarginTop'     => 100,
+        'cellMarginRight'   => 100,
+        'cellMarginBottom'  => 100,
+        'cellMarginLeft'    => 100,
+        'borderBottomSize'  => 10,
+        'borderBottomColor' => 'black',
     ),
     "col1Width"  => 1805.6,
     "col2Width"  => 3611.2,
@@ -634,15 +649,17 @@ $printiqplussummaryTable = (object)array(
 
 $totalAnnualSavingsTable = (object)array(
     "tablestyle" => array(
-        'cellMarginTop'    => 100,
-        'cellMarginRight'  => 100,
-        'cellMarginBottom' => 100,
-        'cellMarginLeft'   => 100
+        'cellMarginTop'     => 100,
+        'cellMarginRight'   => 100,
+        'cellMarginBottom'  => 100,
+        'cellMarginLeft'    => 100,
+        'borderBottomSize'  => 1,
+        'borderBottomColor' => '999999',
     ),
     "col1Width"  => 6020,
     "col2Width"  => 3008,
     "body"       => (object)array(
-            "rowheight" => null,
+            "rowheight" => 400,
             "cell1"     => (object)array(
                     "cellStyle"      => array(
                         "bgColor"          => "F0F0F0",
@@ -682,11 +699,20 @@ $totalAnnualSavingsTable = (object)array(
  * Estimated Annual Savings table styles
  */
 $estimatedAnnualSavingsTable = (object)array(
+    "rowheader"       => array(
+        'tblHeader' => true,
+        'cantSplit' => true,
+    ),
+    "rowstyle"        => array(
+        "cantSplit" => true,
+    ),
     "tablestyle"      => array(
-        'cellMarginTop'    => 50,
-        'cellMarginRight'  => 50,
-        'cellMarginBottom' => 50,
-        'cellMarginLeft'   => 50
+        'cellMarginTop'     => 50,
+        'cellMarginRight'   => 50,
+        'cellMarginBottom'  => 50,
+        'cellMarginLeft'    => 50,
+        'borderBottomSize'  => 10,
+        'borderBottomColor' => 'black',
     ),
     "headerCol1Width" => 4414,
     "headerCol2Width" => 4614,
@@ -704,6 +730,13 @@ $estimatedAnnualSavingsTable = (object)array(
                         "borderLeftSize"   => 1,
                         "valign"           => "center"
                     ),
+                    "cellspan"       => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "gridSpan"         => 2,
+                    ),
                     "fontStyle"      => 'bold_text',
                     "paragraphStyle" => 'nospacing_centeralign'
                 ),
@@ -714,6 +747,13 @@ $estimatedAnnualSavingsTable = (object)array(
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
                         "valign"           => "center"
+                    ),
+                    "cellspan"       => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "gridSpan"         => 2,
                     ),
                     "fontStyle"      => 'bold_text',
                     "paragraphStyle" => 'nospacing_centeralign'
@@ -1078,11 +1118,16 @@ $assumptionsTable = (object)array(
  */
 
 $nextStepsTable = (object)array(
+    "rowstyle"   => array(
+        "cantSplit" => true,
+    ),
     "tablestyle" => array(
-        'cellMarginTop'    => 100,
-        'cellMarginRight'  => 100,
-        'cellMarginBottom' => 100,
-        'cellMarginLeft'   => 100
+        'cellMarginTop'     => 100,
+        'cellMarginRight'   => 100,
+        'cellMarginBottom'  => 100,
+        'cellMarginLeft'    => 100,
+        'borderBottomSize'  => 10,
+        'borderBottomColor' => 'black,'
     ),
     "col1Width"  => 2000,
     "col2Width"  => 7300,
@@ -1128,7 +1173,7 @@ $styles = (object)array(
             "printiqplussummary"     => $printiqplussummaryTable,
             "addtionalReplacements"  => $addtionalReplacementsTable,
             "nextsteps"              => $nextStepsTable,
-        )
+        ),
 );
 
 $titledata = array(
@@ -1145,7 +1190,7 @@ $data = array(
     "assessmentViewModel" => $this->assessmentViewModel,
     "styles"              => $styles,
     "brandName"           => My_Brand::$brandName,
-    "companyName"         => My_Brand::$companyName
+    "companyName"         => My_Brand::$companyName,
 );
 // Actual document pages
 $this->partial("report/solution/docx/01_titlepage.phtml", $titledata);
@@ -1157,7 +1202,7 @@ $this->partial("report/solution/docx/06_additionalreplacements.phtml", $data);
 $this->partial("report/solution/docx/07_businessprint.phtml", $data);
 $this->partial("report/solution/docx/08_nextsteps.phtml", $data);
 
-$objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
+$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpword, 'Word2007');
 $objWriter->save($this->savePath);
 
 echo $this->baseUrl($this->publicFileName);

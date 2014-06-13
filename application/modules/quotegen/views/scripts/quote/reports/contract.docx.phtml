@@ -3,8 +3,8 @@
 /**
  * Creates a brand new section
  *
- * @param PHPWord           $phpWord
- * @param PHPWord_Section[] $sections
+ * @param \PhpOffice\PhpWord\PhpWord           $phpWord
+ * @param \PhpOffice\PhpWord\Element\Section[] $sections
  * @param string            $sectionName
  *
  * @return mixed
@@ -13,7 +13,7 @@ function getNewSection ($phpWord, &$sections, $sectionName = 'default')
 {
     if (!isset($sections[$sectionName]))
     {
-        $section       = $phpWord->createSection();
+        $section       = $phpWord->addSection();
         $sectionStyles = $section->getSettings();
         $sectionStyles->setMarginLeft(300);
         $sectionStyles->setMarginBottom(300);
@@ -26,7 +26,7 @@ function getNewSection ($phpWord, &$sections, $sectionName = 'default')
 }
 
 /**
- * @var $sections PHPWord_Section[]
+ * @var $sections \PhpOffice\PhpWord\Element\Section[]
  */
 $sections = array();
 
@@ -45,14 +45,14 @@ $commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme . '/docx/co
 $this->quote = $this->Quote();
 $quote       = $this->quote;
 
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 $phpWord->setDefaultFontName('Consolas');
 
 /**
  * Document Properties
  */
-$properties = $phpWord->getProperties();
+$properties = $phpWord->getDocumentProperties();
 $properties->setCreator('Demo Report');
 $properties->setCompany('Demo Report');
 $properties->setTitle('Demo Report');
@@ -264,7 +264,7 @@ if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SE
     );
 }
 
-$objWriter = PHPWord_IOFactory::createWriter($phpWord, 'Word2007');
+$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
 
 try
 {

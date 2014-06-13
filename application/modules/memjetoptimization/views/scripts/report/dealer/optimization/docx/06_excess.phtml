@@ -6,7 +6,7 @@
  * as well as related devices information
  */
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 /* @var $optimization Memjetoptimization_ViewModel_Optimization */
 $optimization = $this->optimization;
@@ -14,7 +14,7 @@ $optimization = $this->optimization;
 $memjetOptimizationDevices = $this->memjetOptimizationDevices;
 
 $section->addTextBreak();
-$headerTextRun = $section->createTextRun();
+$headerTextRun = $section->addTextRun();
 $headerTextRun->addText('Excess Devices', 'titlepageHeaderFont');
 $headerTextRun->addText(' (' . count($memjetOptimizationDevices->excess) . ')');
 $section->addText("The following devices are excess devices that can still be used inside your clients fleet.");
@@ -23,7 +23,7 @@ $section->addText("The following devices are excess devices that can still be us
 $tcStyle = $this->styles->tables->excess;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
-$table->addRow($tcStyle->body->rowheight);
+$table->addRow($tcStyle->body->rowheight,$tcStyle->rowHeader);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Life Page Count', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);

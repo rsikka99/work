@@ -46,7 +46,7 @@ class Hardwareoptimization_Report_Customer_OptimizationController extends Hardwa
             case "docx" :
                 $customerOptimization   = new Hardwareoptimization_Model_Optimization_Customer($this->_hardwareOptimization);
                 $graphs                 = $this->cachePNGImages($customerOptimization->getGraphs(), true);
-                $this->view->phpword    = new PHPWord();
+                $this->view->phpword    = new \PhpOffice\PhpWord\PhpWord();
                 $this->view->wordStyles = $this->getWordStyles();
                 $this->view->graphs     = $graphs;
 

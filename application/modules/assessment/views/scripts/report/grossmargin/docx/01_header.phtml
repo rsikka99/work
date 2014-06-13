@@ -5,7 +5,7 @@
  * This script contains everything that comes before the big table of
  * information in the cost analysis.
  */
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
@@ -22,7 +22,7 @@ $assessmentViewModel = $this->assessmentViewModel;
  */
 
 $section->addTitle('Gross Margin Report');
-$textRun = $section->createTextRun();
+$textRun = $section->addTextRun();
 $textRun->addText('AMPV = Average Monthly Page Volume', 'italic_text');
 
 // Table with values
@@ -59,7 +59,7 @@ $table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addTe
 $table->addCell($tcStyle->col3Width, $tcStyle->row->labelcell->cellStyle)->addText('Color Margin:', $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText(number_format($assessmentViewModel->getGrossMarginColorMargin()) . '%', $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 
-$textRun = $section->createTextRun();
-$textRun = $section->createTextRun();
+$textRun = $section->addTextRun();
+$textRun = $section->addTextRun();
 $textRun->addText('Yellow highlighted rows indicate devices that have not been assigned toners matching your selected first toner vendor preference. For these devices the system has selected the best available alternative based on your preference.', 'italic_text', 'nospacing_centeralign');
 

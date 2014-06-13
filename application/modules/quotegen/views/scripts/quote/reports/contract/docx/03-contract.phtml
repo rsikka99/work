@@ -1,5 +1,5 @@
 <?php
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
@@ -10,8 +10,8 @@ $noSpacing = $this->paragraphStyle->noSpacing;
 $labelFont = $this->fontStyle->label;
 
 $contractTable = $section->addTable($this->tableStyle->standard);
-$contractTable->addRow();
-$contractTable->addCell($tableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $noSpacing);
+$contractTable->addRow(300);
+$contractTable->addCell($tableSpan ['span8'], $this->cellStyle->invertBackground)->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $noSpacing);
 
 
 $contractHtml = new DOMDocument(5);
@@ -21,8 +21,9 @@ $contractHtml->loadHTML($contractTemplateSection->getContractSectionText());
 foreach ($contractHtml->getElementsByTagName('p') as $paragraphNode)
 {
     $contractTable->addRow();
-    $cell    = $contractTable->addCell($tableSpan ['span8'], null, 8);
-    $textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
+    $cell = $contractTable->addCell($tableSpan ['span8'], null);
+
+    $textRun = $cell->addTextRun($this->paragraphStyle->noSpacingJustified);
 
     $childNodes = $paragraphNode->childNodes;
     for ($i = 0; $i < $childNodes->length; $i++)

@@ -39,7 +39,7 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
                 {
                     case "docx" :
                         // Add DOCX Logic here
-                        $this->view->phpword = new PHPWord();
+                        $this->view->phpword = new \PhpOffice\PhpWord\PhpWord();
                         break;
                     case "html" :
                     default :
@@ -72,7 +72,7 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
                 throw new Exception("CSV Format not available through this page yet!");
                 break;
             case "docx" :
-                $this->view->phpword = new PHPWord();
+                $this->view->phpword = new \PhpOffice\PhpWord\PhpWord();
                 $assessmentViewModel = $this->getAssessmentViewModel();
                 $graphs              = $this->cachePNGImages($assessmentViewModel->getGraphs(), true);
                 $assessmentViewModel->setGraphs($graphs);

@@ -1,7 +1,7 @@
 <?php
 /* @var $optimization Memjetoptimization_ViewModel_Optimization */
 $optimization = $this->optimization;
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 /* @var $profitabiltyDevices Memjetoptimization_Model_Optimization_Dealer */
 $profitabiltyDevices = $this->profitabilityDevices;
@@ -15,7 +15,7 @@ $section->addText('The following devices have been deemed productive and we sugg
 $tcStyle = $this->devicetables->tables->acceptable;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
-$table->addRow($tcStyle->body->rowheight);
+$table->addRow($tcStyle->body->rowheight,$this->styles->tables->rowheader);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
@@ -37,7 +37,7 @@ foreach ($profitabiltyDevices->kept as $device)
         $style     = $tcStyle->body->cell1->odd;
     }
 
-    $table->addRow($tcStyle->body->rowheight);
+    $table->addRow($tcStyle->body->rowheight,$this->styles->tables->rowstyle);
 
     $cell = $table->addCell($tcStyle->collWidth, $style);
     $cell->addText($device->getMasterDevice()->getManufacturer()->fullname, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell1->manufacturerName->paragraphStyle);

@@ -2,7 +2,7 @@
 /**
  * Assessment Title Page
  */
-/* @var $phpword PHPWord */
+/* @var $phpword \PhpOffice\PhpWord\PhpWord */
 $phpword = $this->phpword;
 
 /* @var $quote Quotegen_Model_Quote */
@@ -12,7 +12,7 @@ $client = $quote->getClient();
 
 $quoteDate = date('F jS, Y', strtotime($quote->quoteDate));
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 // Table to get the images working properly

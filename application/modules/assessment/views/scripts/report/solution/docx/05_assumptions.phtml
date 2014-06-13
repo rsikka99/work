@@ -1,15 +1,15 @@
 <?php
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 $section->addPageBreak();
-$section->addTitle('Survey Assumptions', 1);
 
+$section->addTitle('Survey Assumptions', 1);
 $section->addText("Q: How much did you spend last year on ink and toner for your printer fleet (excluding the cost of leased copiers)?", "bold_text");
 $section->addText(sprintf('A: %1$s / year', $this->currency($assessmentViewModel->getCostOfInkAndToner($customerCostPerPageSetting))));
 

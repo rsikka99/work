@@ -279,7 +279,8 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
     public function initDocxContext ()
     {
         // Include php word and initialize a new instance
-        $this->view->phpword = new PHPWord();
+        $this->view->phpword = new \PhpOffice\PhpWord\PhpWord()
+        ;
     }
 
     public function postDocxContext ()

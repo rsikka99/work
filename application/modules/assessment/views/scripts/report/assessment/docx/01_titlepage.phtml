@@ -2,21 +2,19 @@
 /**
  * Assessment Title Page
  */
-/* @var $phpword PHPWord */
+/* @var $phpword \PhpOffice\PhpWord\PhpWord */
 $phpword = $this->phpword;
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 
-/* @var $titlePage PHPWord_Section */
+/* @var $titlePage \PhpOffice\PhpWord\Element\Section */
 $titlePage       = $this->section;
 $titleImageStyle = array(
     'align' => 'center'
 );
 
 // Table to fix the issue of images being different sizes
-$imageTable = $titlePage->addTable(array(
-    'borderBottomSize' => 1
-));
+$imageTable = $titlePage->addTable(array());
 $imageTable->addRow(5760);
 $cell = $imageTable->addCell(9028.8, array(
     'valign' => 'center'

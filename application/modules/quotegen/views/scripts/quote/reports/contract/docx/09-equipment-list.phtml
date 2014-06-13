@@ -1,5 +1,5 @@
 <?php
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $quote Quotegen_Model_Quote */
@@ -17,16 +17,20 @@ $labelFont = $this->fontStyle->label;
  * Devices Table - Title Row
  */
 $deviceTable = $section->addTable($this->tableStyle->standard);
-$deviceTable->addRow();
-$deviceTable->addCell($tableSpan ['span4'], $this->cellStyle->invertBackground, 8)->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $this->paragraphStyle->noSpacing);
+$deviceTable->getStyle()->setBorderBottomSize(1);
+$deviceTable->getStyle()->setBorderLeftSize(1);
+$deviceTable->getStyle()->setBorderRightSize(1);
+
+$deviceTable->addRow(300);
+$deviceTable->addCell(null, $this->cellStyle->fullWidthGridSpan3)->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $this->paragraphStyle->noSpacing);
 
 /**
  * Devices Table - Header Row
  */
 $deviceTable->addRow(300);
-$deviceTable->addCell($tableSpan ['span3'], $this->cellStyle->bottomLeftBorderBAlign, 3)->addText('MAKE, MODEL NUMBER & INCLUDED ACCESSORIES', $this->fontStyle->label, $this->paragraphStyle->noSpacing);
-$deviceTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomRightBorderBAlign, 2)->addText('SERIAL NUMBER', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
-$deviceTable->addCell($tableSpan ['span3'], $this->cellStyle->bottomRightBorderBAlign, 3)->addText('ADDRESS', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$deviceTable->addCell($tableSpan ['span3'], $this->cellStyle->bottomAlign)->addText('MAKE, MODEL NUMBER & INCLUDED ACCESSORIES', $this->fontStyle->label, $this->paragraphStyle->noSpacing);
+$deviceTable->addCell($tableSpan ['span2'], array_merge($this->cellStyle->bottomAlign, $this->cellStyle->borderRight))->addText('SERIAL NUMBER', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$deviceTable->addCell($tableSpan ['span3'], $this->cellStyle->bottomRightBorderBAlign)->addText('ADDRESS', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
 
 /**
  * Devices Table - Device Rows
@@ -36,7 +40,7 @@ foreach ($quote->getQuoteDevices() as $quoteDevice)
     for ($i = 0; $i < $quoteDevice->calculateTotalQuantity(); $i++)
     {
         $deviceTable->addRow(600);
-        $deviceDetailsCell = $deviceTable->addCell($tableSpan ['span3'], $this->cellStyle->bottomLeftBorder, 3);
+        $deviceDetailsCell = $deviceTable->addCell($tableSpan ['span3'], $this->cellStyle->borderTop);
         $deviceDetailsCell->addText($quoteDevice->name, null, $this->paragraphStyle->noSpacing);
 
         foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption)
@@ -44,7 +48,7 @@ foreach ($quote->getQuoteDevices() as $quoteDevice)
             $deviceDetailsCell->addText('    - ' . $quoteDeviceOption->quantity . ' x ' . $quoteDeviceOption->name, $this->fontStyle->finePrint, $this->paragraphStyle->noSpacing);
         }
 
-        $deviceTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomRightBorder, 2)->addText(' ', null, $this->paragraphStyle->noSpacing);
-        $deviceTable->addCell($tableSpan ['span3'], $this->cellStyle->bottomRightBorder, 3)->addText(' ', null, $this->paragraphStyle->noSpacing);
+        $deviceTable->addCell($tableSpan ['span2'], array_merge($this->cellStyle->bottomRightBorder, $this->cellStyle->borderTop))->addText(' ', null, $this->paragraphStyle->noSpacing);
+        $deviceTable->addCell($tableSpan ['span3'], array_merge($this->cellStyle->bottomRightBorder, $this->cellStyle->borderTop))->addText(' ', null, $this->paragraphStyle->noSpacing);
     }
 }

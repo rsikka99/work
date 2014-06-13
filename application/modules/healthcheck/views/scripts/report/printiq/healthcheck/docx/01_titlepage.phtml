@@ -2,15 +2,14 @@
 /**
  * Healthcheck Title Page
  */
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
 
-/* @var $titlePage PHPWord_Section */
+/* @var $titlePage \PhpOffice\PhpWord\Element\Section */
 $titlePage = $this->section;
-
 /**
  * Right aligned logo
  */
@@ -54,4 +53,4 @@ $titlePage->addText("                - Best-in-class solutions to save you time 
 $titlePage->addText('', null, 'titleStyle2');
 $titlePage->addText('', null, 'titleStyle2');
 $titlePage->addText('', null, 'titleStyle2');
-$titlePage->addText('', null, 'titleStyle2');
+$titlePage->addText('', null, 'titleStyleSmallLine');

@@ -3,15 +3,18 @@
  * Hardware Optimization Title Page
  */
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
+
 /* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
 $hardwareOptimization = $this->hardwareOptimization;
 
 $titleImageStyle = array('align' => 'center');
 
+$cellStyle = array('bgColor' => My_Brand::$reportTitlePageTitleBackgroundColor, 'width' => 15297);
+
 // Table to fix the issue of images being different sizes
-$imageTable = $section->addTable(array('borderBottomSize' => 1));
+$imageTable = $section->addTable();
 $imageTable->addRow(2500);
 $cell = $imageTable->addCell(15000.8, array('valign' => 'center'));
 $cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, array(
@@ -20,11 +23,12 @@ $cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, array(
 
 
 $section->addTextBreak();
-// Assessment Title
-$section->addText('', null, 'titleStyle1');
-$section->addText('  Hardware Optimization', 'titlepage_title', 'titleStyle1');
-$section->addText('', null, 'titleStyle1');
 
+// Assessment Title
+
+$section->addText(' ', null, 'titleStyle1');
+$section->addText('  Hardware Optimization', 'titlepage_title', 'titleStyle1');
+$section->addText(' ', null, 'titleStyle1');
 
 $section->addTextBreak();
 

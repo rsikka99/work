@@ -3,7 +3,7 @@
  * Memjet Optimization Title Page
  */
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 /* @var $memjetOptimization Memjetoptimization_Model_Memjet_Optimization */
 $memjetOptimization = $this->memjetOptimization;
@@ -11,7 +11,7 @@ $memjetOptimization = $this->memjetOptimization;
 $titleImageStyle = array('align' => 'center');
 
 // Table to fix the issue of images being different sizes
-$imageTable = $section->addTable(array('borderBottomSize' => 1));
+$imageTable = $section->addTable( /*array('borderBottomSize' => 1)*/);
 $imageTable->addRow(2500);
 $cell = $imageTable->addCell(15000.8, array('valign' => 'center'));
 $cell->addImage($this->theme("img/report_logo.png", true), array('align' => 'center'));

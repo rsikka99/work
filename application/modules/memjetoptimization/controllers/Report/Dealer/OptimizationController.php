@@ -45,7 +45,7 @@ class Memjetoptimization_Report_Dealer_OptimizationController extends Memjetopti
             case "docx" :
                 $dealerOptimization     = new Memjetoptimization_Model_Optimization_Dealer($this->_memjetOptimization);
                 $graphs                 = $this->cachePNGImages($dealerOptimization->getGraphs(), true);
-                $this->view->phpword    = new PHPWord();
+                $this->view->phpword    = new \PhpOffice\PhpWord\PhpWord();
                 $this->view->wordStyles = $this->getWordStyles();
                 $this->view->graphs     = $graphs;
 

@@ -3,10 +3,10 @@
  * Assessment - 3 Smart Steps to Success with Managed Print
  */
 
-/* @var $phpWord PHPWord */
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 $section->addPageBreak();
 
@@ -14,7 +14,6 @@ $section->addPageBreak();
 $assessmentViewModel = $this->assessmentViewModel;
 
 $section->addTitle("3 Smart Steps to Success with Managed Print", 1);
-
 $section->addText(sprintf('%1$s has been managing print for our customers since the beginning. Sourcing and delivering printers and supplies is our mainstay and we\'ve been taking care of business for 25 years. Our full service MPS program was designed to manage and support your printing environment, based on your unique office printing needs.', $this->companyName));
 $section->addText(sprintf('The %1$s MPS program empowers you to:', $this->companyName));
 
@@ -31,33 +30,34 @@ $section->addTitle('Step 1: Assess', 2);
 $section->addText(sprintf('This complimentary %1$s Smart Assessment will help us determine what your needs are for office print. By combining data collected from your printing devices with questionnaire responses, we can determine what is working and what isn\'t in your office print environment. From this information, we can build a managed print solution that meets your business needs.', $this->brandName));
 
 $section->addTitle('Step 2: Optimize', 2);
-$tr = $section->createTextRun();
+$tr = $section->addTextRun();
 $tr->addText('Increase Hardware Efficiency:' . ' ', 'bold_text');
 $tr->addText('Whether you choose to maintain your existing printer fleet or refresh inefficient devices, your managed print program delivers benefits that meet your specific needs. We will make sure your printing equipment meets your needs and help you optimize the placement of your equipment to make sure you are getting the most out of your assets.');
 
-$tr = $section->createTextRun();
+$tr = $section->addTextRun();
 $tr->addText('Just-in-Time Supplies & Efficient Service:' . ' ', 'bold_text');
 $tr->addText('Our just-in-time supplies fulfillment and 4-hour response repair service will get you the supplies and service you need, when you need it. By remotely monitoring your printers, we can help you minimize downtime and reduce the amount of working capital held in supplies inventory. Next-day service is available for all printers under a managed print contract so your IT staff will be free from handling printer-related issues.');
 
-$tr = $section->createTextRun();
+$tr = $section->addTextRun();
 $tr->addText('Single Contact, Single Invoice:' . ' ', 'bold_text');
 $tr->addText('Forget dealing with multiple vendors and receive one invoice for all of your managed printers-this includes either service and supplies on a per-page rate, or hardware, service and supplies on a flat monthly rate. Either way, you will be able to budget for printing with predictable expenses.');
 
-$tr = $section->createTextRun();
+$tr = $section->addTextRun();
 $tr->addText('Eco Smart Solutions:' . ' ', 'bold_text');
 $tr->addText(sprintf('%1$s was recognized by Newsweek as the No. 1 green retailer, and we can help you reduce your environmental impact and achieve your sustainability goals.', $this->companyName));
 
 $section->addPageBreak();
-$section->addTitle('Step 3: Manage', 2);
 
+$section->addTitle('Step 3: Manage', 2);
 $section->addText('Ongoing management of your print environment enables you to focus on your core business, while we take care of print. By monitoring your print environment on an ongoing basis, we can help you decide if and when your managed print strategy needs to be updated to accommodate new needs.');
 
 $section->addTitle(sprintf('Potential Savings with %1$s', $this->brandName), 2);
-
 $section->addText(sprintf('%1$s can manage your existing printing devices that are not currently on a lease with another vendor. Note that while we have included all of your purchased equipment in the following calculations, not all of them may qualify for managed print services or just-in-time supplies fulfillment. Please refer to the %2$s Your Solution document for a complete list of qualified devices.', $this->companyName, $this->brandName));
 
 $section->addTitle(sprintf('Estimated Costs: Printing Devices Managed with %1$s', $this->brandName), 3);
+
 $summaryTable = $section->addTable($this->styles->tables->expenseSummaryTable->tablestyle);
+
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText(sprintf('%1$s monochrome cost per page', $this->brandName), null, 'nospacing');
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->getMPSBlackAndWhiteCPP(), 5), null, 'nospacing_rightalign');
@@ -107,16 +107,16 @@ $cell->addText('Assume no change', 'small_italic_text', 'nospacing');
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText($this->currency($assessmentViewModel->getAnnualCostOfHardwarePurchases()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border)->addText(sprintf('%1$s estimated annual cost of purchased devices', $this->brandName), 'bold_text', 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText($this->currency($assessmentViewModel->getPrintIQTotalCost()), 'bold_text', 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, array_merge($this->styles->tables->expenseSummaryTable->cell1Border, $this->styles->tables->expenseSummaryTable->underline))->addText(sprintf('%1$s estimated annual cost of purchased devices', $this->brandName), 'bold_text', 'nospacing');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, array_merge($this->styles->tables->expenseSummaryTable->cell2Border, $this->styles->tables->expenseSummaryTable->underline))->addText($this->currency($assessmentViewModel->getPrintIQTotalCost()), 'bold_text', 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border)->addText('Current estimated annual cost of purchased devices', 'bold_text', 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText($this->currency($assessmentViewModel->getTotalPurchasedAnnualCost()), 'bold_text', 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, array_merge($this->styles->tables->expenseSummaryTable->cell1Border, $this->styles->tables->expenseSummaryTable->underline))->addText('Current estimated annual cost of purchased devices', 'bold_text', 'nospacing');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, array_merge($this->styles->tables->expenseSummaryTable->cell2Border, $this->styles->tables->expenseSummaryTable->underline))->addText($this->currency($assessmentViewModel->getTotalPurchasedAnnualCost()), 'bold_text', 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText(sprintf('POTENTIAL ANNUAL SAVINGS USING %1$s', $this->brandName), 'bold_red_text', 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->getPrintIQSavings()), 'bold_highlight_text', 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, array_merge($this->styles->tables->expenseSummaryTable->cell1, $this->styles->tables->expenseSummaryTable->underline))->addText(sprintf('POTENTIAL ANNUAL SAVINGS USING %1$s', $this->brandName), 'bold_red_text', 'nospacing');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, array_merge($this->styles->tables->expenseSummaryTable->cell2, $this->styles->tables->expenseSummaryTable->underline))->addText($this->currency($assessmentViewModel->getPrintIQSavings()), 'bold_highlight_text', 'nospacing_rightalign');
 
 $section->addTextBreak();
 

@@ -2,25 +2,26 @@
 /**
  * Assessment Title Page
  */
-/* @var $phpword PHPWord */
+
+/* @var $phpword \PhpOffice\PhpWord\PhpWord*/
 $phpword = $this->phpword;
+
 /* @var $quote Quotegen_Model_Quote */
 $quote = $this->quote;
 
-/* @var $section PHPWord_Section */
-$titlepage       = $this->section;
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$titlepage = $this->section;
+
 $titleImageStyle = array(
     'align' => 'center'
 );
 
 // Table to fix the issue of images being different sizes
-$imageTable = $titlepage->addTable(array(
-                                        'borderBottomSize' => 1
-                                   ));
+$imageTable = $titlepage->addTable(array());
 $imageTable->addRow(5760);
 $cell = $imageTable->addCell(9028.8, array(
-                                          'valign' => 'center'
-                                     ));
+    'valign' => 'center'
+));
 
 $cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, array(
     'align' => 'center'
@@ -29,9 +30,9 @@ $cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, array(
 
 $titlepage->addTextBreak();
 // Assessment Title
-$titlepage->addText($this->translate(''), null, 'titleStyle2');
+$titlepage->addText($this->translate(' '), null, 'titleStyle2');
 $titlepage->addText($this->translate('  MPSToolbox.com Hardware Quote'), 'titlepage_title', 'titleStyle2');
-$titlepage->addText($this->translate(''), null, 'titleStyle2');
+$titlepage->addText($this->translate(' '), null, 'titleStyle2');
 
 
 $client = $quote->getClient();

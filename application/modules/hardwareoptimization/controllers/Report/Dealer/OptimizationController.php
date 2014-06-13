@@ -45,11 +45,12 @@ class Hardwareoptimization_Report_Dealer_OptimizationController extends Hardware
                 throw new Exception("CSV Format not available through this page yet!");
                 break;
             case "docx" :
-                $dealerOptimization     = new Hardwareoptimization_Model_Optimization_Dealer($this->_hardwareOptimization);
-                $graphs                 = $this->cachePNGImages($dealerOptimization->getGraphs(), true);
-                $this->view->phpword    = new PHPWord();
-                $this->view->wordStyles = $this->getWordStyles();
-                $this->view->graphs     = $graphs;
+                $dealerOptimization         = new Hardwareoptimization_Model_Optimization_Dealer($this->_hardwareOptimization);
+                $graphs                     = $this->cachePNGImages($dealerOptimization->getGraphs(), true);
+                $this->view->phpword        = new \PhpOffice\PhpWord\PhpWord();
+                $this->view->wordStyles     = $this->getWordStyles();
+                $this->view->graphs         = $graphs;
+                $this->view->dealerLogoFile = $this->getDealerLogoFile();
 
                 $this->_helper->layout->disableLayout();
                 break;
@@ -71,6 +72,7 @@ class Hardwareoptimization_Report_Dealer_OptimizationController extends Hardware
         }
         catch (Exception $e)
         {
+
             throw new Exception("Controller caught the exception!", 0, $e);
         }
     }

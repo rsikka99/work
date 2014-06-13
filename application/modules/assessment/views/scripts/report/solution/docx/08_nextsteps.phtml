@@ -2,7 +2,7 @@
 /**
  * Solution - Next Steps
  */
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
@@ -16,23 +16,23 @@ $section->addTextBreak();
 $tc    = $this->styles->tables->nextsteps;
 $table = $section->addTable($tc->tablestyle);
 
-$table->addRow($tc->body->rowheight);
+$table->addRow($tc->body->rowheight,$tc->rowstyle);
 $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('Today:', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
 $cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle);
 $cell->addListItem('Remote monitoring software is already installed.', 0, $tc->body->cell2->fontStyle, $tc->body->cell2->listStyle);
 $cell->addListItem('Select a department or floor for initial migration to managed print services.', 0, $tc->body->cell2->fontStyle, $tc->body->cell2->listStyle);
 
-$table->addRow($tc->body->rowheight);
+$table->addRow($tc->body->rowheight,$tc->rowstyle);
 $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('Within 30 days:', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
 $cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle);
 $cell->addListItem('Migrate the selected department or floor to managed print services.', 0, $tc->body->cell2->fontStyle, $tc->body->cell2->listStyle);
 
-$table->addRow($tc->body->rowheight);
+$table->addRow($tc->body->rowheight,$tc->rowstyle);
 $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('Within 90 days:', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
 $cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle);
 $cell->addListItem('Migrate all other desired locations to managed print services.', 0, $tc->body->cell2->fontStyle, $tc->body->cell2->listStyle);
 
-$table->addRow($tc->body->rowheight);
+$table->addRow($tc->body->rowheight,$tc->rowstyle);
 $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('Every six months:', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
 $cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle);
 $cell->addListItem('Evaluation and adjustment of recommendations as needed.', 0, $tc->body->cell2->fontStyle, $tc->body->cell2->listStyle);

@@ -11,10 +11,10 @@ $customerOptimization = $this->customerOptimization;
 /* @var $graphs array */
 $graphs = $this->graphs;
 
-/* @var $section PHPWord_Section */
+/* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
-$section->addTitle('Age Of Printing Devices', 2);
+$section->addTitle('Age of Printing Devices', 2);
 $section->addText('The breakdown of the age of your printing devices is shown below:');
 $tcStyle    = $this->twocenter;
 $imageTable = $section->addTable($tcStyle->tablestyle);

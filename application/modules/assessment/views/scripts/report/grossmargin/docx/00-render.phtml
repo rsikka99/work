@@ -1,12 +1,12 @@
 <?php
-/* @var $phpword PHPWord */
+/* @var $phpword \PhpOffice\PhpWord\PhpWord */
 $phpword = $this->phpword;
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 
 // Initialize some properties
-$properties = $phpword->getProperties();
+$properties = $phpword->getDocumentProperties();
 $properties->setCreator('MPS Assessment Software');
 $properties->setCompany('MPS Assessment Software');
 $properties->setCategory('Dealer Report');
@@ -21,7 +21,7 @@ $properties->setSubject('MPS Assessment Software');
  */
 
 // This section is landscape with 0.5" margins insead of 1"
-$mainSection = $phpword->createSection(array(
+$mainSection = $phpword->addSection(array(
     'orientation'  => 'landscape',
     'marginLeft'   => 720,
     'marginRight'  => 720,
@@ -120,6 +120,13 @@ $settingsTable = (object)array(
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50
     ),
+    "rowheader"  => array(
+        'tblHeader' => true,
+        'cantSplit' => true,
+    ),
+    "rowstyle"   => array(
+        "cantSplit" => true,
+    ),
     "col1Width"  => 6000,
     "col2Width"  => 2000,
     "col3Width"  => 2000,
@@ -138,11 +145,20 @@ $settingsTable = (object)array(
 );
 
 $grossMarginTable = (object)array(
+    "rowheader"    => array(
+        'tblHeader' => true,
+        'cantSplit' => true,
+    ),
+    "rowstyle"     => array(
+        "cantSplit" => true,
+    ),
     "tablestyle"   => array(
-        'cellMarginTop'    => 50,
-        'cellMarginRight'  => 200,
-        'cellMarginBottom' => 50,
-        'cellMarginright'  => 50
+        'cellMarginTop'     => 50,
+        'cellMarginRight'   => 200,
+        'cellMarginBottom'  => 50,
+        'cellMarginright'   => 50,
+        'borderBottomSize'  => 10,
+        'borderBottomColor' => 'black',
     ),
     "colSpanWidth" => 5000,
     "col1Width"    => 4000,
@@ -160,28 +176,44 @@ $grossMarginTable = (object)array(
     "centeralign"  => "nospacing_centeralign",
     "rightalign"   => "nospacing_rightalign",
     "header"       => (object)array(
-            "rowheight"      => null,
-            "fontStyle"      => "table_header",
-            "cell"           => array(
+            "rowheight"       => null,
+            "fontStyle"       => "table_header",
+            "headercelllarge" => array(
+                "borderTopSize"   => 1,
+                "borderRightSize" => 1,
+                "borderLeftSize"  => 1,
+                "bgColor"         => $header_color,
+                "valign"          => "center",
+                "gridSpan"        => 5,
+            ),
+            "headercellsmall" => array(
+                "borderTopSize"   => 1,
+                "borderRightSize" => 1,
+                "borderLeftSize"  => 1,
+                "bgColor"         => $header_color,
+                "valign"          => "center",
+                "gridSpan"        => 2,
+            ),
+            "cell"            => array(
+                "borderTopSize"   => 1,
+                "borderRightSize" => 1,
+                "borderLeftSize"  => 1,
+                "bgColor"         => $header_color,
+                "valign"          => "center",
+            ),
+            "nobottomborder"  => array(
                 "borderTopSize"   => 1,
                 "borderRightSize" => 1,
                 "borderLeftSize"  => 1,
                 "bgColor"         => $header_color,
                 "valign"          => "center"
             ),
-            "nobottomborder" => array(
-                "borderTopSize"   => 1,
-                "borderRightSize" => 1,
-                "borderLeftSize"  => 1,
-                "bgColor"         => $header_color,
-                "valign"          => "center"
-            ),
-            "notopborder"    => array(
+            "notopborder"     => array(
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
                 "bgColor"          => $header_color,
-                "valign"           => "center"
+                "valign"           => "center",
             )
         ),
     "row"          => (object)array(
@@ -192,7 +224,8 @@ $grossMarginTable = (object)array(
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
-                "valign"           => "center"
+                "valign"           => "center",
+                "cantSplit"        => true,
             ),
             "highlightcell" => array(
                 "borderTopSize"    => 1,
@@ -245,7 +278,7 @@ $data = array(
 $this->partial("report/grossmargin/docx/01_header.phtml", $data);
 $this->partial("report/grossmargin/docx/02_maintable.phtml", $data);
 
-$objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
+$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpword, 'Word2007');
 $objWriter->save($this->savePath);
 
 /**
