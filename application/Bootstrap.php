@@ -103,13 +103,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initViewSettings ()
     {
-        $options  = $this->getOptions();
-        $theme    = $options['app']['theme'];
-        $themeDir = PUBLIC_PATH . '/themes/' . $theme;
-
-
+        $dealerId = (Zend_Auth::getInstance()->hasIdentity()) ? Zend_Auth::getInstance()->getIdentity()->dealerId : 0;
         $this->bootstrap('view');
         $this->bootstrap('brand');
+        $this->bootstrap('db');
         $view = $this->getResource('view');
 
         // Set the doctype to HTML5 so components know how to render items
@@ -119,11 +116,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->registerHelper(new My_View_Helper_Navigation_Menu(), 'menu');
 
 
-        /**
-         * Setup LESS
-         */
-        My_Less::setLessVariables(My_Brand::toArray());
-
         $forceRecompile = (isset($_REQUEST['recompile_less']));
 
         /**
@@ -131,49 +123,41 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
          */
         try
         {
-            My_Less::autoCompileLess(PUBLIC_PATH . '/less/site/bootstrap/bootstrap.less', PUBLIC_PATH . '/css/site/bootstrap.css', $theme, $forceRecompile);
+            Application_Service_Less::compileSiteStyles($forceRecompile);
         }
         catch (Exception $e)
         {
             // Retry in case of a directory error.
-            My_Less::autoCompileLess(PUBLIC_PATH . '/less/site/bootstrap/bootstrap.less', PUBLIC_PATH . '/css/site/bootstrap.css', $theme, true);
+            Application_Service_Less::compileSiteStyles($forceRecompile);
         }
-
-        try
-        {
-            My_Less::autoCompileLess(PUBLIC_PATH . '/less/site/styles.less', PUBLIC_PATH . '/css/site/styles.css', $theme, $forceRecompile);
-        }
-        catch (Exception $e)
-        {
-            // Retry in case of a directory error.
-            My_Less::autoCompileLess(PUBLIC_PATH . '/less/site/styles.less', PUBLIC_PATH . '/css/site/styles.css', $theme, true);
-        }
-
-        try
-        {
-            My_Less::autoCompileLess(PUBLIC_PATH . '/less/reports/reports.less', PUBLIC_PATH . '/css/reports/reports.css', $theme, $forceRecompile);
-        }
-        catch (Exception $e)
-        {
-            // Retry in case of a directory error.
-            My_Less::autoCompileLess(PUBLIC_PATH . '/less/reports/reports.less', PUBLIC_PATH . '/css/reports/reports.css', $theme, true);
-        }
-
 
         /**
-         * Theme specific styles
+         * Theme Styles
          */
         try
         {
-            My_Less::autoCompileLess($themeDir . '/less/site/styles.less', $themeDir . '/css/site/styles.css', $theme, $forceRecompile);
+            Application_Service_Less::compileSiteThemeStyles($forceRecompile);
         }
         catch (Exception $e)
         {
             // Retry in case of a directory error.
-            My_Less::autoCompileLess($themeDir . '/less/site/styles.less', $themeDir . '/css/site/styles.css', $theme, true);
+            Application_Service_Less::compileSiteThemeStyles($forceRecompile);
         }
 
+        /**
+         * Report Styles
+         */
+        try
+        {
+            Application_Service_Less::compileReportStyles($forceRecompile);
+        }
+        catch (Exception $e)
+        {
+            // Retry in case of a directory error.
+            Application_Service_Less::compileReportStyles($forceRecompile);
+        }
 
+        $view->headLink()->prependStylesheet($view->baseUrl(sprintf("css/reports/reports_dealer_%s.css", $dealerId)));
         $view->headLink()->prependStylesheet($view->theme("/css/site/styles.css"));
         $view->headLink()->prependStylesheet($view->baseUrl("/css/site/styles.css"));
         $view->headLink()->prependStylesheet($view->theme("/jquery/ui/grid/ui.jqgrid.css"));

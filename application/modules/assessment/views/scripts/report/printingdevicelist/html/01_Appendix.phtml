@@ -2,8 +2,8 @@
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 
-$this->brandName = My_Brand::$brandName;
-$this->companyName = My_Brand::$companyName;
+$this->brandName = My_Brand::getDealerBranding()->mpsProgramName;
+$this->companyName = My_Brand::getDealerBranding()->shortDealerName;
 $this->jit = My_Brand::$jit;
 ?>
 <div class="h1">Printing Device List</div>

@@ -51,8 +51,9 @@ $estimatedTonerCostsTable->addRow();
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText('Average number of pages per device, per month', null, null);
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText(number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()), null, 'nospacing_rightalign');
 $section->addTextBreak();
-$section->addText('A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer\'s stated yield of a single print cartridge. In essence, you should not have to change the same toner cartridge more than once per month.', null, array('spaceAfter' => 20));
-$section->addText('Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices. As a guide we suggest that total company printing should range between 30 and 50% of maximum fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets. Most companies find that they have more printing hardware than they need. The following chart displays your estimated monthly page volume compared to your maximum monthly page capacity.', null, 'nospacing');
+$section->addText('A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer\'s stated yield of a single print cartridge. In essence, you should not have to change the same toner cartridge more than once per month.', null, array('spaceAfter' => 150));
+$section->addText('Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices. As a guide we suggest that total company printing should range between 30 and 50% of maximum fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets.', null, array('spaceAfter' => 150));
+$section->addText('Most companies find that they have more printing hardware than they need. The following chart displays your estimated monthly page volume compared to your maximum monthly page capacity.');
 
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle);
@@ -122,7 +123,12 @@ $section->addTextBreak();
 
 $section->addTitle('Color Usage', 2);
 
-$section->addText(sprintf('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.', number_format($healthcheckViewModel->getDevices()->colorCapableDeviceInstances->getCount()), $this->formatPageVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()), number_format($healthcheckViewModel->calculatePercentOfTotalVolumeColorMonthly(), 2)));
+$section->addText(sprintf('You currently have %1$s color printing %2$s that %3$s a monthly average of %4$s color pages per month, which is %5$s%% of your total monthly print volume.',
+    number_format($healthcheckViewModel->getDevices()->colorCapableDeviceInstances->getCount()),
+    (number_format($healthcheckViewModel->getDevices()->colorCapableDeviceInstances->getCount()) == 1) ? 'device' : 'devices',
+    (number_format($healthcheckViewModel->getDevices()->colorCapableDeviceInstances->getCount()) == 1) ? 'prints' : 'print',
+    $this->formatPageVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()),
+    number_format($healthcheckViewModel->calculatePercentOfTotalVolumeColorMonthly(), 2)));
 
 $section->addTextBreak();
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);

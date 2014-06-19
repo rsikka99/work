@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class Admin_Model_Mapper_Dealer
+ * Class Application_Model_Mapper_Dealer
  */
-class Admin_Model_Mapper_Dealer extends My_Model_Mapper_Abstract
+class Application_Model_Mapper_Dealer extends My_Model_Mapper_Abstract
 {
     /*
      * Column Definitions
@@ -16,12 +16,12 @@ class Admin_Model_Mapper_Dealer extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Admin_Model_DbTable_Dealer';
+    protected $_defaultDbTable = 'Application_Model_DbTable_Dealer';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Admin_Model_Mapper_Dealer
+     * @return Application_Model_Mapper_Dealer
      */
     public static function getInstance ()
     {
@@ -29,10 +29,10 @@ class Admin_Model_Mapper_Dealer extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Admin_Model_Dealer to the database.
+     * Saves an instance of Application_Model_Dealer to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Admin_Model_Dealer
+     * @param $object Application_Model_Dealer
      *                The object to insert
      *
      * @return int The primary key of the new row
@@ -57,9 +57,9 @@ class Admin_Model_Mapper_Dealer extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves (updates) an instance of Admin_Model_Dealer to the database.
+     * Saves (updates) an instance of Application_Model_Dealer to the database.
      *
-     * @param $object     Admin_Model_Dealer
+     * @param $object     Application_Model_Dealer
      *                    The Dealer model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
@@ -90,14 +90,14 @@ class Admin_Model_Mapper_Dealer extends My_Model_Mapper_Abstract
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *                This can either be an instance of Admin_Model_Dealer or the
+     *                This can either be an instance of Application_Model_Dealer or the
      *                primary key to delete
      *
      * @return int The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Admin_Model_Dealer)
+        if ($object instanceof Application_Model_Dealer)
         {
             $whereClause = array(
                 "{$this->col_id} = ?" => $object->id
@@ -121,13 +121,13 @@ class Admin_Model_Mapper_Dealer extends My_Model_Mapper_Abstract
      * @param $id int
      *            The id of the Dealer to find
      *
-     * @return Admin_Model_Dealer
+     * @return Application_Model_Dealer
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Admin_Model_Dealer)
+        if ($result instanceof Application_Model_Dealer)
         {
             return $result;
         }
@@ -139,7 +139,7 @@ class Admin_Model_Mapper_Dealer extends My_Model_Mapper_Abstract
             return false;
         }
         $row    = $result->current();
-        $object = new Admin_Model_Dealer($row->toArray());
+        $object = new Application_Model_Dealer($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -157,7 +157,7 @@ class Admin_Model_Mapper_Dealer extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL An SQL OFFSET value.
      *
-     * @return Admin_Model_Dealer
+     * @return Application_Model_Dealer
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -167,7 +167,7 @@ class Admin_Model_Mapper_Dealer extends My_Model_Mapper_Abstract
             return false;
         }
 
-        $object = new Admin_Model_Dealer($row->toArray());
+        $object = new Application_Model_Dealer($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -187,7 +187,7 @@ class Admin_Model_Mapper_Dealer extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL An SQL LIMIT offset.
      *
-     * @return Admin_Model_Dealer[]
+     * @return Application_Model_Dealer[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -195,7 +195,7 @@ class Admin_Model_Mapper_Dealer extends My_Model_Mapper_Abstract
         $entries   = array();
         foreach ($resultSet as $row)
         {
-            $object = new Admin_Model_Dealer($row->toArray());
+            $object = new Application_Model_Dealer($row->toArray());
 
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -221,7 +221,7 @@ class Admin_Model_Mapper_Dealer extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param Admin_Model_Dealer $object
+     * @param Application_Model_Dealer $object
      *
      * @return int
      */

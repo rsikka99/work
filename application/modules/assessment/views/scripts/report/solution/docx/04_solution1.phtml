@@ -21,16 +21,16 @@ $listParagraphStyle = array(
 $section->addPageBreak();
 $section->addTitle(sprintf('Solution: %1$s', $this->brandName), 1);
 
-$section->addText(sprintf('Get the most out of your existing printing assets with the %1$s program. %2$s will take over the management of your current printing equipment and wrap your supplies and service into a single invoice.', $this->brandName, $this->companyName));
+$section->addText(sprintf('Get the most out of your existing printing assets with the %1$s. %2$s will take over the management of your current printing equipment and combine your supplies and service into a single invoice.', $this->brandName, $this->companyName));
 
 $section->addTitle('Program Components', 2);
 
-$section->addText(sprintf('Pay by the page with the %1$s program:', $this->brandName));
+$section->addText(sprintf('Pay by the page with the %1$s:', $this->brandName));
 $section->addListItem(sprintf('$%1$s for monochrome pages', $this->NumberFormat($assessmentViewModel->getMPSBlackAndWhiteCPP(), 8)), 0, 'bold_text', null, $listParagraphStyle);
 $section->addListItem(sprintf('$%1$s for color pages', $this->NumberFormat($assessmentViewModel->getMPSColorCPP(), 8)), 0, 'bold_text', null, $listParagraphStyle);
 $section->addListItem('Includes supplies and service for your existing equipment', 0, 'bold_text', null, $listParagraphStyle);
 
-$section->addText(sprintf('The %1$s program uses remote monitoring software to provide you with:', $this->brandName));
+$section->addText(sprintf('The %1$s uses remote monitoring software to provide you with:', $this->brandName));
 $section->addListItem('Just-in-time supplies fulfillment', 0, null, null, $listParagraphStyle);
 $section->addListItem('Efficient maintenance and break-fix service', 0, null, null, $listParagraphStyle);
 $section->addListItem('Monthly business intelligence reports', 0, null, null, $listParagraphStyle);
@@ -117,7 +117,7 @@ $cell = $table->addCell($tc->col3Width, $tc->footer->cell3->cellStyle)->addText(
 $cell = $table->addCell($tc->col4Width, $tc->footer->cell4->cellStyle)->addText($this->currency($assessmentViewModel->getPrintIQTotalCost()), $tc->footer->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
 
 
-$section->addText(sprintf('Note that although the page volumes from all of your purchased devices were included in our savings calculations, not all of them may qualify for our managed print services program or just-in-time supplies fulfillment. Volumes from unqualified devices would have to be merged to an existing or new qualified device to be included in the program. Please see the Appendix for a complete printing device list with details on compatibility with the %1$s program.', $this->brandName), 'small_italic_text');
+$section->addText(sprintf('Note that although the page volumes from all of your purchased devices were included in our savings calculations, not all of them may qualify for our managed print services program or just-in-time supplies fulfillment. Volumes from unqualified devices would have to be merged to an existing or new qualified device to be included in the program. Please see the Appendix for a complete printing device list with details on compatibility with the %1$s.', $this->brandName), 'small_italic_text');
 $section->addTextBreak(1);
 
 $tc    = $this->styles->tables->totalAnnualSavings;

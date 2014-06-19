@@ -7,9 +7,9 @@ $fh = fopen($this->savePath, "w+");
 
 fputcsv($fh, $this->fieldTitleList);
 fputcsv($fh, array());
-fputcsv($fh, array("MPSToolbox.com Black And White CPP:", $this->monochromeCPP));
+fputcsv($fh, array(My_Brand::getDealerBranding()->mpsProgramName . " Black And White CPP:", $this->monochromeCPP));
 fputcsv($fh, array());
-fputcsv($fh, array("MPSToolbox.com Color CPP:", $this->colorCPP));
+fputcsv($fh, array(My_Brand::getDealerBranding()->mpsProgramName . " Color CPP:", $this->colorCPP));
 fputcsv($fh, array());
 fputcsv($fh, array());
 

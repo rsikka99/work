@@ -86,16 +86,16 @@
         },
         {
             "name": "michelf/php-markdown",
-            "version": "1.4.1",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/michelf/php-markdown.git",
-                "reference": "de9a19c7bf352d41cc99ed86c3c0ef17e87394b6"
+                "reference": "96d8150406f67e683ef4acc09fef91785fef1266"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/de9a19c7bf352d41cc99ed86c3c0ef17e87394b6",
-                "reference": "de9a19c7bf352d41cc99ed86c3c0ef17e87394b6",
+                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/96d8150406f67e683ef4acc09fef91785fef1266",
+                "reference": "96d8150406f67e683ef4acc09fef91785fef1266",
                 "shasum": ""
             },
             "require": {
@@ -133,7 +133,7 @@
             "keywords": [
                 "markdown"
             ],
-            "time": "2014-05-05 02:43:50"
+            "time": "2013-11-29 17:09:24"
         },
         {
             "name": "nesbot/carbon",
@@ -218,20 +218,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PHPWord.git",
-<<<<<<< Updated upstream
+                "reference": "e9f8e889f8fef4e141d14505e861d7995ad558a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PHPWord/zipball/f54d9a1eb443dbb8dc631ff8eb8f25fe9bafa25c",
-                "reference": "f54d9a1eb443dbb8dc631ff8eb8f25fe9bafa25c",
-=======
-                "reference": "09a143fe71334bb599db1833b929b87972bf227d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PHPWord/zipball/09a143fe71334bb599db1833b929b87972bf227d",
-                "reference": "09a143fe71334bb599db1833b929b87972bf227d",
->>>>>>> Stashed changes
+                "url": "https://api.github.com/repos/PHPOffice/PHPWord/zipball/e9f8e889f8fef4e141d14505e861d7995ad558a3",
+                "reference": "e9f8e889f8fef4e141d14505e861d7995ad558a3",
                 "shasum": ""
             },
             "require": {
@@ -310,23 +302,20 @@
                 "word",
                 "writer"
             ],
-<<<<<<< Updated upstream
-=======
-            "time": "2014-06-06 11:56:09"
->>>>>>> Stashed changes
+            "time": "2014-06-11 19:41:49"
         },
         {
             "name": "robmorgan/phinx",
-            "version": "v0.3.4",
+            "version": "v0.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/robmorgan/phinx.git",
-                "reference": "5de112662b64d4d6ffa45d4dfc557c2a4c1620cd"
+                "reference": "685b6196a92ec74c75f4df8258d02889305edac4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/robmorgan/phinx/zipball/5de112662b64d4d6ffa45d4dfc557c2a4c1620cd",
-                "reference": "5de112662b64d4d6ffa45d4dfc557c2a4c1620cd",
+                "url": "https://api.github.com/repos/robmorgan/phinx/zipball/685b6196a92ec74c75f4df8258d02889305edac4",
+                "reference": "685b6196a92ec74c75f4df8258d02889305edac4",
                 "shasum": ""
             },
             "require": {
@@ -370,7 +359,7 @@
                 "migrations",
                 "phinx"
             ],
-            "time": "2014-04-27 15:25:07"
+            "time": "2014-03-22 13:11:11"
         },
         {
             "name": "symfony/class-loader",
@@ -631,16 +620,16 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.6",
+            "version": "1.12.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zf1.git",
-                "reference": "9adf10d1c5875a98047ea99613061a944ad17083"
+                "reference": "828191781995123e2a5888a386ed827a4cd7695a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zf1/zipball/9adf10d1c5875a98047ea99613061a944ad17083",
-                "reference": "9adf10d1c5875a98047ea99613061a944ad17083",
+                "url": "https://api.github.com/repos/zendframework/zf1/zipball/828191781995123e2a5888a386ed827a4cd7695a",
+                "reference": "828191781995123e2a5888a386ed827a4cd7695a",
                 "shasum": ""
             },
             "require": {
@@ -674,7 +663,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2014-04-15 16:50:58"
+            "time": "2014-03-07 16:13:40"
         }
     ],
     "packages-dev": [
@@ -982,22 +971,20 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "3.7.37",
+            "version": "3.7.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "ae6cefd7cc84586a5ef27e04bae11ee940ec63dc"
+                "reference": "248d6ce95e6ca7f0e3135252c0b984bbe1f52f19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ae6cefd7cc84586a5ef27e04bae11ee940ec63dc",
-                "reference": "ae6cefd7cc84586a5ef27e04bae11ee940ec63dc",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/248d6ce95e6ca7f0e3135252c0b984bbe1f52f19",
+                "reference": "248d6ce95e6ca7f0e3135252c0b984bbe1f52f19",
                 "shasum": ""
             },
             "require": {
-                "ext-ctype": "*",
                 "ext-dom": "*",
-                "ext-json": "*",
                 "ext-pcre": "*",
                 "ext-reflection": "*",
                 "ext-spl": "*",
@@ -1013,6 +1000,9 @@
                 "pear-pear.php.net/pear": "1.9.4"
             },
             "suggest": {
+                "ext-json": "*",
+                "ext-simplexml": "*",
+                "ext-tokenizer": "*",
                 "phpunit/php-invoker": "~1.1"
             },
             "bin": [
@@ -1051,7 +1041,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-04-30 12:24:19"
+            "time": "2014-03-28 11:04:36"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

@@ -28,9 +28,8 @@ $section          = $phpWord->addSection(array(
 ));
 $titlepageSection = $section;
 
-
 /* Tables for the device layouts */
-$widthTwips       = 11111;
+$widthTwips       = 11490;
 $header_color     = $this->wordStyles->default->tableHeaderBackgroundColor;
 $sub_header_color = $this->wordStyles->default->tableSubHeaderBackgroundColor;
 $even_color       = "EFEFEF";
@@ -38,14 +37,14 @@ $odd_color        = "FCFCFC";
 $footer_color     = "b8cce3";
 $highlight_color  = "ebc7a4";
 
-$titlePageBackgroundColor  = My_Brand::$reportTitlePageTitleBackgroundColor;
-$titlePageBackgroundColor2 = My_Brand::$reportTitlePageInformationBackgroundColor;
-$titlePageTextColor        = My_Brand::$reportTitlePageTitleColor;
-$titlePageTextColor2       = My_Brand::$reportTitlePageInformationColor;
-$headingColor              = My_Brand::$reportHeadingColor;
-$h2Background              = My_Brand::$reportHeadingBackgroundColor;
-$h2Color                   = My_Brand::$reportSubHeadingColor;
-$h3Color                   = My_Brand::$reportHeadingColor;
+$titlePageBackgroundColor  = My_Brand::getDealerBranding()->titlePageTitleBackgroundColor;
+$titlePageBackgroundColor2 = My_Brand::getDealerBranding()->titlePageInformationBackgroundColor;
+$titlePageTextColor        = My_Brand::getDealerBranding()->titlePageTitleFontColor;
+$titlePageTextColor2       = My_Brand::getDealerBranding()->titlePageInformationFontColor;
+$headingColor              = My_Brand::getDealerBranding()->h1FontColor;
+$h2Background              = My_Brand::getDealerBranding()->h2BackgroundColor;
+$h2Color                   = My_Brand::getDealerBranding()->h2FontColor;
+$h3Color                   = My_Brand::getDealerBranding()->h1FontColor;
 
 
 /**
@@ -55,7 +54,7 @@ $h3Color                   = My_Brand::$reportHeadingColor;
 // Title page
 $phpWord->addTitleStyle(2, array(
     'size'   => 12,
-    'color'  => My_Brand::$reportSubHeadingColor,
+    'color'  => My_Brand::getDealerBranding()->h2FontColor,
     'bold'   => true,
     'italic' => true
 ), array(
@@ -79,6 +78,9 @@ $phpWord->addParagraphStyle('titleStyle2', array(
 ));
 $phpWord->addParagraphStyle('titleStyle3', array(
     'spaceAfter' => 100,
+    'tabs'       => array(
+        new \PhpOffice\PhpWord\Style\Tab('left', 350)
+    ),
     'shading'    => array(
         'fill' => $titlePageBackgroundColor2,
     )
@@ -427,7 +429,7 @@ $titleData = array(
     "hardwareOptimization" => $hardwareOptimization,
     "styles"               => $styles,
     "dealerLogoFile"       => $this->dealerLogoFile,
-    "companyName"          => My_Brand::$companyName,
+    "companyName"          => My_Brand::getDealerBranding()->shortDealerName,
 );
 
 $profitabilityDevices = new Hardwareoptimization_Model_Optimization_Customer($hardwareOptimization);
@@ -442,7 +444,7 @@ $data = array(
     "devicetables"         => $deviceTables,
     "profitabilityDevices" => $profitabilityDevices,
     "twocenter"            => $doubleCenterTable,
-    "companyName"          => My_Brand::$companyName,
+    "companyName"          => My_Brand::getDealerBranding()->shortDealerName,
 
 );
 // Actual document pages

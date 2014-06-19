@@ -8,14 +8,15 @@ $assessmentViewModel = $this->assessmentViewModel;
 /**
  * Styles
  */
-$h1Color                   = My_Brand::$reportHeadingColor;
-$titlePageBackgroundColor1 = My_Brand::$reportTitlePageTitleBackgroundColor;
-$titlePageBackgroundColor2 = My_Brand::$reportTitlePageInformationBackgroundColor;
-$titlePageTextColor1       = My_Brand::$reportTitlePageTitleColor;
-$titlePageTextColor2       = My_Brand::$reportTitlePageInformationColor;
+$h1Color                   = My_Brand::getDealerBranding()->h1FontColor;
+$h1Background              = My_Brand::getDealerBranding()->h1BackgroundColor;
+$titlePageBackgroundColor1 = My_Brand::getDealerBranding()->titlePageTitleBackgroundColor;
+$titlePageBackgroundColor2 = My_Brand::getDealerBranding()->titlePageInformationBackgroundColor;
+$titlePageTextColor1       = My_Brand::getDealerBranding()->titlePageTitleFontColor;
+$titlePageTextColor2       = My_Brand::getDealerBranding()->titlePageInformationFontColor;
 $h1BorderColor             = $this->wordStyles->default->sectionHeaderBorderColor;
-$h2Background              = My_Brand::$reportHeadingBackgroundColor;
-$h2Color                   = My_Brand::$reportSubHeadingColor;
+$h2Background              = My_Brand::getDealerBranding()->h2BackgroundColor;
+$h2Color                   = My_Brand::getDealerBranding()->h2FontColor;
 $h3Color                   = "000000";
 
 /**
@@ -34,11 +35,17 @@ $properties->setSubject('MPS Assessment Software');
 $titlePageSection = $phpWord->addSection(array(
     'orientation'  => null,
     'marginLeft'   => 1420,
-    'marginRight'  => 720,
-    'marginTop'    => 720,
-    'marginBottom' => 720
+    'marginRight'  => 1420,
+    'marginTop'    => 1420,
+    'marginBottom' => 1420
 ));
-$section          = $phpWord->addSection();
+$section          = $phpWord->addSection(array(
+    'orientation'  => null,
+    'marginLeft'   => 1420,
+    'marginRight'  => 1420,
+    'marginTop'    => 1420,
+    'marginBottom' => 1420
+));
 
 // Title page
 $phpWord->addParagraphStyle('titleStyle1', array(
@@ -47,7 +54,7 @@ $phpWord->addParagraphStyle('titleStyle1', array(
     'bgColor'    => $titlePageBackgroundColor1,
     'shading'    => array(
         'fill' => $titlePageBackgroundColor1,
-    )
+    ),
 ));
 $phpWord->addParagraphStyle('titleStyle2', array(
     'spaceAfter'  => 50,
@@ -57,9 +64,12 @@ $phpWord->addParagraphStyle('titleStyle2', array(
 $phpWord->addParagraphStyle('titleStyle3', array(
     'spaceAfter' => 100,
     'bgColor'    => $titlePageBackgroundColor2,
+    'tabs'       => array(
+        new \PhpOffice\PhpWord\Style\Tab('left', 350)
+    ),
     'shading'    => array(
         'fill' => $titlePageBackgroundColor2,
-    )
+    ),
 ));
 $phpWord->addFontStyle('titlepage_title', array(
     'size'  => 24,
@@ -162,24 +172,29 @@ $phpWord->addFontStyle('small_italic_text', array(
  */
 // H1 Style
 $phpWord->addTitleStyle(1, array(
-    'size'  => 15,
-    'color' => $h1Color,
-    'bold'  => true
-), array(
-    'borderBottomColor' => $h1BorderColor,
-    'borderBottomSize'  => 1
-));
+        'size'  => 15,
+        'color' => $h1Color,
+        'bold'  => true,
+    ),
+    array(
+        'shading' => array(
+            'fill' => $h1Background,
+        ),
+    )
+);
 // H2 Style #5881BC
 $phpWord->addTitleStyle(2, array(
-    'size'   => 12,
-    'color'  => $h2Color,
-    'bold'   => true,
-    'italic' => true,
-), array(
-    'shading' => array(
-        'fill' => $h2Background,
+        'size'   => 12,
+        'color'  => $h2Color,
+        'bold'   => true,
+        'italic' => true,
+    ),
+    array(
+        'shading' => array(
+            'fill' => $h2Background,
+        )
     )
-));
+);
 // H3 Style #5881BC
 $phpWord->addTitleStyle(3, array(
     'size'  => 10,
@@ -516,8 +531,8 @@ $data = array(
     "section"             => $section,
     "assessmentViewModel" => $this->assessmentViewModel,
     "styles"              => $styles,
-    "brandName"           => My_Brand::$brandName,
-    "companyName"         => My_Brand::$companyName,
+    "brandName"           => My_Brand::getDealerBranding()->mpsProgramName,
+    "companyName"         => My_Brand::getDealerBranding()->shortDealerName,
 );
 
 // Actual document pages

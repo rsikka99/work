@@ -33,7 +33,7 @@ class Admin_Form_Fix_Toner extends Twitter_Bootstrap_Form_Horizontal
         // Set the method for the display form to POST
         $this->setMethod('POST');
 
-        $dealers    = Admin_Model_Mapper_Dealer::getInstance()->fetchAll();
+        $dealers    = Application_Model_Mapper_Dealer::getInstance()->fetchAll();
         $dealerList = array(
             0 => "Select Company..."
         );

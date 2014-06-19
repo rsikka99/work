@@ -20,7 +20,7 @@
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($this->paginator->getCurrentItems() as $dealer) : /* @var $dealer Admin_Model_Dealer */ ?>
+            <?php foreach ($this->paginator->getCurrentItems() as $dealer) : /* @var $dealer Application_Model_Dealer */ ?>
 
                 <tr>
                     <td><?php echo $this->escape($dealer->id); ?></td>

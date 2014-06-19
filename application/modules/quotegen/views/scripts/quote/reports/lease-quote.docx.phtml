@@ -63,10 +63,14 @@ $phpword->addParagraphStyle('titleStyle2', array(
     'spaceBefore' => 100,
     'shading'     => array(
         'fill' => '4C4C4C',
-    )
+    ),
+    'align'       => 'center',
 ));
 $phpword->addParagraphStyle('titleStyle3', array(
     'spaceAfter' => 200,
+    'tabs'       => array(
+        new \PhpOffice\PhpWord\Style\Tab('left', 350)
+    ),
     'shading'    => array(
         'fill' => '7F7F7F',
     )
@@ -184,19 +188,24 @@ $phpword->addFontStyle('small_italic_text', array(
 // H1 Style
 $phpword->addTitleStyle(1, array(
     'size'  => 15,
-    'color' => $this->docStyles->brandBaseColor,
+    'color' => My_Brand::getDealerBranding()->h1FontColor,
     'bold'  => true
 ), array(
-    'borderBottomSize' => 1
+    'shading' => array(
+        'fill' => My_Brand::getDealerBranding()->h1BackgroundColor,
+    ),
 ));
+
 // H2 Style #5881BC
 $phpword->addTitleStyle(2, array(
     'size'   => 12,
-    'color'  => 'FFFFFF',
+    'color'  => My_Brand::getDealerBranding()->h2FontColor,
     'bold'   => true,
     'italic' => true
 ), array(
-    'bgColor' => $this->docStyles->brandBaseColor
+    'shading' => array(
+        'fill' => My_Brand::getDealerBranding()->h2BackgroundColor,
+    ),
 ));
 // H3 Style #5881BC
 $phpword->addTitleStyle(3, array(
@@ -220,10 +229,12 @@ $phpword->addFontStyle('heading3', array(
  */
 $trueCostsTable = (object)array(
     "tablestyle" => array(
-        'cellMarginTop'    => 90,
-        'cellMarginRight'  => 50,
-        'cellMarginBottom' => 90,
-        'cellMarginLeft'   => 50,
+        'cellMarginTop'     => 90,
+        'cellMarginRight'   => 50,
+        'cellMarginBottom'  => 90,
+        'cellMarginLeft'    => 50,
+        'borderBottomSize'  => 1,
+        'borderBottomColor' => 'BFBFBF',
     ),
     "col1Width"  => 2347.38,
     "col2Width"  => 3764.88,
@@ -236,7 +247,8 @@ $trueCostsTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => 'bold_text',
                     "paragraphStyle" => 'nospacing_centeralign'
@@ -247,7 +259,8 @@ $trueCostsTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => 'bold_text',
                     "paragraphStyle" => 'nospacing_centeralign'
@@ -258,7 +271,8 @@ $trueCostsTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => 'bold_text',
                     "paragraphStyle" => 'nospacing_centeralign'
@@ -272,11 +286,11 @@ $trueCostsTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
-                        'color' => 'FF0000',
-                        'bold'  => true
+                        'bold' => true
                     ),
                     "paragraphStyle" => 'nospacing'
                 ),
@@ -286,7 +300,8 @@ $trueCostsTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => null,
                     "paragraphStyle" => 'nospacing'
@@ -297,7 +312,8 @@ $trueCostsTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => null,
                     "paragraphStyle" => 'nospacing'
@@ -332,7 +348,8 @@ $leaseQuoteTable = (object)array(
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
                         "bgColor"          => $this->docStyles->brandBaseColor,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'color' => 'FFFFFF',
@@ -352,7 +369,8 @@ $leaseQuoteTable = (object)array(
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
                         "bgColor"          => $this->docStyles->brandBaseColor,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'color' => 'FFFFFF',
@@ -372,7 +390,8 @@ $leaseQuoteTable = (object)array(
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
                         "bgColor"          => $this->docStyles->brandBaseColor,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'color' => 'FFFFFF',
@@ -392,7 +411,8 @@ $leaseQuoteTable = (object)array(
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
                         "bgColor"          => $this->docStyles->brandBaseColor,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'color' => 'FFFFFF',
@@ -414,7 +434,8 @@ $leaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'bold' => true,
@@ -429,7 +450,8 @@ $leaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -443,7 +465,8 @@ $leaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -457,7 +480,8 @@ $leaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -477,7 +501,8 @@ $leaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -491,7 +516,8 @@ $leaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -505,7 +531,8 @@ $leaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -519,7 +546,8 @@ $leaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -540,7 +568,8 @@ $leaseQuoteTable = (object)array(
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
                         "bgColor"          => 'D9D9D9',
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -556,7 +585,8 @@ $leaseQuoteTable = (object)array(
                         "borderLeftSize"   => 1,
                         "bgColor"          => 'D9D9D9',
                         "valign"           => 'center',
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "cell2Span3"     => array(
                         "borderTopSize"    => 1,
@@ -567,6 +597,7 @@ $leaseQuoteTable = (object)array(
                         "valign"           => 'center',
                         "borderColor"      => 'BFBFBF',
                         "gridSpan"         => 3,
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'bold' => true,
@@ -587,7 +618,8 @@ $leaseQuoteTable = (object)array(
                         "borderLeftSize"   => 1,
                         "bgColor"          => 'D9D9D9',
                         "valign"           => 'center',
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'bold' => true,
@@ -602,20 +634,25 @@ $leaseQuoteTable = (object)array(
                 )
         ),
     "cpp"          => (object)array(
-            "rowheight" => null,
+            "rowheight" => 500,
             "cell1"     => (object)array(
                     "cellStyle"      => array(
                         "borderTopSize"    => 1,
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
                         'size' => 11
                     ),
-                    "paragraphStyle" => 'nospacing'
+                    "paragraphStyle" => array(
+                        'nospacing'  => true,
+                        'align'      => 'right',
+                        'spaceAfter' => 0
+                    )
                 ),
             "cell2"     => (object)array(
                     "cellStyle"      => array(
@@ -624,7 +661,7 @@ $leaseQuoteTable = (object)array(
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
                         "valign"           => 'center',
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -668,7 +705,8 @@ $leaseQuoteTable = (object)array(
                         "borderLeftSize"   => 1,
                         "valign"           => 'center',
                         "borderColor"      => 'BFBFBF',
-                        "bgColor"          => 'D9D9D9'
+                        "bgColor"          => 'D9D9D9',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         "bold" => true,
@@ -683,14 +721,15 @@ $leaseQuoteTable = (object)array(
                 )
         ),
     "pages"        => (object)array(
-            "rowheight" => null,
+            "rowheight" => 500,
             "cell1"     => (object)array(
                     "cellStyle"      => array(
                         "borderTopSize"    => 1,
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -708,7 +747,8 @@ $leaseQuoteTable = (object)array(
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
                         "valign"           => 'center',
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -725,7 +765,8 @@ $leaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -742,7 +783,8 @@ $leaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => "center",
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',

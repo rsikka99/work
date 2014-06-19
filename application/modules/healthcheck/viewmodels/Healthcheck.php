@@ -188,7 +188,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     public function __construct (Healthcheck_Model_Healthcheck $report)
     {
         parent::__construct($report);
-        $this->DealerCompany = My_Brand::$companyName;
+        $this->DealerCompany = My_Brand::getDealerBranding()->shortDealerName;
 
         if (isset(self::$Proposal))
         {
@@ -1122,6 +1122,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->Graphs))
         {
+            $dealerBranding = My_Brand::getDealerBranding();
+
             // Other variables used in several places
             $companyName   = $this->healthcheck->getClient()->companyName;
             $employeeCount = $this->healthcheck->getClient()->employeeCount;
@@ -1143,7 +1145,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $this->getDevices()->leasedDeviceInstances->getCount()
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphLeasedDeviceColor),
             ));
             $barGraph->addDataSet(array(
                 $this->getDevices()->purchasedDeviceInstances->getCount()
@@ -1153,7 +1155,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setBarScale(50, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphPurchasedDeviceColor),
             ));
             $barGraph->setLegend(array(
                 "Number of leased devices",
@@ -1177,7 +1179,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 round($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphLeasedDeviceColor),
             ));
             $barGraph->addDataSet(array(
                 round($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
@@ -1187,7 +1189,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setBarScale(50, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphPurchasedDeviceColor),
             ));
             $barGraph->setLegend(array(
                 "Monthly pages on leased devices",
@@ -1253,7 +1255,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $averagePageCount
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphCustomerColor),
             ));
             $barGraph->addDataSet(array(
                 Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_DEVICE
@@ -1263,7 +1265,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
             ));
             $barGraph->setLegend(array(
                 $companyName,
@@ -1290,7 +1292,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $pagesPerEmployee
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphCustomerColor),
             ));
             $barGraph->addDataSet(array(
                 Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE
@@ -1300,7 +1302,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
             ));
             $barGraph->setLegend(array(
                 $companyName,
@@ -1326,7 +1328,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $devicesPerEmployee
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphCustomerColor),
             ));
             $barGraph->addDataSet(array(
                 Assessment_ViewModel_Assessment::AVERAGE_EMPLOYEES_PER_DEVICE
@@ -1336,7 +1338,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
             ));
             $barGraph->setLegend(array(
                 $companyName,
@@ -1389,8 +1391,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 "$duplexPercentage%"
             ));
             $duplexCapableGraph->addColors(array(
-                "E21736",
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphDuplexCapableDeviceColor),
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
             ));
             $duplexCapableGraph->setLegendPosition("bv");
             // Graphs[13]
@@ -1423,8 +1425,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 number_format($this->getDevices()->allIncludedDeviceInstances->getCount() - $this->getDevices()->scanCapableDeviceInstances->getCount())
             ));
             $scanCapableGraph->addColors(array(
-                "E21736",
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphCopyCapableDeviceColor),
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
             ));
             $scanCapableGraph->setLegendPosition("bv");
             $scanCapableGraph->setDimensions(305, 210);
@@ -1866,6 +1868,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
         if ($this->Graphs == null)
         {
+            $dealerBranding = My_Brand::getDealerBranding();
+
             // Fetch the old graphs
             $this->_getOldGraphs();
 
@@ -1913,8 +1917,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $deviceAgeGraph->setLegend($legendItems);
             $deviceAgeGraph->setLabels($labels);
             $deviceAgeGraph->addColors(array(
-                "E21736",
-                "0094cf"
+                str_replace('#', '', $dealerBranding->graphCompatibleDeviceColor),
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
             ));
             $deviceAgeGraph->setLegendPosition("bv");
             $deviceAgeGraph->setTitle("Pages printed on Devices Reporting Toner Levels");
@@ -1960,8 +1964,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $deviceAgeGraph->setLegend($legendItems);
             $deviceAgeGraph->setLabels($labels);
             $deviceAgeGraph->addColors(array(
-                "E21736",
-                "0094cf"
+                str_replace('#', '', $dealerBranding->graphJitCompatibleDeviceColor),
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
             ));
             $deviceAgeGraph->setLegendPosition("bv");
             $deviceAgeGraph->setTitle("Pages printed on " . My_Brand::$jit);
@@ -1982,7 +1986,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphCustomerColor),
             ));
             $barGraph->addDataSet(array(
                 $this->getMaximumMonthlyPrintVolume()
@@ -1996,7 +2000,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("b");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphPositiveColor),
             ));
             $barGraph->setProperty('chxs', '0N*sz0*');
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
@@ -2018,7 +2022,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $this->getDevices()->colorCapableDeviceInstances->getCount()
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphColorDeviceColor),
             ));
             $barGraph->addDataSet(array(
                 $this->getDevices()->allIncludedDeviceInstances->getCount() - $this->getDevices()->colorCapableDeviceInstances->getCount()
@@ -2027,7 +2031,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setDataRange(0, $highest * 1.1);
             $barGraph->setBarScale(70, 10);
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphMonoDeviceColor),
             ));
             $barGraph->setLegend(array(
                 "Color-capable",
@@ -2056,7 +2060,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphColorDeviceColor),
             ));
             $barGraph->addDataSet(array(
                 $blackAndWhitePageCount
@@ -2065,7 +2069,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setDataRange(0, $highest * 1.1);
             $barGraph->setBarScale(70, 10);
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphMonoDeviceColor),
             ));
             $barGraph->setLegend(array(
                 "Color pages printed",
@@ -2098,8 +2102,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $colorNonCapableDeviceCount
             ));
             $colorCapableGraph->addColors(array(
-                "E21736",
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphColorDeviceColor),
+                str_replace('#', '', $dealerBranding->graphMonoDeviceColor),
             ));
             $colorCapableGraph->setLegendPosition("bv");
             // colorCapablePieChart
@@ -2126,8 +2130,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $a3NonCapableDeviceCount . "%"
             ));
             $a3CapableGraph->addColors(array(
-                "E21736",
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphCompatibleDeviceColor),
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
             ));
             $a3CapableGraph->setLegendPosition("bv");
             // a3CapablePieChart
@@ -2153,8 +2157,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $a3NonA3PageCountPercent . "%"
             ));
             $a3CapableGraph->addColors(array(
-                "E21736",
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphCompatibleDeviceColor),
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
             ));
             $a3CapableGraph->setLegendPosition("bv");
             // a3PagePercent
@@ -2174,7 +2178,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $numberOfDevicesReportingTonerLevels
             ));
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphCompatibleDeviceColor),
             ));
             $barGraph->addDataSet(array(
                 ($numberOfIncompatibleDevices)
@@ -2184,7 +2188,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setBarScale(70, 10);
             $barGraph->setLegendPosition("b");
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
             ));
             $barGraph->setLegend(array(
                 "Printers Reporting Toner Levels",
@@ -2211,7 +2215,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $numberOfDevicesReportingTonerLevels
             ));
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphJitCompatibleDeviceColor),
             ));
             $barGraph->addDataSet(array(
                 ($numberOfIncompatibleDevices)
@@ -2221,7 +2225,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setBarScale(70, 10);
             $barGraph->setLegendPosition("b");
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
             ));
             $barGraph->setLegend(array(
                 "Printers Compatible with " . My_Brand::$jit,
@@ -2248,7 +2252,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $oemCost
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphNegativeColor),
             ));
             $barGraph->addDataSet(array(
                 $compCost
@@ -2259,7 +2263,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setLegendPosition("b");
             $barGraph->setProperty('chxs', '0N*cUSD*');
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphPositiveColor),
             ));
             $barGraph->setLegend(array(
                 "OEM Toner",
@@ -2282,13 +2286,13 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 0
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphCustomerColor),
             ));
             $barGraph->addDataSet(array(
                 0
             ));
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
             ));
             $barGraph->addDataSet(array(
                 30
@@ -2315,12 +2319,12 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             //Create a circle object, color E21736,0,height, position on axis, size, | means another statement in this string
-            $dotProperties = '@d,E21736,0,.5:' . number_format($percentage, 2) . ',15|';
+            $dotProperties = '@d,' . str_replace('#', '', $dealerBranding->graphCustomerColor) . ',0,.5:' . number_format($percentage, 2) . ',15|';
             //Add onto the last property, @t = a text message, color,0,height,positon - halfish of the text width, size
             $dotProperties .= '@t' . number_format($percentage * 100) . '%,000000,0,-2.0:' . number_format($percentage - .01, 2) . ',10';
             $barGraph->setProperty('chm', $dotProperties);
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
             ));
             $barGraph->setProperty('chxs', '0N*sz0*');
             // HardwareUtilizationCapacityPercent
@@ -2375,25 +2379,25 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $deviceAges ["Less than 3 years old"]
             ));
             $barGraph->addColors(array(
-                "0094cf"
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices1),
             ));
             $barGraph->addDataSet(array(
                 $deviceAges ["3-5 years old"]
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices2),
             ));
             $barGraph->addDataSet(array(
                 $deviceAges ["6-8 years old"]
             ));
             $barGraph->addColors(array(
-                "adba1d"
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices3),
             ));
             $barGraph->addDataSet(array(
                 $deviceAges ["More than 8 years old"]
             ));
             $barGraph->addColors(array(
-                "5c3f9b"
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices4),
             ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
@@ -2406,6 +2410,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 "6-8 years old",
                 "More than 8 years old"
             ));
+
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
@@ -2445,10 +2450,10 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $AgeOfPrintingPieChart = new gchart\gPie3DChart(400, 300);
             $AgeOfPrintingPieChart->addDataSet($deviceAges);
             $AgeOfPrintingPieChart->addColors(array(
-                "0094cf",
-                "E21736",
-                "adba1d",
-                "5c3f9b",
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices1),
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices2),
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices3),
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices4),
             ));
             $AgeOfPrintingPieChart->setLegendPosition("bv");
             $AgeOfPrintingPieChart->setTitle("Age of device");
@@ -2499,10 +2504,10 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $PrintIQAgeOfPrintingPieChart = new gchart\gPie3DChart(250, 220);
             $PrintIQAgeOfPrintingPieChart->addDataSet($deviceAges);
             $PrintIQAgeOfPrintingPieChart->addColors(array(
-                "008000",
-                "54CC64",
-                "FFD000",
-                "ff0000",
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices1),
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices2),
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices3),
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices4),
             ));
             $PrintIQAgeOfPrintingPieChart->setLegendPosition("bv");
             $PrintIQAgeOfPrintingPieChart->setTitle("Age of device");
@@ -2558,25 +2563,25 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $deviceAges ["Less than 3 years old"]
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addColors(array(
-                "008000"
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices1),
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addDataSet(array(
                 $deviceAges ["3-5 years old"]
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addColors(array(
-                "54CC64"
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices2),
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addDataSet(array(
                 $deviceAges ["6-8 years old"]
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addColors(array(
-                "FFD000"
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices3),
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addDataSet(array(
                 $deviceAges ["More than 8 years old"]
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addColors(array(
-                "ff0000"
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices4),
             ));
 
             $highest = max($deviceAges["Less than 3 years old"], $deviceAges["3-5 years old"], $deviceAges["6-8 years old"], $deviceAges["More than 8 years old"]);
@@ -2618,8 +2623,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $duplexNonCapableDeviceCount
             ));
             $duplexCapableGraph->addColors(array(
-                "E21736",
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphDuplexCapableDeviceColor),
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
             ));
             $duplexCapableGraph->setLegendPosition("bv");
             // DuplexCapableDevicesGraph
@@ -2639,7 +2644,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $averagePageCount
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphCustomerColor),
             ));
             $barGraph->addDataSet(array(
                 Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_DEVICE
@@ -2649,7 +2654,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
             ));
             $barGraph->setLegend(array(
                 $companyName,
@@ -2676,7 +2681,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $pagesPerEmployee
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphCustomerColor),
             ));
             $barGraph->addDataSet(array(
                 Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE
@@ -2686,7 +2691,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
             ));
             $barGraph->setLegend(array(
                 $companyName,
@@ -2712,7 +2717,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $devicesPerEmployee
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphCustomerColor),
             ));
             $barGraph->addDataSet(array(
                 Assessment_ViewModel_Assessment::AVERAGE_EMPLOYEES_PER_DEVICE
@@ -2722,7 +2727,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
             ));
             $barGraph->setLegend(array(
                 $companyName,
@@ -2753,8 +2758,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $copyNonCapableDeviceCount
             ));
             $copyCapableGraph->addColors(array(
-                "E21736",
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphCopyCapableDeviceColor),
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
             ));
             $copyCapableGraph->setLegendPosition("bv");
             // Graphs CopyCapableDevicesGraph
@@ -2763,9 +2768,9 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- ManagedVsNotJitVsJitDevices
              */
-            $isManagedDeviceCount           = $this->getDevices()->isManagedDeviceInstances->getCount();
-            $notCompatibleDeviceCount       = $this->getDevices()->notCompatibleDeviceInstances->getCount();
-            $jitCompatibleDeviceCount       = $this->getDevices()->compatibleDeviceInstances->getCount();
+            $isManagedDeviceCount     = $this->getDevices()->isManagedDeviceInstances->getCount();
+            $notCompatibleDeviceCount = $this->getDevices()->notCompatibleDeviceInstances->getCount();
+            $jitCompatibleDeviceCount = $this->getDevices()->compatibleDeviceInstances->getCount();
 
             $highest  = max($isManagedDeviceCount, $notCompatibleDeviceCount, $jitCompatibleDeviceCount);
             $barGraph = new gchart\gBarChart(280, 230);
@@ -2776,21 +2781,21 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $isManagedDeviceCount
             ));
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphManagedDeviceColor),
             ));
 
             $barGraph->addDataSet(array(
                 $notCompatibleDeviceCount
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
             ));
             $barGraph->addDataSet(array(
                 $jitCompatibleDeviceCount
             ));
 
             $barGraph->addColors(array(
-                "FFD000"
+                str_replace('#', '', $dealerBranding->graphJitCompatibleDeviceColor),
             ));
             $barGraph->setBarScale(65, 10);
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
@@ -2829,21 +2834,21 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $isManagedDeviceCount
             ));
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphManagedDeviceColor),
             ));
 
             $barGraph->addDataSet(array(
                 $unmanagedDeviceCount
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphManageableDeviceColor),
             ));
             $barGraph->addDataSet(array(
                 $managedByThirdPartyDeviceCount
             ));
 
             $barGraph->addColors(array(
-                "ababab"
+                str_replace('#', '', $dealerBranding->graphFutureReviewDeviceColor),
             ));
 
             if ($insufficientData > 0)
@@ -2853,7 +2858,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 ));
 
                 $barGraph->addColors(array(
-                    "666666"
+                    str_replace('#', '', $dealerBranding->graphExcludedDeviceColor),
                 ));
                 $barGraph->setBarScale(50, 10);
             }
@@ -2910,14 +2915,14 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 round($pagesPrinted[$pagesPrintedOnManaged])
             ));
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphManagedDeviceColor),
             ));
             $barGraph->addDataSet(array(
                 round($pagesPrinted[$pagesPrintedOnUnmanaged])
             ));
 
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphManageableDeviceColor),
             ));
 
             $barGraph->addDataSet(array(
@@ -2925,7 +2930,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             ));
 
             $barGraph->addColors(array(
-                "ababab"
+                str_replace('#', '', $dealerBranding->graphFutureReviewDeviceColor),
             ));
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
@@ -2951,19 +2956,19 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              */
             $barGraph = new gchart\gBarChart(280, 230);
 
-            $pagesPrintedOnManaged           = "Managed/On " . My_Brand::$jit;
-            $pagesPrintedOnNotCompatible     = "Not " . My_Brand::$jit . " Compatible";
-            $pagesPrintedOnCompatible        = My_Brand::$jit . " Compatible";
+            $pagesPrintedOnManaged       = "Managed/On " . My_Brand::$jit;
+            $pagesPrintedOnNotCompatible = "Not " . My_Brand::$jit . " Compatible";
+            $pagesPrintedOnCompatible    = My_Brand::$jit . " Compatible";
 
             $pagesPrinted = array(
-                $pagesPrintedOnManaged           => 0,
-                $pagesPrintedOnNotCompatible     => 0,
-                $pagesPrintedOnCompatible        => 0,
+                $pagesPrintedOnManaged       => 0,
+                $pagesPrintedOnNotCompatible => 0,
+                $pagesPrintedOnCompatible    => 0,
             );
 
-            $pagesPrinted[$pagesPrintedOnManaged]           = $this->getDevices()->isManagedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
-            $pagesPrinted[$pagesPrintedOnNotCompatible]     = $this->getDevices()->notCompatibleDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
-            $pagesPrinted[$pagesPrintedOnCompatible]        = $this->getDevices()->compatibleDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
+            $pagesPrinted[$pagesPrintedOnManaged]       = $this->getDevices()->isManagedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
+            $pagesPrinted[$pagesPrintedOnNotCompatible] = $this->getDevices()->notCompatibleDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
+            $pagesPrinted[$pagesPrintedOnCompatible]    = $this->getDevices()->compatibleDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
 
             $highest = max($pagesPrinted[$pagesPrintedOnManaged], $pagesPrinted [$pagesPrintedOnNotCompatible], $pagesPrinted[$pagesPrintedOnCompatible]);
             $barGraph->setVisibleAxes(array(
@@ -2973,21 +2978,21 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 round($pagesPrinted[$pagesPrintedOnManaged])
             ));
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphManagedDeviceColor),
             ));
             $barGraph->addDataSet(array(
                 round($pagesPrinted[$pagesPrintedOnNotCompatible])
             ));
 
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphManageableDeviceColor),
             ));
             $barGraph->addDataSet(array(
                 round($pagesPrinted[$pagesPrintedOnCompatible])
             ));
 
             $barGraph->addColors(array(
-                "FFD000"
+                str_replace('#', '', $dealerBranding->graphJitCompatibleDeviceColor),
             ));
 
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
@@ -3070,8 +3075,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 number_format($numberOfIncludedDevices - $this->getDevices()->faxCapableDeviceInstances->getCount())
             ));
             $faxCapable->addColors(array(
-                "E21736",
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphFaxCapableDeviceColor),
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
             ));
             $faxCapable->setLegendPosition("bv");
             // Graphs[faxCapableBar]
@@ -3414,7 +3419,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function calculateOptimizedTonerOrderSavingPercentage ()
     {
-        return $this->calculateOptimizedTonerOrderSavings() / $this->calculateCurrentTonerOrderCost() * 100;
+        return ($this->calculateCurrentTonerOrderCost() > 0 && $this->calculateOptimizedTonerOrderSavings() > 0) ? $this->calculateOptimizedTonerOrderSavings() / $this->calculateCurrentTonerOrderCost() * 100 : 0;
     }
 
     /**

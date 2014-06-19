@@ -778,6 +778,13 @@
                     <resource>dealermanagement__index__index</resource>
                     <class>dropdown</class>
                     <pages>
+                        <branding>
+                            <label>Branding</label>
+                            <module>dealermanagement</module>
+                            <controller>branding</controller>
+                            <action>index</action>
+                            <resource>dealermanagement__branding__index</resource>
+                        </branding>
                         <clients>
                             <label>Clients</label>
                             <module>dealermanagement</module>
@@ -1142,7 +1149,6 @@
                         </EventLog>
                     </pages>
                 </sysadmin>
-
                 <settings>
                     <order>999997</order>
                     <label>Settings</label>

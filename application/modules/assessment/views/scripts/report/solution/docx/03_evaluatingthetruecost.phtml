@@ -17,7 +17,7 @@ $tcStyle = $this->styles->tables->truecosts;
 $table   = $section->addTable($tcStyle->tablestyle);
 
 // Table header
-$table->addRow($tcStyle->header->rowheight,$tcStyle->rowheader);
+$table->addRow($tcStyle->header->rowheight, $tcStyle->rowheader);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->cell1->cellStyle)->addText('Question', $tcStyle->header->cell1->fontStyle, $tcStyle->header->cell1->paragraphStyle);
 $table->addCell($tcStyle->col2Width, $tcStyle->header->cell2->cellStyle)->addText('Why It\'s Important to Ask', $tcStyle->header->cell2->fontStyle, $tcStyle->header->cell2->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->cell3->cellStyle)->addText(sprintf('How %1$s MPS Works', $this->companyName), $tcStyle->header->cell3->fontStyle, $tcStyle->header->cell3->paragraphStyle);
@@ -40,9 +40,9 @@ $table->addCell($tcStyle->col3Width, $tcStyle->body->cell3->cellStyle)->addText(
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->col1Width, $tcStyle->body->cell1->cellStyle)->addText('What is included and not included in the contract?', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
 $table->addCell($tcStyle->col2Width, $tcStyle->body->cell2->cellStyle)->addText('Many contracts have a variety of hidden charges. Does your rate include toner, maintenance kits, parts, service and labor? Can fuel surcharges be billed separately? Are there minimum page charges or overage rates? Do rates increase over the lease term? Ask these questions to determine the total cost of the contract.', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
-$table->addCell($tcStyle->col3Width, $tcStyle->body->cell3->cellStyle)->addText(sprintf('Our %1$s Plus program includes hardware, supplies, parts, service and labor for a flat monthly rate. If you want us to manage your existing hardware, our %1$s program includes supplies, parts, service and labor for a standard per-page rate. There are no minimum page charges, overage rates or fuel surcharges, and our rates do not increase over the contract term.', $this->brandName), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->body->cell3->cellStyle)->addText('Our managed print program includes hardware, supplies, parts, service and labor for a flat monthly rate. If you want us to manage your existing hardware, our %1$s includes supplies, parts, service and labor for a standard per-page rate. There are no minimum page charges, overage rates or fuel surcharges, and our rates do not increase over the contract term.', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
 
-$table->addRow($tcStyle->body->rowheight,$tcStyle->rowstyle);
+$table->addRow($tcStyle->body->rowheight, $tcStyle->rowstyle);
 $table->addCell($tcStyle->col1Width, $tcStyle->body->cell1->cellStyle)->addText('What features are included in the hardware?', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
 $table->addCell($tcStyle->col2Width, $tcStyle->body->cell2->cellStyle)->addText('Hardware with many features, such as tabloid printing and stapling, drive up the cost. While some businesses may require these features, many do not. Know what features you require and do not pay for anything additional that you do not need.', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->body->cell3->cellStyle)->addText(sprintf('%1$s works with you to determine your hardware needs, so you do not end up paying for unnecessary features.', $this->companyName), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);

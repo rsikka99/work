@@ -62,7 +62,7 @@ class Healthcheck_Service_HealthcheckSettings
     public function __construct ($healthcheckId, $userId, $dealerId)
     {
         $user                       = Application_Model_Mapper_User::getInstance()->find($userId);
-        $dealer                     = Admin_Model_Mapper_Dealer::getInstance()->find($dealerId);
+        $dealer                     = Application_Model_Mapper_Dealer::getInstance()->find($dealerId);
         $this->_healthcheck         = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find($healthcheckId);
         $this->_dealerSettings      = $dealer->getDealerSettings()->getHealthcheckSettings();
         $this->_userSettings        = $user->getUserSettings()->getHealthcheckSettings();

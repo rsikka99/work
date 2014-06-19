@@ -1,8 +1,8 @@
-<?php $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); ?>
+
 <div class="container assessment" id="htmlReportContainer">
     <?php
-    $this->brandName = My_Brand::$brandName;
-    $this->companyName = My_Brand::$companyName;
+    $this->brandName = My_Brand::getDealerBranding()->mpsProgramName;
+    $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
     echo $this->render('report/assessment/html/01_Title.phtml');
     echo $this->render('report/assessment/html/02_Scorecard.phtml');
     echo $this->render('report/assessment/html/03_ServiceAndSuppliesLogistics.phtml');

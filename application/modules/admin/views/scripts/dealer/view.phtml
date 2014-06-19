@@ -1,5 +1,5 @@
 <?php
-/* @var $dealer Admin_Model_Dealer */
+/* @var $dealer Application_Model_Dealer */
 $dealer = $this->dealer;
 ?>
 <h2><?= $dealer->dealerName ?></h2>
@@ -70,7 +70,7 @@ $dealer = $this->dealer;
                 <tr>
                     <td><?php echo $user->email; ?></td>
                     <td><?php echo $user->firstname; ?> <?php echo $user->lastname; ?></td>
-                    <td><?php echo Admin_Model_Mapper_Dealer::getInstance()->find($user->dealerId)->dealerName ?></td>
+                    <td><?php echo Application_Model_Mapper_Dealer::getInstance()->find($user->dealerId)->dealerName ?></td>
                     <td style="text-align: center;"><?php echo $user->loginAttempts; ?></td>
                     <td><?php echo ($user->isFrozen()) ? $user->frozenUntil : ""; ?></td>
                     <td style="text-align: center;"><?php echo ($user->locked) ? "Yes" : "No"; ?></td>

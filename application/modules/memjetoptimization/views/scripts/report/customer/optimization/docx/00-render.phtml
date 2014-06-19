@@ -14,7 +14,7 @@ $properties->setDescription('MPS Assessment Software');
 $properties->setCategory('Customer Report');
 $properties->setLastModifiedBy('MPS Assessment Software');
 
-$section          = $phpWord->createSection(array(
+$section          = $phpWord->addSection(array(
     'orientation'  => null,
     'marginLeft'   => 375,
     'marginRight'  => 375,
@@ -23,17 +23,17 @@ $section          = $phpWord->createSection(array(
 ));
 $titlepageSection = $section;
 
-$titlePageBackgroundColor  = My_Brand::$reportTitlePageTitleBackgroundColor;
-$titlePageBackgroundColor2 = My_Brand::$reportTitlePageInformationBackgroundColor;
-$titlePageTextColor        = My_Brand::$reportTitlePageTitleColor;
-$titlePageTextColor2       = My_Brand::$reportTitlePageInformationColor;
-$headingColor              = My_Brand::$reportHeadingColor;
-$h2Background              = My_Brand::$reportHeadingBackgroundColor;
-$h2Color                   = My_Brand::$reportSubHeadingColor;
-$h3Color                   = My_Brand::$reportHeadingColor;
+$titlePageBackgroundColor  = My_Brand::getDealerBranding()->titlePageTitleBackgroundColor;
+$titlePageBackgroundColor2 = My_Brand::getDealerBranding()->titlePageInformationBackgroundColor;
+$titlePageTextColor        = My_Brand::getDealerBranding()->titlePageTitleFontColor;
+$titlePageTextColor2       = My_Brand::getDealerBranding()->titlePageInformationFontColor;
+$headingColor              = My_Brand::getDealerBranding()->h1FontColor;
+$h2Background              = My_Brand::getDealerBranding()->h2BackgroundColor;
+$h2Color                   = My_Brand::getDealerBranding()->h2FontColor;
+$h3Color                   = My_Brand::getDealerBranding()->h1FontColor;
 
 /* Tables for the device layouts */
-$widthTwips       = 11111;
+$widthTwips       = 11490;
 $header_color     = $this->wordStyles->default->tableHeaderBackgroundColor;
 $sub_header_color = $this->wordStyles->default->tableSubHeaderBackgroundColor;
 $even_color       = "EFEFEF";
@@ -48,11 +48,14 @@ $highlight_color  = "ebc7a4";
 // H2 Style #5881BC
 $phpWord->addTitleStyle(2, array(
     'size'   => 12,
-    'color'  => 'white', /*My_Brand::$reportSubHeadingColor,*/
+    'color'  => My_Brand::getDealerBranding()->h2FontColor,
     'bold'   => true,
     'italic' => true
 ), array(
-    'bgColor' => My_Brand::$reportHeadingBackgroundColor,
+    'bgColor' => My_Brand::getDealerBranding()->h2BackgroundColor,
+    'shading' => array(
+        'fill' => My_Brand::getDealerBranding()->h2BackgroundColor,
+    )
 ));
 $this->phpword->addParagraphStyle('titleStyle1', array(
     'align'      => 'center',
@@ -66,12 +69,15 @@ $phpWord->addParagraphStyle('titleStyle2', array(
     'spaceAfter'  => 50,
     'spaceBefore' => 50,
     'bgColor'     => $titlePageBackgroundColor2,
-    'shading'    => array(
+    'shading'     => array(
         'fill' => $titlePageBackgroundColor2,
     )
 ));
 $phpWord->addParagraphStyle('titleStyle3', array(
     'spaceAfter' => 100,
+    'tabs'       => array(
+        new \PhpOffice\PhpWord\Style\Tab('left', 350)
+    ),
     'bgColor'    => $titlePageBackgroundColor2,
     'shading'    => array(
         'fill' => $titlePageBackgroundColor2,
@@ -239,6 +245,24 @@ $standard_cell_left = (object)array(
         ),
 );
 
+$standard_cell_right = (object)array(
+    "even"           => array(
+        "bgColor"          => $even_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "odd"            => array(
+        "bgColor"          => $odd_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "fontStyle"      => null,
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'right'
+    ),
+);
+
 $standard_cell_no_right_border = (object)array(
     "even"           => array(
         "bgColor" => $even_color,
@@ -313,10 +337,11 @@ $flaggedDevices   = (object)array(
             "cell1"     => $standard_cell_left,
             "cell2"     => $standard_cell_left,
             "cell3"     => $standard_cell_left,
-            "cell4"     => $standard_cell_vcenter,
-            "cell5"     => $standard_cell_vcenter,
-            "cell6"     => $standard_cell_vcenter,
-            "cell7"     => $standard_cell_vcenter_no_right_border,
+            "cell4"     => $standard_cell_no_right_border,
+            "cell5"     => $standard_cell_no_right_border,
+            "cell6"     => $standard_cell_no_right_border,
+            "cell7"     => $standard_cell_no_right_border,
+            "cell8"     => $standard_cell_no_right_border,
         ),
     "header"     => (object)array(
             'header'     => $standard_header,
@@ -339,7 +364,7 @@ $retiredDevices   = (object)array(
             "rowheight" => null,
             "cell1"     => $standard_cell_left,
             "cell2"     => $standard_cell_left,
-            "cell3"     => $standard_cell_vcenter,
+            "cell3"     => $standard_cell_right,
             "cell4"     => $standard_cell_vcenter,
             "cell5"     => $standard_cell_vcenter_no_right_border,
         ),
@@ -364,8 +389,8 @@ $acceptableDevices = (object)array(
             "rowheight" => null,
             "cell1"     => $standard_cell_left,
             "cell2"     => $standard_cell_left,
-            "cell3"     => $standard_cell_vcenter,
-            "cell4"     => $standard_cell_vcenter_no_right_border,
+            "cell3"     => $standard_cell_right,
+            "cell4"     => $standard_cell_right,
         ),
     "header"     => (object)array(
             'header'     => $standard_header,
@@ -409,7 +434,7 @@ $titleData = array(
     "memjetOptimization" => $memjetOptimization,
     "styles"             => $styles,
     "dealerLogoFile"     => $this->dealerLogoFile,
-    "companyName"        => My_Brand::$companyName,
+    "companyName"        => My_Brand::getDealerBranding()->shortDealerName,
 );
 
 $profitabilityDevices = new Memjetoptimization_Model_Optimization_Customer($memjetOptimization);
@@ -424,7 +449,7 @@ $data = array(
     "devicetables"         => $deviceTables,
     "profitabilityDevices" => $profitabilityDevices,
     "twocenter"            => $doubleCenterTable,
-    "companyName"          => My_Brand::$companyName,
+    "companyName"          => My_Brand::getDealerBranding()->shortDealerName,
 
 );
 // Actual document pages

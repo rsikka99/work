@@ -13,8 +13,6 @@ $section = $this->section;
 $assessmentViewModel = $this->assessmentViewModel;
 $graphs              = $assessmentViewModel->getGraphs();
 
-$section->addPageBreak();
-
 $section->addTitle(sprintf('Analysis: %1$s Hardware Usage', $this->brandName), 1);
 
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
@@ -25,7 +23,12 @@ $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number
 $section->addTextBreak();
 
 $section->addTitle('Print Volume and Number of Printing Devices', 2);
-$section->addText(sprintf('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.', number_format($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount()), number_format($assessmentViewModel->calculateAveragePagesPerDeviceMonthly()), $this->formatPageVolume($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())));
+$section->addText(sprintf('You currently have %1$s networked printing %2$s that %3$s an average of %4$s pages each per month, for an average total monthly print volume of %5$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.',
+    number_format($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount()), //1
+    (number_format($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount()) == 1) ? 'device' : 'devices', //2
+    (number_format($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount()) == 1) ? 'prints' : 'print', //3
+    number_format($assessmentViewModel->calculateAveragePagesPerDeviceMonthly()), //4
+    $this->formatPageVolume($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()))); //5
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
@@ -86,7 +89,11 @@ $section->addText('Only takes into account devices for which expected cartridge 
 $section->addTextBreak();
 
 $section->addTitle('Color Usage', 2);
-$section->addText(sprintf('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.', number_format($assessmentViewModel->getNumberOfColorCapableDevices()), $this->formatPageVolume($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()), number_format(($assessmentViewModel->getPercentages()->TotalColorPercentage * 100), 2)));
+$section->addText(sprintf('You currently have %1$s color printing %2$s a monthly average of %3$s color pages per month, which is %4$s%% of your total monthly print volume.',
+    number_format($assessmentViewModel->getNumberOfColorCapableDevices()), //1
+    (number_format($assessmentViewModel->getNumberOfColorCapableDevices()) == 1) ? 'device that prints' : 'devices that print', //2
+    $this->formatPageVolume($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()), //3
+    number_format(($assessmentViewModel->getPercentages()->TotalColorPercentage * 100), 2))); //4
 
 $section->addTextBreak();
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);

@@ -1,43 +1,56 @@
 <?php
-/**
- * Assessment Title Page
- */
 /* @var $phpword \PhpOffice\PhpWord\PhpWord */
 $phpword = $this->phpword;
 
 /* @var $quote Quotegen_Model_Quote */
 $quote = $this->quote;
 
-$client = $quote->getClient();
-
-$quoteDate = date('F jS, Y', strtotime($quote->quoteDate));
-
 /* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
+$client  = $quote->getClient();
 
-// Table to get the images working properly
-$table = $section->addTable();
-$table->addRow();
-$cell = $table->addCell(3209);
-$cell->addImage(ASSETS_PATH . "/docx/quote/images/cell1.jpg");
-$cell = $table->addCell(5818);
-$cell->addTextBreak(3);
-$cell->addImage(ASSETS_PATH . "/docx/quote/images/cell2.jpg");
-$cell->addTextBreak(5);
+// Table to fix the issue of images being different sizes
+$imageTable = $section->addTable(array());
+$imageTable->addRow(5760);
+$cell = $imageTable->addCell(9028.8, array(
+    'valign' => 'center'
+));
 
-$clientName = $quote->clientDisplayName;
-if (empty($clientName))
+$cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, array(
+    'align' => 'center'
+));
+
+/**
+ * Main title
+ */
+$section->addTextBreak();
+$section->addText($this->translate(''), null, 'titleStyle2');
+$section->addText($this->translate(My_Brand::getDealerBranding()->shortDealerName . ' Hardware Quote'), 'titlepage_title', 'titleStyle2');
+$section->addText($this->translate(''), null, 'titleStyle2');
+
+/**
+ * Prepared For: Company Name
+ */
+$section->addTextBreak();
+$section->addText('', 'titlepage_address', 'titleStyle3');
+$section->addText("\t" . sprintf($this->translate('Prepared For: %1$s'), $client->companyName), 'titlepage_subtitle', 'titleStyle3');
+
+/**
+ * Address
+ */
+$addressLines = explode("\n", $client->getAddress()->getFullAddressMultipleLines());
+$addressCount = 1;
+foreach ($addressLines as $line)
 {
-    $clientName = $client->companyName;
+    $section->addText("\t" . $line, 'titlepage_address', 'titleStyle3');
+    $addressCount++;
 }
 
-$cell->addText($this->translate('Prepared For:') . " " . $clientName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
-
-$cell->addText($quoteDate, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
-$cell->addTextBreak(4);
-// Parse the address
-$addressLines = explode("\n", $client->getAddress());
-foreach ( $addressLines as $line )
+// Add blank lines to fill up the page with yummy greyness
+if ($addressCount < 11)
 {
-    $cell->addText($line, null, 'nospacing');
+    for ($i = 0; $i < 11 - $addressCount; $i++)
+    {
+        $section->addText('', 'titlepage_address', 'titleStyle3');
+    }
 }

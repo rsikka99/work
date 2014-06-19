@@ -13,7 +13,7 @@ class Admin_DealerController extends Tangent_Controller_Action
         $this->view->headTitle('System');
         $this->view->headTitle('Dealers');
         $this->view->headTitle('Dealer Management');
-        $dealerMapper = Admin_Model_Mapper_Dealer::getInstance();
+        $dealerMapper = Application_Model_Mapper_Dealer::getInstance();
         $paginator    = new Zend_Paginator(new My_Paginator_MapperAdapter($dealerMapper));
 
         // Gets the current page for the passed parameter
@@ -41,9 +41,9 @@ class Admin_DealerController extends Tangent_Controller_Action
             $this->redirect('index');
         }
 
-        $dealerMapper = Admin_Model_Mapper_Dealer::getInstance();
+        $dealerMapper = Application_Model_Mapper_Dealer::getInstance();
         $dealer       = $dealerMapper->find($dealerId);
-        if (!$dealer instanceof Admin_Model_Dealer)
+        if (!$dealer instanceof Application_Model_Dealer)
         {
             $this->_flashMessenger->addMessage(array('warning' => 'Invalid dealer selected.'));
             $this->redirect('index');
@@ -71,11 +71,11 @@ class Admin_DealerController extends Tangent_Controller_Action
         /**
          * Fetch the dealer
          */
-        $dealerMapper        = Admin_Model_Mapper_Dealer::getInstance();
+        $dealerMapper        = Application_Model_Mapper_Dealer::getInstance();
         $dealerFeatureMapper = Application_Model_Mapper_Dealer_Feature::getInstance();
         $dealer              = $dealerMapper->find($dealerId);
 
-        if (!$dealer instanceof Admin_Model_Dealer)
+        if (!$dealer instanceof Application_Model_Dealer)
         {
             $this->_flashMessenger->addMessage(array('warning' => 'Invalid dealer selected.'));
             $this->redirect('index');
@@ -180,7 +180,7 @@ class Admin_DealerController extends Tangent_Controller_Action
 
     /**
      * @param Admin_Form_Dealer  $form
-     * @param Admin_Model_Dealer $dealer
+     * @param Application_Model_Dealer $dealer
      */
     protected function _processDealerLogoImage ($form, &$dealer)
     {
@@ -270,7 +270,7 @@ class Admin_DealerController extends Tangent_Controller_Action
                         $db->beginTransaction();
 
                         // Create a new dealer object
-                        $dealer = new Admin_Model_Dealer();
+                        $dealer = new Application_Model_Dealer();
 
                         $this->_processDealerLogoImage($form, $dealer);
 
@@ -278,7 +278,7 @@ class Admin_DealerController extends Tangent_Controller_Action
                         $dealer->dateCreated = date("Y-m-d");
 
                         // Save the dealer with the id to the database
-                        $dealerId = Admin_Model_Mapper_Dealer::getInstance()->insert($dealer);
+                        $dealerId = Application_Model_Mapper_Dealer::getInstance()->insert($dealer);
 
                         $newDeviceSwapReasonArray = array();
                         // Copy the systems default reason for the dealers system default reason
@@ -355,7 +355,7 @@ class Admin_DealerController extends Tangent_Controller_Action
         $this->view->headTitle('Dealers');
         $this->view->headTitle('Delete Dealer');
         $dealerId = $this->getRequest()->getUserParam('id');
-        $dealer   = Admin_Model_Mapper_Dealer::getInstance()->find($dealerId);
+        $dealer   = Application_Model_Mapper_Dealer::getInstance()->find($dealerId);
 
         if ($dealerId == 1)
         {
@@ -363,7 +363,7 @@ class Admin_DealerController extends Tangent_Controller_Action
             $this->redirect('index');
         }
 
-        if (!$dealer instanceof Admin_Model_Dealer)
+        if (!$dealer instanceof Application_Model_Dealer)
         {
             $this->_flashMessenger->addMessage(array('warning' => 'Invalid dealer selected.'));
             $this->redirect('index');
@@ -397,7 +397,7 @@ class Admin_DealerController extends Tangent_Controller_Action
 
                         Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->deleteDefaultReasonByDealerId($dealer->id);
                         Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->deleteReasonsByDealerId($dealer->id);
-                        Admin_Model_Mapper_Dealer::getInstance()->delete($dealer);
+                        Application_Model_Mapper_Dealer::getInstance()->delete($dealer);
 
                         $db->commit();
 

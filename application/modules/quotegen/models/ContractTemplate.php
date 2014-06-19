@@ -80,13 +80,13 @@ class Quotegen_Model_ContractTemplate extends My_Model_Abstract
     /**
      * Gets the dealer object
      *
-     * @return Admin_Model_Dealer
+     * @return Application_Model_Dealer
      */
     public function getDealer ()
     {
         if (!isset($this->_dealer))
         {
-            $this->_dealer = Admin_Model_Mapper_Dealer::getInstance()->find($this->dealerId);
+            $this->_dealer = Application_Model_Mapper_Dealer::getInstance()->find($this->dealerId);
         }
 
         return $this->_dealer;
@@ -95,7 +95,7 @@ class Quotegen_Model_ContractTemplate extends My_Model_Abstract
     /**
      * Sets the dealer object
      *
-     * @param Admin_Model_Dealer $dealer
+     * @param Application_Model_Dealer $dealer
      *
      * @return $this
      */

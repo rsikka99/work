@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class Application_Model_DbTable_Dealer_feature
+ * Class Application_Model_DbTable_Dealer_Feature
  */
-class Application_Model_DbTable_Dealer_feature extends Zend_Db_Table_Abstract implements My_Feature_DbTableInterface
+class Application_Model_DbTable_Dealer_Feature extends Zend_Db_Table_Abstract implements My_Feature_DbTableInterface
 {
     public $col_dealerId = 'dealerId';
     public $col_featureId = 'featureId';

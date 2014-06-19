@@ -102,7 +102,7 @@ $tableData = array();
     <img src="<?php echo $graphs['PercentPerDeviceBrand']; ?>" />
 </div>
 
-<div class="pheader">Number of Printing Devices Compatibile with <?php echo My_Brand::$companyNameFull;?></div>
+<div class="pheader">Number of Printing Devices Compatibile with <?php echo My_Brand::getDealerBranding()->shortDealerNameFull;?></div>
 <p>Out of your <?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?>
     networked printing devices, you have
     <strong><?php echo $healthcheckViewModel->getDevices()->isManagedDeviceInstances->getCount(); ?></strong> devices that are managed,  <?php echo $healthcheckViewModel->getDevices()->unmanagedDeviceInstances->getCount(); ?> devices that are not compatible and <?php echo $healthcheckViewModel->getDevices()->compatibleDeviceInstances->getCount() ?> devices compatible with <?php echo $this->jitFullName ?>. These non compatible devices are shown in the fleet attributes section below. A complete list of all devices and their <?php echo $this->jit ?> compatibility can be found in the Appendix.

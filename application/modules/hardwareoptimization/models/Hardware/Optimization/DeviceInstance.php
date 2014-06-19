@@ -204,9 +204,18 @@ class Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance extends My
      */
     public function getDeviceSwapReason ()
     {
-        if (!isset($this->_deviceSwapReason) && $this->deviceSwapReasonId > 0)
+        if (!isset($this->_deviceSwapReason))
         {
-            $this->_deviceSwapReason = Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->find($this->deviceSwapReasonId);
+            if ($this->deviceSwapReasonId > 0)
+            {
+                $this->_deviceSwapReason = Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->find($this->deviceSwapReasonId);
+            }
+
+            if (!$this->_deviceSwapReason instanceof Hardwareoptimization_Model_Device_Swap_Reason)
+            {
+                $this->_deviceSwapReason         = new Hardwareoptimization_Model_Device_Swap_Reason();
+                $this->_deviceSwapReason->reason = 'Please make sure you have at least 1 default reason per category and re-analyze your fleet.';
+            }
         }
 
         return $this->_deviceSwapReason;

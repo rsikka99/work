@@ -55,7 +55,7 @@ class Admin_UserController extends Tangent_Controller_Action
             {
                 if ($form->isValid($values))
                 {
-                    $dealer = Admin_Model_Mapper_Dealer::getInstance()->find($values['dealerId']);
+                    $dealer = Application_Model_Mapper_Dealer::getInstance()->find($values['dealerId']);
                     if ($dealer && $dealer->getNumberOfLicensesUsed() < $dealer->userLicenses)
                     {
                         // Save to the database

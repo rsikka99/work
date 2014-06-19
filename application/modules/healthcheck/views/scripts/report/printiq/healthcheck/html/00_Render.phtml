@@ -1,10 +1,9 @@
 <div class="container health-check" id="htmlReportContainer">
     <?php
-    $this->reportName = My_Brand::$companyName;
-    $this->jitName = My_Brand::$jitName;
-    $this->jitFullName = My_Brand::$jitFullName;
+    $this->reportName = My_Brand::getDealerBranding()->shortDealerName;
+    $this->jitName = My_Brand::getDealerBranding()->shortJitProgramName;
+    $this->jitFullName = My_Brand::getDealerBranding()->jitProgramName;
 
-    $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css"));
     echo $this->render('report/printiq/healthcheck/html/01_Title.phtml');
     echo $this->render('report/printiq/healthcheck/html/02_Scorecard.phtml');
     echo $this->render('report/printiq/healthcheck/html/03_ServiceAndSuppliesLogistics.phtml');

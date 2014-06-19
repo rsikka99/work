@@ -22,6 +22,8 @@ class Hardwareoptimization_Model_Optimization_Dealer extends
     {
         if (!isset($this->graphs))
         {
+            $dealerBranding = My_Brand::getDealerBranding();
+
             $numberValueMarker = "N *sz0";
 
             /**
@@ -33,7 +35,12 @@ class Hardwareoptimization_Model_Optimization_Dealer extends
             $barGraph = new gchart\gBarChart(375, 250);
             $barGraph->setTitle("Optimization Fleet Summary");
             $barGraph->setVisibleAxes(array('y'));
-            $colors = array("009999", "1240AB", "FFAA00", "FF7400");
+            $colors = array(
+                str_replace('#', '', $dealerBranding->graphKeepDeviceColor),
+                str_replace('#', '', $dealerBranding->graphReplacedDeviceColor),
+                str_replace('#', '', $dealerBranding->graphDoNotRepairDeviceColor),
+                str_replace('#', '', $dealerBranding->graphRetireDeviceColor),
+            );
             foreach ($colors as $color)
             {
                 $barGraph->addColors(array($color));
@@ -62,7 +69,11 @@ class Hardwareoptimization_Model_Optimization_Dealer extends
             $barGraph = new gchart\gBarChart(325, 250);
             $barGraph->setTitle("Other Devices");
             $barGraph->setVisibleAxes(array('y'));
-            $colors = array("009999", "1240AB", "FFAA00");
+            $colors = array(
+                str_replace('#', '', $dealerBranding->graphReplacedDeviceColor),
+                str_replace('#', '', $dealerBranding->graphExcludedDeviceColor),
+                str_replace('#', '', $dealerBranding->graphLeasedDeviceColor),
+            );
             foreach ($colors as $color)
             {
                 $barGraph->addColors(array($color));

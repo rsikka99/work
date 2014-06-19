@@ -1,8 +1,8 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$this->brandName = My_Brand::$brandName;
-$this->companyName = My_Brand::$companyName;
+$this->brandName = My_Brand::getDealerBranding()->mpsProgramName;
+$this->companyName = My_Brand::getDealerBranding()->shortDealerName;
 ?>
 <div class="h1">Your <?php echo $this->brandName; ?> Solution</div>
 <p>Based on your <?php echo $this->brandName; ?> Smart Assessment, we have developed a choice of managed print solutions to meet your specific business

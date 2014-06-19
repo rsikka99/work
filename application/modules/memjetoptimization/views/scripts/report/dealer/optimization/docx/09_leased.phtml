@@ -19,13 +19,13 @@ $section->addTextBreak();
 $headerTextRun = $section->addTextRun();
 $headerTextRun->addText('Leased Devices', 'titlepageHeaderFont');
 $headerTextRun->addText(' (' . count($memjetOptimizationDevices->leased) . ' of ' . $memjetOptimizationDevices->getDeviceCount() . ')');
-$section->addText("The following devices have been deemed productive and fall within the target costs per pages.");
+$section->addText("The following devices have been deemed productive and fall within the target cost per page.");
 
 // Table with values
 $tcStyle = $this->styles->tables->leased;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
-$table->addRow($tcStyle->body->rowheight,$tcStyle->rowHeader);
+$table->addRow($tcStyle->body->rowheight, $tcStyle->rowHeader);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial Number', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);

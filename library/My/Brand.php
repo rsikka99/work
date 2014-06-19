@@ -6,24 +6,13 @@
 class My_Brand
 {
     // Brand Colors
-    public static $reportTitlePageTitleBackgroundColor = "#4C4C4C";
-    public static $reportTitlePageInformationBackgroundColor = "#7F7F7F";
     public static $reportWhiteTitlePageTextColor = "#000000";
-    public static $reportTitlePageTitleColor = "#FFFFFF";
-    public static $reportTitlePageInformationColor = "#FFFFFF";
-    public static $reportHeadingColor = "#0096D6";
-    public static $reportHeadingBackgroundColor = "#0096D6";
-    public static $reportSubHeadingColor = "#FFFFFF";
-    public static $reportSubHeadingBackgroundColor = "#0096D6";
 
     // Branding Text Replacements
     public static $jit = "JIT";
-    public static $jitName = "MPSToolbox.com JIT";
-    public static $jitFullName = "MPSToolbox.com Just In Time (JIT)";
-    public static $brandName = "MPSToolbox.com";
-    public static $companyName = "MPSToolbox.com";
-    public static $companyNameFull = "MPSToolbox.com";
     public static $dealerSku = "Dealer SKU";
+
+    protected static $dealerBrandingCache = array();
 
 
     /**
@@ -39,49 +28,9 @@ class My_Brand
         /**
          * Brand Colors
          */
-        if (isset($params->reportTitlePageTitleBackgroundColor) && !is_null($params->reportTitlePageTitleBackgroundColor))
-        {
-            self::$reportTitlePageTitleBackgroundColor = $params->reportTitlePageTitleBackgroundColor;
-        }
-
-        if (isset($params->reportTitlePageInformationBackgroundColor) && !is_null($params->reportTitlePageInformationBackgroundColor))
-        {
-            self::$reportTitlePageInformationBackgroundColor = $params->reportTitlePageInformationBackgroundColor;
-        }
-
         if (isset($params->reportWhiteTitlePageTextColor) && !is_null($params->reportWhiteTitlePageTextColor))
         {
             self::$reportWhiteTitlePageTextColor = $params->reportWhiteTitlePageTextColor;
-        }
-
-        if (isset($params->reportTitlePageTitleColor) && !is_null($params->reportTitlePageTitleColor))
-        {
-            self::$reportTitlePageTitleColor = $params->reportTitlePageTitleColor;
-        }
-
-        if (isset($params->reportTitlePageInformationColor) && !is_null($params->reportTitlePageInformationColor))
-        {
-            self::$reportTitlePageInformationColor = $params->reportTitlePageInformationColor;
-        }
-
-        if (isset($params->reportHeadingColor) && !is_null($params->reportHeadingColor))
-        {
-            self::$reportHeadingColor = $params->reportHeadingColor;
-        }
-
-        if (isset($params->reportHeadingBackgroundColor) && !is_null($params->reportHeadingBackgroundColor))
-        {
-            self::$reportHeadingBackgroundColor = $params->reportHeadingBackgroundColor;
-        }
-
-        if (isset($params->reportSubHeadingColor) && !is_null($params->reportSubHeadingColor))
-        {
-            self::$reportSubHeadingColor = $params->reportSubHeadingColor;
-        }
-
-        if (isset($params->reportSubHeadingBackgroundColor) && !is_null($params->reportSubHeadingBackgroundColor))
-        {
-            self::$reportSubHeadingBackgroundColor = $params->reportSubHeadingBackgroundColor;
         }
 
         /**
@@ -92,31 +41,6 @@ class My_Brand
             self::$jit = $params->jit;
         }
 
-        if (isset($params->jitName) && !is_null($params->jitName))
-        {
-            self::$jitName = $params->jitName;
-        }
-
-        if (isset($params->jitFullName) && !is_null($params->jitFullName))
-        {
-            self::$jitFullName = $params->jitFullName;
-        }
-
-        if (isset($params->brandName) && !is_null($params->brandName))
-        {
-            self::$brandName = $params->brandName;
-        }
-
-        if (isset($params->companyName) && !is_null($params->companyName))
-        {
-            self::$companyName = $params->companyName;
-        }
-
-        if (isset($params->companyNameFull) && !is_null($params->companyNameFull))
-        {
-            self::$companyNameFull = $params->companyNameFull;
-        }
-
         if (isset($params->dealerSku) && !is_null($params->dealerSku))
         {
             self::$dealerSku = $params->dealerSku;
@@ -124,45 +48,106 @@ class My_Brand
     }
 
     /**
+     * Gets the branding for a dealer
+     *
+     * @param null $dealerId
+     *
+     * @return Application_Model_Dealer_Branding
+     */
+    public static function getDealerBranding ($dealerId = null)
+    {
+        if (!isset(self::$dealerBrandingCache))
+        {
+            self::$dealerBrandingCache = array();
+        }
+
+        if ($dealerId === null)
+        {
+            $dealerId = (Zend_Auth::getInstance()->hasIdentity()) ? Zend_Auth::getInstance()->getIdentity()->dealerId : 0;
+        }
+
+        if (!isset(self::$dealerBrandingCache[$dealerId]))
+        {
+            $dealerBranding = Application_Model_Mapper_Dealer_Branding::getInstance()->find($dealerId);
+            if (!$dealerBranding instanceof Application_Model_Dealer_Branding)
+            {
+                $dealerBranding = new Application_Model_Dealer_Branding();
+
+                $dealer = Application_Model_Mapper_Dealer::getInstance()->find($dealerId);
+                if ($dealer instanceof Application_Model_Dealer)
+                {
+                    $dealerBranding->dealerName      = $dealer->dealerName;
+                    $dealerBranding->shortDealerName = $dealer->dealerName;
+                }
+
+            }
+            self::$dealerBrandingCache[$dealerId] = $dealerBranding;
+        }
+
+        return self::$dealerBrandingCache[$dealerId];
+    }
+
+    /**
+     * Reset the dealer branding cache
+     */
+    public static function resetDealerBrandingCache()
+    {
+        self::$dealerBrandingCache = array();
+    }
+
+    /**
+     * @param int $dealerId
+     *
      * @return array
      */
-    public static function toArray ()
+    public static function toArray ($dealerId = null)
     {
+        $dealerBranding = self::getDealerBranding($dealerId);
+
         return array(
-            "reportTitlePageTitleBackgroundColor"       => self::$reportTitlePageTitleBackgroundColor,
-            "reportTitlePageInformationBackgroundColor" => self::$reportTitlePageInformationBackgroundColor,
+            "reportTitlePageTitleColor"                 => $dealerBranding->titlePageTitleFontColor,
+            "reportTitlePageTitleBackgroundColor"       => $dealerBranding->titlePageTitleBackgroundColor,
+            "reportTitlePageInformationColor"           => $dealerBranding->titlePageInformationFontColor,
+            "reportTitlePageInformationBackgroundColor" => $dealerBranding->titlePageInformationBackgroundColor,
+            "reportHeadingColor"                        => $dealerBranding->h1FontColor,
+            "reportHeadingBackgroundColor"              => $dealerBranding->h1BackgroundColor,
+            "reportSubHeadingColor"                     => $dealerBranding->h2FontColor,
+            "reportSubHeadingBackgroundColor"           => $dealerBranding->h2BackgroundColor,
+
+            // TODO lrobert: Fix this color to either be hard coded into for the Print IQ version of the software
             "reportWhiteTitlePageTextColor"             => self::$reportWhiteTitlePageTextColor,
-            "reportTitlePageTitleColor"                 => self::$reportTitlePageTitleColor,
-            "reportTitlePageInformationColor"           => self::$reportTitlePageInformationColor,
-            "reportHeadingColor"                        => self::$reportHeadingColor,
-            "reportHeadingBackgroundColor"              => self::$reportHeadingBackgroundColor,
-            "reportSubHeadingColor"                     => self::$reportSubHeadingColor,
-            "reportSubHeadingBackgroundColor"           => self::$reportSubHeadingBackgroundColor,
-            "brandName"                                 => self::$brandName,
-            "companyName"                               => self::$companyName,
-            "companyNameFull"                           => self::$companyNameFull,
-            "jit"                                       => self::$jit,
-            "jitName"                                   => self::$jitName,
-            "jitFullName"                               => self::$jitFullName,
+
+            "brandName"                                 => $dealerBranding->mpsProgramName,
+            "companyName"                               => $dealerBranding->dealerName,
+            "companyNameFull"                           => $dealerBranding->shortDealerName,
+            "jit"                                       => $dealerBranding->dealerName,
+            "jitName"                                   => $dealerBranding->shortJitProgramName,
+            "jitFullName"                               => $dealerBranding->jitProgramName,
             "dealerSku"                                 => self::$dealerSku,
         );
     }
 
     /**
+     * @param int $dealerId
+     *
      * @return array
      */
-    public static function getColorVariablesAsArray ()
+    public static function getColorVariablesAsArray ($dealerId = null)
     {
+        $dealerBranding = self::getDealerBranding($dealerId);
+
         return array(
-            "reportTitlePageTitleBackgroundColor"       => self::$reportTitlePageTitleBackgroundColor,
-            "reportTitlePageInformationBackgroundColor" => self::$reportTitlePageInformationBackgroundColor,
+            "reportTitlePageTitleColor"                 => $dealerBranding->titlePageTitleFontColor,
+            "reportTitlePageTitleBackgroundColor"       => $dealerBranding->titlePageTitleBackgroundColor,
+            "reportTitlePageInformationColor"           => $dealerBranding->titlePageInformationFontColor,
+            "reportTitlePageInformationBackgroundColor" => $dealerBranding->titlePageInformationBackgroundColor,
+            "reportHeadingColor"                        => $dealerBranding->h1FontColor,
+            "reportHeadingBackgroundColor"              => $dealerBranding->h1BackgroundColor,
+            "reportSubHeadingColor"                     => $dealerBranding->h2FontColor,
+            "reportSubHeadingBackgroundColor"           => $dealerBranding->h2BackgroundColor,
+
+            // TODO lrobert: Fix this color to either be hard coded into for the Print IQ version of the software
             "reportWhiteTitlePageTextColor"             => self::$reportWhiteTitlePageTextColor,
-            "reportTitlePageTitleColor"                 => self::$reportTitlePageTitleColor,
-            "reportTitlePageInformationColor"           => self::$reportTitlePageInformationColor,
-            "reportHeadingColor"                        => self::$reportHeadingColor,
-            "reportHeadingBackgroundColor"              => self::$reportHeadingBackgroundColor,
-            "reportSubHeadingColor"                     => self::$reportSubHeadingColor,
-            "reportSubHeadingBackgroundColor"           => self::$reportSubHeadingBackgroundColor,
         );
     }
 

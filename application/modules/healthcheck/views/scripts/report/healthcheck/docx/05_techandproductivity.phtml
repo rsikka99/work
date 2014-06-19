@@ -3,7 +3,7 @@
  * Healthcheck - Analysis: Technology Reliability and User Productivity
  */
 
-/* @var $phpWord \PhpOffice\PhpWord\PhpWord*/
+/* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
 /* @var $section \PhpOffice\PhpWord\Element\Section */
@@ -18,7 +18,10 @@ $section->addTitle("Analysis: Technology Reliability and User Productivity", 1);
 
 $section->addTitle('Age of Printing Devices', 2);
 
-$section->addText(sprintf('We estimate the average age of your printing devices is %1$s year(s); a good industry average is 3 years. Devices over 5 years old receive, on average, one repair per year.', number_format($healthcheckViewModel->getAverageAgeOfDevices(), 1)));
+$section->addText(sprintf('We estimate the average age of your printing devices is %1$s %2$s; a good industry average is 3 years. Devices over 5 years old require, on average, one repair per year.',
+    number_format($healthcheckViewModel->getAverageAgeOfDevices(), 1),
+    (number_format($healthcheckViewModel->getAverageAgeOfDevices()) == 1) ? 'year' : 'years'
+));
 
 $imageTable = $section->addTable();
 $imageTable->addRow();
@@ -37,7 +40,7 @@ $section->addTitle('Technology Features and Functionality', 2);
 $section->addText('The ability to scan and fax documents from convenient locations helps to improve document workflow and productivity, and scanning can also help reduce the number of pages printed. Color printing capabilities are important if you are generating client-facing or other important documents in-house.');
 $section->addText('The charts below show the percentage of your printing devices that are capable of copying, duplex printing, and color printing.');
 
-$imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
+$imageTable = $section->addTable($this->styles->tables->tripleimage->tablestyle);
 $imageTable->addRow();
 $imageTable->addCell(3010, $this->styles->tables->tripleimage->cell1)->addImage($graphs ['CopyCapableDevicesGraph']);
 $imageTable->addCell(3010, $this->styles->tables->tripleimage->cell2)->addImage($graphs ['DuplexCapableDevicesGraph']);

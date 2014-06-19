@@ -6,6 +6,7 @@
 class Dealermanagement_Model_Acl
 {
     const RESOURCE_DEALERMANAGEMENT_WILDCARD               = "dealermanagement__%__%";
+    const RESOURCE_DEALERMANAGEMENT_BRANDING_WILDCARD      = "dealermanagement__branding__%";
     const RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD        = "dealermanagement__client__%";
     const RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX           = "dealermanagement__client__index";
     const RESOURCE_DEALERMANAGEMENT_CLIENT_CREATE          = "dealermanagement__client__create";
@@ -36,6 +37,7 @@ class Dealermanagement_Model_Acl
     private static function setupAclResources (Application_Model_Acl $acl)
     {
         $acl->addResource(self::RESOURCE_DEALERMANAGEMENT_WILDCARD);
+        $acl->addResource(self::RESOURCE_DEALERMANAGEMENT_BRANDING_WILDCARD);
         $acl->addResource(self::RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD);
         $acl->addResource(self::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX);
         $acl->addResource(self::RESOURCE_DEALERMANAGEMENT_CLIENT_CREATE);
@@ -79,6 +81,7 @@ class Dealermanagement_Model_Acl
         // Dealer Admin
         $acl->allow(Application_Model_Acl::ROLE_COMPANY_ADMINISTRATOR, self::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_COMPANY_ADMINISTRATOR, self::RESOURCE_DEALERMANAGEMENT_DEALER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_COMPANY_ADMINISTRATOR, self::RESOURCE_DEALERMANAGEMENT_BRANDING_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Lease Rate Admin
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);

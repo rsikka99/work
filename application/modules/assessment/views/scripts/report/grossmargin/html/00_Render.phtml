@@ -1,10 +1,10 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$brandName = My_Brand::$brandName;
-$companyName = My_Brand::$companyName;
+$brandName = My_Brand::getDealerBranding()->mpsProgramName;
+$companyName = My_Brand::getDealerBranding()->shortDealerName;
 $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
-$this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); ?>
+?>
 <div class="container full-width gross-margin" id="htmlReportContainer">
 <div>
     <h2 class="reportTitle">Gross Margin Report</h2><br />

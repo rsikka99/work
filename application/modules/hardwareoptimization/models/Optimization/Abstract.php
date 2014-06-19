@@ -396,7 +396,7 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
         }
         else
         {
-            $masterDeviceList = false;
+            $masterDeviceList = array();
         }
 
         return $masterDeviceList;
@@ -445,18 +445,21 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
     {
         $uniqueTonerList = array();
 
-        foreach ($masterDevices as $masterDevice)
+        if (count($masterDevices) > 0)
         {
-            $toners = $masterDevice->getTonersForAssessment($this->_optimization->getCostPerPageSettingForDealer());
-
-            foreach ($toners as $toner)
+            foreach ($masterDevices as $masterDevice)
             {
-                if (!in_array($toner, $uniqueTonerList))
-                {
-                    $uniqueTonerList [] = $toner;
-                }
-            }
+                $toners = $masterDevice->getTonersForAssessment($this->_optimization->getCostPerPageSettingForDealer());
 
+                foreach ($toners as $toner)
+                {
+                    if (!in_array($toner, $uniqueTonerList))
+                    {
+                        $uniqueTonerList [] = $toner;
+                    }
+                }
+
+            }
         }
 
         return $uniqueTonerList;

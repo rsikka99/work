@@ -44,7 +44,7 @@ class Preferences_QuoteController extends Tangent_Controller_Action
         $this->view->headTitle('Settings');
         $this->view->headTitle('User Hardware Quote');
         // Dealer
-        $dealer                 = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $dealer                 = Application_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
         $combinedDealerSettings = $dealer->getDealerSettings()->getQuoteSettings();
 
         // User
@@ -84,7 +84,7 @@ class Preferences_QuoteController extends Tangent_Controller_Action
         $this->view->headTitle('Settings');
         $this->view->headTitle('Dealer Hardware Quote');
         // Initialize and get the form
-        $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $dealer = Application_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
 
 
         $quoteSettingFormService = new Preferences_Service_QuoteSetting($dealer->getDealerSettings()->getQuoteSettings());

@@ -169,8 +169,8 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
     function getStatistics ($assessmentViewModel, $costPerPageSetting)
     {
         $statisticsGroup                                                   = array();
-        $statisticsGroup['left'][My_Brand::$brandName . ' Monochrome CPP'] = $this->view->formatCostPerPage($assessmentViewModel->getMPSBlackAndWhiteCPP());
-        $statisticsGroup['left'][My_Brand::$brandName . ' Color CPP']      = $this->view->formatCostPerPage($assessmentViewModel->getMPSColorCPP());
+        $statisticsGroup['left'][My_Brand::getDealerBranding()->mpsProgramName . ' Monochrome CPP'] = $this->view->formatCostPerPage($assessmentViewModel->getMPSBlackAndWhiteCPP());
+        $statisticsGroup['left'][My_Brand::getDealerBranding()->mpsProgramName . ' Color CPP']      = $this->view->formatCostPerPage($assessmentViewModel->getMPSColorCPP());
         $statisticsGroup['left']['Weighted Monochrome CPP']                = $this->view->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP($costPerPageSetting)->BlackAndWhite);
         $statisticsGroup['left']['Weighted Color CPP']                     = $this->view->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP($costPerPageSetting)->Color);
         $statisticsGroup['left']['Monochrome Margin']                      = number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin($costPerPageSetting)) . "%";

@@ -39,7 +39,7 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
         // Display all of the users
         $this->view->users = $users;
         // Get the max users allowed for this dealer
-        $this->view->maxUsers = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId)->userLicenses;
+        $this->view->maxUsers = Application_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId)->userLicenses;
     }
 
 
@@ -62,7 +62,7 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
                 $db = Zend_Db_table::getDefaultAdapter();
                 try
                 {
-                    $dealer           = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+                    $dealer           = Application_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
                     $currentUserCount = count(Application_Model_Mapper_User::getInstance()->fetchUserListForDealer($dealer->id));
                     $maxLicenses      = $dealer->userLicenses;
                     if ($currentUserCount < $maxLicenses)

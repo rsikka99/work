@@ -100,9 +100,11 @@ class My_Error_Handler
         $errorName = (array_key_exists($errorNumber, self::$errorNames)) ? self::$errorNames [$errorNumber] : '';
         $fileName  = basename($errorFile);
 
+        $shortPath = sprintf('<br>"%s"', str_replace(APPLICATION_BASE_PATH, '', $errorFile));
+
         // Create an error object
         $error           = new stdClass();
-        $error->message  = "{$errorName} : {$errorString} in {$fileName} on line {$errorLineNumber}";
+        $error->message  = "{$errorName} : {$errorString} in {$fileName} on line {$errorLineNumber}${shortPath}";
         $error->color    = (array_key_exists($errorNumber, self::$errorColors)) ? self::$errorColors [$errorNumber] : '';
         $error->number   = $errorNumber;
         self::$errors [] = $error;

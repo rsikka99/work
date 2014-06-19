@@ -6,17 +6,22 @@
 $phpWord = $this->phpword;
 
 /* @var $section \PhpOffice\PhpWord\Element\Section */
-$section = $this->section;
+$section = $phpWord->addSection(array(
+    'orientation'  => null,
+    'marginLeft'   => 720,
+    'marginRight'  => 720,
+    'marginTop'    => 720,
+    'marginBottom' => 720,
+));
 
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
 $graphs               = $healthcheckViewModel->getGraphs();
 
-$section->addPageBreak();
 $section->addTitle("Fleet Attributes", 1);
 
 $section->addText("The following provides a summary of your existing printing devices.");
-$section->addText("Leased devices are shown in gray.");
+$section->addText("Leased devices are shown in gray.", 'small_italic_text');
 
 $cellWidths = array(
     6500,
@@ -26,7 +31,7 @@ $cellWidths = array(
     500,
     500,
     500,
-    500
+    500,
 );
 $tcStyle    = $this->styles->tables->fleetattributes;
 /**
@@ -61,6 +66,17 @@ foreach ($healthcheckViewModel->getOptimizedDevices() as $device)
 }
 $section->addPageBreak();
 
+$cellWidths = array(
+    4500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    2500,
+);
+
 /**
  * Underutilized Devices
  */
@@ -94,7 +110,7 @@ foreach ($healthcheckViewModel->getUnderutilizedDevices() as $device)
     $UnderutilizedDevicesTable->addCell($cellWidths [5], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format(($device->isLeased ? $device->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $device->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) . "%", null, 'nospacing_rightalign');
     $UnderutilizedDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->isCapableOfReportingTonerLevels ? 'Y' : 'N')), null, 'nospacing_centeralign');
     $UnderutilizedDevicesTable->addCell($cellWidths [5], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->isLeased ? 'N' : ($device->isManaged ? 'Y' : 'N'))), null, 'nospacing_centeralign');
-    $UnderutilizedDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(sprintf('Migrate all page volume to %1$s compatible device.', $this->jit), null, 'nospacing_leftalign');
+    $UnderutilizedDevicesTable->addCell($cellWidths [7], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(sprintf('Migrate all page volume to %1$s compatible device.', $this->jit), null, 'nospacing_leftalign');
 }
 $section->addPageBreak();
 
@@ -143,7 +159,7 @@ $cellWidths = array(
     500,
     500,
     500,
-    5000
+    5000,
 );
 $section->addPageBreak();
 /**

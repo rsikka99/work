@@ -27,30 +27,29 @@ $cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, array(
 $titlePage->addTextBreak();
 // Assessment Title
 $titlePage->addText('', null, 'titleStyle1');
-$titlePage->addText('  Health Check', 'titlepage_title', 'titleStyle1');
+$titlePage->addText('Health Check', 'titlepage_title', 'titleStyle1');
 $titlePage->addText('', null, 'titleStyle1');
-
 
 $titlePage->addTextBreak();
 
-$titlePage->addText(' ', 'titlepage_address', 'titleStyle3');
-$titlePage->addText(sprintf('Prepared For: %1$s', $healthcheckViewModel->healthcheck->getClient()->companyName), 'titlepage_subtitle', 'titleStyle3');
+$titlePage->addText('', 'titlepage_address', 'titleStyle3');
+$titlePage->addText("\t" . sprintf('Prepared For: %s', $healthcheckViewModel->healthcheck->getClient()->companyName), 'titlepage_subtitle', 'titleStyle3');
 
 // Parse the address
 $addressLines = explode("\n", $healthcheckViewModel->healthcheck->getClient()->getAddress()->getFullAddressMultipleLines());
 $addressCount = 1;
 foreach ($addressLines as $line)
 {
-    $titlePage->addText($line, 'titlepage_address', 'titleStyle3');
+    $titlePage->addText("\t" . $line, 'titlepage_address', 'titleStyle3');
     $addressCount++;
 }
-$titlePage->addText(' ', 'titlepage_address', 'titleStyle3');
-$titlePage->addText('Date:' . " " . $healthcheckViewModel->getDateReportPrepared(), 'titlepage_address', 'titleStyle3');
+$titlePage->addText('', 'titlepage_address', 'titleStyle3');
+$titlePage->addText("\t" . sprintf('Date: %s', $healthcheckViewModel->getDateReportPrepared()), 'titlepage_address', 'titleStyle3');
 // Add extra blank lines to make the grey box big
 if ($addressCount < 11)
 {
     for ($i = 0; $i < 11 - $addressCount; $i++)
     {
-        $titlePage->addText(' ', 'titlepage_address', 'titleStyle3');
+        $titlePage->addText('', 'titlepage_address', 'titleStyle3');
     }
 }

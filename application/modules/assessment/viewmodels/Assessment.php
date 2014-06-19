@@ -1963,6 +1963,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->Graphs))
         {
+            $dealerBranding = My_Brand::getDealerBranding();
+
             // Other variables used in several places
             $companyName   = $this->assessment->getClient()->companyName;
             $employeeCount = $this->assessment->getClient()->employeeCount;
@@ -1985,21 +1987,21 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 $this->getTotalPurchasedAnnualCost()
             ));
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphNegativeColor),
             ));
             $barGraph->addDataSet(array(
                 $this->getPrintIQTotalCost()
             ));
             $barGraph->setLegend(array(
                 "Current",
-                My_Brand::$brandName
+                My_Brand::getDealerBranding()->mpsProgramName
             ));
             $barGraph->addAxisRange(0, 0, $highest * 1.3);
             $barGraph->setDataRange(0, $highest * 1.3);
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("b");
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphPositiveColor),
             ));
             $barGraph->setProperty('chxs', '0N*sz0*');
             $barGraph->addValueMarkers($PrintIQSavingsBarGraph_currencyValueMarker, "000000", "0", "-1", "11");
@@ -2019,7 +2021,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 $this->getDevices()->leasedDeviceInstances->getCount()
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphLeasedDeviceColor),
             ));
             $barGraph->addDataSet(array(
                 $this->getDevices()->purchasedDeviceInstances->getCount()
@@ -2029,7 +2031,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $barGraph->setBarScale(50, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphPurchasedDeviceColor),
             ));
             $barGraph->setLegend(array(
                 "Number of leased devices",
@@ -2053,7 +2055,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 round($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphLeasedDeviceColor),
             ));
             $barGraph->addDataSet(array(
                 round($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
@@ -2063,7 +2065,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $barGraph->setBarScale(50, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphPurchasedDeviceColor),
             ));
             $barGraph->setLegend(array(
                 "Monthly pages on leased devices",
@@ -2129,7 +2131,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 $averagePageCount
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphCustomerColor),
             ));
             $barGraph->addDataSet(array(
                 self::AVERAGE_MONTHLY_PAGES_PER_DEVICE
@@ -2139,7 +2141,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
             ));
             $barGraph->setLegend(array(
                 $companyName,
@@ -2166,7 +2168,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 $pagesPerEmployee
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphCustomerColor),
             ));
             $barGraph->addDataSet(array(
                 Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE
@@ -2176,7 +2178,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
             ));
             $barGraph->setLegend(array(
                 $companyName,
@@ -2202,7 +2204,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 $devicesPerEmployee
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphCustomerColor),
             ));
             $barGraph->addDataSet(array(
                 self::AVERAGE_EMPLOYEES_PER_DEVICE
@@ -2212,7 +2214,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
             ));
             $barGraph->setLegend(array(
                 $companyName,
@@ -2247,8 +2249,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 "$colorPercentage%"
             ));
             $colorCapableGraph->addColors(array(
-                "E21736",
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphColorDeviceColor),
+                str_replace('#', '', $dealerBranding->graphMonoDeviceColor),
             ));
             $colorCapableGraph->setLegendPosition("bv");
             // Graphs[7]
@@ -2279,8 +2281,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 "$bwPercentage%"
             ));
             $colorVSBWPagesGraph->addColors(array(
-                "E21736",
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphColorDeviceColor),
+                str_replace('#', '', $dealerBranding->graphMonoDeviceColor),
             ));
             $colorVSBWPagesGraph->setLegendPosition("bv");
             // Graphs[8]
@@ -2320,12 +2322,12 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
             foreach ($deviceAges as $legendItem => $count)
             {
+                $legendItems [] = $legendItem;
+                $dataSet []     = $count;
                 if ($count > 0)
                 {
-                    $dataSet []     = $count;
-                    $legendItems [] = $legendItem;
-                    $percentage     = round(($count / $this->getDevices()->purchasedDeviceInstances->getCount()) * 100, 2);
-                    $labels []      = "$percentage%";
+                    $percentage = round(($count / $this->getDevices()->purchasedDeviceInstances->getCount()) * 100, 2);
+                    $labels []  = "$percentage%";
                 }
             }
             $deviceAgeGraph = new gchart\gPie3DChart(350, 200);
@@ -2333,10 +2335,10 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $deviceAgeGraph->setLegend($legendItems);
             $deviceAgeGraph->setLabels($labels);
             $deviceAgeGraph->addColors(array(
-                "E21736",
-                "0094cf",
-                "5c3f9b",
-                "adba1d"
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices1),
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices2),
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices3),
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices4),
             ));
             $deviceAgeGraph->setLegendPosition("bv");
             // Graphs[9]
@@ -2368,8 +2370,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 "$scanPercentage%"
             ));
             $scanCapableGraph->addColors(array(
-                "E21736",
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphCopyCapableDeviceColor),
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
             ));
             $scanCapableGraph->setLegendPosition("bv");
             // Graphs[10]
@@ -2399,8 +2401,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 "$faxPercentage%"
             ));
             $faxCapable->addColors(array(
-                "E21736",
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphFaxCapableDeviceColor),
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
             ));
             $faxCapable->setLegendPosition("bv");
             // Graphs[11]
@@ -2437,8 +2439,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 "$duplexPercentage%"
             ));
             $duplexCapableGraph->addColors(array(
-                "E21736",
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphDuplexCapableDeviceColor),
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
             ));
             $duplexCapableGraph->setLegendPosition("bv");
             // Graphs[13]
@@ -2450,8 +2452,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $scanCapableGraph->setDimensions(305, 210);
             // Graphs[14]
             $this->Graphs [] = $scanCapableGraph->getUrl();
-
-
         }
 
         return $this->Graphs;

@@ -37,7 +37,7 @@ $cell->addImage($graphs [9], array(
 ));
 $section->addTextBreak();
 
-$section->addText('The devices listed below have a high risk of breaking down, because of a combination of their age and the total amount of pages they have printed throughout their life.');
+$section->addText('The devices listed below have a high risk of breaking down, because of a combination of their age and the total amount of pages they have printed throughout their lifetime.');
 
 $cellWidths = array(
     3611,
@@ -73,7 +73,8 @@ foreach ($assessmentViewModel->getHighRiskDevices() as $device)
         break;
     }
 }
-$section->addText('Only takes into account devices for which release dates and expected cartridge yields are known. Age is based on the assumption that the device was installed approximately 1 year after the release date.', 'small_italic_text', 'nospacing');
+$section->addText('Only takes into account devices for which release dates and expected cartridge yields are known.', 'small_italic_text', 'nospacing');
+$section->addText('Age is based on the assumption that the device was installed approximately 1 year after the release date.', 'small_italic_text', 'nospacing');
 
 $section->addPageBreak();
 

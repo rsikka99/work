@@ -24,6 +24,8 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
     {
         if (!isset($this->_graphs))
         {
+            $dealerBranding = My_Brand::getDealerBranding();
+
             $purchaseDeviceCount = count($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances());
 
             // N = number, p = percent, 0 = number of decimal places.
@@ -45,7 +47,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
                 $averagePageCount
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphCustomerColor),
             ));
             $barGraph->addDataSet(array(
                 self::AVERAGE_MONTHLY_PAGES
@@ -55,7 +57,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
             ));
             $barGraph->setLegend(array(
                 $this->_hardwareOptimization->getClient()->companyName,
@@ -82,7 +84,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
                 $pagesPerEmployee
             ));
             $barGraph->addColors(array(
-                "E21736"
+                str_replace('#', '', $dealerBranding->graphCustomerColor),
             ));
             $barGraph->addDataSet(array(
                 self::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE
@@ -92,7 +94,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
             ));
             $barGraph->setLegend(array(
                 $this->_hardwareOptimization->getClient()->companyName,
@@ -109,21 +111,23 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
              */
             $highest  = ($this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() > $this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) ? $this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() : $this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
             $barGraph = new gchart\gBarChart(200, 300);
-            $barGraph->setTitle("Leased Vs Purchase|Page Counts");
+            $barGraph->setTitle("Leased Vs Purchase|Monthly Page Counts");
             $barGraph->setVisibleAxes(array('y'));
             $barGraph->addDataSet(array(round($this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())));
-            $barGraph->addColors(array("E21736"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphLeasedDeviceColor),
+            ));
             $barGraph->addDataSet(array(round($this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())));
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphPurchasedDeviceColor),
             ));
             $barGraph->setLegend(array(
-                "Monthly pages on leased devices",
-                "Monthly pages on purchased devices"
+                "Leased devices",
+                "Purchased devices"
             ));
 
             $barGraph->setProperty('chxs', '0N*sz0*');
@@ -142,22 +146,30 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $count = count($this->kept);
             $graph->addDataSet(array(($count / $purchaseDeviceCount)));
             $percentValueMarker1 = "N  *p0* ({$count})";
-            $graph->addColors(array("E21736"));
+            $graph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphKeepDeviceColor),
+            ));
 
             $count = count($this->replaced);
             $graph->addDataSet(array($count / $purchaseDeviceCount));
             $percentValueMarker2 = "N  *p0* ({$count})";
-            $graph->addColors(array("0194D2"));
+            $graph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphReplacedDeviceColor),
+            ));
 
             $count = count($this->flagged);
             $graph->addDataSet(array(count($this->flagged) / $purchaseDeviceCount));
             $percentValueMarker3 = "N  *p0* ({$count})";
-            $graph->addColors(array("EF6B18"));
+            $graph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphDoNotRepairDeviceColor),
+            ));
 
             $count = count($this->retired);
             $graph->addDataSet(array($count / $purchaseDeviceCount));
             $percentValueMarker4 = "N  *p0* ({$count})";
-            $graph->addColors(array("FFCF00"));
+            $graph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphRetireDeviceColor),
+            ));
 
             $graph->setDataRange(0, 1);
             $graph->setBarScale(50, 10);
@@ -190,11 +202,21 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->addDataSet(array(30));
             $barGraph->addDataSet(array(0));
             $barGraph->addDataSet(array(20));
-            $barGraph->addColors(array("E21736"));
-            $barGraph->addColors(array("000000"));
-            $barGraph->addColors(array("0194D2"));
-            $barGraph->addColors(array("FFFFFF"));
-            $barGraph->addColors(array("FFFFFF"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphCurrentSituationColor),
+            ));
+            $barGraph->addColors(array(
+                '000000'
+            ));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphPositiveColor),
+            ));
+            $barGraph->addColors(array(
+                "FFFFFF"
+            ));
+            $barGraph->addColors(array(
+                "FFFFFF"
+            ));
             $barGraph->setLegend(array(
                 "Your Estimated Monthly Usage (% of Capacity)",
                 "Your Estimated Optimized Monthly Usage (% of Capacity)",
@@ -205,14 +227,17 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
 
-            $dotProperties = '@d,E21736,0,.5:' . number_format($percentage, 2) . ',30|';
-            $dotProperties .= '@t' . number_format($percentage * 100, 2) . '%,E21736,0,1:' . number_format($percentage - .03, 2) . ',10|';
-            $percentage = ($this->_optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->_optimization->calculateMaximumMonthlyPrintVolumeWithReplacements());
-            $dotProperties .= '@d,000000,0,.5:' . number_format($percentage, 2) . ',20|';
-            $dotProperties .= '@t' . number_format($percentage * 100, 2) . '%,000000,0,-2.5:' . number_format($percentage - .03, 2) . ',10';
+            $dotProperties = '@d,' . str_replace('#', '', $dealerBranding->graphCurrentSituationColor) . ',0,.5:' . number_format($percentage, 2) . ',30|';
+            $dotProperties .= '@t' . number_format($percentage * 100, 2) . '%,' . str_replace('#', '', $dealerBranding->graphCurrentSituationColor) . ',0,1:' . number_format($percentage - .03, 2) . ',10|';
+            $optimizedPercentage = ($this->_optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() /
+                                    $this->_optimization->calculateMaximumMonthlyPrintVolumeWithReplacements());
+            $dotProperties .= '@d,000000,0,.5:' . number_format($optimizedPercentage, 2) . ',20|';
+            $dotProperties .= '@t' . number_format($optimizedPercentage * 100, 2) . '%,000000,0,-2.5:' . number_format($optimizedPercentage - .03, 2) . ',10';
             $barGraph->setProperty('chm', $dotProperties);
 
-            $barGraph->addColors(array("0194D2"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphNewSituationColor),
+            ));
             $barGraph->setProperty('chxs', '0N*sz0*');
             // Graph4
             $this->_graphs [] = $barGraph->getUrl();
@@ -231,11 +256,17 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setTitle("Employees per device");
             $barGraph->setVisibleAxes(array('y'));
             $barGraph->addDataSet(array($devicesPerEmployee));
-            $barGraph->addColors(array("E21736"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphCurrentSituationColor),
+            ));
             $barGraph->addDataSet(array($averageEmployeePerDevice));
-            $barGraph->addColors(array("0194D2"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
+            ));
             $barGraph->addDataSet(array($devicesPerEmployeeOptimized));
-            $barGraph->addColors(array("EF6B18"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphNewSituationColor),
+            ));
 
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
@@ -266,11 +297,17 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setTitle(" " . My_Brand::$jit . " compatibility");
             $barGraph->setVisibleAxes(array('y'));
             $barGraph->addDataSet(array($jitCompatible));
-            $barGraph->addColors(array("E21736"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphJitCompatibleDeviceColor),
+            ));
             $barGraph->addDataSet(array($nonJitCompatible));
-            $barGraph->addColors(array("0194D2"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
+            ));
             $barGraph->addDataSet(array($optimizedJitCompatible));
-            $barGraph->addColors(array("EF6B18"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphNewSituationColor),
+            ));
 
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
@@ -299,11 +336,17 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
                 'y'
             ));
             $barGraph->addDataSet(array(count($this->_optimization->getDevices()->leasedDeviceInstances->getDeviceInstances())));
-            $barGraph->addColors(array("E21736"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphLeasedDeviceColor),
+            ));
             $barGraph->addDataSet(array(count($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances())));
-            $barGraph->addColors(array("0194D2"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphPurchasedDeviceColor),
+            ));
             $barGraph->addDataSet(array(count($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances()) - count($this->retired)));
-            $barGraph->addColors(array("EF6B18"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphNewSituationColor),
+            ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
             $barGraph->setBarScale(40, 10);
@@ -326,11 +369,17 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setTitle("Technology Features");
             $barGraph->setVisibleAxes(array('y'));
             $barGraph->addDataSet(array($this->deviceCategories["current"]["copy"] / $purchaseDeviceCount));
-            $barGraph->addColors(array("E21736"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphCopyCapableDeviceColor),
+            ));
             $barGraph->addDataSet(array($this->deviceCategories["current"]["duplex"] / $purchaseDeviceCount));
-            $barGraph->addColors(array("0194D2"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphDuplexCapableDeviceColor),
+            ));
             $barGraph->addDataSet(array($this->deviceCategories["current"]["color"] / $purchaseDeviceCount));
-            $barGraph->addColors(array("EF6B18"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphColorDeviceColor),
+            ));
             $barGraph->setDataRange(0, 1);
             $barGraph->setBarScale(43, 10);
             $barGraph->setLegendPosition("bv");
@@ -355,11 +404,17 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setTitle("Technology Features (optimized)");
             $barGraph->setVisibleAxes(array('y'));
             $barGraph->addDataSet(array($this->deviceCategories["optimized"]["copy"] / $purchaseDeviceCount));
-            $barGraph->addColors(array("E21736"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphCopyCapableDeviceColor),
+            ));
             $barGraph->addDataSet(array($this->deviceCategories["optimized"]["duplex"] / $purchaseDeviceCount));
-            $barGraph->addColors(array("0194D2"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphDuplexCapableDeviceColor),
+            ));
             $barGraph->addDataSet(array($this->deviceCategories["optimized"]["color"] / $purchaseDeviceCount));
-            $barGraph->addColors(array("EF6B18"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphColorDeviceColor),
+            ));
             $barGraph->setDataRange(0, 1);
             $barGraph->setBarScale(43, 10);
             $barGraph->setLegendPosition("bv");
@@ -391,11 +446,17 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setTitle("Age of devices");
             $barGraph->setVisibleAxes(array('y'));
 
-            $colors = array("E21736", "0194D2", "EF6B18", "FFCF00");
+            $colors = array(
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices1),
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices2),
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices3),
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices4),
+            );
             foreach ($colors as $color)
             {
                 $barGraph->addColors(array($color));
             }
+
             foreach (array_reverse($this->deviceAges) as $deviceCount)
             {
                 $barGraph->addDataSet(array($deviceCount));
@@ -419,11 +480,17 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setTitle("Age of optimized devices");
             $barGraph->setVisibleAxes(array('y'));
 
-            $colors = array("E21736", "0194D2", "EF6B18", "FFCF00");
+            $colors = array(
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices1),
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices2),
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices3),
+                str_replace('#', '', $dealerBranding->graphAgeOfDevices4),
+            );
             foreach ($colors as $color)
             {
                 $barGraph->addColors(array($color));
             }
+
             foreach (array_reverse($this->deviceAgesOptimized) as $deviceCount)
             {
                 $barGraph->addDataSet(array($deviceCount));
@@ -455,13 +522,21 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setVisibleAxes(array('x'));
             $barGraph->setTitle("Unique Supply Types");
 
-            $barGraph->addColors(array("0194D2"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphNewSituationColor),
+            ));
             $barGraph->addDataSet(array(0));
-            $barGraph->addColors(array("E21736"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphCurrentSituationColor),
+            ));
             $barGraph->addDataSet(array(0));
-            $barGraph->addColors(array("FFFFFF"));
+            $barGraph->addColors(array(
+                "FFFFFF"
+            ));
             $barGraph->addDataSet(array($targetUniqueness));
-            $barGraph->addColors(array("0194D2"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphNewSituationColor),
+            ));
             $barGraph->addDataSet(array($targetUniqueness));
 
             $barGraph->setLegend(array(
@@ -475,10 +550,9 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setBarScale(40, 5);
             $barGraph->setLegendPosition("t");
 
-            $dotProperties = '@d,E21736,0,.5:' . number_format($diamond, 7) . ',30|';
-            $dotProperties .= '@t' . count($uniqueSupplyTypes) . ',E21736,0,-1:' . number_format($diamond - 0.012, 7) . ',10';
+            $dotProperties = '@d,' . str_replace('#', '', $dealerBranding->graphCurrentSituationColor) . ',0,.5:' . number_format($diamond, 7) . ',30|';
+            $dotProperties .= '@t' . count($uniqueSupplyTypes) . ',000000,0,-1:' . number_format($diamond - 0.012, 7) . ',10';
             $barGraph->setProperty('chm', $dotProperties);
-            $barGraph->addColors(array("0194D2"));
             $barGraph->setProperty('chxs', '0N*sz0*');
             $this->_graphs [] = $barGraph->getUrl();
 
@@ -488,6 +562,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $uniqueSupplyTypes = $this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->getAllMasterDevicesWithReplacements()));
             $highest           = $this->getMaximumSupplyCount($this->getUniquePurchasedMasterDevices($this->getAllMasterDevicesWithReplacements()));
             $graphMaximum      = $highest + $highest * .15;
+            $graphMaximum      = ($graphMaximum > 0) ? $graphMaximum : 1;
             $diamond           = count($uniqueSupplyTypes) / $graphMaximum;
             $targetUniqueness  = $highest * 0.15;
 
@@ -495,13 +570,21 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setTitle("Unique Supply Types (Optimized)");
             $barGraph->setHorizontal(true);
             $barGraph->setVisibleAxes(array('x'));
-            $barGraph->addColors(array("0194D2"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphNewSituationColor),
+            ));
             $barGraph->addDataSet(array(0));
-            $barGraph->addColors(array("E21736"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
+            ));
             $barGraph->addDataSet(array(0));
-            $barGraph->addColors(array("FFFFFF"));
+            $barGraph->addColors(array(
+                "FFFFFF"
+            ));
             $barGraph->addDataSet(array($targetUniqueness));
-            $barGraph->addColors(array("0194D2"));
+            $barGraph->addColors(array(
+                str_replace('#', '', $dealerBranding->graphNewSituationColor),
+            ));
             $barGraph->addDataSet(array($targetUniqueness));
             $barGraph->setLegend(array(
                 "Ideal Supply Uniqueness",
@@ -514,10 +597,9 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setBarScale(40, 5);
             $barGraph->setLegendPosition("t");
 
-            $dotProperties = '@d,E21736,0,.5:' . number_format($diamond, 7) . ',30|';
-            $dotProperties .= '@t' . count($uniqueSupplyTypes) . ',E21736,0,-1:' . number_format($diamond - 0.012, 7) . ',10';
+            $dotProperties = '@d,' . str_replace('#', '', $dealerBranding->graphNewSituationColor) . ',0,.5:' . number_format($diamond, 7) . ',30|';
+            $dotProperties .= '@t' . count($uniqueSupplyTypes) . ',000000,0,-1:' . number_format($diamond - 0.012, 7) . ',10';
             $barGraph->setProperty('chm', $dotProperties);
-            $barGraph->addColors(array("0194D2"));
             $barGraph->setProperty('chxs', $numberValueMarker);
             // Graph13
             $this->_graphs [] = $barGraph->getUrl();
@@ -546,8 +628,8 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
                 "$colorPercentage%"
             ));
             $colorCapableGraph->addColors(array(
-                "E21736",
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphColorDeviceColor),
+                str_replace('#', '', $dealerBranding->graphMonoDeviceColor),
             ));
             $colorCapableGraph->setLegendPosition("bv");
             // Graphs[7]
@@ -576,8 +658,8 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
                 "$colorPercentage%"
             ));
             $colorCapableGraph->addColors(array(
-                "E21736",
-                "0194D2"
+                str_replace('#', '', $dealerBranding->graphColorDeviceColor),
+                str_replace('#', '', $dealerBranding->graphMonoDeviceColor),
             ));
             $colorCapableGraph->setLegendPosition("bv");
 

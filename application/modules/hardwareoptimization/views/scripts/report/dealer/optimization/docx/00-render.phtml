@@ -37,7 +37,7 @@ $mainSection = $phpWord->addSection(array(
 /**
  * Define Table Styles here
  */
-$widthTwips       = 15297;
+$widthTwips       = 15840;
 $header_color     = $this->wordStyles->default->tableHeaderBackgroundColor;
 $sub_header_color = $this->wordStyles->default->tableSubHeaderBackgroundColor;
 $even_color       = "EFEFEF";
@@ -45,14 +45,14 @@ $odd_color        = "FCFCFC";
 $footer_color     = "b8cce3";
 $highlight_color  = "ebc7a4";
 
-$titlePageBackgroundColor  = My_Brand::$reportTitlePageTitleBackgroundColor;
-$titlePageBackgroundColor2 = My_Brand::$reportTitlePageInformationBackgroundColor;
-$titlePageTextColor        = My_Brand::$reportTitlePageTitleColor;
-$titlePageTextColor2       = My_Brand::$reportTitlePageInformationColor;
-$headingColor              = My_Brand::$reportHeadingColor;
-$h2Background              = My_Brand::$reportHeadingBackgroundColor;
-$h2Color                   = My_Brand::$reportSubHeadingColor;
-$h3Color                   = My_Brand::$reportHeadingColor;
+$titlePageBackgroundColor  = My_Brand::getDealerBranding()->titlePageTitleBackgroundColor;
+$titlePageBackgroundColor2 = My_Brand::getDealerBranding()->titlePageInformationBackgroundColor;
+$titlePageTextColor        = My_Brand::getDealerBranding()->titlePageTitleFontColor;
+$titlePageTextColor2       = My_Brand::getDealerBranding()->titlePageInformationFontColor;
+$headingColor              = My_Brand::getDealerBranding()->h1FontColor;
+$h2Background              = My_Brand::getDealerBranding()->h2BackgroundColor;
+$h2Color                   = My_Brand::getDealerBranding()->h2FontColor;
+$h3Color                   = My_Brand::getDealerBranding()->h1FontColor;
 
 $phpWord->addFontStyle('titlepageHeaderFont', array('bold' => true, 'size' => 12));
 $phpWord->addFontStyle('documentHeader', array('bold' => true, 'size' => 16));
@@ -72,6 +72,9 @@ $phpWord->addParagraphStyle('titleStyle2', array(
 ));
 $phpWord->addParagraphStyle('titleStyle3', array(
     'spaceAfter' => 100,
+    'tabs'       => array(
+        new \PhpOffice\PhpWord\Style\Tab('left', 350)
+    ),
     'shading'    => array(
         'fill' => $titlePageBackgroundColor2,
     )
@@ -94,11 +97,11 @@ $phpWord->addFontStyle('titlepage_address', array(
 ));
 $phpWord->addTitleStyle(2, array(
     'size'   => 12,
-    'color'  => $this->wordStyles->default->subSectionFontColor,
+    'color'  => My_Brand::getDealerBranding()->h2FontColor,
     'bold'   => true,
     'italic' => true
 ), array(
-    'bgColor' => My_Brand::$reportHeadingBackgroundColor,
+    'bgColor' => My_Brand::getDealerBranding()->h2BackgroundColor,
 ));
 
 // Classes that describe standard cells

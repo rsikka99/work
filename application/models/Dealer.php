@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class Admin_Model_Dealer
+ * Class Application_Model_Dealer
  */
-class Admin_Model_Dealer extends My_Model_Abstract
+class Application_Model_Dealer extends My_Model_Abstract
 {
     /**
      * The id of the dealer

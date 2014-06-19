@@ -24,7 +24,7 @@ $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number
 $section->addTextBreak();
 
 $section->addTitle('Printing Device Management Breakdown', 2);
-$section->addText('Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.');
+$section->addText('Different types of printing devices are managed in different ways: newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.');
 
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
@@ -57,10 +57,8 @@ $excludedDeviceCount = count($assessmentViewModel->getExcludedDevices());
 if ($excludedDeviceCount > 0)
 {
     $section->addTextBreak();
-    $section->addText(sprintf('%1$s devices were not included in the analysis due to lack of data or model information. See the Appendix in the %2$s Your Solution document for the list of excluded device(s).', number_format($excludedDeviceCount), $this->brandName));
+    $section->addText(sprintf('There are %1$s devices not included in the analysis due to lack of data or model information. See the Appendix in the %2$s Your Solution document for details regarding the excluded device(s).', number_format($excludedDeviceCount), $this->brandName));
 }
-
-$section->addPageBreak();
 
 $section->addTitle('Efficiency of Break-Fix Service', 2);
 $section->addText('Based on your questionnaire responses, we discovered the following:');
@@ -95,28 +93,40 @@ $cellWidths = array(
 
 $table = $section->addTable($this->styles->tables->twoColumnDataTable->tablestyle);
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
-$table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText('Percentage of fleet capable of report toner levels', 'bold_text', 'nospacing');
+$table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText('Percentage of fleet capable of reporting toner levels', 'bold_text', 'nospacing');
 $table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($assessmentViewModel->calculatePercentageOfFleetReportingTonerLevels(), 2) . "%", 'bold_text', 'nospacing_rightalign');
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
 $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText('Number of orders for ink and toner executed annually', 'bold_text', 'nospacing');
 $table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($assessmentViewModel->getNumberOfAnnualInkTonerOrders()), 'bold_text', 'nospacing_rightalign');
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
-$table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText('Estimated annual cost to execute ink and toner orders', 'bold_text', 'nospacing');
+$table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText('Estimated annual cost of ink and toner orders', 'bold_text', 'nospacing');
 $table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText($this->currency($assessmentViewModel->getCostOfExecutingSuppliesOrders()), 'bold_text', 'nospacing_rightalign');
 $section->addText(sprintf('Time spent dealing with multiple vendors could be better spent focusing on your core business tasks. %1$s can bundle your supplies and service into a single invoice - and if you need new hardware, that can be included too.', $this->companyName), 'small_italic_text');
 
 $section->addTitle('Number of Printing Device Models and Supply Types', 2);
-$section->addText(sprintf('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.', number_format($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount()), number_format($assessmentViewModel->getNumberOfUniqueModels()), number_format(count($assessmentViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances())), number_format(count($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances())), number_format($assessmentViewModel->getNumberOfUniquePurchasedModels()), number_format($assessmentViewModel->getNumberOfUniquePurchasedToners()), number_format($assessmentViewModel->getCashHeldInInventory())));
+$section->addText(sprintf('Out of your %1$s networked printing devices, you have %2$s unique device %3$s. Each section of the chart below represents a single model type. We estimate that %4$s of your printing devices %5$s leased %6$s, for which supplies are included in your contract. The %7$s remaining %8$s of %9$s %10$s and use %11$s %12$s. If you hold two of each supply in inventory, you have an estimated $%13$s in operating cash held in printer supplies inventory at any given time.',
+    number_format($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount()), //1
+    number_format($assessmentViewModel->getNumberOfUniqueModels()), //2
+    (number_format($assessmentViewModel->getNumberOfUniqueModels()) == 1) ? 'model' : 'models', //3
+    number_format(count($assessmentViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances())), //4
+    (number_format(count($assessmentViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances())) == 1) ? 'is a' : 'are', //5
+    (number_format(count($assessmentViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances())) == 1) ? 'machine' : 'machines', //6
+    number_format(count($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances())), //7
+    (number_format(count($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances())) == 1) ? 'machine consists' : 'machines consist', //8
+    number_format($assessmentViewModel->getNumberOfUniquePurchasedModels()), //9
+    (number_format($assessmentViewModel->getNumberOfUniquePurchasedModels()) == 1) ? 'model' : 'different models', //10
+    number_format($assessmentViewModel->getNumberOfUniquePurchasedModels()), //11
+    (number_format($assessmentViewModel->getNumberOfUniquePurchasedModels()) == 1) ? 'supply type' : 'different supply types', //12
+    number_format($assessmentViewModel->getCashHeldInInventory()))); //13
 
 
 $imageTable = $section->addTable();
 $imageTable->addRow();
-$cell = $imageTable->addCell(9028.8, array(
-    'valign' => 'center'
+$cell = $imageTable->addCell(9028.8, array(    'valign' => 'center'
 ));
 
 $cell->addImage($graphs[3], array(
     'align' => 'center'
 ));
 
-$section->addText(sprintf('By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. %1$s can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.', $this->companyName));
+$section->addText(sprintf('By using the same supplies for all printing devices, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. %1$s can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.', $this->companyName));

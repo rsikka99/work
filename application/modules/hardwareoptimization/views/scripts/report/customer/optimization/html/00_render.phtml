@@ -1,6 +1,5 @@
 <?php
 $this->placeholder('extraNavbar')->set($this->render('_partials/reportMenu.phtml'));
-$this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css"));
 
 /* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
 $hardwareOptimization = $this->hardwareOptimization;
@@ -15,7 +14,7 @@ $graphs = $customerOptimization->getGraphs();
 $titleData = array(
     "hardwareOptimization" => $hardwareOptimization,
     "dealerLogoFile"       => $this->dealerLogoFile,
-    "companyName"          => My_Brand::$companyName,
+    "companyName"          => My_Brand::getDealerBranding()->shortDealerName,
 );
 
 $profitabilityDevices = new Hardwareoptimization_Model_Optimization_Customer($hardwareOptimization);
@@ -25,7 +24,7 @@ $data = array(
     "optimization"         => $optimization,
     "customerOptimization" => $customerOptimization,
     "graphs"               => $graphs,
-    "companyName"          => My_Brand::$companyName,
+    "companyName"          => My_Brand::getDealerBranding()->shortDealerName,
 );
 ?>
 <div class="row-fluid">

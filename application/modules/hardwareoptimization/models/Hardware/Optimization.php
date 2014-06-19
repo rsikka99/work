@@ -56,7 +56,7 @@ class Hardwareoptimization_Model_Hardware_Optimization extends My_Model_Abstract
     protected $_client;
 
     /**
-     * @var Admin_Model_Dealer
+     * @var Application_Model_Dealer
      */
     protected $_dealer;
 
@@ -163,13 +163,13 @@ class Hardwareoptimization_Model_Hardware_Optimization extends My_Model_Abstract
     /**
      * Gets the dealer
      *
-     * @return Admin_Model_Dealer
+     * @return Application_Model_Dealer
      */
     public function getDealer ()
     {
         if (!isset($this->_dealer))
         {
-            $this->_dealer = Admin_Model_Mapper_Dealer::getInstance()->find($this->dealerId);
+            $this->_dealer = Application_Model_Mapper_Dealer::getInstance()->find($this->dealerId);
         }
 
         return $this->_dealer;

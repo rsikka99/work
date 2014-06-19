@@ -76,7 +76,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
         $this->view->device_list = array();
         $db                      = Zend_Db_Table::getDefaultAdapter();
 
-        $dealer         = Admin_Model_Mapper_Dealer::getInstance()->find($this->_dealerId);
+        $dealer         = Application_Model_Mapper_Dealer::getInstance()->find($this->_dealerId);
         $dealerSettings = $dealer->getDealerSettings();
 
 

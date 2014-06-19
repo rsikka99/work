@@ -4,6 +4,7 @@ Version Pending Changes
 Version 1.4.11
 ==============
 * Added support for PrintFleet 3.x csv uploads
+* Added customizable branding found under Admin -> Branding
 
 Template Change log
 ===================

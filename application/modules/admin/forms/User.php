@@ -134,7 +134,7 @@ class Admin_Form_User extends EasyBib_Form
 
         $firstDealerId = null;
         $dealers       = array();
-        foreach (Admin_Model_Mapper_Dealer::getInstance()->fetchAll() as $dealer)
+        foreach (Application_Model_Mapper_Dealer::getInstance()->fetchAll() as $dealer)
         {
             // Use this to grab the first id in the leasing schema dropdown
             if (!$firstDealerId)

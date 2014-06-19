@@ -7,14 +7,15 @@ $assessmentViewModel = $this->assessmentViewModel;
 /**
  * Styles
  */
-$h1Color                   = My_Brand::$reportHeadingColor;
-$titlePageBackgroundColor1 = My_Brand::$reportTitlePageTitleBackgroundColor;
-$titlePageBackgroundColor2 = My_Brand::$reportTitlePageInformationBackgroundColor;
-$titlePageTextColor1       = My_Brand::$reportTitlePageTitleColor;
-$titlePageTextColor2       = My_Brand::$reportTitlePageInformationColor;
+$h1Color                   = My_Brand::getDealerBranding()->h1FontColor;
+$h1BackgroundColor         = My_Brand::getDealerBranding()->h1BackgroundColor;
+$titlePageBackgroundColor1 = My_Brand::getDealerBranding()->titlePageTitleBackgroundColor;
+$titlePageBackgroundColor2 = My_Brand::getDealerBranding()->titlePageInformationBackgroundColor;
+$titlePageTextColor1       = My_Brand::getDealerBranding()->titlePageTitleFontColor;
+$titlePageTextColor2       = My_Brand::getDealerBranding()->titlePageInformationFontColor;
 $h1BorderColor             = $this->wordStyles->default->sectionHeaderBorderColor;
-$h2Background              = My_Brand::$reportHeadingBackgroundColor;
-$h2Color                   = My_Brand::$reportSubHeadingColor;
+$h2Background              = My_Brand::getDealerBranding()->h2BackgroundColor;
+$h2Color                   = My_Brand::getDealerBranding()->h2FontColor;
 $h3Color                   = "000000";
 
 $textHighlightColor = "0096D6";
@@ -35,19 +36,11 @@ $properties->setSubject('MPS Assessment Software');
 $titlePageSection = $phpword->addSection(array(
     'orientation'  => null,
     'marginLeft'   => 1420,
-    'marginRight'  => 720,
-    'marginTop'    => 720,
-    'marginBottom' => 720
+    'marginRight'  => 1420,
+    'marginTop'    => 1420,
+    'marginBottom' => 1420
 ));
 $section          = $phpword->addSection();
-/**
- * Footer
- */
-// Footer in PHPWord is not working correctly
-//$footer = $section->createFooter();
-//$footer->addText("TEXT");
-//$footer->addImage(PUBLIC_PATH . $this->theme('/proposalgenerator/reports/images/officedepotLogo.jpg'), array (    'align' => 'right'));
-
 
 /**
  * Paragraph styles
@@ -68,7 +61,9 @@ $phpword->addParagraphStyle('titleStyle2', array(
 ));
 $phpword->addParagraphStyle('titleStyle3', array(
     'spaceAfter' => 100,
-    //    'bgColor'    => $titlePageBackgroundColor2
+    'tabs'       => array(
+        new \PhpOffice\PhpWord\Style\Tab('left', 350)
+    ),
     'shading'    => array(
         'fill' => $titlePageBackgroundColor2,
     )
@@ -178,30 +173,37 @@ $phpword->addFontStyle('small_italic_text', array(
  */
 // H1 Style
 $phpword->addTitleStyle(1, array(
-    'size'  => 15,
-    'color' => $h1Color,
-    'bold'  => true
-), array());
+        'size'  => 15,
+        'color' => $h1Color,
+        'bold'  => true
+    ),
+    array(
+        'shading' => array(
+            'fill' => $h1Background,
+        ),
+    ));
 // H2 Style #5881BC
 $phpword->addTitleStyle(2, array(
-    'size'   => 12,
-    'color'  => $h2Color,
-    'bold'   => true,
-    'italic' => true
-), array(
-    'shading' => array(
-        'fill' => $h2Background,
-    )
-));
+        'size'   => 12,
+        'color'  => $h2Color,
+        'bold'   => true,
+        'italic' => true
+    ),
+    array(
+        'shading' => array(
+            'fill' => $h2Background,
+        )
+    ));
 // H3 Style #5881BC
 $phpword->addTitleStyle(3, array(
-    'size'  => 10,
-    'color' => $h3Color,
-    'bold'  => true
-), array(
-    'spaceBefore' => 100,
-    'spaceAfter'  => 100
-));
+        'size'  => 10,
+        'color' => $h3Color,
+        'bold'  => true
+    ),
+    array(
+        'spaceBefore' => 100,
+        'spaceAfter'  => 100
+    ));
 
 // H3 Style #5881BC
 $phpword->addFontStyle('heading3', array(
@@ -1122,12 +1124,10 @@ $nextStepsTable = (object)array(
         "cantSplit" => true,
     ),
     "tablestyle" => array(
-        'cellMarginTop'     => 100,
-        'cellMarginRight'   => 100,
-        'cellMarginBottom'  => 100,
-        'cellMarginLeft'    => 100,
-        'borderBottomSize'  => 10,
-        'borderBottomColor' => 'black,'
+        'cellMarginTop'    => 100,
+        'cellMarginRight'  => 100,
+        'cellMarginBottom' => 100,
+        'cellMarginLeft'   => 100,
     ),
     "col1Width"  => 2000,
     "col2Width"  => 7300,
@@ -1135,22 +1135,14 @@ $nextStepsTable = (object)array(
             "rowheight" => null,
             "cell1"     => (object)array(
                     "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "valign"           => "center"
+                        "valign" => "top"
                     ),
                     "fontStyle"      => 'bold_text',
                     "paragraphStyle" => 'nospacing'
                 ),
             "cell2"     => (object)array(
                     "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "valign"           => "center"
+                        "valign" => "top"
                     ),
                     "fontStyle"      => null,
                     "paragraphStyle" => null,
@@ -1189,8 +1181,8 @@ $data = array(
     "section"             => $section,
     "assessmentViewModel" => $this->assessmentViewModel,
     "styles"              => $styles,
-    "brandName"           => My_Brand::$brandName,
-    "companyName"         => My_Brand::$companyName,
+    "brandName"           => My_Brand::getDealerBranding()->mpsProgramName,
+    "companyName"         => My_Brand::getDealerBranding()->shortDealerName
 );
 // Actual document pages
 $this->partial("report/solution/docx/01_titlepage.phtml", $titledata);

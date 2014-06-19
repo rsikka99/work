@@ -92,7 +92,7 @@ $phpword->addFontStyle('italic_text', array(
 // H1 Style
 $phpword->addTitleStyle(1, array(
     'size'  => 16,
-    'color' => number_format(0),
+    'color' => '000000',
     'bold'  => true
 ), array(
     'borderBottomSize' => 1
@@ -100,7 +100,7 @@ $phpword->addTitleStyle(1, array(
 // H2 Style #5881BC
 $phpword->addTitleStyle(2, array(
     'size'  => 14,
-    'color' => number_format(0),
+    'color' => '000000',
     'bold'  => true
 ));
 // H3 Style #5881BC
@@ -266,8 +266,8 @@ $data = array(
     "assessmentViewModel" => $assessmentViewModel,
     "section"             => $mainSection,
     "styles"              => $styles,
-    "brandName"           => My_Brand::$brandName,
-    "companyName"         => My_Brand::$companyName
+    "brandName"           => My_Brand::getDealerBranding()->mpsProgramName,
+    "companyName"         => My_Brand::getDealerBranding()->shortDealerName
 );
 
 /**

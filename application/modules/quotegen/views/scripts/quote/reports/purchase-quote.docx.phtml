@@ -61,10 +61,14 @@ $phpword->addParagraphStyle('titleStyle2', array(
     'spaceBefore' => 100,
     'shading'     => array(
         'fill' => '4C4C4C',
-    )
+    ),
+    'align'       => 'center',
 ));
 $phpword->addParagraphStyle('titleStyle3', array(
     'spaceAfter' => 200,
+    'tabs'       => array(
+        new \PhpOffice\PhpWord\Style\Tab('left', 350)
+    ),
     'shading'    => array(
         'fill' => '7F7F7F',
     )
@@ -184,20 +188,26 @@ $phpword->addFontStyle('small_italic_text', array(
 // H1 Style
 $phpword->addTitleStyle(1, array(
     'size'  => 15,
-    'color' => $this->docStyles->brandBaseColor,
+    'color' => My_Brand::getDealerBranding()->h1FontColor,
     'bold'  => true
 ), array(
-    'borderBottomSize' => 1
+    'shading' => array(
+        'fill' => My_Brand::getDealerBranding()->h1BackgroundColor,
+    ),
 ));
+
 // H2 Style #5881BC
 $phpword->addTitleStyle(2, array(
     'size'   => 12,
-    'color'  => 'FFFFFF',
+    'color'  => My_Brand::getDealerBranding()->h2FontColor,
     'bold'   => true,
     'italic' => true
 ), array(
-    'bgColor' => $this->docStyles->brandBaseColor
+    'shading' => array(
+        'fill' => My_Brand::getDealerBranding()->h2BackgroundColor,
+    ),
 ));
+
 // H3 Style #5881BC
 $phpword->addTitleStyle(3, array(
     'size'  => 10,
@@ -236,7 +246,8 @@ $trueCostsTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => 'bold_text',
                     "paragraphStyle" => 'nospacing_centeralign'
@@ -247,7 +258,8 @@ $trueCostsTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => 'bold_text',
                     "paragraphStyle" => 'nospacing_centeralign'
@@ -258,7 +270,8 @@ $trueCostsTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => 'bold_text',
                     "paragraphStyle" => 'nospacing_centeralign'
@@ -272,10 +285,10 @@ $trueCostsTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
-                        'color' => 'FF0000',
                         'bold'  => true
                     ),
                     "paragraphStyle" => 'nospacing'
@@ -286,7 +299,8 @@ $trueCostsTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => null,
                     "paragraphStyle" => 'nospacing'
@@ -297,7 +311,8 @@ $trueCostsTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => null,
                     "paragraphStyle" => 'nospacing'
@@ -333,7 +348,8 @@ $purchaseQuoteTable = (object)array(
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
                         "bgColor"          => $this->docStyles->brandBaseColor,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         'color' => 'FFFFFF',
@@ -353,7 +369,8 @@ $purchaseQuoteTable = (object)array(
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
                         "bgColor"          => $this->docStyles->brandBaseColor,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         'color' => 'FFFFFF',
@@ -373,7 +390,8 @@ $purchaseQuoteTable = (object)array(
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
                         "bgColor"          => $this->docStyles->brandBaseColor,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         'color' => 'FFFFFF',
@@ -393,16 +411,16 @@ $purchaseQuoteTable = (object)array(
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
                         "bgColor"          => $this->docStyles->brandBaseColor,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
-                        'color' => 'FFFFFF',
-                        'bold'  => true,
-                        'name'  => 'Calibri',
-                        'size'  => 11
+                        'name' => 'Calibri',
+                        'size' => 11
                     ),
                     "paragraphStyle" => array(
                         'nospacing'  => true,
+                        'align'      => 'right',
                         'spaceAfter' => 0
                     )
                 )
@@ -415,7 +433,8 @@ $purchaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         'bold' => true,
@@ -430,7 +449,8 @@ $purchaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -444,7 +464,8 @@ $purchaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -458,15 +479,17 @@ $purchaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
                         'size' => 11
                     ),
                     "paragraphStyle" => array(
-                        'nospacing' => true,
-                        'align'     => 'right'
+                        'nospacing'  => true,
+                        'align'      => 'right',
+                        'spaceAfter' => 0
                     )
                 )
         ),
@@ -478,7 +501,8 @@ $purchaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -492,7 +516,8 @@ $purchaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -506,7 +531,8 @@ $purchaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -520,7 +546,8 @@ $purchaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => null,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -541,7 +568,8 @@ $purchaseQuoteTable = (object)array(
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
                         "bgColor"          => 'D9D9D9',
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -557,7 +585,8 @@ $purchaseQuoteTable = (object)array(
                         "borderLeftSize"   => 1,
                         "bgColor"          => 'D9D9D9',
                         "valign"           => 'center',
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "cell2Span3"     => array(
                         "borderTopSize"    => 1,
@@ -612,7 +641,8 @@ $purchaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -627,7 +657,8 @@ $purchaseQuoteTable = (object)array(
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
                         "valign"           => 'center',
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -645,7 +676,8 @@ $purchaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        "valign"           => 'center',
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
@@ -668,7 +700,8 @@ $purchaseQuoteTable = (object)array(
                         "borderLeftSize"   => 1,
                         "borderColor"      => 'BFBFBF',
                         "bgColor"          => 'D9D9D9',
-                        "align"            => 'right'
+                        "align"            => 'right',
+                        "valign"           => "center",
                     ),
                     "purchaseTotal"  => array(
                         "borderTopSize"    => 1,
@@ -712,22 +745,24 @@ $purchaseQuoteTable = (object)array(
                 )
         ),
     "pages"        => (object)array(
-            "rowheight" => null,
+            "rowheight" => 500,
             "cell1"     => (object)array(
                     "cellStyle"      => array(
                         "borderTopSize"    => 1,
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        'valign'           => 'center',
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',
                         'size' => 11
                     ),
                     "paragraphStyle" => array(
-                        'nospacing' => true,
-                        'align'     => 'right'
+                        'nospacing'  => true,
+                        'align'      => 'right',
+                        'spaceAfter' => 0
                     )
                 ),
 
@@ -737,7 +772,8 @@ $purchaseQuoteTable = (object)array(
                         "borderRightSize"  => 1,
                         "borderBottomSize" => 1,
                         "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF'
+                        "borderColor"      => 'BFBFBF',
+                        'valign'           => 'center',
                     ),
                     "fontStyle"      => array(
                         'name' => 'Calibri',

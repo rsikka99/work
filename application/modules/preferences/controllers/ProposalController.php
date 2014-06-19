@@ -12,7 +12,7 @@ class Preferences_ProposalController extends Tangent_Controller_Action
         $this->view->headTitle('Settings');
         $this->view->headTitle('Dealer Report');
         // Initialize and get the form
-        $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $dealer = Application_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
 
         $combinedSettings                    = array_merge($dealer->getDealerSettings()->getAssessmentSettings()->toArray(), $dealer->getDealerSettings()->getSurveySettings()->toArray());
         $assessmentId                        = $dealer->getDealerSettings()->getAssessmentSettings()->toArray()['id'];
@@ -94,7 +94,7 @@ class Preferences_ProposalController extends Tangent_Controller_Action
         // Initialize and get the form
 
         // Dealer
-        $dealer                 = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $dealer                 = Application_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
         $combinedDealerSettings = array_merge($dealer->getDealerSettings()->getAssessmentSettings()->toArray(), $dealer->getDealerSettings()->getSurveySettings()->toArray());
 
         // User

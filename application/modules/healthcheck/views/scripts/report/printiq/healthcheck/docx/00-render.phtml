@@ -5,16 +5,16 @@ $phpWord = $this->phpword;
 /**
  * Styles
  */
-$headingColor                  = My_Brand::$reportHeadingColor;
-$h2Background                  = My_Brand::$reportHeadingBackgroundColor;
-$titleBackgroundColor1         = My_Brand::$reportTitlePageTitleBackgroundColor;
-$titleBackgroundColor2         = My_Brand::$reportTitlePageInformationBackgroundColor;
-$titleTextColor                = My_Brand::$reportTitlePageTitleColor;
-$titleTextColor2               = My_Brand::$reportTitlePageInformationColor;
+$h1Color                       = My_Brand::getDealerBranding()->h1FontColor;
+$h1Background                  = My_Brand::getDealerBranding()->h1BackgroundColor;
+$h2Background                  = My_Brand::getDealerBranding()->h2BackgroundColor;
+$titleBackgroundColor1         = My_Brand::getDealerBranding()->titlePageTitleBackgroundColor;
+$titleBackgroundColor2         = My_Brand::getDealerBranding()->titlePageInformationBackgroundColor;
+$titleTextColor                = My_Brand::getDealerBranding()->titlePageTitleFontColor;
+$titleTextColor2               = My_Brand::getDealerBranding()->titlePageInformationFontColor;
 $titleWhiteBackgroundTextColor = My_Brand::$reportWhiteTitlePageTextColor;
-$h2Background                  = My_Brand::$reportHeadingBackgroundColor;
-$h2Color                       = My_Brand::$reportSubHeadingColor;
-$h3Color                       = My_Brand::$reportHeadingColor;
+$h2Color                       = My_Brand::getDealerBranding()->h2FontColor;
+$h3Color                       = My_Brand::getDealerBranding()->h1FontColor;
 
 $paragraphFont = "Arial";
 
@@ -40,17 +40,11 @@ $titlepageSection = $phpWord->addSection(array(
 ));
 $section          = $phpWord->addSection();
 
-// Header and Footer in PHPWord is not working correctly
-//$header = $section->createHeader();
-//$header->addText("Testing");
-//$footer = $section->createFooter();
-//$footer->addText("TEXT");
-
-
 /**
  * Paragraph styles
  */
 // Title page
+
 $phpWord->addParagraphStyle('titleStyle1', array(
     'align'      => 'center',
     'spaceAfter' => 100,
@@ -78,6 +72,18 @@ $phpWord->addParagraphStyle('titleStyle3', array(
 ));
 $phpWord->addParagraphStyle('titleTextStyle1', array(
     'spaceAfter' => 25,
+    'tabs'       => array(
+        new \PhpOffice\PhpWord\Style\Tab('left', 800)
+    ),
+    'shading'    => array(
+        'fill' => $titleBackgroundColor2,
+    )
+));
+$phpWord->addParagraphStyle('titleTextStyle2', array(
+    'spaceAfter' => 25,
+    'tabs'       => array(
+        new \PhpOffice\PhpWord\Style\Tab('left', 1200)
+    ),
     'shading'    => array(
         'fill' => $titleBackgroundColor2,
     )
@@ -222,11 +228,13 @@ $phpWord->addFontStyle('small_italic_text', array(
 // H1 Style
 $phpWord->addTitleStyle(1, array(
     'size'  => 15,
-    'color' => $headingColor,
+    'color' => $h1Color,
     'bold'  => true
 ), array(
     'borderBottomSize' => 1,
-
+    'shading'          => array(
+        'fill' => $h1Background,
+    ),
 ));
 // H2 Style #5881BC
 $phpWord->addTitleStyle(2, array(
@@ -813,12 +821,12 @@ $data = array(
     "section"              => $section,
     "healthcheckViewModel" => $this->healthcheckViewModel,
     "styles"               => $styles,
-    "brandName"            => My_Brand::$brandName,
-    "companyName"          => My_Brand::$companyName,
-    "companyNameFull"      => My_Brand::$companyNameFull,
+    "brandName"            => My_Brand::getDealerBranding()->mpsProgramName,
+    "companyName"          => My_Brand::getDealerBranding()->shortDealerName,
+    "companyNameFull"      => My_Brand::getDealerBranding()->shortDealerNameFull,
     "jit"                  => My_Brand::$jit,
-    "jitName"              => My_Brand::$jitName,
-    "jitFullName"          => My_Brand::$jitFullName
+    "jitName"              => My_Brand::getDealerBranding()->shortJitProgramName,
+    "jitFullName"          => My_Brand::getDealerBranding()->jitProgramName
 );
 // Actual document pages
 $this->partial("report/printiq/healthcheck/docx/01_titlepage.phtml", $titledata);

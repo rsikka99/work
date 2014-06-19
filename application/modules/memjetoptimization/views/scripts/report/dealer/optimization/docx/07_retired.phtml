@@ -42,7 +42,6 @@ foreach ($memjetOptimizationDevices->retired as $device)
     $masterDevice = $device->getMasterDevice();
     $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
 
-    $table->addRow($tcStyle->body->rowheight);
     $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
 
     $table->addRow($tcStyle->body->rowheight);

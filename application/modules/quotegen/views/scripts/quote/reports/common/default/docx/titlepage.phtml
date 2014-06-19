@@ -1,23 +1,16 @@
 <?php
-/**
- * Assessment Title Page
- */
-
-/* @var $phpword \PhpOffice\PhpWord\PhpWord*/
+/* @var $phpword \PhpOffice\PhpWord\PhpWord */
 $phpword = $this->phpword;
 
 /* @var $quote Quotegen_Model_Quote */
 $quote = $this->quote;
 
 /* @var $section \PhpOffice\PhpWord\Element\Section */
-$titlepage = $this->section;
-
-$titleImageStyle = array(
-    'align' => 'center'
-);
+$section = $this->section;
+$client  = $quote->getClient();
 
 // Table to fix the issue of images being different sizes
-$imageTable = $titlepage->addTable(array());
+$imageTable = $section->addTable(array());
 $imageTable->addRow(5760);
 $cell = $imageTable->addCell(9028.8, array(
     'valign' => 'center'
@@ -27,26 +20,37 @@ $cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, array(
     'align' => 'center'
 ));
 
+/**
+ * Main title
+ */
+$section->addTextBreak();
+$section->addText($this->translate(''), null, 'titleStyle2');
+$section->addText($this->translate(My_Brand::getDealerBranding()->shortDealerName . ' Hardware Quote'), 'titlepage_title', 'titleStyle2');
+$section->addText($this->translate(''), null, 'titleStyle2');
 
-$titlepage->addTextBreak();
-// Assessment Title
-$titlepage->addText($this->translate(' '), null, 'titleStyle2');
-$titlepage->addText($this->translate('  MPSToolbox.com Hardware Quote'), 'titlepage_title', 'titleStyle2');
-$titlepage->addText($this->translate(' '), null, 'titleStyle2');
+/**
+ * Prepared For: Company Name
+ */
+$section->addTextBreak();
+$section->addText('', 'titlepage_address', 'titleStyle3');
+$section->addText("\t" . sprintf($this->translate('Prepared For: %1$s'), $client->companyName), 'titlepage_subtitle', 'titleStyle3');
 
-
-$client = $quote->getClient();
-
-$titlepage->addTextBreak();
-
-$titlepage->addText(' ', 'titlepage_address', 'titleStyle3');
-$titlepage->addText(sprintf($this->translate('Prepared For: %1$s'), $client->companyName), 'titlepage_subtitle', 'titleStyle3');
-
-// Parse the address
+/**
+ * Address
+ */
 $addressLines = explode("\n", $client->getAddress()->getFullAddressMultipleLines());
 $addressCount = 1;
 foreach ($addressLines as $line)
 {
-    $titlepage->addText($line, 'titlepage_address', 'titleStyle3');
+    $section->addText("\t" . $line, 'titlepage_address', 'titleStyle3');
     $addressCount++;
+}
+
+// Add blank lines to fill up the page with yummy greyness
+if ($addressCount < 11)
+{
+    for ($i = 0; $i < 11 - $addressCount; $i++)
+    {
+        $section->addText('', 'titlepage_address', 'titleStyle3');
+    }
 }

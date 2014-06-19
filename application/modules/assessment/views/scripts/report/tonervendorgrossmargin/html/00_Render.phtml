@@ -1,9 +1,8 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$brandName = My_Brand::$brandName;
-$companyName = My_Brand::$companyName;
-$this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css"));
+$brandName = My_Brand::getDealerBranding()->mpsProgramName;
+$companyName = My_Brand::getDealerBranding()->shortDealerName;
 ?>
 <div class="container full-width gross-margin" id="htmlReportContainer">
 <div class="rows">
@@ -82,10 +81,10 @@ foreach ($this->vendorSeparatedData as $vendorData)
                 <tbody>
                 <tr>
                     <td class="column1">
-                        <div class="heading"><?php echo My_Brand::$brandName; ?> Monochrome CPP:</div>
+                        <div class="heading"><?php echo My_Brand::getDealerBranding()->mpsProgramName; ?> Monochrome CPP:</div>
                     </td>
                     <td class="column2">
-                        <div><?php echo $vendorData['statisticsGroup']['left'][My_Brand::$brandName . ' Monochrome CPP'] ?></div>
+                        <div><?php echo $vendorData['statisticsGroup']['left'][My_Brand::getDealerBranding()->mpsProgramName . ' Monochrome CPP'] ?></div>
                     </td>
                     <td class="column3">
                         <div class="heading">Total Cost:</div>
@@ -96,10 +95,10 @@ foreach ($this->vendorSeparatedData as $vendorData)
                 </tr>
                 <tr>
                     <td class="column1">
-                        <div class="heading"><?php echo My_Brand::$brandName; ?> Color CPP:</div>
+                        <div class="heading"><?php echo My_Brand::getDealerBranding()->mpsProgramName; ?> Color CPP:</div>
                     </td>
                     <td class="column2">
-                        <div><?php echo $vendorData['statisticsGroup']['left'][My_Brand::$brandName . ' Color CPP'] ?></div>
+                        <div><?php echo $vendorData['statisticsGroup']['left'][My_Brand::getDealerBranding()->mpsProgramName . ' Color CPP'] ?></div>
                     </td>
                     <td class="column3">
                         <div class="heading">Total Revenue:</div>

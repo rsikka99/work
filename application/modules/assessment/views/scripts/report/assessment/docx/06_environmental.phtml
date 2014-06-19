@@ -25,7 +25,11 @@ $section->addTextBreak();
 
 $section->addTitle('Energy Consumption', 2);
 $section->addTextBreak();
-$section->addText(sprintf('You are currently using an estimated average of %1$s kWh per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.', number_format($assessmentViewModel->getAveragePowerUsagePerMonth()), number_format($assessmentViewModel->getAveragePowerCostPerMonth()), number_format($assessmentViewModel->assessment->getAssessmentSettings()->kilowattsPerHour, 2)));
+$section->addText(sprintf('You are currently using an estimated average of %1$s kWh per month to operate printing devices at an estimated monthly cost of %2$s, assuming a cost of %3$s per kWh.',
+    number_format($assessmentViewModel->getAveragePowerUsagePerMonth()), // 1
+    $this->currency($assessmentViewModel->getAveragePowerCostPerMonth()), // 2
+    $this->currency($assessmentViewModel->assessment->getAssessmentSettings()->kilowattsPerHour, array('precision' => 4)))); // 3
+
 $section->addText('The following lists the devices with the highest average power consumption per month.');
 
 $cellWidths = array(
@@ -66,5 +70,3 @@ $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle)
 $imageTable->addRow();
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs [13]);
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs [14]);
-
-$section->addPageBreak();

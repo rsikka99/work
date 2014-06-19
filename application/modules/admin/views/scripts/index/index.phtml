@@ -102,6 +102,12 @@
                     Users<br /><br /></a>
             </div>
         <?php endif; ?>
+        <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_BRANDING_WILDCARD)) : ?>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "branding", "module" => "dealermanagement")); ?>"><i class="icon-wrench icon-4x"></i><br /><br />
+                    Branding<br /><br /></a>
+            </div>
+        <?php endif; ?>
         <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_MANUFACTURER_CREATE)) : ?>
             <div class="span2">
                 <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "manufacturer", "module" => "proposalgen")); ?>"><i class="icon-print icon-4x"></i><br /><br />

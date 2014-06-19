@@ -23,7 +23,7 @@ $section->addTextBreak();
 $headerTextRun = $section->addTextRun(array("spaceAfter" => 0));
 $headerTextRun->addText('Excluded Devices', 'titlepageHeaderFont');
 $headerTextRun->addText(sprintf(' (%1$s)', number_format($totalNumberOfDevices)));
-$section->addText("Devices that have either been manually excluded or haven't been mapped during previous steps.");
+$section->addText("Devices that have been manually excluded or have not been mapped during previous steps.");
 
 // Table with values
 $tcStyle = $this->styles->tables->excluded;

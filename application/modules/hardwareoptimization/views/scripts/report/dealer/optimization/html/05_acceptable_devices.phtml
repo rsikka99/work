@@ -9,7 +9,7 @@ $optimization = $this->optimization;
 $dealerOptimization = $this->dealerOptimization;
 
 /* @var $acceptableDeviceInstances Proposalgen_Model_DeviceInstance[] */
-$acceptableDeviceInstances = $this->deviceInstances[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_KEEP];
+$acceptableDeviceInstances = (isset($this->deviceInstances[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_KEEP]) ? $this->deviceInstances[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_KEEP] : array());
 
 /* @var $graphs array */
 $graphs = $this->graphs;

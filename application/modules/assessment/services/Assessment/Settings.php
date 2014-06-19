@@ -62,7 +62,7 @@ class Assessment_Service_Assessment_Settings
     public function __construct ($assessmentId, $userId, $dealerId)
     {
         $user                      = Application_Model_Mapper_User::getInstance()->find($userId);
-        $dealer                    = Admin_Model_Mapper_Dealer::getInstance()->find($dealerId);
+        $dealer                    = Application_Model_Mapper_Dealer::getInstance()->find($dealerId);
         $this->_assessment         = Assessment_Model_Mapper_Assessment::getInstance()->find($assessmentId);
         $this->_dealerSettings     = $dealer->getDealerSettings()->getAssessmentSettings();
         $this->_userSettings       = $user->getUserSettings()->getAssessmentSettings();

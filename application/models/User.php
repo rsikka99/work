@@ -95,7 +95,7 @@ class Application_Model_User extends My_Model_Abstract
     protected $_userSettings;
 
     /**
-     * @var Admin_Model_Dealer
+     * @var Application_Model_Dealer
      */
     protected $_dealer;
 
@@ -281,13 +281,13 @@ class Application_Model_User extends My_Model_Abstract
     /**
      * Gets the dealer object that the user belongs to.
      *
-     * @return Admin_Model_Dealer
+     * @return Application_Model_Dealer
      */
     public function getDealer ()
     {
         if (!isset($this->_dealer))
         {
-            $this->_dealer = Admin_Model_Mapper_Dealer::getInstance()->find($this->dealerId);
+            $this->_dealer = Application_Model_Mapper_Dealer::getInstance()->find($this->dealerId);
         }
 
         return $this->_dealer;

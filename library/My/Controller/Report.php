@@ -247,7 +247,7 @@ abstract class My_Controller_Report extends Tangent_Controller_Action
      */
     public function getDealerLogoFile ()
     {
-        $dealer   = Admin_Model_Mapper_Dealer::getInstance()->find($this->_identity->dealerId);
+        $dealer   = Application_Model_Mapper_Dealer::getInstance()->find($this->_identity->dealerId);
         $logoFile = false;
         if ($dealer)
         {

@@ -15,7 +15,7 @@ $section->addText('The following devices have been deemed productive and we sugg
 $tcStyle = $this->devicetables->tables->acceptable;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
-$table->addRow($tcStyle->body->rowheight,$this->styles->tables->rowheader);
+$table->addRow($tcStyle->body->rowheight, $this->styles->tables->rowheader);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
@@ -37,7 +37,7 @@ foreach ($profitabiltyDevices->kept as $device)
         $style     = $tcStyle->body->cell1->odd;
     }
 
-    $table->addRow($tcStyle->body->rowheight,$this->styles->tables->rowstyle);
+    $table->addRow($tcStyle->body->rowheight, $this->styles->tables->rowstyle);
 
     $cell = $table->addCell($tcStyle->collWidth, $style);
     $cell->addText($device->getMasterDevice()->getManufacturer()->fullname, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell1->manufacturerName->paragraphStyle);
@@ -52,7 +52,21 @@ foreach ($profitabiltyDevices->kept as $device)
 
 $section->addTextBreak();
 $section->addTitle('Number of Printing Device Models and Supply Types', 2);
-$section->addText(sprintf('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.', number_format(count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances())), number_format($optimization->getNumberOfUniqueModels()), number_format(count($optimization->getDevices()->leasedDeviceInstances->getDeviceInstances())), number_format(count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances())), number_format($optimization->getNumberOfUniquePurchasedModels()), number_format($optimization->getNumberOfUniquePurchasedToners()), number_format($optimization->getCashHeldInInventory())));
+$section->addText(sprintf('Out of your %1$s networked printing devices, you have %2$s unique %3$s. Each section of the chart below represents a single model type. We estimate that %4$s of your printing devices %5$s leased %6$s, for which supplies are included in your contract. The %7$s remaining %8$s of %9$s %10$s and %11$s %12$s %13$s. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.',
+    number_format(count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances())), //1
+    number_format($optimization->getNumberOfUniqueModels()), //2
+    (number_format($optimization->getNumberOfUniqueModels()) == 1) ? 'model' : 'models', //3
+    number_format(count($optimization->getDevices()->leasedDeviceInstances->getDeviceInstances())), //4
+    (number_format($optimization->getDevices()->leasedDeviceInstances->getCount()) == 1) ? 'is a' : 'are', //5
+    (number_format($optimization->getDevices()->leasedDeviceInstances->getCount()) == 1) ? 'machine' : 'machines', //6
+    number_format(count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances())), //7
+    (number_format($optimization->getDevices()->purchasedDeviceInstances->getCount()) == 1) ? 'machine consists' : 'machines consist', //8
+    number_format($optimization->getNumberOfUniquePurchasedModels()), //9
+    (number_format($optimization->getNumberOfUniquePurchasedModels()) == 1) ? 'model' : 'different models', //10
+    (number_format($optimization->getNumberOfUniquePurchasedModels()) == 1) ? 'uses' : 'use', //11
+    number_format($optimization->getNumberOfUniquePurchasedToners()), //12
+    (number_format($optimization->getNumberOfUniquePurchasedToners()) == 1) ? 'supply type' : 'different supply types', //13
+    number_format($optimization->getCashHeldInInventory())));
 $section->addTextBreak();
 
 $section->addImage($this->graphs [12], array('align' => 'center'));

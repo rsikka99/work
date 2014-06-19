@@ -11,7 +11,7 @@ $hardwareOptimization = $this->hardwareOptimization;
 
 $titleImageStyle = array('align' => 'center');
 
-$cellStyle = array('bgColor' => My_Brand::$reportTitlePageTitleBackgroundColor, 'width' => 15297);
+$cellStyle = array('bgColor' => My_Brand::getDealerBranding()->titlePageTitleBackgroundColor, 'width' => 15297);
 
 // Table to fix the issue of images being different sizes
 $imageTable = $section->addTable();
@@ -26,25 +26,25 @@ $section->addTextBreak();
 
 // Assessment Title
 
-$section->addText(' ', null, 'titleStyle1');
-$section->addText('  Hardware Optimization', 'titlepage_title', 'titleStyle1');
-$section->addText(' ', null, 'titleStyle1');
+$section->addText('', null, 'titleStyle1');
+$section->addText('Hardware Optimization', 'titlepage_title', 'titleStyle1');
+$section->addText('', null, 'titleStyle1');
 
 $section->addTextBreak();
 
-$section->addText(' ', 'titlepage_address', 'titleStyle3');
-$section->addText(sprintf('Prepared For: %1$s', $this->hardwareOptimization->getClient()->companyName), 'titlepage_subtitle', 'titleStyle3');
+$section->addText('', 'titlepage_address', 'titleStyle3');
+$section->addText(sprintf("\t" . 'Prepared For: %1$s', $this->hardwareOptimization->getClient()->companyName), 'titlepage_subtitle', 'titleStyle3');
 
 // Parse the address
 $addressLines = explode("\n", $hardwareOptimization->getClient()->getAddress()->getFullAddressMultipleLines());
 $addressCount = 1;
 foreach ($addressLines as $line)
 {
-    $section->addText($line, 'titlepage_address', 'titleStyle3');
+    $section->addText("\t" . $line, 'titlepage_address', 'titleStyle3');
     $addressCount++;
 }
-$section->addText(' ', 'titlepage_address', 'titleStyle3');
-$section->addText('Date:' . " " . $hardwareOptimization->dateCreated, 'titlepage_address', 'titleStyle3');
+$section->addText('', 'titlepage_address', 'titleStyle3');
+$section->addText("\t" . 'Date:' . " " . $hardwareOptimization->dateCreated, 'titlepage_address', 'titleStyle3');
 
 // Add extra blank lines to make the grey box big
 if ($addressCount < 11)
