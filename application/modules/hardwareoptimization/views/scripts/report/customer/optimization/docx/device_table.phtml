@@ -29,7 +29,7 @@ if (count($deviceInstances) > 0)
 {
 
 // Table header
-    $table->addRow($tcStyle->body->rowheight,$this->tableStyle->rowheader);
+    $table->addRow($tcStyle->body->rowheight, $this->tableStyle->rowheader);
     $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
     $table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
     $table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
@@ -70,7 +70,7 @@ if (count($deviceInstances) > 0)
             $style     = $tcStyle->body->cell1->odd;
         }
 
-        $table->addRow($tcStyle->body->rowheight,$this->tableStyle->rowstyle);
+        $table->addRow($tcStyle->body->rowheight, $this->tableStyle->rowstyle);
         // Device Name
         $cell = $table->addCell($tcStyle->collWidth, $style);
         $cell->addText($masterDevice->getManufacturer()->fullname, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell1->manufacturerName->paragraphStyle);
@@ -133,6 +133,7 @@ if (count($deviceInstances) > 0)
 }
 else
 {
+    $table->addRow();
     $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('No devices fall under this category.', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 }
 
