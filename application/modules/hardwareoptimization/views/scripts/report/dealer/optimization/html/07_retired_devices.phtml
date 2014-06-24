@@ -19,8 +19,8 @@ $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
 <div class="pheader" id="retired">
     Retired Devices <em><?php echo '(' . number_format(count($retiredDeviceInstances)) . ' of ' . $this->totalDevices . ')' ?></em>
 </div>
-<em>Devices with both low volume and age of over 8 years have been targeted for retirement. We suggest migrating the page volume to another device in your
-    fleet. </em>
+<em>Devices with both low volume and age of over <?php echo Proposalgen_Model_DeviceInstance::RETIREMENT_AGE ?> years have been targeted for retirement. We suggest migrating the page volume to another device in your
+    fleet.</em>
 <table class="rDevices">
     <tr class="header">
         <th class="device-name">Device Name</th>

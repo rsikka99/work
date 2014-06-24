@@ -20,7 +20,7 @@ $section->addTextBreak();
 $headerTextRun = $section->addTextRun();
 $headerTextRun->addText('Retired Devices', 'titlepageHeaderFont');
 $headerTextRun->addText(sprintf(' (%1$s of %2$s)', number_format(count($retiredDeviceInstances)), number_format($this->totalDevices)));
-$section->addText("Devices with both low volume and age of over 8 years have been targeted for retirement. We suggest migrating the page volume to another device in your fleet. ");
+$section->addText(sprintf('Devices with both low volume and age of over %1$s years have been targeted for retirement. We suggest migrating the page volume to another device in your fleet.', Proposalgen_Model_DeviceInstance::RETIREMENT_AGE));
 
 // Table with values
 $tcStyle = $this->styles->tables->retire;
