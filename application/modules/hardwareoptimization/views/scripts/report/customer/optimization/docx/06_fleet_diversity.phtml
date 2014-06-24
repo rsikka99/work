@@ -16,7 +16,7 @@ $section = $this->section;
 
 $section->addTitle('Number of Printing Device Models and Supply Types', 2);
 $section->addText(sprintf('Out of your %1$s networked printing devices, you have %2$s unique %3$s. Each section of the chart below represents a single model type. We estimate that %4$s of your printing devices %5$s leased %6$s, for which supplies are included in your contract. The %7$s remaining %8$s of %9$s %10$s and %11$s %12$s %13$s. If you hold two of each supply in inventory, you have an estimated $%14$s in operating cash held in printer supplies inventory at any given time.',
-    number_format($optimization->getDevices()->purchasedDeviceInstances->getCount()), //1
+    number_format($optimization->getDevices()->allIncludedDeviceInstances->getCount()), //1
     number_format($optimization->getNumberOfUniqueModels()), //2
     (number_format($optimization->getNumberOfUniqueModels()) == 1) ? 'model' : 'models', //3
     number_format($optimization->getDevices()->leasedDeviceInstances->getCount()), //4
