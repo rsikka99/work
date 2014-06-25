@@ -10,6 +10,6 @@ $section = $this->section;
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
 
-$section->addTitle(sprintf('Your %1$s Health Check', $this->brandName), 1);
-$section->addText(sprintf('We greatly appreciate the opportunity to review your printing environment. Our process will examine the efficiency of your hardware and also provide an understanding of how much energy, trees and water is consumed by your toner usage each year. Our free PrintIQ Health Check will break down your current fleet and show you how you can lower your supplies cost, improve the productivity of your equipment and reduce the environmental impact of your fleet.', $this->brandName));
-$section->addText("Data used in this Health Check is compiled using remote monitoring software, from the past 30 days.");
+$section->addTitle(sprintf('Your %1$s', My_Brand::getDealerBranding()->healthCheckTitle), 1);
+$section->addText(sprintf('We greatly appreciate the opportunity to review your printing environment. Our process will examine the efficiency of your hardware and also provide an understanding of how much energy, trees and water is consumed by your toner usage each year. Our free %s will break down your current fleet and show you how you can lower your supplies cost, improve the productivity of your equipment and reduce the environmental impact of your fleet.', My_Brand::getDealerBranding()->healthCheckTitle));
+$section->addText("Data used in this review is compiled using remote monitoring software, from the past 30 days.");

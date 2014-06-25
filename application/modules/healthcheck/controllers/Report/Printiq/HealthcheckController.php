@@ -7,9 +7,7 @@ class Healthcheck_Report_Printiq_HealthcheckController extends Healthcheck_Libra
 {
 
     /**
-     * The assessmentAction displays the OD assessment report.
-     * Data is retrieved
-     * from the database and displayed using HTML, CSS, and javascript.
+     * @throws Exception
      */
     public function indexAction ()
     {
@@ -32,7 +30,7 @@ class Healthcheck_Report_Printiq_HealthcheckController extends Healthcheck_Libra
             "/healthcheck/report_printiq_healthcheck/generate/format/docx" => $this->_wordFormat
         );
 
-        $this->view->reportTitle = "Healthcheck";
+        $this->view->reportTitle = My_Brand::getDealerBranding()->healthCheckTitle;
 
         $format = $this->_getParam("format", "html");
         try
@@ -90,7 +88,7 @@ class Healthcheck_Report_Printiq_HealthcheckController extends Healthcheck_Libra
                 break;
         }
 
-        $filename = $this->generateReportFilename($this->getHealthcheck()->getClient(), 'Healthcheck') . ".$format";
+        $filename = $this->generateReportFilename($this->getHealthcheck()->getClient(), My_Brand::getDealerBranding()->healthCheckTitle) . ".$format";
 
         $this->initReportVariables($filename);
 

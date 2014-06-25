@@ -14,6 +14,16 @@ $this->headScript()->appendFile($this->baseUrl('/js/colorTextbox.js'));
         <?= $form->getElement('shortJitProgramName') ?>
     </fieldset>
     <fieldset>
+        <legend>Report Titles</legend>
+        <?= $form->getElement('assessmentTitle') ?>
+        <?= $form->getElement('customerCostAnalysisTitle') ?>
+        <?= $form->getElement('customerOptimizationTitle') ?>
+        <?= $form->getElement('healthCheckTitle') ?>
+        <?= $form->getElement('leaseQuoteTitle') ?>
+        <?= $form->getElement('purchaseQuoteTitle') ?>
+        <?= $form->getElement('solutionTitle') ?>
+    </fieldset>
+    <fieldset>
         <legend>Generic Report Colors</legend>
         <?= $form->getElement('titlePageTitleFontColor') ?>
         <?= $form->getElement('titlePageTitleBackgroundColor') ?>

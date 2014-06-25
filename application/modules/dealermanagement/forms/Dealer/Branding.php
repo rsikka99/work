@@ -91,7 +91,6 @@ class Dealermanagement_Form_Dealer_Branding extends Twitter_Bootstrap_Form_Horiz
         $this->addElement('text', 'titlePageTitleFontColor', array(
             'label'      => 'Title Page Title Font Color:',
             'required'   => true,
-
             'class'      => 'hex-color-input',
             'filters'    => array('StringTrim', 'StripTags',),
             'validators' => array(
@@ -102,7 +101,6 @@ class Dealermanagement_Form_Dealer_Branding extends Twitter_Bootstrap_Form_Horiz
         $this->addElement('text', 'titlePageTitleBackgroundColor', array(
             'label'      => 'Title Page Title Background Color:',
             'required'   => true,
-
             'class'      => 'hex-color-input',
             'filters'    => array('StringTrim', 'StripTags',),
             'validators' => array(
@@ -113,7 +111,6 @@ class Dealermanagement_Form_Dealer_Branding extends Twitter_Bootstrap_Form_Horiz
         $this->addElement('text', 'titlePageInformationFontColor', array(
             'label'      => 'Title Page Text Color:',
             'required'   => true,
-
             'class'      => 'hex-color-input',
             'filters'    => array('StringTrim', 'StripTags',),
             'validators' => array(
@@ -124,7 +121,6 @@ class Dealermanagement_Form_Dealer_Branding extends Twitter_Bootstrap_Form_Horiz
         $this->addElement('text', 'titlePageInformationBackgroundColor', array(
             'label'      => 'Title Page Text Background Color:',
             'required'   => true,
-
             'class'      => 'hex-color-input',
             'filters'    => array('StringTrim', 'StripTags',),
             'validators' => array(
@@ -135,7 +131,6 @@ class Dealermanagement_Form_Dealer_Branding extends Twitter_Bootstrap_Form_Horiz
         $this->addElement('text', 'h1FontColor', array(
             'label'      => 'H1 Font Color:',
             'required'   => true,
-
             'class'      => 'hex-color-input',
             'filters'    => array('StringTrim', 'StripTags',),
             'validators' => array(
@@ -146,7 +141,6 @@ class Dealermanagement_Form_Dealer_Branding extends Twitter_Bootstrap_Form_Horiz
         $this->addElement('text', 'h1BackgroundColor', array(
             'label'      => 'H1 Background Color:',
             'required'   => true,
-
             'class'      => 'hex-color-input',
             'filters'    => array('StringTrim', 'StripTags',),
             'validators' => array(
@@ -157,7 +151,6 @@ class Dealermanagement_Form_Dealer_Branding extends Twitter_Bootstrap_Form_Horiz
         $this->addElement('text', 'h2FontColor', array(
             'label'      => 'H2 Font Color:',
             'required'   => true,
-
             'class'      => 'hex-color-input',
             'filters'    => array('StringTrim', 'StripTags',),
             'validators' => array(
@@ -168,7 +161,6 @@ class Dealermanagement_Form_Dealer_Branding extends Twitter_Bootstrap_Form_Horiz
         $this->addElement('text', 'h2BackgroundColor', array(
             'label'      => 'H2 Background Color:',
             'required'   => true,
-
             'class'      => 'hex-color-input',
             'filters'    => array('StringTrim', 'StripTags',),
             'validators' => array(
@@ -224,8 +216,8 @@ class Dealermanagement_Form_Dealer_Branding extends Twitter_Bootstrap_Form_Horiz
 
         $this->addElement('text', 'graphMonoDeviceColor', array(
             'label'      => 'Graph Color - Monochrome Devices:',
-            'required'   => true,'class'      => 'hex-color-input',
-
+            'required'   => true,
+            'class'      => 'hex-color-input',
             'filters'    => array('StringTrim', 'StripTags',),
             'validators' => array(
                 $hexColorValidator,
@@ -234,8 +226,8 @@ class Dealermanagement_Form_Dealer_Branding extends Twitter_Bootstrap_Form_Horiz
 
         $this->addElement('text', 'graphColorDeviceColor', array(
             'label'      => 'Graph Color - Color Devices:',
-            'required'   => true,'class'      => 'hex-color-input',
-
+            'required'   => true,
+            'class'      => 'hex-color-input',
             'filters'    => array('StringTrim', 'StripTags',),
             'validators' => array(
                 $hexColorValidator,
@@ -244,8 +236,8 @@ class Dealermanagement_Form_Dealer_Branding extends Twitter_Bootstrap_Form_Horiz
 
         $this->addElement('text', 'graphCopyCapableDeviceColor', array(
             'label'      => 'Graph Color - Copy/Scan Capable Devices:',
-            'required'   => true,'class'      => 'hex-color-input',
-
+            'required'   => true,
+            'class'      => 'hex-color-input',
             'filters'    => array('StringTrim', 'StripTags',),
             'validators' => array(
                 $hexColorValidator,
@@ -254,8 +246,8 @@ class Dealermanagement_Form_Dealer_Branding extends Twitter_Bootstrap_Form_Horiz
 
         $this->addElement('text', 'graphDuplexCapableDeviceColor', array(
             'label'      => 'Graph Color - Duplex Capable Devices:',
-            'required'   => true,'class'      => 'hex-color-input',
-
+            'required'   => true,
+            'class'      => 'hex-color-input',
             'filters'    => array('StringTrim', 'StripTags',),
             'validators' => array(
                 $hexColorValidator,
@@ -264,8 +256,8 @@ class Dealermanagement_Form_Dealer_Branding extends Twitter_Bootstrap_Form_Horiz
 
         $this->addElement('text', 'graphFaxCapableDeviceColor', array(
             'label'      => 'Graph Color - Fax Capable Devices:',
-            'required'   => true,'class'      => 'hex-color-input',
-
+            'required'   => true,
+            'class'      => 'hex-color-input',
             'filters'    => array('StringTrim', 'StripTags',),
             'validators' => array(
                 $hexColorValidator,
@@ -274,8 +266,8 @@ class Dealermanagement_Form_Dealer_Branding extends Twitter_Bootstrap_Form_Horiz
 
         $this->addElement('text', 'graphPurchasedDeviceColor', array(
             'label'      => 'Graph Color - Purchased Devices:',
-            'required'   => true,'class'      => 'hex-color-input',
-
+            'required'   => true,
+            'class'      => 'hex-color-input',
             'filters'    => array('StringTrim', 'StripTags',),
             'validators' => array(
                 $hexColorValidator,
@@ -469,6 +461,90 @@ class Dealermanagement_Form_Dealer_Branding extends Twitter_Bootstrap_Form_Horiz
             'filters'    => array('StringTrim', 'StripTags',),
             'validators' => array(
                 $hexColorValidator,
+            ),
+        ));
+
+        $this->addElement('text', 'assessmentTitle', array(
+            'label'      => 'Assessment Title:',
+            'required'   => true,
+            'filters'    => array('StringTrim', 'StripTags',),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array('min' => 0, 'max' => 200),
+                ),
+            ),
+        ));
+
+        $this->addElement('text', 'customerCostAnalysisTitle', array(
+            'label'      => 'Customer Cost Analysis Title:',
+            'required'   => true,
+            'filters'    => array('StringTrim', 'StripTags',),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array('min' => 0, 'max' => 200),
+                ),
+            ),
+        ));
+
+        $this->addElement('text', 'customerOptimizationTitle', array(
+            'label'      => 'Customer Optimization Title:',
+            'required'   => true,
+            'filters'    => array('StringTrim', 'StripTags',),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array('min' => 0, 'max' => 200),
+                ),
+            ),
+        ));
+
+        $this->addElement('text', 'healthCheckTitle', array(
+            'label'      => 'Business Review Title:',
+            'required'   => true,
+            'filters'    => array('StringTrim', 'StripTags',),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array('min' => 0, 'max' => 200),
+                ),
+            ),
+        ));
+
+        $this->addElement('text', 'leaseQuoteTitle', array(
+            'label'      => 'Lease Quote Title:',
+            'required'   => true,
+            'filters'    => array('StringTrim', 'StripTags',),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array('min' => 0, 'max' => 200),
+                ),
+            ),
+        ));
+
+        $this->addElement('text', 'purchaseQuoteTitle', array(
+            'label'      => 'Purchase Quote Title:',
+            'required'   => true,
+            'filters'    => array('StringTrim', 'StripTags',),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array('min' => 0, 'max' => 200),
+                ),
+            ),
+        ));
+
+        $this->addElement('text', 'solutionTitle', array(
+            'label'      => 'Solution Title:',
+            'required'   => true,
+            'filters'    => array('StringTrim', 'StripTags',),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array('min' => 0, 'max' => 200),
+                ),
             ),
         ));
 

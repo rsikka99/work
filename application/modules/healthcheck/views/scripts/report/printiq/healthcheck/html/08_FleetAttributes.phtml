@@ -6,7 +6,7 @@ $healthcheckViewModel = $this->healthcheckViewModel;
 <p>The following provides a summary of your existing printing devices.</p>
 <p>Devices marked for future consideration are shown in gray.</p>
 
-<div class="pheader">Devices compatible with <?php echo My_Brand::getDealerBranding()->shortDealerNameFull; ?></div>
+<div class="pheader">Devices compatible with <?php echo My_Brand::getDealerBranding()->mpsProgramName; ?></div>
 <table cellspacing="0" class="genericTable" style="font-size: 10pt;">
     <thead>
     <tr class="shaded">
@@ -42,7 +42,7 @@ $healthcheckViewModel = $this->healthcheckViewModel;
     <?php endforeach; ?>
     </tbody>
 </table>
-<div class="pheader">Devices not compatible with <?php echo My_Brand::getDealerBranding()->shortDealerNameFull; ?></div>
+<div class="pheader">Devices not compatible with <?php echo My_Brand::getDealerBranding()->mpsProgramName; ?></div>
 <table cellspacing="0" class="genericTable" style="font-size: 10pt;">
     <thead>
     <tr class="shaded">

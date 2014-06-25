@@ -11,7 +11,7 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         </div>
     </div>
     <div class="right printiq-title-page-text">
-        <div class="printiq-title-page-header">Health Check</div>
+        <div class="printiq-title-page-header"><?= My_Brand::getDealerBranding()->healthCheckTitle ?></div>
         <div><i>Prepared for:</i></div>
         <div><?php echo $healthcheckViewModel->healthcheck->getClient()->companyName; ?></div>
         <div>

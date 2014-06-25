@@ -21,7 +21,7 @@ $h3Color                   = My_Brand::getDealerBranding()->h1FontColor;
 $properties = $phpword->getDocumentProperties();
 $properties->setCreator('MPS Assessment Software');
 $properties->setCompany('MPS Assessment Software');
-$properties->setTitle('Healthcheck');
+$properties->setTitle(My_Brand::getDealerBranding()->healthCheckTitle);
 $properties->setCategory('Dealer Report');
 $properties->setLastModifiedBy('MPS Assessment Software');
 $properties->setCreated(time());

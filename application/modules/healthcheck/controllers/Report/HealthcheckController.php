@@ -7,9 +7,7 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
 {
 
     /**
-     * The assessmentAction displays the OD assessment report.
-     * Data is retrieved
-     * from the database and displayed using HTML, CSS, and javascript.
+     * @throws Exception
      */
     public function indexAction ()
     {
@@ -17,7 +15,7 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
         $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED);
 
         /**
-         * If we have access to the PrintIQ Health Check, we will switch to it
+         * If we have access to the Health Check, we will switch to it
          */
         if (My_Feature::canAccess(My_Feature::HEALTHCHECK_PRINTIQ))
         {
@@ -33,7 +31,7 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
             "/healthcheck/report_healthcheck/generate/format/docx" => $this->_wordFormat
         );
 
-        $this->view->reportTitle = "Healthcheck";
+        $this->view->reportTitle = My_Brand::getDealerBranding()->healthCheckTitle;
 
         $format = $this->_getParam("format", "html");
         try
@@ -91,7 +89,7 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
                 break;
         }
 
-        $filename = $this->generateReportFilename($this->getHealthcheck()->getClient(), 'Healthcheck') . ".$format";
+        $filename = $this->generateReportFilename($this->getHealthcheck()->getClient(), My_Brand::getDealerBranding()->healthCheckTitle) . ".$format";
 
         $this->initReportVariables($filename);
 

@@ -7,11 +7,7 @@ $assessmentViewModel = $this->assessmentViewModel;
 <table cellspacing="0" class="gradesTable">
     <tr>
         <td class="gradeDescription">
-
-            <p><?php echo
-                    // FIXME: The way we change the reportname
-                $rankingText = str_replace("reportName", $this->brandName, $assessmentViewModel->getRanking()->getExpense()->RankingText);
-                htmlentities($rankingText); ?></p>
+            <p><?= $assessmentViewModel->getRanking()->getExpense()->RankingText ?></p>
         </td>
         <td class="gradeNumber"><?php echo number_format($assessmentViewModel->getRanking()->getExpense()->Rank, 1); ?></td>
     </tr>

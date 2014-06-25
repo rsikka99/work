@@ -30,7 +30,7 @@ $section->addListItem("Improve productivity and user satisfaction");
 $section->addListItem("Foster your eco-smart objectives");
 
 $section->addTitle('Step 1: Assess', 2);
-$section->addText(sprintf('This complimentary %1$s Smart Assessment will help us determine what your needs are for office print. By combining data collected from your printing devices with questionnaire responses, we can determine what is working and what isn\'t in your office print environment. From this information, we can build a managed print solution that meets your business needs.', $this->brandName));
+$section->addText(sprintf('This complimentary %1$s will help us determine what your needs are for office print. By combining data collected from your printing devices with questionnaire responses, we can determine what is working and what isn\'t in your office print environment. From this information, we can build a managed print solution that meets your business needs.', My_Brand::getDealerBranding()->assessmentTitle));
 
 $section->addTitle('Step 2: Optimize', 2);
 $tr = $section->addTextRun();
@@ -57,10 +57,10 @@ $section->addPageBreak();
 $section->addTitle('Step 3: Manage', 2);
 $section->addText('Ongoing management of your print environment enables you to focus on your core business, while we take care of print. By monitoring your print environment on an ongoing basis, we can help you decide if and when your managed print strategy needs to be updated to accommodate new needs.');
 
-$section->addTitle(sprintf('Potential Savings with %1$s', $this->brandName), 2);
-$section->addText(sprintf('%1$s can manage your existing printing devices that are not currently on a lease with another vendor. Note that while we have included all of your purchased equipment in the following calculations, not all of them may qualify for managed print services or just-in-time supplies fulfillment. Please refer to the %2$s Your Solution document for a complete list of qualified devices.', $this->companyName, $this->brandName));
+$section->addTitle(sprintf('Potential Savings with the %1$s program', $this->brandName), 2);
+$section->addText(sprintf('%1$s can manage your existing printing devices that are not currently on a lease with another vendor. Note that while we have included all of your purchased equipment in the following calculations, not all of them may qualify for managed print services or just-in-time supplies fulfillment. Please refer to the %2$s document for a complete list of qualified devices.', $this->companyName, My_Brand::getDealerBranding()->solutionTitle));
 
-$section->addTitle(sprintf('Estimated Costs: Printing Devices Managed with %1$s', $this->brandName), 3);
+$section->addTitle(sprintf('Estimated Costs: Printing Devices Managed with the %1$s program', $this->brandName), 3);
 
 $summaryTable = $section->addTable($this->styles->tables->expenseSummaryTable->tablestyle);
 

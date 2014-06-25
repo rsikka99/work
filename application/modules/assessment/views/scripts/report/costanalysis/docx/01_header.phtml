@@ -10,7 +10,7 @@ $section = $this->section;
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 
-$section->addTitle('Customer Cost Analysis');
+$section->addTitle(My_Brand::getDealerBranding()->customerCostAnalysisTitle);
 
 $textRun = $section->addTextRun();
 $textRun->addText("Average Monochrome CPP: ", array("bold" => true));

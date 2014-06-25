@@ -60,7 +60,7 @@ class Hardwareoptimization_Report_Customer_OptimizationController extends Hardwa
                 break;
         }
 
-        $filename = $this->generateReportFilename($this->getHardwareOptimization()->getClient(), 'Customer_Hardware_Optimization') . ".$format";
+        $filename = $this->generateReportFilename($this->getHardwareOptimization()->getClient(), My_Brand::getDealerBranding()->customerOptimizationTitle) . ".$format";
 
         $this->initReportVariables($filename);
         // Render early

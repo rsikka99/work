@@ -1,6 +1,6 @@
 <?php
 /**
- * Solution - Your PrintIQ� Solution
+ * Solution
  */
 /* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
@@ -21,9 +21,9 @@ $listParagraphStyle = array(
 /**
  * Section Start
  */
-$section->addTitle('Your Solution', 1);
+$section->addTitle(sprintf('Your %s', My_Brand::getDealerBranding()->solutionTitle), 1);
 
-$section->addText(sprintf('Based on your %1$s Smart Assessment, we have developed a choice of managed print solutions to meet your specific business needs.', $this->brandName));
+$section->addText(sprintf('Based on your %1$s, we have developed a choice of managed print solutions to meet your specific business needs.', My_Brand::getDealerBranding()->assessmentTitle));
 
 $section->addTitle('Managed Print Solution Objectives', 2);
 

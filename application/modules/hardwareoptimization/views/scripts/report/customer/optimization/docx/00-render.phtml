@@ -14,7 +14,7 @@ $phpWord = $this->phpword;
 // Initialize some properties
 $properties = $phpWord->getDocumentProperties();
 $properties->setCreator('MPS Assessment Software');
-$properties->setTitle('Customer Hardware Optimization Report');
+$properties->setTitle(My_Brand::getDealerBranding()->customerOptimizationTitle);
 $properties->setDescription('MPS Assessment Software');
 $properties->setCategory('Customer Report');
 $properties->setLastModifiedBy('MPS Assessment Software');

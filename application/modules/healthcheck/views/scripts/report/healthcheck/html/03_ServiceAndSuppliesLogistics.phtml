@@ -90,7 +90,7 @@ $tableData = array();
         </tr>
     <?php endforeach; ?>
 </table>
-<p>By using printing devices that use the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. <?php echo $this->reportName ?> can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
+<p>By using printing devices that use the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. The <?php echo My_Brand::getDealerBranding()->mpsProgramName ?> program can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
 
 <div class="pheader">Number of Printing Device Vendors</div>
 <p>Out of your <?php echo count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances()) ?>
@@ -102,9 +102,8 @@ $tableData = array();
     <img src="<?php echo $graphs['PercentPerDeviceBrand']; ?>" />
 </div>
 
-<div class="pheader">Number of Printing Devices Compatibile with <?php echo My_Brand::getDealerBranding()->shortDealerNameFull;?></div>
-<p>Out of your <?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?>
-    networked printing devices, you have
+<div class="pheader">Number of Printing Devices Compatible with <?php echo My_Brand::getDealerBranding()->shortDealerName; ?></div>
+<p>Out of your <?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?> networked printing devices, you have
     <strong><?php echo $healthcheckViewModel->getDevices()->isManagedDeviceInstances->getCount(); ?></strong> devices that are managed,  <?php echo $healthcheckViewModel->getDevices()->unmanagedDeviceInstances->getCount(); ?> devices that are not compatible and <?php echo $healthcheckViewModel->getDevices()->compatibleDeviceInstances->getCount() ?> devices compatible with <?php echo $this->jitFullName ?>. These non compatible devices are shown in the fleet attributes section below. A complete list of all devices and their <?php echo $this->jit ?> compatibility can be found in the Appendix.
 </p>
 <br />

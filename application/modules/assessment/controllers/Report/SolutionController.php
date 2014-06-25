@@ -81,7 +81,7 @@ class Assessment_Report_SolutionController extends Assessment_Library_Controller
                 break;
         }
 
-        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Solution') . ".$format";
+        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), My_Brand::getDealerBranding()->solutionTitle) . ".$format";
 
         $this->initReportVariables($filename);
 

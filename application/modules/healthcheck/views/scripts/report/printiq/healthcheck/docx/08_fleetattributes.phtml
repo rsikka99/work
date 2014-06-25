@@ -32,7 +32,7 @@ $tcStyle    = $this->styles->tables->fleetattributes;
 /**
  * Comatpbile with jit Devices
  */
-$section->addTitle(sprintf('Devices compatible with %1$s', My_Brand::getDealerBranding()->shortDealerNameFull), 2);
+$section->addTitle(sprintf('Devices compatible with %1$s', My_Brand::getDealerBranding()->mpsProgramName), 2);
 $compatibleDevicesTable = $section->addTable($tcStyle->tablestyle);
 $compatibleDevicesTable->addRow($tcStyle->rowheight,$this->styles->tables->rowheader);
 $compatibleDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'bold_text', 'nospacing_centeralign');
@@ -73,7 +73,7 @@ $cellWidths = array(
 /**
  * Non compatible with jit Devices
  */
-$section->addTitle(sprintf('Devices not compatible with %1$s', My_Brand::getDealerBranding()->shortDealerNameFull), 2);
+$section->addTitle(sprintf('Devices not compatible with %1$s', My_Brand::getDealerBranding()->mpsProgramName), 2);
 $notCompatibleDevicesTable = $section->addTable($tcStyle->tablestyle);
 $notCompatibleDevicesTable->addRow($tcStyle->rowheight,$this->styles->tables->rowheader);
 $notCompatibleDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'bold_text', 'nospacing_centeralign');

@@ -4,5 +4,5 @@ $healthcheckViewModel = $this->healthcheckViewModel;
 $graphs = $healthcheckViewModel->getGraphs();
 ?>
 <div class="pheader">Estimated OEM Toner Costs vs. Estimated Compatible Toner Costs</div>
-<p>You are saving money by moving to private brand toner for the machines that are on your <?php echo $this->jit; ?> Program.</p>
-<p><?php echo $this->reportName; ?> analyzed your usage on your ink and toner spend and you can save an additional <?php echo $this->currency($healthcheckViewModel->calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()) ?> over the next 6 months by moving to the suggested items on the attached analysis.</p>
+<p>You are saving money by moving to private brand toner for the machines that are on our <?php My_Brand::getDealerBranding()->shortJitProgramName ?> Program.</p>
+<p><?= My_Brand::getDealerBranding()->dealerName; ?> analyzed your usage on your ink and toner spend and you can save an additional <?php echo $this->currency($healthcheckViewModel->calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()) ?> over the next 6 months by moving to the suggested items on the attached analysis.</p>

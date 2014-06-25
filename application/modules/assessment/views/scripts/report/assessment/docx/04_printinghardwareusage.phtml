@@ -13,7 +13,7 @@ $section = $this->section;
 $assessmentViewModel = $this->assessmentViewModel;
 $graphs              = $assessmentViewModel->getGraphs();
 
-$section->addTitle(sprintf('Analysis: %1$s Hardware Usage', $this->brandName), 1);
+$section->addTitle('Analysis: Printing Hardware Usage', 1);
 
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
 $gradeTable->addRow();

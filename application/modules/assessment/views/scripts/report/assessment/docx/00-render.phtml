@@ -26,7 +26,7 @@ $properties = $phpWord->getDocumentProperties();
 $properties->setCreator('MPS Assessment Software');
 $properties->setCompany('MPS Assessment Software');
 $properties->setCategory('Customer Report');
-$properties->setTitle('Assessment');
+$properties->setTitle(My_Brand::getDealerBranding()->assessmentTitle);
 $properties->setLastModifiedBy('MPS Assessment Software');
 $properties->setCreated(time());
 $properties->setModified(time());

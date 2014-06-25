@@ -10,7 +10,7 @@ $properties = $phpWord->getDocumentProperties();
 $properties->setCreator('MPS Assessment Software');
 $properties->setCompany('MPS Assessment Software');
 $properties->setCategory('Customer Report');
-$properties->setTitle('Customer Cost Analysis');
+$properties->setTitle(My_Brand::getDealerBranding()->customerCostAnalysisTitle);
 $properties->setLastModifiedBy('MPS Assessment Software');
 $properties->setCreated(time());
 $properties->setModified(time());

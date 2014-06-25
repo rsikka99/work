@@ -57,7 +57,7 @@ $excludedDeviceCount = count($assessmentViewModel->getExcludedDevices());
 if ($excludedDeviceCount > 0)
 {
     $section->addTextBreak();
-    $section->addText(sprintf('There are %1$s devices not included in the analysis due to lack of data or model information. See the Appendix in the %2$s Your Solution document for details regarding the excluded device(s).', number_format($excludedDeviceCount), $this->brandName));
+    $section->addText(sprintf('There are %1$s devices not included in the analysis due to lack of data or model information. See the Appendix in the %2$s document for details regarding the excluded device(s).', number_format($excludedDeviceCount), My_Brand::getDealerBranding()->solutionTitle));
 }
 
 $section->addTitle('Efficiency of Break-Fix Service', 2);

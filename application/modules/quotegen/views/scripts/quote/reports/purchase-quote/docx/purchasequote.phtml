@@ -5,9 +5,6 @@ $commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
 // Render the elements in the theme
 $this->render("{$commonPartsBasePath}/styles.phtml");
 
-/**
- * Solution - Solution 1: PrintIQ�
- */
 /* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 $section->addPageBreak();
@@ -26,7 +23,7 @@ foreach ($quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
     {
         $table = $section->addTable($tcStyle->tablestyle);
 
-        $table->addRow($tcStyle->header->rowheight,$tcStyle->header->rowStyle);
+        $table->addRow($tcStyle->header->rowheight, $tcStyle->header->rowStyle);
         $table->addCell($tcStyle->col1Width, $tcStyle->header->cell1->cellStyle)->addText('Item', $tcStyle->header->cell1->fontStyle, $tcStyle->header->cell1->paragraphStyle);
         $table->addCell($tcStyle->col2Width, $tcStyle->header->cell2->cellStyle)->addText('SKU', $tcStyle->header->cell2->fontStyle, $tcStyle->header->cell2->paragraphStyle);
         $table->addCell($tcStyle->col3Width, $tcStyle->header->cell3->cellStyle)->addText('Description and Features', $tcStyle->header->cell3->fontStyle, $tcStyle->header->cell3->paragraphStyle);

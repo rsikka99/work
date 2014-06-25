@@ -25,7 +25,7 @@ $imageCell->addImage(ASSETS_PATH . "/printiq/titlepage_logo.png", array(
  */
 $detailsTable->addRow(4070);
 $textCell = $detailsTable->addCell(12240);
-$textCell->addText('Health Check', 'titlepage_title', 'nospacing_rightalign');
+$textCell->addText(My_Brand::getDealerBranding()->healthCheckTitle, 'titlepage_title', 'nospacing_rightalign');
 $textCell->addText('Prepared For: ', 'titlepage_subtitle_italic', 'rightalign');
 $textCell->addText(sprintf('%1$s', $healthcheckViewModel->healthcheck->getClient()->companyName), 'titlepage_subtitle', array(
     'align'       => 'right',

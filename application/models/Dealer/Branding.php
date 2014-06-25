@@ -23,22 +23,22 @@ class Application_Model_Dealer_Branding extends My_Model_Abstract
     /**
      * @var string
      */
-    public $mpsProgramName = 'MPS Program';
+    public $mpsProgramName = 'Toolbox MPS';
 
     /**
      * @var string
      */
-    public $shortMpsProgramName = 'MPS Program';
+    public $shortMpsProgramName = 'TMPS';
 
     /**
      * @var string
      */
-    public $jitProgramName = 'JIT Program';
+    public $jitProgramName = 'Toolbox JIT';
 
     /**
      * @var string
      */
-    public $shortJitProgramName = 'JIT';
+    public $shortJitProgramName = 'TJIT';
 
     /**
      * @var string
@@ -83,22 +83,22 @@ class Application_Model_Dealer_Branding extends My_Model_Abstract
     /**
      * @var string
      */
-    public $graphCustomerColor = '#CCCCCC';
+    public $graphCustomerColor = '#225ea8';
 
     /**
      * @var string
      */
-    public $graphDealerColor = '#5C3F9B';
+    public $graphDealerColor = '#fe9929';
 
     /**
      * @var string
      */
-    public $graphPositiveColor = '#E21736';
+    public $graphPositiveColor = '#0194D2';
 
     /**
      * @var string
      */
-    public $graphNegativeColor = '#0194D2';
+    public $graphNegativeColor = '#d7301f';
 
     /**
      * @var string
@@ -108,7 +108,7 @@ class Application_Model_Dealer_Branding extends My_Model_Abstract
     /**
      * @var string
      */
-    public $graphLeasedDeviceColor = '#E21736';
+    public $graphLeasedDeviceColor = '#d7301f';
 
     /**
      * @var string
@@ -123,22 +123,22 @@ class Application_Model_Dealer_Branding extends My_Model_Abstract
     /**
      * @var string
      */
-    public $graphKeepDeviceColor = '#E21736';
+    public $graphKeepDeviceColor = '#0194D2';
 
     /**
      * @var string
      */
-    public $graphReplacedDeviceColor = '#0194D2';
+    public $graphReplacedDeviceColor = '#ffffd4';
 
     /**
      * @var string
      */
-    public $graphDoNotRepairDeviceColor = '#EF6B18';
+    public $graphDoNotRepairDeviceColor = '#d7301f';
 
     /**
      * @var string
      */
-    public $graphRetireDeviceColor = '#FFCF00';
+    public $graphRetireDeviceColor = '#cc4c02';
 
     /**
      * @var string
@@ -168,7 +168,7 @@ class Application_Model_Dealer_Branding extends My_Model_Abstract
     /**
      * @var string
      */
-    public $graphNotCompatibleDeviceColor = '#E21736';
+    public $graphNotCompatibleDeviceColor = '#d7301f';
 
     /**
      * @var string
@@ -183,47 +183,82 @@ class Application_Model_Dealer_Branding extends My_Model_Abstract
     /**
      * @var string
      */
-    public $graphAgeOfDevices1 = '#008000';
+    public $graphAgeOfDevices1 = '#f1eef6';
 
     /**
      * @var string
      */
-    public $graphAgeOfDevices2 = '#54CC64';
+    public $graphAgeOfDevices2 = '#bdc9e1';
 
     /**
      * @var string
      */
-    public $graphAgeOfDevices3 = '#FFD000';
+    public $graphAgeOfDevices3 = '#74a9cf';
 
     /**
      * @var string
      */
-    public $graphAgeOfDevices4 = '#ff0000';
+    public $graphAgeOfDevices4 = '#0570b0';
 
     /**
      * @var string
      */
-    public $graphMonoDeviceColor = '#AAAAAA';
+    public $graphMonoDeviceColor = '#d7301f';
 
     /**
      * @var string
      */
-    public $graphColorDeviceColor = '#0094CF';
+    public $graphColorDeviceColor = '#0194D2';
 
     /**
      * @var string
      */
-    public $graphCopyCapableDeviceColor = '#00FF00';
+    public $graphCopyCapableDeviceColor = '#0194D2';
 
     /**
      * @var string
      */
-    public $graphDuplexCapableDeviceColor = '#FF00FF';
+    public $graphDuplexCapableDeviceColor = '#0194D2';
 
     /**
      * @var string
      */
-    public $graphFaxCapableDeviceColor = '#00FFFF';
+    public $graphFaxCapableDeviceColor = '#0194D2';
+
+    /**
+     * @var string
+     */
+    public $assessmentTitle = "Assessment";
+
+    /**
+     * @var string
+     */
+    public $customerCostAnalysisTitle = "Cost Analysis";
+
+    /**
+     * @var string
+     */
+    public $customerOptimizationTitle = "Hardware Optimization";
+
+    /**
+     * @var string
+     */
+    public $healthCheckTitle = "Business Review";
+
+    /**
+     * @var string
+     */
+    public $leaseQuoteTitle = "Hardware Quote";
+
+    /**
+     * @var string
+     */
+    public $purchaseQuoteTitle = "Hardware Quote";
+
+    /**
+     * @var string
+     */
+    public $solutionTitle = "Solution";
 
     /**
      * @var Application_Model_Dealer
@@ -461,6 +496,41 @@ class Application_Model_Dealer_Branding extends My_Model_Abstract
             $this->graphFaxCapableDeviceColor = $params->graphFaxCapableDeviceColor;
         }
 
+        if (isset($params->assessmentTitle) && !is_null($params->assessmentTitle))
+        {
+            $this->assessmentTitle = $params->assessmentTitle;
+        }
+
+        if (isset($params->customerCostAnalysisTitle) && !is_null($params->customerCostAnalysisTitle))
+        {
+            $this->customerCostAnalysisTitle = $params->customerCostAnalysisTitle;
+        }
+
+        if (isset($params->customerOptimizationTitle) && !is_null($params->customerOptimizationTitle))
+        {
+            $this->customerOptimizationTitle = $params->customerOptimizationTitle;
+        }
+
+        if (isset($params->healthCheckTitle) && !is_null($params->healthCheckTitle))
+        {
+            $this->healthCheckTitle = $params->healthCheckTitle;
+        }
+
+        if (isset($params->leaseQuoteTitle) && !is_null($params->leaseQuoteTitle))
+        {
+            $this->leaseQuoteTitle = $params->leaseQuoteTitle;
+        }
+
+        if (isset($params->purchaseQuoteTitle) && !is_null($params->purchaseQuoteTitle))
+        {
+            $this->purchaseQuoteTitle = $params->purchaseQuoteTitle;
+        }
+
+        if (isset($params->solutionTitle) && !is_null($params->solutionTitle))
+        {
+            $this->solutionTitle = $params->solutionTitle;
+        }
+
     }
 
     /**
@@ -513,6 +583,13 @@ class Application_Model_Dealer_Branding extends My_Model_Abstract
             "graphCopyCapableDeviceColor"         => $this->graphCopyCapableDeviceColor,
             "graphDuplexCapableDeviceColor"       => $this->graphDuplexCapableDeviceColor,
             "graphFaxCapableDeviceColor"          => $this->graphFaxCapableDeviceColor,
+            "assessmentTitle"                     => $this->assessmentTitle,
+            "customerCostAnalysisTitle"           => $this->customerCostAnalysisTitle,
+            "customerOptimizationTitle"           => $this->customerOptimizationTitle,
+            "healthCheckTitle"                    => $this->healthCheckTitle,
+            "leaseQuoteTitle"                     => $this->leaseQuoteTitle,
+            "purchaseQuoteTitle"                  => $this->purchaseQuoteTitle,
+            "solutionTitle"                       => $this->solutionTitle,
         );
     }
 

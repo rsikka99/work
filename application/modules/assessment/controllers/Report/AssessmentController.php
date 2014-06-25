@@ -26,7 +26,7 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
             "/assessment/report_assessment/generate/format/docx" => $this->_wordFormat
         );
 
-        $this->view->reportTitle = "Assessment";
+        $this->view->reportTitle = My_Brand::getDealerBranding()->assessmentTitle;
 
         $format = $this->_getParam("format", "html");
         try
@@ -84,7 +84,7 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
                 break;
         }
 
-        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Assessment') . ".$format";
+        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), My_Brand::getDealerBranding()->assessmentTitle) . ".$format";
 
         $this->initReportVariables($filename);
 

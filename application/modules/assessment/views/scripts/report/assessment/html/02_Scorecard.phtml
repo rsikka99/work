@@ -3,10 +3,10 @@
 $assessmentViewModel = $this->assessmentViewModel;
 $graphs = $assessmentViewModel->getGraphs();
 ?>
-<div class="h1">Your <?php echo $this->brandName; ?> Smart Assessment</div>
+<div class="h1">Your <?= My_Brand::getDealerBranding()->assessmentTitle ?></div>
 <p>It can be a challenge to understand your printing needs, and there are many factors to consider: hardware functionality, supplies delivery, service, parts,
     maintenance kits,
-    IT time spent supporting printers -- and the cost for all of this. This free <?php echo $this->brandName; ?> Smart Assessment will allow you to make sense
+    IT time spent supporting printers -- and the cost for all of this. This free <?= My_Brand::getDealerBranding()->assessmentTitle ?> will allow you to make sense
     of your printing needs and costs. <?php echo $this->companyName; ?>
     can help you get your office print under control with our smart and flexible managed print services solutions.</p>
 <br />
@@ -16,7 +16,7 @@ $graphs = $assessmentViewModel->getGraphs();
 <table cellspacing="0" class="gradesTable">
     <tr>
         <td class="gradeDescription">
-            <h4>Supplies and Service Logistics</h4>
+            <h4>Service and Supplies Logistics</h4>
 
             <p>Management breakdown, efficiency of break-fix service, number of vendors used for print, and number of different models and associated supply
                 types.</p>
@@ -61,8 +61,9 @@ $graphs = $assessmentViewModel->getGraphs();
 <div class="center">
     <img src="<?php echo $graphs[0]; ?>" /> <!-- Annual printing costs for purchased hardware -->
 </div>
-<br /> <br />
+<br />
+<br />
 <div class="annualSavings">
-    Our <?php echo $this->brandName; ?> program could provide you with annual savings of up to <strong>
-        &#36;<?php echo number_format($assessmentViewModel->getPrintIQSavings(), 0); ?></strong>.
+    Our <?php echo $this->brandName; ?> program could provide you with annual savings of up to
+    <strong><?php echo $this->currency($assessmentViewModel->getPrintIQSavings(), array('precision' => 0)); ?></strong>.
 </div>
