@@ -155,8 +155,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     protected $_pageCounts;
     public $highCostPurchasedDevices;
     public static $COLOR_ARRAY = array(
-        "A8BB19", "7CB9E8", "C9FFE5", "B284BE", "5D8AA8", "00308F", "72A0C1", "AF002A", "E32636", "C46210",
-        "EFDECD", "E52B50", "F19CBB", "3B7A57", "FFBF00", "FF7E00", "FF033E", "9966CC", "A4C639", "9FA91F",
+        "FF7E00", "7CB9E8", "C9FFE5", "B284BE", "5D8AA8", "00308F", "72A0C1", "AF002A", "E32636", "C46210",
+        "EFDECD", "A8BB19", "F19CBB", "3B7A57", "FFBF00", "FF9900", "FF033E", "9966CC", "A4C639", "9FA91F",
         "CD9575", "665D1E", "915C83", "841B2D", "FAEBD7", "008000", "8DB600", "FBCEB1", "00FFFF", "E4D00A",
         "7FFFD4", "4B5320", "3B444B", "8F9779", "E9D66B", "B2BEB5", "87A96B", "FF9966", "A52A2A", "FDEE00",
         "6E7F80", "568203", "007FFF", "89CFF0", "A1CAF1", "F4C2C2", "FF91AF", "21ABCD", "E34234", "D2691E",

@@ -118,27 +118,27 @@ class Application_Model_Dealer_Branding extends My_Model_Abstract
     /**
      * @var string
      */
-    public $graphIndustryAverageColor = '#0194D2';
+    public $graphIndustryAverageColor = '#94d201';
 
     /**
      * @var string
      */
-    public $graphKeepDeviceColor = '#0194D2';
+    public $graphKeepDeviceColor = '#94d201';
 
     /**
      * @var string
      */
-    public $graphReplacedDeviceColor = '#ffffd4';
+    public $graphReplacedDeviceColor = '#0194D2';
 
     /**
      * @var string
      */
-    public $graphDoNotRepairDeviceColor = '#d7301f';
+    public $graphDoNotRepairDeviceColor = '#FFD000';
 
     /**
      * @var string
      */
-    public $graphRetireDeviceColor = '#cc4c02';
+    public $graphRetireDeviceColor = '#d7301f';
 
     /**
      * @var string
@@ -173,32 +173,37 @@ class Application_Model_Dealer_Branding extends My_Model_Abstract
     /**
      * @var string
      */
-    public $graphCurrentSituationColor = '#0194D2';
+    public $graphCurrentSituationColor = '#EF6B18';
 
     /**
      * @var string
      */
-    public $graphNewSituationColor = '#EF6B18';
+    public $graphNewSituationColor = '#0194D2';
 
     /**
      * @var string
      */
-    public $graphAgeOfDevices1 = '#f1eef6';
+    public $graphOptimalSituationColor = '#94d201';
 
     /**
      * @var string
      */
-    public $graphAgeOfDevices2 = '#bdc9e1';
+    public $graphAgeOfDevices1 = '#0570b0';
 
     /**
      * @var string
      */
-    public $graphAgeOfDevices3 = '#74a9cf';
+    public $graphAgeOfDevices2 = '#74a9cf';
 
     /**
      * @var string
      */
-    public $graphAgeOfDevices4 = '#0570b0';
+    public $graphAgeOfDevices3 = '#bdc9e1';
+
+    /**
+     * @var string
+     */
+    public $graphAgeOfDevices4 = '#f1eef6';
 
     /**
      * @var string
