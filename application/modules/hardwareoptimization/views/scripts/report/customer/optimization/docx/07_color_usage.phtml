@@ -15,11 +15,11 @@ $graphs = $this->graphs;
 $section = $this->section;
 
 $section->addTitle('Color Usage', 2);
-$section->addText(sprintf('You currently have %1$s color printing %2$s that print a monthly average of %3$s color pages per month, which is %4$s%% of your total monthly print volume.',
+$section->addText(sprintf('You currently have %1$s color printing %2$s a total monthly average of %3$s color pages per month, which is %4$s%% of your total monthly print volume.',
     number_format($optimization->getNumberOfColorCapableDevices()), //1
-    (number_format($optimization->getNumberOfColorCapableDevices()) == 1) ? 'device' : 'devices', //2
+    (number_format($optimization->getNumberOfColorCapableDevices()) == 1) ? 'device that prints' : 'devices that print', //2
     $this->formatPageVolume($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()), //3
-    number_format(($optimization->getPercentages()->TotalColorPercentage * 100), 2))); //4
+    number_format(($optimization->getPercentages()->TotalColorPercentage * 100), 1))); //4
 
 $section->addText($this->translate('Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your
 company\'s professional image, improve comprehension and increase readership. %1$s can help you track your color printing and provide low-cost color hardware options.', $this->companyName));

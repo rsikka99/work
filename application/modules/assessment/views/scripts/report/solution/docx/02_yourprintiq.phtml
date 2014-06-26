@@ -23,7 +23,7 @@ $listParagraphStyle = array(
  */
 $section->addTitle(sprintf('Your %s', My_Brand::getDealerBranding()->solutionTitle), 1);
 
-$section->addText(sprintf('Based on your %1$s, we have developed a choice of managed print solutions to meet your specific business needs.', My_Brand::getDealerBranding()->assessmentTitle));
+$section->addText(sprintf('Based on your %1$s, we have developed a selection of managed print solutions to meet your specific business needs.', My_Brand::getDealerBranding()->assessmentTitle));
 
 $section->addTitle('Managed Print Solution Objectives', 2);
 
@@ -37,6 +37,7 @@ $section->addListItem('Reduce your environmental impact from office printing', 0
 $section->addTextBreak();
 
 $section->addTitle('Solution Recommendations', 2);
+$section->addText('To achieve the above objectives, we make the following recommendations:');
 
 $section->addListItem('Continue remote print management', 0, 'bold_text', $numberListStyle, $listParagraphStyle);
 $section->addListItem('Software is provided free of charge so we can monitor the status of your printing devices and supply levels.', 1, null, null, $listParagraphStyle);

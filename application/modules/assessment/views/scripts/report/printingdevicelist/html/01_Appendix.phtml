@@ -7,17 +7,17 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
 $this->jit = My_Brand::$jit;
 ?>
 <div class="h1">Printing Device List</div>
-<p>Below is a list of your printing device models and whether or not they are qualified for just-in-time supplies fulfillment. For devices not qualified for just-in-time supplies fulfillment, you can call into our office to order supplies for next-day delivery. Consider upgrading these devices to be on a 100% just-in-time supplies fulfillment model. Devices not included in the report are listed in a subsequent table. These devices are typically older models that are not compatible with remote monitoring software or do not qualify for the <?php echo $this->brandName ?> program.</p>
+<p>Below is a list of your printing device models and whether or not they are qualified for just-in-time supplies fulfillment. For devices not qualified for just-in-time supplies fulfillment, you can call into our office to order supplies for next-day delivery. Consider upgrading these devices to be on a 100% just-in-time supplies fulfillment model. Devices not included in the report are listed in a subsequent table. These devices are typically older models that are not compatible with remote monitoring software or do not qualify for our managed print program.</p>
 <br />
 <table class="genericTable" id="AppendixDeviceTable">
     <thead>
     <tr class="center">
         <th class="left">Manufacturer</th>
         <th class="left">Model</th>
-        <th>IP Address</th>
         <th>Serial No.</th>
+        <th>IP Address</th>
         <th>Age (Years)</th>
-        <th>Purchased <br />or Leased</th>
+        <th>Purchased or<br />Leased</th>
         <th>AMPV</th>
         <th><?php echo $this->jit; ?> <br />Comp.</th>
     </tr>
@@ -32,10 +32,10 @@ $this->jit = My_Brand::$jit;
                 <div><?php echo $deviceInstance->getMasterDevice()->modelName; ?></div>
             </td>
             <td class="column3">
-                <div class="center"><?php echo ($deviceInstance->ipAddress) ? : "Unknown"; ?></div>
+                <div class="center"><?php echo ($deviceInstance->serialNumber) ? : "Unknown"; ?></div>
             </td>
             <td class="column3">
-                <div class="center"><?php echo ($deviceInstance->serialNumber) ? : "Unknown"; ?></div>
+                <div class="center"><?php echo ($deviceInstance->ipAddress) ? : "Unknown"; ?></div>
             </td>
             <td class="column3">
                 <div class="center"><?php echo ($deviceInstance->getAge()) ? : "Unknown"; ?></div>

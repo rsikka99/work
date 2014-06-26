@@ -44,7 +44,7 @@ foreach ($addressLines as $line)
     $addressCount++;
 }
 $section->addText('', 'titlepage_address', 'titleStyle3');
-$section->addText("\t" . 'Date:' . " " . $hardwareOptimization->dateCreated, 'titlepage_address', 'titleStyle3');
+$section->addText(sprintf("\t Date: %s", $hardwareOptimization->getFormattedDatePrepared()), 'titlepage_address', 'titleStyle3');
 
 // Add extra blank lines to make the grey box big
 if ($addressCount < 11)

@@ -1247,7 +1247,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount(), 0);
             $highest          = ($averagePageCount > Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_DEVICE) ? $averagePageCount : Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_DEVICE;
             $barGraph         = new gchart\gBarChart(175, 300);
-            $barGraph->setTitle("Average monthly pages|per networked printer");
+            $barGraph->setTitle("Average Monthly Pages|per Networked Printer");
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -1284,7 +1284,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $pagesPerEmployee = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $employeeCount);
             $highest          = (Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
             $barGraph         = new gchart\gBarChart(175, 300);
-            $barGraph->setTitle("Average monthly pages|per employee");
+            $barGraph->setTitle("Average Monthly Pages|per Employee");
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -1320,7 +1320,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesPerEmployee = round($employeeCount / $this->getDevices()->allIncludedDeviceInstances->getCount(), 2);
             $highest            = ($devicesPerEmployee > Assessment_ViewModel_Assessment::AVERAGE_EMPLOYEES_PER_DEVICE) ? $devicesPerEmployee : Assessment_ViewModel_Assessment::AVERAGE_EMPLOYEES_PER_DEVICE;
             $barGraph           = new gchart\gBarChart(175, 300);
-            $barGraph->setTitle("Employees per|printing device");
+            $barGraph->setTitle("Employees per|Printing Device");
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -1384,8 +1384,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $notDuplexPercentage
             ));
             $duplexCapableGraph->setLegend(array(
-                "Duplex capable",
-                "Not duplex capable"
+                "Duplex-capable",
+                "Not duplex-capable"
             ));
             $duplexCapableGraph->setLabels(array(
                 "$duplexPercentage%"
@@ -1417,8 +1417,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $notScanPercentage
             ));
             $scanCapableGraph->setLegend(array(
-                "Scan capable",
-                "Not scan capable"
+                "Scan-capable",
+                "Not scan-capable"
             ));
             $scanCapableGraph->setLabels(array(
                 number_format($this->getDevices()->scanCapableDeviceInstances->getCount()),
@@ -1992,8 +1992,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $this->getMaximumMonthlyPrintVolume()
             ));
             $barGraph->setLegend(array(
-                "Estimated Actual Monthly Usage",
-                "Maximum Monthly Fleet Capacity"
+                "Estimated actual monthly usage",
+                "Maximum monthly fleet capacity"
             ));
             $barGraph->addAxisRange(0, 0, $highest * 1.3);
             $barGraph->setDataRange(0, $highest * 1.3);
@@ -2094,8 +2094,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $colorNonCapableDeviceCount
             ));
             $colorCapableGraph->setLegend(array(
-                "Color capable",
-                "Black and white only"
+                "Color-capable",
+                "Black-and-white only"
             ));
             $colorCapableGraph->setLabels(array(
                 $colorCapableDeviceCount,
@@ -2311,8 +2311,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 "FFFFFF"
             ));
             $barGraph->setLegend(array(
-                "Your Estimated Monthly Usage (% of Capacity)",
-                "Optimal Monthly Fleet Usage Range"
+                "Your estimated monthly usage (% of capacity)",
+                "Optimal monthly fleet usage range"
             ));
             $barGraph->addAxisRange(0, 0, $highest);
             $barGraph->setDataRange(0, $highest);
@@ -2456,7 +2456,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 str_replace('#', '', $dealerBranding->graphAgeOfDevices4),
             ));
             $AgeOfPrintingPieChart->setLegendPosition("bv");
-            $AgeOfPrintingPieChart->setTitle("Age of device");
+            $AgeOfPrintingPieChart->setTitle("Age of Devices");
             $AgeOfPrintingPieChart->setLabels(array(
                 number_format((($deviceAges ["Less than 3 years old"] / $numberOfIncludedDevices) * 100), 0) . "%",
                 number_format((($deviceAges ["3-5 years old"] / $numberOfIncludedDevices) * 100), 0) . "%",
@@ -2510,7 +2510,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 str_replace('#', '', $dealerBranding->graphAgeOfDevices4),
             ));
             $PrintIQAgeOfPrintingPieChart->setLegendPosition("bv");
-            $PrintIQAgeOfPrintingPieChart->setTitle("Age of device");
+            $PrintIQAgeOfPrintingPieChart->setTitle("Age of Devices");
             $PrintIQAgeOfPrintingPieChart->setLabels(array(
                 number_format((($deviceAges ["Less than 3 years old"] / $numberOfIncludedDevices) * 100), 0) . "%",
                 number_format((($deviceAges ["3-5 years old"] / $numberOfIncludedDevices) * 100), 0) . "%",
@@ -2589,7 +2589,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $PrintIQPagesPrintedByAgeBarGraph->setDataRange(0, $highest * 1.1);
             $PrintIQPagesPrintedByAgeBarGraph->setBarScale(45, 5);
             $PrintIQPagesPrintedByAgeBarGraph->setLegendPosition("bv");
-            $PrintIQPagesPrintedByAgeBarGraph->setTitle("Pages Printed By Age of Device");
+            $PrintIQPagesPrintedByAgeBarGraph->setTitle("Pages Printed By Age of Devices");
             $PrintIQPagesPrintedByAgeBarGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $PrintIQPagesPrintedByAgeBarGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             $PrintIQPagesPrintedByAgeBarGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
@@ -2615,8 +2615,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $duplexNonCapableDeviceCount
             ));
             $duplexCapableGraph->setLegend(array(
-                "Duplex capable",
-                "Not duplex capable"
+                "Duplex-capable",
+                "Not duplex-capable"
             ));
             $duplexCapableGraph->setLabels(array(
                 $duplexCapableDeviceCount,
@@ -2636,7 +2636,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount(), 0);
             $highest          = ($averagePageCount > Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_DEVICE) ? $averagePageCount : Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_DEVICE;
             $barGraph         = new gchart\gBarChart(165, 300);
-            $barGraph->setTitle("Average monthly pages|per networked printer");
+            $barGraph->setTitle("Average Monthly Pages|per Networked Printer");
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -2673,7 +2673,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $pagesPerEmployee = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $employeeCount);
             $highest          = (Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
             $barGraph         = new gchart\gBarChart(165, 300);
-            $barGraph->setTitle("Average monthly pages|per employee");
+            $barGraph->setTitle("Average Monthly Pages|per Employee");
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -2709,7 +2709,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesPerEmployee = round($employeeCount / $this->getDevices()->allIncludedDeviceInstances->getCount(), 2);
             $highest            = ($devicesPerEmployee > Assessment_ViewModel_Assessment::AVERAGE_EMPLOYEES_PER_DEVICE) ? $devicesPerEmployee : Assessment_ViewModel_Assessment::AVERAGE_EMPLOYEES_PER_DEVICE;
             $barGraph           = new gchart\gBarChart(165, 300);
-            $barGraph->setTitle("Employees per|printing device");
+            $barGraph->setTitle("Employees per|Printing Device");
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -2750,8 +2750,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $copyNonCapableDeviceCount
             ));
             $copyCapableGraph->setLegend(array(
-                "Copy capable",
-                "Not copy capable"
+                "Copy-capable",
+                "Not copy-capable"
             ));
             $copyCapableGraph->setLabels(array(
                 $copyCapableDeviceCount,
@@ -2804,15 +2804,15 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setLegendPosition("b|l");
 
             $barGraph->setLegend(array(
-                "Managed/On " . My_Brand::$jit,
-                "Not " . My_Brand::$jit . " Compatible",
-                My_Brand::$jit . " Compatible",
+                "Managed/on " . My_Brand::$jit,
+                "Not " . My_Brand::$jit . " compatible",
+                My_Brand::$jit . " compatible",
             ));
 
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
-            $barGraph->setTitle("Total printers on network");
+            $barGraph->setTitle("Total Printers on Network");
             // Graphs[ManagedVsNotJitVsJitDevices]
             $healthcheckGraphs['ManagedVsNotJitVsJitDevices'] = $barGraph->getUrl();
 
@@ -2874,10 +2874,10 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setLegendPosition("b|l");
 
             $barGraph->setLegend(array(
-                "Managed/On " . My_Brand::$jit,
+                "Managed/on " . My_Brand::$jit,
                 "Manageable",
-                "Future Review",
-                "Insufficient Data",
+                "Future review",
+                "Insufficient data",
             ));
 
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
@@ -2885,7 +2885,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "3", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "4", "-1", "11");
-            $barGraph->setTitle("Total printers on network");
+            $barGraph->setTitle("Total Printers on Network");
             // Graphs[UnmanagedVsManagedDevices]
             $healthcheckGraphs['UnmanagedVsManagedDevices'] = $barGraph->getUrl();
 
@@ -2894,9 +2894,9 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              */
             $barGraph = new gchart\gBarChart(280, 230);
 
-            $pagesPrintedOnManaged           = "Managed/On " . My_Brand::$jit;
+            $pagesPrintedOnManaged           = "Managed/on " . My_Brand::$jit;
             $pagesPrintedOnUnmanaged         = "Manageable";
-            $pagesPrintedManagedByThirdParty = "Future Review";
+            $pagesPrintedManagedByThirdParty = "Future review";
 
             $pagesPrinted                                   = array(
                 $pagesPrintedOnManaged           => 0,
@@ -2942,7 +2942,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $pagesPrintedOnUnmanaged,
                 $pagesPrintedManagedByThirdParty,
             ));
-            $barGraph->setTitle("Total pages printed");
+            $barGraph->setTitle("Total Pages Printed");
             $barGraph->setProperty('chxs', '0N*sz0*');
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
@@ -2956,9 +2956,9 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              */
             $barGraph = new gchart\gBarChart(280, 230);
 
-            $pagesPrintedOnManaged       = "Managed/On " . My_Brand::$jit;
-            $pagesPrintedOnNotCompatible = "Not " . My_Brand::$jit . " Compatible";
-            $pagesPrintedOnCompatible    = My_Brand::$jit . " Compatible";
+            $pagesPrintedOnManaged       = "Managed/on " . My_Brand::$jit;
+            $pagesPrintedOnNotCompatible = "Not " . My_Brand::$jit . " compatible";
+            $pagesPrintedOnCompatible    = My_Brand::$jit . " compatible";
 
             $pagesPrinted = array(
                 $pagesPrintedOnManaged       => 0,
@@ -3005,7 +3005,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $pagesPrintedOnNotCompatible,
                 $pagesPrintedOnCompatible,
             ));
-            $barGraph->setTitle("Total pages printed");
+            $barGraph->setTitle("Total Pages Printed");
             $barGraph->setProperty('chxs', '0N*sz0*');
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
@@ -3022,7 +3022,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $uniqueDevicesGraph = new gchart\gPie3DChart(400, 250);
             $uniqueDevicesGraph->addDataSet($uniqueModelArray);
             $uniqueDevicesGraph->addColors(array_slice(self::$COLOR_ARRAY, 0, count($uniqueModelArray)));
-            $uniqueDevicesGraph->setTitle("Percent per device on your network|Total Devices - " . $numberOfIncludedDevices);
+            $uniqueDevicesGraph->setTitle("Percent per Device on your Network|Total Devices - " . $numberOfIncludedDevices);
             // Graphs[UniqueDevicesGraph]
             $healthcheckGraphs['UniqueDevicesGraph'] = $uniqueDevicesGraph->getUrl();
 
@@ -3031,7 +3031,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              */
             $smallerSubsetOfColors = array_slice(self::$COLOR_ARRAY, 0, 30);
             $percentPerDeviceBrand = new gchart\gPie3DChart(400, 250);
-            $percentPerDeviceBrand->setTitle("Percent per device brand on your network|Total Devices - " . $numberOfIncludedDevices);
+            $percentPerDeviceBrand->setTitle("Percent per Device Brand on your Network|Total Devices - " . $numberOfIncludedDevices);
             $deviceVendorCount = $this->getDeviceVendorCount();
             $percentPerDeviceBrand->addDataSet($deviceVendorCount);
 
@@ -3067,8 +3067,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $notFaxPercentage
             ));
             $faxCapable->setLegend(array(
-                "Fax capable",
-                "Not fax capable"
+                "Fax-capable",
+                "Not fax-capable"
             ));
             $faxCapable->setLabels(array(
                 number_format($this->getDevices()->faxCapableDeviceInstances->getCount()),

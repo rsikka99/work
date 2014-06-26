@@ -31,6 +31,11 @@ class Hardwareoptimization_Model_Hardware_Optimization extends My_Model_Abstract
     public $dateCreated;
 
     /**
+     * @var string
+     */
+    public $dateReportPrepared;
+
+    /**
      * @var int
      */
     public $lastModified;
@@ -203,5 +208,21 @@ class Hardwareoptimization_Model_Hardware_Optimization extends My_Model_Abstract
         }
 
         return $this->_rmsUpload;
+    }
+
+    /**
+     * For getting formatted date of dateCreated for reports
+     *
+     * @return string
+     */
+    public function getFormattedDatePrepared ()
+    {
+        if (!isset($this->dateReportPrepared))
+        {
+            $report_date              = new DateTime($this->dateCreated);
+            $this->dateReportPrepared = date_format($report_date, 'F jS, Y');
+        }
+
+        return $this->dateReportPrepared;
     }
 }

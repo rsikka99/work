@@ -3,9 +3,8 @@
 $healthcheckViewModel = $this->healthcheckViewModel;
 $graphs = $healthcheckViewModel->getGraphs();
 ?>
-<div class="h1">Analysis: Service and Supplies Logistics</div>
 <div class="pheader">Printing Device Management Breakdown</div>
-<p>Different types of printing devices are managed in different ways: newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>
+<p>Different types of printing devices are managed in different ways. Newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>
 <br />
 <div class="center">
     <table>
@@ -91,7 +90,6 @@ $tableData = array();
     <?php endforeach; ?>
 </table>
 <p>By using printing devices that use the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. The <?php echo My_Brand::getDealerBranding()->mpsProgramName ?> program can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
-
 <div class="pheader">Number of Printing Device Vendors</div>
 <p>Out of your <?php echo count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances()) ?>
     networked printing devices, you have <strong>

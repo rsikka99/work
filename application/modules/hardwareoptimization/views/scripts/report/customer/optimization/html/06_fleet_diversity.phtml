@@ -14,14 +14,22 @@ $graphs = $this->graphs;
 <div class="pheader" id="supply-types">
     Number of Printing Device Models and Supply Types
 </div>
+
 <p>Out of your <strong><?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have of
-    <strong><?php echo $optimization->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type.
+    <strong><?php echo $optimization->getNumberOfUniqueModels(); ?></strong> unique
+    <?php echo(count($optimization->getNumberOfUniqueModels()) > 1 ? 'model ' : 'models '); ?>.
+    Each section of the chart below represents a single model type.
     We estimate that <strong><?php echo count($optimization->getDevices()->leasedDeviceInstances->getDeviceInstances()); ?></strong> of your printing devices
-    are leased machines, for which supplies are included in your contract. The
-    <strong><?php echo number_format($optimization->getDevices()->purchasedDeviceInstances->getCount()); ?></strong> remaining machines consist
-    of <strong><?php echo $optimization->getNumberOfUniquePurchasedModels(); ?></strong> different models and use
-    <strong><?php echo $optimization->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you
-    have an estimated <strong><?php echo $this->currency($optimization->getCashHeldInInventory()); ?> in operating cash held in printer supplies
+    <?php echo(count($optimization->getDevices()->leasedDeviceInstances->getDeviceInstances()) == 1 ? ' is a leased machine' : ' are leased machines '); ?>
+    , for which supplies are included in your contract. The
+    <strong><?php echo number_format($optimization->getDevices()->purchasedDeviceInstances->getCount()); ?></strong> remaining
+    <?php echo($optimization->getDevices()->purchasedDeviceInstances->getCount() == 1 ? ' machine consists ' : 'machines consist '); ?>
+    of <strong><?php echo $optimization->getNumberOfUniquePurchasedModels(); ?></strong>
+    <?php echo(count($optimization->getNumberOfUniquePurchasedModels()) > 1 ? ' model and uses' : ' models and use '); ?>
+    <strong><?php echo $optimization->getNumberOfUniquePurchasedToners(); ?></strong>
+    <?php echo(count($optimization->getNumberOfUniquePurchasedToners()) > 1 ? ' supply type' : ' different supply types'); ?>.
+    If you hold two of each supply in inventory, you
+    have an estimated <strong>$<?php echo number_format($optimization->getCashHeldInInventory()); ?> in operating cash held in printer supplies
         inventory</strong> at any given time.</p>
 <table class='center'>
     <tr>
@@ -33,6 +41,6 @@ $graphs = $this->graphs;
         <td><img src="<?php echo $graphs[13]; ?>" /></td>
     </tr>
 </table>
-<p>By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space
+<p>By using printing devices with supplies in common, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space
     required. <?php echo My_Brand::getDealerBranding()->mpsProgramName; ?> can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply
     orders.</p>

@@ -19,37 +19,45 @@ $unmappedInstances = $optimization->getDevices()->unmappedDeviceInstances->getDe
 $totalNumberOfDevices = $optimization->getDevices()->excludedDeviceInstances->getCount() + $optimization->getDevices()->unmappedDeviceInstances->getCount();
 
 ?>
-<div class="pheader" id="excluded">
-    Excluded and Unmapped <em>(<?= number_format($totalNumberOfDevices) ?>)</em>
-</div>
-<table class="rDevices">
-    <tr class="header">
-        <th style="width:175px;">Device Name</th>
-        <th>IP Address</th>
-        <th>Serial Number</th>
-        <th>Mono AMPV</th>
-        <th>Color AMPV</th>
-        <th>Reason</th>
-    </tr>
-    <?php foreach ($excludedDeviceInstances as $deviceInstance) : ?>
-        <tr>
-            <td class="device-name"><?= $deviceInstance->getDeviceName() ?></td>
-            <td class="ip-address"><?= $deviceInstance->ipAddress ?></td>
-            <td class="serial-number"><?= $deviceInstance->serialNumber ?></td>
-            <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()) ?></td>
-            <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) ?></td>
-            <td>Manually Excluded</td>
-        </tr>
-    <?php endforeach ?>
+    <div class="pheader" id="excluded">
+        Excluded and Unmapped Devices <em>(<?= number_format($totalNumberOfDevices) ?>)</em>
+    </div>
 
-    <?php foreach ($unmappedInstances as $deviceInstance) : ?>
-        <tr>
-            <td class="deviceName"><?= $deviceInstance->getDeviceName() ?></td>
-            <td class="ip-address"><?= $deviceInstance->ipAddress ?></td>
-            <td class="serial-number"><?= $deviceInstance->serialNumber ?></td>
-            <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()) ?></td>
-            <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) ?></td>
-            <td>Not Mapped</td>
+    <!-- Only display message and table if there are replacement devices assigned -->
+<?php if ($totalNumberOfDevices): ?>
+    <em>Devices that have been manually excluded or have not been mapped during previous steps.</em>
+
+    <table class="rDevices">
+        <tr class="header">
+            <th style="width:175px;">Device Name</th>
+            <th>Serial Number</th>
+            <th>IP Address</th>
+            <th>Mono AMPV</th>
+            <th>Color AMPV</th>
+            <th>Reason</th>
         </tr>
-    <?php endforeach ?>
-</table>
+        <?php foreach ($excludedDeviceInstances as $deviceInstance) : ?>
+            <tr>
+                <td class="device-name"><?= $deviceInstance->getDeviceName() ?></td>
+                <td class="serial-number"><?= $deviceInstance->serialNumber ?></td>
+                <td class="ip-address"><?= $deviceInstance->ipAddress ?></td>
+                <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()) ?></td>
+                <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) ?></td>
+                <td>Manually Excluded</td>
+            </tr>
+        <?php endforeach ?>
+
+        <?php foreach ($unmappedInstances as $deviceInstance) : ?>
+            <tr>
+                <td class="deviceName"><?= $deviceInstance->getDeviceName() ?></td>
+                <td class="serial-number"><?= $deviceInstance->serialNumber ?></td>
+                <td class="ip-address"><?= $deviceInstance->ipAddress ?></td>
+                <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()) ?></td>
+                <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) ?></td>
+                <td>Not Mapped</td>
+            </tr>
+        <?php endforeach ?>
+    </table>
+<?php else: ?>
+    <em>There are no devices that have been manually excluded or have not been mapped during previous steps.</em>
+<?php endif; ?>

@@ -20,25 +20,34 @@ $totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->g
 <div class="pheader" id="leased">
     Leased Devices <em><?php echo '(' . number_format(count($leasedDeviceInstances)) . ')' ?></em>
 </div>
-<em>The following devices were flagged as leased within the ownership section.</em>
-<table class="rDevices">
-    <tr class="header">
-        <th style="width:175px;">Device Name</th>
-        <th>Serial Number <br /> IP Address</th>
-        <th>Mono AMPV</th>
-        <th>Color AMPV</th>
-    </tr>
-    <?php foreach ($leasedDeviceInstances as $deviceInstance) :
-        $masterDevice = $deviceInstance->getMasterDevice();
-        $isColor      = $masterDevice->isColor();
-        ?>
-        <tr>
 
-            <td class="device-name"><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>'; ?></td>
-            <td class="serial-number"><?php echo $deviceInstance->serialNumber . '<br/>' . $deviceInstance->ipAddress . '</em>'; ?></td>
-            <td class="page-volume"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
-            <td class="page-volume"><?php echo ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A'; ?></td>
+<!-- Only display message and table if there are replacement devices assigned -->
+<?php if ($leasedDeviceInstances): ?>
+    <em>The following devices were flagged as leased within the ownership section.</em>
+
+    <table class="rDevices">
+        <tr class="header">
+            <th style="width:175px;">Device Name</th>
+            <th>Serial Number</th>
+            <th> IP Address</th>
+            <th>Mono AMPV</th>
+            <th>Color AMPV</th>
         </tr>
-    <?php endforeach ?>
-</table>
+        <?php foreach ($leasedDeviceInstances as $deviceInstance) :
+            $masterDevice = $deviceInstance->getMasterDevice();
+            $isColor      = $masterDevice->isColor();
+            ?>
+            <tr>
+
+                <td class="device-name"><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>'; ?></td>
+                <td class="serial-number"><?php echo $deviceInstance->serialNumber ?></td>
+                <td class="ip-address"><?= $deviceInstance->ipAddress ?></td>
+                <td class="page-volume"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
+                <td class="page-volume"><?php echo ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : ' - '; ?></td>
+            </tr>
+        <?php endforeach ?>
+    </table>
+<?php else : ?>
+    <em>There are no devices currently flagged as leased within the ownership section.</em>
+<?php endif; ?>
 <br />

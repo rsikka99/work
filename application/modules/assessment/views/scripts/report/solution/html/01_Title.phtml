@@ -21,8 +21,8 @@ $assessmentViewModel = $this->assessmentViewModel;
             <?= $assessmentViewModel->assessment->getClient()->companyName; ?>
         </h3>
 
-        <h3><?php echo $assessmentViewModel->getDateReportPrepared(); ?></h3>
-
         <p><?php echo nl2br($assessmentViewModel->assessment->getClient()->getAddress()); ?></p>
+        <br>
+        <p>Date: <?php echo $assessmentViewModel->getDateReportPrepared(); ?></p>
     </div>
 </div>

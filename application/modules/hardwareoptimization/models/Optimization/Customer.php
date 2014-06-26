@@ -39,7 +39,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $averagePageCount = round($this->_optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->_optimization->getDevices()->allIncludedDeviceInstances->getCount(), 0);
             $highest          = ($averagePageCount > self::AVERAGE_MONTHLY_PAGES) ? $averagePageCount : self::AVERAGE_MONTHLY_PAGES;
             $barGraph         = new gchart\gBarChart(175, 300);
-            $barGraph->setTitle("Average monthly pages|per networked printer");
+            $barGraph->setTitle("Average Monthly Pages|per Networked Printer");
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -76,7 +76,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $pagesPerEmployee = round($this->_optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->_hardwareOptimization->getClient()->employeeCount);
             $highest          = (self::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? self::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
             $barGraph         = new gchart\gBarChart(175, 300);
-            $barGraph->setTitle("Average monthly pages|per employee");
+            $barGraph->setTitle("Average Monthly Pages|per Employee");
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -111,7 +111,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
              */
             $highest  = ($this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() > $this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) ? $this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() : $this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
             $barGraph = new gchart\gBarChart(200, 300);
-            $barGraph->setTitle("Leased Vs Purchase|Monthly Page Counts");
+            $barGraph->setTitle("Leased vs Purchase|Page Counts");
             $barGraph->setVisibleAxes(array('y'));
             $barGraph->addDataSet(array(round($this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())));
             $barGraph->addColors(array(
@@ -177,8 +177,8 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $graph->setLegend(array(
                 "Keep",
                 "Replaced",
-                "Do Not Repair",
-                "Retire/Migrate",
+                "Do not repair",
+                "Retire/migrate",
             ));
             $graph->setTitle("Optimized Fleet Summary");
             $graph->addValueMarkers($percentValueMarker1, "000000", "0", "-1", "11");
@@ -218,9 +218,9 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
                 "FFFFFF"
             ));
             $barGraph->setLegend(array(
-                "Your Estimated Monthly Usage (% of Capacity)",
-                "Your Estimated Optimized Monthly Usage (% of Capacity)",
-                "Optimal Monthly Fleet Usage (% of Capacity)"
+                "Your estimated monthly usage (% of capacity)",
+                "Your estimated optimized monthly usage (% of capacity)",
+                "Optimal monthly fleet usage (% of capacity)"
             ));
             $barGraph->addAxisRange(0, 0, $highest);
             $barGraph->setDataRange(0, $highest);
@@ -253,7 +253,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $devicesPerEmployeeOptimized = round($employeeCount / ($this->_optimization->getDevices()->allIncludedDeviceInstances->getCount() + count($this->leased) + count($this->excluded)), 1);
             $highest                     = ($devicesPerEmployee > $averageEmployeePerDevice) ? $devicesPerEmployee : $averageEmployeePerDevice;
             $barGraph                    = new gchart\gBarChart(200, 300);
-            $barGraph->setTitle("Employees per device");
+            $barGraph->setTitle("Employees per Device");
             $barGraph->setVisibleAxes(array('y'));
             $barGraph->addDataSet(array($devicesPerEmployee));
             $barGraph->addColors(array(
@@ -294,7 +294,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $highest                = ($jitCompatible > $nonJitCompatible) ? $jitCompatible : $nonJitCompatible;
             $highest                = ($highest > $optimizedJitCompatible) ? $highest : $optimizedJitCompatible;
             $barGraph               = new gchart\gBarChart(200, 300);
-            $barGraph->setTitle(" " . My_Brand::$jit . " compatibility");
+            $barGraph->setTitle(" " . My_Brand::$jit . " Compatibility");
             $barGraph->setVisibleAxes(array('y'));
             $barGraph->addDataSet(array($jitCompatible));
             $barGraph->addColors(array(
@@ -387,9 +387,9 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
                 "0194D2"
             ));
             $barGraph->setLegend(array(
-                "Copy Capable ",
-                "Duplex Capable",
-                "Color Capable"
+                "Copy-capable ",
+                "Duplex-capable",
+                "Color-capable"
             ));
             $barGraph->addValueMarkers($percentValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($percentValueMarker, "000000", "1", "-1", "11");
@@ -401,7 +401,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
              * -- Categories of technology features
              */
             $barGraph = new gchart\gBarChart(215, 300);
-            $barGraph->setTitle("Technology Features (optimized)");
+            $barGraph->setTitle("Technology Features (Optimized)");
             $barGraph->setVisibleAxes(array('y'));
             $barGraph->addDataSet(array($this->deviceCategories["optimized"]["copy"] / $purchaseDeviceCount));
             $barGraph->addColors(array(
@@ -422,9 +422,9 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
                 "0194D2"
             ));
             $barGraph->setLegend(array(
-                "Copy Capable ",
-                "Duplex Capable",
-                "Color Capable"
+                "Copy-capable ",
+                "Duplex-capable",
+                "Color-capable"
             ));
             $barGraph->addValueMarkers($percentValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($percentValueMarker, "000000", "1", "-1", "11");
@@ -443,7 +443,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $highestOptimized = ($this->deviceAgesOptimized[8] > $highestOptimized) ? $this->deviceAgesOptimized[8] : $highestOptimized;
             $highest          = ($highest > $highestOptimized) ? $highest : $highestOptimized;
             $barGraph         = new gchart\gBarChart(225, 325);
-            $barGraph->setTitle("Age of devices");
+            $barGraph->setTitle("Age of Devices");
             $barGraph->setVisibleAxes(array('y'));
 
             $colors = array(
@@ -477,7 +477,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
              * -- Age vertical bar chart optimized
              */
             $barGraph = new gchart\gBarChart(225, 325);
-            $barGraph->setTitle("Age of optimized devices");
+            $barGraph->setTitle("Age of Optimized Devices");
             $barGraph->setVisibleAxes(array('y'));
 
             $colors = array(
@@ -540,8 +540,8 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->addDataSet(array($targetUniqueness));
 
             $barGraph->setLegend(array(
-                "Ideal Supply Uniqueness",
-                "Your Supply Uniqueness"
+                "Ideal supply uniqueness",
+                "Your supply uniqueness"
             ));
             //Ticksize is used to scale the number of ticks on the x axis to never go above 21
             $tickSize = (int)($highest / 20 + 1);
@@ -587,8 +587,8 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             ));
             $barGraph->addDataSet(array($targetUniqueness));
             $barGraph->setLegend(array(
-                "Ideal Supply Uniqueness",
-                "Your Optimized Supply Uniqueness"
+                "Ideal supply uniqueness",
+                "Your optimized supply uniqueness"
             ));
             //Ticksize is used to scale the number of ticks on the x axis to never go above 21
             $tickSize = (int)($graphMaximum / 20 + 1);

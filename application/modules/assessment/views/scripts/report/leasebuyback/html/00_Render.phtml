@@ -8,8 +8,8 @@ $assessmentViewModel = $this->assessmentViewModel;
         <tbody>
         <tr>
             <th>Device Name</th>
-            <th>Ip Address</th>
             <th>Serial Number</th>
+            <th>IP Address</th>
             <th>Lease Buyback Price</th>
         </tr>
         <?php
@@ -33,11 +33,11 @@ $assessmentViewModel = $this->assessmentViewModel;
                 <td class="column1">
                     <div class="center"><?php echo str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) ?></div>
                 </td>
-                <td class="column2">
-                    <div class="center"><?php echo $deviceInstance->ipAddress; ?></div>
-                </td>
                 <td class="column3">
                     <div class="center"><?php echo $deviceInstance->serialNumber; ?></div>
+                </td>
+                <td class="column2">
+                    <div class="center"><?php echo $deviceInstance->ipAddress; ?></div>
                 </td>
                 <td class="column4">
                     <div class="center"><?php echo $leaseBuybackPrice; ?></div>

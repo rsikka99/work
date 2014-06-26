@@ -26,8 +26,8 @@ $section->addText(sprintf('Get the most out of your existing printing assets wit
 $section->addTitle('Program Components', 2);
 
 $section->addText(sprintf('Pay by the page with the %1$s program:', $this->brandName));
-$section->addListItem(sprintf('$%1$s for monochrome pages', $this->NumberFormat($assessmentViewModel->getMPSBlackAndWhiteCPP(), 8)), 0, 'bold_text', null, $listParagraphStyle);
-$section->addListItem(sprintf('$%1$s for color pages', $this->NumberFormat($assessmentViewModel->getMPSColorCPP(), 8)), 0, 'bold_text', null, $listParagraphStyle);
+$section->addListItem(sprintf('$%1$s for monochrome pages', $this->formatCostPerPage($assessmentViewModel->getMPSBlackAndWhiteCPP(), 4)), 0, 'bold_text', null, $listParagraphStyle);
+$section->addListItem(sprintf('$%1$s for color pages', $this->formatCostPerPage($assessmentViewModel->getMPSColorCPP(), 4)), 0, 'bold_text', null, $listParagraphStyle);
 $section->addListItem('Includes supplies and service for your existing equipment', 0, 'bold_text', null, $listParagraphStyle);
 
 $section->addText(sprintf('The %1$s program uses remote monitoring software to provide you with:', $this->brandName));
@@ -125,6 +125,6 @@ $table = $section->addTable($tc->tablestyle);
 
 $table->addRow($tc->body->rowheight);
 $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf('Total annual savings with %1$s', $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-$table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText($this->currency($assessmentViewModel->getPrintIQSavings()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+$table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText($this->currency($assessmentViewModel->getPrintIQSavings(), array('precision' => 0)), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 
 // EOF

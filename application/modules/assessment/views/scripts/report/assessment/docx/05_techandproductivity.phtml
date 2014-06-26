@@ -24,8 +24,8 @@ $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number
 $section->addTextBreak();
 
 $section->addTitle('Age of Printing Devices', 2);
-$section->addText(sprintf('The average age of printing devices in your office is %1$s year(s) old. Printers under 5 years old are the most reliable machines. As printing devices get older, the risk of frequent breakdowns increases. Printers over 8 years old have a high risk of frequent breakdowns and there is a risk that supplies and parts for these machines may be discontinued.'), number_format($assessmentViewModel->getAverageAgeOfDevices(), 1));
-$section->addText('The breakdown of the age of your printing devices is shown below:');
+$section->addText(sprintf('The average age of printing devices in your office is %1$s year(s) old. Printers under 5 years old are the most reliable machines. As printing devices get older, the risk of frequent breakdowns increases. Printers over 8 years old have a high risk of frequent breakdowns and there is a risk that supplies and parts for these machines may be discontinued.', number_format($assessmentViewModel->getAverageAgeOfDevices(), 1)));
+$section->addText('The breakdown of the ages of your printing devices is shown below:');
 $imageTable = $section->addTable();
 $imageTable->addRow();
 $cell = $imageTable->addCell(9028.8, array(

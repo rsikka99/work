@@ -79,6 +79,10 @@ $phpWord->addParagraphStyle('titleStyle3', array(
         'fill' => $titlePageBackgroundColor2,
     )
 ));
+
+$phpWord->addFontStyle('italic_subheading', array(
+    "italic" => true,
+));
 $phpWord->addFontStyle('titlepage_title', array(
     'size'  => 24,
     'bold'  => true,
@@ -95,26 +99,35 @@ $phpWord->addFontStyle('titlepage_address', array(
     'size'  => 12,
     'color' => $titlePageTextColor2,
 ));
+$phpWord->addTitleStyle(1, array(
+    'size'  => 14,
+    'color' => My_Brand::getDealerBranding()->h2BackgroundColor,
+    'bold'  => true,
+));
+
 $phpWord->addTitleStyle(2, array(
     'size'   => 12,
     'color'  => My_Brand::getDealerBranding()->h2FontColor,
     'bold'   => true,
     'italic' => true
 ), array(
-    'bgColor' => My_Brand::getDealerBranding()->h2BackgroundColor,
-));
+    'shading' => array(
+        'fill' => My_Brand::getDealerBranding()->h2BackgroundColor,
+    )));
 
 // Classes that describe standard cells
 $standard_cell                  = (object)array(
     "even"           => array(
         "bgColor"          => $even_color,
         "borderRightColor" => 'FFFFFF',
-        "borderRightSize"  => 20
+        "borderRightSize"  => 20,
+        "valign"           => 'center',
     ),
     "odd"            => array(
         "bgColor"          => $odd_color,
         "borderRightColor" => 'FFFFFF',
-        "borderRightSize"  => 20
+        "borderRightSize"  => 20,
+        "valign"           => 'center',
     ),
     "fontStyle"      => null,
     "paragraphStyle" => array(
@@ -168,9 +181,11 @@ $standard_cell_left_device_name = (object)array(
 $standard_cell_no_right_border  = (object)array(
     "even"           => array(
         "bgColor" => $even_color,
+        "valign"  => 'center',
     ),
     "odd"            => array(
         "bgColor" => $odd_color,
+        "valign"  => 'center',
     ),
     "fontStyle"      => null,
     "paragraphStyle" => array(
@@ -178,7 +193,28 @@ $standard_cell_no_right_border  = (object)array(
         'align'      => 'right'
     )
 );
-$standard_header                = (object)array(
+
+$standard_header_right = (object)array(
+    "even"           => array(
+        "bgColor"          => $even_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20,
+        "valign"           => 'center',
+    ),
+    "odd"            => array(
+        "bgColor"          => $odd_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20,
+        "valign"           => 'center',
+    ),
+    "fontStyle"      => array(
+        'bold' => true,
+    ),
+    "paragraphStyle" => array(
+        'align' => 'right',
+    )
+);
+$standard_header       = (object)array(
     "cellStyle"      => array(
         'bgColor' => $header_color
     ),
@@ -190,7 +226,7 @@ $standard_header                = (object)array(
         'align'      => 'center'
     )
 );
-$standard_sub_header            = (object)array(
+$standard_sub_header   = (object)array(
     "cellStyle"      => array(
         'bgColor' => $sub_header_color
     ),
@@ -201,6 +237,35 @@ $standard_sub_header            = (object)array(
         'spaceAfter' => 0,
         'align'      => 'center'
     )
+);
+
+$fleetTable = (object)array(
+    "tablestyle"  => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
+        'cellMarginBottom' => 50,
+        'cellMarginLeft'   => 50
+    ),
+    "headerStyle" => array(
+        'bgColor' => $header_color,
+    ),
+    "rowstyle"    => array(
+        "cantSplit" => true,
+    ),
+    "colWidth"    => $widthTwips * 0.25,
+
+    "span2Width"  => $widthTwips / 2,
+    "spanAll"     => $widthTwips,
+    "body"        => (object)array(
+            "rowheight"  => 500,
+            "cellHeader" => $standard_header_right,
+            "cell1"      => $standard_cell,
+            "cell2"      => $standard_cell_no_right_border,
+        ),
+    "header"      => (object)array(
+            'header'     => $standard_header,
+            'sub_header' => $standard_sub_header,
+        )
 );
 
 $compareTable = (object)array(
@@ -335,13 +400,15 @@ $acceptableTable   = (object)array(
     "rowheader"  => array(
         "tblHeader" => true,
     ),
-    "col1Width"  => $widthTwips * 0.25,
+    "col1Width"  => $widthTwips * 0.20,
     "col2Width"  => $widthTwips * 0.15,
-    "col3Width"  => $widthTwips * 0.120,
-    "col4Width"  => $widthTwips * 0.120,
-    "col5Width"  => $widthTwips * 0.120,
-    "col6Width"  => $widthTwips * 0.120,
-    "col7Width"  => $widthTwips * 0.120,
+    "col3Width"  => $widthTwips * 0.092,
+    "col4Width"  => $widthTwips * 0.092,
+    "col5Width"  => $widthTwips * 0.092,
+    "col6Width"  => $widthTwips * 0.092,
+    "col7Width"  => $widthTwips * 0.092,
+    "col8Width"  => $widthTwips * 0.092,
+    "col9Width"  => $widthTwips * 0.092,
     "body"       => (object)array(
             "rowheight" => null,
             "cell1"     => $standard_cell_left_device_name,
@@ -350,7 +417,9 @@ $acceptableTable   = (object)array(
             "cell4"     => $standard_cell,
             "cell5"     => $standard_cell,
             "cell6"     => $standard_cell,
-            "cell7"     => $standard_cell_no_right_border,
+            "cell7"     => $standard_cell,
+            "cell8"     => $standard_cell,
+            "cell9"     => $standard_cell_no_right_border,
         ),
     "header"     => (object)array(
             'header'     => $standard_header,
@@ -430,13 +499,15 @@ $flaggedTable      = (object)array(
     "rowHeader"  => array(
         "tblHeader" => true,
     ),
-    "col1Width"  => $widthTwips * 0.25,
+    "col1Width"  => $widthTwips * 0.20,
     "col2Width"  => $widthTwips * 0.15,
-    "col3Width"  => $widthTwips * 0.120,
-    "col4Width"  => $widthTwips * 0.120,
-    "col5Width"  => $widthTwips * 0.120,
-    "col6Width"  => $widthTwips * 0.120,
-    "col7Width"  => $widthTwips * 0.120,
+    "col3Width"  => $widthTwips * 0.092,
+    "col4Width"  => $widthTwips * 0.092,
+    "col5Width"  => $widthTwips * 0.092,
+    "col6Width"  => $widthTwips * 0.092,
+    "col7Width"  => $widthTwips * 0.092,
+    "col8Width"  => $widthTwips * 0.092,
+    "col9Width"  => $widthTwips * 0.092,
     "body"       => (object)array(
             "rowheight" => 400,
             "cell1"     => $standard_cell_left_device_name,
@@ -445,7 +516,9 @@ $flaggedTable      = (object)array(
             "cell4"     => $standard_cell,
             "cell5"     => $standard_cell,
             "cell6"     => $standard_cell,
-            "cell7"     => $standard_cell_no_right_border,
+            "cell7"     => $standard_cell,
+            "cell8"     => $standard_cell,
+            "cell9"     => $standard_cell_no_right_border,
         ),
     "header"     => (object)array(
             'header' => $standard_header,
@@ -539,6 +612,7 @@ $tableStyle = (object)array(
  */
 $styles                      = (object)array(
     "tables" => (object)array(
+            "fleet"       => $fleetTable,
             "compare"     => $compareTable,
             "replacement" => $replacementTable,
             "acceptable"  => $acceptableTable,

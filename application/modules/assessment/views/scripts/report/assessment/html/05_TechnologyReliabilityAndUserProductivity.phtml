@@ -17,7 +17,7 @@ $graphs = $assessmentViewModel->getGraphs();
 <p>The average age of printing devices in your office is <strong><?php echo number_format($assessmentViewModel->getAverageAgeOfDevices(), 1); ?></strong>
     year(s) old. Printers under 5 years old are the most reliable machines. As printing devices get older, the risk of frequent breakdowns increases. Printers
     over 8 years old have a high risk of frequent breakdowns and there is a risk that supplies and parts for these machines may be discontinued.</p>
-<p>The breakdown of the age of your printing devices is shown below:</p>
+<p>The breakdown of the ages of your printing devices is shown below:</p>
 <div class="center">
     <img src="<?php echo $graphs[9]; ?>" />
 </div>
@@ -83,7 +83,7 @@ $graphs = $assessmentViewModel->getGraphs();
     </tr>
     <tr>
         <td>Average hourly IT rate</td>
-        <td class="right">$<?php echo $assessmentViewModel->getAverageITRate(); ?></td>
+        <td class="right"><?php echo $this->currency($assessmentViewModel->getAverageITRate(), 2); ?></td>
     </tr>
     <tr>
         <td>Annual cost for internal IT staff to service and support printers</td>

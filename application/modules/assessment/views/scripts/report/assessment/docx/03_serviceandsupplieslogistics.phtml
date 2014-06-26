@@ -24,7 +24,7 @@ $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number
 $section->addTextBreak();
 
 $section->addTitle('Printing Device Management Breakdown', 2);
-$section->addText('Different types of printing devices are managed in different ways: newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.');
+$section->addText('Different types of printing devices are managed in different ways. Newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.');
 
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
@@ -74,12 +74,12 @@ $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell
 $table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($assessmentViewModel->getNumberOfRepairs()), 'bold_text', 'nospacing_rightalign');
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
 $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText('Average time between printer breaking down and printer being fixed', 'bold_text', 'nospacing');
-$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($assessmentViewModel->getAverageTimeBetweenBreakdownAndFix()) . ' day(s)', 'bold_text', 'nospacing_rightalign');
+$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(sprintf('%1$s day(s)', number_format($assessmentViewModel->getAverageTimeBetweenBreakdownAndFix())), 'bold_text', 'nospacing_rightalign');
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
 $cell = $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1);
 $cell->addText('Annual downtime resulting from printer breakdowns', 'bold_text', 'nospacing');
 $cell->addText('(Based on an 8 hour work day)', 'bold_text', 'nospacing');
-$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($assessmentViewModel->getAnnualDowntimeFromBreakdowns()), 'bold_text', 'nospacing_rightalign');
+$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(sprintf('%1$s hour(s)', number_format($assessmentViewModel->getAnnualDowntimeFromBreakdowns())), 'bold_text', 'nospacing_rightalign');
 $section->addText(sprintf('%1$s can provide next-day service for your printer fleet.', $this->companyName), 'small_italic_text');
 
 $section->addTitle('Number of Vendors', 2);
@@ -94,7 +94,7 @@ $cellWidths = array(
 $table = $section->addTable($this->styles->tables->twoColumnDataTable->tablestyle);
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
 $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText('Percentage of fleet capable of reporting toner levels', 'bold_text', 'nospacing');
-$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($assessmentViewModel->calculatePercentageOfFleetReportingTonerLevels(), 2) . "%", 'bold_text', 'nospacing_rightalign');
+$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(sprintf('%1$s %', number_format($assessmentViewModel->calculatePercentageOfFleetReportingTonerLevels(), 2)), 'bold_text', 'nospacing_rightalign');
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
 $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText('Number of orders for ink and toner executed annually', 'bold_text', 'nospacing');
 $table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($assessmentViewModel->getNumberOfAnnualInkTonerOrders()), 'bold_text', 'nospacing_rightalign');
@@ -122,8 +122,7 @@ $section->addText(sprintf('Out of your %1$s networked printing devices, you have
 
 $imageTable = $section->addTable();
 $imageTable->addRow();
-$cell = $imageTable->addCell(9028.8, array(    'valign' => 'center'
-));
+$cell = $imageTable->addCell(9028.8, array('valign' => 'center'));
 
 $cell->addImage($graphs[3], array(
     'align' => 'center'

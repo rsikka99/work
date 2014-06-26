@@ -4,6 +4,7 @@ $hardwareOptimization = $this->hardwareOptimization;
 
 $title = $this->title;
 $description = $this->description;
+$descriptionIfZero = $this->descriptionIfZeroDevices;
 $totalNumberOfDevices = $this->totalNumberOfDevices;
 $showReplacementDevices = $this->showReplacementDevices;
 $showReason = $this->showReason;
@@ -17,10 +18,10 @@ $deviceInstances = $this->deviceInstances;
     <em> (<?php echo number_format(count($deviceInstances)) ?> out of <?php echo number_format($totalNumberOfDevices) ?> devices)</em>
 </div>
 
-<p><?php echo $description; ?></p>
+<?php if (count($deviceInstances)): ?>
+    <p><?php echo $description; ?></p>
 
-<table class="rDevices">
-    <?php if (count($deviceInstances) > 0) : ?>
+    <table class="rDevices">
         <thead>
         <tr class="header">
             <th style="width:175px;">Device Name</th>
@@ -31,7 +32,7 @@ $deviceInstances = $this->deviceInstances;
             <th>Life Page Count</th>
             <?php if ($showReplacementDevices) : ?>
                 <th style="width:175px;">Replacement Device<?php echo ($showReason) ? " & Reason" : "" ?></th>
-                <?php else : ?>
+            <?php else : ?>
                 <?php if ($showReason) : ?>
                     <th>Reason</th>
                 <?php endif; ?>
@@ -57,7 +58,7 @@ $deviceInstances = $this->deviceInstances;
                 </td>
                 <!-- Monthly Statistics -->
                 <td class="pageVolume"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()) ?></td>
-                <td class="pageVolume"><?php echo ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A' ?></td>
+                <td class="pageVolume"><?php echo ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : ' - ' ?></td>
                 <td class="deviceAge"><?php echo $deviceInstance->getAge() ?>y</td>
                 <td class="pageVolume"><?php echo $this->formatPageVolume($deviceInstance->getMeter()->endMeterLife) ?></td>
                 <?php if ($showReplacementDevices && $replacementMasterDevice) : ?>
@@ -69,25 +70,19 @@ $deviceInstances = $this->deviceInstances;
                         <?php echo $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason ?>
                     </td>
                 <?php elseif ($showReplacementDevices) : ?>
-                    <td>-</td>
                     <?php if ($showReason) : ?>
                         <td class="optimizationReason"><?php echo $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason ?></td>
                     <?php endif; ?>
-                <?php else : ?>
+                <?php
+                else : ?>
                     <?php if ($showReason) : ?>
                         <td class="optimizationReason"><?php echo $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason ?></td>
                     <?php endif; ?>
                 <?php endif; ?>
             </tr>
         <?php endforeach; ?>
-    <?php else : ?>
-        <thead>
-        <tr class="header">
-            <th>No devices fall under this category.</th>
-        </tr>
-        </thead>
-    <?php endif; ?>
-</table>
-<br>
-<hr>
+    </table>
+<?php else : ?>
+    <p><?php echo $descriptionIfZero; ?></p>
+<?php endif; ?>
 <br>

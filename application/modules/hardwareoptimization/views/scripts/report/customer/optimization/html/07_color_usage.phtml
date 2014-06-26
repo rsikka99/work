@@ -14,9 +14,11 @@ $graphs = $this->graphs;
 <div class="pheader" id="color-usage">
     Color Usage
 </div>
-<p>You currently have <strong><?php echo number_format($optimization->getNumberOfColorCapableDevices()); ?></strong> color printing devices that print a monthly average of
+<p>You currently have <strong><?php echo number_format($optimization->getNumberOfColorCapableDevices()); ?></strong> color printing
+    <?php echo(count($optimization->getNumberOfColorCapableDevices()) == 1 ? ' devices that print' : ' device that prints '); ?>
+    a total monthly average of
     <strong><?php echo $this->formatPageVolume($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></strong> color pages per
-    month, which is <strong><?php echo number_format(($optimization->getPercentages()->TotalColorPercentage * 100), 2); ?>%</strong> of your total monthly print
+    month, which is <strong><?php echo number_format(($optimization->getPercentages()->TotalColorPercentage * 100), 1); ?>%</strong> of your total monthly print
     volume.</p>
 <table class='center'>
     <tr>

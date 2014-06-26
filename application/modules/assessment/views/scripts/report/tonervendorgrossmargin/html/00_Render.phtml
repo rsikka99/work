@@ -53,7 +53,7 @@ $companyName = My_Brand::getDealerBranding()->shortDealerName;
                 $vendorOverallMargin = $vendorData['statisticsGroup']['right']['Overall Margin'];
                 $vendorName          = $vendorData['pageTitle'];
                 ?>
-                <tr <?php echo (in_array($vendorName, $this->highestNames) ? 'style="background-color:#C3FFA6"' : '') ?>>
+                <tr <?php echo(in_array($vendorName, $this->highestNames) ? 'style="background-color:#C3FFA6"' : '') ?>>
                     <td><?php echo $vendorName ?></td>
                     <td><?php echo $vendorOverallMargin; ?>%</td>
                 </tr>
@@ -165,7 +165,7 @@ foreach ($this->vendorSeparatedData as $vendorData)
             <table id="grossMarginDeviceSummary">
                 <thead>
                 <tr class="center">
-                    <th class="column1" rowspan="2">Device Name<br>(IP Address - Serial Number)</th>
+                    <th class="column1" rowspan="2">Device Name<br>(Serial Number - IP Address)</th>
                     <th colspan="5">Monochrome</th>
                     <th colspan="5">Color</th>
                 </tr>
@@ -191,18 +191,19 @@ foreach ($this->vendorSeparatedData as $vendorData)
                 {
                     ?>
                     <tr class="<?php echo ($fields['completeMono']) ? "" : "nonCompliantMono" ?> <?php echo ($fields['completeColor']) ? "" : "nonCompliantColor" ?>">
-                        <td class=""><?php echo $fields[0]['deviceName'] ?><br /><?php echo '(' . $fields[0]['ipAddress'] . ' - ' . $fields[0]['serialNumber'] . ')' ?></td>
+                        <td class=""><?php echo $fields[0]['deviceName'] ?>
+                            <br /><?php echo '(' . $fields[0]['serialNumber'] . ' - ' . $fields[0]['ipAddress'] . ')' ?></td>
                         <td class="mono"><?php echo number_format($fields[1]) ?></td>
                         <td class="mono"><?php echo $this->currency($fields[2]) ?></td>
                         <td class="mono"><?php echo number_format($fields[3]) ?></td>
                         <td class="mono"><?php echo $this->formatCostPerPage($fields[4]) ?></td>
                         <td class="mono"><?php echo $this->currency($fields[5]) ?></td>
 
-                        <td class="color"><?php echo (is_numeric($fields[6]) ? number_format($fields[6]) : "-") ?></td>
-                        <td class="color"><?php echo (is_numeric($fields[7]) ? $this->currency($fields[7]) : "-") ?></td>
-                        <td class="color"><?php echo (is_numeric($fields[8]) ? number_format($fields[8]) : "-") ?></td>
-                        <td class="color"><?php echo (is_numeric($fields[9]) ? $this->formatCostPerPage($fields[9]) : "-") ?></td>
-                        <td class="color"><?php echo (is_numeric($fields[10]) ? $this->currency($fields[10]) : "-") ?></td>
+                        <td class="color"><?php echo(is_numeric($fields[6]) ? number_format($fields[6]) : "-") ?></td>
+                        <td class="color"><?php echo(is_numeric($fields[7]) ? $this->currency($fields[7]) : "-") ?></td>
+                        <td class="color"><?php echo(is_numeric($fields[8]) ? number_format($fields[8]) : "-") ?></td>
+                        <td class="color"><?php echo(is_numeric($fields[9]) ? $this->formatCostPerPage($fields[9]) : "-") ?></td>
+                        <td class="color"><?php echo(is_numeric($fields[10]) ? $this->currency($fields[10]) : "-") ?></td>
 
                     </tr>
                 <?php

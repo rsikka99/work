@@ -27,7 +27,7 @@ $tcStyle = $this->styles->tables->grossMargin;
 $table   = $section->addTable($tcStyle->tablestyle);
 
 // Table header
-$table->addRow($tcStyle->header->rowheight,$tcStyle->rowheader);
+$table->addRow($tcStyle->header->rowheight, $tcStyle->rowheader);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->nobottomborder)->addText(null, $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
 $blackAndWhite = $table->addCell($tcStyle->colSpanWidth, $tcStyle->header->headercelllarge, 5);
@@ -39,7 +39,7 @@ $color->addText('Color', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $tonerSkus = $table->addCell($tcStyle->colSpanWidth, $tcStyle->header->headercellsmall, 2);
 $tonerSkus->addText('Toner SKUs', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
-$table->addRow($tcStyle->header->rowheight,$tcStyle->rowheader);
+$table->addRow($tcStyle->header->rowheight, $tcStyle->rowheader);
 
 $column1 = $table->addCell($tcStyle->col1Width, $tcStyle->header->notopborder);
 $column1->addText('Device Name', $tcStyle->header->fontStyle, $tcStyle->centeralign);
@@ -137,7 +137,7 @@ foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDevice
     $mono_toner_class  = ($completeMonoToners) ? $tcStyle->row->cell : $tcStyle->row->highlightcell;
     $color_toner_class = ($completeColorToners) ? $tcStyle->row->cell : $tcStyle->row->highlightcell;
 
-    $table->addRow($tcStyle->rowheight->cell,$tcStyle->rowstyle);
+    $table->addRow($tcStyle->rowheight->cell, $tcStyle->rowstyle);
     $column1 = $table->addCell($tcStyle->col1Width, $tcStyle->row->cell);
     $column1->addText($this->translate(str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName())), $tcStyle->row->fontStyle, $tcStyle->leftalign);
     $column1->addText("(" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")", $tcStyle->row->fontStyle, $tcStyle->leftalign);
@@ -147,7 +147,7 @@ foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDevice
     $table->addCell($tcStyle->col3Width, $mono_toner_class)->addText($blackCost, $tcStyle->row->fontStyle, $tcStyle->rightalign);
     $table->addCell($tcStyle->col4Width, $mono_toner_class)->addText($blackYield, $tcStyle->row->fontStyle, $tcStyle->rightalign);
     $table->addCell($tcStyle->col5Width, $mono_toner_class)->addText($this->formatCostPerPage($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->monochromeCostPerPage), $tcStyle->row->fontStyle, $tcStyle->rightalign);
-    $table->addCell($tcStyle->col6Width, $mono_toner_class)->addText($this->formatCostPerPage($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer())), $tcStyle->row->fontStyle, $tcStyle->rightalign);
+    $table->addCell($tcStyle->col6Width, $mono_toner_class)->addText($this->currency($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer())), $tcStyle->row->fontStyle, $tcStyle->rightalign);
 
     // Color
     $table->addCell($tcStyle->col7Width, $color_toner_class)->addText(($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : "-", $tcStyle->row->fontStyle, ($isColor) ? $tcStyle->rightalign : $tcStyle->centeralign);
@@ -177,17 +177,12 @@ foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDevice
 }
 
 // Table footer (totals row)
-$table->addRow($tcStyle->footer->rowheight,$tcStyle->rowstyle);
+$table->addRow($tcStyle->footer->rowheight, $tcStyle->rowstyle);
 $table->addCell($tcStyle->col1Width, $tcStyle->footer->cell)->addText('Totals for ' . number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getCount()) . ' devices:', $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col2Width, $tcStyle->footer->cell)->addText($this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
-$table->addCell($tcStyle->col3Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
-$table->addCell($tcStyle->col4Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
-$table->addCell($tcStyle->col5Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
+$table->addCell($tcStyle->col3Width, $tcStyle->footer->cellSpan3)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col6Width, $tcStyle->footer->cell)->addText($this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->BlackAndWhite), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col7Width, $tcStyle->footer->cell)->addText($this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
-$table->addCell($tcStyle->col8Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
-$table->addCell($tcStyle->col9Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
-$table->addCell($tcStyle->col10Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
+$table->addCell($tcStyle->col8Width, $tcStyle->footer->cellSpan3)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col11Width, $tcStyle->footer->cell)->addText($this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Color), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
-$table->addCell($tcStyle->col10Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
-$table->addCell($tcStyle->col10Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
+$table->addCell($tcStyle->col10Width, $tcStyle->footer->cellSpan2)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);

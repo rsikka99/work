@@ -48,7 +48,7 @@ $graphs = $healthcheckViewModel->getGraphs();
     <strong><?php echo number_format($healthcheckViewModel->getPercentDevicesOverused()); ?>%</strong> are printing above our recommended monthly print volume. Our recommended monthly print volumes are equal to the manufacturer's stated yield for a single print cartridge (for monochrome devices, the black cartridge, and for color devices, a single color cartridge unless the device is not being used for color).
 </p>
 <p>Underused printing devices can be consolidated or retired to free up floor and desk space, reduce the amount of cash held in unused supplies inventory, and reduce the energy costs associated with powering underused machines. Devices printing fewer than 250 pages per month are likely performing less than 3 print jobs per day, and that volume can easily be accommodated by any nearby device. </p>
-<p>Overused printing devices risk having more frequent breakdowns and should have a portion of their print volumes moved to underused printers or they can be replaced with higher-capacity machines. As an example, small print devices can have paper trays of fewer than 250 pages, and may result in several paper tray changes per day which can lead to user frustration and machine failure.</p>
+<p>Overused printing devices risk having more frequent breakdowns and should have a portion of their print volumes moved to underused printers or new higher-capacity machines. As an example, small print devices can have paper trays of fewer than 250 pages, and may result in several paper tray changes per day which can lead to user frustration and machine failure.</p>
 <br />
 <table cellspacing="0" class="genericTable" id="LeastUsedDevicesTable">
     <thead>
@@ -184,4 +184,4 @@ $graphs = $healthcheckViewModel->getGraphs();
     </tbody>
 </table>
 <p>In general, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company's professional image, improve comprehension and increase readership.</p>
-<p><?php echo $this->reportName ?> can help you track your color printing and provide low-cost color hardware options.</p>
+<p><?php echo My_Brand::getDealerBranding()->shortDealerName ?> can help you track your color printing and provide low-cost color hardware options.</p>

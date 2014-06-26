@@ -15,7 +15,7 @@ $graphs = $assessmentViewModel->getGraphs();
 </table>
 <br />
 <div class="pheader">Printing Device Management Breakdown</div>
-<p>Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased
+<p>Different types of printing devices are managed in different ways. Newer networked printers can be managed with remote monitoring software; leased
     multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older
     printers, are difficult to manage because you cannot monitor them with software.</p>
 <br />
@@ -46,7 +46,8 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
     can help you select network-capable equipment so your desktop printing can be managed with the rest of your office print.</p>
 <br />
 <?php if (count($assessmentViewModel->getExcludedDevices()) > 0) : ?>
-    <p><?php echo count($assessmentViewModel->getExcludedDevices()) ?> devices were not included in the analysis due to lack of data or model information. </p>
+    <p>There are <?php echo count($assessmentViewModel->getExcludedDevices()) ?> devices were not included in the analysis due to lack of data or model information.
+        See the Appendix in the <?php echo $this->brandName ?> Your Solution document for details regarding the excluded device(s).</p>
 <?php endif; ?>
 <div class="pheader">Efficiency of Break-Fix Service</div>
 <p>Based on your questionnaire responses, we discovered the following:</p>
@@ -89,8 +90,8 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
 <br />
 <div class="pheader">Number of Printing Device Models and Supply Types</div>
 <p>Out of your
-    <strong><?php echo $assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have of
-    <strong><?php echo $assessmentViewModel->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model
+    <strong><?php echo $assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have
+    <strong><?php echo $assessmentViewModel->getNumberOfUniqueModels(); ?></strong> unique models. Each section of the chart below represents a single model
     type. We estimate that
     <strong><?php echo count($assessmentViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances()); ?></strong> of your printing devices are leased machines, for
     which supplies are included in your contract. The
@@ -102,6 +103,6 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
 <div class="center">
     <img src="<?php echo $graphs[3]; ?>" /> <!--  Giant pie chart -->
 </div>
-<p>By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space
+<p>By using printing devices with supplies in common, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space
     required. <?php echo $this->companyName; ?> can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and
     emergency supply orders.</p>

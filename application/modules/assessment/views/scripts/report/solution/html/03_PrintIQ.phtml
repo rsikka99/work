@@ -7,7 +7,7 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
 <div class="h1">Solution: <?php echo $this->brandName; ?></div>
 <p>Get the most out of your existing printing assets with the <?php echo $this->brandName; ?> program. <?php echo $this->companyName; ?> will take over the
     management of your current printing equipment
-    and wrap your supplies and service into a single invoice.</p>
+    and combine your supplies and service into a single invoice.</p>
 
 <div class="pheader">Program Components</div>
 <p>Pay by the page with the <?php echo $this->brandName; ?> program:</p>
@@ -116,7 +116,7 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
     </tbody>
 </table>
 
-<p style="margin: 15pt 0pt;">Note that although the page volumes from all of your purchased devices were included in our savings calculations, not all of them
+<p class="italic-message" style="margin: 15pt 0pt;">Note that although the page volumes from all of your purchased devices were included in our savings calculations, not all of them
     may qualify for our managed print services program or just-in-time supplies fulfillment. Volumes from unqualified devices would have to be merged to an
     existing or new qualified device to be included in the program. Please see the Appendix for a complete printing device list with details on compatibility
     with the <?php echo $this->brandName; ?> program.</p>
@@ -125,10 +125,12 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
     <table>
         <tbody>
         <tr>
-            <td width="490" class="left"
-            "><strong>Total annual savings with <?php echo $this->brandName; ?></strong></td>
-            <td width="125" class="right"
-            "><strong><?php echo $this->currency($assessmentViewModel->getPrintIQSavings()); ?></strong></td>
+            <td width="490" class="left">
+                <strong>Total annual savings with <?php echo $this->brandName; ?></strong>
+            </td>
+            <td width="125" class="right">
+                <strong><?php echo $this->currency($assessmentViewModel->getPrintIQSavings(), array('precision' => 0)); ?></strong>
+            </td>
         </tr>
         </tbody>
     </table>

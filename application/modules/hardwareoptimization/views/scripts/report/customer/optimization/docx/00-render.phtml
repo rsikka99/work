@@ -52,6 +52,12 @@ $h3Color                   = My_Brand::getDealerBranding()->h1FontColor;
  */
 // H2 Style #5881BC
 // Title page
+$phpWord->addTitleStyle(1, array(
+    'size'   => 12,
+    'color'  => $h2Background,
+    'bold'   => true,
+));
+
 $phpWord->addTitleStyle(2, array(
     'size'   => 12,
     'color'  => My_Brand::getDealerBranding()->h2FontColor,
@@ -217,6 +223,23 @@ $standard_cell_vcenter_no_right_border = (object)array(
     )
 );
 
+$standard_cell_right = (object)array(
+    "even"           => array(
+        "bgColor"          => $even_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "odd"            => array(
+        "bgColor"          => $odd_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "fontStyle"      => null,
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'right'
+    ),
+);
 
 $standard_cell_left = (object)array(
     "even"             => array(
@@ -242,7 +265,7 @@ $standard_cell_left = (object)array(
             ),
         ),
     "modelName"        => (object)array(
-            "fontStyle"      => array('bold' => true),
+            "fontStyle"      => array(),
             "paragraphStyle" => array(
                 'spaceAfter' => 0,
                 'align'      => 'left'
@@ -285,19 +308,19 @@ $acceptableDevices = (object)array(
         'cellMarginLeft'   => 50
     ),
     "col1Width"  => $widthTwips * 0.30,
-    "col2Width"  => $widthTwips * 0.30,
+    "col2Width"  => $widthTwips * 0.20,
     "col3Width"  => $widthTwips * 0.10,
     "col4Width"  => $widthTwips * 0.10,
-    "col5Width"  => $widthTwips * 0.05,
+    "col5Width"  => $widthTwips * 0.15,
     "col6Width"  => $widthTwips * 0.15,
     "body"       => (object)array(
             "rowheight" => null,
             "cell1"     => $standard_cell_left,
             "cell2"     => $standard_cell_left,
-            "cell3"     => $standard_cell_left,
-            "cell4"     => $standard_cell_vcenter,
-            "cell5"     => $standard_cell_vcenter,
-            "cell6"     => $standard_cell_vcenter_no_right_border
+            "cell3"     => $standard_cell_right,
+            "cell4"     => $standard_cell_right,
+            "cell5"     => $standard_cell_right,
+            "cell6"     => $standard_cell_no_right_border,
         ),
     "header"     => (object)array(
             'header'     => $standard_header,
@@ -317,16 +340,16 @@ $suggestedDevices = (object)array(
     "col3Width"  => $widthTwips * 0.10,
     "col4Width"  => $widthTwips * 0.10,
     "col5Width"  => $widthTwips * 0.05,
-    "col6Width"  => $widthTwips * 0.15,
-    "col7Width"  => $widthTwips * 0.20,
+    "col6Width"  => $widthTwips * 0.10,
+    "col7Width"  => $widthTwips * 0.25,
     "body"       => (object)array(
             "rowheight" => null,
             "cell1"     => $standard_cell_left,
             "cell2"     => $standard_cell_left,
-            "cell3"     => $standard_cell_left,
-            "cell4"     => $standard_cell_vcenter,
-            "cell5"     => $standard_cell_vcenter,
-            "cell6"     => $standard_cell_vcenter_no_right_border,
+            "cell3"     => $standard_cell_right,
+            "cell4"     => $standard_cell_right,
+            "cell5"     => $standard_cell_right,
+            "cell6"     => $standard_cell_right,
             "cell7"     => $standard_cell_left
         ),
     "header"     => (object)array(
@@ -343,19 +366,19 @@ $retiredDevices = (object)array(
         'cellMarginLeft'   => 50
     ),
     "col1Width"  => $widthTwips * 0.30,
-    "col2Width"  => $widthTwips * 0.30,
+    "col2Width"  => $widthTwips * 0.20,
     "col3Width"  => $widthTwips * 0.10,
     "col4Width"  => $widthTwips * 0.10,
-    "col5Width"  => $widthTwips * 0.05,
+    "col5Width"  => $widthTwips * 0.15,
     "col6Width"  => $widthTwips * 0.15,
     "body"       => (object)array(
             "rowheight" => null,
             "cell1"     => $standard_cell_left,
             "cell2"     => $standard_cell_left,
-            "cell3"     => $standard_cell_left,
-            "cell4"     => $standard_cell_vcenter,
-            "cell5"     => $standard_cell_vcenter,
-            "cell6"     => $standard_cell_vcenter_no_right_border
+            "cell3"     => $standard_cell_right,
+            "cell4"     => $standard_cell_right,
+            "cell5"     => $standard_cell_right,
+            "cell6"     => $standard_cell_no_right_border,
         ),
     "header"     => (object)array(
             'header'     => $standard_header,
@@ -370,22 +393,22 @@ $flaggedDevices = (object)array(
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50
     ),
-    "col1Width"  => $widthTwips * 0.20,
+    "col1Width"  => $widthTwips * 0.25,
     "col2Width"  => $widthTwips * 0.20,
     "col3Width"  => $widthTwips * 0.10,
     "col4Width"  => $widthTwips * 0.10,
     "col5Width"  => $widthTwips * 0.05,
-    "col6Width"  => $widthTwips * 0.15,
+    "col6Width"  => $widthTwips * 0.10,
     "col7Width"  => $widthTwips * 0.20,
     "body"       => (object)array(
             "rowheight" => null,
             "cell1"     => $standard_cell_left,
             "cell2"     => $standard_cell_left,
-            "cell3"     => $standard_cell_left,
-            "cell4"     => $standard_cell_vcenter,
-            "cell5"     => $standard_cell_vcenter,
-            "cell6"     => $standard_cell_vcenter_no_right_border,
-            "cell7"     => $standard_cell_left
+            "cell3"     => $standard_cell_right,
+            "cell4"     => $standard_cell_right,
+            "cell5"     => $standard_cell_right,
+            "cell6"     => $standard_cell_right,
+            "cell7"     => $standard_cell_left,
         ),
     "header"     => (object)array(
             'header'     => $standard_header,

@@ -15,7 +15,7 @@ $deviceInstances    = $assessmentViewModel->getMonthlyHighCostPurchasedDevice($c
 $tcStyle = $this->styles->tables->costanalysis;
 $table   = $section->addTable($tcStyle->tablestyle);
 
-$table->addRow($tcStyle->rowheight,$tcStyle->rowheader);
+$table->addRow($tcStyle->rowheight, $tcStyle->rowheader);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText("Device Name", $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText("% Of Monthly Cost", $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText("Monochrome AMPV", $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
@@ -38,11 +38,11 @@ foreach ($deviceInstances as $deviceInstance)
         $style = $tcStyle->body->cell1->odd;
     }
 
-    $table->addRow($tcStyle->rowheight,$tcStyle->rowstyle);
+    $table->addRow($tcStyle->rowheight, $tcStyle->rowstyle);
     $cell1 = $table->addCell($tcStyle->col1Width, $style);
     $cell1->addText($deviceInstance->getMasterDevice()->getManufacturer()->fullname, $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
     $cell1->addText($deviceInstance->getMasterDevice()->modelName, $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-    $table->addCell($tcStyle->col2Width, $style)->addText(number_format($percentOfMonthlyCost) . "%", $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+    $table->addCell($tcStyle->col2Width, $style)->addText(number_format($percentOfMonthlyCost, 2) . "%", $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
     $table->addCell($tcStyle->col3Width, $style)->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
     $table->addCell($tcStyle->col4Width, $style)->addText(($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
     $table->addCell($tcStyle->col5Width, $style)->addText($this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);

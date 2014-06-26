@@ -11,6 +11,7 @@ $profitabiltyDevices = $this->profitabilityDevices;
 $section                = $this->section;
 $title                  = $this->title;
 $description            = $this->description;
+$descriptionIfZero      = $this->descriptionIfZeroDevices;
 $totalNumberOfDevices   = $this->totalNumberOfDevices;
 $showReplacementDevices = $this->showReplacementDevices;
 $showReason             = $this->showReason;
@@ -20,13 +21,12 @@ $cellStyle              = $this->cellStyle;
 $deviceInstances = $this->deviceInstances;
 
 $section->addTitle($title . " (" . number_format(count($deviceInstances)) . " out of " . number_format($totalNumberOfDevices) . " devices)", 2);
-
-$section->addText($description);
-
 $tcStyle = $this->tcStyle;
-$table   = $section->addTable($tcStyle->tablestyle);
+
 if (count($deviceInstances) > 0)
 {
+    $section->addText($description);
+    $table = $section->addTable($tcStyle->tablestyle);
 
 // Table header
     $table->addRow($tcStyle->body->rowheight, $this->tableStyle->rowheader);
@@ -34,8 +34,8 @@ if (count($deviceInstances) > 0)
     $table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
     $table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
     $table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-    $table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Device Age', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-    $table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText('Life Page Count', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Life Page Count', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+    $table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText('Device Age', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
     if ($showReplacementDevices)
     {
         if (!$showReason)
@@ -72,35 +72,34 @@ if (count($deviceInstances) > 0)
 
         $table->addRow($tcStyle->body->rowheight, $this->tableStyle->rowstyle);
         // Device Name
-        $cell = $table->addCell($tcStyle->collWidth, $style);
+        $cell = $table->addCell($tcStyle->col1Width, $style);
         $cell->addText($masterDevice->getManufacturer()->fullname, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell1->manufacturerName->paragraphStyle);
         $cell->addText($masterDevice->modelName, $tcStyle->body->cell1->modelName->fontStyle, $tcStyle->body->cell1->modelName->paragraphStyle);
 
         // Serial and IP
         $cell = $table->addCell($tcStyle->col2Width, $style);
-        $cell->addText($deviceInstance->serialNumber, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell2->manufacturerName->paragraphStyle);
+        $cell->addText($deviceInstance->serialNumber, $tcStyle->body->cell2->manufacturerName->fontStyle, $tcStyle->body->cell2->manufacturerName->paragraphStyle);
         $cell->addText($deviceInstance->ipAddress, $tcStyle->body->cell2->modelName->fontStyle, $tcStyle->body->cell2->modelName->paragraphStyle);
 
         // Monthly Statistics
         //// Mono AMPV
-        $table->addCell($tcStyle->col3Width, $style)->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell3->modelName->fontStyle, $tcStyle->body->cell3->modelName->paragraphStyle);
+        $table->addCell($tcStyle->col3Width, $style)->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
 
         //// Color AMPV
         $cell = $table->addCell($tcStyle->col4Width, $style);
         if ($isColor)
         {
-            $cell->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly(), $tcStyle->body->cell4->modelName->fontStyle, $tcStyle->body->cell4->modelName->paragraphStyle));
+            $cell->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
         }
         else
         {
-            $cell->addText("N/A", $tcStyle->body->cell4->modelName->fontStyle, $tcStyle->body->cell4->modelName->paragraphStyle);
+            $cell->addText(" - ", $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
         }
+        // Life Page Count
+        $table->addCell($tcStyle->col5Width, $style)->addText($this->formatPageVolume($deviceInstance->getMeter()->endMeterLife), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
 
         // Device Age
-        $table->addCell($tcStyle->col5Width, $style)->addText($deviceInstance->getAge() . 'y', $tcStyle->body->cell5->modelName->fontStyle, $tcStyle->body->cell5->modelName->paragraphStyle);
-
-        // Life Page Count
-        $table->addCell($tcStyle->col6Width, $style)->addText($this->formatPageVolume($deviceInstance->getMeter()->endMeterLife, $tcStyle->body->cell6->modelName->fontStyle, $tcStyle->body->cell6->modelName->paragraphStyle));
+        $table->addCell($tcStyle->col6Width, $style)->addText($deviceInstance->getAge() . 'y', $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
 
 
         if ($showReplacementDevices && $replacementMasterDevice)
@@ -133,7 +132,5 @@ if (count($deviceInstances) > 0)
 }
 else
 {
-    $table->addRow();
-    $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('No devices fall under this category.', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+    $section->addText($descriptionIfZero);
 }
-

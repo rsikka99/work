@@ -9,9 +9,9 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
     <thead>
     <tr class="center">
         <th class="left">Device</th>
-        <th>IP Address</th>
         <th>Serial No.</th>
-        <th>Age <br />(In Years)</th>
+        <th>IP Address</th>
+        <th>Device Age <br />(In Years)</th>
     </tr>
     </thead>
     <tbody>
@@ -21,10 +21,10 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
                 <div><?php echo $deviceInstance->getMasterDevice()->getFullDeviceName(); ?></div>
             </td>
             <td class="column3">
-                <div class="center"><?php echo ($deviceInstance->ipAddress) ? : "Unknown"; ?></div>
+                <div class="center"><?php echo ($deviceInstance->serialNumber) ? : "Unknown"; ?></div>
             </td>
             <td class="column3">
-                <div class="center"><?php echo ($deviceInstance->serialNumber) ? : "Unknown"; ?></div>
+                <div class="center"><?php echo ($deviceInstance->ipAddress) ? : "Unknown"; ?></div>
             </td>
             <td class="column6">
                 <div class="center"><?php echo $deviceInstance->getAge(); ?></div>

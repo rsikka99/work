@@ -9,7 +9,7 @@ $deviceInstances = $assessmentViewModel->getMonthlyHighCostPurchasedDevice($cust
 <div class="container landscape cost-analysis" id="htmlReportContainer">
     <h2 class="reportTitle"><?= My_Brand::getDealerBranding()->customerCostAnalysisTitle ?></h2><br />
 
-    <p><strong>Average Black CPP:</strong>
+    <p><strong>Average Monochrome CPP:</strong>
         <?php echo $this->formatCostPerPage($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage); ?></p>
 
     <p><strong>Average Color CPP:</strong>
@@ -19,8 +19,8 @@ $deviceInstances = $assessmentViewModel->getMonthlyHighCostPurchasedDevice($cust
         <tr>
             <th>Device Name</th>
             <th>% Of Monthly Cost</th>
-            <th>Monthly Black Volume</th>
-            <th>Monthly Color Volume</th>
+            <th>Monochrome AMPV</th>
+            <th>Color AMPV</th>
             <th>Black CPP</th>
             <th>Color CPP</th>
             <th>Estimated Monthly Cost</th>

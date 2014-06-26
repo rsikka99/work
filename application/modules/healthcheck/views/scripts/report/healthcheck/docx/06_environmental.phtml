@@ -9,7 +9,7 @@ $phpWord = $this->phpword;
 /* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
-$tcStyle    = $this->styles->tables->fleetattributes;
+$tcStyle = $this->styles->tables->fleetattributes;
 
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
@@ -29,7 +29,7 @@ $cellWidths  = array(
 $imageWidth  = 100;
 $imageHeight = 170;
 
-$imageTable  = $section->addTable($this->styles->tables->tripleimage->tablestyle);
+$imageTable = $section->addTable($this->styles->tables->tripleimage->tablestyle);
 $imageTable->addRow();
 $imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/img/reports/health-check/tree.jpg", array('width' => $imageWidth, 'height' => $imageHeight));
 $imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/img/reports/health-check/tree.jpg", array('width' => $imageWidth, 'height' => $imageHeight));
@@ -39,7 +39,11 @@ $imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)-
 $imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)->addText(sprintf(' %1$s gallons water', number_format($healthcheckViewModel->calculateNumberOfGallonsWaterUsed())), "forestWaterFont");
 
 $section->addTitle('Energy Consumption', 2);
-$section->addText(sprintf('You are currently using an estimated average of %1$s kilowatt hours (kWh) per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.', number_format($healthcheckViewModel->getAveragePowerUsagePerMonth()), number_format($healthcheckViewModel->getAveragePowerCostPerMonth()), number_format($healthcheckViewModel->healthcheck->getHealthcheckSettings()->kilowattsPerHour, 2)));
+$section->addText(sprintf('You are currently using an estimated average of %1$s kilowatt hours (kWh) per month to operate printing devices at an estimated monthly cost of %2$s, assuming a cost of %3$s per kWh.',
+    number_format($healthcheckViewModel->getAveragePowerUsagePerMonth()), // 1
+    $this->currency($healthcheckViewModel->getAveragePowerCostPerMonth(), 2), // 2
+    $this->currency($healthcheckViewModel->healthcheck->getHealthcheckSettings()->kilowattsPerHour, 2))); // 3
+
 $section->addText('The following lists the devices with the highest average power consumption per month.');
 
 $cellWidths = array(
@@ -50,7 +54,7 @@ $cellWidths = array(
 );
 
 $highEnergyTable = $section->addTable($this->styles->tables->highenergy->tablestyle);
-$highEnergyTable->addRow(400,null);
+$highEnergyTable->addRow(400, null);
 $highEnergyTable->addCell($cellWidths [0], $this->styles->tables->utilization->cellHeader)->addText('High Consumption Devices', 'bold_text', 'nospacing_centeralign');
 $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->utilization->cellHeader)->addText('Serial No.', 'bold_text', 'nospacing_centeralign');
 $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->utilization->cellHeader)->addText('Avg. kWh Consumption Per Month Count', 'bold_text', 'nospacing_centeralign');
@@ -59,11 +63,11 @@ $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->utilization->c
 $rowCount = 0;
 foreach ($healthcheckViewModel->getHighPowerConsumptionDevices() as $device)
 {
-    $highEnergyTable->addRow($this->styles->tables->utilization->rowheight,$tcStyle->rowstyle);
+    $highEnergyTable->addRow($this->styles->tables->utilization->rowheight, $tcStyle->rowstyle);
     $highEnergyTable->addCell($cellWidths [0], $this->styles->tables->highriskdevices->cell1)->addText($device->getDeviceName(), null, 'nospacing');
     $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing');
-    $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(number_format($device->getAverageMonthlyPowerConsumption()) . ' kWh', null, 'nospacing_centeralign');
-    $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText(($device->getAverageMonthlyPowerCost()), null, 'nospacing_centeralign');
+    $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(sprintf('%1$s kWh', number_format($device->getAverageMonthlyPowerConsumption())), null, 'nospacing_centeralign');
+    $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText($this->currency($device->getAverageMonthlyPowerCost(), 2), null, 'nospacing_centeralign');
     $rowCount++;
     if ($rowCount > 2)
     {

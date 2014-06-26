@@ -2123,7 +2123,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount(), 0);
             $highest          = ($averagePageCount > self::AVERAGE_MONTHLY_PAGES_PER_DEVICE) ? $averagePageCount : self::AVERAGE_MONTHLY_PAGES_PER_DEVICE;
             $barGraph         = new gchart\gBarChart(175, 300);
-            $barGraph->setTitle("Average monthly pages|per networked printer");
+            $barGraph->setTitle("Average Monthly Pages|per Networked Printer");
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -2160,7 +2160,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $pagesPerEmployee = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $employeeCount);
             $highest          = (Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
             $barGraph         = new gchart\gBarChart(175, 300);
-            $barGraph->setTitle("Average monthly pages|per employee");
+            $barGraph->setTitle("Average Monthly Pages|per Employee");
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -2196,7 +2196,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $devicesPerEmployee = round($employeeCount / $this->getDevices()->allIncludedDeviceInstances->getCount(), 2);
             $highest            = ($devicesPerEmployee > self::AVERAGE_EMPLOYEES_PER_DEVICE) ? $devicesPerEmployee : self::AVERAGE_EMPLOYEES_PER_DEVICE;
             $barGraph           = new gchart\gBarChart(175, 300);
-            $barGraph->setTitle("Employees per|printing device");
+            $barGraph->setTitle("Employees per|Printing Device");
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -2363,8 +2363,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 $notScanPercentage
             ));
             $scanCapableGraph->setLegend(array(
-                "Scan capable",
-                "Not scan capable"
+                "Scan-capable",
+                "Not scan-capable"
             ));
             $scanCapableGraph->setLabels(array(
                 "$scanPercentage%"
@@ -2394,8 +2394,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 $notFaxPercentage
             ));
             $faxCapable->setLegend(array(
-                "Fax capable",
-                "Not fax capable"
+                "Fax-capable",
+                "Not fax-capable"
             ));
             $faxCapable->setLabels(array(
                 "$faxPercentage%"
@@ -2432,8 +2432,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 $notDuplexPercentage
             ));
             $duplexCapableGraph->setLegend(array(
-                "Duplex capable",
-                "Not duplex capable"
+                "Duplex-capable",
+                "Not duplex-capable"
             ));
             $duplexCapableGraph->setLabels(array(
                 "$duplexPercentage%"
