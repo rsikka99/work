@@ -109,7 +109,7 @@ if (strrpos($vendorConfigurationNames, ',') > 0)
 }
 
 
-$summaryText = "There are " . (count($this->vendorseparatedData) - 2) . " toner vendors in the system. Out of the " . count($this->vendorseparatedData) . " toner preferences, " . $vendorConfigurationNames .
+$summaryText = "There are " . (count($this->vendorSeparatedData) - 2) . " toner vendors in the system. Out of the " . count($this->vendorSeparatedData) . " toner preferences, " . $vendorConfigurationNames .
                " has the highest overall gross margin at " . $this->highestMargin . ".";
 
 $activeSheet->setCellValue('A4', $summaryText);
@@ -117,7 +117,7 @@ $activeSheet->mergeCells('A4:L4');
 $activeSheet->setCellValue('A6', "Toner Preference");
 $activeSheet->setCellValue('B6', "Overall Gross Margin");
 
-foreach ($this->vendorseparatedData as $vendorData)
+foreach ($this->vendorSeparatedData as $vendorData)
 {
     $vendorOverallMargin = $vendorData['statisticsGroup']['right']['Overall Margin'];
     $vendorName          = $vendorData['pageTitle'];
@@ -146,7 +146,7 @@ $activeSheet->getColumnDimension('E')->setWidth(12);
  */
 
 
-foreach ($this->vendorseparatedData as $vendorData)
+foreach ($this->vendorSeparatedData as $vendorData)
 {
     $sheetCounter++;
     $sheet = $objPHPExcel->createSheet(null, $sheetCounter);
