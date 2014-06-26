@@ -15,7 +15,7 @@ $assessmentViewModel = $this->assessmentViewModel;
 
 $section->addTitle("3 Smart Steps to Success with Managed Print", 1);
 
-if ($this->App()->theme() == 'printiq')
+if ($this->App()->theme == 'printiq')
 {
     $section->addText(sprintf('%1$s has been managing print for our customers since the beginning. Sourcing and delivering printers and supplies is our mainstay and we\'ve been taking care
     of business for 25 years. Our full service MPS program was designed to manage and support your printing environment, based on your unique office printing needs.', $this->companyName));
@@ -28,7 +28,7 @@ $section->addListItem("Control expenses and budget for future needs");
 $section->addListItem("Increase your working capital by reducing supplies inventory");
 $section->addListItem("Free IT from print related issues");
 $section->addListItem("Choose to keep your existing assets or obtain new hardware from a choice of manufacturers");
-if ($this->App()->theme() == 'printiq')
+if ($this->App()->theme == 'printiq')
 {
     $section->addListItem("Leverage Copy & Print Depot in our 1,100+ stores nationwide for a Total Print Solution");
 }
@@ -51,7 +51,7 @@ $tr = $section->addTextRun();
 $tr->addText('Single Contact, Single Invoice: ', 'bold_text');
 $tr->addText('Forget dealing with multiple vendors and receive one invoice for all of your managed printers. This includes either service and supplies on a per-page rate, or hardware, service and supplies on a flat monthly rate. Either way, you will be able to budget for printing with predictable expenses.');
 
-if ($this->App()->theme() == 'printiq')
+if ($this->App()->theme == 'printiq')
 {
     $tr = $section->addTextRun();
     $tr->addText('Eco Smart Solutions: ', 'bold_text');

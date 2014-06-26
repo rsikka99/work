@@ -20,7 +20,7 @@ $totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->g
 
 $section->addPageBreak();
 
-$section->addTitle(sprintf('Device Appendix  (%1$s devices)', number_format($totalNumberOfDevices), 1));
+$section->addTitle(sprintf('Device Appendix (%1$s devices)', number_format($totalNumberOfDevices), 1));
 
 $this->partial('report/customer/optimization/docx/device_table.phtml',
     array(

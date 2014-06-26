@@ -28,8 +28,8 @@ $deviceInstances = $this->deviceInstances;
             <th>Serial<br />IP Address</th>
             <th>Mono AMPV</th>
             <th>Color AMPV</th>
-            <th>Device Age</th>
             <th>Life Page Count</th>
+            <th>Device Age</th>
             <?php if ($showReplacementDevices) : ?>
                 <th style="width:175px;">Replacement Device<?php echo ($showReason) ? " & Reason" : "" ?></th>
             <?php else : ?>
@@ -59,8 +59,8 @@ $deviceInstances = $this->deviceInstances;
                 <!-- Monthly Statistics -->
                 <td class="pageVolume"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()) ?></td>
                 <td class="pageVolume"><?php echo ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : ' - ' ?></td>
-                <td class="deviceAge"><?php echo $deviceInstance->getAge() ?>y</td>
                 <td class="pageVolume"><?php echo $this->formatPageVolume($deviceInstance->getMeter()->endMeterLife) ?></td>
+                <td class="deviceAge"><?php echo $deviceInstance->getAge() ?>y</td>
                 <?php if ($showReplacementDevices && $replacementMasterDevice) : ?>
                     <td>
                         <em><?php echo $replacementMasterDevice->getManufacturer()->fullname ?></em>

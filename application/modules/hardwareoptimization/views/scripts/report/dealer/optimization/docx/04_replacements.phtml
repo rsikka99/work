@@ -26,7 +26,7 @@ $section->addTitle(sprintf('Suggested Replacement Devices (%1$s of %2$s)', numbe
 if (count($suggestedDeviceInstances) > 0)
 {
     $section->addText(sprintf('The following devices have been targeted for replacement, either for a monthly cost savings greater than %1$s or other
-considerations made by the dealer.', $this->currency($hardwareOptimization->getHardwareOptimizationSetting()->costThreshold)), 'italic_subheading');
+considerations made by the dealer.', $this->currency($hardwareOptimization->getHardwareOptimizationSetting()->costThreshold)));
 
 // Table with values
     $tcStyle = $this->styles->tables->replacement;

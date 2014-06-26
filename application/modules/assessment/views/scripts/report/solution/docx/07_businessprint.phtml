@@ -18,20 +18,20 @@ $section->addTitle('Just-in-Time Supplies', 2);
 $section->addText(sprintf('%1$s monitors your supplies levels and ships toner immediately through our world class logistics and distribution network. This allows you to reduce the amount of cash held in supplies inventory, and increase uptime by always having the right supplies when you need them. Remember, sourcing and delivering supplies is our core business.', $this->companyName));
 
 $section->addTitle('Proactive Maintenance and Service', 2);
-$section->addText(sprintf('%1$s provides same-day support for service and printer maintenance, and under the %2$s program, all of your parts and labor are included (maintenance kits, fusers, etc.). We provide next-day repair for all printing devices under your managed print services contract so your IT staff will be free from handling printer-related issues.', $this->companyName, $this->brandName));
+$section->addText(sprintf('%1$s provides same-day support for service and printer maintenance, and under the %2$s, all of your parts and labor are included (maintenance kits, fusers, etc.). We provide next-day repair for all printing devices under your managed print services contract so your IT staff will be free from handling printer-related issues.', $this->companyName, $this->brandName));
 
 $section->addTitle('Cost Control and Business Intelligence Reporting', 2);
 $section->addText(sprintf('Under the %1$s and %1$s programs, you\'ll have a single contact and receive one monthly invoice for all of your managed print services. Now you can easily predict and budget for your printing expenses.', $this->brandName));
 
 $section->addTitle('Eco Smart Solutions', 2);
 $textrun = $section->addTextRun();
-if ($this->App()->theme() == 'printiq')
+if ($this->App()->theme == 'printiq')
 {
     $textrun->addText(sprintf('%1$s was recognized by Newsweek as the No. 1 Green Retailer.', $this->companyName));
 }
 $textrun->addText(' Our eco-preferable initiatives include recycling programs for supplies and equipment, and product lines of refurbished printers and remanufactured supplies. Through our managed print services program, we can help you determine which inefficient devices should be removed and if duplex, scanning and secure-print features should be implemented to reduce paper waste.');
 
-if ($this->App()->theme() == 'printiq')
+if ($this->App()->theme == 'printiq')
 {
     $section->addTitle('Your Total Print Solution', 2);
     $section->addText(sprintf('With %1$s, you get more than managed print services. Leverage our Copy & Print Depot locations for large or multiple print jobs. E-mail files to Copy & Print Depot for same-day pickup, delivery, or to ship to multiple locations. Use our digital file cabinet to store files on our secure server for staff or customers to access and print on demand. We also offer commercial printing, large format printing, banner printing, custom printing, and have a variety of finishing capabilities for all of your office printing needs.', $this->companyName));

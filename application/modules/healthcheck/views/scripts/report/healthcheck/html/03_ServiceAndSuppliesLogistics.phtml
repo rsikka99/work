@@ -21,7 +21,7 @@ $graphs = $healthcheckViewModel->getGraphs();
 <div class="pheader">Number of Printing Device Models and Supply Types</div>
 <p>Out of your
     <strong><?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have of
-    <strong><?php echo $healthcheckViewModel->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. Models with less than or equal to 0.7% of the total device count are put into the "Other" group.
+    <strong><?php echo $healthcheckViewModel->getNumberOfUniqueModels(); ?></strong> unique models. Each section of the chart below represents a single model type. Models with less than or equal to 0.7% of the total device count are put into the "Other" group.
 </p>
 <div class="center">
     <img src="<?php echo $graphs['UniqueDevicesGraph'] ?>" /> <!--  Giant pie chart -->
@@ -94,7 +94,7 @@ $tableData = array();
 <p>Out of your <?php echo count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances()) ?>
     networked printing devices, you have <strong>
         <?php echo count($healthcheckViewModel->getDeviceVendorCount());
-        ?></strong> different vendors. Each section of the chart below represents a single vendor name.
+        ?></strong> unique vendors. Each section of the chart below represents a single vendor name.
 
 <div class="center">
     <img src="<?php echo $graphs['PercentPerDeviceBrand']; ?>" />

@@ -22,8 +22,8 @@ $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
 
 <!-- Only display message and table if there are replacement devices assigned -->
 <?php if ($suggestedDeviceInstances) : ?>
-    <em>The following devices have been targeted for replacement, either for a monthly cost savings greater
-        than <?php echo $this->currency($hardwareOptimization->getHardwareOptimizationSetting()->costThreshold); ?> or other considerations made by the dealer.</em>
+    <p>The following devices have been targeted for replacement, either for a monthly cost savings greater
+        than <?php echo $this->currency($hardwareOptimization->getHardwareOptimizationSetting()->costThreshold); ?> or other considerations made by the dealer.</p>
 
     <table class="rDevices">
         <tr class="header">

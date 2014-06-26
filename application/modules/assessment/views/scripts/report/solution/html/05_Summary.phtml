@@ -16,17 +16,18 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
     is our core business.</p>
 
 <div class="pheader" style="margin: 10pt 0pt;">Proactive Maintenance and Service</div>
-<p><?php echo $this->companyName; ?> provides same-day support for service and printer maintenance, and under the <?php echo $this->brandName; ?> program, all
+<p><?php echo $this->companyName; ?> provides same-day support for service and printer maintenance, and under the <?php echo $this->brandName; ?>, all
     of your parts and labor are included (maintenance kits, fusers, etc.).
     We provide next-day repair for all printing devices under your managed print services contract so your IT staff will be free from handling printer-related
     issues.</p>
 
 <div class="pheader" style="margin: 10pt 0pt;">Cost Control and Business Intelligence Reporting</div>
-<p>Under the <?php echo $this->brandName; ?> and <?php echo $this->brandname; ?> Plus programs, you'll have a single contact and receive
-    one monthly invoice for all of your managed print services. Now you can easily predict and budget for your printing expenses.</p>
+<p>Under the <?php echo $this->brandName; ?>
+    <?php if ($this->App()->theme == 'printiq'): ?> and <?php echo $this->brandname; ?> Plus programs<?php endif; ?>
+    , you'll have a single contact and receive one monthly invoice for all of your managed print services. Now you can easily predict and budget for your printing expenses.</p>
 
 <div class="pheader" style="margin: 10pt 0pt;">Eco Smart Solutions</div>
-<p><?php if ($this->App()->theme() == 'printiq'): ?>
+<p><?php if ($this->App()->theme == 'printiq'): ?>
         <?php echo $this->companyName; ?> was recognized by Newsweek as the No. 1 Green Retailer. Our eco-preferable initiatives
         include recycling programs for supplies and equipment, and product lines of refurbished printers and
         remanufactured supplies.
@@ -34,7 +35,7 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
     which inefficient devices should be removed and if duplex, scanning and secure-print features should be
     implemented to reduce paper waste.</p>
 
-<?php if ($this->App()->theme() == 'printiq'): ?>
+<?php if ($this->App()->theme == 'printiq'): ?>
     <div class="pheader" style="margin: 10pt 0pt;">Your Total Print Solution</div>
     <p>With <?php echo $this->companyName; ?>, you get more than managed print services. Leverage our Copy & Print Depot locations for large or multiple print jobs.
         E-mail files to Copy & Print Depot for

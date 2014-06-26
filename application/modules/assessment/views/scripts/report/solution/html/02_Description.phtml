@@ -136,10 +136,11 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
             </div>
         </td>
         <td class="column3">
-            <div>Our <?php echo $this->brandName; ?> Plus program includes hardware, supplies, parts, service and labor for a flat monthly rate. If you want us
-                to manage your existing hardware, our <?php echo $this->brandName; ?> program includes supplies, parts, service and labor for a standard
-                per-page rate.
-                There are no minimum page charges, overage rates or fuel surcharges, and our rates do not increase over the contract term.
+            <div><?php if ($this->App()->theme == 'printiq'): ?>
+                    Our <?php echo $this->brandName; ?> Plus program includes hardware, supplies, parts, service and labor for a flat monthly rate.
+                <?php endif; ?>
+                If you want us to manage your existing hardware, our <?php echo $this->brandName; ?> program includes supplies, parts, service and labor for a standard
+                per-page rate. There are no minimum page charges, overage rates or fuel surcharges, and our rates do not increase over the contract term.
             </div>
         </td>
     </tr>
