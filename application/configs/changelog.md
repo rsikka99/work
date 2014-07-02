@@ -7,6 +7,26 @@
 *[RMS]: Remote Monitoring System
 *[UX]: User Experience
 
+Version 1.4.11
+==============
+* Added custom contracts (not user customizable, must be requested)
+* Added support for **PrintFleet 3.x** csv uploads
+* Added customizable branding found under **Admin -> Branding**
+    * Graph Colors
+    * Report Colors
+    * Report Names
+* Changed lease rates to be configurable anywhere between 0.00001 and 1.0 no matter how many decimal places are used
+* Changed quote report names to include customer name
+* Changed all customer facing reports to have a proper title page
+* Changed all HTML reports to be in sync with their DOCX counterparts
+* Fixed issue with logos getting distorted when uploaded
+* Fixed issue with transparent PNG files getting a solid background
+* Fixed issue where release date on devices would not save properly
+* Fixed issue where toners could not be edited due to a duplicate sku error
+* Fixed graphs to be consistent throughout reports. Their colors can be changed within the Branding aspect of the software
+* Fixed typos and inconsistencies in all reports
+* Removed Lorem Ipsum from Hardware Optimization Customer Facing Report
+
 Version 1.4.10
 ==============
 * Added markdown parsing of the changelog
@@ -67,10 +87,10 @@ Version 1.4.5
 =============
 * Added A3 support for master devices
 * Added Print Audit support
-* Added memjet device swaps into the system.
+* Added memjet device swaps into the system
 * Added tracking of users last valid login time
-* Added the ability to mark master devices as part of a JIT Program.
-* Added the ability to mark device instances as leased.
+* Added the ability to mark master devices as part of a JIT Program
+* Added the ability to mark device instances as leased
 * Changed admin/labor/parts CPP and energy cost are now allowed to be 0
 * Fixed the ability to delete dealers when they have a device swap attached
 * Fixed the hardware quote from displaying incorrect numbers
@@ -81,24 +101,24 @@ Version 1.4.5
 
 Version 1.4.4
 =============
-* Added a new bulk file imports into the system.
-* Added a new interface for import and export files.
+* Added a new bulk file imports into the system
+* Added a new interface for import and export files
 * Added a new report, Toner Vendor Gross Margin
 * Added explanation of how dealer / system overrides work for labor and parts CPP
-* Added the ability for Master Device Administrators to approve toners.
-* Added the ability for Master Device Administrators to edit manufacturers.
-* Added the ability for users that are not administrators to create, edit and delete toners that are not system toners.
-* Added the ability for users to create manufacturers.
+* Added the ability for Master Device Administrators to approve toners
+* Added the ability for Master Device Administrators to edit manufacturers
+* Added the ability for users that are not administrators to create, edit and delete toners that are not system toners
+* Added the ability for users to create manufacturers
 * Added the ability to add names to the reports
 * Added the ability to filter toner exports by manufacturer
 * Added the ability to import leasing rates
 * Changed look and feel of form / buttons to be more uniform across the application
 * Changed look and feel of manufacturers edit / create forms
-* Changed mapping no longer closes modal after saving.
-* Changed toners now are assigned automatically after creating them on the assigned toners page.
+* Changed mapping no longer closes modal after saving
+* Changed toners now are assigned automatically after creating them on the assigned toners page
 * Fixed bulk file pricing not being able to update by percentage
-* Fixed exclusion of devices for hardware optimization not working.
-* Fixed machine compatibility from not showing when assigning toners that were not yet saved.
+* Fixed exclusion of devices for hardware optimization not working
+* Fixed machine compatibility from not showing when assigning toners that were not yet saved
 * Fixed quote device groups not being saved
 * Fixed quote settings form multi select width bug
 * Fixed the ability to save user profiles
@@ -108,7 +128,7 @@ Version 1.4.4
 Version 1.4.3
 =============
 * Fixed issue cost delta would not include parts and labor CPP (display only)
-* Removed part types from toners. Toner vendors are now used instead.
+* Removed part types from toners. Toner vendors are now used instead
 
 Version 1.4.2
 =============
