@@ -61,7 +61,7 @@ $section->addTextBreak();
 $this->partial('report/customer/optimization/docx/device_table.phtml',
     array(
         "section"                  => $section,
-        "title"                    => "Devices Eligible for Retirement",
+        "title"                    => "Devices Eligible for Retirement and Migration",
         "description"              => "Devices with both low volume and age of over " . Proposalgen_Model_DeviceInstance::RETIREMENT_AGE . " years have been targeted for retirement. We suggest migrating page volumes to other devices.",
         "descriptionIfZeroDevices" => "There are no devices currently targeted for retirement.",
         "deviceInstances"          => (isset($deviceInstances[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_RETIRE])) ? $deviceInstances[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_RETIRE] : array(),

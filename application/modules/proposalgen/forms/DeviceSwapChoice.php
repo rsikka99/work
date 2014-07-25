@@ -108,7 +108,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
 
             $replacementDeviceOptions = array(
                 Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_KEEP   => Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_KEEP,
-                Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_RETIRE => Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_RETIRE,
+                Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_RETIRE => Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_RETIRE . " and Migrate",
                 Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_DNR    => Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_DNR,
             );
 
