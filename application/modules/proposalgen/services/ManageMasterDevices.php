@@ -172,14 +172,14 @@ class Proposalgen_Service_ManageMasterDevices
          */
         foreach ($toners as $toner)
         {
-            $assignedTonerColors[$toner['tonerColorId']] = true;
+            $assignedTonerColors[(int)$toner['tonerColorId']] = true;
 
             /**
              * OEM toners have the same manufacturer id as the device
              */
-            if ($toner['manufacturerId'] == $manufacturerId)
+            if ((int)$toner['manufacturerId'] == (int)$manufacturerId)
             {
-                $assignedOemTonerColors[$toner['tonerColorId']] = true;
+                $assignedOemTonerColors[(int)$toner['tonerColorId']] = true;
             }
         }
 

@@ -430,7 +430,11 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                 $forms['suppliesAndService'] = $manageMasterDeviceService->getSuppliesAndServicesForm();
                 $tonersList                  = $formData['suppliesAndService']['tonersList'];
 
-                $errorMessages = $manageMasterDeviceService->validateToners($tonersList, $formData['suppliesAndService']['tonerConfigId'], $manufacturerId);
+                $errorMessages = $manageMasterDeviceService->validateToners(
+                    $tonersList,
+                    ($formData['suppliesAndService']['tonerConfigId']) ?: $masterDevice->tonerConfigId,
+                    $manufacturerId
+                );
 
                 if (!$formData['suppliesAndService']['isLeased'] && $errorMessages !== true)
                 {
