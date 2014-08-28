@@ -130,7 +130,7 @@ class Admin_Service_Onboarding_Compatible extends Admin_Service_Onboarding_Abstr
 
                 if (!isset($manufacturers[$oemManufacturerName]))
                 {
-                    $manufacturerList = $manufacturerMapper->searchByName($manufacturerName);
+                    $manufacturerList = $manufacturerMapper->searchByName($oemManufacturerName);
                     $manufacturer     = reset($manufacturerList);
 
                     if ($manufacturer instanceof Proposalgen_Model_Manufacturer)
@@ -169,104 +169,116 @@ class Admin_Service_Onboarding_Compatible extends Admin_Service_Onboarding_Abstr
              */
             if (count($messages) < 1)
             {
-                foreach ($csvLines as $csvLine)
+                $db = Zend_Db_Table::getDefaultAdapter();
+                try
                 {
-                    $compatibleManufacturerName = $csvLine[self::COLUMN_TONER_MANUFACTURER];
-                    $compatibleSku              = $csvLine[self::COLUMN_TONER_SKU];
-                    $compatibleYield            = $csvLine[self::COLUMN_TONER_YIELD];
-                    $dealerCost                 = $csvLine[self::COLUMN_TONER_DEALER_COST];
-                    $dealerSku                  = $csvLine[self::COLUMN_TONER_DEALER_SKU];
-                    $oemTonerSku                = $csvLine[self::COLUMN_TONER_COMPATIBLE_WITH_SKU];
-                    $oemTonerManufacturerName   = $csvLine[self::COLUMN_TONER_COMPATIBLE_WITH_MANUFACTURER];
 
-                    /**
-                     * Get the color of the toner
-                     */
-                    $compTonerColorName     = $csvLine[self::COLUMN_TONER_COLOR];
-                    $compatibleTonerColorId = 1;
-                    foreach ($tonerColors as $tonerColorId => $tonerColorName)
-                    {
-                        if (strcasecmp($tonerColorName, $compTonerColorName) === 0)
-                        {
-                            $compatibleTonerColorId = $tonerColorId;
-                            break;
-                        }
-                    }
 
-                    /**
-                     * Make sure the compatible toner is in the system
-                     */
-                    $compatibleToner = $tonerMapper->fetchBySkuAndManufacturer($compatibleSku, $manufacturers[$compatibleManufacturerName]);
-                    if (!$compatibleToner instanceof Proposalgen_Model_Toner)
+                    foreach ($csvLines as $csvLine)
                     {
-                        $compatibleToner                 = new Proposalgen_Model_Toner();
-                        $compatibleToner->sku            = $compatibleSku;
-                        $compatibleToner->manufacturerId = $manufacturers[$compatibleManufacturerName];
-                        $compatibleToner->tonerColorId   = $compatibleTonerColorId;
-                        $compatibleToner->userId         = 1;
-                        $compatibleToner->yield          = $compatibleYield;
-                        $compatibleToner->cost           = Proposalgen_Service_Toner::obfuscateTonerCost($dealerCost);
-                        $compatibleToner->isSystemDevice = false;
-                        $tonerMapper->insert($compatibleToner);
-                    }
-                    
-                    /**
-                     * Toner colors must match. If we're inserting into the system this should always be true.
-                     */
-                    if ($compatibleToner->tonerColorId === $compatibleTonerColorId)
-                    {
+                        $compatibleManufacturerName = $csvLine[self::COLUMN_TONER_MANUFACTURER];
+                        $compatibleSku              = $csvLine[self::COLUMN_TONER_SKU];
+                        $compatibleYield            = $csvLine[self::COLUMN_TONER_YIELD];
+                        $dealerCost                 = $csvLine[self::COLUMN_TONER_DEALER_COST];
+                        $dealerSku                  = $csvLine[self::COLUMN_TONER_DEALER_SKU];
+                        $oemTonerSku                = $csvLine[self::COLUMN_TONER_COMPATIBLE_WITH_SKU];
+                        $oemTonerManufacturerName   = $csvLine[self::COLUMN_TONER_COMPATIBLE_WITH_MANUFACTURER];
+
                         /**
-                         * Update the compatible toner dealer price
+                         * Get the color of the toner
                          */
-                        $dealerTonerAttribute = $dealerTonerAttributeMapper->findTonerAttributeByTonerId($compatibleToner->id, $dealerId);
-                        if ($dealerTonerAttribute instanceof Proposalgen_Model_Dealer_Toner_Attribute)
+                        $compTonerColorName     = $csvLine[self::COLUMN_TONER_COLOR];
+                        $compatibleTonerColorId = 1;
+                        foreach ($tonerColors as $tonerColorId => $tonerColorName)
                         {
-                            $dealerTonerAttribute->cost = $dealerCost;
-                            if (strlen($dealerSku) > 0 && strcasecmp($compatibleToner->sku, $dealerSku) !== 0)
+                            if (strcasecmp($tonerColorName, $compTonerColorName) === 0)
                             {
-                                $dealerTonerAttribute->dealerSku = $dealerSku;
+                                $compatibleTonerColorId = $tonerColorId;
+                                break;
                             }
-
-                            $dealerTonerAttributeMapper->save($dealerTonerAttribute);
-                        }
-                        else
-                        {
-                            $dealerTonerAttribute           = new Proposalgen_Model_Dealer_Toner_Attribute();
-                            $dealerTonerAttribute->tonerId  = $compatibleToner->id;
-                            $dealerTonerAttribute->dealerId = $dealerId;
-                            $dealerTonerAttribute->cost     = $dealerCost;
-
-                            if (strlen($dealerSku) > 0)
-                            {
-                                $dealerTonerAttribute->dealerSku = $dealerSku;
-                            }
-
-                            $dealerTonerAttributeMapper->insert($dealerTonerAttribute);
                         }
 
                         /**
-                         * Map the compatible SKU to the same devices as the OEM SKU
+                         * Make sure the compatible toner is in the system
                          */
-                        $oemToner = $tonerMapper->fetchBySkuAndManufacturer($oemTonerSku, $manufacturers[$oemTonerManufacturerName]);
-                        if ($oemToner)
+                        $compatibleToner = $tonerMapper->fetchBySkuAndManufacturer($compatibleSku, $manufacturers[$compatibleManufacturerName]);
+                        if (!$compatibleToner instanceof Proposalgen_Model_Toner)
                         {
-                            $existingDeviceToners = $deviceTonerMapper->fetchDeviceTonersByTonerId($oemToner->id);
-                            foreach ($existingDeviceToners as $existingDeviceToner)
+                            $compatibleToner                 = new Proposalgen_Model_Toner();
+                            $compatibleToner->sku            = $compatibleSku;
+                            $compatibleToner->manufacturerId = $manufacturers[$compatibleManufacturerName];
+                            $compatibleToner->tonerColorId   = $compatibleTonerColorId;
+                            $compatibleToner->userId         = 1;
+                            $compatibleToner->yield          = $compatibleYield;
+                            $compatibleToner->cost           = Proposalgen_Service_Toner::obfuscateTonerCost($dealerCost);
+                            $compatibleToner->isSystemDevice = false;
+                            $tonerMapper->insert($compatibleToner);
+                        }
+
+                        /**
+                         * Toner colors must match. If we're inserting into the system this should always be true.
+                         */
+                        if ((int)$compatibleToner->tonerColorId === (int)$compatibleTonerColorId)
+                        {
+                            /**
+                             * Update the compatible toner dealer price
+                             */
+                            $dealerTonerAttribute = $dealerTonerAttributeMapper->findTonerAttributeByTonerId($compatibleToner->id, $dealerId);
+                            if ($dealerTonerAttribute instanceof Proposalgen_Model_Dealer_Toner_Attribute)
                             {
-                                if (!$deviceTonerMapper::getInstance()->find(array($compatibleToner->id, $existingDeviceToner->master_device_id)) instanceof Proposalgen_Model_DeviceToner)
+                                $dealerTonerAttribute->cost = $dealerCost;
+                                if (strlen($dealerSku) > 0 && strcasecmp($compatibleToner->sku, $dealerSku) !== 0)
                                 {
-                                    $deviceToner                   = new Proposalgen_Model_DeviceToner();
-                                    $deviceToner->toner_id         = $compatibleToner->id;
-                                    $deviceToner->master_device_id = $existingDeviceToner->master_device_id;
-                                    Proposalgen_Model_Mapper_DeviceToner::getInstance()->insert($deviceToner);
+                                    $dealerTonerAttribute->dealerSku = $dealerSku;
+                                }
+
+                                $dealerTonerAttributeMapper->save($dealerTonerAttribute);
+                            }
+                            else
+                            {
+                                $dealerTonerAttribute           = new Proposalgen_Model_Dealer_Toner_Attribute();
+                                $dealerTonerAttribute->tonerId  = $compatibleToner->id;
+                                $dealerTonerAttribute->dealerId = $dealerId;
+                                $dealerTonerAttribute->cost     = $dealerCost;
+
+                                if (strlen($dealerSku) > 0)
+                                {
+                                    $dealerTonerAttribute->dealerSku = $dealerSku;
+                                }
+
+                                $dealerTonerAttributeMapper->insert($dealerTonerAttribute);
+                            }
+
+                            /**
+                             * Map the compatible SKU to the same devices as the OEM SKU
+                             */
+                            $oemToner = $tonerMapper->fetchBySkuAndManufacturer($oemTonerSku, $manufacturers[$oemTonerManufacturerName]);
+                            if ($oemToner)
+                            {
+                                $existingDeviceToners = $deviceTonerMapper->fetchDeviceTonersByTonerId($oemToner->id);
+                                foreach ($existingDeviceToners as $existingDeviceToner)
+                                {
+                                    if (!$deviceTonerMapper::getInstance()->find(array($compatibleToner->id, $existingDeviceToner->master_device_id)) instanceof Proposalgen_Model_DeviceToner)
+                                    {
+                                        $deviceToner                   = new Proposalgen_Model_DeviceToner();
+                                        $deviceToner->toner_id         = $compatibleToner->id;
+                                        $deviceToner->master_device_id = $existingDeviceToner->master_device_id;
+                                        Proposalgen_Model_Mapper_DeviceToner::getInstance()->insert($deviceToner);
+                                    }
                                 }
                             }
                         }
+                        else
+                        {
+                            $messages[] = sprintf('The toner color specified in the file ("%1$s") does not match the toner color of the system toner ("%2$s").', $compTonerColorName, $tonerColors[$compatibleToner->tonerColorId]);
+                        }
                     }
-                    else
-                    {
-                        $messages[] = sprintf('The toner color specified in the file ("%1$s") does not match the toner color of the system toner ("%2$s").', $compTonerColorName, $tonerColors[$compatibleToner->tonerColorId]);
-                    }
+                }
+                catch (Exception $e)
+                {
+                    $db->rollBack();
+                    Tangent_Log::logException($e);
+                    $messages[] = sprintf('Database error. A system administrator has been notified and the error has been logged.');
                 }
             }
         }
