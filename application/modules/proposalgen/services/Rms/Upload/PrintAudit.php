@@ -39,6 +39,7 @@ class Proposalgen_Service_Rms_Upload_PrintAudit extends Proposalgen_Service_Rms_
 //        'yellowTonerYield'       => 'yellowTonerYield',
 //        'yellowTonerCost'        => 'yellowTonerCost',
     protected $_columnMapping = array(
+        'rmsModelId'             => 'rmsModelId',
         'assetid'                => 'assetId',
         'ismanaged'              => 'isManaged',
         'monitordate'            => 'monitorStartDate',

@@ -199,9 +199,9 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                     'filter'  => 'Callback',
                     'options' => array(
                         'callback' => function ($value)
-                            {
-                                return (strcasecmp($value, "Managed") === 0);
-                            },
+                        {
+                            return (strcasecmp($value, "Managed") === 0);
+                        },
                     ),
                 ),
                 'Int',
