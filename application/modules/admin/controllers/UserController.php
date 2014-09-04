@@ -473,19 +473,9 @@ class Admin_UserController extends Tangent_Controller_Action
                             }
                         }
 
-                        if ($passwordChanged)
-                        {
-                            Dealermanagement_Service_User::sendPasswordChangedEmail($user, $values['password']);
-                            $this->_flashMessenger->addMessage(array(
-                                'success' => "User '" . $this->view->escape($formValues ["email"]) . "' saved successfully. An email with the new password will be sent to the user."
-                            ));
-                        }
-                        else
-                        {
-                            $this->_flashMessenger->addMessage(array(
-                                'success' => "User '" . $this->view->escape($formValues ["email"]) . "' saved successfully."
-                            ));
-                        }
+                        $this->_flashMessenger->addMessage(array(
+                            'success' => "User '" . $this->view->escape($formValues ["email"]) . "' saved successfully."
+                        ));
                     }
                     else
                     {

@@ -231,11 +231,6 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
                 }
 
                 $success = true;
-
-                if ($passwordChanged)
-                {
-                    Dealermanagement_Service_User::sendPasswordChangedEmail($user, $filteredData['password']);
-                }
             }
         }
         else
