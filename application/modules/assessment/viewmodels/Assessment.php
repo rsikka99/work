@@ -1966,7 +1966,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $dealerBranding = My_Brand::getDealerBranding();
 
             // Other variables used in several places
-            $companyName   = $this->assessment->getClient()->companyName;
+            $companyName   = mb_strimwidth($this->assessment->getClient()->companyName, 0, 23, "...");
             $employeeCount = $this->assessment->getClient()->employeeCount;
 
             // Formatting variables

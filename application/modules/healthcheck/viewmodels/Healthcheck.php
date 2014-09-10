@@ -1125,7 +1125,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $dealerBranding = My_Brand::getDealerBranding();
 
             // Other variables used in several places
-            $companyName   = $this->healthcheck->getClient()->companyName;
+            $companyName   = mb_strimwidth($this->healthcheck->getClient()->companyName, 0, 23, "...");
             $employeeCount = $this->healthcheck->getClient()->employeeCount;
 
             // Formatting variables
@@ -1875,7 +1875,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
             $healthcheckGraphs       = array();
             $numberValueMarker       = "N *sz0";
-            $companyName             = $this->healthcheck->getClient()->companyName;
+            $companyName             = mb_strimwidth($this->healthcheck->getClient()->companyName, 0, 23, "...");
             $employeeCount           = $this->healthcheck->getClient()->employeeCount;
             $numberOfIncludedDevices = $this->getDevices()->allIncludedDeviceInstances->getCount();
 
@@ -2196,7 +2196,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             ));
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
-            $barGraph->setTitle($this->healthcheck->getClient()->companyName);
+            $barGraph->setTitle($companyName);
 
             // reportingTonerLevelsBarGraph
             $healthcheckGraphs['reportingTonerLevelsBarGraph'] = $barGraph->getUrl();
@@ -2233,7 +2233,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             ));
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
-            $barGraph->setTitle($this->healthcheck->getClient()->companyName);
+            $barGraph->setTitle($companyName);
 
             // CompatibleJITBarGraph
             $healthcheckGraphs['CompatibleJITBarGraph'] = $barGraph->getUrl();

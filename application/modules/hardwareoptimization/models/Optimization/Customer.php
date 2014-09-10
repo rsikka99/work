@@ -25,7 +25,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
         if (!isset($this->_graphs))
         {
             $dealerBranding = My_Brand::getDealerBranding();
-
+            $companyName   = mb_strimwidth($this->_hardwareOptimization->getClient()->companyName, 0, 23, "...");
             $purchaseDeviceCount = count($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances());
 
             // N = number, p = percent, 0 = number of decimal places.
@@ -60,7 +60,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
                 str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
             ));
             $barGraph->setLegend(array(
-                $this->_hardwareOptimization->getClient()->companyName,
+                $companyName,
                 "Average"
             ));
 
@@ -97,7 +97,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
                 str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
             ));
             $barGraph->setLegend(array(
-                $this->_hardwareOptimization->getClient()->companyName,
+                $companyName,
                 "Average"
             ));
             $barGraph->setProperty('chxs', '0N*sz0*');
