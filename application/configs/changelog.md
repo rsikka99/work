@@ -7,6 +7,12 @@
 *[RMS]: Remote Monitoring System
 *[UX]: User Experience
 
+Version 1.4.12
+==============
+* Added the ability to group devices in a Print Audit upload
+* Fixed issue with long customer names on graphs
+* Fixed issue that color devices do not always save successfully due to an issue with the toner configuration
+
 Version 1.4.11
 ==============
 * Added custom contracts (not user customizable, must be requested)
