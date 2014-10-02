@@ -418,7 +418,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                 if ($targetDeviceInstance instanceof Proposalgen_Model_DeviceInstance)
                 {
                     $deviceInstances = array();
-                    if ($targetDeviceInstance->getRmsUploadRow()->rmsModelId > 0)
+                    if (strlen($targetDeviceInstance->getRmsUploadRow()->rmsModelId) > 0)
                     {
                         $deviceInstances = $deviceInstanceMapper->fetchAllWithRmsModelId($targetDeviceInstance->rmsUploadId, $targetDeviceInstance->getRmsUploadRow()->rmsProviderId, $targetDeviceInstance->getRmsUploadRow()->rmsModelId);
                     }

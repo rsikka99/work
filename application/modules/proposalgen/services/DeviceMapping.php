@@ -80,7 +80,7 @@ class Proposalgen_Service_DeviceMapping
         $deviceInstance->id;
         $rmsUploadRow = $deviceInstance->getRmsUploadRow();
 
-        $hasRmsModelId = ($rmsUploadRow->rmsModelId > 0);
+        $hasRmsModelId = (strlen($rmsUploadRow->rmsModelId) > 0);
 
         if ($hasRmsModelId)
         {
