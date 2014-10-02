@@ -7,6 +7,11 @@
 *[RMS]: Remote Monitoring System
 *[UX]: User Experience
 
+Version 1.4.13
+==============
+* Fixed issue with string based RMS Model IDs such as Print Audit IDs not mapping more than 1 device at a time
+* Fixed issue with dealer toner preferences not propagating
+
 Version 1.4.12
 ==============
 * Added the ability to group devices in a Print Audit upload
