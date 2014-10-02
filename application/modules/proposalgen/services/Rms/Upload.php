@@ -3,8 +3,7 @@
 /**
  * Class Proposalgen_Service_Rms_Upload
  */
-class Proposalgen_Service_Rms_Upload
-{
+class Proposalgen_Service_Rms_Upload {
     /**
      * @var int
      */
@@ -51,13 +50,11 @@ class Proposalgen_Service_Rms_Upload
      * @param int                               $clientId
      * @param Proposalgen_Model_Rms_Upload|null $rmsUpload
      */
-    public function __construct ($userId, $clientId, $rmsUpload = null)
-    {
+    public function __construct( $userId, $clientId, $rmsUpload = null ) {
         $this->_userId   = $userId;
         $this->_clientId = $clientId;
 
-        if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload)
-        {
+        if ( $rmsUpload instanceof Proposalgen_Model_Rms_Upload ) {
             $this->rmsUpload = $rmsUpload;
         }
     }
@@ -73,19 +70,16 @@ class Proposalgen_Service_Rms_Upload
      *
      * @return bool success
      */
-    public function processUpload ($data, $dealerId)
-    {
+    public function processUpload( $data, $dealerId ) {
         $importSuccessful = false;
 
         $this->_fileName = $this->getForm()->getUploadedFilename();
-        if ($this->getForm()->isValid($data) && $this->_fileName !== false)
-        {
+        if ( $this->getForm()->isValid( $data ) && $this->_fileName !== false ) {
             $values               = $this->getForm()->getValues();
             $this->_rmsProviderId = $values ['rmsProviderId'];
 
             // Get the appropriate service based on the RMS provider
-            switch ((int)$this->_rmsProviderId)
-            {
+            switch ( (int) $this->_rmsProviderId ) {
                 case Proposalgen_Model_Rms_Provider::RMS_PROVIDER_PRINTFLEET_THREE:
                     $uploadProviderId = Proposalgen_Model_Rms_Provider::RMS_PROVIDER_PRINTFLEET_THREE;
                     $uploadCsvService = new Proposalgen_Service_Rms_Upload_PrintFleet();
@@ -117,12 +111,10 @@ class Proposalgen_Service_Rms_Upload
                     break;
             }
 
-            if ($uploadCsvService instanceof Proposalgen_Service_Rms_Upload_Abstract)
-            {
+            if ( $uploadCsvService instanceof Proposalgen_Service_Rms_Upload_Abstract ) {
                 $db = Zend_Db_Table::getDefaultAdapter();
                 $db->beginTransaction();
-                try
-                {
+                try {
                     $rmsUploadRowMapper        = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance();
                     $rmsExcludedRowMapper      = Proposalgen_Model_Mapper_Rms_Excluded_Row::getInstance();
                     $deviceInstanceMeterMapper = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance();
@@ -132,14 +124,13 @@ class Proposalgen_Service_Rms_Upload
                      * Store our old upload in case we need it.
                      */
                     $oldRmsUpload = null;
-                    if ($this->rmsUpload instanceof Proposalgen_Model_Rms_Upload)
-                    {
+                    if ( $this->rmsUpload instanceof Proposalgen_Model_Rms_Upload ) {
                         $oldRmsUpload = $this->rmsUpload;
                     }
 
                     $this->rmsUpload                  = new Proposalgen_Model_Rms_Upload();
-                    $this->rmsUpload->uploadDate      = new Zend_Db_Expr('NOW()');
-                    $this->rmsUpload->fileName        = basename($this->_fileName);
+                    $this->rmsUpload->uploadDate      = new Zend_Db_Expr( 'NOW()' );
+                    $this->rmsUpload->fileName        = basename( $this->_fileName );
                     $this->rmsUpload->clientId        = $this->_clientId;
                     $this->rmsUpload->rmsProviderId   = $uploadProviderId;
                     $this->rmsUpload->invalidRowCount = 0;
@@ -149,42 +140,34 @@ class Proposalgen_Service_Rms_Upload
                     /*
                      * Process the new data
                      */
-                    $processCsvMessage = $uploadCsvService->processCsvFile($this->_fileName);
-                    if ($processCsvMessage === true)
-                    {
+                    $processCsvMessage = $uploadCsvService->processCsvFile( $this->_fileName );
+                    if ( $processCsvMessage === true ) {
 
                         /**
                          * Save our upload object
                          */
-                        $this->rmsUpload->invalidRowCount = count($uploadCsvService->invalidCsvLines);
-                        $this->rmsUpload->validRowCount   = count($uploadCsvService->validCsvLines);
+                        $this->rmsUpload->invalidRowCount = count( $uploadCsvService->invalidCsvLines );
+                        $this->rmsUpload->validRowCount   = count( $uploadCsvService->validCsvLines );
                         $this->invalidRows                = $uploadCsvService->invalidCsvLines;
 
-                        if ($this->rmsUpload->validRowCount < 2)
-                        {
+                        if ( $this->rmsUpload->validRowCount < 2 ) {
                             $this->errorMessages = "Your file had less than 2 valid rows in it. We require that you have 2 or more valid rows to upload a file";
-                        }
-                        else
-                        {
+                        } else {
 
-                            if ($oldRmsUpload instanceof Proposalgen_Model_Rms_Upload)
-                            {
+                            if ( $oldRmsUpload instanceof Proposalgen_Model_Rms_Upload ) {
                                 /**
                                  * Delete all previously uploaded lines
                                  */
-                                $rmsUploadRowMapper->deleteAllForRmsUpload($oldRmsUpload->id);
-                                $rmsExcludedRowMapper->deleteAllForRmsUpload($oldRmsUpload->id);
-                                Proposalgen_Model_Mapper_Rms_Upload::getInstance()->delete($oldRmsUpload);
+                                $rmsUploadRowMapper->deleteAllForRmsUpload( $oldRmsUpload->id );
+                                $rmsExcludedRowMapper->deleteAllForRmsUpload( $oldRmsUpload->id );
+                                Proposalgen_Model_Mapper_Rms_Upload::getInstance()->delete( $oldRmsUpload );
                             }
 
 
-                            if ($this->rmsUpload->id > 0)
-                            {
-                                Proposalgen_Model_Mapper_Rms_Upload::getInstance()->save($this->rmsUpload);
-                            }
-                            else
-                            {
-                                Proposalgen_Model_Mapper_Rms_Upload::getInstance()->insert($this->rmsUpload);
+                            if ( $this->rmsUpload->id > 0 ) {
+                                Proposalgen_Model_Mapper_Rms_Upload::getInstance()->save( $this->rmsUpload );
+                            } else {
+                                Proposalgen_Model_Mapper_Rms_Upload::getInstance()->insert( $this->rmsUpload );
                             }
 
 
@@ -196,8 +179,7 @@ class Proposalgen_Service_Rms_Upload
                              */
                             $deviceInstances = array();
 
-                            foreach ($uploadCsvService->validCsvLines as $line)
-                            {
+                            foreach ( $uploadCsvService->validCsvLines as $line ) {
                                 /*
                                  * Convert line into device instance, upload row, and meters
                                  */
@@ -206,24 +188,22 @@ class Proposalgen_Service_Rms_Upload
                                 /*
                                  * Check and insert RMS device
                                  */
-                                if (strlen($line->rmsModelId) > 0)
-                                {
-                                    $rmsDevice = $rmsDeviceMapper->find(array($uploadProviderId, $line->rmsModelId));
-                                    if ($rmsDevice instanceof Proposalgen_Model_Rms_Device)
-                                    {
-                                        if ($rmsDevice->isGeneric)
-                                        {
+                                if ( strlen( $line->rmsModelId ) > 0 ) {
+                                    $rmsDevice = $rmsDeviceMapper->find( array(
+                                            $uploadProviderId,
+                                            $line->rmsModelId
+                                        ) );
+                                    if ( $rmsDevice instanceof Proposalgen_Model_Rms_Device ) {
+                                        if ( $rmsDevice->isGeneric ) {
                                             $line->rmsModelId = null;
                                         }
                                         $lineArray = $line->toArray();
-                                    }
-                                    else
-                                    {
-                                        $rmsDevice                = new Proposalgen_Model_Rms_Device($lineArray);
+                                    } else {
+                                        $rmsDevice                = new Proposalgen_Model_Rms_Device( $lineArray );
                                         $rmsDevice->rmsProviderId = $uploadProviderId;
-                                        $rmsDevice->dateCreated   = new Zend_Db_Expr("NOW()");
+                                        $rmsDevice->dateCreated   = new Zend_Db_Expr( "NOW()" );
                                         $rmsDevice->userId        = $this->_userId;
-                                        $rmsDeviceMapper->insert($rmsDevice);
+                                        $rmsDeviceMapper->insert( $rmsDevice );
                                     }
 
                                 }
@@ -231,28 +211,24 @@ class Proposalgen_Service_Rms_Upload
                                 /*
                                  * Save RMS Upload Row
                                  */
-                                $rmsUploadRow                 = new Proposalgen_Model_Rms_Upload_Row($lineArray);
+                                $rmsUploadRow                 = new Proposalgen_Model_Rms_Upload_Row( $lineArray );
                                 $rmsUploadRow->fullDeviceName = "{$line->manufacturer} {$line->modelName}";
                                 $rmsUploadRow->rmsProviderId  = $uploadProviderId;
 
                                 // Lets make an attempt at finding the manufacturer
-                                $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->searchByName($rmsUploadRow->manufacturer);
-                                if ($manufacturers && count($manufacturers) > 0)
-                                {
+                                $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->searchByName( $rmsUploadRow->manufacturer );
+                                if ( $manufacturers && count( $manufacturers ) > 0 ) {
                                     $rmsUploadRow->manufacturerId = $manufacturers[0]->id;
                                 }
 
-                                try
-                                {
-                                    $rmsUploadRowMapper->insert($rmsUploadRow);
+                                try {
+                                    $rmsUploadRowMapper->insert( $rmsUploadRow );
                                 }
-                                catch (Exception $e)
-                                {
-                                    if (isset($rmsDevice) && $rmsDevice instanceof Proposalgen_Model_Rms_Device)
-                                    {
-                                        Tangent_Log::crit(print_r($rmsDevice->toArray(), true));
+                                catch ( Exception $e ) {
+                                    if ( isset( $rmsDevice ) && $rmsDevice instanceof Proposalgen_Model_Rms_Device ) {
+                                        Tangent_Log::crit( print_r( $rmsDevice->toArray(), true ) );
                                     }
-                                    Tangent_Log::crit(print_r($rmsUploadRow->toArray(), true));
+                                    Tangent_Log::crit( print_r( $rmsUploadRow->toArray(), true ) );
                                     throw $e;
                                 }
 
@@ -260,10 +236,10 @@ class Proposalgen_Service_Rms_Upload
                                 /*
                                  * Save Device Instance
                                  */
-                                $deviceInstance                 = new Proposalgen_Model_DeviceInstance($lineArray);
+                                $deviceInstance                 = new Proposalgen_Model_DeviceInstance( $lineArray );
                                 $deviceInstance->rmsUploadId    = $this->rmsUpload->id;
                                 $deviceInstance->rmsUploadRowId = $rmsUploadRow->id;
-                                Proposalgen_Model_Mapper_DeviceInstance::getInstance()->insert($deviceInstance);
+                                Proposalgen_Model_Mapper_DeviceInstance::getInstance()->insert( $deviceInstance );
 
                                 $deviceInstances[] = $deviceInstance;
 
@@ -276,170 +252,129 @@ class Proposalgen_Service_Rms_Upload
                                 $meter->monitorStartDate = $line->monitorStartDate;
                                 $meter->monitorEndDate   = $line->monitorEndDate;
 
-                                $defaultDatabaseField = new Zend_Db_Expr('NULL');
+                                $defaultDatabaseField = new Zend_Db_Expr( 'NULL' );
 
                                 // Life Meter
-                                if ($line->endMeterLife > 0)
-                                {
+                                if ( $line->endMeterLife > 0 ) {
                                     $meter->startMeterLife = $line->startMeterLife;
                                     $meter->endMeterLife   = $line->endMeterLife;
-                                }
-                                else if ($line->endMeterBlack > 0 || $line->endMeterColor > 0)
-                                {
+                                } else if ( $line->endMeterBlack > 0 || $line->endMeterColor > 0 ) {
                                     $meter->startMeterLife = $line->startMeterBlack + $line->startMeterColor;
                                     $meter->endMeterLife   = $line->endMeterBlack + $line->endMeterColor;
-                                }
-                                else
-                                {
+                                } else {
                                     $meter->startMeterLife = $defaultDatabaseField;
                                     $meter->endMeterLife   = $defaultDatabaseField;
                                 }
 
                                 //  Black
-                                if ($line->endMeterBlack > 0)
-                                {
+                                if ( $line->endMeterBlack > 0 ) {
                                     $meter->startMeterBlack = $line->startMeterBlack;
                                     $meter->endMeterBlack   = $line->endMeterBlack;
-                                }
-                                // If we don't have a meter lets try creating it
-                                else if ($line->endMeterLife > 0)
-                                {
+                                } // If we don't have a meter lets try creating it
+                                else if ( $line->endMeterLife > 0 ) {
                                     $endMeterBlack = $line->endMeterLife - $line->endMeterPrintColor - $line->endMeterCopyColor - $line->endMeterPrintA3Color;
-                                    if ($endMeterBlack > 0)
-                                    {
+                                    if ( $endMeterBlack > 0 ) {
                                         $meter->startMeterBlack = $line->startMeterLife - $line->startMeterPrintColor - $line->startMeterCopyColor - $line->startMeterPrintA3Color;
                                         $meter->endMeterBlack   = $endMeterBlack;
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         $meter->startMeterBlack = $defaultDatabaseField;
                                         $meter->endMeterBlack   = $defaultDatabaseField;
                                     }
-                                }
-                                else
-                                {
+                                } else {
                                     $meter->startMeterBlack = $defaultDatabaseField;
                                     $meter->endMeterBlack   = $defaultDatabaseField;
                                 }
 
                                 //  Color
-                                if ($line->endMeterColor > 0)
-                                {
+                                if ( $line->endMeterColor > 0 ) {
                                     $meter->startMeterColor = $line->startMeterColor;
                                     $meter->endMeterColor   = $line->endMeterColor;
-                                }
-                                else
-                                {
+                                } else {
                                     $meter->startMeterColor = $defaultDatabaseField;
                                     $meter->endMeterColor   = $defaultDatabaseField;
                                 }
 
                                 // Print Black
-                                if ($line->endMeterPrintBlack > 0)
-                                {
+                                if ( $line->endMeterPrintBlack > 0 ) {
                                     $meter->startMeterPrintBlack = $line->startMeterPrintBlack;
                                     $meter->endMeterPrintBlack   = $line->endMeterPrintBlack;
-                                }
-                                else
-                                {
+                                } else {
                                     $meter->startMeterPrintBlack = $defaultDatabaseField;
                                     $meter->endMeterPrintBlack   = $defaultDatabaseField;
                                 }
 
                                 // Print Color
-                                if ($line->endMeterPrintColor > 0)
-                                {
+                                if ( $line->endMeterPrintColor > 0 ) {
                                     $meter->startMeterPrintColor = $line->startMeterPrintColor;
                                     $meter->endMeterPrintColor   = $line->endMeterPrintColor;
-                                }
-                                else
-                                {
+                                } else {
                                     $meter->startMeterPrintColor = $defaultDatabaseField;
                                     $meter->endMeterPrintColor   = $defaultDatabaseField;
                                 }
 
                                 // Copy Black
-                                if ($line->endMeterCopyBlack > 0)
-                                {
+                                if ( $line->endMeterCopyBlack > 0 ) {
                                     $meter->startMeterCopyBlack = $line->startMeterCopyBlack;
                                     $meter->endMeterCopyBlack   = $line->endMeterCopyBlack;
-                                }
-                                else
-                                {
+                                } else {
                                     $meter->startMeterCopyBlack = $defaultDatabaseField;
                                     $meter->endMeterCopyBlack   = $defaultDatabaseField;
                                 }
 
                                 // Copy Color
-                                if ($line->endMeterCopyColor > 0)
-                                {
+                                if ( $line->endMeterCopyColor > 0 ) {
                                     $meter->startMeterCopyColor = $line->startMeterCopyColor;
                                     $meter->endMeterCopyColor   = $line->endMeterCopyColor;
-                                }
-                                else
-                                {
+                                } else {
                                     $meter->startMeterCopyColor = $defaultDatabaseField;
                                     $meter->endMeterCopyColor   = $defaultDatabaseField;
                                 }
 
                                 // Fax
-                                if ($line->endMeterFax > 0)
-                                {
+                                if ( $line->endMeterFax > 0 ) {
                                     $meter->startMeterFax = $line->startMeterFax;
                                     $meter->endMeterFax   = $line->endMeterFax;
-                                }
-                                else
-                                {
+                                } else {
                                     $meter->startMeterFax = $defaultDatabaseField;
                                     $meter->endMeterFax   = $defaultDatabaseField;
                                 }
 
                                 // Scan
-                                if ($line->endMeterScan > 0)
-                                {
+                                if ( $line->endMeterScan > 0 ) {
                                     $meter->startMeterScan = $line->startMeterScan;
                                     $meter->endMeterScan   = $line->endMeterScan;
-                                }
-                                else
-                                {
+                                } else {
                                     $meter->startMeterScan = $defaultDatabaseField;
                                     $meter->endMeterScan   = $defaultDatabaseField;
                                 }
 
                                 // Print A3 Black
-                                if ($line->endMeterPrintA3Black > 0)
-                                {
+                                if ( $line->endMeterPrintA3Black > 0 ) {
                                     $meter->startMeterPrintA3Black = $line->startMeterPrintA3Black;
                                     $meter->endMeterPrintA3Black   = $line->endMeterPrintA3Black;
-                                }
-                                else
-                                {
+                                } else {
                                     $meter->startMeterPrintA3Black = $defaultDatabaseField;
                                     $meter->endMeterPrintA3Black   = $defaultDatabaseField;
                                 }
 
                                 // Print A3 Color
-                                if ($line->endMeterPrintA3Color > 0)
-                                {
+                                if ( $line->endMeterPrintA3Color > 0 ) {
                                     $meter->startMeterPrintA3Color = $line->startMeterPrintA3Color;
                                     $meter->endMeterPrintA3Color   = $line->endMeterPrintA3Color;
-                                }
-                                else
-                                {
+                                } else {
                                     $meter->startMeterPrintA3Color = $defaultDatabaseField;
                                     $meter->endMeterPrintA3Color   = $defaultDatabaseField;
                                 }
 
-                                $deviceInstanceMeterMapper->insert($meter);
+                                $deviceInstanceMeterMapper->insert( $meter );
                             }
 
                             /**
                              * Invalid Lines
                              */
-                            foreach ($uploadCsvService->invalidCsvLines as $line)
-                            {
+                            foreach ( $uploadCsvService->invalidCsvLines as $line ) {
 
-                                $rmsExcludedRow = new Proposalgen_Model_Rms_Excluded_Row($line->toArray());
+                                $rmsExcludedRow = new Proposalgen_Model_Rms_Excluded_Row( $line->toArray() );
 
                                 // Set values that have different names than in $line
                                 $rmsExcludedRow->manufacturerName = $line->manufacturer;
@@ -449,7 +384,7 @@ class Proposalgen_Service_Rms_Upload
                                 // Set values that are none existent in $line
                                 $rmsExcludedRow->rmsProviderId = $uploadProviderId;
 
-                                Proposalgen_Model_Mapper_Rms_Excluded_Row::getInstance()->insert($rmsExcludedRow);
+                                Proposalgen_Model_Mapper_Rms_Excluded_Row::getInstance()->insert( $rmsExcludedRow );
                             }
 
 
@@ -457,22 +392,20 @@ class Proposalgen_Service_Rms_Upload
                              * Perform Mapping
                              */
                             $deviceMappingService = new Proposalgen_Service_DeviceMapping();
-                            $deviceMappingService->mapDevices($deviceInstances, $this->_userId, true);
+                            $deviceMappingService->mapDevices( $deviceInstances, $this->_userId, true );
 
                             /**
                              * @var $deviceInstance Proposalgen_Model_DeviceInstance
                              */
-                            foreach ($deviceInstances as $deviceInstance)
-                            {
-                                $deviceInstance             = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstance->id);
-                                $deviceInstanceMasterDevice = Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance()->find($deviceInstance->id);
+                            foreach ( $deviceInstances as $deviceInstance ) {
+                                $deviceInstance             = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find( $deviceInstance->id );
+                                $deviceInstanceMasterDevice = Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance()->find( $deviceInstance->id );
 
-                                if ($deviceInstanceMasterDevice instanceof Proposalgen_Model_Device_Instance_Master_Device)
-                                {
+                                if ( $deviceInstanceMasterDevice instanceof Proposalgen_Model_Device_Instance_Master_Device ) {
                                     $masterDevice                             = $deviceInstanceMasterDevice->getMasterDevice();
                                     $deviceInstance->isLeased                 = $masterDevice->isLeased;
-                                    $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($dealerId);
-                                    Proposalgen_Model_Mapper_DeviceInstance::getInstance()->save($deviceInstance);
+                                    $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible( $dealerId );
+                                    Proposalgen_Model_Mapper_DeviceInstance::getInstance()->save( $deviceInstance );
                                 }
                             }
 
@@ -481,16 +414,13 @@ class Proposalgen_Service_Rms_Upload
 
                             $importSuccessful = true;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         $this->errorMessages = "There was an error importing your file. $processCsvMessage";
                     }
                 }
-                catch (Exception $e)
-                {
+                catch ( Exception $e ) {
                     $db->rollBack();
-                    Tangent_Log::logException($e);
+                    Tangent_Log::logException( $e );
                     $this->errorMessages = "There was an error parsing your file. If this continues to happen please reference this id when requesting support: " . Tangent_Log::getUniqueId();
                 }
             }
@@ -502,11 +432,9 @@ class Proposalgen_Service_Rms_Upload
     /**
      * @return Proposalgen_Form_ImportRmsCsv
      */
-    public function getForm ()
-    {
-        if (!isset($this->_form))
-        {
-            $this->_form = new Proposalgen_Form_ImportRmsCsv(array('csv'), "1B", "8MB");
+    public function getForm() {
+        if ( ! isset( $this->_form ) ) {
+            $this->_form = new Proposalgen_Form_ImportRmsCsv( array( 'csv' ), "1B", "8MB" );
         }
 
         return $this->_form;

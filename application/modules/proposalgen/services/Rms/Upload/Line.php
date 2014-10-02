@@ -1402,7 +1402,7 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
          * Because of our previous logic setting the start meter 0 if end meter is present,
          * we can assume that if either meter is set to null that the meter is not present
          */
-        if ($startMeter === null || $endMeter === null)
+        if ($startMeter === null || $endMeter === null || ($startMeter <= 0 && $endMeter <= 0))
         {
             $returnCode = self::METER_IS_NOT_PRESENT;
         }

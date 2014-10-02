@@ -4,13 +4,15 @@
 *[CSV]: Comma-separated values
 *[JIT]: Just In Time
 *[OEM]: Original Equipment Manufacturer
+*[SQL]: Structured Query Language
 *[RMS]: Remote Monitoring System
 *[UX]: User Experience
 
 Version 1.4.13
 ==============
-* Fixed issue with string based RMS Model IDs such as Print Audit IDs not mapping more than 1 device at a time
 * Fixed issue with dealer toner preferences not propagating
+* Fixed issue with false detection of color capabilities on PrintFleet 3.x reports that aren't generated via SQL which caused toner level data to be incorrect
+* Fixed issue with string based RMS Model IDs such as Print Audit IDs not mapping more than 1 device at a time
 
 Version 1.4.12
 ==============
