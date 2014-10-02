@@ -5,7 +5,7 @@
  */
 class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
 {
-    const MAX_DEVICE_INSTANCES = 3000;
+    const MAX_DEVICE_INSTANCES = 20000;
 
     /*
      * Column Definitions
