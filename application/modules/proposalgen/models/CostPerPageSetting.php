@@ -96,6 +96,13 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
     public $pricingMargin = 0;
 
     /**
+     * Whether or not to apply service to managed devices
+     *
+     * @var bool
+     */
+    public $useCustomerCostPerPageForManagedDevices = false;
+
+    /**
      * @param null|array $options
      */
     public function __construct ($options = null)

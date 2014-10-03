@@ -80,15 +80,16 @@ class Assessment_ViewModel_Abstract
     {
         if (!isset($this->_costPerPageSettingForCustomer))
         {
-            $this->_costPerPageSettingForCustomer                         = new Proposalgen_Model_CostPerPageSetting();
-            $assessmentSettings                                           = $this->assessment->getAssessmentSettings();
-            $this->_costPerPageSettingForCustomer->adminCostPerPage       = $assessmentSettings->adminCostPerPage;
-            $this->_costPerPageSettingForCustomer->pageCoverageColor      = $this->getPageCoverageColor();
-            $this->_costPerPageSettingForCustomer->pageCoverageMonochrome = $this->getPageCoverageBlackAndWhite();
-            $this->_costPerPageSettingForCustomer->monochromeTonerRankSet = $assessmentSettings->getCustomerMonochromeRankSet();
-            $this->_costPerPageSettingForCustomer->colorTonerRankSet      = $assessmentSettings->getCustomerColorRankSet();
-            $this->_costPerPageSettingForCustomer->useDevicePageCoverages = $assessmentSettings->useDevicePageCoverages;
-            $this->_costPerPageSettingForCustomer->pricingMargin          = $assessmentSettings->assessmentReportMargin;
+            $this->_costPerPageSettingForCustomer                                          = new Proposalgen_Model_CostPerPageSetting();
+            $assessmentSettings                                                            = $this->assessment->getAssessmentSettings();
+            $this->_costPerPageSettingForCustomer->adminCostPerPage                        = $assessmentSettings->adminCostPerPage;
+            $this->_costPerPageSettingForCustomer->pageCoverageColor                       = $this->getPageCoverageColor();
+            $this->_costPerPageSettingForCustomer->pageCoverageMonochrome                  = $this->getPageCoverageBlackAndWhite();
+            $this->_costPerPageSettingForCustomer->monochromeTonerRankSet                  = $assessmentSettings->getCustomerMonochromeRankSet();
+            $this->_costPerPageSettingForCustomer->colorTonerRankSet                       = $assessmentSettings->getCustomerColorRankSet();
+            $this->_costPerPageSettingForCustomer->useDevicePageCoverages                  = $assessmentSettings->useDevicePageCoverages;
+            $this->_costPerPageSettingForCustomer->pricingMargin                           = $assessmentSettings->assessmentReportMargin;
+            $this->_costPerPageSettingForCustomer->useCustomerCostPerPageForManagedDevices = true;
         }
 
         return $this->_costPerPageSettingForCustomer;
@@ -107,6 +108,8 @@ class Assessment_ViewModel_Abstract
 
             $assessmentSettings                                         = $this->assessment->getAssessmentSettings();
             $this->_costPerPageSettingForDealer->adminCostPerPage       = $assessmentSettings->adminCostPerPage;
+            $this->_costPerPageSettingForDealer->partsCostPerPage       = $assessmentSettings->partsCostPerPage;
+            $this->_costPerPageSettingForDealer->laborCostPerPage       = $assessmentSettings->laborCostPerPage;
             $this->_costPerPageSettingForDealer->pageCoverageColor      = $assessmentSettings->actualPageCoverageColor;
             $this->_costPerPageSettingForDealer->pageCoverageMonochrome = $assessmentSettings->actualPageCoverageMono;
             $this->_costPerPageSettingForDealer->monochromeTonerRankSet = $assessmentSettings->getDealerMonochromeRankSet();

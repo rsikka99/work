@@ -75,17 +75,18 @@ class Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->_costPerPageSettingForCustomer))
         {
-            $this->_costPerPageSettingForCustomer                                = new Proposalgen_Model_CostPerPageSetting();
-            $healthcheckSettings                                                 = $this->healthcheck->getHealthcheckSettings();
-            $this->_costPerPageSettingForCustomer->adminCostPerPage              = $healthcheckSettings->adminCostPerPage;
-            $this->_costPerPageSettingForCustomer->pageCoverageColor             = $this->getPageCoverageColor();
-            $this->_costPerPageSettingForCustomer->pageCoverageMonochrome        = $this->getPageCoverageBlackAndWhite();
-            $this->_costPerPageSettingForCustomer->monochromeTonerRankSet        = $healthcheckSettings->getCustomerMonochromeRankSet();
-            $this->_costPerPageSettingForCustomer->colorTonerRankSet             = $healthcheckSettings->getCustomerColorRankSet();
-            $this->_costPerPageSettingForCustomer->useDevicePageCoverages        = $healthcheckSettings->useDevicePageCoverages;
-            $this->_costPerPageSettingForCustomer->customerMonochromeCostPerPage = $healthcheckSettings->customerMonochromeCostPerPage;
-            $this->_costPerPageSettingForCustomer->customerColorCostPerPage      = $healthcheckSettings->customerColorCostPerPage;
-            $this->_costPerPageSettingForCustomer->pricingMargin                 = $healthcheckSettings->healthcheckMargin;
+            $this->_costPerPageSettingForCustomer                                          = new Proposalgen_Model_CostPerPageSetting();
+            $healthcheckSettings                                                           = $this->healthcheck->getHealthcheckSettings();
+            $this->_costPerPageSettingForCustomer->adminCostPerPage                        = $healthcheckSettings->adminCostPerPage;
+            $this->_costPerPageSettingForCustomer->pageCoverageColor                       = $this->getPageCoverageColor();
+            $this->_costPerPageSettingForCustomer->pageCoverageMonochrome                  = $this->getPageCoverageBlackAndWhite();
+            $this->_costPerPageSettingForCustomer->monochromeTonerRankSet                  = $healthcheckSettings->getCustomerMonochromeRankSet();
+            $this->_costPerPageSettingForCustomer->colorTonerRankSet                       = $healthcheckSettings->getCustomerColorRankSet();
+            $this->_costPerPageSettingForCustomer->useDevicePageCoverages                  = $healthcheckSettings->useDevicePageCoverages;
+            $this->_costPerPageSettingForCustomer->customerMonochromeCostPerPage           = $healthcheckSettings->customerMonochromeCostPerPage;
+            $this->_costPerPageSettingForCustomer->customerColorCostPerPage                = $healthcheckSettings->customerColorCostPerPage;
+            $this->_costPerPageSettingForCustomer->pricingMargin                           = $healthcheckSettings->healthcheckMargin;
+            $this->_costPerPageSettingForCustomer->useCustomerCostPerPageForManagedDevices = true;
         }
 
         return $this->_costPerPageSettingForCustomer;

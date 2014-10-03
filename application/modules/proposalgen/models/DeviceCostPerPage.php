@@ -126,7 +126,16 @@ class Proposalgen_Model_DeviceCostPerPage extends My_Model_Abstract
             $costPerPage->monochromeCostPerPage = 0;
             $costPerPage->colorCostPerPage      = 0;
             $costPerPage->add($this->getCostOfInkAndTonerPerPage());
-            if (!$this->isManaged)
+
+            /**
+             * Customer cost per page is used when we showing the cost per page to a customer and it's
+             * a device that is currently managed by the dealer. This helps reflect accurate costs of
+             * a fleet from the customers point of view.
+             *
+             * In this case we don't need to apply service/admin cost per page when we're using the
+             * customer cost per page.
+             */
+            if (!$this->costPerPageSetting->useCustomerCostPerPageForManagedDevices || !$this->isManaged)
             {
                 if ($costPerPage->monochromeCostPerPage > 0)
                 {
@@ -181,7 +190,12 @@ class Proposalgen_Model_DeviceCostPerPage extends My_Model_Abstract
                 $costPerPage->add($tonerCostPerPage);
             }
 
-            if ($this->isManaged)
+            /**
+             * Customer cost per page is used when we showing the cost per page to a customer and it's
+             * a device that is currently managed by the dealer. This helps reflect accurate costs of
+             * a fleet from the customers point of view.
+             */
+            if ($this->costPerPageSetting->useCustomerCostPerPageForManagedDevices && $this->isManaged)
             {
                 if ($this->costPerPageSetting->customerMonochromeCostPerPage != null)
                 {
