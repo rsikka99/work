@@ -57,11 +57,10 @@ $dealer = $this->dealer;
             <tr>
                 <th>Email</th>
                 <th>Name</th>
-                <th>Dealer Name</th>
                 <th style="width: 70px;">Login Attempts</th>
                 <th style="width: 100px;">Frozen Until</th>
                 <th style="width: 60px;">Locked</th>
-                <th style="width: 120px;">Last Seen</th>
+                <th style="width: 180px;">Last Seen</th>
                 <th style="width: 60px;">Action</th>
             </tr>
             </thead>
@@ -70,11 +69,10 @@ $dealer = $this->dealer;
                 <tr>
                     <td><?php echo $user->email; ?></td>
                     <td><?php echo $user->firstname; ?> <?php echo $user->lastname; ?></td>
-                    <td><?php echo Application_Model_Mapper_Dealer::getInstance()->find($user->dealerId)->dealerName ?></td>
                     <td style="text-align: center;"><?php echo $user->loginAttempts; ?></td>
                     <td><?php echo ($user->isFrozen()) ? $user->frozenUntil : ""; ?></td>
                     <td style="text-align: center;"><?php echo ($user->locked) ? "Yes" : "No"; ?></td>
-                    <td><?php echo ($user->lastSeen === null) ? "Never" : (new \Carbon\Carbon($user->lastSeen))->diffForHumans(); ?></td>
+                    <td><?php echo ($user->lastSeen === null) ? "Never" : (new \Carbon\Carbon($user->lastSeen))->diffForHumans(); ?><br><?php echo $user->lastSeen ?></td>
                     <td>
                         <div class="btn-group">
                             <?php if ($user->id == 1 && $this->identity()->id !== 1) : ?>

@@ -9,6 +9,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
     public $col_id = "id";
     public $col_dealerId = "dealerId";
     public $col_email = "email";
+    public $col_lastSeen = "lastSeen";
     /**
      * The default db table class to use
      *
@@ -295,7 +296,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
      */
     public function fetchUserListForDealer ($dealerId)
     {
-        return $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+        return $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId), "{$this->col_lastSeen} DESC");
 
     }
 
