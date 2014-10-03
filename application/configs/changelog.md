@@ -8,6 +8,10 @@
 *[RMS]: Remote Monitoring System
 *[UX]: User Experience
 
+Version 1.4.14
+==============
+* Fixed bug where managed devices would always used the customers cost per page even when performing a cost analysis on the device
+
 Version 1.4.13
 ==============
 * Fixed issue with dealer toner preferences not propagating
