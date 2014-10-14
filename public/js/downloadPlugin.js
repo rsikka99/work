@@ -63,6 +63,11 @@
             {
                 e.preventDefault();
 
+                if (typeof extraDataId != 'undefined' && extraDataId.length > 0)
+                {
+                    extraData[extraDataId] = $('#' + extraDataId.toString()).val();
+                }
+
                 /**
                  * Popup Window
                  */

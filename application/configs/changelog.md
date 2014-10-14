@@ -11,6 +11,7 @@
 Version 1.4.14
 ==============
 * Fixed bug where managed devices would always used the customers cost per page even when performing a cost analysis on the device
+* Fixed issue with contract download button not downloading the correct template
 
 Version 1.4.13
 ==============
