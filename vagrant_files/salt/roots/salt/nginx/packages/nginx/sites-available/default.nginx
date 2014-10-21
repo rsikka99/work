@@ -1,24 +1,15 @@
 server {
-    listen 80;
+    listen 80 default_server;
     server_name localhost;
 
     server_tokens off;
     autoindex on;
 
     index index.php index.html index.htm;
-    root /home/vagrant/mpstoolbox/public;
+    root /home/lrobert/apps/default;
 
     location / {
-        try_files $uri $uri/ /index.php$is_args$args;
-    }
-
-    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
-    #
-    location ~* \.php$ {
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass unix:/var/run/php5-fpm.sock;
-        fastcgi_index index.php;
-        include fastcgi_params;
+        try_files $uri /index.html;
     }
 
     # don't allow hidden files

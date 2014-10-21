@@ -1,0 +1,1 @@
+{{ pillar.get('ssl_certificates').get(key_name).get('certificate').get('contents') }}

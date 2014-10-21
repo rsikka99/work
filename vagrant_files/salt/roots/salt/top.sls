@@ -1,5 +1,9 @@
 base:
   '*':
-    - php5-fpm
-    - nginx
+    - utilities
+  'db':
     - mysql
+    - mysql-client
+  'web':
+    - mysql-client
+    - app-mpstoolbox
