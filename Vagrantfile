@@ -29,6 +29,7 @@ Vagrant.configure('2') do |config|
   config.vm.define 'web' do |web|
     web.vm.box       = 'ubuntu/trusty64'
     web.vm.host_name = 'web'
+    web.vm.network 'private_network', ip: '192.168.56.100'
     web.vm.network 'private_network', ip: '192.168.56.101'
     web.vm.network 'public_network', :bridge => 'en0: Ethernet (AirPort)'
 

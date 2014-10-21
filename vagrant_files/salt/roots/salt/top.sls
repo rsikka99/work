@@ -7,4 +7,5 @@ base:
   'web':
     - mysql-client
     - composer
+    - phpmyadmin
     - app-mpstoolbox
