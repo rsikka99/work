@@ -10,6 +10,7 @@
 
 Version 1.4.14
 ==============
+* Fixed filename on some reports to include the client name
 * Fixed bug where managed devices would always used the customers cost per page even when performing a cost analysis on the device
 * Fixed issue with contract download button not downloading the correct template
 
