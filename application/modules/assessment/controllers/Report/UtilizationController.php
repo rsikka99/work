@@ -69,7 +69,7 @@ class Assessment_Report_UtilizationController extends Assessment_Library_Control
                 break;
         }
 
-        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Utilization Report') . ".$format";
+        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Utilization Report') . '.xlsx';
 
         $this->initReportVariables($filename);
 

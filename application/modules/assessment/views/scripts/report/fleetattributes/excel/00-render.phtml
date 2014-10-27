@@ -1,6 +1,5 @@
 <?php
 
-$filename = 'FleetAttributes.xlsx';
 $savePath = PUBLIC_PATH . "/downloads/client/{$this->clientId}/orderlist/{$this->quoteId}/";
 
 if (!is_dir($savePath))
@@ -10,9 +9,6 @@ if (!is_dir($savePath))
         throw new Exception("Could not open cache folder! PATH:" . $savePath, 0);
     }
 }
-
-$savePath   = $savePath . $filename;
-$linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/orderlist/{$this->quoteId}/{$filename}");
 
 // Create a new PHPExcel Object * New PHPExcel objects will have one attached worksheet by default
 /* @var $objPHPExcel PHPExcel */
@@ -80,9 +76,9 @@ foreach ($this->fleetAttributesData as $deviceData)
 
 // Save Excel 2007 file
 $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
-$objWriter->save($savePath);
+$objWriter->save($this->savePath);
 
 //Clear the workbook from php's memory
 $objPHPExcel->disconnectWorksheets();
 
-echo $this->baseUrl($linkToFile);
+echo $this->baseUrl($this->publicFileName);
