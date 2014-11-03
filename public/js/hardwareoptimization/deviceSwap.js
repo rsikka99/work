@@ -364,16 +364,34 @@ $(function ()
                 $("#deviceReasonTable").jqGrid().trigger('reloadGrid');
                 $("#reasonAddModal").modal('hide');
             },
-            error   : function (ajaxRequest)
+            error   : function (xhr)
             {
+                // Show the error message
+                var errorMessageElement = $("#reason-add-save-error");
+                var $errorList = $(document.createElement('ul'));
+
                 try
                 {
-                    // Show the error message
-                    var errorMessageElement = $("#reason-add-save-error");
+                    // a try/catch is recommended as the error handler
+                    // could occur in many events and there might not be
+                    // a JSON response from the server
 
-                    var json = $.parseJSON(ajaxRequest.responseText);
-                    errorMessageElement.empty().html(json.error);
-                    errorMessageElement.show();
+                    var data = $.parseJSON(xhr.responseText);
+
+                    if (data.errorMessages)
+                    {
+                        $.each(data.errorMessages, function (field, messages)
+                        {
+                            $.each(messages, function (index, message)
+                            {
+                                $errorList.append(
+                                    $(document.createElement('li')).text($('[for="' + field + '"]').text() + ': ' + message)
+                                );
+                            });
+                        });
+                    }
+
+                    errorMessageElement.empty().append($errorList);
                 }
                 catch (error)
                 {
@@ -435,12 +453,16 @@ $(function ()
 
 
     // When modal hides function is triggered, clear previous messages
-    $('.modal').on('hidden', function ()
+    $('#deviceAddModal').on('hidden', function ()
     {
-        var errorMessageElement = $("#save-error");
-        errorMessageElement.hide();
+        $('#save-error').hide();
         $('#deviceType').val("");
-    })
+    });
+
+    $('#reasonAddModal').on('hidden', function ()
+    {
+        $('#reason-add-save-error').hide();
+    });
 });
 
 /**

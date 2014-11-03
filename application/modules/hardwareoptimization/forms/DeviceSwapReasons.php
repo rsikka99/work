@@ -25,8 +25,9 @@ class Hardwareoptimization_Form_DeviceSwapReasons extends Twitter_Bootstrap_Form
         $reasonCategoryElement->setMultiOptions($reasons);
 
         $reasonElement = $this->createElement("text", "reason", array(
-            "label" => "Reason",
-            "class" => "input-xlarge"
+            "label"    => "Reason",
+            "class"    => "input-xlarge",
+            "required" => true
         ));
         $this->addElement($reasonElement);
 
