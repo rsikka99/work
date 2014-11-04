@@ -52,7 +52,7 @@
                     </td>
 
                     <?php foreach ($leasingSchema->getRanges() as $range) : /* @var $range Quotegen_Model_LeasingSchemaRange */ ?>
-                        <td style="text-align: center;"><?php echo number_format($rates[$term->id][$range->id]->rate, 4); ?></td>
+                        <td style="text-align: center;"><?= $this->formatLeaseRate($rates[$term->id][$range->id]->rate); ?></td>
                     <?php endforeach; ?>
 
                     <td style="text-align: center;">

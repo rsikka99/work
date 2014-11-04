@@ -128,12 +128,12 @@ foreach ($quoteDeviceGroups as $quoteDeviceGroup)
             // Option Row
             // Use a foreach to go through options instead of using fromArray just in case
             // we require to style the option rows.
-            foreach ($deviceOptions as $option)
+            foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption)
             {
                 $currentRow = $activeSheet->getHighestRow() + 1;
-                $activeSheet->setCellValue("A{$currentRow}", "     {$option ['name']}");
-                $activeSheet->setCellValue("B{$currentRow}", $option ["oemSku"]);
-                $activeSheet->setCellValue("C{$currentRow}", $option ["dealerSku"]);
+                $activeSheet->setCellValue("A{$currentRow}", sprintf("%s x %s", number_format($quoteDeviceOption->quantity), $quoteDeviceOption->name));
+                $activeSheet->setCellValue("B{$currentRow}", $quoteDeviceOption->oemSku);
+                $activeSheet->setCellValue("C{$currentRow}", $quoteDeviceOption->dealerSku);
             }
             $totalQuantity++;
         }
