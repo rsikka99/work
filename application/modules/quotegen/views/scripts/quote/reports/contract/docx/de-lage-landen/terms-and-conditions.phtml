@@ -1,0 +1,44 @@
+<?php
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
+
+/* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
+$contractTemplateSection = $this->contractTemplateSection;
+
+$tableSpan      = $this->tableStyle->gridSpan;
+$cellStyle      = $this->cellStyle;
+$fontStyle      = $this->fontStyle;
+$paragraphStyle = $this->paragraphStyle;
+
+$termsAndConditionsTable = $section->addTable($this->tableStyle->standard);
+$termsAndConditionsTable->getStyle()->setCellMargin(50);
+
+$termsAndConditionsTable->addRow(300);
+$termsAndConditionsTable->addCell($tableSpan ['span8'], $cellStyle->invertBackground)->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+
+$contractHtml = new DOMDocument(5);
+$contractHtml->loadHTML($contractTemplateSection->getContractSectionText());
+
+/* @var $childNode DOMElement */
+foreach ($contractHtml->getElementsByTagName('p') as $paragraphNode)
+{
+    $termsAndConditionsTable->addRow();
+    $cell    = $termsAndConditionsTable->addCell($tableSpan ['span8'], null);
+    $textRun = $cell->addTextRun(array_merge($paragraphStyle->noSpacingJustified, array('spacing' => 1.1)));
+
+    $childNodes = $paragraphNode->childNodes;
+    for ($i = 0; $i < $childNodes->length; $i++)
+    {
+        /** @var $node DOMElement */
+        $node = $childNodes->item($i);
+
+        if ($node->tagName == 'b')
+        {
+            $textRun->addText($node->textContent, $fontStyle->boldFinePrint);
+        }
+        else
+        {
+            $textRun->addText($node->textContent, $fontStyle->finePrint);
+        }
+    }
+}

@@ -1,0 +1,56 @@
+<?php
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
+
+/* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
+$contractTemplateSection = $this->contractTemplateSection;
+
+$tableSpan      = $this->tableStyle->gridSpan;
+$cellStyle      = $this->cellStyle;
+$fontStyle      = $this->fontStyle;
+$paragraphStyle = $this->paragraphStyle;
+
+$lessorTable = $section->addTable($this->tableStyle->standard);
+$lessorTable->getStyle()->setBorderBottomSize(1)->setBorderLeftSize(1)->setBorderRightSize(1);
+$lessorTable->getStyle()->setCellMargin(50);
+
+$lessorTable->addRow(300);
+$lessorTable->addCell($tableSpan ['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span2))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+
+/*
+ * De Lage Landen address
+ */
+$guarantyHtml = new DOMDocument(5);
+$guarantyHtml->loadHTML($contractTemplateSection->getContractSectionText());
+
+$lessorTable->addRow(300);
+$cell = $lessorTable->addCell($tableSpan ['span8'], array_merge($cellStyle->span2));
+
+foreach ($guarantyHtml->getElementsByTagName('p') as $paragraphNode)
+{
+    $textRun = $cell->addTextRun(array('lineHeight' => 1));
+
+    $childNodes = $paragraphNode->childNodes;
+    for ($i = 0; $i < $childNodes->length; $i++)
+    {
+        /** @var $node DOMElement */
+        $node = $childNodes->item($i);
+
+        if ($node->tagName == 'b')
+        {
+            $textRun->addText($node->textContent, $fontStyle->boldFinePrint);
+        }
+        else
+        {
+            $textRun->addText($node->textContent, $fontStyle->finePrint);
+        }
+    }
+}
+
+$lessorTable->addRow(300);
+$lessorTable->addCell($tableSpan['span4'], array_merge($cellStyle->topBorder, $cellStyle->rightBorder))->addText('Commencement Date', $fontStyle->label);
+$lessorTable->addCell($tableSpan['span4'], $cellStyle->topBorder)->addText('Lease Number', $fontStyle->label);
+$lessorTable->addRow(300);
+$lessorTable->addCell($tableSpan['span8'], array_merge($cellStyle->span2, $cellStyle->topBorder))->addText('Accepted By:', $fontStyle->label);
+
+$section->addTextBreak(1);

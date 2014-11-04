@@ -1,0 +1,62 @@
+<?php
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
+
+// Start new page for attached Schedule of Equipment
+$section->addPageBreak(1);
+
+/* @var $quote Quotegen_Model_Quote */
+$quote = $this->quote;
+
+/* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
+$contractTemplateSection = $this->contractTemplateSection;
+
+$tableSpan      = $this->tableStyle->gridSpan;
+$cellStyle      = $this->cellStyle;
+$fontStyle      = $this->fontStyle;
+$paragraphStyle = $this->paragraphStyle;
+
+/**
+ * Schedule Table - Title Row
+ */
+$deviceTable = $section->addTable($this->tableStyle->standard);
+$deviceTable->getStyle()->setBorderBottomSize(1)->setBorderLeftSize(1)->setBorderRightSize(1);
+$deviceTable->getStyle()->setCellMargin(50);
+
+$deviceTable->getStyle()->setBorderBottomSize(1);
+$deviceTable->getStyle()->setBorderLeftSize(1);
+$deviceTable->getStyle()->setBorderRightSize(1);
+
+$deviceTable->addRow(300);
+$deviceTable->addCell(null, array_merge($cellStyle->invertBackground, $cellStyle->span4))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+
+/**
+ * Schedule Table - Header Row
+ */
+$deviceTable->addRow(300);
+$deviceTable->addCell($tableSpan ['span3'], array_merge($cellStyle->bottomAlign, $cellStyle->rightBorder))->addText('Make, Model Number & Included Accessories', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$deviceTable->addCell($tableSpan ['span1'], array_merge($cellStyle->bottomAlign, $cellStyle->rightBorder))->addText('Serial Number', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$deviceTable->addCell($tableSpan ['span2'], array_merge($cellStyle->bottomAlign, $cellStyle->rightBorder))->addText('Address', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$deviceTable->addCell($tableSpan ['span2'], array_merge($cellStyle->bottomAlign, $cellStyle->rightBorder))->addText('Description', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+
+/**
+ * Schedule Table - Device Rows
+ */
+foreach ($quote->getQuoteDevices() as $quoteDevice)
+{
+    for ($i = 0; $i < $quoteDevice->calculateTotalQuantity(); $i++)
+    {
+        $deviceTable->addRow(600);
+        $deviceDetailsCell = $deviceTable->addCell($tableSpan ['span3'], array_merge($cellStyle->topBorder, $cellStyle->rightBorder));
+        $deviceDetailsCell->addText($quoteDevice->name, $fontStyle->bold, $paragraphStyle->noSpacing);
+
+        foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption)
+        {
+            $deviceDetailsCell->addText('    - ' . $quoteDeviceOption->quantity . ' x ' . $quoteDeviceOption->name, $fontStyle->finePrint, $paragraphStyle->noSpacing);
+        }
+
+        $deviceTable->addCell($tableSpan ['span1'], array_merge($cellStyle->rightBorder, $cellStyle->topBorder))->addText(' ', null, $paragraphStyle->noSpacing);
+        $deviceTable->addCell($tableSpan ['span2'], array_merge($cellStyle->rightBorder, $cellStyle->topBorder))->addText(' ', null, $paragraphStyle->noSpacing);
+        $deviceTable->addCell($tableSpan ['span2'], array_merge($cellStyle->rightBorder, $cellStyle->topBorder))->addText(' ', null, $paragraphStyle->noSpacing);
+    }
+}

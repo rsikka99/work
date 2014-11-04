@@ -5,16 +5,31 @@
  */
 class Quotegen_Model_ContractSection extends My_Model_Abstract
 {
-    const SECTION_CUSTOMER_YOU_YOUR               = 1;
-    const SECTION_VENDOR                          = 2;
-    const SECTION_CONTRACT                        = 3;
-    const SECTION_CUSTOMERS_AUTH_SIGNATURE        = 4;
-    const SECTION_OWNER_WE_US_OUR                 = 5;
-    const SECTION_UNCONDITIONAL_GUARANTY          = 6;
-    const SECTION_MPS_CONTRACT_DETAILS            = 7;
-    const SECTION_HARDWARE_CONTRACT_DETAILS       = 8;
-    const SECTION_EQUIPMENT_LIST                  = 9;
-    const SECTION_ADDITIONAL_TERMS_AND_CONDITIONS = 10;
+    /*
+     * Great America contract sections
+     */
+    const SECTION_GA_CUSTOMER_YOU_YOUR               = 1;
+    const SECTION_GA_VENDOR                          = 2;
+    const SECTION_GA_CONTRACT                        = 3;
+    const SECTION_GA_CUSTOMERS_AUTH_SIGNATURE        = 4;
+    const SECTION_GA_OWNER_WE_US_OUR                 = 5;
+    const SECTION_GA_UNCONDITIONAL_GUARANTY          = 6;
+    const SECTION_GA_MPS_CONTRACT_DETAILS            = 7;
+    const SECTION_GA_HARDWARE_CONTRACT_DETAILS       = 8;
+    const SECTION_GA_EQUIPMENT_LIST                  = 9;
+    const SECTION_GA_ADDITIONAL_TERMS_AND_CONDITIONS = 10;
+
+    /*
+     * De Lage Landen contract sections
+     */
+    const SECTION_DLL_LESSEE_INFO          = 11;
+    const SECTION_DLL_PAYMENT_INFO         = 12;
+    const SECTION_DLL_TERMS_AND_CONDITIONS = 13;
+    const SECTION_DLL_LESSEE_SIGNATURE     = 14;
+    const SECTION_DLL_LESSOR_SIGNATURE     = 15;
+    const SECTION_DLL_ACCEPTANCE           = 16;
+    const SECTION_DLL_GUARANTY             = 17;
+    const SECTION_DLL_SCHEDULE             = 18;
 
     /**
      * @var int

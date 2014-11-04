@@ -1,0 +1,54 @@
+<?php
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
+
+/* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
+$contractTemplateSection = $this->contractTemplateSection;
+
+$tableSpan      = $this->tableStyle->gridSpan;
+$cellStyle      = $this->cellStyle;
+$fontStyle      = $this->fontStyle;
+$paragraphStyle = $this->paragraphStyle;
+
+$guarantyTable = $section->addTable(array_merge($this->tableStyle->standard));
+$guarantyTable->getStyle()->setBorderBottomSize(1)->setBorderLeftSize(1)->setBorderRightSize(1);
+$guarantyTable->getStyle()->setCellMargin(50);
+
+$guarantyTable->addRow(300);
+$guarantyTable->addCell($tableSpan['span8'], array_merge($cellStyle->span3, $cellStyle->invertBackground))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+
+$guarantyHtml = new DOMDocument(5);
+$guarantyHtml->loadHTML($contractTemplateSection->getContractSectionText());
+
+/* @var $childNode DOMElement */
+foreach ($guarantyHtml->getElementsByTagName('p') as $paragraphNode)
+{
+    $guarantyTable->addRow();
+    $cell = $guarantyTable->addCell($tableSpan ['span8'], $cellStyle->span3);
+
+    $textRun = $cell->addTextRun($paragraphStyle->justified);
+
+    $childNodes = $paragraphNode->childNodes;
+    for ($i = 0; $i < $childNodes->length; $i++)
+    {
+        /** @var $node DOMElement */
+        $node = $childNodes->item($i);
+
+        if ($node->tagName == 'b')
+        {
+            $textRun->addText($node->textContent, $fontStyle->boldFinePrint);
+        }
+        else
+        {
+            $textRun->addText($node->textContent, $fontStyle->finePrint);
+        }
+    }
+}
+
+// First Signature
+$guarantyTable->addRow(350);
+$guarantyTable->addCell($tableSpan ['span3'], array_merge($cellStyle->topBorder, $cellStyle->topAlign))->addText('Signature', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$guarantyTable->addCell($tableSpan ['span4'], array_merge($cellStyle->topBorder, $cellStyle->topAlign))->addText('Print Name', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$guarantyTable->addCell($tableSpan ['span1'], array_merge($cellStyle->topBorder, $cellStyle->topAlign))->addText('Date', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+
+$section->addPageBreak(1);

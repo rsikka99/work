@@ -7,69 +7,47 @@ $this->cellStyle->invertBackground = array(
     'bgColor'        => '111111',
     'borderLeftSize' => 1
 );
-
-// Borders
-$this->cellStyle->bottomBorder      = array(
-    'borderBottomSize' => 1,
+$this->cellStyle->topBorder        = array(
+    'borderTopSize' => 1,
 );
-$this->cellStyle->leftRightBorder   = array(
-    'borderRightSize' => 1,
-    'borderLeftSize'  => 1
-);
-$this->cellStyle->rightBorder       = array(
+$this->cellStyle->rightBorder      = array(
     'borderRightSize' => 1
 );
-$this->cellStyle->bottomRightBorder = array(
-    'borderBottomSize' => 1,
-    'borderRightSize'  => 1
-);
-$this->cellStyle->bottomLeftBorder  = array(
-    'borderBottomSize' => 1,
-    'borderLeftSize'   => 1
-);
-
-$this->cellStyle->leftBorder = array(
-    'borderLeftSize' => 1
-);
-$this->cellStyle->border     = array(
-    'borderBottomSize' => 1,
-    'borderTopSize'    => 1,
-    'borderLeftSize'   => 1,
-    'borderRightSize'  => 1
-);
-
-// Border valign
-$this->cellStyle->borderBAlign            = array(
-    'borderBottomSize' => 1,
-    'borderTopSize'    => 1,
-    'borderLeftSize'   => 1,
-    'borderRightSize'  => 1,
-    'valign'           => 'bottom'
-);
-$this->cellStyle->bottomBorderBAlign      = array(
-    'borderBottomSize' => 1,
-    'valign'           => 'bottom',
-);
-$this->cellStyle->leftBorderBAlign        = array(
-    'borderLeftSize' => 1,
-    'valign'         => 'bottom'
-);
-$this->cellStyle->bottomRightBorderBAlign = array(
-    'borderBottomSize' => 1,
-    'borderRightSize'  => 1,
-    'valign'           => 'bottom'
-);
-
-$this->cellStyle->bottomLeftBorderBAlign = array(
-    'borderBottomSize' => 1,
-    'borderLeftSize'   => 1,
-    'valign'           => 'bottom'
-);
-
-// Valign
-$this->cellStyle->bottomAlign = array(
+$this->cellStyle->bottomAlign      = array(
     'valign' => 'bottom'
 );
+$this->cellStyle->topAlign         = array(
+    'valign'          => 'top',
+    'borderRightSize' => 1,
+);
+$this->cellStyle->span8            = array(
+    'gridSpan' => 8
+);
+$this->cellStyle->span7            = array(
+    'gridSpan' => 7
+);
+$this->cellStyle->span6            = array(
+    'gridSpan' => 6
+);
+$this->cellStyle->span5            = array(
+    'gridSpan' => 5
+);
+$this->cellStyle->span4            = array(
+    'gridSpan' => 4
+);
+$this->cellStyle->span3            = array(
+    'gridSpan' => 3
+);
+$this->cellStyle->span2            = array(
+    'gridSpan' => 2
+);
+$this->cellStyle->span1            = array(
+    'gridSpan' => 1
+);
+$this->cellStyle->center           = array(
+    'valign' => 'center',
+);
+
 
 //**************************************/
 //**************FONT STYLE**************/
@@ -80,12 +58,8 @@ $this->fontStyle->invertBackground = array(
     'bold'  => true,
     'size'  => '10'
 );
-$this->fontStyle->subHeader        = array(
-    'size' => '16',
-    'bold' => true
-);
 $this->fontStyle->label            = array(
-    "size" => '7'
+    "size" => '7',
 );
 $this->fontStyle->boldFinePrint    = array(
     'bold' => true,
@@ -94,14 +68,13 @@ $this->fontStyle->boldFinePrint    = array(
 $this->fontStyle->finePrint        = array(
     'size' => '8'
 );
-
-$this->fontStyle->center    = array(
+$this->fontStyle->center           = array(
     'align' => 'center'
 );
-$this->fontStyle->bold      = array(
+$this->fontStyle->bold             = array(
     'bold' => true
 );
-$this->fontStyle->underline = array(
+$this->fontStyle->underline        = array(
     'underline' => \PhpOffice\PhpWord\Style\Font::UNDERLINE_SINGLE
 );
 
@@ -119,6 +92,11 @@ $this->paragraphStyle->noSpacingCentered = array(
 $this->paragraphStyle->noSpacingRight    = array(
     'spaceAfter' => 0,
     'align'      => 'right'
+);
+
+$this->paragraphStyle->noSpacingLeft = array(
+    'spaceAfter' => 0,
+    'align'      => 'left'
 );
 
 $this->paragraphStyle->noSpacingJustified = array(
@@ -146,86 +124,10 @@ $this->tableStyle->gridSpan = array(
     "span2" => 2827,
     "span3" => 4240.5,
     "span4" => 5654,
+    "span5" => 7067.5,
     "span6" => 8481,
     "span8" => 11308
 );
 
-$this->tableStyle->bottomBorder = array(
-    'borderBottomSize' => 1,
-);
 
-
-$this->cellStyle->fullWidthGridSpan3 = array(
-    'gridSpan' => 3,
-    'bgColor'  => '111111',
-    'color'    => 'FFFFFF',
-);
-
-$this->cellStyle->fullWidthGridSpan2 = array(
-    'gridSpan' => 2,
-    'bgColor'  => '111111',
-    'color'    => 'FFFFFF',
-);
-
-
-$this->cellStyle->fullWidthGridSpan1 = array(
-    'gridSpan' => 1,
-    'bgColor'  => '111111',
-    'color'    => 'FFFFFF',
-);
-
-$this->cellStyle->fullWidthGridSpan4 = array(
-    'gridSpan'       => 4,
-    'bgColor'        => '111111',
-    'color'          => 'FFFFFF',
-    'valign'         => 'center',
-    'borderLeftSize' => 1
-);
-
-$this->cellStyle->fullWidthGridSpan8 = array(
-    'gridSpan'       => 8,
-    'bgColor'        => '111111',
-    'color'          => 'FFFFFF',
-    'valign'         => 'center',
-    'borderLeftSize' => 1
-);
-
-$this->cellStyle->gridSpan4 = array(
-    'gridSpan' => 4,
-);
-
-$this->cellStyle->gridSpan3 = array(
-    'gridSpan' => 3,
-);
-$this->cellStyle->gridSpan2 = array(
-    'gridSpan' => 2,
-);
-
-$this->cellStyle->gridSpan2 = array(
-    'gridSpan' => 2,
-);
-
-$this->cellStyle->bottom = array(
-    'borderBottomSize' => 1,
-);
-
-$this->cellStyle->borderRight = array(
-    'borderRightSize' => 1,
-);
-
-$this->cellStyle->borderLeft = array(
-    'borderLeftSize' => 1,
-);
-
-$this->cellStyle->borderTop = array(
-    'borderTopSize' => 1,
-);
-
-$this->cellStyle->bottomAlign = array(
-    'valign' => 'bottom',
-);
-
-$this->cellStyle->middle = array(
-    'valign' => 'center',
-);
 

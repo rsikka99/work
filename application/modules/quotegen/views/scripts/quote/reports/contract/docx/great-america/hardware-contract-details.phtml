@@ -1,0 +1,49 @@
+<?php
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
+
+/* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
+$contractTemplateSection = $this->contractTemplateSection;
+
+$tableSpan      = $this->tableStyle->gridSpan;
+$cellStyle      = $this->cellStyle;
+$fontStyle      = $this->fontStyle;
+$paragraphStyle = $this->paragraphStyle;
+
+// Begin Terms Table
+$termDetailsTable = $section->addTable($this->tableStyle->standard);
+$termDetailsTable->getStyle()->setBorderBottomSize(1);
+$termDetailsTable->getStyle()->setBorderRightSize(1);
+$termDetailsTable->getStyle()->setBorderLeftSize(1);
+
+
+$termDetailsTable->addRow();
+$termDetailsTable->addCell($tableSpan ['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span8))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$termDetailsTable->addRow();
+
+/**
+ * Term & Payment
+ */
+$termAndPaymentCell = $termDetailsTable->addCell($tableSpan ['span3'], $cellStyle->span3);
+$termAndPaymentCell->addText('TERM IN MONTHS      : ' . $this->leaseDetails->termInMonths . ' Months', $fontStyle->label, $paragraphStyle->noSpacing);
+
+$termAndPaymentTextRun = $termAndPaymentCell->addTextRun($paragraphStyle->noSpacing);
+$termAndPaymentTextRun->addText('MONTHLY FIXED CHARGE: ', $fontStyle->label);
+$termAndPaymentTextRun->addText("{$this->leaseDetails->monthlyCharge}", array_merge($fontStyle->label, $fontStyle->underline, $fontStyle->bold));
+$termAndPaymentTextRun->addText("**");
+
+$termAndPaymentCell->addText('SEE ATTACHED EQUIPMENT LIST [ ]', $fontStyle->label, $paragraphStyle->noSpacing);
+
+/**
+ * Security Deposit
+ */
+$securityDepositCell = $termDetailsTable->addCell($tableSpan ['span2'], $cellStyle->span2);
+$securityDepositCell->addText('SECURITY DEPOSIT ' . $this->leaseDetails->securityDeposit, $fontStyle->label, $paragraphStyle->noSpacing);
+
+/**
+ * Purchase Option Cell
+ */
+$purchaseOptionCell = $termDetailsTable->addCell($tableSpan ['span3'], $cellStyle->span3);
+$purchaseOptionCell->addText('Purchase Option: [ ] Fair Market Value', $fontStyle->label, $paragraphStyle->noSpacing);
+$purchaseOptionCell->addText('                 [ ] 10% of Equipment Cost', $fontStyle->label, $paragraphStyle->noSpacing);
+$purchaseOptionCell->addText('                 [ ] Other:________________', $fontStyle->label, $paragraphStyle->noSpacing);

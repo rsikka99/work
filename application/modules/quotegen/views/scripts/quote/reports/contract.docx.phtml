@@ -5,7 +5,7 @@
  *
  * @param \PhpOffice\PhpWord\PhpWord           $phpWord
  * @param \PhpOffice\PhpWord\Element\Section[] $sections
- * @param string            $sectionName
+ * @param string                               $sectionName
  *
  * @return mixed
  */
@@ -105,34 +105,39 @@ $defaultData = array(
     "quote"          => $this->quote,
 );
 
+/*
+ * Great America contract sections
+ */
+
 /**
  * Customer ("you" or "your")
  */
-if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_CUSTOMER_YOU_YOUR]))
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_CUSTOMER_YOU_YOUR]))
 {
-    $this->partial("{$basePath}/01-customer-you-your.phtml", array_merge(
+    $this->partial("{$basePath}/great-america/customer-you-your.phtml", array_merge(
             $defaultData,
             array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_CUSTOMER_YOU_YOUR],
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_CUSTOMER_YOU_YOUR],
             )
         )
     );
 
-    if (!isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_VENDOR]))
+    if (!isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_VENDOR]))
     {
         $section->addTextBreak();
     }
 }
 
+
 /**
  * Vendor Statement
  */
-if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_VENDOR]))
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_VENDOR]))
 {
-    $this->partial("{$basePath}/02-vendor.phtml", array_merge(
+    $this->partial("{$basePath}/great-america/vendor.phtml", array_merge(
             $defaultData,
             array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_VENDOR],
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_VENDOR],
             )
         )
     );
@@ -142,12 +147,12 @@ if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SE
 /**
  * Contract
  */
-if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_CONTRACT]))
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_CONTRACT]))
 {
-    $this->partial("{$basePath}/03-contract.phtml", array_merge(
+    $this->partial("{$basePath}/great-america/contract.phtml", array_merge(
             $defaultData,
             array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_CONTRACT],
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_CONTRACT],
             )
         )
     );
@@ -157,12 +162,12 @@ if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SE
 /**
  * MPS Contract Details
  */
-if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_MPS_CONTRACT_DETAILS]))
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_MPS_CONTRACT_DETAILS]))
 {
-    $this->partial("{$basePath}/07-mps-contract-details.phtml", array_merge(
+    $this->partial("{$basePath}/great-america/mps-contract-details.phtml", array_merge(
             $defaultData,
             array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_MPS_CONTRACT_DETAILS],
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_MPS_CONTRACT_DETAILS],
             )
         )
     );
@@ -172,12 +177,12 @@ if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SE
 /**
  * Hardware Contract Details
  */
-if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_HARDWARE_CONTRACT_DETAILS]))
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_HARDWARE_CONTRACT_DETAILS]))
 {
-    $this->partial("{$basePath}/08-hardware-contract-details.phtml", array_merge(
+    $this->partial("{$basePath}/great-america/hardware-contract-details.phtml", array_merge(
             $defaultData,
             array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_HARDWARE_CONTRACT_DETAILS],
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_HARDWARE_CONTRACT_DETAILS],
             )
         )
     );
@@ -187,12 +192,12 @@ if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SE
 /**
  * Customer's Authorized Signature - Signature Box
  */
-if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_CUSTOMERS_AUTH_SIGNATURE]))
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_CUSTOMERS_AUTH_SIGNATURE]))
 {
-    $this->partial("{$basePath}/04-customers-authorizing-signature.phtml", array_merge(
+    $this->partial("{$basePath}/great-america/customers-authorizing-signature.phtml", array_merge(
             $defaultData,
             array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_CUSTOMERS_AUTH_SIGNATURE],
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_CUSTOMERS_AUTH_SIGNATURE],
             )
         )
     );
@@ -202,12 +207,12 @@ if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SE
 /**
  * Owner ("we", "us", "our") - Signature Box
  */
-if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_OWNER_WE_US_OUR]))
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_OWNER_WE_US_OUR]))
 {
-    $this->partial("{$basePath}/05-owner-we-us-our.phtml", array_merge(
+    $this->partial("{$basePath}/great-america/owner-we-us-our.phtml", array_merge(
             $defaultData,
             array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_OWNER_WE_US_OUR],
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_OWNER_WE_US_OUR],
             )
         )
     );
@@ -217,12 +222,12 @@ if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SE
 /**
  * Unconditional Guaranty - Signature Boxes
  */
-if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_UNCONDITIONAL_GUARANTY]))
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_UNCONDITIONAL_GUARANTY]))
 {
-    $this->partial("{$basePath}/06-unconditional-guaranty.phtml", array_merge(
+    $this->partial("{$basePath}/great-america/unconditional-guaranty.phtml", array_merge(
             $defaultData,
             array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_UNCONDITIONAL_GUARANTY],
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_UNCONDITIONAL_GUARANTY],
             )
         )
     );
@@ -233,15 +238,15 @@ if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SE
 /**
  * Equipment List
  */
-if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_EQUIPMENT_LIST]))
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_EQUIPMENT_LIST]))
 {
     $equipmentSection = getNewSection($phpWord, $sections, 'equipment');
 
-    $this->partial("{$basePath}/09-equipment-list.phtml", array_merge(
+    $this->partial("{$basePath}/great-america/equipment-list.phtml", array_merge(
             $defaultData,
             array(
                 "section"                 => $equipmentSection,
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_EQUIPMENT_LIST],
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_EQUIPMENT_LIST],
             )
         )
     );
@@ -250,15 +255,134 @@ if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SE
 /**
  * Additional Terms and Conditions
  */
-if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_ADDITIONAL_TERMS_AND_CONDITIONS]))
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_ADDITIONAL_TERMS_AND_CONDITIONS]))
 {
     $termsAndConditionsSection = getNewSection($phpWord, $sections, 'terms-and-conditions');
 
-    $this->partial("{$basePath}/10-additional-terms-and-conditions.phtml", array_merge(
+    $this->partial("{$basePath}/great-america/additional-terms-and-conditions.phtml", array_merge(
             $defaultData,
             array(
                 "section"                 => $termsAndConditionsSection,
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_ADDITIONAL_TERMS_AND_CONDITIONS],
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_GA_ADDITIONAL_TERMS_AND_CONDITIONS],
+            )
+        )
+    );
+}
+
+/*
+ * De Lage Landen contract sections
+ */
+
+/**
+ * Lessee Information
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_LESSEE_INFO]))
+{
+    $this->partial("{$basePath}/de-lage-landen/lessee-information.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_LESSEE_INFO],
+            )
+        )
+    );
+}
+
+
+/**
+ * Payment Information
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_PAYMENT_INFO]))
+{
+    $this->partial("{$basePath}/de-lage-landen/payment-information.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_PAYMENT_INFO],
+            )
+        )
+    );
+}
+
+/**
+ * Lessee Signature
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_LESSEE_SIGNATURE]))
+{
+    $this->partial("{$basePath}/de-lage-landen/lessee-signature.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_LESSEE_SIGNATURE],
+            )
+        )
+    );
+}
+
+/**
+ * Lessor
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_LESSOR_SIGNATURE]))
+{
+    $this->partial("{$basePath}/de-lage-landen/lessor-signature.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_LESSOR_SIGNATURE],
+            )
+        )
+    );
+}
+
+/**
+ * Acceptance
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_ACCEPTANCE]))
+{
+    $this->partial("{$basePath}/de-lage-landen/acceptance.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_ACCEPTANCE],
+            )
+        )
+    );
+}
+
+/**
+ * Guaranty
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_GUARANTY]))
+{
+    $this->partial("{$basePath}/de-lage-landen/guaranty.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_GUARANTY],
+            )
+        )
+    );
+}
+
+
+/**
+ * Terms and Conditions
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_TERMS_AND_CONDITIONS]))
+{
+    $this->partial("{$basePath}/de-lage-landen/terms-and-conditions.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_TERMS_AND_CONDITIONS],
+            )
+        )
+    );
+}
+
+
+/**
+ * Schedule (Device List)
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_SCHEDULE]))
+{
+    $this->partial("{$basePath}/de-lage-landen/schedule.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_DLL_SCHEDULE],
             )
         )
     );

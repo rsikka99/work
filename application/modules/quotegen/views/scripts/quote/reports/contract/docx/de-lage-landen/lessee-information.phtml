@@ -1,0 +1,35 @@
+<?php
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
+
+/* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
+$contractTemplateSection = $this->contractTemplateSection;
+
+$tableSpan      = $this->tableStyle->gridSpan;
+$cellStyle      = $this->cellStyle;
+$fontStyle      = $this->fontStyle;
+$paragraphStyle = $this->paragraphStyle;
+$rowHeight      = array('exactHeight' => true);
+
+$lesseeInfoTable = $section->addTable($this->tableStyle->standard);
+$lesseeInfoTable->getStyle()->setBorderLeftSize(1)->setBorderRightSize(1)->setBorderBottomSize(1);
+$lesseeInfoTable->getStyle()->setCellMargin(50);
+
+$lesseeInfoTable->addRow(300);
+$lesseeInfoTable->addCell($tableSpan ['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span8))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+
+$lesseeInfoTable->addRow(300);
+$lesseeInfoTable->addCell($tableSpan['span1'], $cellStyle->span1)->addText('Full Legal Name:', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$lesseeInfoTable->addCell($tableSpan['span4'], array_merge($cellStyle->center, $cellStyle->rightBorder, $cellStyle->span4))->addText("{$this->company->name}", $fontStyle->bold);
+$lesseeInfoTable->addCell($tableSpan['span3'], array_merge($cellStyle->span3))->addText('Purchase Order Requisition Number', $fontStyle->label);
+
+$lesseeInfoTable->addRow(300);
+$lesseeInfoTable->addCell($tableSpan['span2'], array_merge($cellStyle->topBorder, $cellStyle->span1))->addText("Billing Address: ", $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$lesseeInfoTable->addCell($tableSpan['span3'], array_merge($cellStyle->center, $cellStyle->rightBorder, $cellStyle->topBorder, $cellStyle->span4))->addText("{$this->company->address}", $fontStyle->bold);
+$lesseeInfoTable->addCell($tableSpan['span1'], array_merge($cellStyle->topBorder, $cellStyle->span1))->addText('Phone Number', $fontStyle->label);
+$lesseeInfoTable->addCell($tableSpan['span2'], array_merge($cellStyle->topBorder, $cellStyle->span2))->addText($this->company->phoneNumber, $fontStyle->bold);
+
+$lesseeInfoTable->addRow(500, $rowHeight);
+$lesseeInfoTable->addCell($tableSpan['span8'], array_merge($cellStyle->topBorder, $cellStyle->span8))->addText('Send Invoice to Attention of:', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+
+$section->addTextBreak(1);

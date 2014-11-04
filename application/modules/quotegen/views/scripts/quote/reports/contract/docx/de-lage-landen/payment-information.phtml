@@ -1,0 +1,81 @@
+<?php
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
+
+/* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
+$contractTemplateSection = $this->contractTemplateSection;
+
+$tableSpan      = $this->tableStyle->gridSpan;
+$cellStyle      = $this->cellStyle;
+$fontStyle      = $this->fontStyle;
+$paragraphStyle = $this->paragraphStyle;
+$rowHeight      = array('exactHeight' => true);
+
+$paymentInfoTable = $section->addTable($this->tableStyle->standard);
+$paymentInfoTable->getStyle()->setBorderBottomSize(1)->setBorderRightSize(1)->setBorderLeftSize(1);
+$paymentInfoTable->getStyle()->setCellMargin(50);
+
+$paymentInfoTable->addRow(300);
+$paymentInfoTable->addCell($tableSpan['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span7))->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $paragraphStyle->noSpacing);
+
+$paymentInfoTable->addRow(300);
+$paymentInfoTable->addCell($tableSpan['span2'], $cellStyle->rightBorder)->addText('Number of Lease Payments', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$paymentInfoTable->addCell($tableSpan['span1'], $cellStyle->span2)->addText('Lease Payment', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span1'])->addText('(PLUS)', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span1'])->addText('Applicable Sales Tax', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span1'])->addText('(EQUALS)', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span2'])->addText('Total Lease Payment', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+
+$paymentInfoTable->addRow(300);
+$paymentInfoTable->addCell($tableSpan['span2'], $cellStyle->rightBorder);
+$paymentInfoTable->addCell($tableSpan['span1'], array_merge($cellStyle->span2, $cellStyle->topBorder))->addText("{$this->leaseDetails->monthlyCharge}", $this->fontStyle->bold, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span1'], $cellStyle->topBorder)->addText('+', null, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span1'], $cellStyle->topBorder)->addText('');
+$paymentInfoTable->addCell($tableSpan['span1'], $cellStyle->topBorder)->addText('=', null, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span2'], $cellStyle->topBorder)->addText('', null, $paragraphStyle->noSpacingCentered);
+
+$paymentInfoTable->addRow(50, $rowHeight);
+$paymentInfoTable->addCell($tableSpan['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span7));
+
+$paymentInfoTable->addRow(300);
+$paymentInfoTable->addCell($tableSpan['span3'], array_merge($cellStyle->rightBorder, $cellStyle->center))->addText('Term of Lease in Months', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$paymentInfoTable->addCell($tableSpan['span1'], array_merge($cellStyle->span2, $cellStyle->center))->addText('Payment Frequency:', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$paymentInfoTable->addCell($tableSpan['span1'], array_merge($cellStyle->center))->addText('[  ] Monthly', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$paymentInfoTable->addCell($tableSpan['span1'], array_merge($cellStyle->center))->addText('[  ] Quarterly', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$paymentInfoTable->addCell($tableSpan['span1'], array_merge($cellStyle->center))->addText('[  ] Other:', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$paymentInfoTable->addCell($tableSpan['span1']);
+
+$paymentInfoTable->addRow(300);
+$paymentInfoTable->addCell($tableSpan['span3'], $cellStyle->rightBorder)->addText($this->leaseDetails->termInMonths . ' Months', $this->fontStyle->bold, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span1'], array_merge($cellStyle->span2, $cellStyle->topBorder, $cellStyle->center))->addText('End of Lease Option:', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$paymentInfoTable->addCell($tableSpan['span1'], array_merge($cellStyle->center, $cellStyle->topBorder))->addText('[  ] FMV', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$paymentInfoTable->addCell($tableSpan['span1'], array_merge($cellStyle->center, $cellStyle->topBorder))->addText('[  ] 10%', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$paymentInfoTable->addCell($tableSpan['span1'], array_merge($cellStyle->center, $cellStyle->topBorder))->addText('[  ] $1', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$paymentInfoTable->addCell($tableSpan['span1'], array_merge($cellStyle->center, $cellStyle->topBorder))->addText('[  ] Other:', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+
+$paymentInfoTable->addRow(300);
+$paymentInfoTable->addCell($tableSpan['span3'], $cellStyle->rightBorder);
+$paymentInfoTable->addCell($tableSpan['span5'], array_merge($cellStyle->span6, $cellStyle->center))->addText('End of Lease Purchase Option shall be FMV unless another option is selected.', $this->fontStyle->boldFinePrint, $paragraphStyle->noSpacingLeft);
+
+$paymentInfoTable->addRow(50, $rowHeight);
+$paymentInfoTable->addCell($tableSpan['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span7));
+
+$paymentInfoTable->addRow(300);
+$paymentInfoTable->addCell($tableSpan['span1'])->addText('Security Deposit', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$paymentInfoTable->addCell($tableSpan['span1'])->addText('(PLUS)', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span1'])->addText('First Period Payment', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span1'])->addText('(PLUS)', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span1'])->addText('Other', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span1'])->addText('(EQUALS)', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span2'])->addText('Total Payment Enclosed', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+
+$paymentInfoTable->addRow(300);
+$paymentInfoTable->addCell($tableSpan['span1'], $cellStyle->center)->addText($this->leaseDetails->securityDeposit, $this->fontStyle->bold, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span1'])->addText('+', null, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span1'])->addText("{$this->leaseDetails->monthlyCharge}", $this->fontStyle->bold, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span1'])->addText('+', null, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span1'])->addText('', null, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span1'])->addText('=', null, $paragraphStyle->noSpacingCentered);
+$paymentInfoTable->addCell($tableSpan['span2'])->addText('', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+
+$section->addTextBreak(1);

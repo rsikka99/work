@@ -5,13 +5,14 @@ $section = $this->section;
 /* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
 $contractTemplateSection = $this->contractTemplateSection;
 
-$tableSpan = $this->tableStyle->gridSpan;
-$noSpacing = $this->paragraphStyle->noSpacing;
-$labelFont = $this->fontStyle->label;
+$tableSpan      = $this->tableStyle->gridSpan;
+$cellStyle      = $this->cellStyle;
+$fontStyle      = $this->fontStyle;
+$paragraphStyle = $this->paragraphStyle;
 
 $contractTable = $section->addTable($this->tableStyle->standard);
 $contractTable->addRow(300);
-$contractTable->addCell($tableSpan ['span8'], $this->cellStyle->invertBackground)->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $noSpacing);
+$contractTable->addCell($tableSpan ['span8'], $cellStyle->invertBackground)->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
 
 
 $contractHtml = new DOMDocument(5);
@@ -23,7 +24,7 @@ foreach ($contractHtml->getElementsByTagName('p') as $paragraphNode)
     $contractTable->addRow();
     $cell = $contractTable->addCell($tableSpan ['span8'], null);
 
-    $textRun = $cell->addTextRun($this->paragraphStyle->noSpacingJustified);
+    $textRun = $cell->addTextRun($paragraphStyle->noSpacingJustified);
 
     $childNodes = $paragraphNode->childNodes;
     for ($i = 0; $i < $childNodes->length; $i++)
@@ -33,11 +34,11 @@ foreach ($contractHtml->getElementsByTagName('p') as $paragraphNode)
 
         if ($node->tagName == 'b')
         {
-            $textRun->addText($node->textContent, $this->fontStyle->boldFinePrint);
+            $textRun->addText($node->textContent, $fontStyle->boldFinePrint);
         }
         else
         {
-            $textRun->addText($node->textContent, $this->fontStyle->finePrint);
+            $textRun->addText($node->textContent, $fontStyle->finePrint);
         }
     }
 }

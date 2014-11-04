@@ -1,0 +1,27 @@
+<?php
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
+
+/* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
+$contractTemplateSection = $this->contractTemplateSection;
+
+$tableSpan      = $this->tableStyle->gridSpan;
+$cellStyle      = $this->cellStyle;
+$fontStyle      = $this->fontStyle;
+$paragraphStyle = $this->paragraphStyle;
+
+$footerTable = $section->addTable($this->tableStyle->standard);
+$footerTable->addRow(300);
+$footerTable->addCell($tableSpan ['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span4))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$footerTable->addRow();
+$footerTable->addCell($tableSpan ['span8'], $cellStyle->span4)->addText(' ', $fontStyle->finePrint, $paragraphStyle->noSpacing);
+$footerTable->addRow(350);
+$footerTable->addCell($tableSpan ['span2'], array_merge($cellStyle->bottomAlign, $cellStyle->rightBorder))->addText(' ', null, $paragraphStyle->noSpacing);
+$footerTable->addCell($tableSpan ['span3'], array_merge($cellStyle->bottomAlign, $cellStyle->topBorder, $cellStyle->rightBorder))->addText('X', null, $paragraphStyle->noSpacing);
+$footerTable->addCell($tableSpan ['span3'], $cellStyle->bottomAlign)->addText('', null, $paragraphStyle->noSpacing);
+$footerTable->addCell($tableSpan ['span1'], $cellStyle->bottomAlign)->addText('', null, $paragraphStyle->noSpacing);
+$footerTable->addRow();
+$footerTable->addCell($tableSpan ['span1'], $cellStyle->topBorder)->addText('OWNER', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$footerTable->addCell($tableSpan ['span3'], $cellStyle->topBorder)->addText('SIGNATURE', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$footerTable->addCell($tableSpan ['span3'], $cellStyle->topBorder)->addText('PRINT NAME & TITLE', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$footerTable->addCell($tableSpan ['span1'], $cellStyle->topBorder)->addText('DATE', $fontStyle->label, $paragraphStyle->noSpacingCentered);

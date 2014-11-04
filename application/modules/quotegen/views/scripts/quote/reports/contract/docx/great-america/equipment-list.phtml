@@ -1,0 +1,52 @@
+<?php
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
+
+/* @var $quote Quotegen_Model_Quote */
+$quote = $this->quote;
+
+/* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
+$contractTemplateSection = $this->contractTemplateSection;
+
+$tableSpan      = $this->tableStyle->gridSpan;
+$cellStyle      = $this->cellStyle;
+$fontStyle      = $this->fontStyle;
+$paragraphStyle = $this->paragraphStyle;
+
+/**
+ * Devices Table - Title Row
+ */
+$deviceTable = $section->addTable($this->tableStyle->standard);
+$deviceTable->getStyle()->setBorderBottomSize(1)->setBorderLeftSize(1)->setBorderRightSize(1);
+
+$deviceTable->addRow(300);
+$deviceTable->addCell(null, array_merge($cellStyle->invertBackground, $cellStyle->span3))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+
+/**
+ * Devices Table - Header Row
+ */
+$deviceTable->addRow(300);
+$deviceTable->addCell($tableSpan ['span3'], $cellStyle->bottomAlign)->addText('MAKE, MODEL NUMBER & INCLUDED ACCESSORIES', $fontStyle->label, $paragraphStyle->noSpacing);
+$deviceTable->addCell($tableSpan ['span2'], array_merge($cellStyle->bottomAlign, $cellStyle->rightBorder))->addText('SERIAL NUMBER', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$deviceTable->addCell($tableSpan ['span3'], $cellStyle->bottomAlign)->addText('ADDRESS', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+
+/**
+ * Devices Table - Device Rows
+ */
+foreach ($quote->getQuoteDevices() as $quoteDevice)
+{
+    for ($i = 0; $i < $quoteDevice->calculateTotalQuantity(); $i++)
+    {
+        $deviceTable->addRow(600);
+        $deviceDetailsCell = $deviceTable->addCell($tableSpan ['span3'], $cellStyle->topBorder);
+        $deviceDetailsCell->addText($quoteDevice->name, null, $paragraphStyle->noSpacing);
+
+        foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption)
+        {
+            $deviceDetailsCell->addText('    - ' . $quoteDeviceOption->quantity . ' x ' . $quoteDeviceOption->name, $fontStyle->finePrint, $paragraphStyle->noSpacing);
+        }
+
+        $deviceTable->addCell($tableSpan ['span2'], array_merge($cellStyle->bottomAlign, $cellStyle->topBorder))->addText(' ', null, $paragraphStyle->noSpacing);
+        $deviceTable->addCell($tableSpan ['span3'], array_merge($cellStyle->bottomAlign, $cellStyle->topBorder))->addText(' ', null, $paragraphStyle->noSpacing);
+    }
+}

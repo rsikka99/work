@@ -1,0 +1,32 @@
+<?php
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
+
+/* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
+$contractTemplateSection = $this->contractTemplateSection;
+
+$tableSpan     = $this->tableStyle->gridSpan;
+$noSpacing     = $this->paragraphStyle->noSpacing;
+$labelFont     = $this->fontStyle->label;
+$cellStyle     = $this->cellStyle;
+$statementFont = array('size' => '9', 'bold' => true);
+
+$acceptanceTable = $section->addTable($this->tableStyle->standard);
+$acceptanceTable->getStyle()->setBorderBottomSize(1)->setBorderLeftSize(1)->setBorderRightSize(1);
+$acceptanceTable->getStyle()->setCellMargin(50);
+
+$acceptanceTable->addRow(300);
+$acceptanceTable->addCell($tableSpan ['span8'], array_merge($this->cellStyle->invertBackground, $this->cellStyle->span2))->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $noSpacing);
+
+$acceptanceTable->addRow(300);
+$textRun = $acceptanceTable->addCell($tableSpan ['span8'], $this->cellStyle->span2)->addTextRun($noSpacing);
+$textRun->addText("The Equipment has been received, put in use, is in good working order and is satisfactory and acceptable.", $statementFont);
+
+$acceptanceTable->addRow(400);
+$acceptanceTable->addCell($tableSpan['span4'], array_merge($this->cellStyle->rightBorder, $cellStyle->topBorder))->addText('Signature', $labelFont, $this->paragraphStyle->noSpacingLeft);
+$acceptanceTable->addCell($tableSpan['span4'], $cellStyle->topBorder)->addText('Date', $labelFont, $this->paragraphStyle->noSpacingLeft);
+$acceptanceTable->addRow(400);
+$acceptanceTable->addCell($tableSpan['span4'], array_merge($cellStyle->rightBorder, $cellStyle->topBorder))->addText('Print Name', $labelFont, $this->paragraphStyle->noSpacingLeft);
+$acceptanceTable->addCell($tableSpan['span4'], $cellStyle->topBorder)->addText('Title', $labelFont, $this->paragraphStyle->noSpacingLeft);
+
+$section->addTextBreak(1);

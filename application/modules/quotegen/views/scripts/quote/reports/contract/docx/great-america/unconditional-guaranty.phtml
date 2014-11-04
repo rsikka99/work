@@ -1,0 +1,69 @@
+<?php
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
+
+/* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
+$contractTemplateSection = $this->contractTemplateSection;
+
+$tableSpan      = $this->tableStyle->gridSpan;
+$cellStyle      = $this->cellStyle;
+$fontStyle      = $this->fontStyle;
+$paragraphStyle = $this->paragraphStyle;
+
+$unconditionalGuarantyTable = $section->addTable($this->tableStyle->standard);
+$unconditionalGuarantyTable->addRow(300);
+$unconditionalGuarantyTable->addCell(null, array_merge($cellStyle->invertBackground, $cellStyle->span4))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+
+$guarantyHtml = new DOMDocument(5);
+$guarantyHtml->loadHTML($contractTemplateSection->getContractSectionText());
+
+/* @var $childNode DOMElement */
+foreach ($guarantyHtml->getElementsByTagName('p') as $paragraphNode)
+{
+    $unconditionalGuarantyTable->addRow();
+    $cell = $unconditionalGuarantyTable->addCell($tableSpan ['span8'], $cellStyle->span4);
+
+    $textRun = $cell->addTextRun($paragraphStyle->justified);
+
+    $childNodes = $paragraphNode->childNodes;
+    for ($i = 0; $i < $childNodes->length; $i++)
+    {
+        /** @var $node DOMElement */
+        $node = $childNodes->item($i);
+
+        if ($node->tagName == 'b')
+        {
+            $textRun->addText($node->textContent, $fontStyle->boldFinePrint);
+        }
+        else
+        {
+            $textRun->addText($node->textContent, $fontStyle->finePrint);
+        }
+    }
+}
+
+
+// First Signature
+$unconditionalGuarantyTable->addRow(350);
+$unconditionalGuarantyTable->addCell($tableSpan ['span2'], $cellStyle->rightBorder)->addText(' ', null, $paragraphStyle->noSpacing);
+$unconditionalGuarantyTable->addCell($tableSpan ['span3'], array_merge($cellStyle->bottomAlign, $cellStyle->topBorder, $cellStyle->rightBorder))->addText('X', null, $paragraphStyle->noSpacing);
+$unconditionalGuarantyTable->addCell($tableSpan ['span3'], $cellStyle->bottomAlign)->addText('', null, $paragraphStyle->noSpacing);
+$unconditionalGuarantyTable->addCell($tableSpan ['span1'], $cellStyle->bottomAlign)->addText('', null, $paragraphStyle->noSpacing);
+$unconditionalGuarantyTable->addRow();
+$unconditionalGuarantyTable->addCell($tableSpan ['span1'], $cellStyle->topBorder)->addText(' ', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$unconditionalGuarantyTable->addCell($tableSpan ['span3'], $cellStyle->topBorder)->addText('SIGNATURE', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$unconditionalGuarantyTable->addCell($tableSpan ['span3'], $cellStyle->topBorder)->addText('PRINT NAME & TITLE', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$unconditionalGuarantyTable->addCell($tableSpan ['span1'], $cellStyle->topBorder)->addText('DATE', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+
+// Second Signature
+$unconditionalGuarantyTable->addRow(350);
+$unconditionalGuarantyTable->addCell($tableSpan ['span2'], $cellStyle->rightBorder)->addText(' ', null, $paragraphStyle->noSpacing);
+$unconditionalGuarantyTable->addCell($tableSpan ['span3'], array_merge($cellStyle->bottomAlign, $cellStyle->topBorder, $cellStyle->rightBorder))->addText('X', null, $paragraphStyle->noSpacing);
+$unconditionalGuarantyTable->addCell($tableSpan ['span3'], $cellStyle->bottomAlign)->addText('', null, $paragraphStyle->noSpacing);
+$unconditionalGuarantyTable->addCell($tableSpan ['span1'], $cellStyle->bottomAlign)->addText('', null, $paragraphStyle->noSpacing);
+$unconditionalGuarantyTable->addRow();
+$unconditionalGuarantyTable->addCell($tableSpan ['span1'], $cellStyle->topBorder)->addText(' ', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$unconditionalGuarantyTable->addCell($tableSpan ['span3'], $cellStyle->topBorder)->addText('SIGNATURE', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$unconditionalGuarantyTable->addCell($tableSpan ['span3'], $cellStyle->topBorder)->addText('PRINT NAME & TITLE', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$unconditionalGuarantyTable->addCell($tableSpan ['span1'], $cellStyle->topBorder)->addText('DATE', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+

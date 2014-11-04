@@ -17,6 +17,7 @@ $this->leaseDetails->securityDeposit = $this->currency(0);
 $this->leaseDetails->meterFrequency = '';
 
 // Information specific for the company
-$this->company          = new stdClass();
-$this->company->name    = ($quote->getClient()->legalName ? $quote->getClient()->legalName : $quote->getClient()->companyName);
-$this->company->address = "{$quote->getClient()->getAddress()->getFullAddressOneLine()}";
+$this->company              = new stdClass();
+$this->company->name        = ($quote->getClient()->legalName ? $quote->getClient()->legalName : $quote->getClient()->companyName);
+$this->company->address     = "{$quote->getClient()->getAddress()->getFullAddressOneLine()}";
+$this->company->phoneNumber = ($quote->getClient()->getContact()->areaCode . '-' . $quote->getClient()->getContact()->exchangeCode . '-' . $quote->getClient()->getContact()->number);

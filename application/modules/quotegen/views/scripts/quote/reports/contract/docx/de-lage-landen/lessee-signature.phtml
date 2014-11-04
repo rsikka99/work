@@ -1,0 +1,39 @@
+<?php
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
+
+/* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
+$contractTemplateSection = $this->contractTemplateSection;
+
+$tableSpan      = $this->tableStyle->gridSpan;
+$cellStyle      = $this->cellStyle;
+$fontStyle      = $this->fontStyle;
+$paragraphStyle = $this->paragraphStyle;
+$labelFont      = $fontStyle->label;
+
+$lesseeSignatureTable = $section->addTable($this->tableStyle->standard);
+$lesseeSignatureTable->getStyle()->setBorderBottomSize(1)->setBorderLeftSize(1)->setBorderRightSize(1);
+$lesseeSignatureTable->getStyle()->setCellMargin(50);
+
+$lesseeSignatureTable->addRow(300);
+$lesseeSignatureTable->addCell($tableSpan['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span6))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+
+$lesseeSignatureTable->addRow(300);
+$lesseeSignatureTable->addCell($tableSpan['span6'], $cellStyle->span2)->addText('You agree that this is a non-cancelable lease. The Equipment is: ', $fontStyle->boldFinePrint);
+$lesseeSignatureTable->addCell($tableSpan['span1'], $cellStyle->span2)->addText('[  ] New', null, $paragraphStyle->noSpacingCentered);
+$lesseeSignatureTable->addCell($tableSpan['span1'], $cellStyle->span2)->addText('[  ] Used', null, $paragraphStyle->noSpacingCentered);
+
+$lesseeSignatureTable->addRow(300);
+$lesseeSignatureTable->addCell($tableSpan['span6'], array_merge($cellStyle->topBorder, $cellStyle->rightBorder, $cellStyle->span3))->addText('Signature', $fontStyle->label);
+$lesseeSignatureTable->addCell($tableSpan['span2'], array_merge($cellStyle->topBorder, $cellStyle->span3))->addText('Date', $fontStyle->label);
+
+$lesseeSignatureTable->addRow(300);
+$lesseeSignatureTable->addCell($tableSpan['span6'], array_merge($cellStyle->topBorder, $cellStyle->rightBorder, $cellStyle->span3))->addText('Title', $fontStyle->label);
+$lesseeSignatureTable->addCell($tableSpan['span4'], array_merge($cellStyle->topBorder, $cellStyle->span3))->addText('Print Name', $fontStyle->label);
+
+$lesseeSignatureTable->addRow(300);
+$lesseeSignatureTable->addCell($tableSpan['span8'], array_merge($cellStyle->topBorder, $cellStyle->span6))->addText('Legal Name of Corporation', $fontStyle->label);
+
+$section->addTextBreak(1);
+
+
