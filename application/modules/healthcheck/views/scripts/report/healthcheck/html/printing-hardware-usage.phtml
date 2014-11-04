@@ -1,7 +1,7 @@
 <?php
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
-$graphs = $healthcheckViewModel->getGraphs();
+$graphs               = $healthcheckViewModel->getGraphs();
 ?>
 <div class="h1">Analysis: Printing Hardware Usage</div>
 <div class="pheader">Print Volume and Number of Printing Devices</div>
@@ -10,7 +10,8 @@ $graphs = $healthcheckViewModel->getGraphs();
     <strong><?php echo number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()); ?>
     </strong> pages each per month, for an average total monthly print volume of
     <strong><?php echo $this->formatPageVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></strong> pages.
-    Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.</p>
+    Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.
+</p>
 <br /> <br />
 <div class="center">
     <img src="<?php echo $graphs['AverageMonthlyPagesBarGraph']; ?>" style="width: 30%; height: 30%;" /> <!-- Average monthly pages per networked printer -->
@@ -67,7 +68,7 @@ $graphs = $healthcheckViewModel->getGraphs();
                 <div><?php echo $deviceInstance->getDeviceName() ?></div>
             </td>
             <td class="column2">
-                <div class=" center"><?php echo ($deviceInstance->serialNumber) ? : 'Unknown'; ?></div>
+                <div class=" center"><?php echo ($deviceInstance->serialNumber) ?: 'Unknown'; ?></div>
             </td>
             <td class="column3">
                 <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
@@ -101,7 +102,7 @@ $graphs = $healthcheckViewModel->getGraphs();
                 <div><?php echo $deviceInstance->getDeviceName() ?></div>
             </td>
             <td class="column2">
-                <div class=" center"><?php echo ($deviceInstance->serialNumber) ? : 'Unknown' ?></div>
+                <div class=" center"><?php echo ($deviceInstance->serialNumber) ?: 'Unknown' ?></div>
             </td>
             <td class="column3">
                 <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
@@ -131,7 +132,9 @@ $graphs = $healthcheckViewModel->getGraphs();
     <table>
         <tbody>
         <tr>
-            <td><img src="<?php echo $graphs['ColorCapablePrintingDevices']; ?>" /></td>
+            <td>
+                <img src="<?php echo $graphs['ColorCapablePrintingDevices']; ?>" />
+            </td>
             <!-- Devices Purchased -->
             <td><img src="<?php echo $graphs['ColorVSBWPagesGraph']; ?>" /></td>
             <!-- Monthly pages on devices not leased -->
@@ -155,9 +158,8 @@ $graphs = $healthcheckViewModel->getGraphs();
     </tr>
     </thead>
     <tbody>
-    <?php
-    $ctr = 0;
-    foreach ($healthcheckViewModel->getMonthlyHighCostPurchasedColorDevices($healthcheckViewModel->getCostPerPageSettingForCustomer()) as $deviceInstance): ?>
+    <?php $ctr = 0; ?>
+    <?php foreach ($healthcheckViewModel->getMonthlyHighCostPurchasedColorDevices($healthcheckViewModel->getCostPerPageSettingForCustomer()) as $deviceInstance): ?>
         <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()); ?>
         <tr>
             <td><?php echo $deviceName ?>
@@ -176,11 +178,13 @@ $graphs = $healthcheckViewModel->getGraphs();
             <td><?php echo $this->formatCostPerPage($deviceInstance->getColorCostPerPageWithMargin($healthcheckViewModel->getCostPerPageSettingForCustomer())); ?></td>
             <td><?php echo $this->currency($deviceInstance->getCostOfColorInkAndToner($healthcheckViewModel->getCostPerPageSettingForCustomer())) ?></td>
         </tr>
-        <?php $ctr++;
-        if ($ctr > 2)
+        <?php
+        if (++$ctr >= 3)
         {
             break;
-        } endforeach; ?>
+        }
+        ?>
+    <?php endforeach; ?>
     </tbody>
 </table>
 <p>In general, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company's professional image, improve comprehension and increase readership.</p>

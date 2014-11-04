@@ -27,7 +27,8 @@ class Healthcheck_Report_Printiq_HealthcheckController extends Healthcheck_Libra
         $this->view->availableReports['Printiq_Healthcheck']['active'] = true;
 
         $this->view->formats = array(
-            "/healthcheck/report_printiq_healthcheck/generate/format/docx" => $this->_wordFormat
+            "/healthcheck/report_printiq_healthcheck/generate/format/excel" => $this->_excelFormat,
+            "/healthcheck/report_printiq_healthcheck/generate/format/docx"  => $this->_wordFormat,
         );
 
         $this->view->reportTitle = My_Brand::getDealerBranding()->healthCheckTitle;
@@ -44,6 +45,9 @@ class Healthcheck_Report_Printiq_HealthcheckController extends Healthcheck_Libra
                     case "docx" :
                         // Add DOCX Logic here
                         $this->view->phpword = new \PhpOffice\PhpWord\PhpWord();
+                        break;
+                    case "excel" :
+                        $this->view->phpExcel = new PHPExcel();
                         break;
                     case "html" :
                     default :
@@ -70,6 +74,8 @@ class Healthcheck_Report_Printiq_HealthcheckController extends Healthcheck_Libra
     {
         $format = $this->_getParam("format", "docx");
 
+        $reportTitle = My_Brand::getDealerBranding()->healthCheckTitle;
+
         switch ($format)
         {
             case "csv" :
@@ -82,13 +88,21 @@ class Healthcheck_Report_Printiq_HealthcheckController extends Healthcheck_Libra
                 $healthcheck->setGraphs($graphs);
                 $this->view->wordStyles = $this->getWordStyles();
                 $this->_helper->layout->disableLayout();
+                $filename = $this->generateReportFilename($this->getHealthcheck()->getClient(), $reportTitle) . ".$format";
+                break;
+            case 'excel' :
+                $this->_helper->layout->disableLayout();
+                $this->view->phpexcel                 = new PHPExcel();
+                $healthcheck                          = $this->getHealthcheckViewModel();
+                $this->healthcheckDeviceListViewModel = new Healthcheck_ViewModel_HealthcheckDeviceListViewModel($healthcheck);
+                $reportTitle .= ' Device List';
+                $filename = $this->generateReportFilename($this->getHealthcheck()->getClient(), $reportTitle) . ".xlsx";
+
                 break;
             default :
                 throw new Exception("Invalid Format Requested!");
                 break;
         }
-
-        $filename = $this->generateReportFilename($this->getHealthcheck()->getClient(), My_Brand::getDealerBranding()->healthCheckTitle) . ".$format";
 
         $this->initReportVariables($filename);
 

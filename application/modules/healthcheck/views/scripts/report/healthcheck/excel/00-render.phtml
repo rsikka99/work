@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * Create a new PHPExcel Object
+ * New PHPExcel objects will have one attached worksheet by default
+ */
+
+/* @var $phpExcel PHPExcel */
+$phpExcel = $this->phpexcel;
+
+/**
+ * Objects in memory are held in php memory as serialized objects. This
+ * reduces memory footprint with little performance hit
+ */
+PHPExcel_CachedObjectStorageFactory::cache_in_memory_serialized;
+
+$healthcheckDeviceListViewModel = new Healthcheck_ViewModel_HealthcheckDeviceListViewModel($this->healthcheckViewModel);
+
+$data = ['healthCheckDeviceListViewModel' => $healthcheckDeviceListViewModel];
+
+// Render each page
+//@formatter:off
+$this->partial("report/healthcheck/excel/optimized-devices.phtml",                  array_merge($data, ['worksheet' => $phpExcel->getSheet(0)]));
+$this->partial("report/healthcheck/excel/under-utilized-devices.phtml",             array_merge($data, ['worksheet' => $phpExcel->createSheet(1)]));
+$this->partial("report/healthcheck/excel/over-utilized-devices.phtml",              array_merge($data, ['worksheet' => $phpExcel->createSheet(2)]));
+$this->partial("report/healthcheck/excel/old-devices.phtml",                        array_merge($data, ['worksheet' => $phpExcel->createSheet(3)]));
+$this->partial("report/healthcheck/excel/devices-not-reporting-toner-levels.phtml", array_merge($data, ['worksheet' => $phpExcel->createSheet(4)]));
+//@formatter:on
+
+// Default to the first page
+$phpExcel->setActiveSheetIndex(0);
+
+// Save Excel 2007 file
+$objWriter = new PHPExcel_Writer_Excel2007($phpExcel);
+$objWriter->save($this->savePath);
+
+// Dereference the worksheets so they can be freed from memory
+$phpExcel->disconnectWorksheets();
+
+echo $this->baseUrl($this->publicFileName);

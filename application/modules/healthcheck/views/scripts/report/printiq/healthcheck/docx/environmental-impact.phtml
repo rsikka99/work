@@ -98,6 +98,8 @@ $scanAndFaxTable->addCell($cellWidths [1], $this->styles->tables->utilization->c
 $scanAndFaxTable->addCell($cellWidths [2], $this->styles->tables->utilization->cellHeader)->addText('Average Monthly Volume', 'bold_text', 'nospacing_centeralign');
 $scanAndFaxTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('Average Monthly Scan Pages', 'bold_text', 'nospacing_centeralign');
 $scanAndFaxTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('Average Monthly Faxed Pages', 'bold_text', 'nospacing_centeralign');
+
+$ctr = 0;
 /* @var $device Proposalgen_Model_DeviceInstance */
 foreach ($healthcheckViewModel->getFaxAndScanTableDevices() as $device)
 {
@@ -108,5 +110,10 @@ foreach ($healthcheckViewModel->getFaxAndScanTableDevices() as $device)
     $scanAndFaxTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_rightalign');
     $scanAndFaxTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(($device->getMasterDevice()->isCopier) ? $this->formatPageVolume($device->getPageCounts()->getScanPageCount()->getMonthly()) : '-', null, 'nospacing_rightalign');
     $scanAndFaxTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(($device->getMasterDevice()->isFax) ? $this->formatPageVolume($device->getPageCounts()->getFaxPageCount()->getMonthly()) : '-', null, 'nospacing_rightalign');
+
+    if (++$ctr >= 3)
+    {
+        break;
+    }
 }
 $section->addTextBreak();

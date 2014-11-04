@@ -1,0 +1,31 @@
+<?php
+/* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
+$healthcheckViewModel = $this->healthcheckViewModel;
+
+?>
+<div class="container health-check" id="htmlReportContainer">
+    <?php
+    $this->reportName  = My_Brand::getDealerBranding()->mpsProgramName;
+    $this->jit         = My_Brand::$jit;
+    $this->jitName     = My_Brand::getDealerBranding()->shortJitProgramName;
+    $this->jitFullName = My_Brand::getDealerBranding()->jitProgramName;
+
+    echo $this->render('report/healthcheck/html/title-page.phtml');
+    echo $this->render('report/healthcheck/html/score-card.phtml');
+    echo $this->render('report/healthcheck/html/service-and-supplies-logistics.phtml');
+    echo $this->render('report/healthcheck/html/oem-vs-compatible.phtml');
+    echo $this->render('report/healthcheck/html/printing-hardware-usage.phtml');
+    echo $this->render('report/healthcheck/html/technology-reliability-and-user-productivity.phtml');
+    echo $this->render('report/healthcheck/html/environmental-impact.phtml');
+
+    /**
+     * Only show the fleet attributes page if we have less than 200 devices in the fleet.
+     */
+    if ($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount() < 100)
+    {
+        echo $this->render('report/healthcheck/html/fleet-attributes.phtml');
+    }
+
+    echo $this->render('report/healthcheck/html/summary-page.phtml');
+    ?>
+</div>

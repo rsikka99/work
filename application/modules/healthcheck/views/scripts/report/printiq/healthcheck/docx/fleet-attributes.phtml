@@ -10,7 +10,6 @@ $section = $this->section;
 
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
-$graphs               = $healthcheckViewModel->getGraphs();
 
 $section->addPageBreak();
 
@@ -30,7 +29,7 @@ $cellWidths = array(
 );
 $tcStyle    = $this->styles->tables->fleetattributes;
 /**
- * Comatpbile with jit Devices
+ * Compatible with jit Devices
  */
 $section->addTitle(sprintf('Devices compatible with %1$s', My_Brand::getDealerBranding()->mpsProgramName), 2);
 $compatibleDevicesTable = $section->addTable($tcStyle->tablestyle);

@@ -153,10 +153,3 @@ $cellWidths = array(
     1528,
     1800
 );
-$section->addPageBreak();
-$section->addTitle('Estimated OEM Toner Costs vs. Estimated Compatible Toner Costs', 2);
-
-$section->addText(sprintf('You are saving money by moving to Private Brand Toner for the machines that are on your %1$s Program.'), $this->jit);
-$section->addText(sprintf('We analyzed your usage on your ink and toner spend and you can save an additional %1$s over the next 6 months by moving to the suggested items on the attached analysis. ',
-    $this->currency($healthcheckViewModel->calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually())) // 1
-);

@@ -1,20 +1,29 @@
 <?php
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
-$graphs = $healthcheckViewModel->getGraphs();
+$graphs               = $healthcheckViewModel->getGraphs();
 ?>
 <div class="h1">Analysis: Environmental Impact</div>
 <div class="pheader">Forest and Water Consumption</div>
 <p>Did you know that it takes one average-sized tree to produce <?php echo number_format(Healthcheck_ViewModel_Healthcheck::PAGES_PER_TREE); ?> pages of standard 20lb office paper? Paper production also uses a tremendous amount of water and other solvents to produce traditional white copy paper. Based on your annual page volume we estimate the following tree and water requirements to produce documents for <?php echo $healthcheckViewModel->healthcheck->getClient()->companyName ?>:</p>
 <table>
     <tr>
-        <td><img style="width:95px;" src="/img/reports/health-check/tree.jpg" /></td>
-        <td><img style="width:95px;" src="/img/reports/health-check/tree.jpg" /></td>
-        <td style="font-size:25px;text-align:center"><strong><?php echo number_format($healthcheckViewModel->calculateNumberOfTreesUsed()) ?></strong> <br />trees
+        <td><img style="width:95px;" src="/img/reports/health-check/tree.jpg" />
         </td>
-        <td><img style="width:87px;" src="/img/reports/health-check/droplet.jpg" /></td>
-        <td><img style="width:87px;" src="/img/reports/health-check/droplet.jpg" /></td>
-        <td style="font-size:25px;text-align:center"><strong><?php echo number_format($healthcheckViewModel->calculateNumberOfGallonsWaterUsed()) ?></strong>
+        <td><img style="width:95px;" src="/img/reports/health-check/tree.jpg" />
+        </td>
+        <td style="font-size:25px;text-align:center">
+            <strong><?php echo number_format($healthcheckViewModel->calculateNumberOfTreesUsed()) ?></strong>
+            <br />trees
+        </td>
+        <td>
+            <img style="width:87px;" src="/img/reports/health-check/droplet.jpg" />
+        </td>
+        <td>
+            <img style="width:87px;" src="/img/reports/health-check/droplet.jpg" />
+        </td>
+        <td style="font-size:25px;text-align:center">
+            <strong><?php echo number_format($healthcheckViewModel->calculateNumberOfGallonsWaterUsed()) ?></strong>
             <br />gallons water
         </td>
     </tr>
@@ -33,8 +42,10 @@ $graphs = $healthcheckViewModel->getGraphs();
         <tr class="shaded">
             <th style="width: 160px;">High Consumption Devices</th>
             <th style="width: 110px;" class="center">Serial No.</th>
-            <th style="width: 170px;" class="center">Avg. kWh Consumption<br />Per Month Count</th>
-            <th style="width: 145px;" class="center">Avg. Power<br />Cost per Month</th>
+            <th style="width: 170px;" class="center">Avg. kWh Consumption<br />Per Month Count
+            </th>
+            <th style="width: 145px;" class="center">Avg. Power<br />Cost per Month
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -90,6 +101,7 @@ else
         <th>Average Monthly Scan Pages</th>
         <th>Average Monthly Faxed Pages</th>
     </tr>
+    <?php $ctr = 0; ?>
     <?php foreach ($healthcheckViewModel->getFaxAndScanTableDevices() as $deviceInstance) : ?>
         <tr>
             <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
@@ -99,5 +111,11 @@ else
             <td class="page-volume"><?php echo ($deviceInstance->getMasterDevice()->isCopier) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getScanPageCount()->getMonthly()) : '-'; ?></td>
             <td class="page-volume"><?php echo ($deviceInstance->getMasterDevice()->isFax) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getFaxPageCount()->getMonthly()) : '-'; ?></td>
         </tr>
+        <?php
+        if (++$ctr >= 3)
+        {
+            break;
+        }
+        ?>
     <?php endforeach; ?>
 </table>

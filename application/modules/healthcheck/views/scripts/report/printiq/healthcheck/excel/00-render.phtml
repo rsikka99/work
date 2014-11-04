@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * Create a new PHPExcel Object
+ * New PHPExcel objects will have one attached worksheet by default
+ */
+
+/* @var $phpExcel PHPExcel */
+$phpExcel = $this->phpexcel;
+
+/**
+ * Objects in memory are held in php memory as serialized objects. This
+ * reduces memory footprint with little performance hit
+ */
+PHPExcel_CachedObjectStorageFactory::cache_in_memory_serialized;
+
+$healthcheckDeviceListViewModel = new Healthcheck_ViewModel_HealthcheckDeviceListViewModel($this->healthcheckViewModel);
+
+$data = array(
+    'healthCheckDeviceListViewModel' => $healthcheckDeviceListViewModel,
+);
+
+//@formatter:off
+$this->partial("report/printiq/healthcheck/excel/optimized-devices.phtml",                     array_merge($data, array('worksheet' => $phpExcel->getSheet(0))));
+$this->partial("report/printiq/healthcheck/excel/under-utilized-devices.phtml",                array_merge($data, array('worksheet' => $phpExcel->createSheet(1))));
+$this->partial("report/printiq/healthcheck/excel/over-utilized-devices.phtml",                 array_merge($data, array('worksheet' => $phpExcel->createSheet(2))));
+$this->partial("report/printiq/healthcheck/excel/old-devices.phtml",                           array_merge($data, array('worksheet' => $phpExcel->createSheet(3))));
+$this->partial("report/printiq/healthcheck/excel/devices-not-reporting-toner-levels.phtml",    array_merge($data, array('worksheet' => $phpExcel->createSheet(4))));
+$this->partial("report/printiq/healthcheck/excel/fax-and-scan-devices.phtml",                  array_merge($data, array('worksheet' => $phpExcel->createSheet(5))));
+$this->partial("report/printiq/healthcheck/excel/devices-compatible-with-program.phtml",       array_merge($data, array('worksheet' => $phpExcel->createSheet(6))));
+$this->partial("report/printiq/healthcheck/excel/devices-not-compatible-with-program.phtml",   array_merge($data, array('worksheet' => $phpExcel->createSheet(7))));
+$this->partial("report/printiq/healthcheck/excel/a3-devices.phtml",                            array_merge($data, array('worksheet' => $phpExcel->createSheet(8))));
+//@formatter:on
+
+
+// Default to the first page
+$phpExcel->setActiveSheetIndex(0);
+
+// Save Excel 2007 file
+$objWriter = new PHPExcel_Writer_Excel2007($phpExcel);
+$objWriter->save($this->savePath);
+
+// Dereference the worksheets so they can be freed from memory
+$phpExcel->disconnectWorksheets();
+
+echo $this->baseUrl($this->publicFileName);

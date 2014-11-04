@@ -1,0 +1,124 @@
+<?php
+
+/**
+ *  Healthcheck - Over-utilized Devices List
+ */
+
+/* @var $worksheet PHPExcel_Worksheet */
+$worksheet = $this->worksheet;
+
+/* @var $healthCheckDeviceListViewModel Healthcheck_ViewModel_HealthcheckDeviceListViewModel */
+$healthCheckDeviceListViewModel = $this->healthCheckDeviceListViewModel;
+
+$worksheet->setTitle('A3 devices');
+
+/**
+ * Titles
+ */
+$worksheet->setCellValue('A1', 'Device Name');
+$worksheet->setCellValue('B1', 'IP Address');
+$worksheet->setCellValue('C1', 'Serial Number');
+$worksheet->setCellValue('D1', 'Device Age (Years)');
+$worksheet->setCellValue('E1', 'Monthly Page Volume');
+$worksheet->setCellValue('F1', 'Percent of Total Page Volume');
+$worksheet->setCellValue('G1', 'Monthly A3 Page Volume');
+$worksheet->setCellValue('H1', 'Suggested Maximum Page Volume');
+$worksheet->setCellValue('I1', 'Life Page Count');
+$worksheet->setCellValue('J1', 'A3');
+$worksheet->setCellValue('K1', 'Color');
+$worksheet->setCellValue('L1', 'Duplex');
+$worksheet->setCellValue('M1', 'MFP');
+$worksheet->setCellValue('N1', 'Fax');
+$worksheet->setCellValue('O1', 'Reports Toner Levels');
+$worksheet->setCellValue('P1', 'Linked to JIT Program');
+
+$worksheet->getStyle('A1')->getFont()->setBold(true);
+$worksheet->getStyle('B1')->getFont()->setBold(true);
+$worksheet->getStyle('C1')->getFont()->setBold(true);
+$worksheet->getStyle('D1')->getFont()->setBold(true);
+$worksheet->getStyle('E1')->getFont()->setBold(true);
+$worksheet->getStyle('F1')->getFont()->setBold(true);
+$worksheet->getStyle('G1')->getFont()->setBold(true);
+$worksheet->getStyle('H1')->getFont()->setBold(true);
+$worksheet->getStyle('I1')->getFont()->setBold(true);
+$worksheet->getStyle('J1')->getFont()->setBold(true);
+$worksheet->getStyle('K1')->getFont()->setBold(true);
+$worksheet->getStyle('L1')->getFont()->setBold(true);
+$worksheet->getStyle('M1')->getFont()->setBold(true);
+$worksheet->getStyle('N1')->getFont()->setBold(true);
+$worksheet->getStyle('O1')->getFont()->setBold(true);
+$worksheet->getStyle('P1')->getFont()->setBold(true);
+
+$worksheet->getStyle('J1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$worksheet->getStyle('K1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$worksheet->getStyle('L1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$worksheet->getStyle('M1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$worksheet->getStyle('N1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$worksheet->getStyle('O1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$worksheet->getStyle('P1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+/**
+ * Device List
+ */
+foreach ($healthCheckDeviceListViewModel->getOptimizedDevices() as $deviceData)
+{
+    $currentRow = $worksheet->getHighestRow() + 1;
+
+    /*
+     * Device Data
+     */
+    $worksheet->setCellValue("A{$currentRow}", $deviceData['deviceName']);
+    $worksheet->setCellValue("B{$currentRow}", $deviceData['ipAddress']);
+    $worksheet->setCellValue("C{$currentRow}", $deviceData['serialNumber']);
+    $worksheet->setCellValue("D{$currentRow}", $deviceData['deviceAge']);
+    $worksheet->setCellValue("E{$currentRow}", $deviceData['monthlyPageVolume']);
+    $worksheet->setCellValue("F{$currentRow}", $deviceData['percentOfTotalPageVolume']);
+    $worksheet->setCellValue("G{$currentRow}", $deviceData['monthlyA3PageVolume']);
+    $worksheet->setCellValue("H{$currentRow}", $deviceData['suggestedMaxVolume']);
+    $worksheet->setCellValue("I{$currentRow}", $deviceData['lifePageCount']);
+    $worksheet->setCellValue("J{$currentRow}", $deviceData['isA3']);
+    $worksheet->setCellValue("K{$currentRow}", $deviceData['isColor']);
+    $worksheet->setCellValue("L{$currentRow}", $deviceData['isDuplex']);
+    $worksheet->setCellValue("M{$currentRow}", $deviceData['isMFP']);
+    $worksheet->setCellValue("N{$currentRow}", $deviceData['isFax']);
+    $worksheet->setCellValue("O{$currentRow}", $deviceData['reportsTonerLevels']);
+    $worksheet->setCellValue("P{$currentRow}", $deviceData['linkedToJitProgram']);
+
+    /**
+     * Cell Styles
+     */
+    $worksheet->getStyle("D{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+    $worksheet->getStyle("E{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+    $worksheet->getStyle("F{$currentRow}")->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
+    $worksheet->getStyle("G{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+    $worksheet->getStyle("H{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+    $worksheet->getStyle("I{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+
+    $worksheet->getStyle("J{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $worksheet->getStyle("K{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $worksheet->getStyle("L{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $worksheet->getStyle("M{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $worksheet->getStyle("N{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $worksheet->getStyle("O{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $worksheet->getStyle("P{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+}
+
+/**
+ * Widths
+ */
+$worksheet->getColumnDimension('A')->setWidth(40);
+$worksheet->getColumnDimension('B')->setWidth(20);
+$worksheet->getColumnDimension('C')->setWidth(20);
+$worksheet->getColumnDimension('D')->setWidth(20);
+$worksheet->getColumnDimension('E')->setWidth(20);
+$worksheet->getColumnDimension('F')->setWidth(20);
+$worksheet->getColumnDimension('G')->setWidth(20);
+$worksheet->getColumnDimension('H')->setWidth(20);
+$worksheet->getColumnDimension('I')->setWidth(8);
+$worksheet->getColumnDimension('J')->setWidth(8);
+$worksheet->getColumnDimension('K')->setWidth(8);
+$worksheet->getColumnDimension('L')->setWidth(8);
+$worksheet->getColumnDimension('M')->setWidth(8);
+$worksheet->getColumnDimension('N')->setWidth(20);
+$worksheet->getColumnDimension('O')->setWidth(20);
+$worksheet->getColumnDimension('P')->setWidth(20);

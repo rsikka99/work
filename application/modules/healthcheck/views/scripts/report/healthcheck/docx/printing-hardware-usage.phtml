@@ -159,8 +159,7 @@ foreach ($healthcheckViewModel->getMonthlyHighCostPurchasedColorDevices($healthc
     $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()), null, 'nospacing_centeralign');
     $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->formatCostPerPage($deviceInstance->getColorCostPerPageWithMargin($healthcheckViewModel->getCostPerPageSettingForCustomer())), null, 'nospacing_centeralign');
     $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->currency($deviceInstance->getCostOfColorInkAndToner($healthcheckViewModel->getCostPerPageSettingForCustomer())), null, 'nospacing_centeralign');
-    $ctr++;
-    if ($ctr > 2)
+    if (++$ctr >= 3)
     {
         break;
     }

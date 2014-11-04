@@ -59,17 +59,16 @@ $highEnergyTable->addCell($cellWidths [0], $this->styles->tables->utilization->c
 $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->utilization->cellHeader)->addText('Serial No.', 'bold_text', 'nospacing_centeralign');
 $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->utilization->cellHeader)->addText('Avg. kWh Consumption Per Month Count', 'bold_text', 'nospacing_centeralign');
 $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('Avg. Power Cost per Month', 'bold_text', 'nospacing_centeralign');
-/* @var $device Proposalgen_Model_DeviceInstance */
-$rowCount = 0;
-foreach ($healthcheckViewModel->getHighPowerConsumptionDevices() as $device)
+
+$crt = 0;
+foreach ($healthcheckViewModel->getHighPowerConsumptionDevices() as $deviceInstance)
 {
     $highEnergyTable->addRow($this->styles->tables->utilization->rowheight, $tcStyle->rowstyle);
-    $highEnergyTable->addCell($cellWidths [0], $this->styles->tables->highriskdevices->cell1)->addText($device->getDeviceName(), null, 'nospacing');
-    $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing');
-    $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(sprintf('%1$s kWh', number_format($device->getAverageMonthlyPowerConsumption())), null, 'nospacing_centeralign');
-    $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText($this->currency($device->getAverageMonthlyPowerCost(), 2), null, 'nospacing_centeralign');
-    $rowCount++;
-    if ($rowCount > 2)
+    $highEnergyTable->addCell($cellWidths [0], $this->styles->tables->highriskdevices->cell1)->addText($deviceInstance->getDeviceName(), null, 'nospacing');
+    $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($deviceInstance->serialNumber) ?: "Unknown", null, 'nospacing');
+    $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(sprintf('%1$s kWh', number_format($deviceInstance->getAverageMonthlyPowerConsumption())), null, 'nospacing_centeralign');
+    $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText($this->currency($deviceInstance->getAverageMonthlyPowerCost(), 2), null, 'nospacing_centeralign');
+    if (++$ctr >= 3)
     {
         break;
     }
