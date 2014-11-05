@@ -34,6 +34,8 @@ $properties->setCreated(time());
 $properties->setModified(time());
 $properties->setSubject('MPS Assessment Software');
 $pageWidth        = 9428;
+$titlePageWidth   = 12240;
+$titlePageHeaderMargin = ($titlePageWidth - $pageWidth) / 2;
 $titlepageSection = $phpWord->addSection(array(
     'orientation'  => null,
     'marginLeft'   => 0,
@@ -43,6 +45,32 @@ $titlepageSection = $phpWord->addSection(array(
 ));
 $section          = $phpWord->addSection();
 
+/**
+ * Add logos to the title page
+ */
+$header = $titlepageSection->addHeader();
+$table  = $header->addTable();
+$row    = $table->addRow(500);
+$row->addCell($titlePageHeaderMargin)->addText(' ');
+$companyLogoCell = $row->addCell($pageWidth / 3 * 2);
+$reportLogoCell  = $row->addCell($pageWidth / 3 * 1);
+$companyLogoCell->addImage($this->theme('/img/reports/small_header_logo.png', true));
+$reportLogoCell->addImage($this->theme('/img/reports/report_logo.png', true), array(
+    'align' => 'right'
+));
+
+/**
+ * Add logos to the main section
+ */
+$header          = $section->addHeader();
+$table           = $header->addTable();
+$row             = $table->addRow(500);
+$companyLogoCell = $row->addCell($pageWidth / 3 * 2);
+$reportLogoCell  = $row->addCell($pageWidth / 3 * 1);
+$companyLogoCell->addImage($this->theme('/img/reports/small_header_logo.png', true));
+$reportLogoCell->addImage($this->theme('/img/reports/report_logo.png', true), array(
+    'align' => 'right'
+));
 /**
  * Paragraph styles
  */
