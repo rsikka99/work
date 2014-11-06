@@ -15,6 +15,9 @@ $dealerColorRankSetArray->removeDecorator('Zend_Form_Decorator_HtmlTag');
 
 ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+        <a href="<?php echo $this->url(array('action' => 'index', 'controller' => 'quote_profitability', 'quoteId' => $quote->id)); ?>">
+            <p>Skip this step for a purchased quote or MPS Hardware</p>
+        </a>
     <div class="accordion" id="accordion2">
         <div class="accordion-group">
             <div class="accordion-heading">
