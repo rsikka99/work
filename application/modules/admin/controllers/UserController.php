@@ -116,7 +116,10 @@ class Admin_UserController extends Tangent_Controller_Action
                             }
                             $db->commit();
 
-                            Dealermanagement_Service_User::sendNewUserEmail($user, $values['password']);
+                            if ($values['sendemail'])
+                            {
+                                Dealermanagement_Service_User::sendNewUserEmail($user, $values['password']);
+                            }
                         }
                         catch (Zend_Db_Statement_Mysqli_Exception $e)
                         {

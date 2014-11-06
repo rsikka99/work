@@ -270,6 +270,14 @@ class Admin_Form_User extends EasyBib_Form
             ));
         }
 
+        if ($this->getFormMode() === self::MODE_CREATE)
+        {
+            $this->addElement('checkbox', 'sendemail', array(
+                'label'   => 'Send Password to User via Email:',
+                'checked' => true
+            ));
+        }
+
         // Add the submit button
         $this->addElement('submit', 'submit', array(
             'ignore' => true,
