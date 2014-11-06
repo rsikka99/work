@@ -15,13 +15,14 @@ $dealerColorRankSetArray->removeDecorator('Zend_Form_Decorator_HtmlTag');
 
 ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
-        <a href="<?php echo $this->url(array('action' => 'index', 'controller' => 'quote_profitability', 'quoteId' => $quote->id)); ?>">
-            <p>Skip this step for a purchased quote or MPS Hardware</p>
-        </a>
+    <p><i class="icon icon-info-sign"></i> Skip this step for a purchased quote or MPS Hardware</p>
+
     <div class="accordion" id="accordion2">
         <div class="accordion-group">
             <div class="accordion-heading">
-                <h4><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse1"> Page Settings </a></h4>
+                <h4>
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse1"> Page Settings </a>
+                </h4>
             </div>
             <div id="collapse1" class="accordion-body in">
                 <div class="accordion-inner">
