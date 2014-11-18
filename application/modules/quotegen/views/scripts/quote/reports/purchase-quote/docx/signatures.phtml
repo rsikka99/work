@@ -1,0 +1,47 @@
+<?php
+
+// Get the path based on the theme
+$commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
+// Render the elements in the theme
+$this->render("{$commonPartsBasePath}/styles.phtml");
+
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
+$section->addTitle('Signatures');
+
+$groupCount = 0;
+$tcStyle    = $this->styles->tables->quoteTable;
+/* @var $quote Quotegen_Model_Quote */
+$quote = $this->quote;
+
+$section->addTextBreak();
+
+$table = $section->addTable($tcStyle->signatureTableStyle);
+
+$table->addRow($tcStyle->signature->rowheight, null);
+$table->addCell($tcStyle->col1Width, null);
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell2->cellStyle)->addText("X", $tcStyle->signature->cell2->fontStyle, $tcStyle->signature->cell2->paragraphStyle2);
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell2->cellStyle)->addText($quote->getClient()->companyName, $tcStyle->signature->cell2->fontStyle, $tcStyle->signature->cell2->paragraphStyle);
+$table->addCell($tcStyle->col1Width, null);
+
+$table->addRow($tcStyle->signature->rowheight, $tcStyle->header->rowStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('Name', $tcStyle->signature->cell1->fontStyle, $tcStyle->signature->cell1->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('Signature', $tcStyle->signature->cell1->fontStyle, $tcStyle->signature->cell1->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('Company', $tcStyle->signature->cell1->fontStyle, $tcStyle->signature->cell1->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('Date', $tcStyle->signature->cell1->fontStyle, $tcStyle->signature->cell1->paragraphStyle);
+
+$section->addTextBreak();
+
+$table = $section->addTable($tcStyle->signatureTableStyle);
+
+$table->addRow($tcStyle->signature->rowheight, null);
+$table->addCell($tcStyle->col1Width, null);
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell2->cellStyle)->addText("X", $tcStyle->signature->cell2->fontStyle, $tcStyle->signature->cell2->paragraphStyle2);
+$table->addCell($tcStyle->col1Width, null);
+$table->addCell($tcStyle->col1Width, null);
+
+$table->addRow($tcStyle->signature->rowheight, null);
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('Name', $tcStyle->signature->cell1->fontStyle, $tcStyle->signature->cell1->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('Signature', $tcStyle->signature->cell1->fontStyle, $tcStyle->signature->cell1->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('Company', $tcStyle->signature->cell1->fontStyle, $tcStyle->signature->cell1->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('Date', $tcStyle->signature->cell1->fontStyle, $tcStyle->signature->cell1->paragraphStyle);

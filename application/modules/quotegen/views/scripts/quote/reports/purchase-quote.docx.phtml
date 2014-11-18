@@ -423,7 +423,13 @@ $purchaseQuoteTable = (object)array(
                         'align'      => 'right',
                         'spaceAfter' => 0
                     )
-                )
+                ),
+    "signatureTableStyle" => array(
+        'cellMarginTop'    => 25,
+        'cellMarginRight'  => 100,
+        'cellMarginBottom' => 25,
+        'cellMarginLeft'   => 100,
+    ),
         ),
     "device"       => (object)array(
             "rowheight" => null,
@@ -785,7 +791,45 @@ $purchaseQuoteTable = (object)array(
                         'spaceAfter' => 0
                     )
                 )
+        ),
+    "signature"           => (object)array(
+        "rowheight" => 500,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize" => 1,
+                'valign'        => 'center',
+            ),
+            "fontStyle"      => array(
+                'name' => 'Calibri',
+                'size' => 11,
+            ),
+            "paragraphStyle" => array(
+                'nospacing'  => true,
+                'align'      => 'center',
+                'spaceAfter' => 0
+            )
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"       => array(
+                'valign' => 'bottom',
+            ),
+            "fontStyle"       => array(
+                'name' => 'Calibri',
+                'size' => 11,
+                'bold' => true,
+            ),
+            "paragraphStyle"  => array(
+                'nospacing'  => true,
+                'align'      => 'center',
+                'spaceAfter' => 0
+            ),
+            "paragraphStyle2" => array(
+                'nospacing'  => true,
+                'align'      => 'left',
+                'spaceAfter' => 0
+            )
         )
+    )
 );
 
 /**
@@ -815,9 +859,8 @@ $data = array(
 
 // Actual document pages
 $this->partial("{$commonPartsBasePath}/docx/titlepage.phtml", $titledata);
-$this->partial("{$commonPartsBasePath}/01_prependDocuments.phtml", $data);
 $this->partial("{$basePath}/purchasequote.phtml", $data);
-$this->partial("{$commonPartsBasePath}/02_appendDocuments.phtml", $data);
+$this->partial("{$basePath}/signatures.phtml", $data);
 
 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpword, 'Word2007');
 
