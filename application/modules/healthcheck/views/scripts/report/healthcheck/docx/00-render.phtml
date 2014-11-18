@@ -80,6 +80,12 @@ $this->phpword->addFontStyle('titlepage_address', array(
     'size'  => 12,
     'color' => $titlePageTextColor
 ));
+
+$phpWord->addFontStyle('small_cell_heading', array(
+    'size' => 9,
+    'bold' => true
+));
+
 $phpWord->addParagraphStyle('titlepageHeaderParagraph', array(
     'spaceAfter' => 200
 ));

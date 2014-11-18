@@ -20,7 +20,7 @@ $worksheet->setCellValue('B1', 'IP Address');
 $worksheet->setCellValue('C1', 'Serial Number');
 $worksheet->setCellValue('D1', 'Device Age (Years)');
 $worksheet->setCellValue('E1', 'Monthly Page Volume');
-$worksheet->setCellValue('F1', 'Percent of Total Page Volume');
+$worksheet->setCellValue('F1', 'Percent of Fleet\'s Total Monthly Page Volume');
 $worksheet->setCellValue('G1', 'Percent of Total Monthly Cost');
 $worksheet->setCellValue('H1', 'Suggested Maximum Page Volume');
 $worksheet->setCellValue('I1', 'Life Page Count');
@@ -31,6 +31,23 @@ $worksheet->setCellValue('M1', 'MFP');
 $worksheet->setCellValue('N1', 'Fax');
 $worksheet->setCellValue('O1', 'Reports Toner Levels');
 $worksheet->setCellValue('P1', 'Linked to JIT Program');
+
+$worksheet->getStyle('A1')->getFont()->setBold(true);
+$worksheet->getStyle('B1')->getFont()->setBold(true);
+$worksheet->getStyle('C1')->getFont()->setBold(true);
+$worksheet->getStyle('D1')->getFont()->setBold(true);
+$worksheet->getStyle('E1')->getFont()->setBold(true);
+$worksheet->getStyle('F1')->getFont()->setBold(true);
+$worksheet->getStyle('G1')->getFont()->setBold(true);
+$worksheet->getStyle('H1')->getFont()->setBold(true);
+$worksheet->getStyle('I1')->getFont()->setBold(true);
+$worksheet->getStyle('J1')->getFont()->setBold(true);
+$worksheet->getStyle('K1')->getFont()->setBold(true);
+$worksheet->getStyle('L1')->getFont()->setBold(true);
+$worksheet->getStyle('M1')->getFont()->setBold(true);
+$worksheet->getStyle('N1')->getFont()->setBold(true);
+$worksheet->getStyle('O1')->getFont()->setBold(true);
+$worksheet->getStyle('P1')->getFont()->setBold(true);
 
 /**
  * Device List
@@ -47,7 +64,7 @@ foreach ($healthCheckDeviceListViewModel->getOldDevices() as $deviceData)
     $worksheet->setCellValue("C{$currentRow}", $deviceData['serialNumber']);
     $worksheet->setCellValue("D{$currentRow}", $deviceData['deviceAge']);
     $worksheet->setCellValue("E{$currentRow}", $deviceData['monthlyPageVolume']);
-    $worksheet->setCellValue("F{$currentRow}", $deviceData['percentOfTotalPageVolume']);
+    $worksheet->setCellValue("F{$currentRow}", $deviceData['percentOfFleetsTotalPageVolume']);
     $worksheet->setCellValue("G{$currentRow}", $deviceData['percentOfMonthlyCost']);
     $worksheet->setCellValue("H{$currentRow}", $deviceData['suggestedMaxVolume']);
     $worksheet->setCellValue("I{$currentRow}", $deviceData['lifePageCount']);
@@ -111,7 +128,7 @@ $worksheet->getColumnDimension('B')->setWidth(20);
 $worksheet->getColumnDimension('C')->setWidth(20);
 $worksheet->getColumnDimension('D')->setWidth(20);
 $worksheet->getColumnDimension('E')->setWidth(20);
-$worksheet->getColumnDimension('F')->setWidth(20);
+$worksheet->getColumnDimension('F')->setWidth(30);
 $worksheet->getColumnDimension('G')->setWidth(20);
 $worksheet->getColumnDimension('H')->setWidth(20);
 $worksheet->getColumnDimension('I')->setWidth(20);

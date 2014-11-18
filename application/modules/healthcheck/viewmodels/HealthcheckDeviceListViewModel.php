@@ -143,21 +143,21 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
             foreach ($this->healthCheckViewModel->getOptimizedDevices() as $deviceInstance)
             {
                 $this->optimizedDevices[] = [
-                    'deviceName'               => str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()),
-                    'ipAddress'                => $deviceInstance->ipAddress,
-                    'serialNumber'             => $deviceInstance->serialNumber,
-                    'deviceAge'                => $deviceInstance->getAge(),
-                    'monthlyPageVolume'        => $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(),
-                    'percentOfTotalPageVolume' => $deviceInstance->calculateMonthlyPercentOfTotalVolume($this->healthCheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) / 100,
-                    'suggestedMaxVolume'       => $deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount(),
-                    'lifePageCount'            => $deviceInstance->getMeter()->endMeterLife,
-                    'isA3'                     => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
-                    'isColor'                  => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
-                    'isDuplex'                 => $deviceInstance->getMasterDevice()->isDuplex ? 'Yes' : 'No',
-                    'isMFP'                    => $deviceInstance->getMasterDevice()->isMfp() ? 'Yes' : 'No',
-                    'isFax'                    => $deviceInstance->getMasterDevice()->isFax ? 'Yes' : 'No',
-                    'reportsTonerLevels'       => $deviceInstance->isCapableOfReportingTonerLevels() ? 'Yes' : 'No',
-                    'linkedToJitProgram'       => $deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No'),
+                    'deviceName'                     => str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()),
+                    'ipAddress'                      => $deviceInstance->ipAddress,
+                    'serialNumber'                   => $deviceInstance->serialNumber,
+                    'deviceAge'                      => $deviceInstance->getAge(),
+                    'monthlyPageVolume'              => $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(),
+                    'percentOfFleetsTotalPageVolume' => $deviceInstance->calculateMonthlyPercentOfTotalVolume($this->healthCheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) / 100,
+                    'suggestedMaxVolume'             => $deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount(),
+                    'lifePageCount'                  => $deviceInstance->getMeter()->endMeterLife,
+                    'isA3'                           => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
+                    'isColor'                        => $deviceInstance->getMasterDevice()->isColor() ? 'Yes' : 'No',
+                    'isDuplex'                       => $deviceInstance->getMasterDevice()->isDuplex ? 'Yes' : 'No',
+                    'isMFP'                          => $deviceInstance->getMasterDevice()->isMfp() ? 'Yes' : 'No',
+                    'isFax'                          => $deviceInstance->getMasterDevice()->isFax ? 'Yes' : 'No',
+                    'reportsTonerLevels'             => $deviceInstance->isCapableOfReportingTonerLevels() ? 'Yes' : 'No',
+                    'linkedToJitProgram'             => $deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No'),
                 ];
             }
         }
@@ -177,23 +177,23 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
             foreach ($this->healthCheckViewModel->getUnderutilizedDevices() as $deviceInstance)
             {
                 $this->underUtilizedDevices[] = [
-                    'deviceName'               => str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()),
-                    'ipAddress'                => $deviceInstance->ipAddress,
-                    'serialNumber'             => $deviceInstance->serialNumber,
-                    'deviceAge'                => $deviceInstance->getAge(),
-                    'monthlyPageVolume'        => $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(),
-                    'percentOfTotalPageVolume' => $deviceInstance->calculateMonthlyPercentOfTotalVolume($this->healthCheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) / 100,
-                    'suggestedMaxVolume'       => $deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount(),
-                    'lifePageCount'            => $deviceInstance->getMeter()->endMeterLife,
-                    'isA3'                     => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
-                    'isColor'                  => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
-                    'isDuplex'                 => $deviceInstance->getMasterDevice()->isDuplex ? 'Yes' : 'No',
-                    'isMFP'                    => $deviceInstance->getMasterDevice()->isMfp() ? 'Yes' : 'No',
-                    'isFax'                    => $deviceInstance->getMasterDevice()->isFax ? 'Yes' : 'No',
-                    'reportsTonerLevels'       => $deviceInstance->isCapableOfReportingTonerLevels() ? 'Yes' : 'No',
-                    'linkedToJitProgram'       => $deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No'),
+                    'deviceName'                     => str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()),
+                    'ipAddress'                      => $deviceInstance->ipAddress,
+                    'serialNumber'                   => $deviceInstance->serialNumber,
+                    'deviceAge'                      => $deviceInstance->getAge(),
+                    'monthlyPageVolume'              => $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(),
+                    'percentOfFleetsTotalPageVolume' => $deviceInstance->calculateMonthlyPercentOfTotalVolume($this->healthCheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) / 100,
+                    'suggestedMaxVolume'             => $deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount(),
+                    'lifePageCount'                  => $deviceInstance->getMeter()->endMeterLife,
+                    'isA3'                           => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
+                    'isColor'                        => $deviceInstance->getMasterDevice()->isColor() ? 'Yes' : 'No',
+                    'isDuplex'                       => $deviceInstance->getMasterDevice()->isDuplex ? 'Yes' : 'No',
+                    'isMFP'                          => $deviceInstance->getMasterDevice()->isMfp() ? 'Yes' : 'No',
+                    'isFax'                          => $deviceInstance->getMasterDevice()->isFax ? 'Yes' : 'No',
+                    'reportsTonerLevels'             => $deviceInstance->isCapableOfReportingTonerLevels() ? 'Yes' : 'No',
+                    'linkedToJitProgram'             => $deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No'),
 
-                    'percentOfMonthlyCost'     => ($deviceInstance->isLeased)
+                    'percentOfMonthlyCost'           => ($deviceInstance->isLeased)
                         ? $deviceInstance->getLeasedMonthlyRatePercentage(
                             $this->healthCheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment,
                             $this->healthCheckViewModel->getLeasedBlackAndWhiteCharge(),
@@ -205,7 +205,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
                             $this->healthCheckViewModel->getCostPerPageSettingForCustomer()
                         ),
 
-                    'suggestedAction'          => sprintf('Migrate all page volume to %1$s compatible device.', My_Brand::$jit),
+                    'suggestedAction'                => sprintf('Migrate all page volume to %1$s compatible device.', My_Brand::$jit),
                 ];
             }
         }
@@ -225,23 +225,23 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
             foreach ($this->healthCheckViewModel->getOverutilizedDevices() as $deviceInstance)
             {
                 $this->overUtilizedDevices[] = [
-                    'deviceName'               => str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()),
-                    'ipAddress'                => $deviceInstance->ipAddress,
-                    'serialNumber'             => $deviceInstance->serialNumber,
-                    'deviceAge'                => $deviceInstance->getAge(),
-                    'monthlyPageVolume'        => $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(),
-                    'percentOfTotalPageVolume' => $deviceInstance->calculateMonthlyPercentOfTotalVolume($this->healthCheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) / 100,
-                    'suggestedMaxVolume'       => $deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount(),
-                    'lifePageCount'            => $deviceInstance->getMeter()->endMeterLife,
-                    'isA3'                     => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
-                    'isColor'                  => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
-                    'isDuplex'                 => $deviceInstance->getMasterDevice()->isDuplex ? 'Yes' : 'No',
-                    'isMFP'                    => $deviceInstance->getMasterDevice()->isMfp() ? 'Yes' : 'No',
-                    'isFax'                    => $deviceInstance->getMasterDevice()->isFax ? 'Yes' : 'No',
-                    'reportsTonerLevels'       => $deviceInstance->isCapableOfReportingTonerLevels() ? 'Yes' : 'No',
-                    'linkedToJitProgram'       => $deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No'),
+                    'deviceName'                     => str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()),
+                    'ipAddress'                      => $deviceInstance->ipAddress,
+                    'serialNumber'                   => $deviceInstance->serialNumber,
+                    'deviceAge'                      => $deviceInstance->getAge(),
+                    'monthlyPageVolume'              => $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(),
+                    'percentOfFleetsTotalPageVolume' => $deviceInstance->calculateMonthlyPercentOfTotalVolume($this->healthCheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) / 100,
+                    'suggestedMaxVolume'             => $deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount(),
+                    'lifePageCount'                  => $deviceInstance->getMeter()->endMeterLife,
+                    'isA3'                           => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
+                    'isColor'                        => $deviceInstance->getMasterDevice()->isColor() ? 'Yes' : 'No',
+                    'isDuplex'                       => $deviceInstance->getMasterDevice()->isDuplex ? 'Yes' : 'No',
+                    'isMFP'                          => $deviceInstance->getMasterDevice()->isMfp() ? 'Yes' : 'No',
+                    'isFax'                          => $deviceInstance->getMasterDevice()->isFax ? 'Yes' : 'No',
+                    'reportsTonerLevels'             => $deviceInstance->isCapableOfReportingTonerLevels() ? 'Yes' : 'No',
+                    'linkedToJitProgram'             => $deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No'),
 
-                    'percentOfMonthlyCost'     => ($deviceInstance->isLeased)
+                    'percentOfMonthlyCost'           => ($deviceInstance->isLeased)
                         ? $deviceInstance->getLeasedMonthlyRatePercentage(
                             $this->healthCheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment,
                             $this->healthCheckViewModel->getLeasedBlackAndWhiteCharge(),
@@ -253,7 +253,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
                             $this->healthCheckViewModel->getCostPerPageSettingForCustomer()
                         ),
 
-                    'suggestedAction'          => sprintf('Migrate excess page volume to a %1$s compatible device.', My_Brand::$jit),
+                    'suggestedAction'                => sprintf('Migrate excess page volume to a %1$s compatible device.', My_Brand::$jit),
                 ];
             }
         }
@@ -273,23 +273,23 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
             foreach ($this->healthCheckViewModel->getOldDevices() as $deviceInstance)
             {
                 $this->oldDevices[] = [
-                    'deviceName'               => str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()),
-                    'ipAddress'                => $deviceInstance->ipAddress,
-                    'serialNumber'             => $deviceInstance->serialNumber,
-                    'deviceAge'                => $deviceInstance->getAge(),
-                    'monthlyPageVolume'        => $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(),
-                    'percentOfTotalPageVolume' => $deviceInstance->calculateMonthlyPercentOfTotalVolume($this->healthCheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) / 100,
-                    'suggestedMaxVolume'       => $deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount(),
-                    'lifePageCount'            => $deviceInstance->getMeter()->endMeterLife,
-                    'isA3'                     => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
-                    'isColor'                  => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
-                    'isDuplex'                 => $deviceInstance->getMasterDevice()->isDuplex ? 'Yes' : 'No',
-                    'isMFP'                    => $deviceInstance->getMasterDevice()->isMfp() ? 'Yes' : 'No',
-                    'isFax'                    => $deviceInstance->getMasterDevice()->isFax ? 'Yes' : 'No',
-                    'reportsTonerLevels'       => $deviceInstance->isCapableOfReportingTonerLevels() ? 'Yes' : 'No',
-                    'linkedToJitProgram'       => $deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No'),
+                    'deviceName'                     => str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()),
+                    'ipAddress'                      => $deviceInstance->ipAddress,
+                    'serialNumber'                   => $deviceInstance->serialNumber,
+                    'deviceAge'                      => $deviceInstance->getAge(),
+                    'monthlyPageVolume'              => $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(),
+                    'percentOfFleetsTotalPageVolume' => $deviceInstance->calculateMonthlyPercentOfTotalVolume($this->healthCheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) / 100,
+                    'suggestedMaxVolume'             => $deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount(),
+                    'lifePageCount'                  => $deviceInstance->getMeter()->endMeterLife,
+                    'isA3'                           => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
+                    'isColor'                        => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
+                    'isDuplex'                       => $deviceInstance->getMasterDevice()->isDuplex ? 'Yes' : 'No',
+                    'isMFP'                          => $deviceInstance->getMasterDevice()->isMfp() ? 'Yes' : 'No',
+                    'isFax'                          => $deviceInstance->getMasterDevice()->isFax ? 'Yes' : 'No',
+                    'reportsTonerLevels'             => $deviceInstance->isCapableOfReportingTonerLevels() ? 'Yes' : 'No',
+                    'linkedToJitProgram'             => $deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No'),
 
-                    'percentOfMonthlyCost'     => ($deviceInstance->isLeased)
+                    'percentOfMonthlyCost'           => ($deviceInstance->isLeased)
                         ? $deviceInstance->getLeasedMonthlyRatePercentage(
                             $this->healthCheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment,
                             $this->healthCheckViewModel->getLeasedBlackAndWhiteCharge(),
@@ -301,7 +301,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
                             $this->healthCheckViewModel->getCostPerPageSettingForCustomer()
                         ),
 
-                    'suggestedAction'          => sprintf('Migrate all page volume to a newer %1$s compatible device.', My_Brand::$jit),
+                    'suggestedAction'                => sprintf('Migrate all page volume to a newer %1$s compatible device.', My_Brand::$jit),
                 ];
             }
         }
@@ -322,23 +322,23 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
             {
                 $this->devicesNotReportingTonerLevels[] = [
 
-                    'deviceName'               => str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()),
-                    'ipAddress'                => $deviceInstance->ipAddress,
-                    'serialNumber'             => $deviceInstance->serialNumber,
-                    'deviceAge'                => $deviceInstance->getAge(),
-                    'monthlyPageVolume'        => $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(),
-                    'percentOfTotalPageVolume' => $deviceInstance->calculateMonthlyPercentOfTotalVolume($this->healthCheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) / 100,
-                    'suggestedMaxVolume'       => $deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount(),
-                    'lifePageCount'            => $deviceInstance->getMeter()->endMeterLife,
-                    'isA3'                     => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
-                    'isColor'                  => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
-                    'isDuplex'                 => $deviceInstance->getMasterDevice()->isDuplex ? 'Yes' : 'No',
-                    'isMFP'                    => $deviceInstance->getMasterDevice()->isMfp() ? 'Yes' : 'No',
-                    'isFax'                    => $deviceInstance->getMasterDevice()->isFax ? 'Yes' : 'No',
-                    'reportsTonerLevels'       => $deviceInstance->isCapableOfReportingTonerLevels() ? 'Yes' : 'No',
-                    'linkedToJitProgram'       => $deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No'),
+                    'deviceName'                     => str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()),
+                    'ipAddress'                      => $deviceInstance->ipAddress,
+                    'serialNumber'                   => $deviceInstance->serialNumber,
+                    'deviceAge'                      => $deviceInstance->getAge(),
+                    'monthlyPageVolume'              => $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(),
+                    'percentOfFleetsTotalPageVolume' => $deviceInstance->calculateMonthlyPercentOfTotalVolume($this->healthCheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) / 100,
+                    'suggestedMaxVolume'             => $deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount(),
+                    'lifePageCount'                  => $deviceInstance->getMeter()->endMeterLife,
+                    'isA3'                           => $deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No',
+                    'isColor'                        => $deviceInstance->getMasterDevice()->isColor() ? 'Yes' : 'No',
+                    'isDuplex'                       => $deviceInstance->getMasterDevice()->isDuplex ? 'Yes' : 'No',
+                    'isMFP'                          => $deviceInstance->getMasterDevice()->isMfp() ? 'Yes' : 'No',
+                    'isFax'                          => $deviceInstance->getMasterDevice()->isFax ? 'Yes' : 'No',
+                    'reportsTonerLevels'             => $deviceInstance->isCapableOfReportingTonerLevels() ? 'Yes' : 'No',
+                    'linkedToJitProgram'             => $deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No'),
 
-                    'percentOfMonthlyCost'     => ($deviceInstance->isLeased)
+                    'percentOfMonthlyCost'           => ($deviceInstance->isLeased)
                         ? $deviceInstance->getLeasedMonthlyRatePercentage(
                             $this->healthCheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment,
                             $this->healthCheckViewModel->getLeasedBlackAndWhiteCharge(),
@@ -350,7 +350,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
                             $this->healthCheckViewModel->getCostPerPageSettingForCustomer()
                         ),
 
-                    'suggestedAction'          => sprintf('Migrate all page volume to %1$s compatible device.', My_Brand::$jit),
+                    'suggestedAction'                => sprintf('Migrate all page volume to %1$s compatible device.', My_Brand::$jit),
                 ];
             }
         }

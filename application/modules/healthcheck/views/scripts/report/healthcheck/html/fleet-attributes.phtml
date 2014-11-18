@@ -12,7 +12,14 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         <th style="width: 170px;vertical-align: middle"><strong>Device Name</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Fleet's Total Monthly Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Suggested Max. Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Life Page Count</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>A3</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Color</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Duplex</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>MFP</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Fax</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Reports Toner Levels</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo $this->jit; ?> Program</strong></th>
     </tr>
@@ -33,8 +40,15 @@ $healthcheckViewModel = $this->healthcheckViewModel;
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->isCapableOfReportingTonerLevels ? 'Y' : 'N') ?></td>
-            <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount()) ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMeter()->endMeterLife) ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isColor() ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isDuplex ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isMfp() ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isFax ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->isCapableOfReportingTonerLevels() ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No')) ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -46,12 +60,16 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         <th style="width: 30px;vertical-align: middle"><strong>Device Name</th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Suggested Max. Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Suggested Max. Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Fleet's Total Monthly Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Suggested Max. Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Life Page Count</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>A3</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Color</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Duplex</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>MFP</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Fax</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Reports Toner Levels</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo $this->jit; ?> Program</strong></th>
-        <th style="vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
     </tr>
     </thead>
     <tbody>
@@ -70,12 +88,16 @@ $healthcheckViewModel = $this->healthcheckViewModel;
                 <br /> <?php echo $deviceInstance->ipAddress; ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
-            <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 2) ?>%</td>
-            <td class="right"><?php echo number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->isCapableOfReportingTonerLevels ? 'Y' : 'N') ?></td>
-            <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
-            <td>Migrate all page volume to <?php echo $this->jit; ?> compatible device.</td>
+            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()),2)?>%</td>
+            <td class="right"><?php echo number_format($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount()) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getMeter()->endMeterLife) ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isColor() ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isDuplex ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isMfp() ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isFax ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->isCapableOfReportingTonerLevels() ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No')) ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -87,12 +109,16 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         <th style="width: 170px;vertical-align: middle"><strong>Device Name</th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Suggested Max. Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Suggested Max. Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Fleet's Total Monthly Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Suggested Max. Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Life Page Count</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>A3</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Color</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Duplex</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>MFP</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Fax</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Reports Toner Levels</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo $this->jit; ?> Program</strong></th>
-        <th style="width: 220px;vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
     </tr>
     </thead>
     <tbody>
@@ -110,12 +136,16 @@ $healthcheckViewModel = $this->healthcheckViewModel;
                 <br /> <?php echo $deviceInstance->ipAddress; ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
-            <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 2) ?>%</td>
-            <td class="right"><?php echo number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->isCapableOfReportingTonerLevels ? 'Y' : 'N') ?></td>
-            <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
-            <td>Migrate excess page volume to an <?php echo $this->jit; ?> compatible device.</td>
+            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
+            <td class="right"><?php echo number_format($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount()) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getMeter()->endMeterLife) ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isColor()? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isDuplex) ? 'Yes' : 'No'?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isMfp()) ? 'Yes' : 'No'?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isFax) ? 'Yes' : 'No'?></td>
+            <td class="center"> <?php echo($deviceInstance->isCapableOfReportingTonerLevels() ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No')) ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -127,11 +157,17 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         <th style="width: 170px;vertical-align: middle"><strong>Device Name</th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Fleet's Total Monthly Page Volume</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Suggested Max. Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Life Page Count</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>A3</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Color</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Duplex</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>MFP</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Fax</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Reports Toner Levels</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo $this->jit; ?> Program</strong></th>
-        <th style="width: 220px;vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
     </tr>
     </thead>
     <tbody>
@@ -149,10 +185,26 @@ $healthcheckViewModel = $this->healthcheckViewModel;
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
-            <td class="right"><?php echo number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->isCapableOfReportingTonerLevels ? 'Y' : 'N') ?></td>
-            <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
-            <td>Migrate all page volume to a newer <?php echo $this->jit; ?> compatible device.</td>
+            <td class="right"><?php echo ($deviceInstance->isLeased)
+                    ? number_format($deviceInstance->getLeasedMonthlyRatePercentage(
+                        $healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment,
+                        $healthcheckViewModel->getLeasedBlackAndWhiteCharge(),
+                        $healthcheckViewModel->getLeasedColorCharge(),
+                        $healthcheckViewModel->calculateTotalMonthlyCost()
+                    )*100,2)
+                    : number_format($deviceInstance->getMonthlyRatePercentage(
+                        $healthcheckViewModel->calculateTotalMonthlyCost(),
+                        $healthcheckViewModel->getCostPerPageSettingForCustomer()
+                    )*100,2) ?>%</td>
+            <td class="center"> <?php echo number_format($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount()) ?></td>
+            <td class="center"> <?php echo number_format($deviceInstance->getMeter()->endMeterLife) ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isColor() ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isDuplex ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isMfp() ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->getMasterDevice()->isFax ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->isCapableOfReportingTonerLevels() ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No')) ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -164,11 +216,16 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         <th style="width: 170px;vertical-align: middle"><strong>Device Name</th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Fleet's Total Monthly Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Suggested Max. Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Life Page Count</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>A3</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Color</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Duplex</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>MFP</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Fax</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Reports Toner Levels</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo $this->jit; ?> Program</strong></th>
-        <th style="width: 220px;vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
     </tr>
     </thead>
     <tbody>
@@ -187,10 +244,15 @@ $healthcheckViewModel = $this->healthcheckViewModel;
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
-            <td class="right"><?php echo number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->isCapableOfReportingTonerLevels ? 'Y' : 'N') ?></td>
-            <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
-            <td>Migrate all page volume to <?php echo $this->jit; ?> compatible device.</td>
+            <td class="right"><?php echo number_format($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount()) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getMeter()->endMeterLife) ?></td>
+            <td class="right"><?php echo ($deviceInstance->getMasterDevice()->isA3 ? 'Yes' : 'No') ?></td>
+            <td class="right"><?php echo ($deviceInstance->getMasterDevice()->isColor() ? 'Yes' : 'No') ?></td>
+            <td class="right"><?php echo ($deviceInstance->getMasterDevice()->isDuplex ? 'Yes' : 'No') ?></td>
+            <td class="right"><?php echo ($deviceInstance->getMasterDevice()->isMfp() ? 'Yes' : 'No') ?></td>
+            <td class="right"><?php echo ($deviceInstance->getMasterDevice()->isFax ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->isCapableOfReportingTonerLevels() ? 'Yes' : 'No') ?></td>
+            <td class="center"> <?php echo($deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No')) ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
