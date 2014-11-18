@@ -57,8 +57,8 @@ if (count($totalNumberOfDevices) > 0)
 
         $table->addRow($tcStyle->body->rowheight);
         $table->addCell($tcStyle->col1Width, $style)->addText($deviceInstance->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-        $table->addCell($tcStyle->col2Width, $style)->addText($deviceInstance->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
-        $table->addCell($tcStyle->col3Width, $style)->addText($deviceInstance->serialNumber, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+        $table->addCell($tcStyle->col2Width, $style)->addText($deviceInstance->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+        $table->addCell($tcStyle->col3Width, $style)->addText($deviceInstance->ipAddress, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
         $table->addCell($tcStyle->col4Width, $style)->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
         $table->addCell($tcStyle->col5Width, $style)->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
         $table->addCell($tcStyle->col6Width, $style)->addText("Not Mapped", $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
