@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<options>
-    <option>
+<optionsGoodData>
+    <testData>
         <data>
             <availableOptionsname>availableOptionsname</availableOptionsname>
             <availableOptionsdescription>availableOptionsdescription</availableOptionsdescription>
@@ -8,8 +8,8 @@
             <availableOptionsoemSku>oemsku</availableOptionsoemSku>
             <availableOptionsdealerSku>dealerSku</availableOptionsdealerSku>
         </data>
-    </option>
-    <option>
+    </testData>
+    <testData>
         <data>
             <availableOptionsname>Best Option Name NA</availableOptionsname>
             <availableOptionsdescription>test test tset se#@3213 21asd zxc 23112</availableOptionsdescription>
@@ -17,8 +17,8 @@
             <availableOptionsoemSku>2s2s2d2v222</availableOptionsoemSku>
             <availableOptionsdealerSku>123124</availableOptionsdealerSku>
         </data>
-    </option>
-    <option>
+    </testData>
+    <testData>
         <data>
             <availableOptionsname>123</availableOptionsname>
             <availableOptionsdescription>availableOptionsdescription</availableOptionsdescription>
@@ -26,5 +26,5 @@
             <availableOptionsoemSku>12345</availableOptionsoemSku>
             <availableOptionsdealerSku>434sds21DEALERSKU</availableOptionsdealerSku>
         </data>
-    </option>
-</options>
+    </testData>
+</optionsGoodData>

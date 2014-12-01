@@ -1,32 +1,32 @@
-<leastingRates>
-    <leasingRate>
+<leasingRatesGoodData>
+    <testData>
         <data>
             <name>Joe</name>
             <dealerId>1</dealerId>
         </data>
-    </leasingRate>
-    <leasingRate>
+    </testData>
+    <testData>
         <data>
             <name>4KODS9O2AL3E0TE9C2FDPAPKWXMAQO9JKNC7TFUZ5D272C5HRWJUCDLMKHWDDAMJLKDB4ZN8X2NOMFPY9Z9FTQ0T82842SO0NITVP1FJ0GTKADWODYEVH538JPHFBA62BR48E4FJQIZMMRA2LQI0TJE6E4LUZEN89UENPN9DYUUFYHY7SIIUW50HSZOGWJGH3PSG2Q9JR5QQIGY63BZ7ZPL3M8S57QO2F752TOFA9K0T1STPHSNRW2CRENDA1EM</name>
             <dealerId>1</dealerId>
         </data>
-    </leasingRate>
-    <leasingRate>
+    </testData>
+    <testData>
         <data>
             <name>56465456465456 456465 48a89fads4f65a4sd5f ad56s4f5ad4sfad89sf4a564 adsf</name>
             <dealerId>9001</dealerId>
         </data>
-    </leasingRate>
-    <leasingRate>
+    </testData>
+    <testData>
         <data>
             <name>Joe Jim Bob</name>
             <dealerId>897975</dealerId>
         </data>
-    </leasingRate>
-    <leasingRate>
+    </testData>
+    <testData>
         <data>
             <name>456456</name>
             <dealerId>52352</dealerId>
         </data>
-    </leasingRate>
-</leastingRates>
+    </testData>
+</leasingRatesGoodData>

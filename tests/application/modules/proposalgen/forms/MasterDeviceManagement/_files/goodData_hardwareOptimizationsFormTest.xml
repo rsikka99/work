@@ -1,36 +1,29 @@
 <?xml version="1.0" standalone="yes"?>
-<hardwareOptimizations>
-    <hardwareOptimization>
+<hardwareOptimizationGoodData>
+    <testData>
         <data>
             <isDeviceSwap>1</isDeviceSwap>
             <minimumPageCount>1</minimumPageCount>
             <maximumPageCount>10</maximumPageCount>
         </data>
-    </hardwareOptimization>
-    <hardwareOptimization>
+    </testData>
+    <testData>
         <data>
             <isDeviceSwap>0</isDeviceSwap>
             <minimumPageCount>1</minimumPageCount>
             <maximumPageCount>10</maximumPageCount>
         </data>
-    </hardwareOptimization>
-    <hardwareOptimization>
+    </testData>
+    <testData>
         <data>
             <isDeviceSwap>0</isDeviceSwap>
         </data>
-    </hardwareOptimization>
-    <hardwareOptimization>
+    </testData>
+    <testData>
         <data>
             <isDeviceSwap>0</isDeviceSwap>
             <minimumPageCount>0</minimumPageCount>
             <maximumPageCount>0</maximumPageCount>
         </data>
-    </hardwareOptimization>
-    <hardwareOptimization>
-        <data>
-            <isDeviceSwap>asd</isDeviceSwap>
-            <minimumPageCount>2</minimumPageCount>
-            <maximumPageCount>5</maximumPageCount>
-        </data>
-    </hardwareOptimization>
-</hardwareOptimizations>
+    </testData>
+</hardwareOptimizationGoodData>

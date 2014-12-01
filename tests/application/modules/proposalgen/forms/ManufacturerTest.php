@@ -3,63 +3,31 @@
 /**
  * Class Proposalgen_Form_ManufacturerTest
  */
-class Proposalgen_Form_ManufacturerTest extends PHPUnit_Framework_TestCase
+class Proposalgen_Form_ManufacturerTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
+
     /**
-     * @var Proposalgen_Form_Manufacturer
+     * @return Proposalgen_Form_Manufacturer
      */
-    protected $_form;
-
-    public function setUp ()
+    public function getForm ()
     {
-        $this->_form = new Proposalgen_Form_Manufacturer();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
-    }
-
-    public function goodData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_manufacturerTest.xml");
-        $data = array();
-        foreach ($xml->manufacturer as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    public function badData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_manufacturerTest.xml");
-        $data = array();
-        foreach ($xml->manufacturer as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
+        return new Proposalgen_Form_Manufacturer();
     }
 
     /**
-     * @dataProvider badData
+     * @return array
      */
-    public function testFormRejectsBadData ($data)
+    public function getGoodData ()
     {
-        $this->assertFalse($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_manufacturerTest.xml");
     }
 
     /**
-     * @dataProvider goodData
+     * @return array
      */
-    public function testFormAcceptsValidData ($data)
+    public function getBadData ()
     {
-        $this->assertTrue($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_manufacturerTest.xml");
     }
 
 }

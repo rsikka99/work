@@ -1,26 +1,21 @@
 <?xml version="1.0" standalone="yes"?>
-<surveys>
-    <survey>
+<surveysBadData>
+    <testData>
         <data>
             <toner_cost_radio>exact</toner_cost_radio>
-            <toner_cost></toner_cost>
             <labor_cost_radio>exact</labor_cost_radio>
-            <labor_cost></labor_cost>
             <avg_purchase>50</avg_purchase>
             <it_hourlyRate>40</it_hourlyRate>
             <inkTonerOrderRadio>Weekly</inkTonerOrderRadio>
-            <numb_monthlyOrders></numb_monthlyOrders>
             <itHoursRadio>exact</itHoursRadio>
-            <itHours></itHours>
             <monthlyBreakdownRadio>exact</monthlyBreakdownRadio>
-            <monthlyBreakdown></monthlyBreakdown>
             <pageCoverage_BW>6</pageCoverage_BW>
             <pageCoverage_Color>24</pageCoverage_Color>
             <printVolume>5</printVolume>
             <repairTime>0.5</repairTime>
         </data>
-    </survey>
-    <survey>
+    </testData>
+    <testData>
         <data>
             <toner_cost_radio>exact</toner_cost_radio>
             <toner_cost>1000</toner_cost>
@@ -29,7 +24,6 @@
             <avg_purchase>50</avg_purchase>
             <it_hourlyRate>40</it_hourlyRate>
             <inkTonerOrderRadio>Daily</inkTonerOrderRadio>
-            <numb_monthlyOrders></numb_monthlyOrders>
             <itHoursRadio>exact</itHoursRadio>
             <itHours>1000</itHours>
             <monthlyBreakdownRadio>exact</monthlyBreakdownRadio>
@@ -39,8 +33,8 @@
             <printVolume>5</printVolume>
             <repairTime>0.5</repairTime>
         </data>
-    </survey>
-    <survey>
+    </testData>
+    <testData>
         <data>
             <toner_cost_radio>exact</toner_cost_radio>
             <toner_cost>1000</toner_cost>
@@ -49,7 +43,6 @@
             <avg_purchase>50</avg_purchase>
             <it_hourlyRate>40</it_hourlyRate>
             <inkTonerOrderRadio>Daily</inkTonerOrderRadio>
-            <numb_monthlyOrders></numb_monthlyOrders>
             <itHoursRadio>exact</itHoursRadio>
             <itHours>1000</itHours>
             <monthlyBreakdownRadio>exact</monthlyBreakdownRadio>
@@ -59,8 +52,8 @@
             <printVolume>5</printVolume>
             <repairTime>0.5</repairTime>
         </data>
-    </survey>
-    <survey>
+    </testData>
+    <testData>
         <data>
             <toner_cost_radio>guess</toner_cost_radio>
             <toner_cost>this stuff is ignored if the radio is guess!</toner_cost>
@@ -69,7 +62,6 @@
             <avg_purchase>50</avg_purchase>
             <it_hourlyRate>40</it_hourlyRate>
             <inkTonerOrderRadio>Daily</inkTonerOrderRadio>
-            <numb_monthlyOrders></numb_monthlyOrders>
             <itHoursRadio>guess</itHoursRadio>
             <itHours>this shouldn't work</itHours>
             <monthlyBreakdownRadio>guess</monthlyBreakdownRadio>
@@ -79,8 +71,8 @@
             <printVolume>5</printVolume>
             <repairTime>5</repairTime>
         </data>
-    </survey>
-    <survey>
+    </testData>
+    <testData>
         <data>
             <toner_cost_radio>exact</toner_cost_radio>
             <toner_cost>1000</toner_cost>
@@ -89,7 +81,6 @@
             <avg_purchase>50</avg_purchase>
             <it_hourlyRate>40</it_hourlyRate>
             <inkTonerOrderRadio>Times per month</inkTonerOrderRadio>
-            <numb_monthlyOrders></numb_monthlyOrders>
             <itHoursRadio>exact</itHoursRadio>
             <itHours>1000</itHours>
             <monthlyBreakdownRadio>exact</monthlyBreakdownRadio>
@@ -99,17 +90,15 @@
             <printVolume>5</printVolume>
             <repairTime>0.5</repairTime>
         </data>
-    </survey>
-    <survey>
+    </testData>
+    <testData>
         <data>
             <toner_cost_radio>exact</toner_cost_radio>
             <toner_cost>-3</toner_cost>
             <labor_cost_radio>guess</labor_cost_radio>
-            <labor_cost></labor_cost>
             <avg_purchase>50</avg_purchase>
             <it_hourlyRate>40</it_hourlyRate>
             <inkTonerOrderRadio>Daily</inkTonerOrderRadio>
-            <numb_monthlyOrders></numb_monthlyOrders>
             <itHoursRadio>exact</itHoursRadio>
             <itHours>-5</itHours>
             <monthlyBreakdownRadio>exact</monthlyBreakdownRadio>
@@ -119,5 +108,5 @@
             <printVolume>5</printVolume>
             <repairTime>0.5</repairTime>
         </data>
-    </survey>
-</surveys>
+    </testData>
+</surveysBadData>

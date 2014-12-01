@@ -1,0 +1,21 @@
+<?xml version="1.0" standalone="yes"?>
+<loginFormGoodData>
+    <testData>
+        <data>
+            <email>lrobert@tangentmtw.com</email>
+            <password>somepassword</password>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <email>swilder@tangentmtw.com</email>
+            <password>O1as94_adsf#@</password>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <email>someuser44@example.com</email>
+            <password>75647564</password>
+        </data>
+    </testData>
+</loginFormGoodData>

@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<toners>
-    <toner>
+<tonersBadData>
+    <testData>
         <data>
             <availableTonersmanufacturerId>2</availableTonersmanufacturerId>
             <availableTonerstonerColorId>3</availableTonerstonerColorId>
@@ -10,8 +10,8 @@
             <availableTonersdealerCost>1</availableTonersdealerCost>
             <availableTonerssystemCost>1</availableTonerssystemCost>
         </data>
-    </toner>
-    <toner>
+    </testData>
+    <testData>
         <data>
             <availableTonersmanufacturerId>1</availableTonersmanufacturerId>
             <availableTonerstonerColorId>1</availableTonerstonerColorId>
@@ -21,8 +21,8 @@
             <availableTonersdealerCost>a</availableTonersdealerCost>
             <availableTonerssystemCost>a</availableTonerssystemCost>
         </data>
-    </toner>
-    <toner>
+    </testData>
+    <testData>
         <data>
             <availableTonersmanufacturerId>Ã</availableTonersmanufacturerId>
             <availableTonerstonerColorId>Ã</availableTonerstonerColorId>
@@ -32,5 +32,5 @@
             <availableTonersdealerCost>1.1</availableTonersdealerCost>
             <availableTonerssystemCost>1.1</availableTonerssystemCost>
         </data>
-    </toner>
-</toners>
+    </testData>
+</tonersBadData>

@@ -1,21 +1,21 @@
 <?xml version="1.0" standalone="yes"?>
-<quotes>
-    <quote>
+<quotesGoodData>
+    <testData>
         <data>
             <clientId>1</clientId>
             <quoteType>purchased</quoteType>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <clientId>1</clientId>
             <quoteType>leased</quoteType>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <clientId>3</clientId>
             <quoteType>leased</quoteType>
         </data>
-    </quote>
-</quotes>
+    </testData>
+</quotesGoodData>

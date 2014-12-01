@@ -1,11 +1,37 @@
 <?php
 
-class Proposalgen_Form_MasterDeviceManagement_HardwareConfigurationsFormTest extends PHPUnit_Framework_TestCase
+class Proposalgen_Form_MasterDeviceManagement_HardwareConfigurationsFormTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
     /**
      * @var Proposalgen_Form_MasterDeviceManagement_HardwareConfigurations
      */
     protected $_form;
+
+    /**
+     * @return Proposalgen_Form_MasterDeviceManagement_HardwareConfigurations
+     */
+    public function getForm ()
+    {
+        $this->buildForm();
+
+        return $this->_form;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGoodData ()
+    {
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_hardwareConfigurationsFormTest.xml");
+    }
+
+    /**
+     * @return array
+     */
+    public function getBadData ()
+    {
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_hardwareConfigurationsFormTest.xml");
+    }
 
     /**
      * Builds the form to be used for testing
@@ -16,6 +42,9 @@ class Proposalgen_Form_MasterDeviceManagement_HardwareConfigurationsFormTest ext
      */
     public function buildForm ($deviceConfigurationId = 1, $masterDeviceId = 1)
     {
+        $data = $this->getGoodData();
+        $this->setupDeviceOptions($data[0]);
+
         $this->_form = new Proposalgen_Form_MasterDeviceManagement_HardwareConfigurations($deviceConfigurationId, $masterDeviceId);
     }
 
@@ -55,64 +84,6 @@ class Proposalgen_Form_MasterDeviceManagement_HardwareConfigurationsFormTest ext
             Quotegen_Model_Mapper_DeviceOption::getInstance()->saveItemToCache($deviceOption);
             Quotegen_Model_Mapper_Device::getInstance()->saveItemToCache($device);
         }
-    }
-
-    /**
-     * This function loads an XML file of good data into arrays to be tested in the form
-     */
-    public function goodData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_hardwareConfigurationsFormTest.xml");
-        $data = array();
-
-        foreach ($xml->hardwareConfiguration as $row)
-        {
-            $row    = json_decode(json_encode($row), 1);
-            $data[] = $row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * @dataProvider goodData
-     *               Tests whether the form accepts valid data
-     */
-    public function testFormAcceptsValidData ($data)
-    {
-        $this->setupDeviceOptions($data['hardwareConfigurationsoption1']);
-        $this->buildForm(1, 1);
-
-        $this->assertTrue($this->_form->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
-    }
-
-    /**
-     * This function loads an XML file of good data into arrays to be tested in the form
-     */
-    public function badData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_hardwareConfigurationsFormTest.xml");
-        $data = array();
-
-        foreach ($xml->hardwareConfiguration as $row)
-        {
-            $row    = json_decode(json_encode($row), 1);
-            $data[] = $row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * @dataProvider badData
-     *               Tests if the form errors on invalid data
-     */
-    public function testFormRejectsBadData ($data)
-    {
-        $this->setupDeviceOptions($data['hardwareConfigurationsoption1']);
-        $this->buildForm(1, 1);
-
-        $this->assertFalse($this->_form->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
     }
 }
 

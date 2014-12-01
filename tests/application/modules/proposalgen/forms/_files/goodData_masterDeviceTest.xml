@@ -1,26 +1,15 @@
 <?xml version="1.0" standalone="yes"?>
-<masterDevices>
-    <masterDevice>
+<masterDevicesGoodData>
+    <testData>
         <data>
             <manufacturer_id>1</manufacturer_id>
             <printer_model>GHz</printer_model>
             <toner_config_id>1</toner_config_id>
-            <is_copier></is_copier>
-            <is_fax></is_fax>
-            <is_scanner></is_scanner>
-            <is_duplex></is_duplex>
-            <watts_power_normal></watts_power_normal>
-            <watts_power_idle></watts_power_idle>
-            <cost></cost>
-            <service_cost_per_page></service_cost_per_page>
             <launch_date>2007-09-18</launch_date>
-            <ppm_black></ppm_black>
-            <ppm_color></ppm_color>
-            <is_leased></is_leased>
-            <leased_toner_yield></leased_toner_yield>
+            <is_leased>false</is_leased>
         </data>
-    </masterDevice>
-    <masterDevice>
+    </testData>
+    <testData>
         <data>
             <manufacturer_id>3</manufacturer_id>
             <printer_model>Test Two</printer_model>
@@ -36,18 +25,14 @@
             <launch_date>2007-09-18</launch_date>
             <ppm_black>1</ppm_black>
             <ppm_color>5</ppm_color>
-            <is_leased></is_leased>
-            <leased_toner_yield></leased_toner_yield>
+            <is_leased>false</is_leased>
         </data>
-    </masterDevice>
-    <masterDevice>
+    </testData>
+    <testData>
         <data>
             <manufacturer_id>13</manufacturer_id>
             <printer_model>Oce</printer_model>
             <toner_config_id>4</toner_config_id>
-            <is_copier></is_copier>
-            <is_fax></is_fax>
-            <is_scanner></is_scanner>
             <is_duplex>1</is_duplex>
             <watts_power_normal>500</watts_power_normal>
             <watts_power_idle>450</watts_power_idle>
@@ -59,8 +44,8 @@
             <is_leased>true</is_leased>
             <leased_toner_yield>100</leased_toner_yield>
         </data>
-    </masterDevice>
-    <masterDevice>
+    </testData>
+    <testData>
         <data>
             <manufacturer_id>13</manufacturer_id>
             <printer_model>Oce</printer_model>
@@ -79,5 +64,5 @@
             <is_leased>true</is_leased>
             <leased_toner_yield>100</leased_toner_yield>
         </data>
-    </masterDevice>
-</masterDevices>
+    </testData>
+</masterDevicesGoodData>

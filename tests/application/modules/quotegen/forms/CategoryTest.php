@@ -3,75 +3,30 @@
 /**
  * Class Quotegen_Form_CategoryTest
  */
-class Quotegen_Form_CategoryTest extends PHPUnit_Framework_TestCase
+class Quotegen_Form_CategoryTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
+
     /**
-     * @var Quotegen_Form_Category
+     * @return Quotegen_Form_Category
      */
-    protected $_form;
-
-    public function setUp ()
+    public function getForm ()
     {
-        $this->_form = new Quotegen_Form_Category();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
+        return new Quotegen_Form_Category();
     }
 
     /**
-     * This function loads an XML file of good data into arrays to be tested in the form
+     * @return array
      */
-    public function goodCategoryData ()
+    public function getGoodData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_CategoryTest.xml");
-        $data = array();
-        foreach ($xml->category as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_CategoryTest.xml");
     }
 
     /**
-     * This function loads an XML file of bad data into arrays to be tested in the form
+     * @return array
      */
-    public function badCategoryData ()
+    public function getBadData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_CategoryTest.xml");
-        $data = array();
-        foreach ($xml->category as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Test the form using valid data
-     *
-     *
-     * @dataProvider goodCategoryData
-     */
-    public function testFormAcceptsValidData ($data)
-    {
-        $this->assertTrue($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
-    }
-
-
-    /**
-     * Test the form using bad data
-     *
-     * @dataProvider badCategoryData
-     */
-    public
-    function testFormRejectsBadData ($data)
-    {
-        $this->assertFalse($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_CategoryTest.xml");
     }
 }

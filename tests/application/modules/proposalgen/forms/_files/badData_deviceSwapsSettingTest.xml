@@ -1,45 +1,43 @@
 <?xml version="1.0" standalone="yes"?>
-<deviceSwaps>
-    <deviceSwap>
+<deviceSwapsBadData>
+    <testData>
         <data>
             <masterDeviceId>1</masterDeviceId>
             <minimumPageCount>0</minimumPageCount>
-            <maximumPageCount></maximumPageCount>
+            <maximumPageCount>null</maximumPageCount>
         </data>
-    </deviceSwap>
-    <deviceSwap>
+    </testData>
+    <testData>
         <data>
             <masterDeviceId>1</masterDeviceId>
-            <minimumPageCount></minimumPageCount>
             <maximumPageCount>100</maximumPageCount>
         </data>
-    </deviceSwap>
-    <deviceSwap>
+    </testData>
+    <testData>
         <data>
-            <masterDeviceId></masterDeviceId>
             <minimumPageCount>5</minimumPageCount>
             <maximumPageCount>100</maximumPageCount>
         </data>
-    </deviceSwap>
-    <deviceSwap>
+    </testData>
+    <testData>
         <data>
             <masterDeviceId>1</masterDeviceId>
             <minimumPageCount>500</minimumPageCount>
             <maximumPageCount>100</maximumPageCount>
         </data>
-    </deviceSwap>
-    <deviceSwap>
+    </testData>
+    <testData>
         <data>
             <masterDeviceId>1</masterDeviceId>
             <minimumPageCount>-1</minimumPageCount>
             <maximumPageCount>-1</maximumPageCount>
         </data>
-    </deviceSwap>
-    <deviceSwap>
+    </testData>
+    <testData>
         <data>
             <masterDeviceId>1</masterDeviceId>
             <minimumPageCount>500</minimumPageCount>
             <maximumPageCount>500</maximumPageCount>
         </data>
-    </deviceSwap>
-</deviceSwaps>
+    </testData>
+</deviceSwapsBadData>

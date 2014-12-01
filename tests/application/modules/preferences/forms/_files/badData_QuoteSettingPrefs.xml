@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<quotes>
-    <quote>
+<quotesBadData>
+    <testData>
         <data>
             <pageCoverageMonochrome>100</pageCoverageMonochrome>
             <pageCoverageColor>100</pageCoverageColor>
@@ -10,8 +10,8 @@
             <dealerMonochromeRankSetArray>0.000000001</dealerMonochromeRankSetArray>
             <dealerColorRankSetArray>0.000000001</dealerColorRankSetArray>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>99.999999999</pageCoverageMonochrome>
             <pageCoverageColor>99.99999999</pageCoverageColor>
@@ -21,8 +21,8 @@
             <dealerMonochromeRankSetArray>4</dealerMonochromeRankSetArray>
             <dealerColorRankSetArray>4564</dealerColorRankSetArray>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>0</pageCoverageMonochrome>
             <pageCoverageColor>99.99999999</pageCoverageColor>
@@ -32,8 +32,8 @@
             <dealerMonochromeRankSetArray>-44</dealerMonochromeRankSetArray>
             <dealerColorRankSetArray>0.000000001</dealerColorRankSetArray>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>0.000000001</pageCoverageMonochrome>
             <pageCoverageColor>100</pageCoverageColor>
@@ -43,8 +43,8 @@
             <dealerMonochromeRankSetArray>0.000000001</dealerMonochromeRankSetArray>
             <dealerColorRankSetArray>0.000000001</dealerColorRankSetArray>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>84</pageCoverageMonochrome>
             <pageCoverageColor>99.99999999</pageCoverageColor>
@@ -53,5 +53,5 @@
             <adminCostPerPage>letters don't go here!</adminCostPerPage>
             <dealerColorRankSetArray>0.000000001</dealerColorRankSetArray>
         </data>
-    </quote>
-</quotes>
+    </testData>
+</quotesBadData>

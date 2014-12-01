@@ -3,101 +3,34 @@
 /**
  * Class Default_Form_ResetPasswordTest
  */
-class Default_Form_ResetPasswordTest extends PHPUnit_Framework_TestCase
+class Default_Form_ResetPasswordTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
     /**
-     * @var Default_Form_ResetPassword
+     * Gets the form to use in the test
+     *
+     * @return Default_Form_ResetPassword
      */
-    protected $_form;
-
-    public function setUp ()
+    public function getForm ()
     {
-        $this->_form = new Default_Form_ResetPassword();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
+        return new Default_Form_ResetPassword();
     }
 
     /**
-     * This function returns an array of good data to put into the form
-     *
-     * @return array
+     * @return array|mixed
      */
-    public function goodData ()
+    public function getGoodData ()
     {
-        return array(
-            array(
-                'jimmy99',
-                'jimmy99'
-            ),
-            array(
-                'C0Q6030IF22PXIJZHXT77LJL3D8AK7HEKMUFE10ODBWKJWBBWZLQN5WGRMKYM3I1ATE6ANG89UFEKBF9',
-                'C0Q6030IF22PXIJZHXT77LJL3D8AK7HEKMUFE10ODBWKJWBBWZLQN5WGRMKYM3I1ATE6ANG89UFEKBF9'
-            ),
-            array(
-                'bob678',
-                'bob678'
-            )
-        );
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_ResetPasswordTest.xml");
+
     }
 
     /**
-     * Test the form using valid data
-     *
-     *
-     * @dataProvider goodData
+     * @return array|mixed
      */
-    public function testFormAcceptsValidData ($password, $passwordConfirm)
+    public function getBadData ()
     {
-        $data = array(
-            'password'         => $password,
-            'password_confirm' => $passwordConfirm
-        );
-        $this->assertTrue($this->_form->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
-    }
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_ResetPasswordTest.xml");
 
-    /**
-     *  This function returns an array of bad data to put into the form
-     *
-     * @return array
-     */
-    public function badData ()
-    {
-        return array(
-            array(
-                'joe12345',
-                'joe1234'
-            ),
-            array(
-                'jimmy99',
-                'joe12345'
-            ),
-            array(
-                'joe',
-                'joe'
-            ), array(
-                'C0Q6030IF22PXIJZHXT77LJL3D8AK7HEKMUFE10ODBWKJWBBWZLQN5WGRMKYM3I1ATE6ANG89UFEKBF91',
-                'C0Q6030IF22PXIJZHXT77LJL3D8AK7HEKMUFE10ODBWKJWBBWZLQN5WGRMKYM3I1ATE6ANG89UFEKBF91'
-            ),
-        );
-    }
-
-    /**
-     * Test the form using bad data
-     *
-     * @dataProvider badData
-     */
-    public function testFormRejectsBadData ($password, $passwordConfirm)
-    {
-        $data = array(
-            'password'         => $password,
-            'password_confirm' => $passwordConfirm
-        );
-        $this->assertFalse($this->_form->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
     }
 
 }

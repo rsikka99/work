@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<healthchecks>
-    <healthcheck>
+<healthchecksBadData>
+    <testData>
         <data>
             <pageCoverageMonochrome>0.000000001</pageCoverageMonochrome>
             <pageCoverageColor>99</pageCoverageColor>
@@ -23,8 +23,8 @@
             <customerMonochromeCostPerPage>6</customerMonochromeCostPerPage>
             <customerColorCostPerPage>-1</customerColorCostPerPage>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>99.999999</pageCoverageMonochrome>
             <pageCoverageColor>45</pageCoverageColor>
@@ -45,8 +45,8 @@
             <costToExecuteSuppliesOrder>0.000000001</costToExecuteSuppliesOrder>
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>784</pageCoverageMonochrome>
             <pageCoverageColor>103</pageCoverageColor>
@@ -67,8 +67,8 @@
             <costToExecuteSuppliesOrder>0.000000001</costToExecuteSuppliesOrder>
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>784</pageCoverageMonochrome>
             <pageCoverageColor>103</pageCoverageColor>
@@ -89,8 +89,8 @@
             <costToExecuteSuppliesOrder>0.000000001</costToExecuteSuppliesOrder>
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>784</pageCoverageMonochrome>
             <pageCoverageColor>100.00000000001</pageCoverageColor>
@@ -110,10 +110,9 @@
             <costOfLabor>0.000000001</costOfLabor>
             <costToExecuteSuppliesOrder>0.000000001</costToExecuteSuppliesOrder>
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
-
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>0.000000001</pageCoverageMonochrome>
             <pageCoverageColor>99</pageCoverageColor>
@@ -136,5 +135,5 @@
             <customerMonochromeCostPerPage>-55</customerMonochromeCostPerPage>
             <customerColorCostPerPage>55</customerColorCostPerPage>
         </data>
-    </healthcheck>
-</healthchecks>
+    </testData>
+</healthchecksBadData>

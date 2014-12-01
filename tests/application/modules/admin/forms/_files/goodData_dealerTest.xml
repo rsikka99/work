@@ -1,15 +1,21 @@
 <?xml version="1.0" standalone="yes"?>
-<dealerData>
-    <dealer>
-        <dealerName>Bo</dealerName>
-        <userLicenses>432</userLicenses>
-    </dealer>
-    <dealer>
-        <dealerName>Boundary</dealerName>
-        <userLicenses>2</userLicenses>
-    </dealer>
-    <dealer>
-        <dealerName>Boundary</dealerName>
-        <userLicenses>999</userLicenses>
-    </dealer>
-</dealerData>
+<dealerGoodData>
+    <testData>
+        <data>
+            <dealerName>Bo</dealerName>
+            <userLicenses>432</userLicenses>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <dealerName>Boundary</dealerName>
+            <userLicenses>2</userLicenses>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <dealerName>Boundary</dealerName>
+            <userLicenses>999</userLicenses>
+        </data>
+    </testData>
+</dealerGoodData>

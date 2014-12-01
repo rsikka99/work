@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<suppliesAndServices>
-    <suppliesAndService>
+<suppliesAndServicesBadData>
+    <testData>
         <data>
             <dealerPartsCostPerPage>asdf</dealerPartsCostPerPage>
             <partsCostPerPage>fdsa</partsCostPerPage>
@@ -11,8 +11,8 @@
             <leasedTonerYield>asdf</leasedTonerYield>
             <leaseBuybackPrice>Cake</leaseBuybackPrice>
         </data>
-    </suppliesAndService>
-    <suppliesAndService>
+    </testData>
+    <testData>
         <data>
             <dealerPartsCostPerPage>1</dealerPartsCostPerPage>
             <partsCostPerPage>2</partsCostPerPage>
@@ -23,8 +23,8 @@
             <leasedTonerYield>asdf</leasedTonerYield>
             <leaseBuybackPrice>-520000</leaseBuybackPrice>
         </data>
-    </suppliesAndService>
-    <suppliesAndService>
+    </testData>
+    <testData>
         <data>
             <dealerPartsCostPerPage>6</dealerPartsCostPerPage>
             <partsCostPerPage>2</partsCostPerPage>
@@ -34,8 +34,8 @@
             <isLeased>0</isLeased>
             <leaseBuybackPrice>Morgan Freeman</leaseBuybackPrice>
         </data>
-    </suppliesAndService>
-    <suppliesAndService>
+    </testData>
+    <testData>
         <data>
             <dealerPartsCostPerPage>6</dealerPartsCostPerPage>
             <partsCostPerPage>2</partsCostPerPage>
@@ -45,5 +45,5 @@
             <isLeased>0</isLeased>
             <leaseBuybackPrice>Gordon Freeman</leaseBuybackPrice>
         </data>
-    </suppliesAndService>
-</suppliesAndServices>
+    </testData>
+</suppliesAndServicesBadData>

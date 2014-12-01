@@ -1,75 +1,30 @@
 <?php
 
-class Proposalgen_Form_MasterDeviceManagement_HardwareQuotesFormTest extends PHPUnit_Framework_TestCase
+class Proposalgen_Form_MasterDeviceManagement_HardwareQuotesFormTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
     /**
-     * @var Proposalgen_Form_MasterDeviceManagement_HardwareQuote
+     * @return Proposalgen_Form_MasterDeviceManagement_HardwareQuote
      */
-    protected $_form;
-
-    public function setUp ()
+    public function getForm ()
     {
-        $this->_form = new Proposalgen_Form_MasterDeviceManagement_HardwareQuote();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
+        return new Proposalgen_Form_MasterDeviceManagement_HardwareQuote();
     }
 
     /**
-     * This function loads an XML file of good data into arrays to be tested in the form
+     * @return array
      */
-    public function goodData ()
+    public function getGoodData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_hardwareQuotesFormTest.xml");
-        $data = array();
-
-        foreach ($xml->hardwareQuote as $row)
-        {
-            $row    = json_decode(json_encode($row), 1);
-            $data[] = $row;
-        }
-
-        return $data;
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_hardwareQuotesFormTest.xml");
     }
 
     /**
-     * @dataProvider goodData
-     *               Tests whether the form accepts valid data
+     * @return array
      */
-    public function testFormAcceptsValidData ($data)
+    public function getBadData ()
     {
-        $this->_form->isValid($data);
-        $this->assertTrue($this->_form->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_hardwareQuotesFormTest.xml");
     }
 
-    /**
-     * This function loads an XML file of good data into arrays to be tested in the form
-     */
-    public function badData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_hardwareQuotesFormTest.xml");
-        $data = array();
-
-        foreach ($xml->hardwareQuote as $row)
-        {
-            $row    = json_decode(json_encode($row), 1);
-            $data[] = $row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * @dataProvider badData
-     *               Tests if the form errors on invalid data
-     */
-    public function testFormRejectsBadData ($data)
-    {
-        $this->assertFalse($this->_form->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
-    }
 }
 

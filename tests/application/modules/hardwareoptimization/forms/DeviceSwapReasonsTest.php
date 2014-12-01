@@ -3,23 +3,15 @@
 /**
  * Class Hardwareoptimization_Form_DeviceSwapReasonsTest
  */
-class Hardwareoptimization_Form_DeviceSwapReasonsTest extends PHPUnit_Framework_TestCase
+class Hardwareoptimization_Form_DeviceSwapReasonsTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
+
     /**
-     * @var Hardwareoptimization_Form_DeviceSwapReasons
+     * @return Hardwareoptimization_Form_DeviceSwapReasons
      */
-    protected $_form;
-
-    public function setUp ()
+    public function getForm ()
     {
-        $this->_form = new Hardwareoptimization_Form_DeviceSwapReasons();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
+        return new Hardwareoptimization_Form_DeviceSwapReasons();
     }
 
     /**
@@ -27,55 +19,24 @@ class Hardwareoptimization_Form_DeviceSwapReasonsTest extends PHPUnit_Framework_
      */
     public function testFormElementsExist ()
     {
-        $this->assertInstanceOf('Zend_Form_Element_Checkbox', $this->_form->getElement('isDefault'));
-        $this->assertInstanceOf('Zend_Form_Element_Text', $this->_form->getElement('reason'));
-        $this->assertInstanceOf('Zend_Form_Element_Select', $this->_form->getElement('reasonCategory'));
-    }
-
-    public function goodData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_DeviceSwapReasonsTest.xml");
-        $data = array();
-        foreach ($xml->setting as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    public function badData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_DeviceSwapReasonsTest.xml");
-        $data = array();
-        foreach ($xml->setting as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
+        $this->assertInstanceOf('Zend_Form_Element_Checkbox', $this->getForm()->getElement('isDefault'));
+        $this->assertInstanceOf('Zend_Form_Element_Text', $this->getForm()->getElement('reason'));
+        $this->assertInstanceOf('Zend_Form_Element_Select', $this->getForm()->getElement('reasonCategory'));
     }
 
     /**
-     * Test the form using valid data
-     *
-     *
-     * @dataProvider goodData
+     * @return array|mixed
      */
-    public function testFormAcceptsValidData ($data)
+    public function getGoodData ()
     {
-        $this->assertTrue($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_DeviceSwapReasonsTest.xml");
     }
-
 
     /**
-     * Test the form using bad data
-     *
-     * @dataProvider badData
+     * @return array|mixed
      */
-    public function testFormRejectsBadData ($data)
+    public function getBadData ()
     {
-        $this->assertFalse($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_DeviceSwapReasonsTest.xml");
     }
-
 }

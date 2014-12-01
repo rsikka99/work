@@ -1,10 +1,10 @@
 <?xml version="1.0" standalone="yes"?>
-<options>
-    <option>
+<optionsBadData>
+    <testData>
         <data>
         </data>
-    </option>
-    <option>
+    </testData>
+    <testData>
         <data>
             <availableOptionsname>testNane</availableOptionsname>
             <availableOptionsdescription>qweqwe</availableOptionsdescription>
@@ -12,13 +12,13 @@
             <availableOptionsoemSku>22</availableOptionsoemSku>
             <availableOptionsdealerSku>qwe</availableOptionsdealerSku>
         </data>
-    </option>
-    <option>
+    </testData>
+    <testData>
         <data>
             <availableOptionsname>33</availableOptionsname>
             <availableOptionsdescription>22</availableOptionsdescription>
             <availableOptionsoemSku>232</availableOptionsoemSku>
             <availableOptionsdealerSku>123</availableOptionsdealerSku>
         </data>
-    </option>
-</options>
+    </testData>
+</optionsBadData>

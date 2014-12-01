@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<reportSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <reportSetting>
+<reportSettingsBadData>
+    <testData>
         <!-- empty data -->
         <data>
             <leasedBwCostPerPage></leasedBwCostPerPage>
@@ -19,9 +19,9 @@
             <defaultPrinterCost></defaultPrinterCost>
             <kilowattsPerHour></kilowattsPerHour>
         </data>
-    </reportSetting>
+    </testData>
     <!-- cost per page lower boundary -->
-    <reportSetting>
+    <testData>
         <data>
             <leasedBwCostPerPage>-1</leasedBwCostPerPage>
             <leasedColorCostPerPage>4.99</leasedColorCostPerPage>
@@ -39,9 +39,9 @@
             <defaultPrinterCost>1000</defaultPrinterCost>
             <kilowattsPerHour>10000</kilowattsPerHour>
         </data>
-    </reportSetting>
+    </testData>
     <!-- cost per page higher boundary -->
-    <reportSetting>
+    <testData>
         <data>
             <leasedBwCostPerPage>5.01</leasedBwCostPerPage>
             <leasedColorCostPerPage>4.99</leasedColorCostPerPage>
@@ -59,9 +59,9 @@
             <defaultPrinterCost>1000</defaultPrinterCost>
             <kilowattsPerHour>10000</kilowattsPerHour>
         </data>
-    </reportSetting>
+    </testData>
     <!-- coverage lower boundary -->
-    <reportSetting>
+    <testData>
         <data>
             <leasedBwCostPerPage>0.001</leasedBwCostPerPage>
             <leasedColorCostPerPage>4.99</leasedColorCostPerPage>
@@ -79,9 +79,9 @@
             <defaultPrinterCost>1000</defaultPrinterCost>
             <kilowattsPerHour>10000</kilowattsPerHour>
         </data>
-    </reportSetting>
+    </testData>
     <!-- coverage higher boundary -->
-    <reportSetting>
+    <testData>
         <data>
             <leasedBwCostPerPage>0.001</leasedBwCostPerPage>
             <leasedColorCostPerPage>4.99</leasedColorCostPerPage>
@@ -99,9 +99,9 @@
             <defaultPrinterCost>1000</defaultPrinterCost>
             <kilowattsPerHour>10000</kilowattsPerHour>
         </data>
-    </reportSetting>
+    </testData>
     <!-- report margin lower boundary -->
-    <reportSetting>
+    <testData>
         <data>
             <leasedBwCostPerPage>0.001</leasedBwCostPerPage>
             <leasedColorCostPerPage>4.99</leasedColorCostPerPage>
@@ -119,9 +119,9 @@
             <defaultPrinterCost>1000</defaultPrinterCost>
             <kilowattsPerHour>10000</kilowattsPerHour>
         </data>
-    </reportSetting>
+    </testData>
     <!-- report margin higher boundary -->
-    <reportSetting>
+    <testData>
         <data>
             <leasedBwCostPerPage>0.001</leasedBwCostPerPage>
             <leasedColorCostPerPage>4.99</leasedColorCostPerPage>
@@ -139,9 +139,9 @@
             <defaultPrinterCost>1000</defaultPrinterCost>
             <kilowattsPerHour>10000</kilowattsPerHour>
         </data>
-    </reportSetting>
+    </testData>
     <!-- cost lower boundary -->
-    <reportSetting>
+    <testData>
         <data>
             <leasedBwCostPerPage>0.001</leasedBwCostPerPage>
             <leasedColorCostPerPage>4.99</leasedColorCostPerPage>
@@ -159,5 +159,5 @@
             <defaultPrinterCost>-1</defaultPrinterCost>
             <kilowattsPerHour>10000</kilowattsPerHour>
         </data>
-    </reportSetting>
-</reportSettings>
+    </testData>
+</reportSettingsBadData>

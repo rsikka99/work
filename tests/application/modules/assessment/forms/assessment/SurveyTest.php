@@ -3,77 +3,33 @@
 /**
  * Class Assessment_Form_Assessment_SurveyTest
  */
-class Assessment_Form_Assessment_SurveyTest extends PHPUnit_Framework_TestCase
+class Assessment_Form_Assessment_SurveyTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
     /**
-     * @var Assessment_Form_Assessment_Survey
-     */
-    protected $_form;
-
-    public function setUp ()
-    {
-        $this->_form = new Assessment_Form_Assessment_Survey();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
-    }
-
-    /**
-     * This function loads an XML file of good data into arrays to be tested in the form
-     */
-    public function goodSettingsData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_SurveyTest.xml");
-        $data = array();
-
-        foreach ($xml->survey as $row)
-        {
-            $row    = json_decode(json_encode($row), 1);
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * This function loads an XML file of bad data into arrays to be tested in the form
-     */
-    public function badSettingsData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_SurveyTest.xml");
-        $data = array();
-
-        foreach ($xml->survey as $row)
-        {
-            $row    = json_decode(json_encode($row), 1);
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Test the form using valid data
+     * Gets the form to be used in testing
      *
-     * @dataProvider goodSettingsData
+     * @return Assessment_Form_Assessment_Survey|Zend_Form
      */
-    public function testFormAcceptsValidData ($data)
+    public function getForm ()
     {
-        $this->assertTrue($this->_form->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
+        return new Assessment_Form_Assessment_Survey();
+    }
+
+    /**
+     * @return array|mixed
+     */
+    public function getGoodData ()
+    {
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_SurveyTest.xml");
     }
 
 
     /**
-     * Test the form using bad data
-     *
-     * @dataProvider badSettingsData
+     * @return array|mixed
      */
-    public function testFormRejectsBadData ($data)
+    public function getBadData ()
     {
-        $this->assertFalse($this->_form->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_SurveyTest.xml");
     }
+
 }

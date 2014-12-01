@@ -1,24 +1,24 @@
 <?xml version="1.0" standalone="yes"?>
-<hardwareConfigurations>
-    <hardwareConfiguration>
+<hardwareConfigurationsGoodData>
+    <testData>
         <data>
             <hardwareConfigurationsname>ytrewq</hardwareConfigurationsname>
             <hardwareConfigurationsdescription>Here is a description</hardwareConfigurationsdescription>
             <hardwareConfigurationsoption1>2</hardwareConfigurationsoption1>
         </data>
-    </hardwareConfiguration>
-    <hardwareConfiguration>
+    </testData>
+    <testData>
         <data>
             <hardwareConfigurationsname>qwerty</hardwareConfigurationsname>
             <hardwareConfigurationsdescription>Here is a description</hardwareConfigurationsdescription>
             <hardwareConfigurationsoption1>0</hardwareConfigurationsoption1>
         </data>
-    </hardwareConfiguration>
-    <hardwareConfiguration>
+    </testData>
+    <testData>
         <data>
             <hardwareConfigurationsname>namee</hardwareConfigurationsname>
             <hardwareConfigurationsdescription>stion</hardwareConfigurationsdescription>
             <hardwareConfigurationsoption1>1000</hardwareConfigurationsoption1>
         </data>
-    </hardwareConfiguration>
-</hardwareConfigurations>
+    </testData>
+</hardwareConfigurationsGoodData>

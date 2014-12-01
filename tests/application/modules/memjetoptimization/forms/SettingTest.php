@@ -3,75 +3,32 @@
 /**
  * Class Memjetoptimization_Form_SettingTest
  */
-class Memjetoptimization_Form_SettingTest extends PHPUnit_Framework_TestCase
+class Memjetoptimization_Form_SettingTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
+
     /**
-     * @var Memjetoptimization_Form_Setting
+     * @return Memjetoptimization_Form_Setting|Zend_Form
      */
-    protected $_form;
-
-    public function setUp ()
+    public function getForm ()
     {
-        $this->_form = new Memjetoptimization_Form_Setting();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
+        return new Memjetoptimization_Form_Setting();
     }
 
     /**
-     * This function loads an XML file of good data into arrays to be tested in the form
+     * @return array|mixed
      */
-    public function goodHOSettingData ()
+    public function getGoodData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_memjetFormTest.xml");
-        $data = array();
-        foreach ($xml->setting as $row)
-        {
-            $data[] = (array)$row;
-        }
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_memjetFormTest.xml");
 
-        return $data;
     }
 
     /**
-     * This function loads an XML file of bad data into arrays to be tested in the form
+     * @return array|mixed
      */
-    public function badHOSettingData ()
+    public function getBadData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_memjetFormTest.xml");
-        $data = array();
-        foreach ($xml->setting as $row)
-        {
-            $data[] = (array)$row;
-        }
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_memjetFormTest.xml");
 
-        return $data;
     }
-
-    /**
-     * Test the form using valid data
-     *
-     *
-     * @dataProvider goodHOSettingData
-     */
-    public function testFormAcceptsValidData ($data)
-    {
-        $this->assertTrue($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
-    }
-
-
-    /**
-     * Test the form using bad data
-     *
-     * @dataProvider badHOSettingData
-     */
-    public function testFormRejectsBadData ($data)
-    {
-        $this->assertFalse($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
-    }
-
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" standalone="yes"?>
+<loginFormBadData>
+    <testData>
+        <data>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <email>lrobert</email>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <password>somepassword</password>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <email>lrobert'; DROP TABLE users; --</email>
+            <password>somepassword</password>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <email>asdf!@#$%^*(*</email>
+            <password>�6��</password>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <email>asdf!@#$%^*(*</email>
+            <password>goodpassword</password>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <email>goodusername</email>
+            <password>�6��</password>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <email>lrobert</email>
+            <password>goodpassword</password>
+        </data>
+    </testData>
+</loginFormBadData>

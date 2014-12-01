@@ -1,33 +1,30 @@
 <?xml version="1.0" standalone="yes"?>
-<quotes>
-    <quote>
+<quotesBadData>
+    <testData>
         <data>
-            <clientId></clientId>
-            <quoteType>purchased</quoteType>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <clientId>100</clientId>
             <quoteType>leased</quoteType>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <clientId>5</clientId>
             <quoteType>bought</quoteType>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <clientId>3</clientId>
-            <quoteType></quoteType>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <clientId>5</clientId>
             <quoteType>Purchased</quoteType>
         </data>
-    </quote>
-</quotes>
+    </testData>
+</quotesBadData>

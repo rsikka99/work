@@ -3,63 +3,30 @@
 /**
  * Class Proposalgen_Form_MasterDeviceTest
  */
-class Proposalgen_Form_MasterDeviceTest extends PHPUnit_Framework_TestCase
+class Proposalgen_Form_MasterDeviceTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
+
     /**
-     * @var Proposalgen_Form_MasterDevice
+     * @return Proposalgen_Form_MasterDevice
      */
-    protected $_form;
-
-    public function setUp ()
+    public function getForm ()
     {
-        $this->_form = new Proposalgen_Form_MasterDevice();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
-    }
-
-    public function goodData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_masterDeviceTest.xml");
-        $data = array();
-        foreach ($xml->masterDevice as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    public function badData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_masterDeviceTest.xml");
-        $data = array();
-        foreach ($xml->masterDevice as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
+        return new Proposalgen_Form_MasterDevice();
     }
 
     /**
-     * @dataProvider badData
+     * @return array
      */
-    public function testFormRejectsBadData ($data)
+    public function getGoodData ()
     {
-        $this->assertFalse($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_masterDeviceTest.xml");
     }
 
     /**
-     * @dataProvider goodData
+     * @return array
      */
-    public function testFormAcceptsValidData ($data)
+    public function getBadData ()
     {
-        $this->assertTrue($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_masterDeviceTest.xml");
     }
-
 }

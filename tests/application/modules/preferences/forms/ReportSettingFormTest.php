@@ -1,61 +1,35 @@
 <?php
 
-class Preferences_Form_ReportSettingFormTest extends PHPUnit_Framework_TestCase
+class Preferences_Form_ReportSettingFormTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
     /**
-     * @var Preferences_Form_ReportSetting
+     * @return Preferences_Form_ReportSetting
      */
-    protected $_form;
-
-    public function setUp ()
+    public function getForm ()
     {
-        $this->_form = new Preferences_Form_ReportSetting(1);
-        parent::setUp();
+        return new Preferences_Form_ReportSetting(1);
     }
+
+    /**
+     * @return array
+     */
+    public function getGoodData ()
+    {
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_reportSettingFormTest.xml");
+    }
+
+    /**
+     * @return array
+     */
+    public function getBadData ()
+    {
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_reportSettingFormTest.xml");
+    }
+
 
     public function testCanCreateForm ()
     {
-        $this->assertInstanceOf('Preferences_Form_ReportSetting', $this->_form);
-    }
-
-    public function goodData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_reportSettingFormTest.xml");
-        $data = array();
-        foreach ($xml->reportSetting as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * @dataProvider goodData
-     */
-    public function testFormAcceptsValidData ($data)
-    {
-        $this->assertTrue($this->_form->isValid((array)$data));
-    }
-
-    public function badData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_reportSettingFormTest.xml");
-        $data = array();
-        foreach ($xml->reportSetting as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * @dataProvider badData
-     */
-    public function testFormRejectsBadData ($data)
-    {
-        $this->assertFalse($this->_form->isValid((array)$data));
+        $this->assertInstanceOf('Preferences_Form_ReportSetting', $this->getForm());
     }
 
     public function nullData ()
@@ -72,6 +46,8 @@ class Preferences_Form_ReportSettingFormTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $data
+     *
      * @dataProvider nullData
      */
     public function testFormAcceptNullValues ($data)

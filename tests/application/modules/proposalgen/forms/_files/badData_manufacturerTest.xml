@@ -1,31 +1,25 @@
 <?xml version="1.0" standalone="yes"?>
-<manufacturers>
-    <manufacturer>
+<manufacturersBadData>
+    <testData>
         <data>
-            <fullname></fullname>
             <displayname>1</displayname>
             <isDeleted>true</isDeleted>
         </data>
-    </manufacturer>
-    <manufacturer>
+    </testData>
+    <testData>
         <data>
-            <fullname></fullname>
-            <displayname></displayname>
-            <isDeleted></isDeleted>
         </data>
-    </manufacturer>
-    <manufacturer>
+    </testData>
+    <testData>
         <data>
             <fullname>dyFAqExNj56gW81hdev8c8FydfsdfcD6oqPjN0npMa938O0NPqchcEzTmbRaSrg4Ea6qdNstQMxp3LoNIMwcOfhEwo745E66UcLLfnawNkalMEYnO12IOx8toevMroHU9i4t2x9q90TenyNvt7olujeASKXrXmZtbEpJVmyXouf3sBNahzO67Fm516GqUrD443kB2q59aNbiD3jKXs2CMoYPH65KfHa4dYhnndFDDMJ4Rqhyogct6gfLTOHEQyVmLFza</fullname>
-            <displayname></displayname>
-            <isDeleted></isDeleted>
         </data>
-    </manufacturer>
-    <manufacturer>
+    </testData>
+    <testData>
         <data>
             <fullname>normal length</fullname>
             <displayname>dyFAqExNj56gW81hdasdfev8c8FycD6oqsdfsdfsPjN0npMa938O0NPqchcEzTmbRaSrg4Ea6qdNstQMxp3LoNIMwcOfhEwo745E66UcLLfnawNkalMEYnO12IOx8toevMroHU9i4t2x9q90TenyNvt7olujeASKXrXmZtbEpJVmyXouf3sBNahzO67Fm516GqUrD443kB2q59aNbiD3jKXs2CMoYPH65KfHa4dYhnndFDDMJ4Rqhyogct6gfLTOHEQyVmLFza</displayname>
             <isDeleted>false</isDeleted>
         </data>
-    </manufacturer>
-</manufacturers>
+    </testData>
+</manufacturersBadData>

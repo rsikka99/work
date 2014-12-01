@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<quotes>
-    <quote>
+<quotesGoodData>
+    <testData>
         <data>
             <pageCoverageMonochrome>1</pageCoverageMonochrome>
             <pageCoverageColor>99</pageCoverageColor>
@@ -10,8 +10,8 @@
             <dealerMonochromeRankSetArray>8</dealerMonochromeRankSetArray>
             <dealerColorRankSetArray>29</dealerColorRankSetArray>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>0.1</pageCoverageMonochrome>
             <pageCoverageColor>99.99999999</pageCoverageColor>
@@ -21,8 +21,8 @@
             <dealerMonochromeRankSetArray>6</dealerMonochromeRankSetArray>
             <dealerColorRankSetArray>3</dealerColorRankSetArray>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>89</pageCoverageMonochrome>
             <pageCoverageColor>18</pageCoverageColor>
@@ -32,8 +32,8 @@
             <dealerMonochromeRankSetArray>29</dealerMonochromeRankSetArray>
             <dealerColorRankSetArray>8</dealerColorRankSetArray>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>95</pageCoverageMonochrome>
             <pageCoverageColor>11</pageCoverageColor>
@@ -43,8 +43,8 @@
             <dealerMonochromeRankSetArray>8</dealerMonochromeRankSetArray>
             <dealerColorRankSetArray>29</dealerColorRankSetArray>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>0.000000001</pageCoverageMonochrome>
             <pageCoverageColor>99.99999999</pageCoverageColor>
@@ -54,8 +54,8 @@
             <dealerMonochromeRankSetArray>3</dealerMonochromeRankSetArray>
             <dealerColorRankSetArray>6</dealerColorRankSetArray>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>0.000000001</pageCoverageMonochrome>
             <pageCoverageColor>99.99999999</pageCoverageColor>
@@ -65,5 +65,5 @@
             <dealerMonochromeRankSetArray>3</dealerMonochromeRankSetArray>
             <dealerColorRankSetArray>6</dealerColorRankSetArray>
         </data>
-    </quote>
-</quotes>
+    </testData>
+</quotesGoodData>

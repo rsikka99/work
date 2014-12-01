@@ -1,26 +1,21 @@
-<leastingRates>
-    <leasingRate>
+<leasingRatesBadData>
+    <testData>
         <data>
-            <name></name>
-            <dealerId></dealerId>
         </data>
-    </leasingRate>
-    <leasingRate>
+    </testData>
+    <testData>
         <data>
             <name>4KODS9O2AL3E0TE9C236262FDPAPKWXMAQO9adsfaJKNC7TFUZ5D272C5HRWJUCDLMKHWDDAMJLKDB4ZN8X2NOMFPY9Z9FTQ0T82842SO0NITVP1FJ0GTKADWODYEVH538JPHFBA62BR48E4FJQIZMMRA2LQI0TJE6E4LUZEN89UENPN9DYUUFYHY7SIIUW50HSZOGWJGH3PSG2Q9JR5QQIGY63BZ7ZPL3M8S57QO2F752TOFA9K0T1STPHSNRW2CRENDA1EM</name>
             <dealerId>1</dealerId>
         </data>
-    </leasingRate>
-    <leasingRate>
+    </testData>
+    <testData>
         <data>
-            <name></name>
             <dealerId> </dealerId>
         </data>
-    </leasingRate>
-    <leasingRate>
+    </testData>
+    <testData>
         <data>
-            <name></name>
-            <dealerId></dealerId>
         </data>
-    </leasingRate>
-</leastingRates>
+    </testData>
+</leasingRatesBadData>

@@ -3,12 +3,39 @@
 /**
  * Class Admin_Form_LeasingSchemaTest
  */
-class Admin_Form_LeasingSchemaTest extends Zend_Test_PHPUnit_ControllerTestCase
+class Admin_Form_LeasingSchemaTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
     /**
      * @var Admin_Form_LeasingSchema
      */
     protected $_form;
+
+    /**
+     * @return Admin_Form_LeasingSchema
+     */
+    public function getForm ()
+    {
+        $this->buildForm();
+
+        return $this->_form;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGoodData ()
+    {
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_leasingSchemaFormTest.xml");
+    }
+
+    /**
+     * @return array
+     */
+    public function getBadData ()
+    {
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_leasingSchemaFormTest.xml");
+    }
+
 
     /**
      * Builds the form to be used for testing
@@ -27,62 +54,11 @@ class Admin_Form_LeasingSchemaTest extends Zend_Test_PHPUnit_ControllerTestCase
         $this->_form = new Admin_Form_LeasingSchema($dealerManagement, array('view' => $view));
     }
 
-    /**
-     * This function loads an XML file of good data into arrays to be tested in the form
-     */
-    public function goodLeasingSchemaData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_leasingSchemaFormTest.xml");
-        $data = array();
-        foreach ($xml->leasingRate as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * This function loads an XML file of bad data into arrays to be tested in the form
-     */
-    public function badLeasingSchemaData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_leasingSchemaFormTest.xml");
-        $data = array();
-        foreach ($xml->leasingRate as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Test the form using valid/required data
-     *
-     * @dataProvider goodLeasingSchemaData
-     */
-    public function testFormAcceptsValidData ($data)
-    {
-        $this->buildForm();
-        $this->assertTrue($this->_form->isValid((array)$data), "Leasing schema form did not accept good data.");
-    }
-
-    /**
-     * Test the form using invalid/missing data
-     *
-     * @dataProvider badLeasingSchemaData
-     */
-    public function testFormRejectsInvalidData ($data)
-    {
-        $this->buildForm();
-        $this->assertFalse($this->_form->isValid((array)$data), "Leasing schema form did not reject bad data.");
-    }
 
     /**
      * Test the form using valid/required data as an admin
      *
-     * @dataProvider goodLeasingSchemaData
+     * @dataProvider getGoodData
      */
     public function testFormAcceptsValidDataAsAdmin ($data)
     {
@@ -93,7 +69,7 @@ class Admin_Form_LeasingSchemaTest extends Zend_Test_PHPUnit_ControllerTestCase
     /**
      * Test the form using invalid/missing data as an admin
      *
-     * @dataProvider badLeasingSchemaData
+     * @dataProvider getBadData
      */
     public function testFormRejectsInvalidDataAsAdmin ($data)
     {

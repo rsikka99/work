@@ -1,6 +1,6 @@
 <?php
 
-class Proposalgen_Form_MasterDeviceManagement_HardwareOptimizationsFormTest extends PHPUnit_Framework_TestCase
+class Proposalgen_Form_MasterDeviceManagement_HardwareOptimizationsFormTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
     /**
      * @return Proposalgen_Form_MasterDeviceManagement_HardwareOptimization
@@ -11,57 +11,19 @@ class Proposalgen_Form_MasterDeviceManagement_HardwareOptimizationsFormTest exte
     }
 
     /**
-     * This function loads an XML file of good data into arrays to be tested in the form
+     * @return array
      */
-    public function goodData ()
+    public function getGoodData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_hardwareOptimizationsFormTest.xml");
-        $data = array();
-
-        foreach ($xml->hardwareOptimization as $row)
-        {
-            $row    = json_decode(json_encode($row), 1);
-            $data[] = $row;
-        }
-
-        return $data;
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_hardwareOptimizationsFormTest.xml");
     }
 
     /**
-     * @dataProvider goodData
-     *               Tests whether the form accepts valid data
+     * @return array
      */
-    public function testFormAcceptsValidData ($data)
+    public function getBadData ()
     {
-        $form = $this->getForm();
-        $this->assertTrue($form->isValid($data), implode(' | ', $form->getErrorMessages()));
-    }
-
-    /**
-     * This function loads an XML file of good data into arrays to be tested in the form
-     */
-    public function badData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_hardwareOptimizationsFormTest.xml");
-        $data = array();
-
-        foreach ($xml->hardwareOptimization as $row)
-        {
-            $row    = json_decode(json_encode($row), 1);
-            $data[] = $row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * @dataProvider badData
-     *               Tests if the form errors on invalid data
-     */
-    public function testFormRejectsBadData ($data)
-    {
-        $form = $this->getForm();
-        $this->assertFalse($form->isValid($data), implode(' | ', $form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_hardwareOptimizationsFormTest.xml");
     }
 }
 

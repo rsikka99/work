@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<settings>
-    <setting>
+<hardwareBadData>
+    <testData>
         <data>
             <name>Jim</name>
             <costThreshold>this is bad</costThreshold>
@@ -12,8 +12,8 @@
             <targetMonochromeCostPerPage>04</targetMonochromeCostPerPage>
             <targetColorCostPerPage>5.1</targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <name>Spock</name>
             <costThreshold>100</costThreshold>
@@ -25,8 +25,8 @@
             <targetMonochromeCostPerPage>80</targetMonochromeCostPerPage>
             <targetColorCostPerPage>100</targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <name>Leonard</name>
             <costThreshold>-9001</costThreshold>
@@ -38,8 +38,8 @@
             <targetMonochromeCostPerPage>5</targetMonochromeCostPerPage>
             <targetColorCostPerPage>5</targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <name>Montgomery</name>
             <costThreshold>9001</costThreshold>
@@ -51,8 +51,8 @@
             <targetMonochromeCostPerPage></targetMonochromeCostPerPage>
             <targetColorCostPerPage></targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <name>Hikaru</name>
             <costThreshold></costThreshold>
@@ -64,8 +64,8 @@
             <targetMonochromeCostPerPage>2</targetMonochromeCostPerPage>
             <targetColorCostPerPage>1</targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <name>1337h4xx0r ▲</name>
             <costThreshold>▲</costThreshold>
@@ -77,5 +77,5 @@
             <targetMonochromeCostPerPage>▲</targetMonochromeCostPerPage>
             <targetColorCostPerPage>▲</targetColorCostPerPage>
         </data>
-    </setting>
-</settings>
+    </testData>
+</hardwareBadData>

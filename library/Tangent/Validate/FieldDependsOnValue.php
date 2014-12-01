@@ -151,7 +151,7 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
             {
                 foreach ($this->_validatorsToRun as $validator)
                 {
-                    if (!$validator->isValid($value))
+                    if (!$validator->isValid($value, $context))
                     {
                         foreach ($validator->getMessages() as $key => $message)
                         {
@@ -172,7 +172,7 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
             {
                 foreach ($this->_validatorsToRun as $validator)
                 {
-                    if (!$validator->isValid($value))
+                    if (!$validator->isValid($value, $context))
                     {
                         foreach ($validator->getMessages() as $message)
                         {

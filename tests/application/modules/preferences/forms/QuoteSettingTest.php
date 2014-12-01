@@ -3,88 +3,31 @@
 /**
  * Class Preferences_Form_QuoteSettingTest
  */
-class Preferences_Form_QuoteSettingTest extends PHPUnit_Framework_TestCase
+class Preferences_Form_QuoteSettingTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
+
     /**
-     * @var Preferences_Form_QuoteSetting
+     * @return Preferences_Form_QuoteSetting
      */
-    protected $_form;
-
-    public function setUp ()
+    public function getForm ()
     {
-        $this->_form = new Preferences_Form_QuoteSetting();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
+        return new Preferences_Form_QuoteSetting();
     }
 
     /**
-     * This function loads an XML file of good data into arrays to be tested in the form
+     * @return array
      */
-    public function goodQuoteSettingPrefData ()
+    public function getGoodData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_QuoteSettingPrefs.xml");
-        $data = array();
-        foreach ($xml->quote as $row)
-        {
-            $row                                         = json_decode(json_encode($row), 1);
-            $row["data"]["dealerMonochromeRankSetArray"] = explode(',', $row["data"]["dealerMonochromeRankSetArray"]);
-            $row["data"]["dealerColorRankSetArray"]      = explode(',', $row["data"]["dealerColorRankSetArray"]);
-            $data[]                                      = (array)$row;
-        }
-
-        return $data;
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_QuoteSettingPrefs.xml");
     }
 
     /**
-     * This function loads an XML file of bad data into arrays to be tested in the form
+     * @return array
      */
-    public function badQuoteSettingPrefData ()
+    public function getBadData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_QuoteSettingPrefs.xml");
-        $data = array();
-        foreach ($xml->quote as $row)
-        {
-            $row = json_decode(json_encode($row), 1);
-            if (isset($row["data"]["dealerMonochromeRankSetArray"]))
-            {
-                $row["data"]["dealerMonochromeRankSetArray"] = explode(',', $row["data"]["dealerMonochromeRankSetArray"]);
-            }
-            if (isset($row["data"]["dealerColorRankSetArray"]))
-            {
-                $row["data"]["dealerColorRankSetArray"] = explode(',', $row["data"]["dealerColorRankSetArray"]);
-            }
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Test the form using valid data
-     *
-     *
-     * @dataProvider goodQuoteSettingPrefData
-     */
-    public function testFormAcceptsValidData ($data)
-    {
-        $this->assertTrue($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
-    }
-
-
-    /**
-     * Test the form using bad data
-     *
-     * @dataProvider badQuoteSettingPrefData
-     */
-    public
-    function testFormRejectsBadData ($data)
-    {
-        $this->assertFalse($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_QuoteSettingPrefs.xml");
     }
 
 }

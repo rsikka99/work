@@ -3,75 +3,31 @@
 /**
  * Class Hardwareoptimization_Form_DeviceSwapsTest
  */
-class Hardwareoptimization_Form_DeviceSwapsTest extends PHPUnit_Framework_TestCase
+class Hardwareoptimization_Form_DeviceSwapsTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
     /**
-     * @var Hardwareoptimization_Form_DeviceSwaps
-     */
-    protected $_form;
-
-    public function setUp ()
-    {
-        $this->_form = new Hardwareoptimization_Form_DeviceSwaps();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
-    }
-
-    /**
-     * This function loads an XML file of good data into arrays to be tested in the form
-     */
-    public function goodHOSettingData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_deviceSwapsSettingTest.xml");
-        $data = array();
-        foreach ($xml->deviceSwap as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * This function loads an XML file of bad data into arrays to be tested in the form
-     */
-    public function badHOSettingData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_deviceSwapsSettingTest.xml");
-        $data = array();
-        foreach ($xml->deviceSwap as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Test the form using valid data
+     * Gets the form to be used in the test
      *
-     *
-     * @dataProvider goodHOSettingData
+     * @return Hardwareoptimization_Form_DeviceSwaps|Zend_Form
      */
-    public function testFormAcceptsValidData ($data)
+    public function getForm ()
     {
-        $this->assertTrue($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
+        return new Hardwareoptimization_Form_DeviceSwaps();
     }
-
 
     /**
-     * Test the form using bad data
-     *
-     * @dataProvider badHOSettingData
+     * @return array|mixed
      */
-    public function testFormRejectsBadData ($data)
+    public function getGoodData ()
     {
-        $this->assertFalse($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_deviceSwapsSettingTest.xml");
     }
 
+    /**
+     * @return array|mixed
+     */
+    public function getBadData ()
+    {
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_deviceSwapsSettingTest.xml");
+    }
 }

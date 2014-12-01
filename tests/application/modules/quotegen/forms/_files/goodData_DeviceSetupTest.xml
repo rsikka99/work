@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<devices>
-    <device>
+<devicesGoodData>
+    <testData>
         <data>
             <manufacturerId>1</manufacturerId>
             <modelName>GHz</modelName>
@@ -22,10 +22,9 @@
             <ppmBlack>100</ppmBlack>
             <ppmColor>100</ppmColor>
             <isLeased>false</isLeased>
-            <leasedTonerYield></leasedTonerYield>
         </data>
-    </device>
-    <device>
+    </testData>
+    <testData>
         <data>
             <manufacturerId>1</manufacturerId>
             <modelName>GHz</modelName>
@@ -35,10 +34,6 @@
             <description>stuff goes here</description>
             <cost>1000</cost>
             <tonerConfigId>1</tonerConfigId>
-            <isCopier></isCopier>
-            <isFax></isFax>
-            <isDuplex></isDuplex>
-            <reportsTonerLevels></reportsTonerLevels>
             <wattsPowerNormal>1000</wattsPowerNormal>
             <wattsPowerIdle>1000</wattsPowerIdle>
             <partsCostPerPage>2</partsCostPerPage>
@@ -46,24 +41,16 @@
             <launchDate>2008-09-18</launchDate>
             <ppmBlack>100</ppmBlack>
             <ppmColor>100</ppmColor>
-            <isLeased></isLeased>
-            <leasedTonerYield></leasedTonerYield>
+            <isLeased>false</isLeased>
         </data>
-    </device>
-    <device>
+    </testData>
+    <testData>
         <data>
             <manufacturerId>1</manufacturerId>
             <modelName>GHz</modelName>
-            <can_sell></can_sell>
-            <oemSku></oemSku>
-            <dealerSku></dealerSku>
+            <can_sell>0</can_sell>
             <description>stuff goes here</description>
-            <cost></cost>
             <tonerConfigId>1</tonerConfigId>
-            <isCopier></isCopier>
-            <isFax></isFax>
-            <isDuplex></isDuplex>
-            <reportsTonerLevels></reportsTonerLevels>
             <wattsPowerNormal>1000</wattsPowerNormal>
             <wattsPowerIdle>1000</wattsPowerIdle>
             <partsCostPerPage>2</partsCostPerPage>
@@ -71,8 +58,7 @@
             <launchDate>2008-09-18</launchDate>
             <ppmBlack>100</ppmBlack>
             <ppmColor>100</ppmColor>
-            <isLeased></isLeased>
-            <leasedTonerYield></leasedTonerYield>
+            <isLeased>false</isLeased>
         </data>
-    </device>
-</devices>
+    </testData>
+</devicesGoodData>

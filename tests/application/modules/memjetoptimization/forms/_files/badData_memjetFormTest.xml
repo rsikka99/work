@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<settings>
-    <setting>
+<memjetFormBadData>
+    <testData>
         <data>
             <name>Jim</name>
             <costThreshold>10</costThreshold>
@@ -14,8 +14,8 @@
             <blackToColorRatio>99</blackToColorRatio>
             <lossTreshold>456489794564897</lossTreshold>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <name>Spock</name>
             <costThreshold>10</costThreshold>
@@ -29,8 +29,8 @@
             <blackToColorRatio>99</blackToColorRatio>
             <lossTreshold>2000000000</lossTreshold>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <name>Leonard</name>
             <costThreshold>10</costThreshold>
@@ -44,8 +44,8 @@
             <blackToColorRatio>99</blackToColorRatio>
             <lossTreshold>9</lossTreshold>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <name>Montgomery</name>
             <costThreshold>10</costThreshold>
@@ -59,8 +59,8 @@
             <blackToColorRatio>99</blackToColorRatio>
             <lossTreshold>1999999999</lossTreshold>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <name>Hikaru</name>
             <costThreshold>10</costThreshold>
@@ -74,8 +74,8 @@
             <blackToColorRatio>99</blackToColorRatio>
             <lossTreshold>0</lossTreshold>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <name>1337h4xx0r ▲</name>
             <costThreshold>10</costThreshold>
@@ -89,5 +89,5 @@
             <blackToColorRatio>99</blackToColorRatio>
             <lossTreshold>1999999999</lossTreshold>
         </data>
-    </setting>
-</settings>
+    </testData>
+</memjetFormBadData>

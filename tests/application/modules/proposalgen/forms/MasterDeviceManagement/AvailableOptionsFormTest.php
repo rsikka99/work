@@ -1,73 +1,30 @@
 <?php
 
-class Proposalgen_Form_MasterDeviceManagement_AvailableOptionsFormTest extends PHPUnit_Framework_TestCase
+class Proposalgen_Form_MasterDeviceManagement_AvailableOptionsFormTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
-    protected $_form;
-
-    public function setUp ()
+    /**
+     * @return Proposalgen_Form_MasterDeviceManagement_AvailableOptions
+     */
+    public function getForm ()
     {
-        $this->_form = new Proposalgen_Form_MasterDeviceManagement_AvailableOptions();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
+        return new Proposalgen_Form_MasterDeviceManagement_AvailableOptions();
     }
 
     /**
-     * This function loads an XML file of good data into arrays to be tested in the form
+     * @return array
      */
-    public function goodData ()
+    public function getGoodData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_availableOptionsFormTest.xml");
-        $data = array();
-
-        foreach ($xml->option as $row)
-        {
-            $row    = json_decode(json_encode($row), 1);
-            $data[] = $row;
-        }
-
-        return $data;
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_availableOptionsFormTest.xml");
     }
 
     /**
-     * Tests whether the form accepts valid data
-     *
-     * @dataProvider goodData
+     * @return array
      */
-    public function testFormAcceptsValidData ($data)
+    public function getBadData ()
     {
-        $this->assertTrue($this->_form->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_availableOptionsFormTest.xml");
     }
 
-    /**
-     * This function loads an XML file of good data into arrays to be tested in the form
-     */
-    public function badData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_availableOptionsFormTest.xml");
-        $data = array();
-
-        foreach ($xml->option as $row)
-        {
-            $row    = json_decode(json_encode($row), 1);
-            $data[] = $row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Tests if the form errors on invalid data
-     *
-     * @dataProvider badData
-     */
-    public function testFormRejectsBadData ($data)
-    {
-        $this->assertFalse($this->_form->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
-    }
 }
 

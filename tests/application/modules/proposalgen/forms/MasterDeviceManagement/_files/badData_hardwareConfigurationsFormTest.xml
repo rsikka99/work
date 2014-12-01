@@ -1,29 +1,29 @@
 <?xml version="1.0" standalone="yes"?>
-<hardwareConfigurations>
-    <hardwareConfiguration>
+<hardwareConfigurationsBadData>
+    <testData>
         <data>
             <hardwareConfigurationsoption1>2</hardwareConfigurationsoption1>
         </data>
-    </hardwareConfiguration>
-    <hardwareConfiguration>
+    </testData>
+    <testData>
         <data>
             <hardwareConfigurationsname>dsa</hardwareConfigurationsname>
             <hardwareConfigurationsdescription>asd</hardwareConfigurationsdescription>
             <hardwareConfigurationsoption1>sas</hardwareConfigurationsoption1>
         </data>
-    </hardwareConfiguration>
-    <hardwareConfiguration>
+    </testData>
+    <testData>
         <data>
             <hardwareConfigurationsname>dsa</hardwareConfigurationsname>
             <hardwareConfigurationsdescription>asd</hardwareConfigurationsdescription>
             <hardwareConfigurationsoption1>1001</hardwareConfigurationsoption1>
         </data>
-    </hardwareConfiguration>
-    <hardwareConfiguration>
+    </testData>
+    <testData>
         <data>
             <hardwareConfigurationsname>dsa</hardwareConfigurationsname>
             <hardwareConfigurationsdescription>asd</hardwareConfigurationsdescription>
             <hardwareConfigurationsoption1>-1</hardwareConfigurationsoption1>
         </data>
-    </hardwareConfiguration>
-</hardwareConfigurations>
+    </testData>
+</hardwareConfigurationsBadData>

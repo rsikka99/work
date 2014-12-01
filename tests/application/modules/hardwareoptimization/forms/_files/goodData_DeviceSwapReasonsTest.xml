@@ -1,31 +1,31 @@
 <?xml version="1.0" standalone="yes"?>
-<settings>
-    <setting>
+<deviceSwapReasonsGoodData>
+    <testData>
         <data>
             <reasonCategory>1</reasonCategory>
             <reason>this is text</reason>
             <isDefault>true</isDefault>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <reasonCategory>2</reasonCategory>
             <reason>this is text</reason>
             <isDefault>1</isDefault>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <reasonCategory>2</reasonCategory>
             <reason>abcdefghijklmnopqrstuvwxyz</reason>
             <isDefault>false</isDefault>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <reasonCategory>1</reasonCategory>
             <reason>abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz</reason>
             <isDefault>0</isDefault>
         </data>
-    </setting>
-</settings>
+    </testData>
+</deviceSwapReasonsGoodData>

@@ -76,7 +76,7 @@ class Hardwareoptimization_Form_DeviceSwaps extends Twitter_Bootstrap_Form_Horiz
 
 
         $this->addElement($maxPageCountElement);
-        $minPageCountElement->addValidator(new Tangent_Validate_LessThanFormValue($maxPageCountElement));
+        $minPageCountElement->addValidator(new Tangent_Validate_LessThanFormValue($maxPageCountElement->getName()));
         $this->addElement($minPageCountElement);
 
         $this->addDisplayGroup(array($masterDeviceElement, $minPageCountElement, $maxPageCountElement, $deviceTypeElement), 'devicesSwaps');

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<reportSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <reportSetting>
+<reportSettingsGoodData>
+    <testData>
         <data>
             <leasedBwCostPerPage>0.001</leasedBwCostPerPage>
             <leasedColorCostPerPage>4.99</leasedColorCostPerPage>
@@ -18,8 +18,8 @@
             <defaultPrinterCost>1000</defaultPrinterCost>
             <kilowattsPerHour>25</kilowattsPerHour>
         </data>
-    </reportSetting>
-    <reportSetting>
+    </testData>
+    <testData>
         <data>
             <leasedBwCostPerPage>0.001</leasedBwCostPerPage>
             <leasedColorCostPerPage>4.99</leasedColorCostPerPage>
@@ -37,8 +37,8 @@
             <defaultPrinterCost>1000</defaultPrinterCost>
             <kilowattsPerHour>0</kilowattsPerHour>
         </data>
-    </reportSetting>
-    <reportSetting>
+    </testData>
+    <testData>
         <data>
             <leasedBwCostPerPage>0.001</leasedBwCostPerPage>
             <leasedColorCostPerPage>4.99</leasedColorCostPerPage>
@@ -56,8 +56,8 @@
             <defaultPrinterCost>1000</defaultPrinterCost>
             <kilowattsPerHour>15</kilowattsPerHour>
         </data>
-    </reportSetting>
-    <reportSetting>
+    </testData>
+    <testData>
         <data>
             <leasedBwCostPerPage>0.001</leasedBwCostPerPage>
             <leasedColorCostPerPage>4.99</leasedColorCostPerPage>
@@ -75,5 +75,5 @@
             <defaultPrinterCost>1000</defaultPrinterCost>
             <kilowattsPerHour>0</kilowattsPerHour>
         </data>
-    </reportSetting>
-</reportSettings>
+    </testData>
+</reportSettingsGoodData>

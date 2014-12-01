@@ -3,110 +3,27 @@
 /**
  * Class Default_Form_ChangePasswordTest
  */
-class Default_Form_ChangePasswordTest extends PHPUnit_Framework_TestCase
+class Default_Form_ChangePasswordTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
-    /**
-     * @var Default_Form_ChangePassword
-     */
-    protected $_form;
 
-    public function setUp ()
+    public function getForm ()
     {
-        $this->_form = new Default_Form_ChangePassword();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
+        return new Default_Form_ChangePassword();
     }
 
     /**
-     * This function returns an array of good data to put into the form
-     *
-     * @return array
+     * @return array|mixed
      */
-    public function goodData ()
+    public function getGoodData ()
     {
-        return array(
-            array(
-                'asdfasdf',
-                'jimmy99',
-                'jimmy99'
-            ),
-            array(
-                'asdfasdf',
-                'C0Q6030IF22PXIJZHXT77LJL3D8AK7HEKMUFE10ODBWKJWBBWZLQN5WGRMKYM3I1ATE6ANG89UFEKBF9',
-                'C0Q6030IF22PXIJZHXT77LJL3D8AK7HEKMUFE10ODBWKJWBBWZLQN5WGRMKYM3I1ATE6ANG89UFEKBF9'
-            ),
-            array(
-                'asdfasdf',
-                'bob678',
-                'bob678'
-            )
-        );
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_ChangePasswordTest.xml");
     }
 
     /**
-     * Test the form using valid data
-     *
-     *
-     * @dataProvider goodData
+     * @return array|mixed
      */
-    public function testFormAcceptsValidData ($currentPassword, $password, $passwordConfirm)
+    public function getBadData ()
     {
-        $data = array(
-            'current_password' => $currentPassword,
-            'password'         => $password,
-            'password_confirm' => $passwordConfirm
-        );
-        $this->assertTrue($this->_form->isValid($data), "Change password form did not accept good data.");
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_ChangePasswordTest.xml");
     }
-
-    /**
-     *  This function returns an array of bad data to put into the form
-     *
-     * @return array
-     */
-    public function badData ()
-    {
-        return array(
-            array(
-                'adsf',
-                'joe12345',
-                'joe12345'
-            ),
-            array(
-                'asdfasdf',
-                'jimmy99',
-                'joe12345'
-            ),
-            array(
-                'asdfasdf',
-                'joe',
-                'joe'
-            ), array(
-                'asdfasdf',
-                'C0Q6030IF22PXIJZHXT77LJL3D8AK7HEKMUFE10ODBWKJWBBWZLQN5WGRMKYM3I1ATE6ANG89UFEKBF91',
-                'C0Q6030IF22PXIJZHXT77LJL3D8AK7HEKMUFE10ODBWKJWBBWZLQN5WGRMKYM3I1ATE6ANG89UFEKBF91'
-            ),
-        );
-    }
-
-    /**
-     * Test the form using bad data
-     *
-     * @dataProvider badData
-     */
-    public function testFormRejectsBadData ($currentPassword, $password, $passwordConfirm)
-    {
-        $data = array(
-            'current_password' => $currentPassword,
-            'password'         => $password,
-            'password_confirm' => $passwordConfirm
-        );
-        $this->assertFalse($this->_form->isValid($data), "Change password form accepted bad data!");
-    }
-
 }

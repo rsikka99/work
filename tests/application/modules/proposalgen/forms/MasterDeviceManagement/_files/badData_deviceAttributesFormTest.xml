@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<deviceAttributes>
-    <deviceAttribute>
+<deviceAttributesBadData>
+    <testData>
         <data>
             <isCopier>3</isCopier>
             <isDuplex>1</isDuplex>
@@ -14,5 +14,5 @@
             <wattsPowerNormal>123</wattsPowerNormal>
             <wattsPowerIdle>55</wattsPowerIdle>
         </data>
-    </deviceAttribute>
-</deviceAttributes>
+    </testData>
+</deviceAttributesBadData>

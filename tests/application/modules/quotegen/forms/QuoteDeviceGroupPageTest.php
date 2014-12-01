@@ -3,75 +3,30 @@
 /**
  * Class Quotegen_Form_QuoteDeviceGroupPageTest
  */
-class Quotegen_Form_QuoteDeviceGroupPageTest extends PHPUnit_Framework_TestCase
+class Quotegen_Form_QuoteDeviceGroupPageTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
+
     /**
-     * @var Quotegen_Form_QuoteDeviceGroupPage
+     * @return Quotegen_Form_QuoteDeviceGroupPage
      */
-    protected $_form;
-
-    public function setUp ()
+    public function getForm ()
     {
-        $this->_form = new Quotegen_Form_QuoteDeviceGroupPage();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
+        return new Quotegen_Form_QuoteDeviceGroupPage();
     }
 
     /**
-     * This function loads an XML file of good data into arrays to be tested in the form
+     * @return array
      */
-    public function goodQuoteDeviceGroupPageData ()
+    public function getGoodData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_QuoteDeviceGroupPageTest.xml");
-        $data = array();
-        foreach ($xml->quote as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_QuoteDeviceGroupPageTest.xml");
     }
 
     /**
-     * This function loads an XML file of bad data into arrays to be tested in the form
+     * @return array
      */
-    public function badQuoteDeviceGroupPageData ()
+    public function getBadData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_QuoteDeviceGroupPageTest.xml");
-        $data = array();
-        foreach ($xml->quote as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Test the form using valid data
-     *
-     *
-     * @dataProvider goodQuoteDeviceGroupPageData
-     */
-    public function testFormAcceptsValidData ($data)
-    {
-        $this->assertTrue($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
-    }
-
-
-    /**
-     * Test the form using bad data
-     *
-     * @dataProvider badQuoteDeviceGroupPageData
-     */
-    public
-    function testFormRejectsBadData ($data)
-    {
-        $this->assertFalse($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_QuoteDeviceGroupPageTest.xml");
     }
 }

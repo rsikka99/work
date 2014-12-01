@@ -1,33 +1,28 @@
 <?xml version="1.0" standalone="yes"?>
-<categorys>
-    <category>
+<categorysBadData>
+    <testData>
         <data>
             <name>Jim</name>
-            <description></description>
         </data>
-    </category>
-    <category>
+    </testData>
+    <testData>
         <data>
-            <name></name>
             <description>As a Starfleet officer in the latter half of the 23rd century, he served aboard the starship USS Enterprise as science officer under Captain Christopher Pike, as first officer and science officer under Captain James T. Kirk, and as the Enterprise's commanding officer during her tenure as a training vessel. In the 24th century, Spock became a celebrated ambassador and adviser to the Federation's leadership. He disappeared in 2387 after saving the Federation from a supernova that destroyed Romulus, causing the creation of the alternate reality.</description>
         </data>
-    </category>
-    <category>
+    </testData>
+    <testData>
         <data>
             <name>73n0rD</name>
-            <description></description>
         </data>
-    </category>
-    <category>
+    </testData>
+    <testData>
         <data>
-            <name></name>
             <description>ZZlyOqmBmNxb5xFTskvjceA3DxYCGUR8Sp4dWDLCWbTwYPI16eacP90iOfw5l0W</description>
         </data>
-    </category>
-    <category>
+    </testData>
+    <testData>
         <data>
             <name>Hikaru</name>
-            <description></description>
         </data>
-    </category>
-</categorys>
+    </testData>
+</categorysBadData>

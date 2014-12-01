@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<healthchecks>
-    <healthcheck>
+<healthchecksGoodData>
+    <testData>
         <data>
             <reportDate>08/09/2011</reportDate>
             <healthcheckMargin>0.000000001</healthcheckMargin>
@@ -24,8 +24,8 @@
             <useDevicePageCoverages>1</useDevicePageCoverages>
             <customerMonochromeCostPerPage>5</customerMonochromeCostPerPage>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <reportDate>11/12/2015</reportDate>
             <healthcheckMargin>98.9999999</healthcheckMargin>
@@ -48,8 +48,8 @@
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
             <useDevicePageCoverages>0</useDevicePageCoverages>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <reportDate>11/12/2011</reportDate>
             <healthcheckMargin>0.000000001</healthcheckMargin>
@@ -73,8 +73,8 @@
             <useDevicePageCoverages>1</useDevicePageCoverages>
             <customerMonochromeCostPerPage>2</customerMonochromeCostPerPage>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <reportDate>11/12/2011</reportDate>
             <healthcheckMargin>0.000000001</healthcheckMargin>
@@ -98,8 +98,8 @@
             <useDevicePageCoverages>1</useDevicePageCoverages>
             <customerMonochromeCostPerPage>1</customerMonochromeCostPerPage>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <reportDate>11/12/2011</reportDate>
             <healthcheckMargin>0.000000001</healthcheckMargin>
@@ -123,8 +123,8 @@
             <useDevicePageCoverages>1</useDevicePageCoverages>
             <customerMonochromeCostPerPage>2</customerMonochromeCostPerPage>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <reportDate>11/12/2011</reportDate>
             <healthcheckMargin>0.000000001</healthcheckMargin>
@@ -148,5 +148,5 @@
             <useDevicePageCoverages>1</useDevicePageCoverages>
             <customerMonochromeCostPerPage>4</customerMonochromeCostPerPage>
         </data>
-    </healthcheck>
-</healthchecks>
+    </testData>
+</healthchecksGoodData>

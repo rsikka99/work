@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<settings>
-    <setting>
+<hardwareOptSettingBadData>
+    <testData>
         <data>
             <costThreshold>this is bad</costThreshold>
             <pageCoverageMonochrome>100</pageCoverageMonochrome>
@@ -11,8 +11,8 @@
             <targetMonochromeCostPerPage>04</targetMonochromeCostPerPage>
             <targetColorCostPerPage>5.1</targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <costThreshold>100</costThreshold>
             <pageCoverageMonochrome>200</pageCoverageMonochrome>
@@ -23,8 +23,8 @@
             <targetMonochromeCostPerPage>80</targetMonochromeCostPerPage>
             <targetColorCostPerPage>100</targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <costThreshold>-9001</costThreshold>
             <pageCoverageMonochrome>-1</pageCoverageMonochrome>
@@ -35,8 +35,8 @@
             <targetMonochromeCostPerPage>5</targetMonochromeCostPerPage>
             <targetColorCostPerPage>5</targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <costThreshold>9001</costThreshold>
             <pageCoverageMonochrome>99</pageCoverageMonochrome>
@@ -47,8 +47,8 @@
             <targetMonochromeCostPerPage></targetMonochromeCostPerPage>
             <targetColorCostPerPage></targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <costThreshold></costThreshold>
             <pageCoverageMonochrome></pageCoverageMonochrome>
@@ -59,8 +59,8 @@
             <targetMonochromeCostPerPage>2</targetMonochromeCostPerPage>
             <targetColorCostPerPage>1</targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <costThreshold>▲</costThreshold>
             <pageCoverageMonochrome>▲</pageCoverageMonochrome>
@@ -71,5 +71,5 @@
             <targetMonochromeCostPerPage>▲</targetMonochromeCostPerPage>
             <targetColorCostPerPage>▲</targetColorCostPerPage>
         </data>
-    </setting>
-</settings>
+    </testData>
+</hardwareOptSettingBadData>

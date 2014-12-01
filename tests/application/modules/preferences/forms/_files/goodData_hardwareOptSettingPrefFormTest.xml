@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<settings>
-    <setting>
+<hardwareOptSettingGoodData>
+    <testData>
         <data>
             <costThreshold>1</costThreshold>
             <pageCoverageMonochrome>100</pageCoverageMonochrome>
@@ -11,8 +11,8 @@
             <targetMonochromeCostPerPage>5</targetMonochromeCostPerPage>
             <targetColorCostPerPage>5</targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <costThreshold>9001</costThreshold>
             <pageCoverageMonochrome>0</pageCoverageMonochrome>
@@ -23,8 +23,8 @@
             <targetMonochromeCostPerPage>0.0000032523532</targetMonochromeCostPerPage>
             <targetColorCostPerPage>0.000000235235</targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <costThreshold>9001</costThreshold>
             <pageCoverageMonochrome>50</pageCoverageMonochrome>
@@ -35,8 +35,8 @@
             <targetMonochromeCostPerPage>0.0000002352523</targetMonochromeCostPerPage>
             <targetColorCostPerPage>0.00023523523</targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <costThreshold>54654545645646589946516894641561231898981364564.5</costThreshold>
             <pageCoverageMonochrome>99</pageCoverageMonochrome>
@@ -47,8 +47,8 @@
             <targetMonochromeCostPerPage>.4</targetMonochromeCostPerPage>
             <targetColorCostPerPage>2.5</targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <costThreshold>90044564689423331</costThreshold>
             <pageCoverageMonochrome>50</pageCoverageMonochrome>
@@ -59,8 +59,8 @@
             <targetMonochromeCostPerPage>0.0000000032523522</targetMonochromeCostPerPage>
             <targetColorCostPerPage>.0000000234241</targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <costThreshold>90044564689423331</costThreshold>
             <pageCoverageMonochrome>50</pageCoverageMonochrome>
@@ -71,8 +71,8 @@
             <targetMonochromeCostPerPage>2</targetMonochromeCostPerPage>
             <targetColorCostPerPage>1</targetColorCostPerPage>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <costThreshold>90044564689423331</costThreshold>
             <pageCoverageMonochrome>50</pageCoverageMonochrome>
@@ -83,5 +83,5 @@
             <targetMonochromeCostPerPage>2</targetMonochromeCostPerPage>
             <targetColorCostPerPage>1</targetColorCostPerPage>
         </data>
-    </setting>
-</settings>
+    </testData>
+</hardwareOptSettingGoodData>

@@ -1,92 +1,30 @@
 <?php
 
-class Default_Form_DealerTest extends PHPUnit_Framework_TestCase
+class Default_Form_DealerTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
-    /**
-     * @var Admin_Form_Dealer
-     */
-    protected $_form;
 
     /**
-     * Provides bad data for tests to use
+     * @return Admin_Form_Dealer
      */
-    public function badData ()
+    public function getForm ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_dealerTest.xml");
-        $data = array();
-
-        foreach ($xml->dealer as $dealer)
-        {
-            $data [] = (array)$dealer;
-        }
-
-        return $data;
+        return new Admin_Form_Dealer();
     }
 
     /**
-     * @dataProvider badData
+     * @return array
      */
-    public function testFormInvalid ($dealerName, $userLicenses)
+    public function getGoodData ()
     {
-        $data = array(
-            'dealerName'   => $dealerName,
-            'userLicenses' => $userLicenses,
-            'dealerLogo'   => null,
-        );
-
-        $_FILES = array(
-            'dealerLogoImage' => array(
-                'name'     => '',
-                'tmp_name' => '',
-                'type'     => 'null',
-                'size'     => '',
-                'error'    => 4
-            )
-        );
-
-        $this->assertFalse($this->getForm()->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_dealerTest.xml");
     }
 
     /**
-     * This function returns an array of good data to put into the form
+     * @return array
      */
-    public function goodData ()
+    public function getBadData ()
     {
-        $xmlStr = simplexml_load_file(__DIR__ . "/_files/goodData_dealerTest.xml");
-        $xml    = new SimpleXMLElement($xmlStr->asXML());
-
-        $data = array();
-
-        foreach ($xml->dealer as $dealer)
-        {
-            $data [] = (array)$dealer;
-        }
-
-        return $data;
-    }
-
-    /**
-     * @dataProvider goodData
-     */
-    public function testFormPass ($dealerName, $userLicenses)
-    {
-        $data = array(
-            'dealerName'   => $dealerName,
-            'userLicenses' => $userLicenses,
-            'dealerLogo'   => null,
-        );
-
-        $_FILES = array(
-            'dealerLogoImage' => array(
-                'name'     => '',
-                'tmp_name' => '',
-                'type'     => 'null',
-                'size'     => '',
-                'error'    => 4
-            )
-        );
-
-        $this->assertTrue($this->getForm()->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_dealerTest.xml");
     }
 
     public function testWillFailIncorrectKeys ()
@@ -99,18 +37,5 @@ class Default_Form_DealerTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->getForm()->isValid(array()));
     }
 
-    /**
-     * Returns an Admin_Form_Dealer object, creates empty if not set
-     *
-     * @return Admin_Form_Dealer
-     */
-    protected function getForm ()
-    {
-        if (!isset($this->_form))
-        {
-            $this->_form = new Admin_Form_Dealer();
-        }
 
-        return $this->_form;
-    }
 }

@@ -1,17 +1,17 @@
 <?xml version="1.0" standalone="yes"?>
-<deviceSwaps>
-    <deviceSwap>
+<deviceSwapsGoodData>
+    <testData>
         <data>
             <masterDeviceId>1</masterDeviceId>
             <minimumPageCount>0</minimumPageCount>
             <maximumPageCount>100</maximumPageCount>
         </data>
-    </deviceSwap>
-    <deviceSwap>
+    </testData>
+    <testData>
         <data>
             <masterDeviceId>1</masterDeviceId>
             <minimumPageCount>499</minimumPageCount>
             <maximumPageCount>500</maximumPageCount>
         </data>
-    </deviceSwap>
-</deviceSwaps>
+    </testData>
+</deviceSwapsGoodData>

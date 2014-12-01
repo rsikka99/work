@@ -3,75 +3,30 @@
 /**
  * Class Preferences_Form_HealthcheckSettingTest
  */
-class Preferences_Form_HealthcheckSettingTest extends PHPUnit_Framework_TestCase
+class Preferences_Form_HealthcheckSettingTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
     /**
-     * @var Preferences_Form_HealthcheckSetting
+     * @return Preferences_Form_HealthcheckSetting
      */
-    protected $_form;
-
-    public function setUp ()
+    public function getForm ()
     {
-        $this->_form = new Preferences_Form_HealthcheckSetting();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
+        return new Preferences_Form_HealthcheckSetting();
     }
 
     /**
-     * This function loads an XML file of good data into arrays to be tested in the form
+     * @return array
      */
-    public function goodHCFormSettingsPrefData ()
+    public function getGoodData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_HealthcheckFormSettingsPrefTest.xml");
-        $data = array();
-        foreach ($xml->healthcheck as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_HealthcheckFormSettingsPrefTest.xml");
     }
 
     /**
-     * This function loads an XML file of bad data into arrays to be tested in the form
+     * @return array
      */
-    public function badHCFormSettingsPrefData ()
+    public function getBadData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_HealthcheckFormSettingsPrefTest.xml");
-        $data = array();
-        foreach ($xml->healthcheck as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Test the form using valid data
-     *
-     *
-     * @dataProvider goodHCFormSettingsPrefData
-     */
-    public function testFormAcceptsValidData ($data)
-    {
-        $this->assertTrue($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
-    }
-
-
-    /**
-     * Test the form using bad data
-     *
-     * @dataProvider badHCFormSettingsPrefData
-     */
-    public function testFormRejectsBadData ($data)
-    {
-        $this->assertFalse($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_HealthcheckFormSettingsPrefTest.xml");
     }
 
 }

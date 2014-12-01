@@ -3,50 +3,30 @@
 /**
  * Class Proposalgen_Form_DeviceSwapTest
  */
-class Proposalgen_Form_DeviceSwapTest extends PHPUnit_Framework_TestCase
+class Proposalgen_Form_DeviceSwapTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
-    public function goodData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_deviceSwapsSettingTest.xml");
-        $data = array();
-        foreach ($xml->deviceSwap as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    public function badData ()
-    {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_deviceSwapsSettingTest.xml");
-        $data = array();
-        foreach ($xml->deviceSwap as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
     /**
-     * @dataProvider badData
+     * @return Hardwareoptimization_Form_DeviceSwaps
      */
-    public function testFormRejectsBadData ($data)
-    {
-        $this->assertFalse($this->getForm()->isValid((array)$data), implode(' | ', $this->getForm()->getErrorMessages()));
-    }
-
-    /**
-     * @dataProvider goodData
-     */
-    public function testFormAcceptsValidData ($data)
-    {
-        $this->assertTrue($this->getForm()->isValid((array)$data), implode(' | ', $this->getForm()->getErrorMessages()));
-    }
-
-    private function getForm ()
+    public function getForm ()
     {
         return new Hardwareoptimization_Form_DeviceSwaps();
     }
+
+    /**
+     * @return array
+     */
+    public function getGoodData ()
+    {
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_deviceSwapsSettingTest.xml");
+    }
+
+    /**
+     * @return array
+     */
+    public function getBadData ()
+    {
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_deviceSwapsSettingTest.xml");
+    }
+
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<healthchecks>
-    <healthcheck>
+<healthchecksBadData>
+    <testData>
         <data>
             <reportDate>01/18/2037</reportDate>
             <healthcheckMargin>100</healthcheckMargin>
@@ -23,8 +23,8 @@
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
             <customerMonochromeCostPerPage>6</customerMonochromeCostPerPage>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <reportDate>01/18/2037</reportDate>
             <healthcheckMargin>98.9999999</healthcheckMargin>
@@ -47,8 +47,8 @@
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
             <customerMonochromeCostPerPage>0</customerMonochromeCostPerPage>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <reportDate>01/18/2038</reportDate>
             <healthcheckMargin>0.000000001</healthcheckMargin>
@@ -71,8 +71,8 @@
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
             <customerMonochromeCostPerPage>5.1</customerMonochromeCostPerPage>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <reportDate>08/09/2037</reportDate>
             <healthcheckMargin>0.000000001</healthcheckMargin>
@@ -94,8 +94,8 @@
             <costToExecuteSuppliesOrder>0.000000001</costToExecuteSuppliesOrder>
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <reportDate>08/09/2038</reportDate>
             <healthcheckMargin>0.000000001</healthcheckMargin>
@@ -117,8 +117,8 @@
             <costToExecuteSuppliesOrder>0.000000001</costToExecuteSuppliesOrder>
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <reportDate>11/12/2011</reportDate>
             <healthcheckMargin>0.000000001</healthcheckMargin>
@@ -142,8 +142,8 @@
             <useDevicePageCoverages>1</useDevicePageCoverages>
             <customerMonochromeCostPerPage>7</customerMonochromeCostPerPage>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <reportDate>11/12/2011</reportDate>
             <healthcheckMargin>0.000000001</healthcheckMargin>
@@ -167,5 +167,5 @@
             <useDevicePageCoverages>1</useDevicePageCoverages>
             <customerColorCostPerPage>-5</customerColorCostPerPage>
         </data>
-    </healthcheck>
-</healthchecks>
+    </testData>
+</healthchecksBadData>

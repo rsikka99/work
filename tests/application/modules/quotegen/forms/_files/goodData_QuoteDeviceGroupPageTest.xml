@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<quotes>
-    <quote>
+<quotesGoodData>
+    <testData>
         <data>
             <name>Jim</name>
             <oemSku>string up to 255!</oemSku>
@@ -8,8 +8,8 @@
             <includedPrice>4999</includedPrice>
             <includedQuantity>49999</includedQuantity>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <name>Joe</name>
             <oemSku>this is required!</oemSku>
@@ -17,8 +17,8 @@
             <includedPrice>0</includedPrice>
             <includedQuantity>50000</includedQuantity>
         </data>
-    </quote>
-    <quote>
+    </testData>
+    <testData>
         <data>
             <name>Jim</name>
             <oemSku>string up to 255!</oemSku>
@@ -26,5 +26,5 @@
             <includedPrice>5000</includedPrice>
             <includedQuantity>0</includedQuantity>
         </data>
-    </quote>
-</quotes>
+    </testData>
+</quotesGoodData>

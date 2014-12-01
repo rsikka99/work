@@ -2,33 +2,33 @@
 <!---->
 <!--Only reasonCategory can have bad data in this form-->
 <!---->
-<settings>
-    <setting>
+<deviceSwapReasonsGoodData>
+    <testData>
         <data>
             <reasonCategory>0</reasonCategory>
             <reason>this is text</reason>
             <isDefault>true</isDefault>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <reasonCategory>20</reasonCategory>
             <reason></reason>
             <isDefault>-1</isDefault>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <reasonCategory></reasonCategory>
             <reason></reason>
             <isDefault>564564564654897xffxhs</isDefault>
         </data>
-    </setting>
-    <setting>
+    </testData>
+    <testData>
         <data>
             <reasonCategory>-1</reasonCategory>
             <reason>abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz</reason>
             <isDefault>-1</isDefault>
         </data>
-    </setting>
-</settings>
+    </testData>
+</deviceSwapReasonsGoodData>

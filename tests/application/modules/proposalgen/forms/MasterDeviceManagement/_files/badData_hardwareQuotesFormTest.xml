@@ -1,24 +1,24 @@
 <?xml version="1.0" standalone="yes"?>
-<hardwareQuotes>
-    <hardwareQuote>
+<hardwareQuotesBadData>
+    <testData>
         <data>
             <isSelling>1</isSelling>
             <oemSku>asdfg</oemSku>
             <dealerSku>gfsda</dealerSku>
             <cost>cake walk bro</cost>
         </data>
-    </hardwareQuote>
-    <hardwareQuote>
+    </testData>
+    <testData>
         <data>
             <isSelling>1</isSelling>
             <oemSku>1</oemSku>
             <dealerSku>1</dealerSku>
             <cost>fredyy</cost>
         </data>
-    </hardwareQuote>
-    <hardwareQuote>
+    </testData>
+    <testData>
         <data>
             <isSelling>1</isSelling>
         </data>
-    </hardwareQuote>
-</hardwareQuotes>
+    </testData>
+</hardwareQuotesBadData>

@@ -1,19 +1,12 @@
 <?xml version="1.0" standalone="yes"?>
-<devices>
-    <device>
+<devicesBadData>
+    <testData>
         <data>
             <manufacturerId>1</manufacturerId>
             <modelName>can sell true requires other fields</modelName>
             <can_sell>1</can_sell>
-            <oemSku></oemSku>
-            <dealerSku></dealerSku>
             <description>stuff goes here</description>
-            <cost></cost>
             <tonerConfigId>1</tonerConfigId>
-            <isCopier></isCopier>
-            <isFax></isFax>
-            <isDuplex></isDuplex>
-            <reportsTonerLevels></reportsTonerLevels>
             <wattsPowerNormal>1000</wattsPowerNormal>
             <wattsPowerIdle>1000</wattsPowerIdle>
             <partsCostPerPage>2</partsCostPerPage>
@@ -21,24 +14,13 @@
             <launchDate>2008-09-18</launchDate>
             <ppmBlack>100</ppmBlack>
             <ppmColor>100</ppmColor>
-            <isLeased></isLeased>
-            <leasedTonerYield></leasedTonerYield>
         </data>
-    </device>
-    <device>
+    </testData>
+    <testData>
         <data>
             <manufacturerId>1</manufacturerId>
             <modelName>tonerConfigId is required</modelName>
-            <can_sell></can_sell>
-            <oemSku></oemSku>
-            <dealerSku></dealerSku>
             <description>stuff goes here</description>
-            <cost></cost>
-            <tonerConfigId></tonerConfigId>
-            <isCopier></isCopier>
-            <isFax></isFax>
-            <isDuplex></isDuplex>
-            <reportsTonerLevels></reportsTonerLevels>
             <wattsPowerNormal>1000</wattsPowerNormal>
             <wattsPowerIdle>1000</wattsPowerIdle>
             <partsCostPerPage>2</partsCostPerPage>
@@ -46,24 +28,13 @@
             <launchDate>2008-09-18</launchDate>
             <ppmBlack>100</ppmBlack>
             <ppmColor>100</ppmColor>
-            <isLeased></isLeased>
-            <leasedTonerYield></leasedTonerYield>
         </data>
-    </device>
-    <device>
+    </testData>
+    <testData>
         <data>
             <manufacturerId>1</manufacturerId>
             <modelName>watts power must be LT 5000</modelName>
-            <can_sell></can_sell>
-            <oemSku></oemSku>
-            <dealerSku></dealerSku>
             <description>stuff goes here</description>
-            <cost></cost>
-            <tonerConfigId></tonerConfigId>
-            <isCopier></isCopier>
-            <isFax></isFax>
-            <isDuplex></isDuplex>
-            <reportsTonerLevels></reportsTonerLevels>
             <wattsPowerNormal>50000</wattsPowerNormal>
             <wattsPowerIdle>1000</wattsPowerIdle>
             <partsCostPerPage>2</partsCostPerPage>
@@ -71,24 +42,13 @@
             <launchDate>2008-09-18</launchDate>
             <ppmBlack>100</ppmBlack>
             <ppmColor>100</ppmColor>
-            <isLeased></isLeased>
-            <leasedTonerYield></leasedTonerYield>
         </data>
-    </device>
-    <device>
+    </testData>
+    <testData>
         <data>
             <manufacturerId>1</manufacturerId>
             <modelName>date must be yyyy-mm-dd</modelName>
-            <can_sell></can_sell>
-            <oemSku></oemSku>
-            <dealerSku></dealerSku>
             <description>stuff goes here</description>
-            <cost></cost>
-            <tonerConfigId></tonerConfigId>
-            <isCopier></isCopier>
-            <isFax></isFax>
-            <isDuplex></isDuplex>
-            <reportsTonerLevels></reportsTonerLevels>
             <wattsPowerNormal>1000</wattsPowerNormal>
             <wattsPowerIdle>1000</wattsPowerIdle>
             <partsCostPerPage>2</partsCostPerPage>
@@ -96,24 +56,14 @@
             <launchDate>09-18-2008</launchDate>
             <ppmBlack>100</ppmBlack>
             <ppmColor>100</ppmColor>
-            <isLeased></isLeased>
-            <leasedTonerYield></leasedTonerYield>
         </data>
-    </device>
-    <device>
+    </testData>
+    <testData>
         <data>
             <manufacturerId>1</manufacturerId>
             <modelName>date must be yyyy-mm-dd</modelName>
-            <can_sell></can_sell>
-            <oemSku></oemSku>
-            <dealerSku></dealerSku>
             <description>stuff goes here</description>
-            <cost></cost>
-            <tonerConfigId></tonerConfigId>
             <isCopier>ff</isCopier>
-            <isFax></isFax>
-            <isDuplex></isDuplex>
-            <reportsTonerLevels></reportsTonerLevels>
             <wattsPowerNormal>1000</wattsPowerNormal>
             <wattsPowerIdle>1000</wattsPowerIdle>
             <partsCostPerPage>2</partsCostPerPage>
@@ -121,8 +71,6 @@
             <launchDate>2008-09-18</launchDate>
             <ppmBlack>100</ppmBlack>
             <ppmColor>100</ppmColor>
-            <isLeased></isLeased>
-            <leasedTonerYield></leasedTonerYield>
         </data>
-    </device>
-</devices>
+    </testData>
+</devicesBadData>

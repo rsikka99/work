@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<suppliesAndServices>
-    <suppliesAndService>
+<suppliesAndServicesGoodData>
+    <testData>
         <data>
             <dealerPartsCostPerPage>1</dealerPartsCostPerPage>
             <partsCostPerPage>2</partsCostPerPage>
@@ -11,8 +11,8 @@
             <leasedTonerYield>asdf</leasedTonerYield>
             <leaseBuybackPrice>0</leaseBuybackPrice>
         </data>
-    </suppliesAndService>
-    <suppliesAndService>
+    </testData>
+    <testData>
         <data>
             <dealerPartsCostPerPage>1</dealerPartsCostPerPage>
             <partsCostPerPage>2</partsCostPerPage>
@@ -22,8 +22,8 @@
             <isLeased>1</isLeased>
             <leasedTonerYield>150</leasedTonerYield>
         </data>
-    </suppliesAndService>
-    <suppliesAndService>
+    </testData>
+    <testData>
         <data>
             <dealerPartsCostPerPage>2</dealerPartsCostPerPage>
             <partsCostPerPage>2</partsCostPerPage>
@@ -34,5 +34,5 @@
             <leasedTonerYield>0</leasedTonerYield>
             <leaseBuybackPrice>100000</leaseBuybackPrice>
         </data>
-    </suppliesAndService>
-</suppliesAndServices>
+    </testData>
+</suppliesAndServicesGoodData>

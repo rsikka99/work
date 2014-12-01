@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<healthchecks>
-    <healthcheck>
+<healthchecksGoodData>
+    <testData>
         <data>
             <pageCoverageMonochrome>1</pageCoverageMonochrome>
             <pageCoverageColor>99</pageCoverageColor>
@@ -25,8 +25,8 @@
             <customerMonochromeCostPerPage>4</customerMonochromeCostPerPage>
             <customerColorCostPerPage>4</customerColorCostPerPage>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>0.001</pageCoverageMonochrome>
             <pageCoverageColor>20</pageCoverageColor>
@@ -49,8 +49,8 @@
             <customerMonochromeCostPerPage>5</customerMonochromeCostPerPage>
             <customerColorCostPerPage>1</customerColorCostPerPage>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>0.000000001</pageCoverageMonochrome>
             <pageCoverageColor>10</pageCoverageColor>
@@ -73,8 +73,8 @@
             <customerMonochromeCostPerPage>2</customerMonochromeCostPerPage>
             <customerColorCostPerPage>2</customerColorCostPerPage>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>0.0089941</pageCoverageMonochrome>
             <pageCoverageColor>94</pageCoverageColor>
@@ -97,8 +97,8 @@
             <customerMonochromeCostPerPage>4</customerMonochromeCostPerPage>
             <customerColorCostPerPage>4</customerColorCostPerPage>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>0.000000001</pageCoverageMonochrome>
             <pageCoverageColor>69</pageCoverageColor>
@@ -121,8 +121,8 @@
             <customerMonochromeCostPerPage>4</customerMonochromeCostPerPage>
             <customerColorCostPerPage>4</customerColorCostPerPage>
         </data>
-    </healthcheck>
-    <healthcheck>
+    </testData>
+    <testData>
         <data>
             <pageCoverageMonochrome>0.000000001</pageCoverageMonochrome>
             <pageCoverageColor>69</pageCoverageColor>
@@ -145,5 +145,5 @@
             <customerMonochromeCostPerPage>4</customerMonochromeCostPerPage>
             <customerColorCostPerPage>4</customerColorCostPerPage>
         </data>
-    </healthcheck>
-</healthchecks>
+    </testData>
+</healthchecksGoodData>

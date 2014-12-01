@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
-<clients>
-    <client>
+<clientsBadData>
+    <testData>
         <data>
             <accountNumber>accountNumber</accountNumber>
             <companyName>companyName</companyName>
@@ -18,8 +18,8 @@
             <countryId>1</countryId>
             <dealerId>4</dealerId>
         </data>
-    </client>
-    <client>
+    </testData>
+    <testData>
         <data>
             <accountNumber>accountNumber</accountNumber>
             <companyName>companyName</companyName>
@@ -37,8 +37,8 @@
             <countryId>1</countryId>
             <dealerId>1</dealerId>
         </data>
-    </client>
-    <client>
+    </testData>
+    <testData>
         <data>
             <accountNumber>accountNumber</accountNumber>
             <companyName>companyName</companyName>
@@ -56,27 +56,8 @@
             <countryId>1</countryId>
             <dealerId>6</dealerId>
         </data>
-    </client>
-    <client>
-        <data>
-            <accountNumber>accountNumber</accountNumber>
-            <companyName>companyName</companyName>
-            <employeeCount>#ofemployees</employeeCount>
-            <legalName>legalName</legalName>
-            <countryCode>1234</countryCode>
-            <areaCode>123</areaCode>
-            <exchangeCode>123</exchangeCode>
-            <number>1234</number>
-            <extension>1234</extension>
-            <addressLine1>myAddress</addressLine1>
-            <city>Kingston</city>
-            <region></region>
-            <postCode>K1K 1K1</postCode>
-            <countryId>1</countryId>
-            <dealerId>1</dealerId>
-        </data>
-    </client>
-    <client>
+    </testData>
+    <testData>
         <data>
             <accountNumber>accountNumber</accountNumber>
             <companyName>companyName</companyName>
@@ -94,5 +75,5 @@
             <countryId>1</countryId>
             <dealerId>1</dealerId>
         </data>
-    </client>
-</clients>
+    </testData>
+</clientsBadData>

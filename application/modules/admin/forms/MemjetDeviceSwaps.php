@@ -128,11 +128,11 @@ class Admin_Form_MemjetDeviceSwaps extends Twitter_Bootstrap_Form_Horizontal
         }
 
         $this->addElement($maxPageCountElement);
-        $minPageCountElement->addValidator(new Tangent_Validate_LessThanFormValue($maxPageCountElement));
+        $minPageCountElement->addValidator(new Tangent_Validate_LessThanFormValue($maxPageCountElement->getName()));
         $this->addElement($minPageCountElement);
 
         $this->addElement($dealerMaxPageCountElement);
-        $dealerMinPageCountElement->addValidator(new Tangent_Validate_LessThanFormValue($dealerMaxPageCountElement));
+        $dealerMinPageCountElement->addValidator(new Tangent_Validate_LessThanFormValue($dealerMaxPageCountElement->getName()));
         $this->addElement($dealerMinPageCountElement);
 
 

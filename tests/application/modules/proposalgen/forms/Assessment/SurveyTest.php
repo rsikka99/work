@@ -3,76 +3,31 @@
 /**
  * Class Proposalgen_Form_Assessment_SurveyTestTest
  */
-class Proposalgen_Form_Assessment_SurveyTest extends PHPUnit_Framework_TestCase
+class Proposalgen_Form_Assessment_SurveyTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
+
     /**
-     * @var Proposalgen_Form_Assessment_Survey
+     * @return Proposalgen_Form_Assessment_Survey
      */
-    protected $_form;
-
-    public function setUp ()
+    public function getForm ()
     {
-        $this->_form = new Proposalgen_Form_Assessment_Survey();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
+        return new Proposalgen_Form_Assessment_Survey();
     }
 
     /**
-     * This function loads an XML file of good data into arrays to be tested in the form
+     * @return array
      */
-    public function goodHCFormSettingsData ()
+    public function getGoodData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_SurveyTest.xml");
-        $data = array();
-        foreach ($xml->survey as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_SurveyTest.xml");
     }
 
     /**
-     * This function loads an XML file of bad data into arrays to be tested in the form
+     * @return array
      */
-    public function badHCFormSettingsData ()
+    public function getBadData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_SurveyTest.xml");
-        $data = array();
-        foreach ($xml->survey as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Test the form using valid data
-     *
-     *
-     * @dataProvider goodHCFormSettingsData
-     */
-    public function testFormAcceptsValidData ($data)
-    {
-        $this->assertTrue($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
-    }
-
-
-    /**
-     * Test the form using bad data
-     *
-     * @dataProvider badHCFormSettingsData
-     */
-    public
-    function testFormRejectsBadData ($data)
-    {
-        $this->assertFalse($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_SurveyTest.xml");
     }
 
 }

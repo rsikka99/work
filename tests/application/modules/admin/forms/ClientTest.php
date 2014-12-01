@@ -3,7 +3,7 @@
 /**
  * Class Admin_Form_ClientTest
  */
-class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
+class Admin_Form_ClientTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
 
     /**
@@ -26,73 +26,19 @@ class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * This function loads an XML file of good data into arrays to be tested in the form
+     * @return array
      */
-    public function goodClientData ()
+    public function getGoodData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_clientFormTest.xml");
-        $data = array();
-        foreach ($xml->client as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
+        return $this->loadFromXmlFile(__DIR__ . "/_files/goodData_clientFormTest.xml");
     }
 
     /**
-     * This function loads an XML file of bad data into arrays to be tested in the form
+     * @return array
      */
-    public function badClientData ()
+    public function getBadData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_clientFormTest.xml");
-        $data = array();
-        foreach ($xml->client as $row)
-        {
-            $data[] = (array)$row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Test the form using valid/required data
-     *
-     * @dataProvider goodClientData
-     */
-    public function testFormAcceptsValidData ($data)
-    {
-        $this->assertTrue($this->getForm()->isValid((array)$data), implode(' | ', $this->getForm()->getErrorMessages()));
-    }
-
-    /**
-     * Test the form using invalid/missing data
-     *
-     * @dataProvider badClientData
-     */
-    public function testFormRejectsInvalidData ($data)
-    {
-        $this->assertFalse($this->getForm()->isValid((array)$data), implode(' | ', $this->getForm()->getErrorMessages()));
-    }
-
-    /**
-     * Test the form using valid/required data as an admin
-     *
-     * @dataProvider goodClientData
-     */
-    public function testFormAcceptsValidDataAsAdmin ($data)
-    {
-        $this->assertTrue($this->getForm(true, true)->isValid((array)$data), implode(' | ', $this->getForm()->getErrorMessages()));
-    }
-
-    /**
-     * Test the form using invalid/missing data as an admin
-     *
-     * @dataProvider badClientData
-     */
-    public function testFormRejectsInvalidDataAsAdmin ($data)
-    {
-        $this->assertFalse($this->getForm(true, true)->isValid((array)$data), implode(' | ', $this->getForm()->getErrorMessages()));
+        return $this->loadFromXmlFile(__DIR__ . "/_files/badData_clientFormTest.xml");
     }
 
     public function testDealerFieldExists ()
