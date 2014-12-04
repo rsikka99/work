@@ -1,5 +1,5 @@
 <?xml version="1.0" standalone="yes"?>
-<healthchecksBadData>
+<healthcheckSettingsBadData>
     <testData>
         <data>
             <pageCoverageMonochrome>0.000000001</pageCoverageMonochrome>
@@ -136,4 +136,4 @@
             <customerColorCostPerPage>55</customerColorCostPerPage>
         </data>
     </testData>
-</healthchecksBadData>
+</healthcheckSettingsBadData>

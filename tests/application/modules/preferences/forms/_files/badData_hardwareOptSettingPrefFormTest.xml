@@ -1,5 +1,5 @@
 <?xml version="1.0" standalone="yes"?>
-<hardwareOptSettingBadData>
+<hardwareoptimizationSettingsBadData>
     <testData>
         <data>
             <costThreshold>this is bad</costThreshold>
@@ -72,4 +72,4 @@
             <targetColorCostPerPage>▲</targetColorCostPerPage>
         </data>
     </testData>
-</hardwareOptSettingBadData>
+</hardwareoptimizationSettingsBadData>

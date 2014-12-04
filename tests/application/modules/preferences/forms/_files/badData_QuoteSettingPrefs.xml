@@ -1,5 +1,5 @@
 <?xml version="1.0" standalone="yes"?>
-<quotesBadData>
+<quoteSettingsBadData>
     <testData>
         <data>
             <pageCoverageMonochrome>100</pageCoverageMonochrome>
@@ -54,4 +54,4 @@
             <dealerColorRankSetArray>0.000000001</dealerColorRankSetArray>
         </data>
     </testData>
-</quotesBadData>
+</quoteSettingsBadData>
