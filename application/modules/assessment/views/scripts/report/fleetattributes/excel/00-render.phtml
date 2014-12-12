@@ -25,52 +25,124 @@ $sheetCounter = 0;
 $activeSheet  = $objPHPExcel->getActiveSheet();
 $objPHPExcel->setActiveSheetIndex(0);
 $activeSheet->setTitle("Fleet Attributes");
-// Start building the document
-if (isset($this->fleetAttributesData[0]))
-{
-    $fieldTitleCounter = 0;
-    foreach ($this->fleetAttributesData[0] as $fieldTitle => $value)
-    {
-        $activeSheet->setCellValueExplicitByColumnAndRow($fieldTitleCounter, 1, $fieldTitle);
-        $activeSheet->getColumnDimensionByColumn($fieldTitleCounter)->setAutoSize(true);
-        $fieldTitleCounter++;
-    }
-}
 
+/**
+ * Titles
+ */
+$activeSheet->setCellValue('A1', 'Device Name');
+$activeSheet->setCellValue('B1', 'IP Address');
+$activeSheet->setCellValue('C1', 'Serial Number');
+$activeSheet->setCellValue('D1', 'Device Age (Years)');
+$activeSheet->setCellValue('E1', 'Monthly Page Volume');
+$activeSheet->setCellValue('F1', 'Suggested Maximum Page Volume');
+$activeSheet->setCellValue('G1', 'Percent of Total Page Volume');
+$activeSheet->setCellValue('H1', 'Reports Toner Levels');
+$activeSheet->setCellValue('I1', 'Compatible with ' . My_Brand::$jit);
+$activeSheet->setCellValue('J1', 'Is Managed');
+$activeSheet->setCellValue('K1', 'Can Copy/Scan');
+$activeSheet->setCellValue('L1', 'Can Duplex');
+$activeSheet->setCellValue('M1', 'Can Fax');
+$activeSheet->setCellValue('N1', 'Can Print A3');
+$activeSheet->setCellValue('O1', 'Print Speed Mono');
+$activeSheet->setCellValue('P1', 'Print Speed Color');
+$activeSheet->setCellValue('Q1', 'Operating Wattage');
+$activeSheet->setCellValue('R1', 'Idle/Sleep Wattage');
+$activeSheet->setCellValue('S1', 'Launch Date');
+
+$activeSheet->getStyle('A1')->getFont()->setBold(true);
+$activeSheet->getStyle('B1')->getFont()->setBold(true);
+$activeSheet->getStyle('C1')->getFont()->setBold(true);
+$activeSheet->getStyle('D1')->getFont()->setBold(true);
+$activeSheet->getStyle('E1')->getFont()->setBold(true);
+$activeSheet->getStyle('F1')->getFont()->setBold(true);
+$activeSheet->getStyle('G1')->getFont()->setBold(true);
+$activeSheet->getStyle('H1')->getFont()->setBold(true);
+$activeSheet->getStyle('I1')->getFont()->setBold(true);
+$activeSheet->getStyle('J1')->getFont()->setBold(true);
+$activeSheet->getStyle('K1')->getFont()->setBold(true);
+$activeSheet->getStyle('L1')->getFont()->setBold(true);
+$activeSheet->getStyle('M1')->getFont()->setBold(true);
+$activeSheet->getStyle('N1')->getFont()->setBold(true);
+$activeSheet->getStyle('O1')->getFont()->setBold(true);
+$activeSheet->getStyle('P1')->getFont()->setBold(true);
+$activeSheet->getStyle('Q1')->getFont()->setBold(true);
+$activeSheet->getStyle('R1')->getFont()->setBold(true);
+$activeSheet->getStyle('S1')->getFont()->setBold(true);
+
+$activeSheet->getStyle('H1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$activeSheet->getStyle('I1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$activeSheet->getStyle('J1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$activeSheet->getStyle('K1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$activeSheet->getStyle('L1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$activeSheet->getStyle('M1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$activeSheet->getStyle('N1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+$activeSheet->getColumnDimensionByColumn(0)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(1)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(2)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(3)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(4)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(5)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(6)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(7)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(8)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(9)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(10)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(11)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(12)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(13)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(14)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(15)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(16)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(17)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(18)->setAutoSize(true);
+
+/**
+ * Fleet Attributes List
+ */
 foreach ($this->fleetAttributesData as $deviceData)
 {
     $currentRow = $activeSheet->getHighestRow() + 1;
 
-    $activeSheet->setCellValueByColumnAndRow(0, $currentRow, $deviceData['Device Name']);
-    $activeSheet->setCellValueByColumnAndRow(1, $currentRow, $deviceData['IP Address']);
-    $activeSheet->setCellValueByColumnAndRow(2, $currentRow, $deviceData['Serial Number']);
-    $activeSheet->setCellValueByColumnAndRow(3, $currentRow, $deviceData['Device Age (Years)']);
-    $activeSheet->setCellValueByColumnAndRow(4, $currentRow, $deviceData['Monthly Page Volume']);
-    $activeSheet->setCellValueByColumnAndRow(5, $currentRow, $deviceData['Suggested Maximum Page Volume']);
-    $activeSheet->setCellValueByColumnAndRow(6, $currentRow, $deviceData['Percent of Total Page Volume']);
-    $activeSheet->setCellValueByColumnAndRow(7, $currentRow, $deviceData['Reports Toner Levels']);
-    $activeSheet->setCellValueByColumnAndRow(8, $currentRow, $deviceData['Compatible with ' . My_Brand::$jit]);
-    $activeSheet->setCellValueByColumnAndRow(9, $currentRow, $deviceData['Is Managed']);
-    $activeSheet->setCellValueByColumnAndRow(10, $currentRow, $deviceData['Can Copy/Scan']);
-    $activeSheet->setCellValueByColumnAndRow(11, $currentRow, $deviceData['Can Duplex']);
-    $activeSheet->setCellValueByColumnAndRow(12, $currentRow, $deviceData['Can Fax']);
-    $activeSheet->setCellValueByColumnAndRow(13, $currentRow, $deviceData['Can Print A3']);
-    $activeSheet->setCellValueByColumnAndRow(14, $currentRow, $deviceData['Print Speed Mono']);
-    $activeSheet->setCellValueByColumnAndRow(15, $currentRow, $deviceData['Print Speed Color']);
-    $activeSheet->setCellValueByColumnAndRow(16, $currentRow, $deviceData['Operating Wattage']);
-    $activeSheet->setCellValueByColumnAndRow(17, $currentRow, $deviceData['Idle/Sleep Wattage']);
-    $activeSheet->setCellValueByColumnAndRow(18, $currentRow, PHPExcel_Shared_Date::stringToExcel($deviceData['Launch Date']));
+    $activeSheet->setCellValue("A{$currentRow}", $deviceData['Device Name']);
+    $activeSheet->setCellValue("B{$currentRow}", $deviceData['IP Address']);
+    $activeSheet->setCellValue("C{$currentRow}", $deviceData['Serial Number']);
+    $activeSheet->setCellValue("D{$currentRow}", $deviceData['Device Age (Years)']);
+    $activeSheet->setCellValue("E{$currentRow}", $deviceData['Monthly Page Volume']);
+    $activeSheet->setCellValue("F{$currentRow}", $deviceData['Suggested Maximum Page Volume']);
+    $activeSheet->setCellValue("G{$currentRow}", $deviceData['Percent of Total Page Volume']);
+    $activeSheet->setCellValue("H{$currentRow}", $deviceData['Reports Toner Levels']);
+    $activeSheet->setCellValue("I{$currentRow}", $deviceData['Compatible with ' . My_Brand::$jit]);
+    $activeSheet->setCellValue("J{$currentRow}", $deviceData['Is Managed']);
+    $activeSheet->setCellValue("K{$currentRow}", $deviceData['Can Copy/Scan']);
+    $activeSheet->setCellValue("L{$currentRow}", $deviceData['Can Duplex']);
+    $activeSheet->setCellValue("M{$currentRow}", $deviceData['Can Fax']);
+    $activeSheet->setCellValue("N{$currentRow}", $deviceData['Can Print A3']);
+    $activeSheet->setCellValue("O{$currentRow}", $deviceData['Print Speed Mono']);
+    $activeSheet->setCellValue("P{$currentRow}", $deviceData['Print Speed Color']);
+    $activeSheet->setCellValue("Q{$currentRow}", $deviceData['Operating Wattage']);
+    $activeSheet->setCellValue("R{$currentRow}", $deviceData['Idle/Sleep Wattage']);
+    $activeSheet->setCellValue("S{$currentRow}", PHPExcel_Shared_Date::stringToExcel($deviceData['Launch Date']));
 
-    $activeSheet->getStyleByColumnAndRow(3, $currentRow)->getNumberFormat()->setFormatCode('#,##0');
-    $activeSheet->getStyleByColumnAndRow(4, $currentRow)->getNumberFormat()->setFormatCode('#,##0');
-    $activeSheet->getStyleByColumnAndRow(5, $currentRow)->getNumberFormat()->setFormatCode('#,##0');
-    $activeSheet->getStyleByColumnAndRow(6, $currentRow)->getNumberFormat()->applyFromArray(array('code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
-    $activeSheet->getStyleByColumnAndRow(14, $currentRow)->getNumberFormat()->setFormatCode('#,##0');
-    $activeSheet->getStyleByColumnAndRow(15, $currentRow)->getNumberFormat()->setFormatCode('#,##0');
-    $activeSheet->getStyleByColumnAndRow(16, $currentRow)->getNumberFormat()->setFormatCode('#,##0');
-    $activeSheet->getStyleByColumnAndRow(17, $currentRow)->getNumberFormat()->setFormatCode('#,##0');
-    $activeSheet->getStyleByColumnAndRow(18, $currentRow)->getNumberFormat()->setFormatCode('mm/dd/yyyy');
-
+    $activeSheet->getStyle("A{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+    $activeSheet->getStyle("B{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+    $activeSheet->getStyle("C{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+    $activeSheet->getStyle("D{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+    $activeSheet->getStyle("E{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+    $activeSheet->getStyle("F{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+    $activeSheet->getStyle("G{$currentRow}")->getNumberFormat()->applyFromArray(array('code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+    $activeSheet->getStyle("H{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $activeSheet->getStyle("I{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $activeSheet->getStyle("J{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $activeSheet->getStyle("K{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $activeSheet->getStyle("L{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $activeSheet->getStyle("M{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $activeSheet->getStyle("N{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $activeSheet->getStyle("O{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+    $activeSheet->getStyle("P{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+    $activeSheet->getStyle("Q{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+    $activeSheet->getStyle("R{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
+    $activeSheet->getStyle("S{$currentRow}")->getNumberFormat()->setFormatCode('mm/dd/yyyy');
 
 }
 

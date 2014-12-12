@@ -113,8 +113,8 @@ class Assessment_Report_FleetattributesController extends Assessment_Library_Con
             $fleetAttributesData[$deviceCounter]['IP Address']                        = $deviceInstance->ipAddress;
             $fleetAttributesData[$deviceCounter]['Serial Number']                     = $deviceInstance->serialNumber;
             $fleetAttributesData[$deviceCounter]['Device Age (Years)']                = $deviceInstance->getAge();
-            $fleetAttributesData[$deviceCounter]['Monthly Page Volume']               = $this->view->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
-            $fleetAttributesData[$deviceCounter]['Suggested Maximum Page Volume']     = $this->view->formatPageVolume($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume);
+            $fleetAttributesData[$deviceCounter]['Monthly Page Volume']               = $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly();
+            $fleetAttributesData[$deviceCounter]['Suggested Maximum Page Volume']     = $deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume;
             $fleetAttributesData[$deviceCounter]['Percent of Total Page Volume']      = $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() / $assessmentViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
             $fleetAttributesData[$deviceCounter]['Reports Toner Levels']              = $deviceInstance->getMasterDevice()->isCapableOfReportingTonerLevels ? 'Yes' : 'No';
             $fleetAttributesData[$deviceCounter]['Compatible with ' . My_Brand::$jit] = $deviceInstance->getMasterDevice()->isJitCompatible($dealerId) ? 'Yes' : 'No';
