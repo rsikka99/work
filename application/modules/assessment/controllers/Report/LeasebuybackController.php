@@ -123,6 +123,6 @@ class Assessment_Report_LeasebuybackController extends Assessment_Library_Contro
         }
 
         $this->view->leaseDeviceData   = $leaseDeviceData;
-        $this->view->totalBuybackPrice = $this->view->currency($assessmentViewModel->getTotalLeaseBuybackPrice());
+        $this->view->totalBuybackPrice = $assessmentViewModel->getTotalLeaseBuybackPrice();
     }
 }

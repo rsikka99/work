@@ -30,6 +30,11 @@ $activeSheet->setCellValue('B1', "Ip Address");
 $activeSheet->setCellValue('C1', "Serial Number");
 $activeSheet->setCellValue('D1', "Lease Buyback Price");
 
+$activeSheet->getStyle('A1')->getFont()->setBold(true);
+$activeSheet->getStyle('B1')->getFont()->setBold(true);
+$activeSheet->getStyle('C1')->getFont()->setBold(true);
+$activeSheet->getStyle('D1')->getFont()->setBold(true);
+
 foreach ($this->leaseDeviceData as $deviceData)
 {
     $currentRow = $activeSheet->getHighestRow() + 1;
@@ -42,6 +47,9 @@ foreach ($this->leaseDeviceData as $deviceData)
 $currentRow = $activeSheet->getHighestRow() + 1;
 $activeSheet->setCellValue("A{$currentRow}", "Total");
 $activeSheet->setCellValue("D{$currentRow}", $this->totalBuybackPrice);
+
+$activeSheet->getStyle("A{$currentRow}")->getFont()->setBold(true);
+$activeSheet->getStyle("D{$currentRow}")->getNumberFormat()->applyFromArray(array('code' => PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE));
 
 $activeSheet->getColumnDimension('A')->setWidth(30);
 $activeSheet->getColumnDimension('B')->setWidth(20);
