@@ -108,8 +108,7 @@ class Assessment_Report_UtilizationController extends Assessment_Library_Control
          */
         foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
         {
-            $utilizationData[$deviceCounter]['Manufacturer']                       = $deviceInstance->getMasterDevice()->getManufacturer()->displayname;
-            $utilizationData[$deviceCounter]['Model']                              = $deviceInstance->getMasterDevice()->modelName;
+            $utilizationData[$deviceCounter]['Device']                             = $deviceInstance->getMasterDevice()->getFullDeviceName();
             $utilizationData[$deviceCounter]['IP Address']                         = $deviceInstance->ipAddress;
             $utilizationData[$deviceCounter]['Serial Number']                      = $deviceInstance->serialNumber;
             $utilizationData[$deviceCounter]['Monthly Page Volume']                = $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly();

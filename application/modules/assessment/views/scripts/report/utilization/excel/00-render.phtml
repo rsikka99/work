@@ -25,32 +25,47 @@ $sheetCounter = 0;
 $activeSheet  = $objPHPExcel->getActiveSheet();
 $objPHPExcel->setActiveSheetIndex(0);
 $activeSheet->setTitle("Utilization");
-// Start building the document
-if (isset($this->utilizationData[0]))
-{
-    $fieldTitleCounter = 0;
-    foreach ($this->utilizationData[0] as $fieldTitle => $value)
-    {
-        $activeSheet->setCellValueExplicitByColumnAndRow($fieldTitleCounter, 1, $fieldTitle);
-        $activeSheet->getColumnDimensionByColumn($fieldTitleCounter)->setAutoSize(true);
-        $fieldTitleCounter++;
-    }
-}
 
+/**
+ * Titles
+ */
+$activeSheet->setCellValue('A1', 'Device Name');
+$activeSheet->setCellValue('B1', 'IP Address');
+$activeSheet->setCellValue('C1', 'Serial Number');
+$activeSheet->setCellValue('D1', 'Monthly Page Volume');
+$activeSheet->setCellValue('E1', 'Maximum Monthly Recommended Volume');
+$activeSheet->setCellValue('F1', 'Utilization Percent');
+
+$activeSheet->getStyle('A1')->getFont()->setBold(true);
+$activeSheet->getStyle('B1')->getFont()->setBold(true);
+$activeSheet->getStyle('C1')->getFont()->setBold(true);
+$activeSheet->getStyle('D1')->getFont()->setBold(true);
+$activeSheet->getStyle('E1')->getFont()->setBold(true);
+$activeSheet->getStyle('F1')->getFont()->setBold(true);
+
+$activeSheet->getColumnDimensionByColumn(0)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(1)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(2)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(3)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(4)->setAutoSize(true);
+$activeSheet->getColumnDimensionByColumn(5)->setAutoSize(true);
+
+/**
+ * Utilization Data List
+ */
 foreach ($this->utilizationData as $deviceData)
 {
     $currentRow = $activeSheet->getHighestRow() + 1;
-    $activeSheet->setCellValueByColumnAndRow(0, $currentRow, $deviceData['Manufacturer']);
-    $activeSheet->setCellValueByColumnAndRow(1, $currentRow, $deviceData['Model']);
-    $activeSheet->setCellValueByColumnAndRow(2, $currentRow, $deviceData['IP Address']);
-    $activeSheet->setCellValueByColumnAndRow(3, $currentRow, $deviceData['Serial Number']);
-    $activeSheet->setCellValueByColumnAndRow(4, $currentRow, $deviceData['Monthly Page Volume']);
-    $activeSheet->setCellValueByColumnAndRow(5, $currentRow, $deviceData['Maximum Monthly Recommended Volume']);
-    $activeSheet->setCellValueByColumnAndRow(6, $currentRow, $deviceData['Utilization Percent']);
+    $activeSheet->setCellValueByColumnAndRow(0, $currentRow, $deviceData['Device']);
+    $activeSheet->setCellValueByColumnAndRow(1, $currentRow, $deviceData['IP Address']);
+    $activeSheet->setCellValueByColumnAndRow(2, $currentRow, $deviceData['Serial Number']);
+    $activeSheet->setCellValueByColumnAndRow(3, $currentRow, $deviceData['Monthly Page Volume']);
+    $activeSheet->setCellValueByColumnAndRow(4, $currentRow, $deviceData['Maximum Monthly Recommended Volume']);
+    $activeSheet->setCellValueByColumnAndRow(5, $currentRow, $deviceData['Utilization Percent']);
 
+    $activeSheet->getStyleByColumnAndRow(3, $currentRow)->getNumberFormat()->setFormatCode('#,##0');
     $activeSheet->getStyleByColumnAndRow(4, $currentRow)->getNumberFormat()->setFormatCode('#,##0');
-    $activeSheet->getStyleByColumnAndRow(5, $currentRow)->getNumberFormat()->setFormatCode('#,##0');
-    $activeSheet->getStyleByColumnAndRow(6, $currentRow)->getNumberFormat()->applyFromArray(array('code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+    $activeSheet->getStyleByColumnAndRow(5, $currentRow)->getNumberFormat()->applyFromArray(array('code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
 }
 
 // Save Excel 2007 file
