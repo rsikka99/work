@@ -112,6 +112,8 @@ $activeSheet->setCellValue('A4', $summaryText);
 $activeSheet->mergeCells('A4:L4');
 $activeSheet->setCellValue('A6', "Toner Preference");
 $activeSheet->setCellValue('B6', "Overall Gross Margin");
+$activeSheet->getStyle('A6')->getFont()->setBold(true);
+$activeSheet->getStyle('B6')->getFont()->setBold(true);
 
 foreach ($this->vendorSeparatedData as $vendorData)
 {
@@ -119,11 +121,10 @@ foreach ($this->vendorSeparatedData as $vendorData)
     $vendorName          = $vendorData['pageTitle'];
     $isHighest           = in_array($vendorName, $this->highestNames);
 
-    $vendorOverallMargin = $vendorData['statisticsGroup']['right']['Overall Margin'];
-    $vendorName          = $vendorData['pageTitle'];
-    $currentRow          = $activeSheet->getHighestRow() + 1;
+    $currentRow = $activeSheet->getHighestRow() + 1;
     $activeSheet->setCellValue("A{$currentRow}", $vendorName);
-    $activeSheet->setCellValue("B{$currentRow}", $vendorOverallMargin . "%");
+    $activeSheet->setCellValue("B{$currentRow}", $vendorOverallMargin / 100);
+    $activeSheet->getStyle("B{$currentRow}")->getNumberFormat()->applyFromArray(array('code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE));
     if ($isHighest)
     {
         $activeSheet->getStyle("A{$currentRow}:B{$currentRow}")->applyFromArray($styleHighestMargin);
