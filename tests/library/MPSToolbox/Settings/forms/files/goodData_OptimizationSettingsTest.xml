@@ -1,0 +1,39 @@
+<?xml version="1.0" standalone="yes"?>
+<optimizationSettingsGoodData>
+    <testData>
+        <data>
+            <optimizedTargetMonochromeCostPerPage>0.017</optimizedTargetMonochromeCostPerPage>
+            <optimizedTargetColorCostPerPage>0.011</optimizedTargetColorCostPerPage>
+            <costThreshold>30</costThreshold>
+            <autoOptimizeFunctionality>true</autoOptimizeFunctionality>
+            <lossThreshold>20</lossThreshold>
+            <blackToColorRatio>50</blackToColorRatio>
+            <deviceSwapMonochromeRankSetArray>2</deviceSwapMonochromeRankSetArray>
+            <deviceSwapColorRankSetArray>2</deviceSwapColorRankSetArray>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <optimizedTargetMonochromeCostPerPage>0.015</optimizedTargetMonochromeCostPerPage>
+            <optimizedTargetColorCostPerPage>0.008</optimizedTargetColorCostPerPage>
+            <costThreshold>25</costThreshold>
+            <autoOptimizeFunctionality>false</autoOptimizeFunctionality>
+            <lossThreshold>15</lossThreshold>
+            <blackToColorRatio>75</blackToColorRatio>
+            <deviceSwapMonochromeRankSetArray>1</deviceSwapMonochromeRankSetArray>
+            <deviceSwapColorRankSetArray>3</deviceSwapColorRankSetArray>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <optimizedTargetMonochromeCostPerPage>0.014</optimizedTargetMonochromeCostPerPage>
+            <optimizedTargetColorCostPerPage>0.07</optimizedTargetColorCostPerPage>
+            <costThreshold>20</costThreshold>
+            <autoOptimizeFunctionality>true</autoOptimizeFunctionality>
+            <lossThreshold>10</lossThreshold>
+            <blackToColorRatio>35</blackToColorRatio>
+            <deviceSwapMonochromeRankSetArray>3</deviceSwapMonochromeRankSetArray>
+            <deviceSwapColorRankSetArray>3</deviceSwapColorRankSetArray>
+        </data>
+    </testData>
+</optimizationSettingsGoodData>

@@ -1,36 +1,22 @@
-<?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
-var isSaveAndApproveAdmin = <?php echo($this->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN) ? 'true' : 'false'); ?>;
-var dealerSkuName = '<?php echo My_Brand::$dealerSku;?>';
-var rmsUploadId = <?php echo $this->rmsUpload->id; ?>
-<?php $this->headScript()->captureEnd(); ?>
-<?php $this->headScript()->appendFile($this->baseUrl('js/quotegen/devicesetup/deviceSetup.js'))
-           ->appendFile($this->baseUrl('js/proposalgen/managedevices/managemasterdevices.js'))
-           ->appendFile($this->baseUrl('js/proposalgen/managedevices/suppliesandservice.js'))
-           ->appendFile($this->baseUrl('js/proposalgen/managedevices/deviceattributes.js'))
-           ->appendFile($this->baseUrl('js/proposalgen/managedevices/availableoptions.js'))
-           ->appendFile($this->baseUrl('js/proposalgen/managedevices/hardwarequote.js'))
-           ->appendFile($this->baseUrl('js/proposalgen/managedevices/hardwareconfigurations.js')); ?>
+<?php
 
-<?php $this->headScript()->appendFile($this->baseUrl('js/proposalgen/fleet/deviceMapping.js')); ?>
-<div class="well">
-    <p>You can map and remap devices by typing into the "Select Master Device" field. The "Select Master Device" text box acts as a search. Once you select an
-        item it will perform the mapping for you. In the case that the device does not exist you may add it using the action menu. If the device is mapped
-        incorrectly you will need to remove the mapping by clearing the text in the "Select Master Device" box.</p>
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Models\Acl\ProposalgenAclModel;
+use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
 
-    <form id="addUnknownDeviceForm" action="<?php echo $this->url(array("action" => "edit-unknown-device")); ?>" method="POST">
-        <input type="hidden" name="deviceInstanceId" id="unknownDeviceDeviceInstanceIds" />
-    </form>
-    <form id="addMasterDeviceForm" method="POST">
-        <input type="hidden" name="deviceInstanceId" id="masterDeviceDeviceInstanceId" />
-    </form>
-    <table id="mappingGrid"></table>
-    <div id="mappingGridPager"></div>
+?>
+<script>
+    <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
+    var isSaveAndApproveAdmin = <?=($this->IsAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, AppAclModel::PRIVILEGE_ADMIN) ? 'true' : 'false'); ?>,
+        canDelete             = <?=($this->IsAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETUP_DELETE, AppAclModel::PRIVILEGE_VIEW) ? 'true' : 'false'); ?>,
+        dealerSkuName         = '<?= My_Brand::$dealerSku; ?>',
+        rmsUploadId           = <?= $this->rmsUpload->id; ?>;
+    <?php $this->headScript()->captureEnd(); ?>
+</script>
+<?php $this->headScript()->appendFile($this->baseUrl('js/app/legacy/proposalgen/fleet/FleetDeviceMapping.js')); ?>
+<div class="container">
+    <p>You can map and remap devices by typing into the "Select Master Device" field. The "Select Master Device" text box acts as a search. Once you select an item it will perform the mapping for you. In the case that the device does not exist you may add it using the action menu. If the device is mapped incorrectly you will need to remove the mapping by clearing the text in the "Select Master Device" box.</p>
 
-    <div class="modal hide masterDeviceModal" data-backdrop="static" id="manageMasterDeviceModal">
-        <div class="modal-body" style="max-height:700px">
-            <div id="masterDeviceManagement">
-            </div>
-        </div>
-    </div>
-    <?php echo $this->navigationForm; ?>
+    <div id="deviceMappingGrid"></div>
+    <?= $this->navigationForm; ?>
 </div>

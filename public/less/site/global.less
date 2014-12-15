@@ -1,10 +1,10 @@
-body {
-    padding-bottom : 75px;
+html {
+    overflow-y : scroll;
 }
 
-// The meat of the document
-.body-container {
-    width : 960px;
+body {
+    padding-bottom   : 75px;
+    background-color : #05192a;
 }
 
 #meat {
@@ -14,7 +14,7 @@ body {
 #headerLogo {
     height : 80px;
     margin : auto;
-    width  : 960px;
+    //    width  : 960px;
 }
 
 #headerLogo h1 {
@@ -49,236 +49,47 @@ body {
     z-index    : 50;
 }
 
-html {
-    overflow-y : scroll;
+/* center-block fix for columns */
+.col-center-block {
+    float        : none;
+    display      : block;
+    margin-left  : auto;
+    margin-right : auto;
 }
 
-// Our ajax loading icon
-.AjaxLoadingIcon {
-    background-image : url('../../img/ajax-loader.gif');
-    height           : 100px;
-    margin           : auto;
-    width            : 100px;
+.modal-dialog {
+    width : auto;
 }
 
-.spinner16 {
-    background-image : url('../../img/spinner_16.gif');
-    height           : 16px;
-    margin           : auto;
-    width            : 16px;
+.page-header {
+    margin-top    : 0;
+    border-bottom : 0;
 }
 
-.spinner32 {
-    background-image : url('../../img/spinner_32.gif');
-    height           : 32px;
-    margin           : auto;
-    width            : 32px;
+.body-container {
+    padding-bottom : 25px;
+
+    @media (min-width : @screen-md-min) {
+        min-height    : 700px;
+    }
 }
 
-.spinner64 {
-    background-image : url('../../img/spinner_64.gif');
-    height           : 64px;
-    margin           : auto;
-    width            : 64px;
-}
-
-.spinner128 {
-    background-image : url('../../img/spinner_128.gif');
-    height           : 128px;
-    margin           : auto;
-    width            : 128px;
-}
-
-// Adjust form actions to be centered on 'tangent' forms.
-form.form-center-actions .form-actions {
-    padding     : 0;
-    display     : block;
+#page-footer {
+    min-height  : 200px;
+    color       : #aaa;
     padding-top : 20px;
-    text-align  : center;
-}
+    a {
+        color : #aaa;
+    }
 
-form.form-center-actions.form-horizontal .form-actions {
-    padding-left : 0;
-}
+    .nav > li {
+        &.active a {
+            color : #fff;
+        }
 
-.clearfix .btn.create-button {
-    margin-bottom : 7px;
-}
-
-.well.no-padding {
-    padding : 0;
-}
-
-// Footer Navigation
-#footerLinks ul.footer-nav {
-    position : relative;
-    left     : 0;
-    display  : block;
-    float    : right;
-}
-
-#footerLinks ul.footer-nav > li {
-    display : block;
-    float   : left;
-}
-
-#footerLinks ul.footer-nav > li a,
-#footerLinks ul.footer-nav > li a:active,
-#footerLinks ul.footer-nav > li a:hover,
-#footerLinks ul.footer-nav > li a:visited {
-    color : #666;
-}
-
-#footerLinks ul.footer-nav > li a {
-    padding-right : 10px;
-    padding-left  : 10px;
-    border-left   : 0;
-    border-right  : 1px solid #999;
-}
-
-#footerLinks ul.footer-nav > li:first-child a {
-    border-left : 0;
-}
-
-#footerLinks ul.footer-nav > li:last-child a {
-    border-right : 0;
-}
-
-legend {
-    margin-bottom : 0px;
-}
-
-// Devices Page
-tr.lowProfitDevice td {
-    font-weight : bold;
-}
-
-/*
- * Profit Table Styles (Hardware Optimization)
- */
-.replacementDevices th {
-    font-size   : 9pt;
-    font-weight : bold;
-}
-
-.replacementDevices table {
-    border-collapse : collapse;
-}
-
-.replacementDevices td {
-    padding   : 6px;
-    font-size : 8pt;
-}
-
-.replacementDevices .retire {
-}
-
-.replacementDevices .replace {
-    background-color : #EBC7A4;
-}
-
-.replacementDevices td#deviceName {
-    padding   : 1px;
-    font-size : 8pt;
-}
-
-.replacementDevices tr.one {
-    background-color : #F1F1F1;
-}
-
-.replacementDevices th.ui-th-column div {
-    white-space : normal !important;
-    height      : auto !important;
-    padding     : 2px;
-}
-
-.replacementDevices tr.three {
-    background-color : #A1A1A1;
-}
-
-.replacementDevices tr.one:hover {
-    background-color : #AAF1F1;
-}
-
-.replacementDevices tr.two:hover {
-    background-color : #AAF1F1;
-}
-
-.replacementDevices td.thresholdWarning {
-    background-color : #FFF58C;
-}
-
-.replacementDevices td.thresholdDanger {
-    background-color : #FF0C36;
-}
-
-table.summaryReport {
-    border-collapse : collapse;
-    width           : 100%;
-}
-
-.summaryReport th {
-    background-color : #ACC7D3;
-}
-
-.deviceSwapList .subHeader {
-    padding          : 5px;
-    background-color : #B8CCE3;
-    text-align       : center;
-    font-size        : 12pt;
-    font-weight      : bold;
-}
-
-.deviceSwapList th {
-    padding          : 3px;
-    background-color : #DDDDDD;
-}
-
-/**
- * Device swap jqgrid styles
- */
-
-#replacementDeviceTable td.dangerThreshhold {
-    font-weight      : bold;
-    color            : white;
-    background-color : red;
-}
-
-#replacementDeviceTable td.warningThreshhold {
-    font-weight      : bold;
-    background-color : yellow;
-}
-
-#replacementDeviceTable td.negativeCostDelta {
-    font-weight      : bold;
-    color            : white;
-    background-color : red;
-}
-
-#replacementDeviceTable td.positiveCostDelta {
-    font-weight      : normal;
-    color            : black;
-    background-color : white;
-}
-
-#navigationMenu {
-    margin-bottom : 0;
-}
-
-select.tonerMultiselect {
-    width  : 600px;
-    height : 100px;
-}
-
-select.criteriaList {
-    margin-bottom : 0px;
-}
-
-.importInformation {
-    padding : 0 10px;
-}
-
-p .importantInformation {
-    font-weight : bold;
-    color       : red;
+        > a:hover, > a:focus {
+            background-color : #f8933c;
+            color            : #fff;
+        }
+    }
 }

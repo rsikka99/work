@@ -2,29 +2,29 @@
 <optionsGoodData>
     <testData>
         <data>
-            <availableOptionsname>availableOptionsname</availableOptionsname>
-            <availableOptionsdescription>availableOptionsdescription</availableOptionsdescription>
-            <availableOptionscost>15</availableOptionscost>
-            <availableOptionsoemSku>oemsku</availableOptionsoemSku>
-            <availableOptionsdealerSku>dealerSku</availableOptionsdealerSku>
+            <name>availableOptionsname</name>
+            <description>availableOptionsdescription</description>
+            <cost>15</cost>
+            <oemSku>oemsku</oemSku>
+            <dealerSku>dealerSku</dealerSku>
         </data>
     </testData>
     <testData>
         <data>
-            <availableOptionsname>Best Option Name NA</availableOptionsname>
-            <availableOptionsdescription>test test tset se#@3213 21asd zxc 23112</availableOptionsdescription>
-            <availableOptionscost>0.55</availableOptionscost>
-            <availableOptionsoemSku>2s2s2d2v222</availableOptionsoemSku>
-            <availableOptionsdealerSku>123124</availableOptionsdealerSku>
+            <name>Best Option Name NA</name>
+            <description>test test tset se#@3213 21asd zxc 23112</description>
+            <cost>0.55</cost>
+            <oemSku>2s2s2d2v222</oemSku>
+            <dealerSku>123124</dealerSku>
         </data>
     </testData>
     <testData>
         <data>
-            <availableOptionsname>123</availableOptionsname>
-            <availableOptionsdescription>availableOptionsdescription</availableOptionsdescription>
-            <availableOptionscost>1,000</availableOptionscost>
-            <availableOptionsoemSku>12345</availableOptionsoemSku>
-            <availableOptionsdealerSku>434sds21DEALERSKU</availableOptionsdealerSku>
+            <name>123</name>
+            <description>availableOptionsdescription</description>
+            <cost>1,000</cost>
+            <oemSku>12345</oemSku>
+            <dealerSku>434sds21DEALERSKU</dealerSku>
         </data>
     </testData>
 </optionsGoodData>

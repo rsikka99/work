@@ -1,0 +1,131 @@
+<?php
+
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\QuoteDeviceForm;
+
+/* @var $form QuoteDeviceForm */
+$form           = $this->element;
+$configurations = $this->configurations;
+?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<fieldset>
+    <legend>Device Configuration</legend>
+
+    <div class="form-group <?= ($form->getElement('name')->hasErrors()) ?: '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('name'), array('col-md-4')) ?>
+        <div class="col-md-8">
+            <?= $this->RenderFormText($form->getElement('name')) ?>
+            <?= $this->RenderFormDescription($form->getElement('name')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('name')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('oemSku')->hasErrors()) ?: '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('oemSku'), array('col-md-4')) ?>
+        <div class="col-md-8">
+            <?= $this->RenderFormText($form->getElement('oemSku')) ?>
+            <?= $this->RenderFormDescription($form->getElement('oemSku')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('oemSku')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('dealerSku')->hasErrors()) ?: '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('dealerSku'), array('col-md-4')) ?>
+        <div class="col-md-8">
+            <?= $this->RenderFormText($form->getElement('dealerSku')) ?>
+            <?= $this->RenderFormDescription($form->getElement('dealerSku')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('dealerSku')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ?: '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('cost'), array('col-md-4')) ?>
+        <div class="col-md-8">
+            <?= $this->RenderFormText($form->getElement('cost'), array(), '$') ?>
+            <?= $this->RenderFormDescription($form->getElement('cost')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('cost')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <legend>Device Options <?= $this->RenderFormSubmit($form->getElement('add'), array('btn btn-success btn-xs')) ?></legend>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-4">
+            <?php if (count($form->getOptionElements()) > 0) : ?>
+                <table class="table table-stripped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Cost per Unit</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <?php foreach ($form->getOptionElements() as $element) : ?>
+                        <tr class="control-group <?php echo ($element->quantity->hasErrors() || $element->cost->hasErrors()) ? 'error' : '' ?>">
+                            <td><?php echo $element->quantity->renderLabel(); ?></td>
+                            <td class="quantity"><?php echo trim($element->quantity->renderViewHelper()); ?></td>
+                            <td class="cost-per-page"><?php echo $this->currency((float)$element->quoteDeviceOption->cost); ?></td>
+                            <td>
+                                <a href="<?php echo $this->url(array('quoteDeviceOptionId' => $element->quoteDeviceOption->id, 'quoteId' => $form->getQuoteDevice()->getQuote()->id, 'quoteDeviceId' => $form->getQuoteDevice()->id), 'quotes.delete-option-from-quote-device'); ?>" class="add-on btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></a>
+                            </td>
+                            <?= $element->quantity->renderErrors(); ?>
+                            <?= $element->cost->renderErrors(); ?>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+            <?php else : ?>
+                <p>There are no options added to this device yet.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <legend>Package Cost</legend>
+    <div class="form-group <?= ($form->getElement('packageCost')->hasErrors()) ?: '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('packageCost'), array('col-md-4')) ?>
+        <div class="col-md-8">
+            <?= $this->RenderFormText($form->getElement('packageCost'), array(), '$') ?>
+            <?= $this->RenderFormDescription($form->getElement('packageCost')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('packageCost')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <legend>Configurations</legend>
+    <?php if ($configurations): ?>
+        <div class="form-group">
+            <div class="col-md-8 col-md-offset-4">
+                <select class="form-control" id="configurationId" name="configurationId" onchange="loadNewConfiguration()">
+                    <option value="" id="">None selected</option>
+                    <?php foreach ($configurations as $configuration) : ?>
+                        <option value="<?php echo $configuration->id; ?>"><?php echo $configuration->description; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <!-- Once a configuration is selected, its details appear in the table below - see configurations-table.phtml -->
+            <div id="configurationsTable" class="col-md-8 col-md-offset-4">
+            </div>
+        </div>
+    <?php else : ?>
+        <p>There are no configurations for this device.</p>
+    <?php endif; ?>
+</fieldset>
+
+<ul class="pager">
+    <li class="previous">
+        <?= $this->RenderFormSubmit($form->getElement('goBack')) ?>
+    </li>
+    <li>
+        <?= $this->RenderFormSubmit($form->getElement('save')) ?>
+    </li>
+    <li class="next">
+        <?= $this->RenderFormSubmit($form->getElement('saveAndContinue')) ?>
+    </li>
+</ul>
+<?= $this->RenderFormClose($form) ?>

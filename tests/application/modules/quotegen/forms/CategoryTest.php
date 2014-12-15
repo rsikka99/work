@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\CategoryForm;
 
 /**
  * Class Quotegen_Form_CategoryTest
@@ -7,11 +8,11 @@ class Quotegen_Form_CategoryTest extends Tangent_PHPUnit_Framework_ZendFormTestC
 {
 
     /**
-     * @return Quotegen_Form_Category
+     * @return CategoryForm
      */
     public function getForm ()
     {
-        return new Quotegen_Form_Category();
+        return new CategoryForm();
     }
 
     /**

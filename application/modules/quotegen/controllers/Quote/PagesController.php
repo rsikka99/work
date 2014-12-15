@@ -1,4 +1,12 @@
 <?php
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerVendorRankingMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerVendorRankingSetMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\QuotePageForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\QuoteDeviceGroupDeviceMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\QuoteDeviceMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\QuoteMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceGroupDeviceModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceModel;
 
 /**
  * Class Quotegen_Quote_PagesController
@@ -9,7 +17,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
     public function init ()
     {
         parent::init();
-        Quotegen_View_Helper_Quotemenu::setActivePage(Quotegen_View_Helper_Quotemenu::PAGES_CONTROLLER);
+        $this->_navigation->setActiveStep(\MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteStepsModel::STEP_ADD_PAGES);
     }
 
     /**
@@ -17,9 +25,8 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
-        $this->view->headTitle('Quote');
-        $this->view->headTitle('Pages');
-        $form = new Quotegen_Form_Quote_Page($this->_quote);
+        $this->_pageTitle = array('Quote', 'Pages');
+        $form             = new QuotePageForm($this->_quote);
 
         $request = $this->getRequest();
         if ($request->isPost())
@@ -31,10 +38,10 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                 // Go through each device and add total pages.
                 if ($form->isValid($values))
                 {
-                    $quoteDeviceGroupDeviceMapper = Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance();
+                    $quoteDeviceGroupDeviceMapper = QuoteDeviceGroupDeviceMapper::getInstance();
                     foreach ($this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
                     {
-                        /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+                        /* @var $quoteDeviceGroupDevice QuoteDeviceGroupDeviceModel */
                         foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
                         {
                             // Checks to see if the quantity has been changed per device
@@ -77,7 +84,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                     $this->_quote->populate($values);
 
                     // Save the toner ranks
-                    $rankingSetMapper = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance();
+                    $rankingSetMapper = TonerVendorRankingSetMapper::getInstance();
 
                     if (isset($values['dealerMonochromeRankSetArray']))
                     {
@@ -85,7 +92,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                     }
                     else
                     {
-                        Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_quote->dealerMonochromeRankSetId);
+                        TonerVendorRankingMapper::getInstance()->deleteByTonerVendorRankingId($this->_quote->dealerMonochromeRankSetId);
                     }
 
                     if (isset($values['dealerColorRankSetArray']))
@@ -94,7 +101,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                     }
                     else
                     {
-                        Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_quote->dealerColorRankSetId);
+                        TonerVendorRankingMapper::getInstance()->deleteByTonerVendorRankingId($this->_quote->dealerColorRankSetId);
                     }
 
                     // If we have a difference in page coverage we need to recalculate CPP rates for devices
@@ -103,7 +110,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                         || $quoteAdminCostPerPage !== (float)$this->_quote->adminCostPerPage
                     )
                     {
-                        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+                        /* @var $quoteDevice QuoteDeviceModel */
                         foreach ($this->_quote->getQuoteDevices() as $quoteDevice)
                         {
                             $device = $quoteDevice->getDevice();
@@ -113,29 +120,27 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                                 if ($masterDevice)
                                 {
                                     $quoteDevice = $quoteDeviceService->syncDevice($quoteDevice);
-                                    Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
+                                    QuoteDeviceMapper::getInstance()->save($quoteDevice);
                                 }
                             }
                         }
                     }
 
                     $this->saveQuote();
-                    Quotegen_Model_Mapper_Quote::getInstance()->save($this->_quote);
+                    QuoteMapper::getInstance()->save($this->_quote);
                     $form->populate($this->_quote->toArray());
 
                     // saveAndContinue is clicked : to to quote_profitability
                     if (isset($values ['saveAndContinue']))
                     {
-                        $this->redirector('index', 'quote_profitability', null, array(
-                            'quoteId' => $this->_quoteId
-                        ));
+                        $this->updateQuoteStepName();
+                        $this->saveQuote();
+                        $this->redirectToRoute('quotes.hardware-financing', array('quoteId' => $this->_quoteId));
                     }
                     else
                     {
                         // Refresh the page
-                        $this->redirector(null, null, null, array(
-                            'quoteId' => $this->_quoteId
-                        ));
+                        $this->redirectToRoute(null, array('quoteId' => $this->_quoteId));
                     }
                 }
                 // form invalid : show error messages 
@@ -149,9 +154,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
             // Go back button is clicked : got back to quote_groups
             else
             {
-                $this->redirector('index', 'quote_groups', null, array(
-                    'quoteId' => $this->_quoteId
-                ));
+                $this->redirectToRoute('quotes.group-devices', array('quoteId' => $this->_quoteId));
             }
         }
 

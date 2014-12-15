@@ -9,11 +9,11 @@
  */
 class My_Validate_DateTime extends Zend_Validate_Abstract
 {
-    const FORMAT_DATE_1 = '/\d{4}\/\d{2}\/\d{2}/';
-    const FORMAT_DATE_2 = '/\d{1,2}\/\d{1,2}\/\d{4}/';
-    const FORMAT_DATE_3 = '/\d{1,2}-\d{1,2}-\d{4}/';
+    const FORMAT_DATE_1        = '/\d{4}\/\d{2}\/\d{2}/';
+    const FORMAT_DATE_2        = '/\d{1,2}\/\d{1,2}\/\d{4}/';
+    const FORMAT_DATE_3        = '/\d{1,2}-\d{1,2}-\d{4}/';
     const FORMAT_DATE_AMERICAN = '/\d{1,2}[\/]\d{1,2}[\/]\d{4}/';
-    const FORMAT_DATE_TIME_1 = '/\d{4}-\d{2}-\d{2} \d{2}(:\d{2}){1,2}/';
+    const FORMAT_DATE_TIME_1   = '/\d{4}-\d{2}-\d{2} \d{2}(:\d{2}){1,2}/';
 
     const INVALID_DATE_FORMAT = 'invalid_date_format';
 

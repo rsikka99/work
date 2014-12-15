@@ -1,14 +1,14 @@
 <?php
+use Tangent\Controller\Action;
 
 /**
  * Class Admin_LogController
  */
-class Admin_LogController extends Tangent_Controller_Action
+class Admin_LogController extends Action
 {
     public function indexAction ()
     {
-        $this->view->headTitle('Application Log');
-        $this->_helper->_layout->setLayout('layout-fluid');
+        $this->_pageTitle  = array('Application Log');
         $this->view->lines = file_get_contents(DATA_PATH . "/logs/application.log");
     }
 }

@@ -2,6 +2,7 @@
 /**
  * Healthcheck - Analysis: Printing Hardware Usage
  */
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
 
 /* @var $phpword \PhpOffice\PhpWord\PhpWord */
 $phpword = $this->phpword;
@@ -86,12 +87,12 @@ $lowestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utiliza
 $lowestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cellHeader)->addText('Avg. Monthly Volume', 'bold_text', 'nospacing_centeralign');
 $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('Recommended Max. Volume', 'bold_text', 'nospacing_centeralign');
 $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('% of Recommended Max. Volume', 'bold_text', 'nospacing_centeralign');
-/* @var $device Proposalgen_Model_DeviceInstance */
+/* @var $device DeviceInstanceModel */
 foreach ($healthcheckViewModel->getLeastUsedDevices() as $device)
 {
     $lowestUtilizationTable->addRow($this->styles->tables->utilization->rowheight);
     $lowestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($device->getDeviceName(), null, 'nospacing');
-    $lowestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing');
+    $lowestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ?: "Unknown", null, 'nospacing');
     $lowestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
     $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->maximumRecommendedMonthlyPageVolume), null, 'nospacing_centeralign');
     $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) . '%', null, 'nospacing_centeralign');
@@ -108,12 +109,12 @@ $highestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utiliz
 $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('Recommended Max. Volume', 'bold_text', 'nospacing_centeralign');
 $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('% of Recommended Max. Volume', 'bold_text', 'nospacing_centeralign');
 
-/* @var $device Proposalgen_Model_DeviceInstance */
+/* @var $device DeviceInstanceModel */
 foreach ($healthcheckViewModel->getMostUsedDevices() as $device)
 {
     $highestUtilizationTable->addRow($this->styles->tables->utilization->rowheight, $tcStyle->rowstyle);
     $highestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($this->translate($device->getDeviceName()), null, 'nospacing');
-    $highestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText($this->translate(($device->serialNumber)) ? : "Unknown", null, 'nospacing');
+    $highestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText($this->translate(($device->serialNumber)) ?: "Unknown", null, 'nospacing');
     $highestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
     $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->maximumRecommendedMonthlyPageVolume), null, 'nospacing_centeralign');
     $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) . '%', null, 'nospacing_centeralign');
@@ -147,14 +148,14 @@ $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->uti
 $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('Color CPP', 'bold_text', 'nospacing_centeralign');
 $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('Estimated Monthly Cost', 'bold_text', 'nospacing_centeralign');
 $ctr = 0;
-/* @var $device Proposalgen_Model_DeviceInstance */
+/* @var $device DeviceInstanceModel */
 foreach ($healthcheckViewModel->getMonthlyHighCostPurchasedColorDevices($healthcheckViewModel->getCostPerPageSettingForCustomer()) as $deviceInstance)
 {
 
     $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName());
     $expensiveColorDevicesTable->addRow(null, $tcStyle->rowstyle);
     $expensiveColorDevicesTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($this->translate($deviceName), null, 'nospacing');
-    $expensiveColorDevicesTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText($this->translate(($device->serialNumber) ? : "Unknown"), null, 'nospacing');
+    $expensiveColorDevicesTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText($this->translate(($device->serialNumber) ?: "Unknown"), null, 'nospacing');
     $expensiveColorDevicesTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format(($deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) . '%', null, 'nospacing_centeralign');
     $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()), null, 'nospacing_centeralign');
     $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->formatCostPerPage($deviceInstance->getColorCostPerPageWithMargin($healthcheckViewModel->getCostPerPageSettingForCustomer())), null, 'nospacing_centeralign');

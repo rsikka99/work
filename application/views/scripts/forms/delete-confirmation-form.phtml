@@ -1,0 +1,18 @@
+<?php
+use MPSToolbox\Legacy\Forms\DeleteConfirmationForm;
+
+/* @var $form DeleteConfirmationForm */
+$form    = $this->element;
+$message = $this->message;
+?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<p><?= $message ?></p>
+<fieldset>
+    <hr>
+    <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+</fieldset>
+<?= $this->RenderFormClose($form) ?>
+
+

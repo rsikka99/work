@@ -1,0 +1,35 @@
+<?php
+/* @var $form \MPSToolbox\Legacy\Modules\ProposalGenerator\Forms\ImportRmsCsvForm */
+$form = $this->element;
+?>
+
+<?= $this->RenderFormOpen($form) ?>
+    <fieldset>
+        <div class="form-group <?= ($form->getElement('rmsProviderId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('rmsProviderId'), array('class' => 'col-md-4')) ?>
+            <div class="col-md-8">
+                <?= $this->RenderFormSelect($form->getElement('rmsProviderId')) ?>
+                <?= $this->RenderFormDescription($form->getElement('rmsProviderId')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('rmsProviderId')) ?>
+            </div>
+        </div>
+
+        <div class="form-group <?= ($form->getElement('uploadFile')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('uploadFile'), array('class' => 'col-md-4')) ?>
+            <div class="col-md-8">
+                <?= $this->RenderFormFile($form->getElement('uploadFile')) ?>
+                <?= $this->RenderFormDescription($form->getElement('uploadFile')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('uploadFile')) ?>
+            </div>
+        </div>
+    </fieldset>
+
+    <ul class="pager">
+        <li class="next">
+            <?= $this->RenderFormSubmit($form->getElement('performUpload'), array('btn', 'btn-primary')) ?>
+        </li>
+        <li class="previous">
+            <?= $this->RenderFormSubmit($form->getElement('goBack'), array('btn', 'btn-default')) ?>
+        </li>
+    </ul>
+<?= $this->RenderFormClose($form) ?>

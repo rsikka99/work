@@ -1,0 +1,104 @@
+<?php
+/* @var $form OptionForm */
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\OptionForm;
+
+$form                = $this->element;
+$leasingSchemaRanges = $this->leasingSchemaRanges;
+?>
+
+<?php $this->headScript()->captureStart('append', 'text/javascript') ?>
+
+$(document).ready(function() {
+// set default count
+update_count();
+
+$("#description").keyup(function() {
+update_count();
+});
+});
+
+function update_count() {
+var count =  $("#description").val().length;
+$("#charcounter").html(255 - count);
+if ( count > 205 ) {
+$("#charcounter").attr('style','color: red');
+} else {
+$("#charcounter").attr('style','color: black');
+}
+}
+
+<?php $this->headScript()->captureEnd() ?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<fieldset>
+    <div class="form-group <?= ($form->getElement('name')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('name'), array('col-md-3')) ?>
+
+        <div class="col-md-5 input-group">
+            <?= $this->RenderFormText($form->getElement('name')) ?>
+            <?= $this->RenderFormDescription($form->getElement('name')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('name')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('description')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('description'), array('col-md-3')) ?>
+
+        <div class="col-md-5 input-group">
+            <?= $this->RenderFormTextArea($form->getElement('description')) ?>
+            <?= $this->RenderFormDescription($form->getElement('description')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('description')) ?>
+            <label>Characters Remaining:
+                <span id="charcounter">255</span>
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('cost'), array('col-md-3')) ?>
+
+        <div class="col-md-5 input-group">
+            <span class="input-group-addon">$</span>
+            <?= $this->RenderFormText($form->getElement('cost')) ?>
+            <?= $this->RenderFormDescription($form->getElement('cost')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('cost')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('oemSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('oemSku'), array('col-md-3')) ?>
+
+        <div class="col-md-5 input-group">
+            <?= $this->RenderFormText($form->getElement('oemSku')) ?>
+            <?= $this->RenderFormDescription($form->getElement('oemSku')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('oemSku')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('dealerSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('dealerSku'), array('col-md-3')) ?>
+
+        <div class="col-md-5 input-group">
+            <?= $this->RenderFormText($form->getElement('dealerSku')) ?>
+            <?= $this->RenderFormDescription($form->getElement('dealerSku')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('dealerSku')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('categories')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('categories'), array('col-md-3')) ?>
+
+        <div class="col-md-5 input-group">
+            <?= $this->RenderFormCheckbox($form->getElement('categories')) ?>
+            <?= $this->RenderFormDescription($form->getElement('categories')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('categories')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <hr>
+    <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+</fieldset>
+<?= $this->RenderFormClose($form) ?>

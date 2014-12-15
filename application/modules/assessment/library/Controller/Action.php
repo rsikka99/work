@@ -1,4 +1,9 @@
 <?php
+use MPSToolbox\Legacy\Modules\Assessment\Mappers\AssessmentMapper;
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentStepsModel;
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
 
 /**
  * Class Assessment_Library_Controller_Action
@@ -6,14 +11,14 @@
 class Assessment_Library_Controller_Action extends My_Controller_Report
 {
     /**
-     * @var Assessment_Model_Assessment
+     * @var AssessmentModel
      */
     protected $_assessment;
 
     /**
      * The navigation steps
      *
-     * @var Assessment_Model_Assessment_Steps
+     * @var AssessmentStepsModel
      */
     protected $_navigation;
 
@@ -41,7 +46,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
     /**
      * @var string
      */
-    protected $_firstStepName = Assessment_Model_Assessment_Steps::STEP_FLEET_UPLOAD;
+    protected $_firstStepName = AssessmentStepsModel::STEP_SURVEY;
 
     /**
      * Called from the constructor as the final step of initialization
@@ -53,7 +58,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
     {
         parent::init();
 
-        $this->_navigation = Assessment_Model_Assessment_Steps::getInstance();
+        $this->_navigation = AssessmentStepsModel::getInstance();
 
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT))
         {
@@ -61,25 +66,29 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
                 "error" => "You do not have permission to access this."
             ));
 
-            $this->redirector('index', 'index', 'index');
+            $this->redirectToRoute('assessment');
         }
 
-        if (isset($this->_mpsSession->selectedClientId))
+        if (!$this->getSelectedClient() instanceof \MPSToolbox\Legacy\Entities\ClientEntity)
         {
-            $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);
-            if (!$client instanceof Quotegen_Model_Client)
-            {
-                $this->_flashMessenger->addMessage(array(
-                    "error" => "A client is not selected."
-                ));
+            $this->_flashMessenger->addMessage(array(
+                "danger" => "A client is not selected."
+            ));
 
-                $this->redirector('index', 'index', 'index');
-            }
-            else
-            {
-                $this->_navigation->clientName = $client->companyName;
-            }
+            $this->redirectToRoute('app.dashboard');
         }
+
+        $this->_navigation->clientName = $this->getSelectedClient()->companyName;
+
+        if (!$this->getSelectedUpload() instanceof \MPSToolbox\Legacy\Entities\RmsUploadEntity)
+        {
+            $this->_flashMessenger->addMessage(array(
+                "danger" => "An RMS upload is not selected."
+            ));
+
+            $this->redirectToRoute('app.dashboard');
+        }
+
 
         $this->_fullCachePath     = PUBLIC_PATH . "/cache/reports/assessment/" . $this->getAssessment()->id;
         $this->_relativeCachePath = "/cache/reports/assessment/" . $this->getAssessment()->id;
@@ -104,7 +113,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
         $availableReportsArray["Reports"] = array(
             "pagetitle" => "Select a report...",
             "active"    => false,
-            "url"       => $this->view->baseUrl('/assessment/report_index/index')
+            "url"       => $this->view->url(array(), 'assessment.report-index')
         );
 
         if (My_Feature::canAccess(My_Feature::ASSESSMENT))
@@ -112,7 +121,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
             $availableReportsArray["Assessment"] = array(
                 "pagetitle" => "Assessment",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/assessment/report_assessment/index')
+                "url"       => $this->view->url(array(), 'assessment.report-assessment')
             );
         }
 
@@ -121,7 +130,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
             $availableReportsArray["CustomerCostAnalysis"] = array(
                 "pagetitle" => "Customer Cost Analysis",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/assessment/report_costanalysis/index')
+                "url"       => $this->view->url(array(), 'assessment.report-cost-analysis')
             );
         }
 
@@ -130,7 +139,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
             $availableReportsArray["GrossMargin"] = array(
                 "pagetitle" => "Gross Margin",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/assessment/report_grossmargin/index')
+                "url"       => $this->view->url(array(), 'assessment.report-gross-margin')
             );
         }
 
@@ -139,7 +148,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
             $availableReportsArray["TonerVendorGrossMargin"] = array(
                 "pagetitle" => "Toner Vendor Gross Margin",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/assessment/report_tonervendorgrossmargin/index')
+                "url"       => $this->view->url(array(), 'assessment.report-toner-vendor-gross-margin')
             );
         }
 
@@ -148,7 +157,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
             $availableReportsArray["JITSupplyAndTonerSku"] = array(
                 "pagetitle" => My_Brand::$jit . " Supply and Toner SKU Report",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/assessment/report_toners/index')
+                "url"       => $this->view->url(array(), 'assessment.report-jit-supply-and-toner-sku')
             );
         }
 
@@ -157,7 +166,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
             $availableReportsArray["OldDeviceList"] = array(
                 "pagetitle" => "Old Device List",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/assessment/report_olddevicelist/index')
+                "url"       => $this->view->url(array(), 'assessment.report-old-device-list')
             );
         }
 
@@ -166,7 +175,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
             $availableReportsArray["PrintingDeviceList"] = array(
                 "pagetitle" => "Printing Device List",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/assessment/report_printingdevicelist/index')
+                "url"       => $this->view->url(array(), 'assessment.report-printing-device-list')
             );
         }
 
@@ -175,7 +184,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
             $availableReportsArray["Solution"] = array(
                 "pagetitle" => "Solution",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/assessment/report_solution/index')
+                "url"       => $this->view->url(array(), 'assessment.report-solution')
             );
         }
 
@@ -184,7 +193,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
             $availableReportsArray["LeaseBuyback"] = array(
                 "pagetitle" => "Lease Buyback",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/assessment/report_leasebuyback/index')
+                "url"       => $this->view->url(array(), 'assessment.report-lease-buy-back')
             );
         }
 
@@ -193,7 +202,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
             $availableReportsArray["FleetAttributes"] = array(
                 "pagetitle" => "Fleet Attributes",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/assessment/report_fleetattributes/index')
+                "url"       => $this->view->url(array(), 'assessment.report-fleet-attributes')
             );
         }
 
@@ -202,7 +211,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
             $availableReportsArray["Utilization"] = array(
                 "pagetitle" => "Utilization",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/assessment/report_utilization/index')
+                "url"       => $this->view->url(array(), 'assessment.report-utilization')
             );
         }
 
@@ -216,13 +225,13 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
      */
     public function initHtmlReport ()
     {
-        $this->view->headScript()->appendFile($this->view->baseUrl('/js/htmlReport.js'));
+        $this->view->headScript()->appendFile($this->view->baseUrl('/js/app/legacy/HtmlReport.js'));
         if ($this->getAssessment()->id < 1)
         {
             $this->_flashMessenger->addMessage(array("error" => "Please select a report first."));
 
             // Send user to the index
-            $this->redirector('index', 'index', 'index');
+            $this->redirectToRoute(array(), 'assessment');
         }
 
         $this->view->dealerLogoFile = $this->getDealerLogoFile();
@@ -259,13 +268,13 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
 
                 if ($this->_assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount() < 1)
                 {
-                    $this->view->ErrorMessages [] = "All uploaded printers were excluded from your report. Reports can not be generated until at least 1 printer is added.";
-                    $hasError                     = true;
+                    $this->view->ErrorMessages = ["All uploaded printers were excluded from your report. Reports can not be generated until at least 1 printer is added."];
+                    $hasError                  = true;
                 }
             }
             catch (Exception $e)
             {
-                $this->view->ErrorMessages [] = "There was an error getting the reports.";
+                $this->view->ErrorMessages = ["There was an error getting the reports."];
                 throw new Zend_Exception("Error Getting Assessment View Model.", 0, $e);
             }
 
@@ -285,10 +294,12 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
      */
     public function postDispatch ()
     {
-        $stage = ($this->getAssessment()->stepName) ? : Assessment_Model_Assessment_Steps::STEP_FLEET_UPLOAD;
+        $stage = ($this->getAssessment()->stepName) ?: AssessmentStepsModel::STEP_SURVEY;
         $this->_navigation->updateAccessibleSteps($stage);
 
         $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation));
+
+        parent::postDispatch();
     }
 
     /**
@@ -315,7 +326,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
     /**
      * Gets the assessment we're working on
      *
-     * @return Assessment_Model_Assessment
+     * @return AssessmentModel
      */
     public function getAssessment ()
     {
@@ -323,17 +334,20 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
         {
             if (isset($this->_mpsSession->assessmentId) && $this->_mpsSession->assessmentId > 0)
             {
-                $this->_assessment = Assessment_Model_Mapper_Assessment::getInstance()->find($this->_mpsSession->assessmentId);
+                $this->_assessment = AssessmentMapper::getInstance()->find($this->_mpsSession->assessmentId);
             }
             else
             {
-                $this->_assessment               = new Assessment_Model_Assessment();
+                $this->_assessment               = new AssessmentModel();
                 $this->_assessment->dateCreated  = date('Y-m-d H:i:s');
                 $this->_assessment->lastModified = date('Y-m-d H:i:s');
                 $this->_assessment->reportDate   = date('Y-m-d H:i:s');
                 $this->_assessment->dealerId     = $this->_identity->dealerId;
+                $this->_assessment->rmsUploadId  = $this->getSelectedUpload()->id;
                 $this->_assessment->name         = "Assessment " . date('Y/m/d');
                 $this->_assessment->clientId     = $this->_mpsSession->selectedClientId;
+                AssessmentMapper::getInstance()->insert($this->_assessment);
+                $this->_mpsSession->assessmentId = $this->_assessment->id;
             }
         }
 
@@ -349,12 +363,10 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
         {
             // Update the last modified date
             $this->_assessment->lastModified = date('Y-m-d H:i:s');
-            Assessment_Model_Mapper_Assessment::getInstance()->save($this->_assessment);
+            AssessmentMapper::getInstance()->save($this->_assessment);
         }
         else
         {
-            $this->_assessment->assessmentSettingId = $this->_assessment->getAssessmentSettings()->id;
-            Assessment_Model_Mapper_Assessment::getInstance()->insert($this->_assessment);
             $this->_mpsSession->assessmentId = $this->_assessment->id;
         }
     }

@@ -1,3 +1,7 @@
 <?php
-$this->placeholder('extraNavbar')->set($this->render('_partials/reportMenu.phtml'));
-echo $this->render('report/fleetattributes/html/00_Render.phtml');
+
+$this->placeholder('ReportNav')->set($this->render('_partials/reportMenu.phtml'));
+?>
+<div class='container'>
+    <?= $this->render('report/fleetattributes/html/00_Render.phtml'); ?>
+</div>

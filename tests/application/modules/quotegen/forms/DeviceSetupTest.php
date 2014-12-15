@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\DeviceSetupForm;
 
 /**
  * Class Quotegen_Form_DeviceSetupTest
@@ -7,11 +8,11 @@ class Quotegen_Form_DeviceSetupTest extends Tangent_PHPUnit_Framework_ZendFormTe
 {
 
     /**
-     * @return Quotegen_Form_DeviceSetup
+     * @return DeviceSetupForm
      */
     public function getForm ()
     {
-        return new Quotegen_Form_DeviceSetup();
+        return new DeviceSetupForm();
     }
 
     /**

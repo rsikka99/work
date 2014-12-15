@@ -1,5 +1,10 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
+
 class Proposalgen_Model_TonerTest extends PHPUnit_Framework_TestCase
 {
     protected $_costPerPageSetting;
@@ -8,7 +13,7 @@ class Proposalgen_Model_TonerTest extends PHPUnit_Framework_TestCase
     {
         if (!isset($this->_costPerPageSetting))
         {
-            $this->_costPerPageSetting                         = new Proposalgen_Model_CostPerPageSetting(array('dealerId' => 2));
+            $this->_costPerPageSetting                         = new CostPerPageSettingModel(array('dealerId' => 2));
             $this->_costPerPageSetting->adminCostPerPage       = 0.05;
             $this->_costPerPageSetting->laborCostPerPage       = 0.06;
             $this->_costPerPageSetting->partsCostPerPage       = 0.07;
@@ -28,7 +33,7 @@ class Proposalgen_Model_TonerTest extends PHPUnit_Framework_TestCase
                     'cost'           => 85.5,
                     'calculatedCost' => 85.5,
                     'yield'          => 7500,
-                    'tonerColorId'   => Proposalgen_Model_TonerColor::BLACK,
+                    'tonerColorId'   => TonerColorModel::BLACK,
                 ),
             ),
             array(
@@ -37,7 +42,7 @@ class Proposalgen_Model_TonerTest extends PHPUnit_Framework_TestCase
                     'cost'           => 85.5,
                     'calculatedCost' => 85.5,
                     'yield'          => 7500,
-                    'tonerColorId'   => Proposalgen_Model_TonerColor::CYAN,
+                    'tonerColorId'   => TonerColorModel::CYAN,
                 ),
             ),
             array(
@@ -46,7 +51,7 @@ class Proposalgen_Model_TonerTest extends PHPUnit_Framework_TestCase
                     'cost'           => 85.5,
                     'calculatedCost' => 85.5,
                     'yield'          => 7500,
-                    'tonerColorId'   => Proposalgen_Model_TonerColor::MAGENTA,
+                    'tonerColorId'   => TonerColorModel::MAGENTA,
                 ),
             ),
             array(
@@ -55,7 +60,7 @@ class Proposalgen_Model_TonerTest extends PHPUnit_Framework_TestCase
                     'cost'           => 85.5,
                     'calculatedCost' => 85.5,
                     'yield'          => 7500,
-                    'tonerColorId'   => Proposalgen_Model_TonerColor::YELLOW,
+                    'tonerColorId'   => TonerColorModel::YELLOW,
                 ),
             ),
             array(
@@ -64,7 +69,7 @@ class Proposalgen_Model_TonerTest extends PHPUnit_Framework_TestCase
                     'cost'           => 85.5,
                     'calculatedCost' => 85.5,
                     'yield'          => 7500,
-                    'tonerColorId'   => Proposalgen_Model_TonerColor::THREE_COLOR,
+                    'tonerColorId'   => TonerColorModel::THREE_COLOR,
                 ),
             ),
             array(
@@ -73,7 +78,7 @@ class Proposalgen_Model_TonerTest extends PHPUnit_Framework_TestCase
                     'cost'           => 85.5,
                     'calculatedCost' => 85.5,
                     'yield'          => 7500,
-                    'tonerColorId'   => Proposalgen_Model_TonerColor::FOUR_COLOR,
+                    'tonerColorId'   => TonerColorModel::FOUR_COLOR,
                 ),
             ),
         );
@@ -84,10 +89,10 @@ class Proposalgen_Model_TonerTest extends PHPUnit_Framework_TestCase
      */
     public function testCalculateCostPerPage ($expectedCostPerPageMonochrome, $expectedCostPerPageColor, $tonerData)
     {
-        $toner       = new Proposalgen_Model_Toner($tonerData);
+        $toner       = new TonerModel($tonerData);
         $costPerPage = $toner->calculateCostPerPage($this->getCostPerPageSetting());
 
-        if ($costPerPage instanceof Proposalgen_Model_CostPerPage)
+        if ($costPerPage instanceof CostPerPageModel)
         {
             if ($costPerPage->monochromeCostPerPage != $expectedCostPerPageMonochrome)
             {

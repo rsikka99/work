@@ -2,6 +2,7 @@
 /**
  * Assessment - Analysis: Printing Hardware Usage
  */
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
 
 /* @var $phpword \PhpOffice\PhpWord\PhpWord */
 $phpword = $this->phpword;
@@ -56,7 +57,7 @@ $lowestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utiliza
 $lowestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText('Serial No.', 'bold_text', 'nospacing_centeralign');
 $lowestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText('Avg. Monthly Volume', 'bold_text', 'nospacing_centeralign');
 $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText('Recommended Max. Volume', 'bold_text', 'nospacing_centeralign');
-/* @var $device Proposalgen_Model_DeviceInstance */
+/* @var $device DeviceInstanceModel */
 foreach ($assessmentViewModel->getLeastUsedDevices() as $device)
 {
     $lowestUtilizationTable->addRow($this->styles->tables->utilization->rowheight, $this->styles->tables->rowstyle);
@@ -76,7 +77,7 @@ $highestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utiliz
 $highestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText('Avg. Monthly Volume', 'bold_text', 'nospacing_centeralign');
 $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText('Recommended Max. Volume', 'bold_text', 'nospacing_centeralign');
 
-/* @var $device Proposalgen_Model_DeviceInstance */
+/* @var $device DeviceInstanceModel */
 foreach ($assessmentViewModel->getMostUsedDevices() as $device)
 {
     $highestUtilizationTable->addRow($this->styles->tables->utilization->rowheight, $this->styles->tables->rowstyle);

@@ -88,7 +88,7 @@ $cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText($t
 $table->addRow($tc->body->rowheight);
 $cell = $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
 $cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('', $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
-$cell = $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText(sprintf('Processing 1 invoice/month @ %1$s', $this->currency($assessmentViewModel->assessment->getSurvey()->costToExecuteSuppliesOrder)), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
+$cell = $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText(sprintf('Processing 1 invoice/month @ %1$s', $this->currency($assessmentViewModel->assessment->getClient()->getSurvey()->costToExecuteSuppliesOrder)), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
 $cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText($this->currency($assessmentViewModel->getInternalAdminCost()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
 
 $table->addRow($tc->body->rowheight);

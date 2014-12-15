@@ -1,24 +1,26 @@
 <?php
 
-class Tangent_PrinterMath
+namespace Tangent;
+
+class PrinterMath
 {
     /*
      * Toner Colors
      */
-    const TONERCOLOR_BLACK       = 1;
-    const TONERCOLOR_CYAN        = 2;
-    const TONERCOLOR_MAGENTA     = 3;
-    const TONERCOLOR_YELLOW      = 4;
-    const TONERCOLOR_THREE_COLOR = 5;
-    const TONERCOLOR_FOUR_COLOR  = 6;
+    const TONER_COLOR_BLACK       = 1;
+    const TONER_COLOR_CYAN        = 2;
+    const TONER_COLOR_MAGENTA     = 3;
+    const TONER_COLOR_YELLOW      = 4;
+    const TONER_COLOR_THREE_COLOR = 5;
+    const TONER_COLOR_FOUR_COLOR  = 6;
 
     /*
      * Toner Configurations
      */
-    const TONERCONFIG_BLACK_ONLY            = 1;
-    const TONERCONFIG_THREE_COLOR_SEPARATED = 2;
-    const TONERCONFIG_THREE_COLOR_COMBINED  = 3;
-    const TONERCONFIG_FOUR_COLOR_COMBINED   = 4;
+    const TONER_CONFIG_BLACK_ONLY            = 1;
+    const TONER_CONFIG_THREE_COLOR_SEPARATED = 2;
+    const TONER_CONFIG_THREE_COLOR_COMBINED  = 3;
+    const TONER_CONFIG_FOUR_COLOR_COMBINED   = 4;
 
     /**
      * The coverage that most manufacturers use to determine yield of a cartridge
@@ -38,7 +40,7 @@ class Tangent_PrinterMath
      * @param number $tonerColorId
      *            The toner color id of the toner cpp we're applying a new coverage to.
      *
-     * @throws InvalidArgumentException When toner color id is invalid or when page coverage is not between 0 and 100
+     * @throws \InvalidArgumentException When toner color id is invalid or when page coverage is not between 0 and 100
      * @return number The adjusted cost per page
      */
     public static function coverageAdjustTonerCostPerPage ($costPerPage, $coverage, $tonerColorId)
@@ -57,28 +59,28 @@ class Tangent_PrinterMath
                 // Split up the coverage if needed based on what color we're processing
                 switch ($tonerColorId)
                 {
-                    case self::TONERCOLOR_THREE_COLOR :
+                    case self::TONER_COLOR_THREE_COLOR :
                         $coverage = ($coverage / 4) * 3;
                         break;
-                    case self::TONERCOLOR_CYAN :
-                    case self::TONERCOLOR_MAGENTA :
-                    case self::TONERCOLOR_YELLOW :
+                    case self::TONER_COLOR_CYAN :
+                    case self::TONER_COLOR_MAGENTA :
+                    case self::TONER_COLOR_YELLOW :
                         $coverage = $coverage / 4;
                         break;
-                    case self::TONERCOLOR_BLACK :
-                    case self::TONERCOLOR_FOUR_COLOR :
+                    case self::TONER_COLOR_BLACK :
+                    case self::TONER_COLOR_FOUR_COLOR :
                         // Coverage is fine as is
                         break;
                     default :
                         // They sent an invalid toner coverage
-                        throw new InvalidArgumentException("Toner Color {$tonerColorId} is not valid.");
+                        throw new \InvalidArgumentException("Toner Color {$tonerColorId} is not valid.");
                         break;
                 }
                 $costPerPage = $costPerPage * (self::OEM_COVERAGE_RATE / $coverage);
             }
             else
             {
-                throw new InvalidArgumentException("Page coverage must always be between 0 and 100 inclusively.");
+                throw new \InvalidArgumentException("Page coverage must always be between 0 and 100 inclusively.");
             }
         }
 
@@ -96,7 +98,7 @@ class Tangent_PrinterMath
      * @param number $tonerConfigurationId
      *            The toner configuration id of the device's cost per page that we are applying a new coverage to.
      *
-     * @throws InvalidArgumentException When toner configuration id is invalid or when page coverage is not between 0
+     * @throws \InvalidArgumentException When toner configuration id is invalid or when page coverage is not between 0
      *         and 100
      * @return number The adjusted cost per page
      */
@@ -116,24 +118,24 @@ class Tangent_PrinterMath
                 // Split up the coverage if needed based on what color we're processing
                 switch ($tonerConfigurationId)
                 {
-                    case self::TONERCONFIG_THREE_COLOR_COMBINED :
-                    case self::TONERCONFIG_THREE_COLOR_SEPARATED :
+                    case self::TONER_CONFIG_THREE_COLOR_COMBINED :
+                    case self::TONER_CONFIG_THREE_COLOR_SEPARATED :
                         $coverage = ($coverage / 4) * 3;
                         break;
-                    case self::TONERCONFIG_BLACK_ONLY :
-                    case self::TONERCONFIG_FOUR_COLOR_COMBINED :
+                    case self::TONER_CONFIG_BLACK_ONLY :
+                    case self::TONER_CONFIG_FOUR_COLOR_COMBINED :
                         // Coverage is fine as is
                         break;
                     default :
                         // They sent an invalid toner coverage
-                        throw new InvalidArgumentException("Toner Color {$tonerConfigurationId} is not valid.");
+                        throw new \InvalidArgumentException("Toner Color {$tonerConfigurationId} is not valid.");
                         break;
                 }
                 $costPerPage = $costPerPage * (self::OEM_COVERAGE_RATE / $coverage);
             }
             else
             {
-                throw new InvalidArgumentException("Page coverage must always be between 0 and 100 inclusively.");
+                throw new \InvalidArgumentException("Page coverage must always be between 0 and 100 inclusively.");
             }
         }
 

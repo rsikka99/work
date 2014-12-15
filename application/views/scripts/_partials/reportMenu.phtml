@@ -1,0 +1,43 @@
+<div class="nav-affix-wrapper" data-spy="affix" data-offset-top="160">
+    <nav class="navbar navbar-default report-navbar" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#report-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand visible-xs" data-toggle="collapse" data-target="#report-navbar-collapse-1">Report Navigation</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="report-navbar-collapse-1">
+                <form class="navbar-form navbar-left" method="POST">
+                    <button name="goBack" id="goBack" type="submit" class="btn btn-default">
+                        <i class="fa fa-fw fa-arrow-left"></i> Go Back
+                    </button>
+                    <div class="form-group">
+                        <label class="sr-only" for="reportNavigator">Select Report</label>
+                        <select id="reportNavigator" class="form-control">
+                            <?php foreach ($this->availableReports as $report) : ?>
+                                <option value='<?= $report['url']; ?>' <?= ($report['active']) ? "selected='selected'" : ""; ?>><?= $report['pagetitle']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </form>
+
+                <?php if (count($this->formats) > 0) : ?>
+                    <div class="navbar-form navbar-right">
+                        <div class="btn-group">
+                            <?php foreach ($this->formats as $url => $format) : ?>
+                                <a class="btn btn-<?= $format['btnstyle']; ?> downloadButton" href="<?= $this->baseUrl($url); ?>" data-ext="<?= $format['extension']; ?>" data-loadingmessage="<?= $format['loadingmessage']; ?>"><?= $format['name']; ?>
+                                    <i class="fa fa-fw fa-download icon-white"></i></a>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+            </div>
+        </div>
+    </nav>
+</div>

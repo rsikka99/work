@@ -3,55 +3,22 @@
     <nav>
         <homemenu>
             <id>homemenu</id>
-            <label>Home</label>
+            <label>Dashboard</label>
             <class>dropdown</class>
-            <module>default</module>
-            <controller>index</controller>
-            <action>index</action>
+            <route>app.dashboard</route>
             <resource>default__index__index</resource>
             <privilege>View</privilege>
             <order>000</order>
+            <icon>fa fa-fw fa-dashboard</icon>
             <pages>
                 <login>
                     <label>Login</label>
-                    <module>default</module>
-                    <controller>auth</controller>
-                    <action>login</action>
+                    <route>auth.login</route>
                     <resource>default__auth__login</resource>
                     <visible>0</visible>
                 </login>
-                <usermenu>
-                    <id>usermenu</id>
-                    <label>User Menu</label>
-                    <uri>#</uri>
-                    <visible>0</visible>
-                    <pages>
-                        <edituserprofile>
-                            <label>My Profile</label>
-                            <module>admin</module>
-                            <controller>user</controller>
-                            <action>profile</action>
-                            <resource>admin__user__profile</resource>
-                            <icon>pencil</icon>
-                            <visible>1</visible>
-                        </edituserprofile>
-                        <changepassword>
-                            <label>Change Password</label>
-                            <module>default</module>
-                            <controller>auth</controller>
-                            <action>changepassword</action>
-                            <resource>default__auth__changepassword</resource>
-                        </changepassword>
-                        <logout>
-                            <label>Sign Out</label>
-                            <module>default</module>
-                            <controller>auth</controller>
-                            <action>logout</action>
-                            <resource>default__auth__logout</resource>
-                        </logout>
-                    </pages>
-                </usermenu>
                 <footermenu>
+                    <icon>fa fa-fw fa-info-circle</icon>
                     <id>footermenu</id>
                     <label>Information</label>
                     <uri>#</uri>
@@ -59,463 +26,352 @@
                     <class>dropdown</class>
                     <pages>
                         <logs>
+                            <icon>fa fa-fw fa-file-text-o</icon>
                             <label>Application Log</label>
-                            <module>admin</module>
-                            <controller>log</controller>
-                            <action>index</action>
+                            <route>app.application-log</route>
                             <resource>admin__log__index</resource>
                         </logs>
                         <about>
+                            <icon>fa fa-fw fa-info-circle</icon>
                             <label>About</label>
-                            <module>default</module>
-                            <controller>info</controller>
-                            <action>about</action>
+                            <route>app.about</route>
                             <resource>default__info__about</resource>
                         </about>
                         <eula>
+                            <icon>fa fa-fw fa-file-text-o</icon>
                             <label>EULA</label>
-                            <module>default</module>
-                            <controller>info</controller>
-                            <action>eula</action>
+                            <route>app.eula</route>
                             <resource>default__info__eula</resource>
                         </eula>
-                        <termsandconditions>
-                            <label>Terms &amp; Conditions</label>
-                            <module>default</module>
-                            <controller>info</controller>
-                            <action>termsandconditions</action>
-                            <resource>default__info__termsandconditions</resource>
-                        </termsandconditions>
                     </pages>
                 </footermenu>
                 <forgotpassword>
                     <label>Forgot Password</label>
-                    <module>default</module>
-                    <controller>auth</controller>
-                    <action>forgotpassword</action>
+                    <route>auth.login.forgot-password</route>
                     <resource>default__auth__forgotpassword</resource>
                     <visible>0</visible>
                 </forgotpassword>
                 <rmsUpload>
                     <label>Upload</label>
                     <class>dropdown</class>
-                    <module>quotegen</module>
-                    <controller>quote_reports</controller>
-                    <action>index</action>
+                    <route>rms-upload</route>
                     <resource>quotegen__quote_reports__index</resource>
                     <reset_params>0</reset_params>
                     <visible>0</visible>
                     <pages>
                         <uploadFile>
                             <label>Upload File</label>
-                            <module>proposalgen</module>
-                            <controller>fleet</controller>
-                            <action>index</action>
+                            <route>rms-upload.upload-file</route>
                             <resource>proposalgen__fleet__index</resource>
+                            <params>
+                                <rmsUploadId>0</rmsUploadId>
+                            </params>
                         </uploadFile>
                         <mapping>
                             <label>Mapping</label>
-                            <module>proposalgen</module>
-                            <controller>fleet</controller>
-                            <action>mapping</action>
+                            <route>rms-upload.mapping</route>
                             <resource>proposalgen__fleet__mapping</resource>
+                            <params>
+                                <rmsUploadId>0</rmsUploadId>
+                            </params>
                             <pages>
                                 <adminMapping>
                                     <label>Edit Mapping</label>
-                                    <module>proposalgen</module>
-                                    <controller>managedevices</controller>
-                                    <action>managemappingdevices</action>
+                                    <route>rms-upload.mapping.admin-edit-mapping</route>
                                     <resource>propolsagen__managedevices__managemappingdevices</resource>
+                                    <params>
+                                        <rmsUploadId>0</rmsUploadId>
+                                    </params>
                                 </adminMapping>
                                 <userMapping>
                                     <label>Edit Mapping</label>
-                                    <module>proposalgen</module>
-                                    <controller>fleet</controller>
-                                    <action>edit-unknown-device</action>
+                                    <route>rms-upload.mapping.user-edit-mapping</route>
                                     <resource>propolsagen__fleet__edit-unknown-device</resource>
+                                    <params>
+                                        <rmsUploadId>0</rmsUploadId>
+                                    </params>
                                 </userMapping>
                             </pages>
                         </mapping>
                         <summary>
                             <label>Summary</label>
-                            <module>proposalgen</module>
-                            <controller>fleet</controller>
-                            <action>summary</action>
+                            <route>rms-upload.summary</route>
                             <resource>proposalgen__fleet__summary</resource>
+                            <params>
+                                <rmsUploadId>0</rmsUploadId>
+                            </params>
                         </summary>
                     </pages>
                 </rmsUpload>
                 <assessment>
                     <label>Assessment</label>
-                    <module>assessment</module>
-                    <controller>index</controller>
-                    <action>index</action>
+                    <route>assessment</route>
                     <resource>assessment__index__index</resource>
                     <visible>0</visible>
                     <pages>
                         <selectUpload>
                             <label>Select Upload</label>
-                            <module>assessment</module>
-                            <controller>index</controller>
-                            <action>select-upload</action>
+                            <route>assessment.select-upload</route>
                             <resource>assessment__index__select-upload</resource>
                         </selectUpload>
                         <survey>
                             <label>Survey</label>
-                            <module>assessment</module>
-                            <controller>index</controller>
-                            <action>survey</action>
+                            <route>assessment.survey</route>
                             <resource>assessment__index__survey</resource>
                         </survey>
                         <settings>
                             <label>Settings</label>
-                            <module>assessment</module>
-                            <controller>index</controller>
-                            <action>settings</action>
+                            <route>assessment.settings</route>
                             <resource>assessment__index__settings</resource>
                         </settings>
                         <reportIndex>
                             <label>Report Index</label>
-                            <module>assessment</module>
-                            <controller>report_index</controller>
-                            <action>index</action>
+                            <route>assessment.report-index</route>
                             <resource>assessment__report_index__index</resource>
                         </reportIndex>
                         <reportAssessment>
                             <label>Report Assessment</label>
-                            <module>assessment</module>
-                            <controller>report_assessment</controller>
-                            <action>index</action>
+                            <route>assessment.report-assessment</route>
                             <resource>assessment__report_assessment__index</resource>
                         </reportAssessment>
                         <reportcostanalysis>
                             <label>Report Cost Analysis</label>
-                            <module>assessment</module>
-                            <controller>report_costanalysis</controller>
-                            <action>index</action>
+                            <route>assessment.report-cost-analysis</route>
                             <resource>assessment__report_costanalysis__index</resource>
                         </reportcostanalysis>
                         <grossmargin>
                             <label>Report Gross margin</label>
-                            <module>assessment</module>
-                            <controller>report_grossmargin</controller>
-                            <action>index</action>
+                            <route>assessment.report-gross-margin</route>
                             <resource>assessment__report_grossmargin__index</resource>
                         </grossmargin>
                         <tonervendorgrossmargin>
                             <label>Toner Vendor Gross margin</label>
-                            <module>assessment</module>
-                            <controller>report_tonervendorgrossmargin</controller>
-                            <action>index</action>
+                            <route>assessment.report-toner-vendor-gross-margin</route>
                             <resource>assessment__report_tonervendorgrossmargin__index</resource>
                         </tonervendorgrossmargin>
                         <toners>
                             <label>Report JIT SUPPLY AND TONER SKU Report</label>
-                            <module>assessment</module>
-                            <controller>report_toners</controller>
-                            <action>index</action>
+                            <route>assessment.report-jit-supply-and-toner-sku</route>
                             <resource>assessment__report_toners__index</resource>
                         </toners>
                         <olddevicelist>
                             <label>Report olddevicelist</label>
-                            <module>assessment</module>
-                            <controller>report_olddevicelist</controller>
-                            <action>index</action>
+                            <route>assessment.report-old-device-list</route>
                             <resource>assessment__report_olddevicelist__index</resource>
                         </olddevicelist>
                         <printingdevicelist>
                             <label>Report printingdevicelist</label>
-                            <module>assessment</module>
-                            <controller>report_printingdevicelist</controller>
-                            <action>index</action>
+                            <route>assessment.report-printing-device-list</route>
                             <resource>assessment__report_printingdevicelist__index</resource>
                         </printingdevicelist>
                         <solution>
                             <label>Report solution</label>
-                            <module>assessment</module>
-                            <controller>report_solution</controller>
-                            <action>index</action>
+                            <route>assessment.report-solution</route>
                             <resource>assessment__report_solution__index</resource>
                         </solution>
                         <leasebuyback>
                             <label>Lease Buyback</label>
-                            <module>assessment</module>
-                            <controller>report_leasebuyback</controller>
-                            <action>index</action>
+                            <route>assessment.report-lease-buy-back</route>
                             <resource>assessment__report_leasebuyback__index</resource>
                         </leasebuyback>
                         <fleetattributes>
                             <label>Fleet Attributes</label>
-                            <module>assessment</module>
-                            <controller>report_fleetattributes</controller>
-                            <action>index</action>
+                            <route>assessment.report-fleet-attributes</route>
                             <resource>assessment__report_fleetattributes__index</resource>
                         </fleetattributes>
                         <utilization>
                             <label>Utilization</label>
-                            <module>assessment</module>
-                            <controller>report_utilization</controller>
-                            <action>index</action>
+                            <route>assessment.report-utilization</route>
                             <resource>assessment__report_utilization__index</resource>
                         </utilization>
                     </pages>
                 </assessment>
                 <hardwareoptimization>
                     <label>Hardware Optimization</label>
-                    <module>hardwareoptimization</module>
-                    <controller>index</controller>
-                    <action>index</action>
+                    <route>hardwareoptimization</route>
                     <resource>hardwareoptimization__index__index</resource>
                     <visible>0</visible>
                     <pages>
                         <select-upload>
                             <label>Select Upload</label>
-                            <module>hardwareoptimization</module>
-                            <controller>index</controller>
-                            <action>select-upload</action>
+                            <route>hardwareoptimization.select-upload</route>
                             <resource>hardwareoptimization__index__select-upload</resource>
                         </select-upload>
                         <settings>
                             <label>Settings</label>
-                            <module>hardwareoptimization</module>
-                            <controller>index</controller>
-                            <action>settings</action>
+                            <route>hardwareoptimization.settings</route>
                             <resource>hardwareoptimization__index__settings</resource>
                         </settings>
                         <optimize>
                             <label>Optimization</label>
-                            <module>hardwareoptimization</module>
-                            <controller>index</controller>
-                            <action>optimize</action>
+                            <route>hardwareoptimization.optimization</route>
                             <resource>hardwareoptimization__index__optimize</resource>
                         </optimize>
                         <reportIndex>
                             <label>Report index</label>
-                            <module>hardwareoptimization</module>
-                            <controller>report_index</controller>
-                            <action>index</action>
+                            <route>hardwareoptimization.report-index</route>
                             <resource>hardwareoptimization__report_index__index</resource>
                         </reportIndex>
                         <customerOptimization>
                             <label>Customer Optimization</label>
-                            <module>hardwareoptimization</module>
-                            <controller>report_customer_optimization</controller>
-                            <action>index</action>
+                            <route>hardwareoptimization.report-customer-optimization</route>
                             <resource>hardwareoptimization__report_customer_optimization__index</resource>
                         </customerOptimization>
                         <dealerOptimization>
-                            <label>Customer Optimization</label>
-                            <module>hardwareoptimization</module>
-                            <controller>report_dealer_optimization</controller>
-                            <action>index</action>
+                            <label>Dealer Optimization</label>
+                            <route>hardwareoptimization.report-dealer-optimization</route>
                             <resource>hardwareoptimization__report_dealer_optimization__index</resource>
                         </dealerOptimization>
                     </pages>
                 </hardwareoptimization>
-                <memjetoptimization>
-                    <label>Memjet Optimization</label>
-                    <module>memjetoptimization</module>
-                    <controller>index</controller>
-                    <action>index</action>
-                    <resource>memjetoptimization__index__index</resource>
-                    <visible>0</visible>
-                    <pages>
-                        <select-upload>
-                            <label>Select Upload</label>
-                            <module>memjetoptimization</module>
-                            <controller>index</controller>
-                            <action>select-upload</action>
-                            <resource>memjetoptimization__index__select-upload</resource>
-                        </select-upload>
-                        <settings>
-                            <label>Settings</label>
-                            <module>memjetoptimization</module>
-                            <controller>index</controller>
-                            <action>settings</action>
-                            <resource>memjetoptimization__index__settings</resource>
-                        </settings>
-                        <optimize>
-                            <label>Optimization</label>
-                            <module>memjetoptimization</module>
-                            <controller>index</controller>
-                            <action>optimize</action>
-                            <resource>memjetoptimization__index__optimize</resource>
-                        </optimize>
-                        <reportIndex>
-                            <label>Report index</label>
-                            <module>memjetoptimization</module>
-                            <controller>report_index</controller>
-                            <action>index</action>
-                            <resource>memjetoptimization__report_index__index</resource>
-                        </reportIndex>
-                        <customerOptimization>
-                            <label>Customer Optimization</label>
-                            <module>memjetoptimization</module>
-                            <controller>report_customer_optimization</controller>
-                            <action>index</action>
-                            <resource>memjetoptimization__report_customer_optimization__index</resource>
-                        </customerOptimization>
-                        <dealerOptimization>
-                            <label>Customer Optimization</label>
-                            <module>memjetoptimization</module>
-                            <controller>report_dealer_optimization</controller>
-                            <action>index</action>
-                            <resource>memjetoptimization__report_dealer_optimization__index</resource>
-                        </dealerOptimization>
-                    </pages>
-                </memjetoptimization>
                 <healthcheck>
                     <label>Healthcheck</label>
-                    <module>healthcheck</module>
-                    <controller>index</controller>
-                    <action>index</action>
+                    <route>healthcheck</route>
                     <resource>healthcheck__index__index</resource>
                     <visible>0</visible>
                     <pages>
                         <select-upload>
                             <label>Select Upload</label>
-                            <module>healthcheck</module>
-                            <controller>index</controller>
-                            <action>select-upload</action>
+                            <route>healthcheck.select-upload</route>
                             <resource>healthcheck__index__select-upload</resource>
                         </select-upload>
                         <settings>
                             <label>Settings</label>
-                            <module>healthcheck</module>
-                            <controller>index</controller>
-                            <action>settings</action>
+                            <route>healthcheck.settings</route>
                             <resource>healthcheck__index__settings</resource>
                         </settings>
                         <report>
                             <label>Healthcheck Report</label>
-                            <module>healthcheck</module>
-                            <controller>report_healthcheck</controller>
-                            <action>index</action>
+                            <route>healthcheck.report</route>
                             <resource>healthcheck__report_healthcheck__index</resource>
                         </report>
                         <printiqreport>
                             <label>PrintIQ Healthcheck Report</label>
-                            <module>healthcheck</module>
-                            <controller>report_printiq_healthcheck</controller>
-                            <action>index</action>
+                            <route>healthcheck.report-printiq</route>
                             <resource>healthcheck__report_printiq_healthcheck__index</resource>
                         </printiqreport>
                     </pages>
                 </healthcheck>
                 <quotemenu>
-                    <id>quotemenu</id>
                     <label>Current Quote</label>
-                    <module>quotegen</module>
-                    <controller>quote_devices</controller>
-                    <action>index</action>
+                    <route>quotes</route>
                     <resource>quotegen__quote_devices__index</resource>
                     <reset_params>0</reset_params>
                     <visible>0</visible>
+                    <params>
+                        <quoteId>0</quoteId>
+                    </params>
                     <pages>
                         <builddevice>
                             <label>Add Hardware</label>
                             <class>dropdown</class>
-                            <module>quotegen</module>
-                            <controller>quote_devices</controller>
-                            <action>index</action>
+                            <route>quotes.add-hardware</route>
                             <resource>quotegen__quote_devices__index</resource>
                             <reset_params>0</reset_params>
+                            <params>
+                                <quoteId>0</quoteId>
+                            </params>
                             <pages>
-                                <addDevice>
-                                    <label>Add New Device</label>
-                                    <module>quotegen</module>
-                                    <controller>quote_devices</controller>
-                                    <action>create-new-quote-device</action>
-                                    <resource>quotegen__quote_devices__create-new-quote-device</resource>
-                                    <reset_params>0</reset_params>
-                                </addDevice>
                                 <editDevice>
                                     <label>Edit Device</label>
-                                    <module>quotegen</module>
-                                    <controller>quote_devices</controller>
-                                    <action>edit-quote-device</action>
+                                    <route>quotes.add-hardware.edit</route>
                                     <visible>0</visible>
                                     <resource>quotegen__quote_devices__edit-quote-device</resource>
                                     <reset_params>0</reset_params>
+                                    <params>
+                                        <id>0</id>
+                                        <quoteId>0</quoteId>
+                                    </params>
                                     <pages>
                                         <addOptionsToDevice>
                                             <label>Add Options</label>
-                                            <module>quotegen</module>
-                                            <controller>quote_devices</controller>
-                                            <action>add-options-to-quote-device</action>
+                                            <route>quotes.add-hardware.edit.add-options</route>
                                             <visible>0</visible>
                                             <resource>quotegen__quote_devices__add-options-to-quote-device</resource>
                                             <reset_params>0</reset_params>
+                                            <params>
+                                                <id>0</id>
+                                                <quoteId>0</quoteId>
+                                            </params>
                                         </addOptionsToDevice>
                                     </pages>
                                 </editDevice>
                                 <removeDevice>
                                     <label>Remove Device</label>
-                                    <module>quotegen</module>
-                                    <controller>quote_devices</controller>
-                                    <action>delete-quote-device</action>
+                                    <route>quotes.add-hardware.delete</route>
                                     <visible>0</visible>
                                     <resource>quotegen__quote_devices__delete-quote-device</resource>
                                     <reset_params>0</reset_params>
+                                    <params>
+                                        <id>0</id>
+                                        <quoteId>0</quoteId>
+                                    </params>
                                 </removeDevice>
                             </pages>
                         </builddevice>
                         <groupDevices>
                             <label>Group Devices</label>
-                            <module>quotegen</module>
-                            <controller>quote_groups</controller>
-                            <action>index</action>
+                            <route>quotes.group-devices</route>
                             <resource>quotegen__quote_groups__index</resource>
                             <reset_params>0</reset_params>
+                            <params>
+                                <quoteId>0</quoteId>
+                            </params>
                         </groupDevices>
                         <managepages>
                             <label>Pages</label>
-                            <module>quotegen</module>
-                            <controller>quote_pages</controller>
-                            <action>index</action>
+                            <route>quotes.manage-pages</route>
                             <resource>quotegen__quote_pages__index</resource>
                             <reset_params>0</reset_params>
+                            <params>
+                                <quoteId>0</quoteId>
+                            </params>
                         </managepages>
                         <profitability>
                             <label>Hardware Financing</label>
-                            <module>quotegen</module>
-                            <controller>quote_profitability</controller>
-                            <action>index</action>
+                            <route>quotes.hardware-financing</route>
                             <resource>quotegen__quote_profitability__index</resource>
                             <reset_params>0</reset_params>
+                            <params>
+                                <quoteId>0</quoteId>
+                            </params>
                         </profitability>
                         <viewAndPrintReports>
                             <label>Reports</label>
                             <class>dropdown</class>
-                            <module>quotegen</module>
-                            <controller>quote_reports</controller>
-                            <action>index</action>
+                            <route>quotes.reports</route>
                             <resource>quotegen__quote_reports__index</resource>
                             <reset_params>0</reset_params>
+                            <params>
+                                <quoteId>0</quoteId>
+                            </params>
                             <pages>
                                 <purchaseQuote>
                                     <label>Purchase Report</label>
-                                    <module>quotegen</module>
-                                    <controller>quote_reports</controller>
-                                    <action>purchase-quote</action>
+                                    <route>quotes.reports.purchase</route>
                                     <resource>quotegen__quote_reports__purchase-quote</resource>
                                     <reset_params>0</reset_params>
+                                    <params>
+                                        <quoteId>0</quoteId>
+                                    </params>
                                 </purchaseQuote>
                                 <leaseQuote>
                                     <label>Lease Report</label>
-                                    <module>quotegen</module>
-                                    <controller>quote_reports</controller>
-                                    <action>lease-quote</action>
+                                    <route>quotes.reports.lease</route>
                                     <resource>quotegen__quote_reports__lease-quote</resource>
                                     <reset_params>0</reset_params>
+                                    <params>
+                                        <quoteId>0</quoteId>
+                                    </params>
                                 </leaseQuote>
                                 <orderList>
                                     <label>Order List</label>
-                                    <module>quotegen</module>
-                                    <controller>quote_reports</controller>
-                                    <action>order-list</action>
+                                    <route>quotes.reports.order-list</route>
                                     <resource>quotegen__quote_reports__order-list</resource>
                                     <reset_params>0</reset_params>
+                                    <params>
+                                        <quoteId>0</quoteId>
+                                    </params>
                                 </orderList>
                             </pages>
                         </viewAndPrintReports>
@@ -523,33 +379,25 @@
                 </quotemenu>
                 <clients>
                     <label>Clients</label>
-                    <module>default</module>
-                    <controller>index</controller>
-                    <action>index</action>
-                    <resource>default__index__index</resource>
+                    <route>clients</route>
+                    <resource>default__index__view-all-clients</resource>
                     <visible>0</visible>
                     <pages>
                         <viewallclients>
                             <label>All Clients</label>
-                            <module>default</module>
-                            <controller>index</controller>
-                            <action>view-all-clients</action>
+                            <route>clients</route>
                             <resource>default__index__view-all-clients</resource>
                             <visible>0</visible>
                         </viewallclients>
                         <createNewClient>
                             <label>Create Clients</label>
-                            <module>default</module>
-                            <controller>index</controller>
-                            <action>create-client</action>
+                            <route>clients.create-clients-dashboard</route>
                             <resource>default__index__create-client</resource>
                             <visible>0</visible>
                         </createNewClient>
                         <editClient>
                             <label>Edit Clients</label>
-                            <module>default</module>
-                            <controller>index</controller>
-                            <action>edit-client</action>
+                            <route>client.edit-clients-dashboard</route>
                             <resource>default__index__edit-client</resource>
                             <visible>0</visible>
                         </editClient>
@@ -557,17 +405,13 @@
                 </clients>
                 <clientpricing>
                     <label>Client Pricing</label>
-                    <module>proposalgen</module>
-                    <controller>client-pricing</controller>
-                    <action>index</action>
+                    <route>client.edit-clients-dashboard</route>
                     <resource>proposalgen__client-pricing__index</resource>
                     <visible>0</visible>
                     <pages>
                         <client-pricing-upload>
                             <label>Client Pricing</label>
-                            <module>proposalgen</module>
-                            <controller>client-pricing</controller>
-                            <action>upload</action>
+                            <route>client.edit-clients-dashboard</route>
                             <resource>proposalgen__client-pricing__upload</resource>
                             <visible>0</visible>
                         </client-pricing-upload>
@@ -575,365 +419,297 @@
                 </clientpricing>
             </pages>
         </homemenu>
-        <adminmenu>
-            <label>Admin</label>
-            <module>admin</module>
-            <controller>index</controller>
-            <action>index</action>
-            <resource>admin__index__index</resource>
-            <order>5</order>
+        <hardwarelibrary>
+            <label>Hardware Library</label>
+            <route>hardware-library.devices</route>
+            <resource>hardware-library__index__index</resource>
+            <order>999991</order>
+            <icon>fa fa-fw fa-print</icon>
+            <class>dropdown</class>
             <pages>
-                <hardwarelibrary>
-                    <label>Hardware Library</label>
-                    <module>hardwarelibrary</module>
-                    <controller>index</controller>
-                    <action>index</action>
-                    <resource>hardwarelibrary__index__index</resource>
-                    <order>999991</order>
-                    <class>dropdown</class>
+                <viewalldevices>
+                    <label>All Devices</label>
+                    <route>hardware-library.all-devices</route>
+                    <resource>quotegen__devicesetup__index</resource>
+                </viewalldevices>
+                <alldevices>
+                    <label>All Devices</label>
+                    <route>hardware-library.devices</route>
+                    <resource>hardware-library__devices__index</resource>
+                    <visible>0</visible>
                     <pages>
-                        <viewalldevices>
-                            <label>All Devices</label>
-                            <module>quotegen</module>
-                            <controller>devicesetup</controller>
-                            <action>index</action>
-                            <resource>quotegen__devicesetup__index</resource>
-                        </viewalldevices>
-                        <viewalltoners>
-                            <label>All Toners</label>
-                            <module>hardwarelibrary</module>
-                            <controller>toner</controller>
-                            <action>index</action>
-                            <resource>hardwarelibrary__toner__index</resource>
-                        </viewalltoners>
-                        <updatepricing>
-                            <label>Bulk Hardware/Pricing Updates</label>
-                            <module>proposalgen</module>
-                            <controller>costs</controller>
-                            <action>bulkdevicepricing</action>
-                            <resource>proposalgen__costs__bulkdevicepricing</resource>
-                            <pages>
-                                <bulkfilepricing>
-                                    <label>Bulk File Device Pricing</label>
-                                    <module>proposalgen</module>
-                                    <controller>costs</controller>
-                                    <action>bulk-file-device-pricing</action>
-                                    <resource>proposalgen__costs__bulk-file-device-pricing</resource>
-                                    <visible>0</visible>
-                                </bulkfilepricing>
-                                <bulkfiledevicefeatures>
-                                    <label>Bulk File Device Features</label>
-                                    <module>proposalgen</module>
-                                    <controller>costs</controller>
-                                    <action>bulk-file-device-features</action>
-                                    <resource>proposalgen__costs__bulk-file-device-features</resource>
-                                    <visible>0</visible>
-                                </bulkfiledevicefeatures>
-                                <bulkfiletonerpricing>
-                                    <label>Bulk File Toner Pricing</label>
-                                    <module>proposalgen</module>
-                                    <controller>costs</controller>
-                                    <action>bulk-file-toner-pricing</action>
-                                    <resource>proposalgen__costs__bulk-file-toner-pricing</resource>
-                                    <visible>0</visible>
-                                </bulkfiletonerpricing>
-                                <bulkfiletonermatchup>
-                                    <label>Bulk File Toner Matchup</label>
-                                    <module>proposalgen</module>
-                                    <controller>costs</controller>
-                                    <action>bulk-file-toner-matchup</action>
-                                    <resource>proposalgen__costs__bulk-file-toner-matchup</resource>
-                                    <visible>0</visible>
-                                </bulkfiletonermatchup>
-                            </pages>
-                        </updatepricing>
-                        <deviceswaps>
-                            <label>Device Swaps</label>
-                            <module>hardwareoptimization</module>
-                            <controller>deviceswaps</controller>
-                            <action>index</action>
-                            <resource>hardwareoptimization__deviceswaps__index</resource>
-                        </deviceswaps>
-                        <memjetdeviceswaps>
-                            <label>Memjet Device Swaps</label>
-                            <module>admin</module>
-                            <controller>memjetdeviceswaps</controller>
-                            <action>index</action>
-                            <visible>0</visible>
-                            <resource>memjetoptimization__deviceswaps__index</resource>
-                        </memjetdeviceswaps>
-                        <managematchups>
-                            <label>Manage Printer Matchups</label>
-                            <module>proposalgen</module>
-                            <controller>admin</controller>
-                            <action>managematchups</action>
-                            <resource>proposalgen__admin__managematchups</resource>
-                        </managematchups>
-                        <manufacturers>
-                            <label>Manufacturers</label>
-                            <module>proposalgen</module>
-                            <controller>manufacturer</controller>
-                            <action>index</action>
-                            <resource>proposalgen__manufacturer__index</resource>
-                            <visible>1</visible>
-                            <pages>
-                                <view>
-                                    <label>View</label>
-                                    <module>proposalgen</module>
-                                    <controller>manufacturer</controller>
-                                    <action>view</action>
-                                    <resource>proposalgen__manufacturer__view</resource>
-                                    <visible>0</visible>
-                                </view>
-                                <delete>
-                                    <label>Delete</label>
-                                    <module>proposalgen</module>
-                                    <controller>manufacturer</controller>
-                                    <action>delete</action>
-                                    <resource>proposalgen__manufacturer__delete</resource>
-                                    <visible>0</visible>
-                                </delete>
-                                <create>
-                                    <label>Create</label>
-                                    <module>proposalgen</module>
-                                    <controller>manufacturer</controller>
-                                    <action>create</action>
-                                    <resource>proposalgen__manufacturer__create</resource>
-                                    <visible>0</visible>
-                                </create>
-                                <update>
-                                    <label>Edit</label>
-                                    <module>proposalgen</module>
-                                    <controller>manufacturer</controller>
-                                    <action>edit</action>
-                                    <resource>proposalgen__manufacturer__edit</resource>
-                                    <visible>0</visible>
-                                </update>
-                            </pages>
-                        </manufacturers>
-                        <viewall>
+                        <view>
                             <label>View All Devices</label>
-                            <module>quotegen</module>
-                            <controller>devicesetup</controller>
-                            <action>index</action>
+                            <route>hardware-library.all-devices</route>
+                            <resource>hardware-library__devices__view</resource>
                             <visible>0</visible>
-                            <resource>quotegen__devicesetup__index</resource>
-                        </viewall>
-                        <create>
-                            <label>Create New</label>
-                            <module>quotegen</module>
-                            <controller>devicesetup</controller>
-                            <action>create</action>
-                            <visible>0</visible>
-                            <resource>quotegen__devicesetup__create</resource>
-                        </create>
-                        <edit>
-                            <label>Device - Details</label>
-                            <module>quotegen</module>
-                            <controller>devicesetup</controller>
-                            <action>edit</action>
-                            <visible>0</visible>
-                            <resource>quotegen__devicesetup__edit</resource>
-                        </edit>
-                        <delete>
-                            <label>Delete Device</label>
-                            <module>quotegen</module>
-                            <controller>devicesetup</controller>
-                            <action>delete</action>
-                            <visible>0</visible>
-                            <resource>quotegen__devicesetup__delete</resource>
-                        </delete>
-                        <toners>
-                            <label>Device - Toners</label>
-                            <module>quotegen</module>
-                            <controller>devicesetup</controller>
-                            <action>toners</action>
-                            <visible>0</visible>
-                            <resource>quotegen__devicesetup__toners</resource>
-                        </toners>
-                        <options>
-                            <label>Device - Available Options</label>
-                            <module>quotegen</module>
-                            <controller>devicesetup</controller>
-                            <action>options</action>
-                            <visible>0</visible>
-                            <resource>quotegen__devicesetup__options</resource>
-                        </options>
-                        <configurations>
-                            <label>Device - Hardware Configurations</label>
-                            <module>quotegen</module>
-                            <controller>devicesetup</controller>
-                            <action>configurations</action>
-                            <visible>0</visible>
-                            <resource>quotegen__devicesetup__configurations</resource>
-                        </configurations>
+                        </view>
                     </pages>
-                </hardwarelibrary>
-                <dealermanagement>
-                    <order>999992</order>
-                    <label>Dealer Management</label>
-                    <module>dealermanagement</module>
-                    <controller>index</controller>
-                    <action>index</action>
+                </alldevices>
+                <updatepricing>
+                    <label>Bulk Hardware/Pricing Updates</label>
+                    <route>hardware-library.bulk-hardware-pricing-updates</route>
+                    <resource>proposalgen__costs__bulkdevicepricing</resource>
+                    <pages>
+                        <bulkfilepricing>
+                            <label>Bulk File Device Pricing</label>
+                            <route>hardware-library.bulk-hardware-pricing-updates.bulk-file-device-pricing</route>
+                            <resource>proposalgen__costs__bulk-file-device-pricing</resource>
+                        </bulkfilepricing>
+                        <bulkfiledevicefeatures>
+                            <label>Bulk File Device Features</label>
+                            <route>hardware-library.bulk-hardware-pricing-updates.bulk-file-device-features</route>
+                            <resource>proposalgen__costs__bulk-file-device-features</resource>
+                        </bulkfiledevicefeatures>
+                        <bulkfiletonerpricing>
+                            <label>Bulk File Toner Pricing</label>
+                            <route>hardware-library.bulk-hardware-pricing-updates.bulk-file-toner-pricing</route>
+                            <resource>proposalgen__costs__bulk-file-toner-pricing</resource>
+                        </bulkfiletonerpricing>
+                        <bulkfiletonermatchup>
+                            <label>Bulk File Toner Matchup</label>
+                            <route>hardware-library.bulk-hardware-pricing-updates.bulk-file-toner-matchup</route>
+                            <resource>proposalgen__costs__bulk-file-toner-matchup</resource>
+                        </bulkfiletonermatchup>
+                    </pages>
+                </updatepricing>
+                <deviceswaps>
+                    <label>Device Swaps</label>
+                    <route>hardware-library.device-swaps</route>
+                    <resource>hardwareoptimization__deviceswaps__index</resource>
+                </deviceswaps>
+                <manufacturers>
+                    <label>Manufacturers</label>
+                    <route>hardware-library.manufacturers</route>
+                    <resource>proposalgen__manufacturer__index</resource>
+                    <visible>1</visible>
+                    <pages>
+                        <view>
+                            <label>View</label>
+                            <route>hardware-library.manufacturers.view</route>
+                            <resource>proposalgen__manufacturer__view</resource>
+                            <visible>0</visible>
+                        </view>
+                        <delete>
+                            <label>Delete</label>
+                            <route>hardware-library.manufacturers.delete</route>
+                            <resource>proposalgen__manufacturer__delete</resource>
+                            <visible>0</visible>
+                            <params>
+                                <id>0</id>
+                            </params>
+                        </delete>
+                        <create>
+                            <label>Create</label>
+                            <route>hardware-library.manufacturers.create</route>
+                            <resource>proposalgen__manufacturer__create</resource>
+                            <visible>0</visible>
+                        </create>
+                        <update>
+                            <label>Edit</label>
+                            <route>hardware-library.manufacturers.edit</route>
+                            <resource>proposalgen__manufacturer__edit</resource>
+                            <visible>0</visible>
+                            <params>
+                                <id>0</id>
+                            </params>
+                        </update>
+                    </pages>
+                </manufacturers>
+                <managematchups>
+                    <label>Manage Printer Matchups</label>
+                    <visible>0</visible>
+                    <route>hardware-library.managematchups</route>
+                    <resource>proposalgen__admin__managematchups</resource>
+                </managematchups>
+                <viewalltoners>
+                    <label>Toners</label>
+                    <route>hardware-library.all-toners</route>
+                    <resource>hardware-library__toner__index</resource>
+                </viewalltoners>
+            </pages>
+        </hardwarelibrary>
+        <usermenu>
+            <icon>fa fa-fw fa-cog</icon>
+            <id>usermenu</id>
+            <label>User Menu</label>
+            <uri>#</uri>
+            <visible>0</visible>
+            <pages>
+                <edituserprofile>
+                    <icon>fa fa-fw fa-pencil</icon>
+                    <label>My Profile</label>
+                    <route>profile</route>
+                    <resource>admin__user__profile</resource>
+                    <visible>1</visible>
+                </edituserprofile>
+                <changepassword>
+                    <icon>fa fa-fw fa-lock</icon>
+                    <label>Change Password</label>
+                    <route>auth.login.change-password</route>
+                    <resource>default__auth__changepassword</resource>
+                </changepassword>
+                <manage-company>
+                    <divider-above>true</divider-above>
+                    <icon>fa fa-fw fa-cogs</icon>
+                    <label>Manage Company</label>
+                    <route>company</route>
                     <resource>dealermanagement__index__index</resource>
-                    <class>dropdown</class>
                     <pages>
                         <branding>
                             <label>Branding</label>
-                            <module>dealermanagement</module>
-                            <controller>branding</controller>
-                            <action>index</action>
+                            <route>company.branding</route>
                             <resource>dealermanagement__branding__index</resource>
                         </branding>
                         <clients>
                             <label>Clients</label>
-                            <module>dealermanagement</module>
-                            <controller>client</controller>
-                            <action>index</action>
+                            <route>company.clients</route>
                             <resource>dealermanagement__client__index</resource>
                             <pages>
                                 <create>
                                     <label>Create New</label>
-                                    <module>dealermanagement</module>
-                                    <controller>client</controller>
-                                    <action>create</action>
+                                    <route>company.clients.create</route>
                                     <visible>0</visible>
                                     <resource>dealermanagement__client__create</resource>
                                 </create>
                                 <editclient>
                                     <label>Edit Client</label>
-                                    <module>dealermanagement</module>
-                                    <controller>client</controller>
-                                    <action>edit</action>
+                                    <route>company.clients.edit</route>
                                     <visible>0</visible>
                                     <resource>dealermanagement__client__edit</resource>
+                                    <params>
+                                        <id>0</id>
+                                    </params>
                                 </editclient>
                                 <viewclient>
                                     <label>View Client</label>
-                                    <module>dealermanagement</module>
-                                    <controller>client</controller>
-                                    <action>view</action>
+                                    <route>company.clients.view</route>
                                     <visible>0</visible>
                                     <resource>dealermanagement__client__view</resource>
+                                    <params>
+                                        <id>0</id>
+                                    </params>
                                 </viewclient>
                                 <deleteclient>
                                     <label>Delete Client</label>
-                                    <module>dealermanagement</module>
-                                    <controller>client</controller>
-                                    <action>delete</action>
+                                    <route>company.clients.delete</route>
                                     <visible>0</visible>
                                     <resource>dealermanagement__client__delete</resource>
+                                    <params>
+                                        <id>0</id>
+                                    </params>
                                 </deleteclient>
                             </pages>
                         </clients>
                         <leasing>
                             <label>Leasing Rates</label>
-                            <module>dealermanagement</module>
-                            <controller>leasingschema</controller>
-                            <action>index</action>
+                            <route>company.leasing-schema</route>
                             <resource>dealermanagement__leasingschema__index</resource>
                             <pages>
                                 <viewschema>
                                     <label>View Provider</label>
-                                    <module>dealermanagement</module>
-                                    <controller>leasingschema</controller>
-                                    <action>index</action>
+                                    <route>company.leasing-schema.view-provider</route>
                                     <resource>dealermanagement__leasingschema__index</resource>
                                     <visible>0</visible>
                                 </viewschema>
                                 <view>
                                     <label>View</label>
-                                    <module>dealermanagement</module>
-                                    <controller>leasingschema</controller>
-                                    <action>view</action>
+                                    <route>company.leasing-schema.view</route>
                                     <resource>dealermanagement__leasingschema__view</resource>
                                     <visible>0</visible>
+                                    <params>
+                                        <leasingSchemaId>0</leasingSchemaId>
+                                    </params>
                                 </view>
                                 <create>
                                     <label>Create</label>
-                                    <module>dealermanagement</module>
-                                    <controller>leasingschema</controller>
-                                    <action>create</action>
+                                    <route>company.leasing-schema.create</route>
                                     <resource>dealermanagement__leasingschema__create</resource>
                                     <visible>0</visible>
                                 </create>
                                 <edit>
                                     <label>Edit</label>
-                                    <module>dealermanagement</module>
-                                    <controller>leasingschema</controller>
-                                    <action>edit</action>
+                                    <route>company.leasing-schema.edit</route>
                                     <resource>dealermanagement__leasingschema__edit</resource>
                                     <visible>0</visible>
+                                    <params>
+                                        <leasingSchemaId>0</leasingSchemaId>
+                                    </params>
                                 </edit>
                                 <delete>
                                     <label>Delete</label>
-                                    <module>dealermanagement</module>
-                                    <controller>leasingschema</controller>
-                                    <action>delete</action>
+                                    <route>company.leasing-schema.delete</route>
                                     <resource>dealermanagement__leasingschema__delete</resource>
                                     <visible>0</visible>
+                                    <params>
+                                        <leasingSchemaId>0</leasingSchemaId>
+                                    </params>
                                 </delete>
                                 <addterm>
                                     <label>Add Term</label>
-                                    <module>dealermanagement</module>
-                                    <controller>leasingschema</controller>
-                                    <action>addterm</action>
+                                    <route>company.leasing-schema.add-term</route>
                                     <resource>dealermanagement__leasingschema__addterm</resource>
                                     <visible>0</visible>
                                 </addterm>
                                 <editterm>
                                     <label>Edit Term</label>
-                                    <module>dealermanagement</module>
-                                    <controller>leasingschema</controller>
-                                    <action>editterm</action>
+                                    <route>company.leasing-schema.edit-term</route>
                                     <resource>dealermanagement__leasingschema__editterm</resource>
                                     <visible>0</visible>
+                                    <params>
+                                        <id>0</id>
+                                    </params>
                                 </editterm>
                                 <delterm>
                                     <label>Delete Term</label>
-                                    <module>dealermanagement</module>
-                                    <controller>leasingschema</controller>
-                                    <action>deleteterm</action>
+                                    <route>company.leasing-schema.delete-term</route>
                                     <resource>dealermanagement__leasingschema__deleteterm</resource>
                                     <visible>0</visible>
+                                    <params>
+                                        <id>0</id>
+                                    </params>
                                 </delterm>
                                 <addrange>
                                     <label>Add Range</label>
-                                    <module>dealermanagement</module>
-                                    <controller>leasingschema</controller>
-                                    <action>addrange</action>
+                                    <route>company.leasing-schema.add-range</route>
                                     <resource>dealermanagement__leasingschema__addrange</resource>
                                     <visible>0</visible>
+                                    <params>
+                                        <leasingSchemaId>0</leasingSchemaId>
+                                    </params>
                                 </addrange>
                                 <editrange>
                                     <label>Edit Range</label>
-                                    <module>dealermanagement</module>
-                                    <controller>leasingschema</controller>
-                                    <action>editrange</action>
+                                    <route>company.leasing-schema.edit-range</route>
                                     <resource>dealermanagement__leasingschema__editrange</resource>
                                     <visible>0</visible>
+                                    <params>
+                                        <id>0</id>
+                                        <leasingSchemaId>0</leasingSchemaId>
+                                    </params>
                                 </editrange>
                                 <delrange>
                                     <label>Delete Range</label>
-                                    <module>dealermanagement</module>
-                                    <controller>leasingschema</controller>
-                                    <action>deleterange</action>
+                                    <route>company.leasing-schema.delete-range</route>
                                     <resource>dealermanagement__leasingschema__deleterange</resource>
                                     <visible>0</visible>
+                                    <params>
+                                        <id>0</id>
+                                        <leasingSchemaId>0</leasingSchemaId>
+                                    </params>
                                 </delrange>
                                 <resetschema>
                                     <label>Clear Provider</label>
-                                    <module>dealermanagement</module>
-                                    <controller>leasingschema</controller>
-                                    <action>resetschema</action>
+                                    <route>company.leasing-schema.clear-provider</route>
                                     <resource>dealermanagement__leasingschema__resetschema</resource>
                                     <visible>0</visible>
+                                    <params>
+                                        <leasingSchemaId>0</leasingSchemaId>
+                                    </params>
                                 </resetschema>
                                 <import>
                                     <label>Import Leasing Rate</label>
-                                    <module>dealermanagement</module>
-                                    <controller>leasingschema</controller>
-                                    <action>import</action>
+                                    <route>company.leasing-schema.import-leasing-rate</route>
                                     <resource>dealermanagement__leasingschema__import</resource>
                                     <visible>0</visible>
                                 </import>
@@ -941,139 +717,135 @@
                         </leasing>
                         <UserManagement>
                             <label>Users</label>
-                            <module>dealermanagement</module>
-                            <controller>user</controller>
-                            <action>index</action>
+                            <route>company.users</route>
                             <resource>dealermanagement__user__index</resource>
                             <pages>
                                 <create>
                                     <label>Create User</label>
-                                    <module>dealermanagement</module>
-                                    <controller>user</controller>
-                                    <action>create</action>
+                                    <route>company.users.create</route>
                                     <resource>dealermanagement__user__create</resource>
                                     <icon>plus-sign</icon>
                                     <visible>0</visible>
                                 </create>
                                 <edit>
                                     <label>Edit User</label>
-                                    <module>dealermanagement</module>
-                                    <controller>user</controller>
-                                    <action>edit</action>
+                                    <route>company.users.edit</route>
                                     <resource>dealermanagement__user__create</resource>
                                     <icon>pencil</icon>
                                     <visible>0</visible>
+                                    <params>
+                                        <id>0</id>
+                                    </params>
                                 </edit>
                                 <delete>
                                     <label>Delete User</label>
-                                    <module>dealermanagement</module>
-                                    <controller>user</controller>
-                                    <action>delete</action>
+                                    <route>company.users.delete</route>
                                     <resource>dealermanagement__user__delete</resource>
                                     <visible>0</visible>
+                                    <params>
+                                        <id>0</id>
+                                    </params>
                                 </delete>
                                 <view>
                                     <label>View User</label>
-                                    <module>dealermanagement</module>
-                                    <controller>user</controller>
-                                    <action>view</action>
+                                    <route>company.users.view</route>
                                     <resource>dealermanagement__user__view</resource>
                                     <visible>0</visible>
+                                    <params>
+                                        <id>0</id>
+                                    </params>
                                 </view>
                             </pages>
                         </UserManagement>
                     </pages>
-                </dealermanagement>
+                </manage-company>
                 <sysadmin>
-                    <order>99999</order>
-                    <id>adminmenu</id>
+                    <divider-above>true</divider-above>
+                    <icon>fa fa-fw fa-database</icon>
                     <label>System Administration</label>
-                    <class>dropdown</class>
-                    <module>admin</module>
-                    <controller>index</controller>
-                    <action>index</action>
+                    <route>admin</route>
                     <resource>admin__index__index</resource>
                     <privilege>admin</privilege>
                     <pages>
+                        <dealeronboarding>
+                            <label>Dealer Onboarding - Pricing</label>
+                            <route>admin.dealer-on-boarding</route>
+                            <resource>admin__onboarding__index</resource>
+                        </dealeronboarding>
                         <clients>
                             <label>Clients</label>
-                            <module>admin</module>
-                            <controller>client</controller>
-                            <action>index</action>
+                            <route>admin.clients</route>
                             <resource>admin__client__index</resource>
                             <pages>
                                 <create>
                                     <label>Create New</label>
-                                    <module>admin</module>
-                                    <controller>client</controller>
-                                    <action>create</action>
+                                    <route>admin.clients.create</route>
                                     <visible>0</visible>
                                     <resource>admin__client__create</resource>
                                 </create>
                                 <editclient>
                                     <label>Edit Client</label>
-                                    <module>admin</module>
-                                    <controller>client</controller>
-                                    <action>edit</action>
+                                    <route>admin.clients.edit</route>
                                     <visible>0</visible>
                                     <resource>admin__client__edit</resource>
+                                    <params>
+                                        <id>0</id>
+                                    </params>
                                 </editclient>
                                 <viewclient>
                                     <label>View Client</label>
-                                    <module>admin</module>
-                                    <controller>client</controller>
-                                    <action>view</action>
+                                    <route>admin.clients.view</route>
                                     <visible>0</visible>
                                     <resource>admin__client__view</resource>
                                 </viewclient>
                                 <deleteclient>
                                     <label>Delete Client</label>
-                                    <module>admin</module>
-                                    <controller>client</controller>
-                                    <action>delete</action>
+                                    <route>admin.clients.delete</route>
                                     <visible>0</visible>
                                     <resource>admin__client__delete</resource>
+                                    <params>
+                                        <id>0</id>
+                                    </params>
                                 </deleteclient>
                             </pages>
                         </clients>
                         <UserManagement>
                             <label>Users</label>
-                            <module>admin</module>
-                            <controller>user</controller>
-                            <action>index</action>
+                            <route>admin.users</route>
                             <resource>admin__user__index</resource>
                             <pages>
                                 <create>
                                     <label>Create User</label>
-                                    <module>admin</module>
-                                    <controller>user</controller>
-                                    <action>create</action>
+                                    <route>admin.users.create</route>
                                     <resource>admin__user__create</resource>
                                     <icon>plus-sign</icon>
                                     <visible>0</visible>
+                                    <params>
+                                        <dealerId>0</dealerId>
+                                    </params>
                                 </create>
                                 <edit>
                                     <label>Edit User</label>
-                                    <module>admin</module>
-                                    <controller>user</controller>
-                                    <action>edit</action>
+                                    <route>admin.users.edit</route>
                                     <resource>admin__user__create</resource>
                                     <icon>pencil</icon>
                                     <visible>0</visible>
+                                    <params>
+                                        <id>0</id>
+                                    </params>
                                 </edit>
                                 <delete>
                                     <label>Delete User</label>
-                                    <module>admin</module>
-                                    <controller>user</controller>
-                                    <action>delete</action>
+                                    <route>admin.users.delete</route>
                                     <resource>admin__user__delete</resource>
                                     <visible>0</visible>
+                                    <params>
+                                        <id>0</id>
+                                    </params>
                                 </delete>
                                 <view>
                                     <label>View User</label>
-                                    <module>admin</module>
-                                    <controller>user</controller>
-                                    <action>view</action>
+                                    <route>admin.users.view</route>
                                     <resource>admin__user__view</resource>
                                     <visible>0</visible>
                                 </view>
@@ -1081,344 +853,101 @@
                         </UserManagement>
                         <DealerManagement>
                             <label>Dealers</label>
-                            <module>admin</module>
-                            <controller>dealer</controller>
-                            <action>index</action>
+                            <route>admin.dealers</route>
                             <resource>admin__dealer__index</resource>
                             <pages>
                                 <create>
                                     <label>Create Dealer</label>
-                                    <module>admin</module>
-                                    <controller>dealer</controller>
-                                    <action>create</action>
+                                    <route>admin.dealers.create</route>
                                     <resource>admin__dealer__create</resource>
                                     <icon>plus-sign</icon>
                                     <visible>0</visible>
                                 </create>
+                                <createuser>
+                                    <label>Create Dealer</label>
+                                    <route>admin.dealers.create-user</route>
+                                    <resource>admin__dealer__create</resource>
+                                    <icon>plus-sign</icon>
+                                    <visible>0</visible>
+                                    <params>
+                                        <dealerId>0</dealerId>
+                                    </params>
+                                </createuser>
                                 <view>
                                     <label>View Dealer</label>
-                                    <module>admin</module>
-                                    <controller>dealer</controller>
-                                    <action>view</action>
+                                    <route>admin.dealers.view</route>
                                     <resource>admin__dealer__view</resource>
                                     <icon>plus-sign</icon>
                                     <visible>0</visible>
+                                    <params>
+                                        <id>0</id>
+                                    </params>
                                 </view>
                                 <edit>
                                     <label>Edit Dealer</label>
-                                    <module>admin</module>
-                                    <controller>dealer</controller>
-                                    <action>edit</action>
+                                    <route>admin.dealers.edit</route>
                                     <resource>admin__dealer__create</resource>
                                     <icon>pencil</icon>
                                     <visible>0</visible>
+                                    <params>
+                                        <id>0</id>
+                                    </params>
                                 </edit>
                                 <delete>
                                     <label>Delete Dealer</label>
-                                    <module>admin</module>
-                                    <controller>dealer</controller>
-                                    <action>delete</action>
+                                    <route>admin.dealers.delete</route>
                                     <resource>admin__dealer__delete</resource>
                                     <visible>0</visible>
+                                    <params>
+                                        <id>0</id>
+                                    </params>
                                 </delete>
                             </pages>
                         </DealerManagement>
-                        <MemjetDeviceSwaps>
-                            <label>Memjet Device Swaps</label>
-                            <module>admin</module>
-                            <controller>memjetdeviceswaps</controller>
-                            <action>index</action>
-                            <resource>admin__memjetdeviceswaps__index</resource>
-                            <pages>
-                                <index>
-                                    <label>Manage Memjet Device Swaps</label>
-                                    <module>admin</module>
-                                    <controller>memjetdeviceswaps</controller>
-                                    <action>index</action>
-                                    <resource>admin__memjetdeviceswaps__index</resource>
-                                    <visible>0</visible>
-                                </index>
-                            </pages>
-                        </MemjetDeviceSwaps>
                         <EventLog>
                             <label>Event Log</label>
-                            <module>admin</module>
-                            <controller>event_log</controller>
-                            <action>index</action>
+                            <route>admin.event-log</route>
                             <resource>admin__event_log__index</resource>
                         </EventLog>
                     </pages>
                 </sysadmin>
-                <settings>
-                    <order>999997</order>
-                    <label>Settings</label>
-                    <module>preferences</module>
-                    <controller>index</controller>
-                    <action>index</action>
-                    <resource>preferences__index__index</resource>
-                    <class>dropdown></class>
-                    <visible>true</visible>
-                    <pages>
-                        <usersettings>
-                            <label>My Settings</label>
-                            <module>preferences</module>
-                            <controller>index</controller>
-                            <action>user</action>
-                            <resource>preferences__index__index</resource>
-                            <class>dropdown subdropdown</class>
-                            <pages>
-                                <userreportsettings>
-                                    <label>Assessment</label>
-                                    <module>preferences</module>
-                                    <controller>proposal</controller>
-                                    <action>user</action>
-                                    <resource>preferences__proposal__user</resource>
-                                </userreportsettings>
-                                <userquotesettings>
-                                    <label>Hardware Quote</label>
-                                    <module>preferences</module>
-                                    <controller>quote</controller>
-                                    <action>user</action>
-                                    <resource>preferences__quote__user</resource>
-                                </userquotesettings>
-                                <userhealthchecksettings>
-                                    <label>Health Check</label>
-                                    <module>preferences</module>
-                                    <controller>healthcheck</controller>
-                                    <action>user</action>
-                                    <resource>preferences__healthcheck__user</resource>
-                                </userhealthchecksettings>
-                                <hardwareoptimizationsettings>
-                                    <label>Hardware Optimization</label>
-                                    <module>preferences</module>
-                                    <controller>hardwareoptimization</controller>
-                                    <action>user</action>
-                                    <resource>preferences__hardwareoptimization__user</resource>
-                                </hardwareoptimizationsettings>
-                                <memjetoptimizationsettings>
-                                    <label>Memjet Optimization</label>
-                                    <module>preferences</module>
-                                    <controller>memjet_optimization</controller>
-                                    <action>user</action>
-                                    <resource>preferences__memjet_optimization__user</resource>
-                                    <visible>0</visible>
-                                </memjetoptimizationsettings>
-                            </pages>
-                        </usersettings>
-                        <dealersettings>
-                            <label>Dealer Report Settings</label>
-                            <module>preferences</module>
-                            <controller>index</controller>
-                            <action>dealer</action>
-                            <resource>preferences__index__dealer</resource>
-                            <class>dropdown subdropdown</class>
-                            <pages>
-                                <dealerreportsettings>
-                                    <label>Assessment</label>
-                                    <module>preferences</module>
-                                    <controller>proposal</controller>
-                                    <action>dealer</action>
-                                    <resource>preferences__proposal__dealer</resource>
-                                </dealerreportsettings>
-                                <dealerquotesettings>
-                                    <label>Hardware Quote</label>
-                                    <module>preferences</module>
-                                    <controller>quote</controller>
-                                    <action>dealer</action>
-                                    <resource>preferences__quote__dealer</resource>
-                                </dealerquotesettings>
-                                <dealerhealthchecksettings>
-                                    <label>Health Check</label>
-                                    <module>preferences</module>
-                                    <controller>healthcheck</controller>
-                                    <action>dealer</action>
-                                    <resource>preferences__healthcheck__dealer</resource>
-                                </dealerhealthchecksettings>
-                                <hardwareoptimizationsettings>
-                                    <label>Hardware Optimization</label>
-                                    <module>preferences</module>
-                                    <controller>hardwareoptimization</controller>
-                                    <action>dealer</action>
-                                    <resource>preferences__hardwareoptimization__dealer</resource>
-                                </hardwareoptimizationsettings>
-                                <memjetoptimizationsettings>
-                                    <label>Memjet Optimization</label>
-                                    <module>preferences</module>
-                                    <controller>memjet_optimization</controller>
-                                    <action>dealer</action>
-                                    <resource>preferences__memjet_optimization__dealer</resource>
-                                    <visible>0</visible>
-                                </memjetoptimizationsettings>
-                            </pages>
-                        </dealersettings>
-                        <systemsettings>
-                            <label>System Report Settings</label>
-                            <module>preferences</module>
-                            <controller>proposal</controller>
-                            <action>system</action>
-                            <resource>preferences__proposal__system</resource>
-                            <class>dropdown subdropdown</class>
-                            <pages>
-                                <systemreportsettings>
-                                    <label>Assessment</label>
-                                    <module>preferences</module>
-                                    <controller>proposal</controller>
-                                    <action>system</action>
-                                    <resource>preferences__proposal__system</resource>
-                                </systemreportsettings>
-                                <systemquotesettings>
-                                    <label>Hardware Quote</label>
-                                    <module>preferences</module>
-                                    <controller>quote</controller>
-                                    <action>system</action>
-                                    <resource>preferences__quote__system</resource>
-                                </systemquotesettings>
-                                <systemhealthchecksettings>
-                                    <label>Health Check</label>
-                                    <module>preferences</module>
-                                    <controller>healthcheck</controller>
-                                    <action>system</action>
-                                    <resource>preferences__healthcheck__system</resource>
-                                </systemhealthchecksettings>
-                                <hardwareoptimizationsettings>
-                                    <label>Hardware Optimization</label>
-                                    <module>preferences</module>
-                                    <controller>hardwareoptimization</controller>
-                                    <action>system</action>
-                                    <resource>preferences__hardwareoptimization__system</resource>
-                                </hardwareoptimizationsettings>
-                                <memjetoptimizationsettings>
-                                    <label>Memjet Optimization</label>
-                                    <module>preferences</module>
-                                    <controller>memjet_optimization</controller>
-                                    <action>system</action>
-                                    <resource>preferences__memjet_optimization__system</resource>
-                                    <visible>0</visible>
-                                </memjetoptimizationsettings>
-                            </pages>
-                        </systemsettings>
-                    </pages>
-                </settings>
+                <logout>
+                    <divider-above>true</divider-above>
+                    <icon>fa fa-fw fa-sign-out</icon>
+                    <label>Sign Out</label>
+                    <route>auth.logout</route>
+                    <resource>default__auth__logout</resource>
+                </logout>
             </pages>
-        </adminmenu>
-        <quotemenu>
-            <id>quotemenu</id>
-            <label>Current Quote</label>
-            <module>quotegen</module>
-            <controller>quote_devices</controller>
-            <action>index</action>
-            <resource>quotegen__quote_devices__index</resource>
-            <reset_params>0</reset_params>
+        </usermenu>
+        <current-client-menu>
+            <icon>fa fa-fw fa-user</icon>
+            <id>clientmenu</id>
+            <label>Clients</label>
+            <uri>#</uri>
             <visible>0</visible>
             <pages>
-                <builddevice>
-                    <label>Add Hardware</label>
-                    <class>dropdown</class>
-                    <module>quotegen</module>
-                    <controller>quote_devices</controller>
-                    <action>index</action>
-                    <resource>quotegen__quote_devices__index</resource>
-                    <reset_params>0</reset_params>
-                    <pages>
-                        <addDevice>
-                            <label>Add New Device</label>
-                            <module>quotegen</module>
-                            <controller>quote_devices</controller>
-                            <action>create-new-quote-device</action>
-                            <resource>quotegen__quote_devices__create-new-quote-device</resource>
-                            <reset_params>0</reset_params>
-                        </addDevice>
-                        <editDevice>
-                            <label>Edit Device</label>
-                            <module>quotegen</module>
-                            <controller>quote_devices</controller>
-                            <action>edit-quote-device</action>
-                            <visible>0</visible>
-                            <resource>quotegen__quote_devices__edit-quote-device</resource>
-                            <reset_params>0</reset_params>
-                            <pages>
-                                <addOptionsToDevice>
-                                    <label>Add Options</label>
-                                    <module>quotegen</module>
-                                    <controller>quote_devices</controller>
-                                    <action>add-options-to-quote-device</action>
-                                    <visible>0</visible>
-                                    <resource>quotegen__quote_devices__add-options-to-quote-device</resource>
-                                    <reset_params>0</reset_params>
-                                </addOptionsToDevice>
-                            </pages>
-                        </editDevice>
-                        <removeDevice>
-                            <label>Remove Device</label>
-                            <module>quotegen</module>
-                            <controller>quote_devices</controller>
-                            <action>delete-quote-device</action>
-                            <visible>0</visible>
-                            <resource>quotegen__quote_devices__delete-quote-device</resource>
-                            <reset_params>0</reset_params>
-                        </removeDevice>
-                    </pages>
-                </builddevice>
-                <groupDevices>
-                    <label>Group Devices</label>
-                    <module>quotegen</module>
-                    <controller>quote_groups</controller>
-                    <action>index</action>
-                    <resource>quotegen__quote_groups__index</resource>
-                    <reset_params>0</reset_params>
-                </groupDevices>
-                <managepages>
-                    <label>Pages</label>
-                    <module>quotegen</module>
-                    <controller>quote_pages</controller>
-                    <action>index</action>
-                    <resource>quotegen__quote_pages__index</resource>
-                    <reset_params>0</reset_params>
-                </managepages>
-                <profitability>
-                    <label>Hardware Financing</label>
-                    <module>quotegen</module>
-                    <controller>quote_profitability</controller>
-                    <action>index</action>
-                    <resource>quotegen__quote_profitability__index</resource>
-                    <reset_params>0</reset_params>
-                </profitability>
-                <viewAndPrintReports>
-                    <label>Reports</label>
-                    <class>dropdown</class>
-                    <module>quotegen</module>
-                    <controller>quote_reports</controller>
-                    <action>index</action>
-                    <resource>quotegen__quote_reports__index</resource>
-                    <reset_params>0</reset_params>
-                    <pages>
-                        <purchaseQuote>
-                            <label>Purchase Report</label>
-                            <module>quotegen</module>
-                            <controller>quote_reports</controller>
-                            <action>purchase-quote</action>
-                            <resource>quotegen__quote_reports__purchase-quote</resource>
-                            <reset_params>0</reset_params>
-                        </purchaseQuote>
-                        <leaseQuote>
-                            <label>Lease Report</label>
-                            <module>quotegen</module>
-                            <controller>quote_reports</controller>
-                            <action>lease-quote</action>
-                            <resource>quotegen__quote_reports__lease-quote</resource>
-                            <reset_params>0</reset_params>
-                        </leaseQuote>
-                        <orderList>
-                            <label>Order List</label>
-                            <module>quotegen</module>
-                            <controller>quote_reports</controller>
-                            <action>order-list</action>
-                            <resource>quotegen__quote_reports__order-list</resource>
-                            <reset_params>0</reset_params>
-                        </orderList>
-                    </pages>
-                </viewAndPrintReports>
+                <user-settings>
+                    <label>Settings</label>
+                    <route>report-settings</route>
+                    <resource>preferences__client__index</resource>
+                    <class>dropdown></class>
+                    <icon>fa fa-fw fa-cog</icon>
+                    <divider-below>true</divider-below>
+                </user-settings>
+                <change-client>
+                    <label>Change Client</label>
+                    <route>app.dashboard.change-client</route>
+                    <resource>default__index__change-client</resource>
+                    <icon>fa fa-fw fa-user</icon>
+                </change-client>
+                <change-upload>
+                    <label>Change Upload</label>
+                    <route>app.dashboard.change-upload</route>
+                    <resource>default__index__change-upload</resource>
+                    <icon>fa fa-fw fa-file-text</icon>
+                </change-upload>
             </pages>
-        </quotemenu>
+        </current-client-menu>
     </nav>
 </config>

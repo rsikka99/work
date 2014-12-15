@@ -1,15 +1,72 @@
-<div class="page-header">
-    <h1>Dealer Management</h1>
+<?php
+
+use MPSToolbox\Legacy\Models\Acl\DealerManagementAclModel;
+use MPSToolbox\Legacy\Models\Acl\PreferencesAclModel;
+
+?>
+<div class="container">
+    <div class="row">
+        <?php if ($this->isAllowed(DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_BRANDING_WILDCARD)) : ?>
+            <div class="col-sm-3 col-md-2 col-lg-2">
+                <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.branding'); ?>">
+                    <i class="fa fa-wrench fa-4x fa-fw"></i>
+                    <br />
+                    <br />
+                    Branding
+                    <br />
+                    <br />
+                </a>
+            </div>
+        <?php endif; ?>
+        <?php if ($this->isAllowed(DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD)) : ?>
+            <div class="col-sm-3 col-md-2 col-lg-2">
+                <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.clients'); ?>">
+                    <i class="fa fa-star fa-4x fa-fw"></i>
+                    <br />
+                    <br />
+                    Clients
+                    <br />
+                    <br />
+                </a>
+            </div>
+        <?php endif; ?>
+        <?php if ($this->isAllowed(DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD)) : ?>
+            <div class="col-sm-3 col-md-2 col-lg-2">
+                <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.leasing-schema'); ?>">
+                    <i class="fa fa-money fa-4x fa-fw"></i>
+                    <br />
+                    <br />
+                    Lease Rates
+                    <br />
+                    <br />
+                </a>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($this->isAllowed(PreferencesAclModel::RESOURCE_PREFERENCES_DEALER_WILDCARD)) : ?>
+            <div class="col-sm-3 col-md-2 col-lg-2">
+                <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.report-settings'); ?>">
+                    <i class="fa fa-cog fa-4x fa-fw"></i>
+                    <br />
+                    <br />
+                    Settings
+                    <br />
+                    <br />
+                </a>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($this->isAllowed(DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD)) : ?>
+            <div class="col-sm-3 col-md-2 col-lg-2">
+                <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.users'); ?>">
+                    <i class="fa fa-group fa-4x fa-fw"></i>
+                    <br />
+                    <br />
+                    Users
+                    <br />
+                    <br />
+                </a>
+            </div>
+        <?php endif; ?>
+    </div>
 </div>
-<?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD)) : ?>
-    <a class="btn btn-large" href="<?php echo $this->url(array("action" => "index", "controller" => "client", "module" => "dealermanagement")); ?>"><i class="icon-star icon-4x"></i><br /><br />
-        Clients</a>
-<?php endif; ?>
-<?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD)) : ?>
-    <a class="btn btn-large" href="<?php echo $this->url(array("action" => "index", "controller" => "leasingschema", "module" => "dealermanagement")); ?>"><i class="icon-money icon-4x"></i><br /><br />
-        Lease Rates</a>
-<?php endif; ?>
-<?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD)) : ?>
-    <a class="btn btn-large" href="<?php echo $this->url(array("action" => "index", "controller" => "user", "module" => "dealermanagement")); ?>"><i class="icon-group icon-4x"></i><br /><br />
-        Users</a>
-<?php endif; ?>

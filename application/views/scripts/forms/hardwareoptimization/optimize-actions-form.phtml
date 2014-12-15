@@ -1,0 +1,14 @@
+<?php
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Forms\OptimizeActionsForm;
+
+/* @var $form OptimizeActionsForm */
+$form = $this->element;
+?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<fieldset>
+    <?= $this->RenderFormSubmit('Submit') ?>
+    <?= $this->RenderFormSubmit('ResetReplacements') ?>
+    <?= $this->RenderFormSubmit('Analyze') ?>
+</fieldset>
+<?= $this->RenderFormClose($form) ?>

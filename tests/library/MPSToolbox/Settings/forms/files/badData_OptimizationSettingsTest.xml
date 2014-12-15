@@ -1,0 +1,29 @@
+<?xml version="1.0" standalone="yes"?>
+<optimizationSettingsBadData>
+    <testData>
+        <data>
+            <autoOptimizeFunctionality>2</autoOptimizeFunctionality>
+            <lossThreshold>asdf</lossThreshold>
+            <blackToColorRatio>2</blackToColorRatio>
+            <deviceSwapMonochromeRankSetArray>null2</deviceSwapMonochromeRankSetArray>
+            <deviceSwapColorRankSetArray>empty</deviceSwapColorRankSetArray>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <optimizedTargetMonochromeCostPerPage>asdf</optimizedTargetMonochromeCostPerPage>
+            <optimizedTargetColorCostPerPage>000000</optimizedTargetColorCostPerPage>
+            <deviceSwapMonochromeRankSetArray>a</deviceSwapMonochromeRankSetArray>
+            <deviceSwapColorRankSetArray>b</deviceSwapColorRankSetArray>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <optimizedTargetMonochromeCostPerPage>05</optimizedTargetMonochromeCostPerPage>
+            <optimizedTargetColorCostPerPage>asdf</optimizedTargetColorCostPerPage>
+            <costThreshold>__</costThreshold>
+            <autoOptimizeFunctionality>1</autoOptimizeFunctionality>
+            <deviceSwapColorRankSetArray>asdf</deviceSwapColorRankSetArray>
+        </data>
+    </testData>
+</optimizationSettingsBadData>

@@ -2,10 +2,12 @@
 /**
  * Solution - Evaluating the True Cost of MPS Contracts and Copier Leases
  */
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+
 /* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
-/* @var $quote Quotegen_Model_Quote */
+/* @var $quote QuoteModel */
 $quote = $this->quote;
 
 
@@ -14,7 +16,7 @@ $section->addTitle($this->translate('Evaluating the True Cost of MPS Contracts a
 $section->addText($this->translate('Before you choose the hardware and managed print program that best meets your needs, make sure you are comparing apples to apples. Many contracts can be confusing or misleading. We recommend asking any vendor the following questions so you are equipped with the necessary information.'));
 
 $tcStyle = $this->styles->tables->truecosts;
-$table = $section->addTable($tcStyle->tablestyle);
+$table   = $section->addTable($tcStyle->tablestyle);
 
 // Table header
 $table->addRow($tcStyle->header->rowheight);

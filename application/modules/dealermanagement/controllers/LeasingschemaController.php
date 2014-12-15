@@ -1,67 +1,70 @@
 <?php
+use MPSToolbox\Legacy\Forms\DeleteConfirmationForm;
+use MPSToolbox\Legacy\Modules\Admin\Forms\LeasingSchemaForm;
+use MPSToolbox\Legacy\Modules\DealerManagement\Forms\ImportLeaseCsvForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\LeasingSchemaTermForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\LeasingSchemaRangeForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\LeasingSchemaTermMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\LeasingSchemaRateMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\LeasingSchemaRangeMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\LeasingSchemaMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\LeasingSchemaTermModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\LeasingSchemaRateModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\LeasingSchemaRangeModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\LeasingSchemaModel;
+use Tangent\Controller\Action;
 
 /**
  * Class Dealermanagement_LeasingschemaController
  */
-class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
+class Dealermanagement_LeasingschemaController extends Action
 {
 
     public function indexAction ()
     {
-        $this->view->headTitle('Leasing Rates');
-        $this->view->headTitle('Leasing Rates');
+        $this->_pageTitle = ['Your Lease Rates', 'Company'];
         // Display all of the leasing schema rates in a grid
-        $leasingSchemas             = Quotegen_Model_Mapper_LeasingSchema::getInstance()->getSchemasForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $leasingSchemas             = LeasingSchemaMapper::getInstance()->getSchemasForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
         $this->view->leasingSchemas = $leasingSchemas;
     }
 
     public function viewAction ()
     {
-        $this->view->headTitle('Leasing Rates');
-        $this->view->headTitle('Leasing Rates');
-        $leasingSchemaId = $this->_getParam('leasingSchemaId', false);
+        $this->_pageTitle = ['Manage Lease Rate', 'Your Lease Rates', 'Company'];
+        $leasingSchemaId  = $this->_getParam('leasingSchemaId', false);
         if (!$leasingSchemaId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'error' => 'That schema does not exist'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['error' => 'That schema does not exist']);
+            $this->redirectToRoute('company.leasing-schema');
         }
-        $leasingSchema = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
+        $leasingSchema = LeasingSchemaMapper::getInstance()->find($leasingSchemaId);
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['danger' => 'Insufficient Privilege: You cannot view this leasing schema.']);
+            $this->redirectToRoute('company.leasing-schema');
         }
         // Display all of the leasing schema rates in a grid
-        $leasingSchemaMapper       = Quotegen_Model_Mapper_LeasingSchema::getInstance();
+        $leasingSchemaMapper       = LeasingSchemaMapper::getInstance();
         $leasingSchema             = $leasingSchemaMapper->find($leasingSchemaId);
         $this->view->leasingSchema = $leasingSchema;
     }
 
     public function editAction ()
     {
-        $this->view->headTitle('Leasing Rates');
-        $this->view->headTitle('Lease Management');
-        $leasingSchemaId = $this->_getParam('leasingSchemaId', false);
+        $this->_pageTitle = ['Lease Rate Card Name', 'Your Lease Rates', 'Company'];
+        $leasingSchemaId  = $this->_getParam('leasingSchemaId', false);
         if (!$leasingSchemaId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'error' => 'That schema does not exist'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['error' => 'That schema does not exist']);
+            $this->redirectToRoute('company.leasing-schema');
         }
-        $leasingSchema = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
+        $leasingSchema = LeasingSchemaMapper::getInstance()->find($leasingSchemaId);
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['danger' => 'Insufficient Privilege: You cannot view this leasing schema.']);
+            $this->redirectToRoute('company.leasing-schema');
         }
-        $form             = new  Admin_Form_LeasingSchema(true);
+        $form             = new  LeasingSchemaForm(true);
         $this->view->form = $form;
         // Postback
         $request = $this->getRequest();
@@ -78,29 +81,24 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                     $db->beginTransaction();
                     try
                     {
-                        $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
+                        $leasingSchemaMapper = LeasingSchemaMapper::getInstance();
                         $leasingSchema->populate($values);
                         $leasingSchemaMapper->save($leasingSchema);
                         $db->commit();
-                        $this->_flashMessenger->addMessage(array(
-                            'success' => "{$leasingSchema->name} has been saved successfully."
-                        ));
-                        $this->redirector('index');
+                        $this->_flashMessenger->addMessage(['success' => "{$leasingSchema->name} has been saved successfully."]);
+                        $this->redirectToRoute('company.leasing-schema');
                     }
                     catch (InvalidArgumentException $e)
                     {
                         $db->rollback();
-                        $this->_flashMessenger->addMessage(array(
-                            'danger' => $e->getMessage()
-                        ));
+                        $this->_flashMessenger->addMessage(['danger' => $e->getMessage()]);
                     }
                 }
             }
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $db->rollBack();
-                $this->redirector('index');
+                $this->redirectToRoute('company.leasing-schema');
             }
         }
         $form->populate($leasingSchema->toArray());
@@ -109,9 +107,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function createAction ()
     {
-        $this->view->headTitle('Leasing Rates');
-        $this->view->headTitle('Create New');
-        $form             = new  Admin_Form_LeasingSchema(true);
+        $this->_pageTitle = ['Create New Rate Card', 'Your Lease Rates', 'Company'];
+        $form             = new  LeasingSchemaForm(true);
         $this->view->form = $form;
         // Postback
         $request = $this->getRequest();
@@ -128,8 +125,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                     $db->beginTransaction();
                     try
                     {
-                        $leasingSchemaMapper     = Quotegen_Model_Mapper_LeasingSchema::getInstance();
-                        $leasingSchema           = new Quotegen_Model_LeasingSchema($values);
+                        $leasingSchemaMapper     = LeasingSchemaMapper::getInstance();
+                        $leasingSchema           = new LeasingSchemaModel($values);
                         $leasingSchema->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
                         $leasingSchemaMapper->insert($leasingSchema);
                         // Reset the grid to default values
@@ -138,14 +135,14 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                         $rate   = "0.0750";
 
                         // Prep mappers
-                        $leasingSchemaRateMapper  = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
-                        $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
-                        $leasingSchemaTermMapper  = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
+                        $leasingSchemaRateMapper  = LeasingSchemaRateMapper::getInstance();
+                        $leasingSchemaRangeMapper = LeasingSchemaRangeMapper::getInstance();
+                        $leasingSchemaTermMapper  = LeasingSchemaTermMapper::getInstance();
 
                         // Prep models
-                        $leasingSchemaRateModel  = new Quotegen_Model_LeasingSchemaRate();
-                        $leasingSchemaRangeModel = new Quotegen_Model_LeasingSchemaRange();
-                        $leasingSchemaTermModel  = new Quotegen_Model_LeasingSchemaTerm();
+                        $leasingSchemaRateModel  = new LeasingSchemaRateModel();
+                        $leasingSchemaRangeModel = new LeasingSchemaRangeModel();
+                        $leasingSchemaTermModel  = new LeasingSchemaTermModel();
                         // Save Term
                         $leasingSchemaTermModel->leasingSchemaId = $leasingSchema->id;
                         $leasingSchemaTermModel->months          = $months;
@@ -163,53 +160,43 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                         $leasingSchemaRateMapper->insert($leasingSchemaRateModel);
 
                         $db->commit();
-                        $this->_flashMessenger->addMessage(array(
-                            'success' => "{$leasingSchema->name} has been created successfully."
-                        ));
-                        $this->redirector('index');
+                        $this->_flashMessenger->addMessage(['success' => sprintf('The "%s" rate card has been created successfully.', $leasingSchema->name)]);
+                        $this->redirectToRoute('company.leasing-schema');
                     }
                     catch (InvalidArgumentException $e)
                     {
                         $db->rollback();
-                        $this->_flashMessenger->addMessage(array(
-                            'danger' => $e->getMessage()
-                        ));
+                        $this->_flashMessenger->addMessage(['danger' => $e->getMessage()]);
                     }
                 }
             }
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $db->rollBack();
-                $this->redirector('index');
+                $this->redirectToRoute('company.leasing-schema');
             }
         }
     }
 
     public function deleteAction ()
     {
-        $this->view->headTitle('Leasing Rates');
-        $this->view->headTitle('Delete');
-        $leasingSchemaId = $this->_getParam('leasingSchemaId', false);
+        $this->_pageTitle = ['Delete Lease Rate Card', 'Your Lease Rates', 'Company'];
+        $leasingSchemaId  = $this->_getParam('leasingSchemaId', false);
         if (!$leasingSchemaId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'warning' => 'Please select a leasing schema to delete first.'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a leasing schema to delete first.']);
+            $this->redirectToRoute('company.leasing-schema');
         }
 
-        $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
+        $leasingSchemaMapper = LeasingSchemaMapper::getInstance();
         $leasingSchema       = $leasingSchemaMapper->find($leasingSchemaId);
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => 'Insufficient Privilege: You cannot delete this leasing schema.'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['danger' => 'Insufficient Privilege: You cannot delete this leasing schema.']);
+            $this->redirectToRoute('company.leasing-schema');
         }
-        $message = "Are you sure you want to completely delete {$leasingSchema->name}?";
-        $form    = new Application_Form_Delete($message);
+        $message = sprintf('Are you sure you want to delete the "%s" rate card?', $leasingSchema->name);
+        $form    = new DeleteConfirmationForm($message);
 
         $request = $this->getRequest();
         if ($request->isPost())
@@ -221,26 +208,21 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                 {
                     try
                     {
-
                         $leasingSchemaMapper->delete($leasingSchema->id);
                     }
                     catch (Exception $e)
                     {
-                        $this->_flashMessenger->addMessage(array(
-                            'danger' => "Failed to delete"
-                        ));
-                        $this->redirector('index');
+                        $this->_flashMessenger->addMessage(['danger' => "Failed to delete"]);
+                        $this->redirectToRoute('company.leasing-schema');
                     }
 
-                    $this->_flashMessenger->addMessage(array(
-                        'success' => "Leasing Schema  {$leasingSchema->name} was deleted successfully."
-                    ));
-                    $this->redirector('index');
+                    $this->_flashMessenger->addMessage(['success' => sprintf('The "%s" lease rate card was deleted successfully.', $leasingSchema->name)]);
+                    $this->redirectToRoute('company.leasing-schema');
                 }
             }
             else // User has selected cancel button, go back.
             {
-                $this->redirector('index');
+                $this->redirectToRoute('company.leasing-schema');
             }
         }
         $this->view->form = $form;
@@ -248,30 +230,26 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function addtermAction ()
     {
-        $this->view->headTitle('Leasing Rates');
-        $this->view->headTitle('Add Term');
+        $this->_pageTitle = ['Add Term', 'Your Lease Rates', 'Company'];
+
         // Get db adapter
         $db = Zend_Db_Table::getDefaultAdapter();
 
         $leasingSchemaId = $this->_getParam('leasingSchemaId', false);
 
         // Get leasing schema
-        $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
+        $leasingSchemaMapper = LeasingSchemaMapper::getInstance();
         $leasingSchema       = $leasingSchemaMapper->find($leasingSchemaId);
 
         if (!$leasingSchema)
         {
-            $this->_flashMessenger->addMessage(array(
-                'warning' => 'The leasing schema does not exist.'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['warning' => 'The leasing schema does not exist.']);
+            $this->redirectToRoute('company.leasing-schema');
         }
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['danger' => 'Insufficient Privilege: You cannot view this leasing schema.']);
+            $this->redirectToRoute('company.leasing-schema');
         }
 
         // Get form and pass ranges for this schema
@@ -279,13 +257,11 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
         if (!$leasingSchemaRanges)
         {
-            $this->_flashMessenger->addMessage(array(
-                'warning' => 'No ranges exist.'
-            ));
-            $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+            $this->_flashMessenger->addMessage(['warning' => 'No ranges exist.']);
+            $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
         }
 
-        $form = new Quotegen_Form_LeasingSchemaTerm($leasingSchemaRanges);
+        $form = new LeasingSchemaTermForm($leasingSchemaRanges);
 
         // Postback
         $request = $this->getRequest();
@@ -303,22 +279,22 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
                         // Get post data
                         $months                  = $values ['term'];
-                        $leasingSchemaTermMapper = new Quotegen_Model_Mapper_LeasingSchemaTerm();
-                        $leasingSchemaTerm       = $leasingSchemaTermMapper->fetchAll(array(
+                        $leasingSchemaTermMapper = new LeasingSchemaTermMapper();
+                        $leasingSchemaTerm       = $leasingSchemaTermMapper->fetchAll([
                             "leasingSchemaId = ?" => $leasingSchemaId,
                             "months = ?"          => $months
-                        ));
+                        ]);
                         if (!$leasingSchemaTerm)
                         {
                             // Insert (Add)
-                            $leasingSchemaTermModel                  = new Quotegen_Model_LeasingSchemaTerm();
+                            $leasingSchemaTermModel                  = new LeasingSchemaTermModel();
                             $leasingSchemaTermModel->leasingSchemaId = $leasingSchemaId;
                             $leasingSchemaTermModel->months          = $months;
 
                             $termId = $leasingSchemaTermMapper->insert($leasingSchemaTermModel);
 
-                            $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
-                            $leasingSchemaRateModel  = new Quotegen_Model_LeasingSchemaRate();
+                            $leasingSchemaRateMapper = LeasingSchemaRateMapper::getInstance();
+                            $leasingSchemaRateModel  = new LeasingSchemaRateModel();
 
                             // Save rates for range and term
                             foreach ($leasingSchemaRanges as $range)
@@ -333,16 +309,12 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                             }
                             $db->commit();
 
-                            $this->_flashMessenger->addMessage(array(
-                                'success' => "The term {$months} months was added successfully."
-                            ));
+                            $this->_flashMessenger->addMessage(['success' => "The term {$months} months was added successfully."]);
                         }
                         else
                         {
                             $db->rollBack();
-                            $this->_flashMessenger->addMessage(array(
-                                'danger' => "The term {$months} months already exists."
-                            ));
+                            $this->_flashMessenger->addMessage(['danger' => "The term {$months} months already exists."]);
                         }
                     }
                     else
@@ -353,36 +325,27 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $db->rollback();
-                    $this->_flashMessenger->addMessage(array(
-                        'danger' => $e->getMessage()
-                    ));
+                    $this->_flashMessenger->addMessage(['danger' => $e->getMessage()]);
                 }
             }
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $db->rollBack();
-                $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+                $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
             }
         }
 
         // Add form to page
-        $form->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript'          => 'leasingschema/forms/leasingSchemaTerm.phtml',
-                    'leasingSchemaRanges' => $leasingSchema->getRanges()
-                )
-            )
-        ));
+        $form->setDecorators([['ViewScript', [
+            'viewScript'          => 'forms/dealermanagement/leasing-schema-term-form.phtml',
+            'leasingSchemaRanges' => $leasingSchema->getRanges()
+        ]]]);
         $this->view->leasingSchemaTerm = $form;
     }
 
     public function edittermAction ()
     {
-        $this->view->headTitle('Leasing Rates');
-        $this->view->headTitle('Edit Term');
+        $this->_pageTitle = ['Edit Term', 'Your Lease Rates', 'Company'];
         // Get db adapter
         $db = Zend_Db_Table::getDefaultAdapter();
 
@@ -390,22 +353,18 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         $termId          = $this->_getParam('id', false);
 
         // Get leasing schema
-        $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
+        $leasingSchemaMapper = LeasingSchemaMapper::getInstance();
         $leasingSchema       = $leasingSchemaMapper->find($leasingSchemaId);
 
         if (!$leasingSchema)
         {
-            $this->_flashMessenger->addMessage(array(
-                'warning' => 'The leasing schema does not exist.'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['warning' => 'The leasing schema does not exist.']);
+            $this->redirectToRoute('company.leasing-schema');
         }
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['danger' => 'Insufficient Privilege: You cannot view this leasing schema.']);
+            $this->redirectToRoute('company.leasing-schema');
         }
 
         // Get form and pass ranges for this schema
@@ -413,13 +372,11 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
         if (!$leasingSchemaRanges)
         {
-            $this->_flashMessenger->addMessage(array(
-                'warning' => 'No ranges exist.'
-            ));
-            $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+            $this->_flashMessenger->addMessage(['warning' => 'No ranges exist.']);
+            $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
         }
 
-        $form = new Quotegen_Form_LeasingSchemaTerm($leasingSchemaRanges);
+        $form = new LeasingSchemaTermForm($leasingSchemaRanges);
 
         // Postback
         $request = $this->getRequest();
@@ -441,24 +398,24 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                         if ($termId)
                         {
                             // Save (Edit)
-                            $leasingSchemaTermMapper = new Quotegen_Model_Mapper_LeasingSchemaTerm();
-                            $leasingSchemaTerm       = $leasingSchemaTermMapper->fetchAll(array(
+                            $leasingSchemaTermMapper = new LeasingSchemaTermMapper();
+                            $leasingSchemaTerm       = $leasingSchemaTermMapper->fetchAll([
                                 "id != ?"             => $termId,
                                 "leasingSchemaId = ?" => $leasingSchemaId,
                                 "months = ?"          => $months
-                            ));
+                            ]);
 
                             // Edit
                             if (!$leasingSchemaTerm)
                             {
-                                $leasingSchemaTermModel                  = new Quotegen_Model_LeasingSchemaTerm();
+                                $leasingSchemaTermModel                  = new LeasingSchemaTermModel();
                                 $leasingSchemaTermModel->id              = $termId;
                                 $leasingSchemaTermModel->leasingSchemaId = $leasingSchemaId;
                                 $leasingSchemaTermModel->months          = $months;
                                 $leasingSchemaTermMapper->save($leasingSchemaTermModel);
 
-                                $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
-                                $leasingSchemaRateModel  = new Quotegen_Model_LeasingSchemaRate();
+                                $leasingSchemaRateMapper = LeasingSchemaRateMapper::getInstance();
+                                $leasingSchemaRateModel  = new LeasingSchemaRateModel();
 
                                 // Save rates for range and term
                                 foreach ($leasingSchemaRanges as $range)
@@ -473,24 +430,18 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                                 }
                                 $db->commit();
 
-                                $this->_flashMessenger->addMessage(array(
-                                    'success' => "The term {$months} months was updated successfully."
-                                ));
+                                $this->_flashMessenger->addMessage(['success' => "The term {$months} months was updated successfully."]);
                             }
                             else
                             {
                                 $db->rollBack();
-                                $this->_flashMessenger->addMessage(array(
-                                    'danger' => "The term {$months} months already exists."
-                                ));
+                                $this->_flashMessenger->addMessage(['danger' => "The term {$months} months already exists."]);
                             }
                         }
                         else
                         {
                             $db->rollBack();
-                            $this->_flashMessenger->addMessage(array(
-                                'error' => "No term was selected. Please try again."
-                            ));
+                            $this->_flashMessenger->addMessage(['error' => "No term was selected. Please try again."]);
                         }
                     }
                     else
@@ -502,16 +453,13 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                 {
                     // Save Error
                     $db->rollBack();
-                    $this->_flashMessenger->addMessage(array(
-                        'danger' => $e->getMessage()
-                    ));
+                    $this->_flashMessenger->addMessage(['danger' => $e->getMessage()]);
                 }
             }
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $db->rollBack();
-                $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+                $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
             }
         }
         else
@@ -520,27 +468,25 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
             if ($termId > 0)
             {
                 // Get Term
-                $leasingSchemaTermMapper = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
+                $leasingSchemaTermMapper = LeasingSchemaTermMapper::getInstance();
                 $leasingSchemaTerm       = $leasingSchemaTermMapper->find($termId);
 
                 if (!$leasingSchemaTerm)
                 {
-                    $this->_flashMessenger->addMessage(array(
-                        'warning' => 'The leasing schema term does not exist.'
-                    ));
-                    $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+                    $this->_flashMessenger->addMessage(['warning' => 'The leasing schema term does not exist.']);
+                    $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
                 }
 
                 $form->getElement('term')->setValue($leasingSchemaTerm->months);
 
                 // Get Rates for Term
-                $leasingSchemaRatesMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
+                $leasingSchemaRatesMapper = LeasingSchemaRateMapper::getInstance();
 
-                $leasingSchemaRate = $leasingSchemaRatesMapper->fetchAll(array(
+                $leasingSchemaRate = $leasingSchemaRatesMapper->fetchAll([
                     'leasingSchemaTermId = ?' => $termId
-                ));
+                ]);
                 /*
-                 * @var $rate Quotegen_Model_LeasingSchemaRate
+                 * @var $rate MPSToolbox\Legacy\Modules\QuoteGenerator\Models\LeasingSchemaRateModel
                  */
                 foreach ($leasingSchemaRate as $rate)
                 {
@@ -556,22 +502,16 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         }
 
         // Add form to page
-        $form->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript'          => 'leasingschema/forms/leasingSchemaTerm.phtml',
-                    'leasingSchemaRanges' => $leasingSchema->getRanges()
-                )
-            )
-        ));
+        $form->setDecorators([['ViewScript', [
+            'viewScript'          => 'forms/dealermanagement/leasing-schema-term-form.phtml',
+            'leasingSchemaRanges' => $leasingSchema->getRanges()
+        ]]]);
         $this->view->leasingSchemaTerm = $form;
     }
 
     public function deletetermAction ()
     {
-        $this->view->headTitle('Leasing Rates');
-        $this->view->headTitle('Delete Term');
+        $this->_pageTitle = ['Delete Term', 'Your Lease Rates', 'Company'];
         // Get db adapter
         $db = Zend_Db_Table::getDefaultAdapter();
 
@@ -580,44 +520,36 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
         if (!$termId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'warning' => 'Please select a term to delete first.'
-            ));
-            $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a term to delete first.']);
+            $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
         }
-        $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
+        $leasingSchemaMapper = LeasingSchemaMapper::getInstance();
         $leasingSchema       = $leasingSchemaMapper->find($leasingSchemaId);
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['danger' => 'Insufficient Privilege: You cannot view this leasing schema.']);
+            $this->redirectToRoute('company.leasing-schema');
         }
 
-        $mapper = new Quotegen_Model_Mapper_LeasingSchemaTerm();
+        $mapper = new LeasingSchemaTermMapper();
         $term   = $mapper->find($termId);
 
         if (!$termId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => 'There was an error selecting the term to delete.'
-            ));
-            $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+            $this->_flashMessenger->addMessage(['danger' => 'There was an error selecting the term to delete.']);
+            $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
         }
 
         // Make sure this isn't the last term for this schema
-        $leasingSchemaTerms = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->fetchAll('leasingSchemaId = ' . $leasingSchemaId);
+        $leasingSchemaTerms = LeasingSchemaTermMapper::getInstance()->fetchAll('leasingSchemaId = ' . $leasingSchemaId);
         if (count($leasingSchemaTerms) <= 1)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => "You cannot delete term {$term->months} months as it is the last term for this leasing schema."
-            ));
-            $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+            $this->_flashMessenger->addMessage(['danger' => "You cannot delete term {$term->months} months as it is the last term for this leasing schema."]);
+            $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
         }
 
         $message = "Are you sure you want to delete term {$term->months} months?";
-        $form    = new Application_Form_Delete($message);
+        $form    = new DeleteConfirmationForm($message);
         $request = $this->getRequest();
 
         if ($request->isPost())
@@ -634,25 +566,21 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                         $months = $term->months;
                         $mapper->delete($term);
                         $db->commit();
-                        $this->_flashMessenger->addMessage(array(
-                            'success' => "The term {$months} months was deleted successfully."
-                        ));
-                        $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+                        $this->_flashMessenger->addMessage(['success' => "The term {$months} months was deleted successfully."]);
+                        $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
                     }
                 }
                 else // go back
                 {
                     $db->rollBack();
-                    $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+                    $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
                 }
             }
             catch (Exception $e)
             {
                 $db->rollBack();
-                $this->_flashMessenger->addMessage(array(
-                    'danger' => 'There was an error selecting the term to delete.'
-                ));
-                $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+                $this->_flashMessenger->addMessage(['danger' => 'There was an error selecting the term to delete.']);
+                $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
             }
         }
         $this->view->form = $form;
@@ -660,35 +588,30 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function addrangeAction ()
     {
-        $this->view->headTitle('Leasing Rates');
-        $this->view->headTitle('Add Range');
+        $this->_pageTitle = ['Add Range', 'Your Lease Rates', 'Company'];
         // Get db adapter
         $db = Zend_Db_Table::getDefaultAdapter();
 
         $leasingSchemaId = $this->_getParam('leasingSchemaId', false);
 
         // Get leasing schema
-        $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
+        $leasingSchemaMapper = LeasingSchemaMapper::getInstance();
         $leasingSchema       = $leasingSchemaMapper->find($leasingSchemaId);
 
         if (!$leasingSchema)
         {
-            $this->_flashMessenger->addMessage(array(
-                'warning' => 'The leasing schema does not exist.'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['warning' => 'The leasing schema does not exist.']);
+            $this->redirectToRoute('company.leasing-schema');
         }
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['danger' => 'Insufficient Privilege: You cannot view this leasing schema.']);
+            $this->redirectToRoute('company.leasing-schema');
         }
         // Get form and pass terms for this schema
         $leasingSchemaTerms = $leasingSchema->getTerms();
 
-        $form = new Quotegen_Form_LeasingSchemaRange($leasingSchemaTerms);
+        $form = new LeasingSchemaRangeForm($leasingSchemaTerms);
 
         // Postback
         $request = $this->getRequest();
@@ -707,23 +630,23 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                         $startRange = $values ['range'];
 
                         // Insert (Add)
-                        $leasingSchemaRangeMapper                 = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
-                        $leasingSchemaRangeModel                  = new Quotegen_Model_LeasingSchemaRange();
+                        $leasingSchemaRangeMapper                 = LeasingSchemaRangeMapper::getInstance();
+                        $leasingSchemaRangeModel                  = new LeasingSchemaRangeModel();
                         $leasingSchemaRangeModel->leasingSchemaId = $leasingSchemaId;
                         $leasingSchemaRangeModel->startRange      = $startRange;
 
                         // Validate Range doesn't exist
-                        $leasingSchemaRange = $leasingSchemaRangeMapper->fetch(array(
+                        $leasingSchemaRange = $leasingSchemaRangeMapper->fetch([
                             'leasingSchemaId = ?' => $leasingSchemaId,
                             'startRange = ?'      => $startRange
-                        ));
+                        ]);
 
                         if (!$leasingSchemaRange)
                         {
                             $rangeId = $leasingSchemaRangeMapper->insert($leasingSchemaRangeModel);
 
-                            $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
-                            $leasingSchemaRateModel  = new Quotegen_Model_LeasingSchemaRate();
+                            $leasingSchemaRateMapper = LeasingSchemaRateMapper::getInstance();
+                            $leasingSchemaRateModel  = new LeasingSchemaRateModel();
 
                             // Save rates for range and term
                             foreach ($leasingSchemaTerms as $term)
@@ -738,16 +661,12 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                             }
                             $db->commit();
 
-                            $this->_flashMessenger->addMessage(array(
-                                'success' => "The range \${$startRange} was added successfully."
-                            ));
+                            $this->_flashMessenger->addMessage(['success' => "The range \${$startRange} was added successfully."]);
                         }
                         else
                         {
                             $db->rollBack();
-                            $this->_flashMessenger->addMessage(array(
-                                'danger' => "The range \${$startRange} already exists."
-                            ));
+                            $this->_flashMessenger->addMessage(['danger' => "The range \${$startRange} already exists."]);
                         }
                     }
                     else
@@ -758,44 +677,33 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $db->rollBack();
-                    $this->_flashMessenger->addMessage(array(
-                        'danger' => $e->getMessage()
-                    ));
+                    $this->_flashMessenger->addMessage(['danger' => $e->getMessage()]);
                 }
                 catch (Exception $e)
                 {
                     // Insert Error
                     $db->rollBack();
-                    $this->_flashMessenger->addMessage(array(
-                        'danger' => 'There was an error processing the insert. Please try again.'
-                    ));
+                    $this->_flashMessenger->addMessage(['danger' => 'There was an error processing the insert. Please try again.']);
                 }
             }
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $db->rollBack();
-                $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+                $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
             }
         }
 
         // Add form to page
-        $form->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript'         => 'leasingschema/forms/leasingSchemaRange.phtml',
-                    'leasingSchemaTerms' => $leasingSchema->getTerms()
-                )
-            )
-        ));
+        $form->setDecorators([['ViewScript', [
+            'viewScript'         => 'forms/dealermanagement/leasing-schema-range-form.phtml',
+            'leasingSchemaTerms' => $leasingSchema->getTerms()
+        ]]]);
         $this->view->leasingSchemaRange = $form;
     }
 
     public function editrangeAction ()
     {
-        $this->view->headTitle('Leasing Rates');
-        $this->view->headTitle('Edit Range');
+        $this->_pageTitle = ['Edit Range', 'Your Lease Rates', 'Company'];
         // Get db adapter
         $db = Zend_Db_Table::getDefaultAdapter();
 
@@ -803,28 +711,24 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         $rangeId         = $this->_getParam('id', false);
 
         // Get leasing schema
-        $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
+        $leasingSchemaMapper = LeasingSchemaMapper::getInstance();
         $leasingSchema       = $leasingSchemaMapper->find($leasingSchemaId);
 
         if (!$leasingSchema)
         {
-            $this->_flashMessenger->addMessage(array(
-                'warning' => 'The leasing schema does not exist.'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['warning' => 'The leasing schema does not exist.']);
+            $this->redirectToRoute('company.leasing-schema');
         }
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['danger' => 'Insufficient Privilege: You cannot view this leasing schema.']);
+            $this->redirectToRoute('company.leasing-schema');
         }
 
         // Get form and pass terms for this schema
         $leasingSchemaTerms = $leasingSchema->getTerms();
 
-        $form = new Quotegen_Form_LeasingSchemaRange($leasingSchemaTerms);
+        $form = new LeasingSchemaRangeForm($leasingSchemaTerms);
 
         // Postback
         $request = $this->getRequest();
@@ -848,23 +752,23 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                             try
                             {
                                 // Save (Edit)
-                                $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
-                                $leasingSchemaRange       = $leasingSchemaRangeMapper->fetchAll(array(
+                                $leasingSchemaRangeMapper = LeasingSchemaRangeMapper::getInstance();
+                                $leasingSchemaRange       = $leasingSchemaRangeMapper->fetchAll([
                                     'id != ?'             => $rangeId,
                                     'leasingSchemaId = ?' => $leasingSchemaId,
                                     'startRange = ?'      => $startRange
-                                ));
+                                ]);
 
                                 if (!$leasingSchemaRange)
                                 {
-                                    $leasingSchemaRangeModel                  = new Quotegen_Model_LeasingSchemaRange();
+                                    $leasingSchemaRangeModel                  = new LeasingSchemaRangeModel();
                                     $leasingSchemaRangeModel->id              = $rangeId;
                                     $leasingSchemaRangeModel->leasingSchemaId = $leasingSchemaId;
                                     $leasingSchemaRangeModel->startRange      = $startRange;
                                     $leasingSchemaRangeMapper->save($leasingSchemaRangeModel);
 
-                                    $leasingSchemaRateMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
-                                    $leasingSchemaRateModel  = new Quotegen_Model_LeasingSchemaRate();
+                                    $leasingSchemaRateMapper = LeasingSchemaRateMapper::getInstance();
+                                    $leasingSchemaRateModel  = new LeasingSchemaRateModel();
 
                                     // Save rates for range and term
                                     foreach ($leasingSchemaTerms as $term)
@@ -879,41 +783,33 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                                     }
                                     $db->commit();
 
-                                    $this->_flashMessenger->addMessage(array(
-                                        'success' => "The range was updated successfully."
-                                    ));
+                                    $this->_flashMessenger->addMessage(['success' => "The range was updated successfully."]);
                                 }
                                 else
                                 {
                                     $db->rollBack();
-                                    $this->_flashMessenger->addMessage(array(
-                                        'danger' => "The range \${$startRange} already exists."
-                                    ));
+                                    $this->_flashMessenger->addMessage(['danger' => "The range \${$startRange} already exists."]);
                                 }
                             }
                             catch (Exception $e)
                             {
                                 // Save Error
                                 $db->rollBack();
-                                $this->_flashMessenger->addMessage(array(
-                                    'danger' => 'There was an error processing the update.  Please try again.'
-                                ));
+                                $this->_flashMessenger->addMessage(['danger' => 'There was an error processing the update.  Please try again.']);
                             }
                         }
                     }
                     else
                     {
                         $db->rollBack();
-                        $this->_flashMessenger->addMessage(array(
-                            'error' => "Please review and complete all required fields."
-                        ));
+                        $this->_flashMessenger->addMessage(['error' => "Please review and complete all required fields."]);
                     }
                 }
                 else
                 {
                     // User has cancelled. We could do a redirect here if we wanted.
                     $db->rollBack();
-                    $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+                    $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
                 }
             }
             catch (Zend_Validate_Exception $e)
@@ -928,27 +824,25 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
             if ($rangeId > 0)
             {
                 // Get Range
-                $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
+                $leasingSchemaRangeMapper = LeasingSchemaRangeMapper::getInstance();
                 $leasingSchemaRange       = $leasingSchemaRangeMapper->find($rangeId);
 
                 if (!$leasingSchemaRange)
                 {
-                    $this->_flashMessenger->addMessage(array(
-                        'warning' => 'The leasing schema range does not exist.'
-                    ));
-                    $this->redirector('index');
+                    $this->_flashMessenger->addMessage(['warning' => 'The leasing schema range does not exist.']);
+                    $this->redirectToRoute('company.leasing-schema');
                 }
 
                 $form->getElement('range')->setValue($leasingSchemaRange->startRange);
 
                 // Get Rates for Range
-                $leasingSchemaRatesMapper = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
+                $leasingSchemaRatesMapper = LeasingSchemaRateMapper::getInstance();
 
-                $leasingSchemaRate = $leasingSchemaRatesMapper->fetchAll(array(
+                $leasingSchemaRate = $leasingSchemaRatesMapper->fetchAll([
                     'leasingSchemaRangeId = ?' => $rangeId
-                ));
+                ]);
                 /**
-                 * @var $rate Quotegen_Model_LeasingSchemaRate
+                 * @var $rate LeasingSchemaRateModel
                  */
                 foreach ($leasingSchemaRate as $rate)
                 {
@@ -964,22 +858,16 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         }
 
         // Add form to page
-        $form->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript'         => 'leasingschema/forms/leasingSchemaRange.phtml',
-                    'leasingSchemaTerms' => $leasingSchema->getTerms()
-                )
-            )
-        ));
+        $form->setDecorators([['ViewScript', [
+            'viewScript'         => 'forms/dealermanagement/leasing-schema-range-form.phtml',
+            'leasingSchemaTerms' => $leasingSchema->getTerms()
+        ]]]);
         $this->view->leasingSchemaRange = $form;
     }
 
     public function deleterangeAction ()
     {
-        $this->view->headTitle('Leasing Rates');
-        $this->view->headTitle('Delete Range');
+        $this->_pageTitle = ['Delete Range', 'Your Lease Rates', 'Company'];
         // Get db adapter
         $db = Zend_Db_Table::getDefaultAdapter();
 
@@ -988,46 +876,38 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
         if (!$rangeId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'warning' => 'Please select a range to delete first.'
-            ));
-            $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a range to delete first.']);
+            $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
         }
-        $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
+        $leasingSchemaMapper = LeasingSchemaMapper::getInstance();
         $leasingSchema       = $leasingSchemaMapper->find($leasingSchemaId);
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['danger' => 'Insufficient Privilege: You cannot view this leasing schema.']);
+            $this->redirectToRoute('company.leasing-schema');
         }
 
-        $mapper = new Quotegen_Model_Mapper_LeasingSchemaRange();
+        $mapper = new LeasingSchemaRangeMapper();
         $range  = $mapper->find($rangeId);
 
         if (!$rangeId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => 'There was an error selecting the range to delete.'
-            ));
-            $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+            $this->_flashMessenger->addMessage(['danger' => 'There was an error selecting the range to delete.']);
+            $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
         }
 
         // Make sure this isn't the last range for this schema
-        $leasingSchemaRanges = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance()->fetchAll('leasingSchemaId = ' . $leasingSchemaId);
+        $leasingSchemaRanges = LeasingSchemaRangeMapper::getInstance()->fetchAll('leasingSchemaId = ' . $leasingSchemaId);
         if (count($leasingSchemaRanges) <= 1)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => "You cannot delete the range \${$range->startRange}  as it is the last range for this Leasing Schema."
-            ));
-            $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+            $this->_flashMessenger->addMessage(['danger' => "You cannot delete the range \${$range->startRange}  as it is the last range for this Leasing Schema."]);
+            $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
         }
         else
         {
             $message = "Are you sure you want to delete the range \${$range->startRange}?";
         }
-        $form = new Application_Form_Delete($message);
+        $form = new DeleteConfirmationForm($message);
 
         $request = $this->getRequest();
         if ($request->isPost())
@@ -1043,25 +923,21 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                     {
                         $mapper->delete($range);
                         $db->commit();
-                        $this->_flashMessenger->addMessage(array(
-                            'success' => "The range \${$this->view->escape($range->startRange)} was deleted successfully."
-                        ));
-                        $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+                        $this->_flashMessenger->addMessage(['success' => "The range \${$this->view->escape($range->startRange)} was deleted successfully."]);
+                        $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
                     }
                 }
                 else // go back
                 {
                     $db->rollBack();
-                    $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+                    $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
                 }
             }
             catch (Exception $e)
             {
                 $db->rollBack();
-                $this->_flashMessenger->addMessage(array(
-                    'danger' => 'There was an error selecting the term to delete.'
-                ));
-                $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+                $this->_flashMessenger->addMessage(['danger' => 'There was an error selecting the term to delete.']);
+                $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
             }
         }
         $this->view->form = $form;
@@ -1069,13 +945,12 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function importAction ()
     {
-        $this->view->headTitle('Leasing Rates');
-        $this->view->headTitle('Import');
-        $leasingSchemaId = $this->_getParam('leasingSchemaId', false);
-        $leasingSchema   = null;
+        $this->_pageTitle = ['Import Card', 'Your Lease Rates', 'Company'];
+        $leasingSchemaId  = $this->_getParam('leasingSchemaId', false);
+        $leasingSchema    = null;
         // Get db adapter
         $db   = Zend_Db_Table::getDefaultAdapter();
-        $form = new Dealermanagement_Form_ImportLeaseCsv(array('csv'), "1B", "8MB");
+        $form = new ImportLeaseCsvForm(['csv'], "1B", "8MB");
 
         // Postback
         $request = $this->getRequest();
@@ -1084,21 +959,28 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
             $values = $request->getPost();
             if (isset($values ['cancel']))
             {
-                $this->redirector("index");
+                if ($leasingSchemaId > 0) // We need to return the user to their previous view
+                {
+                    $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
+                }
+                else
+                {
+                    $this->redirectToRoute('company.leasing-schema');
+                }
             }
             $db->beginTransaction();
             try
             {
                 // Prep mappers
-                $leasingSchemaMapper      = Quotegen_Model_Mapper_LeasingSchema::getInstance();
-                $leasingSchemaRateMapper  = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
-                $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
-                $leasingSchemaTermMapper  = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
+                $leasingSchemaMapper      = LeasingSchemaMapper::getInstance();
+                $leasingSchemaRateMapper  = LeasingSchemaRateMapper::getInstance();
+                $leasingSchemaRangeMapper = LeasingSchemaRangeMapper::getInstance();
+                $leasingSchemaTermMapper  = LeasingSchemaTermMapper::getInstance();
 
                 // Prep models
-                $leasingSchemaRateModel  = new Quotegen_Model_LeasingSchemaRate();
-                $leasingSchemaRangeModel = new Quotegen_Model_LeasingSchemaRange();
-                $leasingSchemaTermModel  = new Quotegen_Model_LeasingSchemaTerm();
+                $leasingSchemaRateModel  = new LeasingSchemaRateModel();
+                $leasingSchemaRangeModel = new LeasingSchemaRangeModel();
+                $leasingSchemaTermModel  = new LeasingSchemaTermModel();
 
                 if ($form->isValid($values) && $form->getUploadedFilename() !== false)
                 {
@@ -1112,9 +994,9 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                         $leasingSchema = $leasingSchemaMapper->find($leasingSchemaId);
                     }
 
-                    if (!$leasingSchema instanceof Quotegen_Model_LeasingSchema)
+                    if (!$leasingSchema instanceof LeasingSchemaModel)
                     {
-                        $leasingSchema           = new Quotegen_Model_LeasingSchema();
+                        $leasingSchema           = new LeasingSchemaModel();
                         $leasingSchema->name     = basename($form->getUploadedFilename());
                         $leasingSchema->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
                         $leasingSchemaId         = $leasingSchemaMapper->insert($leasingSchema);
@@ -1151,19 +1033,19 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                         else
                         {
                             $rates = explode(",", $value);
-                            foreach ($rates as $ratekey => $value)
+                            foreach ($rates as $ratekey => $ratevalue)
                             {
 
                                 // First column is the term
                                 if ($ratekey == 0)
                                 {
                                     // If its not a valid month, ERROR OUT!
-                                    if (!is_numeric($value) || $value <= 0)
+                                    if (!is_numeric($ratevalue) || $ratevalue <= 0)
                                     {
                                         throw new Exception("Passing exception up the chain.", 0, null);
                                     }
 
-                                    $months = $value;
+                                    $months = $ratevalue;
 
                                     // Insert term
                                     $leasingSchemaTermModel->leasingSchemaId = $leasingSchemaId;
@@ -1178,12 +1060,12 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                                     // Loop through remaining columns and save rates
                                     if ($termId > 0 && $rangeId > 0)
                                     {
-                                        if (!is_numeric($value) || $value > 1)
+                                        if (!is_numeric($ratevalue) || $ratevalue > 1)
                                         {
                                             throw new Exception("Passing exception up the chain.", 0, null);
                                         }
                                         // Get rate
-                                        $rate = $value;
+                                        $rate = $ratevalue;
 
                                         // Save Rate
                                         $leasingSchemaRateModel->leasingSchemaTermId  = $termId;
@@ -1203,10 +1085,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                     $db->commit();
 
                     // Send success message to the screen
-                    $this->_flashMessenger->addMessage(array(
-                        'success' => "The leasing schema import was completed successfully."
-                    ));
-                    $this->redirector(array('action' => 'index'));
+                    $this->_flashMessenger->addMessage(['success' => "The leasing schema import was completed successfully."]);
+                    $this->redirectToRoute('company.leasing-schema.view', ['leasingSchemaId' => $leasingSchemaId]);
                 }
                 else
                 {
@@ -1219,25 +1099,19 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                     else
                     {
                         // Display errors to screen
-                        $this->_flashMessenger->addMessage(array(
-                            'error' => "An error has occurred and the import was not completed. Please double check the format of your file and try again."
-                        ));
+                        $this->_flashMessenger->addMessage(['error' => "An error has occurred and the import was not completed. Please double check the format of your file and try again."]);
                     }
                 }
             }
             catch (Zend_Db_Statement_Mysqli_Exception $e)
             {
                 $db->rollback();
-                $this->_flashMessenger->addMessage(array(
-                    'error' => "There was an error saving the leasing schema to the database."
-                ));
+                $this->_flashMessenger->addMessage(['error' => "There was an error saving the leasing schema to the database."]);
             }
             catch (Exception $e)
             {
                 $db->rollback();
-                $this->_flashMessenger->addMessage(array(
-                    'error' => "An error has occurred and the updates were not saved."
-                ));
+                $this->_flashMessenger->addMessage(['error' => "An error has occurred and the updates were not saved."]);
             }
 
         }
@@ -1246,21 +1120,18 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function resetschemaAction ()
     {
-        $this->view->headTitle('Leasing Rates');
-        $this->view->headTitle('Clear Schema');
+        $this->_pageTitle = ['Clear Card', 'Your Lease Rates', 'Company'];
         // Get db adapter
         $db = Zend_Db_Table::getDefaultAdapter();
 
         // Get default leasing schema id
         $leasingSchemaId     = $this->_getParam('leasingSchemaId', false);
-        $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
+        $leasingSchemaMapper = LeasingSchemaMapper::getInstance();
         $leasingSchema       = $leasingSchemaMapper->find($leasingSchemaId);
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-            ));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['danger' => 'Insufficient Privilege: You cannot view this leasing schema.']);
+            $this->redirectToRoute('company.leasing-schema');
         }
         // Reset the grid to default values
         $months = "12";
@@ -1268,14 +1139,18 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         $rate   = "0.0750";
 
         // Prep mappers
-        $leasingSchemaRateMapper  = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
-        $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
-        $leasingSchemaTermMapper  = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
+        $leasingSchemaRateMapper  = LeasingSchemaRateMapper::getInstance();
+        $leasingSchemaRangeMapper = LeasingSchemaRangeMapper::getInstance();
+        $leasingSchemaTermMapper  = LeasingSchemaTermMapper::getInstance();
 
         // Prep models
-        $leasingSchemaRateModel  = new Quotegen_Model_LeasingSchemaRate();
-        $leasingSchemaRangeModel = new Quotegen_Model_LeasingSchemaRange();
-        $leasingSchemaTermModel  = new Quotegen_Model_LeasingSchemaTerm();
+        $leasingSchemaRateModel  = new LeasingSchemaRateModel();
+        $leasingSchemaRangeModel = new LeasingSchemaRangeModel();
+        $leasingSchemaTermModel  = new LeasingSchemaTermModel();
+
+        $message = "Are you sure you want to reset the current schema back to it's default? This action cannot be undone.";
+        $form    = new DeleteConfirmationForm($message);
+
 
         $request = $this->getRequest();
         if ($request->isPost())
@@ -1309,37 +1184,33 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                         $db->commit();
 
                         // Send success message to the screen
-                        $this->_flashMessenger->addMessage(array(
-                            'success' => "The leasing schema has been successfully reset."
-                        ));
+                        $this->_flashMessenger->addMessage(['success' => "The leasing schema has been successfully reset."]);
                     }
                     else
                     {
                         // Delete current failed
                         $db->rollBack();
-                        $this->_flashMessenger->addMessage(array(
-                            'error' => "An error occurred while deleting the current schema."
-                        ));
+                        $this->_flashMessenger->addMessage(['error' => "An error occurred while deleting the current schema."]);
                     }
                 }
                 else
                 {
                     // Cancel action
                     $db->rollBack();
+                    $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
                 }
             }
             catch (Exception $e)
             {
                 // Delete current failed
                 $db->rollBack();
-                $this->_flashMessenger->addMessage(array(
-                    'error' => "An error occurred while deleting the current schema."
-                ));
+                $this->_flashMessenger->addMessage(['error' => "An error occurred while deleting the current schema."]);
             }
 
             // Always redirect back to index
-            $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
+            $this->redirectToRoute('company.leasing-schema.view', ["leasingSchemaId" => $leasingSchemaId]);
         }
+        $this->view->form = $form;
     }
 
     /**
@@ -1350,24 +1221,24 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
     public function emptySchema ($leasingSchemaId)
     {
         // Prep mappers
-        $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
-        $leasingSchemaTermMapper  = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
+        $leasingSchemaRangeMapper = LeasingSchemaRangeMapper::getInstance();
+        $leasingSchemaTermMapper  = LeasingSchemaTermMapper::getInstance();
 
         try
         {
             // Delete existing leasing schema ranges
-            $leasingSchemaRanges = $leasingSchemaRangeMapper->fetchAll(array(
+            $leasingSchemaRanges = $leasingSchemaRangeMapper->fetchAll([
                 'leasingSchemaId = ?' => $leasingSchemaId
-            ));
+            ]);
             foreach ($leasingSchemaRanges as $leasingSchemaRange)
             {
                 $leasingSchemaRangeMapper->delete($leasingSchemaRange);
             }
 
             // Delete existing leasing schema terms
-            $leasingSchemaTerms = $leasingSchemaTermMapper->fetchAll(array(
+            $leasingSchemaTerms = $leasingSchemaTermMapper->fetchAll([
                 'leasingSchemaId = ?' => $leasingSchemaId
-            ));
+            ]);
             foreach ($leasingSchemaTerms as $leasingSchemaTerm)
             {
                 $leasingSchemaTermMapper->delete($leasingSchemaTerm);

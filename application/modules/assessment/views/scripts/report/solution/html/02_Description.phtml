@@ -73,7 +73,7 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
     <tr>
         <th style="width: 100px;">Question</th>
         <th style="width: 250px;">Why It's Important to Ask</th>
-        <th style="width: 250px;">How <?php echo $this->companyName; ?> MPS Works</th>
+        <th style="width: 250px;">How <?= $this->companyName; ?> MPS Works</th>
     </tr>
     </thead>
     <tbody>
@@ -87,7 +87,7 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
             </div>
         </td>
         <td class="column3">
-            <div><?php echo $this->companyName; ?> provides a wide range of options at the end of our hardware contracts. You can upgrade to new equipment, or
+            <div><?= $this->companyName; ?> provides a wide range of options at the end of our hardware contracts. You can upgrade to new equipment, or
                 continue on with the current hardware as is.
             </div>
         </td>
@@ -103,7 +103,7 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
             </div>
         </td>
         <td class="column3">
-            <div><?php echo $this->companyName; ?> offers hardware from channel friendly manufacturers, such as HP and Xerox, which means you will have many
+            <div><?= $this->companyName; ?> offers hardware from channel friendly manufacturers, such as HP and Xerox, which means you will have many
                 options for acquiring supplies and service.
                 While we hope you continue with one of our managed print options, you are free to have another vendor service and supply your device at the end
                 of the contract.
@@ -120,7 +120,7 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
             </div>
         </td>
         <td class="column3">
-            <div><?php echo $this->companyName; ?> typically recommends a 3-year contract term, but we can customize an agreement to meet your specific needs.
+            <div><?= $this->companyName; ?> typically recommends a 3-year contract term, but we can customize an agreement to meet your specific needs.
             </div>
         </td>
     </tr>
@@ -137,9 +137,9 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
         </td>
         <td class="column3">
             <div><?php if ($this->App()->theme == 'printiq'): ?>
-                    Our <?php echo $this->brandName; ?> Plus program includes hardware, supplies, parts, service and labor for a flat monthly rate.
+                    Our <?= $this->brandName; ?> Plus program includes hardware, supplies, parts, service and labor for a flat monthly rate.
                 <?php endif; ?>
-                If you want us to manage your existing hardware, our <?php echo $this->brandName; ?> program includes supplies, parts, service and labor for a standard
+                If you want us to manage your existing hardware, our <?= $this->brandName; ?> program includes supplies, parts, service and labor for a standard
                 per-page rate. There are no minimum page charges, overage rates or fuel surcharges, and our rates do not increase over the contract term.
             </div>
         </td>
@@ -155,7 +155,7 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
             </div>
         </td>
         <td class="column3">
-            <div><?php echo $this->companyName; ?> works with you to determine your hardware needs, so you do not end up paying for unnecessary features.</div>
+            <div><?= $this->companyName; ?> works with you to determine your hardware needs, so you do not end up paying for unnecessary features.</div>
         </td>
     </tr>
     </tbody>

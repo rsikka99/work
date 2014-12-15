@@ -4,6 +4,8 @@
  *
  * This script contains everything for the main table of the cost analysis.
  */
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel;
+
 /* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
@@ -26,7 +28,7 @@ $table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addTe
 
 foreach ($deviceInstances as $deviceInstance)
 {
-    $isColor              = ($deviceInstance->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+    $isColor              = ($deviceInstance->getMasterDevice()->tonerConfigId != TonerConfigModel::BLACK_ONLY) ? true : false;
     $percentOfMonthlyCost = ($assessmentViewModel->calculateTotalMonthlyCost() > 0) ? number_format($deviceInstance->calculateMonthlyCost($costPerPageSetting) / $assessmentViewModel->calculateTotalMonthlyCost() * 100, 2) : 0;
     $cycle                = ($this->cycle(array(true, false))->next()->current());
     if ($cycle)

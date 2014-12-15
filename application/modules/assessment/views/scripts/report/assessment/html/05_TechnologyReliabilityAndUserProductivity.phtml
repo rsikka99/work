@@ -7,19 +7,19 @@ $graphs = $assessmentViewModel->getGraphs();
 <table cellspacing="0" class="gradesTable">
     <tr>
         <td class="gradeDescription">
-            <p><?php echo $assessmentViewModel->getRanking()->getTechnologyReliabilityAndUserProductivity()->RankingText; ?></p>
+            <p><?= $assessmentViewModel->getRanking()->getTechnologyReliabilityAndUserProductivity()->RankingText; ?></p>
         </td>
-        <td class="gradeNumber"><?php echo number_format($assessmentViewModel->getRanking()->getTechnologyReliabilityAndUserProductivity()->Rank, 1); ?></td>
+        <td class="gradeNumber"><?= number_format($assessmentViewModel->getRanking()->getTechnologyReliabilityAndUserProductivity()->Rank, 1); ?></td>
     </tr>
 </table>
 <br />
 <div class="pheader">Age of Printing Devices</div>
-<p>The average age of printing devices in your office is <strong><?php echo number_format($assessmentViewModel->getAverageAgeOfDevices(), 1); ?></strong>
+<p>The average age of printing devices in your office is <strong><?= number_format($assessmentViewModel->getAverageAgeOfDevices(), 1); ?></strong>
     year(s) old. Printers under 5 years old are the most reliable machines. As printing devices get older, the risk of frequent breakdowns increases. Printers
     over 8 years old have a high risk of frequent breakdowns and there is a risk that supplies and parts for these machines may be discontinued.</p>
 <p>The breakdown of the ages of your printing devices is shown below:</p>
 <div class="center">
-    <img src="<?php echo $graphs[9]; ?>" />
+    <img src="<?= $graphs[9]; ?>" />
 </div>
 <br />
 <p>The devices listed below have a high risk of breaking down, because of a combination of their age and the total amount of pages they have printed throughout
@@ -41,22 +41,22 @@ $graphs = $assessmentViewModel->getGraphs();
     foreach ($assessmentViewModel->getHighRiskDevices() as $deviceInstance) : ?>
         <tr>
             <td class="column1">
-                <div class=" left"><?php echo $deviceInstance->getDeviceName(); ?></div>
+                <div class=" left"><?= $deviceInstance->getDeviceName(); ?></div>
             </td>
             <td class="column2">
-                <div class=" center"><?php echo ($deviceInstance->serialNumber) ? : 'Unknown'; ?></div>
+                <div class=" center"><?= ($deviceInstance->serialNumber) ? : 'Unknown'; ?></div>
             </td>
             <td class="column3">
-                <div class=" center"><?php echo $deviceInstance->getAge(); ?> years</div>
+                <div class=" center"><?= $deviceInstance->getAge(); ?> years</div>
             </td>
             <td class="column4">
-                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></div>
+                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></div>
             </td>
             <td class="column5">
-                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getMeter()->endMeterLife); ?></div>
+                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getMeter()->endMeterLife); ?></div>
             </td>
             <td class="column6">
-                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount()); ?></div>
+                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount()); ?></div>
             </td>
         </tr>
         <?php $ctr++;
@@ -69,30 +69,30 @@ $graphs = $assessmentViewModel->getGraphs();
 <p><em>Only takes into account devices for which release dates and expected cartridge yields are known. Age is based on the assumption that the device was
         installed approximately 1 year after the release date.</em></p>
 <br />
-<?php echo $this->noBreakEnd; ?>
-<?php echo $this->noBreakStart; ?>
+<?= $this->noBreakEnd; ?>
+<?= $this->noBreakStart; ?>
 <div class="pheader">IT Time Spent Supporting Printing Devices</div>
 <p>Based on your questionnaire responses, your internal IT personnel spend an average of
-    <strong><?php echo number_format($assessmentViewModel->getWeeklyITHours()); ?></strong> hours per week supporting printing devices. This results in the
+    <strong><?= number_format($assessmentViewModel->getWeeklyITHours()); ?></strong> hours per week supporting printing devices. This results in the
     following:</p>
 <br />
 <table cellspacing="0" class="bold fontChange">
     <tr>
         <td style="width: 470px;">Annual internal IT hours spent servicing and supporting printers</td>
-        <td style="width: 175px;" class="right"><?php echo number_format($assessmentViewModel->getAnnualITHours()); ?></td>
+        <td style="width: 175px;" class="right"><?= number_format($assessmentViewModel->getAnnualITHours()); ?></td>
     </tr>
     <tr>
         <td>Average hourly IT rate</td>
-        <td class="right"><?php echo $this->currency($assessmentViewModel->getAverageITRate(), 2); ?></td>
+        <td class="right"><?= $this->currency($assessmentViewModel->getAverageITRate(), 2); ?></td>
     </tr>
     <tr>
         <td>Annual cost for internal IT staff to service and support printers</td>
-        <td class="right"><?php echo $this->currency($assessmentViewModel->getAnnualITCost()); ?></td>
+        <td class="right"><?= $this->currency($assessmentViewModel->getAnnualITCost()); ?></td>
     </tr>
 </table>
 <br />
 <p>The Gartner Group stated that 30% to 40% of all IT and help desk calls are related to issues with printing and copying. The time that your IT personnel spend
-    managing printers reduces the resources available for your core technology projects. <?php echo $this->companyName; ?> can help you manage your printers
+    managing printers reduces the resources available for your core technology projects. <?= $this->companyName; ?> can help you manage your printers
     efficiently and free up the time of your IT staff.</p>
 <br />
 <div class="pheader">Technology Features and Functionality</div>
@@ -100,10 +100,10 @@ $graphs = $assessmentViewModel->getGraphs();
     amount of pages printed. Color printing capabilities are important if you are generating client-facing or other important documents in-house.</p>
 <p>The charts below show the percent of your printing devices that are capable of scanning, faxing, and color printing.</p>
 <div class="center">
-    <img src="<?php echo $graphs[10]; ?>" /> <!-- Scan capable devices -->
-    <img src="<?php echo $graphs[11]; ?>" /> <!-- Fax capable devices -->
-    <img src="<?php echo $graphs[12]; ?>" /> <!-- Color capable devices -->
+    <img src="<?= $graphs[10]; ?>" /> <!-- Scan capable devices -->
+    <img src="<?= $graphs[11]; ?>" /> <!-- Fax capable devices -->
+    <img src="<?= $graphs[12]; ?>" /> <!-- Color capable devices -->
 </div>
 <br />
-<p>If you are in need of additional features and functionality to improve workflow and print quality, <?php echo $this->companyName; ?> has a variety of
+<p>If you are in need of additional features and functionality to improve workflow and print quality, <?= $this->companyName; ?> has a variety of
     printing devices that can meet your specific business needs. If you already have everything you need, we can manage the printing assets you have.</p>

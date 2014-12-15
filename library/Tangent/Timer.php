@@ -1,12 +1,14 @@
 <?php
 
+namespace Tangent;
+
 /**
  * A class to use to profile pages
  *
  * @author "Lee Robert"
  *
  */
-class Tangent_Timer
+class Timer
 {
     static $_milestones;
 

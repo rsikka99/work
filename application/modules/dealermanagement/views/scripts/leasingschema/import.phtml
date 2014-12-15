@@ -1,44 +1,35 @@
-<?php
-/*
- * import.phtml - import leasing schema from .csv
- * @author	John Sadler
- */
-?>
+<script>
+    <?php $this->headScript()->captureStart('append', 'text/javascript') ?>
+    var grid_width = 940;
 
-<?php $this->headScript()->captureStart('append', 'text/javascript') ?>
-var grid_width = 940;
+    $(document).ready(function ()
+    {
+        tableToGrid("#results_list", {
+            width      : grid_width,
+            height     : 300,
+            rowNum     : -1,
+            shrinkToFit: false
+        });
 
-$(document).ready(function() {
-tableToGrid("#results_list", {
-width:grid_width,
-height:300,
-rowNum: -1,
-shrinkToFit:false
-});
+        $("#confirm_container").html('<p class="warning">Your import will override the existing schema values. Click "Confirm Import" to continue?</p>');
 
-$("#confirm_container").html('<p class="warning">Your import will override the existing schema values. Click "Confirm Import" to continue?</p>');
+    });
 
-});
+    function do_action(action)
+    {
+        $("#message_container").html('');
+        $("#import").submit();
+    }
 
-function do_action(action) {
-$("#message_container").html('');
-$("#import").submit();
-}
-
-<?php $this->headScript()->captureEnd() ?>
-
-<div class="page-header">
-    <h1>Leasing Rates -
-        <small>Import</small>
-    </h1>
-</div>
-<div class="well">
+    <?php $this->headScript()->captureEnd() ?>
+</script>
+<div class="container">
     <p><strong>To import your leasing rates:</strong></p>
 
     <p><strong>1) Create a CSV using the same format shown below</strong></p>
 
     <p><strong>2) Upload the CSV into the system</strong></p>
-    <table class="table" style="border:1 solid black;">
+    <table class="table table-bordered">
         <tr>
             <td></td>
             <td>Range</td>
@@ -58,5 +49,5 @@ $("#import").submit();
             <td>Rate</td>
         </tr>
     </table>
-    <?php echo $this->form; ?>
+    <?= $this->form ?>
 </div>

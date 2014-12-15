@@ -1,0 +1,21 @@
+<?xml version="1.0" standalone="yes"?>
+<quoteSettingsGoodData>
+    <testData>
+        <data>
+            <defaultDeviceMargin>15</defaultDeviceMargin>
+            <defaultPageMargin>45</defaultPageMargin>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <defaultDeviceMargin>10</defaultDeviceMargin>
+            <defaultPageMargin>20</defaultPageMargin>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <defaultDeviceMargin>asdf</defaultDeviceMargin>
+            <defaultPageMargin>55</defaultPageMargin>
+        </data>
+    </testData>
+</quoteSettingsGoodData>

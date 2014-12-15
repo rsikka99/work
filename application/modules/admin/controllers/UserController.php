@@ -1,9 +1,20 @@
 <?php
+use MPSToolbox\Legacy\Forms\DeleteConfirmationForm;
+use MPSToolbox\Legacy\Mappers\DealerMapper;
+use MPSToolbox\Legacy\Mappers\UserMapper;
+use MPSToolbox\Legacy\Models\UserModel;
+use MPSToolbox\Legacy\Modules\Admin\Forms\UserForm;
+use MPSToolbox\Legacy\Modules\Admin\Mappers\RoleMapper;
+use MPSToolbox\Legacy\Modules\Admin\Mappers\UserRoleMapper;
+use MPSToolbox\Legacy\Modules\Admin\Models\RoleModel;
+use MPSToolbox\Legacy\Modules\Admin\Models\UserRoleModel;
+use MPSToolbox\Legacy\Modules\DealerManagement\Services\UserService;
+use Tangent\Controller\Action;
 
 /**
  * Class Admin_UserController
  */
-class Admin_UserController extends Tangent_Controller_Action
+class Admin_UserController extends Action
 {
     /**
      * Whether or not the current user has root access
@@ -22,11 +33,9 @@ class Admin_UserController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
-        $this->view->headTitle('System');
-        $this->view->headTitle('Users');
-        $this->view->headTitle('User Management');
+        $this->_pageTitle = array('System', 'Users', 'User Management');
         // Fetch all the users
-        $userMapper = new Application_Model_Mapper_User();
+        $userMapper = new UserMapper();
         $users      = $userMapper->fetchUserList($this->_currentUserIsRoot);
 
         // Display all of the users
@@ -38,13 +47,12 @@ class Admin_UserController extends Tangent_Controller_Action
      */
     public function createAction ()
     {
-        $this->view->headTitle('Users');
-        $this->view->headTitle('Create User');
+        $this->_pageTitle = array('Users', 'Create User');
 
         $dealerId = $this->getRequest()->getUserParam('id', false);
 
         $db   = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $form = new Admin_Form_User(Admin_Form_User::MODE_CREATE, $dealerId);
+        $form = new UserForm(UserForm::MODE_CREATE, $dealerId);
 
         $request = $this->getRequest();
 
@@ -55,18 +63,18 @@ class Admin_UserController extends Tangent_Controller_Action
             {
                 if ($form->isValid($values))
                 {
-                    $dealer = Application_Model_Mapper_Dealer::getInstance()->find($values['dealerId']);
+                    $dealer = DealerMapper::getInstance()->find($values['dealerId']);
                     if ($dealer && $dealer->getNumberOfLicensesUsed() < $dealer->userLicenses)
                     {
                         // Save to the database
                         try
                         {
                             $db->beginTransaction();
-                            $mapper = new Application_Model_Mapper_User();
+                            $mapper = new UserMapper();
 
-                            $user = new Application_Model_User();
+                            $user = new UserModel();
                             $user->populate($values);
-                            $user->password = Application_Model_User::cryptPassword($user->password);
+                            $user->password = UserModel::cryptPassword($user->password);
                             $userId         = $mapper->insert($user);
 
                             if (!isset($values["userRoles"]))
@@ -77,9 +85,9 @@ class Admin_UserController extends Tangent_Controller_Action
                             // Save changes to the user roles
                             if (isset($values ["userRoles"]))
                             {
-                                $userRole         = new Admin_Model_UserRole();
+                                $userRole         = new UserRoleModel();
                                 $userRole->userId = $userId;
-                                $userRoleMapper   = new Admin_Model_Mapper_UserRole();
+                                $userRoleMapper   = new UserRoleMapper();
                                 $userRoles        = $userRoleMapper->fetchAll(array(
                                     'userId = ?' => $userId
                                 ));
@@ -116,9 +124,9 @@ class Admin_UserController extends Tangent_Controller_Action
                             }
                             $db->commit();
 
-                            if ($values['sendemail'])
+                            if ($values['send_email'])
                             {
-                                Dealermanagement_Service_User::sendNewUserEmail($user, $values['password']);
+                                UserService::sendNewUserEmail($user, $values['password']);
                             }
                         }
                         catch (Zend_Db_Statement_Mysqli_Exception $e)
@@ -145,7 +153,7 @@ class Admin_UserController extends Tangent_Controller_Action
                         catch (Exception $e)
                         {
                             $db->rollBack();
-                            Tangent_Log::logException($e);
+                            \Tangent\Logger\Logger::logException($e);
                             $this->_flashMessenger->addMessage(array(
                                 'danger' => 'There was an error processing this request.  Please try again.'
                             ));
@@ -171,11 +179,11 @@ class Admin_UserController extends Tangent_Controller_Action
             {
                 if ($dealerId !== false)
                 {
-                    $this->redirector('view', 'dealer', null, array('id' => $dealerId));
+                    $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
                 }
                 else
                 {
-                    $this->redirector('index');
+                    $this->redirectToRoute('admin.users');
                 }
 
             }
@@ -189,36 +197,35 @@ class Admin_UserController extends Tangent_Controller_Action
      */
     public function deleteAction ()
     {
-        $this->view->headTitle('Users');
-        $this->view->headTitle('Delete User');
-        $userId   = $this->getRequest()->getUserParam('id', false);
-        $dealerId = $this->getRequest()->getUserParam('dealerId', false);
+        $this->_pageTitle = array('Users', 'Delete User');
+        $userId           = $this->getRequest()->getUserParam('id', false);
+        $dealerId         = $this->getRequest()->getUserParam('dealerId', false);
 
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
         {
             $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
-            $this->redirector('index');
+            $this->redirectToRoute('admin.users');
         }
 
         if ($userId === '1')
         {
             $this->_flashMessenger->addMessage(array('danger' => 'Insufficient Privilege: You cannot delete the root user.'));
-            $this->redirector('index');
+            $this->redirectToRoute('admin.users');
         }
 
-        $mapper = new Application_Model_Mapper_User();
+        $mapper = new UserMapper();
         $user   = $mapper->find($userId);
 
         // If the user doesn't exist, send them back t the view all users page
         if (!$user)
         {
             $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the user to delete.'));
-            $this->redirector('index');
+            $this->redirectToRoute('admin.users');
         }
 
 
-        $form = new Application_Form_Delete("Are you sure you want to delete {$user->email} ({$user->firstname} {$user->lastname})?");
+        $form = new DeleteConfirmationForm("Are you sure you want to delete {$user->email} ({$user->firstname} {$user->lastname})?");
 
         $request = $this->getRequest();
 
@@ -241,22 +248,22 @@ class Admin_UserController extends Tangent_Controller_Action
 
                 if ($dealerId !== false)
                 {
-                    $this->redirector('view', 'dealer', null, array('id' => $dealerId));
+                    $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
                 }
                 else
                 {
-                    $this->redirector('index');
+                    $this->redirectToRoute('admin.users');
                 }
             }
             else
             {
                 if ($dealerId !== false)
                 {
-                    $this->redirector('view', 'dealer', null, array('id' => $dealerId));
+                    $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
                 }
                 else
                 {
-                    $this->redirector('index');
+                    $this->redirectToRoute('admin.users');
                 }
             }
         }
@@ -269,10 +276,9 @@ class Admin_UserController extends Tangent_Controller_Action
      */
     public function editAction ()
     {
-        $this->view->headTitle('Users');
-        $this->view->headTitle('Edit User');
-        $userId   = $this->getRequest()->getUserParam('id', false);
-        $dealerId = $this->getRequest()->getUserParam('dealerId', false);
+        $this->_pageTitle = array('Users', 'Edit User');
+        $userId           = $this->getRequest()->getUserParam('id', false);
+        $dealerId         = $this->getRequest()->getUserParam('dealerId', false);
 
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
@@ -280,11 +286,11 @@ class Admin_UserController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
             if ($dealerId !== false)
             {
-                $this->redirector('view', 'dealer', null, array('id' => $dealerId));
+                $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
             }
             else
             {
-                $this->redirector('index');
+                $this->redirectToRoute('admin.users');
             }
         }
 
@@ -293,23 +299,23 @@ class Admin_UserController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array('danger' => 'Insufficient Privilege: You cannot edit the root user.'));
             if ($dealerId !== false)
             {
-                $this->redirector('view', 'dealer', null, array('id' => $dealerId));
+                $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
             }
             else
             {
-                $this->redirector('index');
+                $this->redirectToRoute('admin.users');
             }
         }
 
         // Get the user
-        $mapper = new Application_Model_Mapper_User();
+        $mapper = new UserMapper();
         $user   = $mapper->find($userId);
 
         // Get all available roles. In theory this should be a managable amount
-        $roleMapper = new Admin_Model_Mapper_Role();
+        $roleMapper = new RoleMapper();
         $roles      = $roleMapper->fetchAll();
 
-        $userRoleMapper = new Admin_Model_Mapper_UserRole();
+        $userRoleMapper = new UserRoleMapper();
         $userRoles      = $userRoleMapper->fetchAll(array('userId = ?' => $userId));
 
         // We need to get the current users roles
@@ -325,16 +331,16 @@ class Admin_UserController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the user to delete.'));
             if ($dealerId !== false)
             {
-                $this->redirector('view', 'dealer', null, array('id' => $dealerId));
+                $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
             }
             else
             {
-                $this->redirector('index');
+                $this->redirectToRoute('admin.users');
             }
         }
 
         // Create a new form with the mode and roles set
-        $form = new Admin_Form_User(Admin_Form_User::MODE_EDIT);
+        $form = new UserForm(UserForm::MODE_EDIT);
 
         // Prepare the data for the form
         $values               = $user->toArray();
@@ -367,7 +373,7 @@ class Admin_UserController extends Tangent_Controller_Action
                             foreach ($formValues ["userRoles"] as $roleId)
                             {
                                 $roleIsValid = false;
-                                /* @var $role Admin_Model_Role */
+                                /* @var $role RoleModel */
                                 foreach ($roles as $role)
                                 {
                                     if ($role->id == $roleId)
@@ -389,7 +395,7 @@ class Admin_UserController extends Tangent_Controller_Action
                         if (isset($formValues ["password"]) && !empty($formValues ["password"]) && $formValues ["reset_password"])
                         {
                             unset($formValues ["passwordconfirm"]);
-                            $formValues ["password"] = Application_Model_User::cryptPassword($formValues ["password"]);
+                            $formValues ["password"] = UserModel::cryptPassword($formValues ["password"]);
                             $passwordChanged         = true;
                         }
                         else
@@ -415,8 +421,8 @@ class Admin_UserController extends Tangent_Controller_Action
                             unset($formValues ["eulaAccepted"]);
                         }
 
-                        $mapper = new Application_Model_Mapper_User();
-                        $user   = new Application_Model_User();
+                        $mapper = new UserMapper();
+                        $user   = new UserModel();
                         $user->populate($formValues);
                         $user->id = $userId;
 
@@ -428,7 +434,7 @@ class Admin_UserController extends Tangent_Controller_Action
                             $formValues['userRoles'] = array();
                         }
                         // Save changes to the user roles
-                        $userRole         = new Admin_Model_UserRole();
+                        $userRole         = new UserRoleModel();
                         $userRole->userId = $userId;
 
                         // Loop through our new roles
@@ -455,7 +461,7 @@ class Admin_UserController extends Tangent_Controller_Action
 
 
                         // Loop through our old roles to see which were removed
-                        /* @var $userRole Admin_Model_UserRole */
+                        /* @var $userRole UserRoleModel */
                         foreach ($userRoles as $userRole)
                         {
                             $hasRole = false;
@@ -497,11 +503,11 @@ class Admin_UserController extends Tangent_Controller_Action
                 // User has cancelled. We could do a redirect here if we wanted.
                 if ($dealerId !== false)
                 {
-                    $this->redirector('view', 'dealer', null, array('id' => $dealerId));
+                    $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
                 }
                 else
                 {
-                    $this->redirector('index');
+                    $this->redirectToRoute('admin.users');
                 }
             }
         }
@@ -512,8 +518,8 @@ class Admin_UserController extends Tangent_Controller_Action
 
     public function profileAction ()
     {
-        $this->view->headTitle('Users');
-        $this->view->headTitle('Profile');
+        $this->_pageTitle = array('Profile', 'Users');
+
         $userId = Zend_Auth::getInstance()->getIdentity()->id;
 
         if (!$userId)
@@ -521,14 +527,14 @@ class Admin_UserController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'warning' => 'Please select a user to delete first.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('admin.users');
         }
 
         // Get the user
-        $userMapper = new Application_Model_Mapper_User();
+        $userMapper = new UserMapper();
         $user       = $userMapper->find($userId);
 
-        $form = new Admin_Form_User(Admin_Form_User::MODE_EDIT);
+        $form = new UserForm(UserForm::MODE_USER_EDIT);
         $form->populate($user->toArray());
 
         $request = $this->getRequest();
@@ -547,7 +553,7 @@ class Admin_UserController extends Tangent_Controller_Action
                     if ($form->isValid($values))
                     {
                         // Update the user information
-                        $usersByEmail = Application_Model_Mapper_User::getInstance()->fetchUserByEmail($values['email']);
+                        $usersByEmail = UserMapper::getInstance()->fetchUserByEmail($values['email']);
                         if ($user->email == $values['email'] || $usersByEmail === false)
                         {
                             // Update storage
@@ -583,10 +589,11 @@ class Admin_UserController extends Tangent_Controller_Action
             else
             {
                 // Redirect user back to the home page
-                $this->redirector('index', 'index', 'default');
+                $this->redirectToRoute('admin');
             }
         }
         $this->view->form = $form;
+        $this->view->user = $user;
     }
 }
 

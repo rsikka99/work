@@ -1,0 +1,52 @@
+<?php
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\DeviceForm;
+
+$form = $this->element;  /* @var $form DeviceForm */
+?>
+<div class="well">
+    <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+        <h2><?php echo $form->getElement('deviceName') ?></h2>
+        <?php echo $form->getElement('sku'); ?>
+        <div class='row'>
+            <div class='span4 offset2'>
+                <h3>Options
+                    <input type="submit" name="addOption" value="Add" class="btn btn-success btn-xs" />
+                </h3><br />
+            </div>
+        </div>
+        <?php if (count($form->getDeviceOptionElements()) > 0) : ?>
+            <div class='row'>
+                <div class='span4 offset2'>
+
+                    <table class="table table-bordered table-striped table-condensed">
+                        <tr>
+                            <th>Option</th>
+                            <th style="width: 80px;">Inlcuded Qty</th>
+                            <th style="width: 30px;"></th>
+                        </tr>
+
+                        <?php foreach ($form->getDeviceOptionElements() as $option) : ?>
+                            <tr>
+                                <td><?php echo $option->deviceOptionElement->getLabel(); ?></td>
+                                <td><?php echo $option->deviceOptionElement->renderViewHelper() ?></td>
+                                <td>
+                                    <a href="<?php echo $this->url(array('id' => $option->getId(), 'optionId' => $option->option->getId()), 'quotes.devices.delete-option'); ?>" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
+            </div>
+
+        <?php else : ?>
+            <h4>There are no options currently associated with this device.
+                Please click the add button above to associate options with this
+                device.</h4>
+        <?php endif; ?>
+
+        <div class="form-actions">
+            <input type="submit" name="back" value="Back" class="btn btn-default" />
+            <input type="submit" name="save" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
+</div>

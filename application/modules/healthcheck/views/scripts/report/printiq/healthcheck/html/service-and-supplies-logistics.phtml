@@ -1,7 +1,7 @@
 <?php
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
-$graphs = $healthcheckViewModel->getGraphs();
+$graphs               = $healthcheckViewModel->getGraphs();
 ?>
 <div class="h1">Analysis: Service and Supplies Logistics</div>
 <div class="pheader">Printing Device Management Breakdown</div>
@@ -12,9 +12,9 @@ $graphs = $healthcheckViewModel->getGraphs();
     <table>
         <tbody>
         <tr>
-            <td><img src="<?php echo $graphs['UnmanagedVsManagedDevices']; ?>" /></td>
+            <td><img src="<?= $graphs['UnmanagedVsManagedDevices']; ?>" /></td>
             <!-- Devices leased/Devices Purchased -->
-            <td><img src="<?php echo $graphs['PagesWithOrWithoutJIT']; ?>" /></td>
+            <td><img src="<?= $graphs['PagesWithOrWithoutJIT']; ?>" /></td>
             <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
         </tr>
         </tbody>
@@ -22,19 +22,19 @@ $graphs = $healthcheckViewModel->getGraphs();
 </div>
 <div class="pheader">Number of Printing Device Models and Supply Types</div>
 <p>Out of your
-    <strong><?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have of
-    <strong><?php echo $healthcheckViewModel->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type.
+    <strong><?= $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have of
+    <strong><?= $healthcheckViewModel->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type.
 </p>
 <div class="center">
-    <img src="<?php echo $graphs['UniqueDevicesGraph'] ?>" /> <!--  Giant pie chart -->
+    <img src="<?= $graphs['UniqueDevicesGraph'] ?>" /> <!--  Giant pie chart -->
 </div>
 <?php
 $uniqueDeviceArray = $healthcheckViewModel->getUniqueDeviceCountArray();
-$totalAmount = $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount();
-$amountOfRows = ceil(count($uniqueDeviceArray) / 2);
+$totalAmount       = $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount();
+$amountOfRows      = ceil(count($uniqueDeviceArray) / 2);
 
 //FirstHalf is whether we are writing to the left side of the table or the right side.
-$firstColumn = true;
+$firstColumn  = true;
 $colorCounter = 0;
 
 $tableData = array();
@@ -70,10 +70,10 @@ $tableData = array();
         <tr>
             <?php if (array_key_exists("column1", $row)) : ?>
                 <td style="border:1px solid">
-                    <div style="width:20px;height:20px;margin: auto;background-color:#<?php echo $row["column1"]["color"]; ?>"></div>
+                    <div style="width:20px;height:20px;margin: auto;background-color:#<?= $row["column1"]["color"]; ?>"></div>
                 </td>
-                <td style="border:1px solid"><?php echo $row["column1"]["name"]; ?></td>
-                <td style="border:1px solid"><?php echo $row["column1"]["percent"] ?></td>
+                <td style="border:1px solid"><?= $row["column1"]["name"]; ?></td>
+                <td style="border:1px solid"><?= $row["column1"]["percent"] ?></td>
             <?php else : ?>
                 <td colspan="3">&nbsp;</td>
             <?php endif; ?>
@@ -81,41 +81,44 @@ $tableData = array();
 
             <?php if (array_key_exists("column2", $row)) : ?>
                 <td style="border:1px solid">
-                    <div style="width:20px;height:20px;margin: auto;background-color:#<?php echo $row["column2"]["color"]; ?>"></div>
+                    <div style="width:20px;height:20px;margin: auto;background-color:#<?= $row["column2"]["color"]; ?>"></div>
                 </td>
-                <td style="border:1px solid"><?php echo $row["column2"]["name"]; ?></td>
-                <td style="border:1px solid"><?php echo $row["column2"]["percent"] ?></td>
+                <td style="border:1px solid"><?= $row["column2"]["name"]; ?></td>
+                <td style="border:1px solid"><?= $row["column2"]["percent"] ?></td>
             <?php else : ?>
                 <td colspan="3">&nbsp;</td>
             <?php endif; ?>
         </tr>
     <?php endforeach; ?>
 </table>
-<p>By using printing devices that use the same supplies, you can reduce the amount of cash tied up in supplies inventory and the amount of storage space required. <?php echo My_Brand::getDealerBranding()->shortDealerName; ?> can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
+<p>By using printing devices that use the same supplies, you can reduce the amount of cash tied up in supplies inventory and the amount of storage space required. <?= My_Brand::getDealerBranding()->shortDealerName; ?> can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
 
 <div class="pheader">Number of Printing Vendors</div>
-<p>Out of your <?php echo count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances()) ?>
+<p>Out of your <?= count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances()) ?>
     networked printing devices, you have <strong>
-        <?php echo count($healthcheckViewModel->getDeviceVendorCount());
+        <?= count($healthcheckViewModel->getDeviceVendorCount());
         ?></strong> different vendors. Each section of the chart below represents a single vendor name.
 
 <div class="center">
-    <img src="<?php echo $graphs['PercentPerDeviceBrand']; ?>" />
+    <img src="<?= $graphs['PercentPerDeviceBrand']; ?>" />
 </div>
 
-<div class="pheader">Number of Printing Devices Compatible with <?php echo My_Brand::getDealerBranding()->mpsProgramName; ?></div>
-<p>Out of your <?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?>
+<div class="pheader">Number of Printing Devices Compatible with <?= My_Brand::getDealerBranding()->mpsProgramName; ?></div>
+<p>Out of your <?= $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?>
     networked printing devices, you have
-    <strong><?php echo $healthcheckViewModel->getDevices()->isManagedDeviceInstances->getCount(); ?></strong> devices that are managed,  <?php echo $healthcheckViewModel->getDevices()->notCompatibleDeviceInstances->getCount(); ?> devices that are not compatible and <?php echo $healthcheckViewModel->getDevices()->compatibleDeviceInstances->getCount() ?> devices compatible with <?php echo $this->jitFullName ?>. These non compatible devices are shown in the fleet attributes section below. A complete list of all devices and their <?php echo $this->jit ?> compatibility can be found in the Appendix.
+    <strong><?= $healthcheckViewModel->getDevices()->isManagedDeviceInstances->getCount(); ?></strong> devices that are managed,  <?= $healthcheckViewModel->getDevices()->notCompatibleDeviceInstances->getCount(); ?> devices that are not compatible and <?= $healthcheckViewModel->getDevices()->compatibleDeviceInstances->getCount() ?> devices compatible with <?= $this->jitFullName ?>. These non compatible devices are shown in the fleet attributes section below. A complete list of all devices and their <?= $this->jit ?> compatibility can be found in the Appendix.
 </p>
 <br />
 <div class="center">
     <table>
         <tbody>
         <tr>
-            <td><img src="<?php echo $graphs['ManagedVsNotJitVsJitDevices']; ?>" /></td>
+            <td><img src="<?= $graphs['ManagedVsNotJitVsJitDevices']; ?>" />
+            </td>
             <!-- Devices leased/Devices Purchased -->
-            <td><img src="<?php echo $graphs['PagesPrintedManagedVsJitVsCompVsLeased']; ?>" /></td>
+            <td>
+                <img src="<?= $graphs['PagesPrintedManagedVsJitVsCompVsLeased']; ?>" />
+            </td>
             <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
         </tr>
         </tbody>

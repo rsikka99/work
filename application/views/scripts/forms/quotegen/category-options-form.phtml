@@ -1,0 +1,36 @@
+<?php
+/* @var $form \MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\CategoryForm */
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\CategoryForm;
+
+$form = $this->element;
+?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<fieldset>
+    <div class="form-group <?= ($form->getElement('name')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('name'), array('col-md-3')) ?>
+
+        <div class="col-md-7">
+            <?= $this->RenderFormText($form->getElement('name')) ?>
+            <?= $this->RenderFormDescription($form->getElement('name')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('name')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('description')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('description'), array('col-md-3')) ?>
+
+        <div class="col-md-7">
+            <?= $this->RenderFormTextArea($form->getElement('description')) ?>
+            <?= $this->RenderFormDescription($form->getElement('description')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('description')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <hr>
+    <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+</fieldset>
+<?= $this->RenderFormClose($form) ?>

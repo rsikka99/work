@@ -1,9 +1,15 @@
 <?php
+use MPSToolbox\Legacy\Forms\DeleteConfirmationForm;
+use MPSToolbox\Legacy\Mappers\DealerMapper;
+use MPSToolbox\Legacy\Mappers\UserMapper;
+use MPSToolbox\Legacy\Modules\Admin\Mappers\RoleMapper;
+use MPSToolbox\Legacy\Modules\DealerManagement\Services\UserService;
+use Tangent\Controller\Action;
 
 /**
  * Class Dealermanagement_UserController
  */
-class Dealermanagement_UserController extends Tangent_Controller_Action
+class Dealermanagement_UserController extends Action
 {
     /**
      * Whether or not the current user has root access
@@ -29,17 +35,16 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
-        $this->view->headTitle('Users');
-        $this->view->headTitle('User Management');
+        $this->_pageTitle = ['Your Users', 'Company'];
         // Fetch all the users
-        $userMapper = new Application_Model_Mapper_User();
+        $userMapper = new UserMapper();
         $users      = $userMapper->fetchUserListForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
 
 
         // Display all of the users
         $this->view->users = $users;
         // Get the max users allowed for this dealer
-        $this->view->maxUsers = Application_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId)->userLicenses;
+        $this->view->maxUsers = DealerMapper::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId)->userLicenses;
     }
 
 
@@ -48,10 +53,9 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
      */
     public function createAction ()
     {
-        $this->view->headTitle('Users');
-        $this->view->headTitle('Create User');
-        $roles       = Admin_Model_Mapper_Role::getInstance()->getRolesAvailableForDealers();
-        $userService = new Dealermanagement_Service_User($roles, $this->_identity->dealerId, true);
+        $this->_pageTitle = ['Create User', 'Your Users', 'Company'];
+        $roles            = RoleMapper::getInstance()->getRolesAvailableForDealers();
+        $userService      = new UserService($roles, $this->_identity->dealerId, true);
 
         if ($this->getRequest()->isPost())
         {
@@ -62,40 +66,40 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
                 $db = Zend_Db_table::getDefaultAdapter();
                 try
                 {
-                    $dealer           = Application_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
-                    $currentUserCount = count(Application_Model_Mapper_User::getInstance()->fetchUserListForDealer($dealer->id));
+                    $dealer           = DealerMapper::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+                    $currentUserCount = count(UserMapper::getInstance()->fetchUserListForDealer($dealer->id));
                     $maxLicenses      = $dealer->userLicenses;
                     if ($currentUserCount < $maxLicenses)
                     {
                         $db->beginTransaction();
                         if ($userService->create($postData))
                         {
-                            $this->_flashMessenger->addMessage(array('success' => 'User created. An email will be sent out to the user with instructions on how to proceed.'));
+                            $this->_flashMessenger->addMessage(['success' => 'User created. An email will be sent out to the user with instructions on how to proceed.']);
                             $db->commit();
                         }
                         else
                         {
                             foreach ($userService->getErrors() as $message)
                             {
-                                $this->_flashMessenger->addMessage(array('danger' => $message));
+                                $this->_flashMessenger->addMessage(['danger' => $message]);
                             }
                             $db->rollBack();
                         }
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array('danger' => 'Allocated user licenses exceed.'));
+                        $this->_flashMessenger->addMessage(['danger' => 'Allocated user licenses exceed.']);
                     }
                 }
                 catch (Exception $e)
                 {
                     $db->rollBack();
-                    Tangent_Log::logException($e);
+                    \Tangent\Logger\Logger::logException($e);
                 }
             }
             else
             {
-                $this->redirector('index');
+                $this->redirectToRoute('company.users');
             }
         }
 
@@ -107,17 +111,16 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
      */
     public function deleteAction ()
     {
-        $this->view->headTitle('Users');
-        $this->view->headTitle('Delete User');
-        $userId = $this->_getParam('id', false);
+        $this->_pageTitle = ['Delete User', 'Your Users', 'Company'];
+        $userId           = $this->_getParam('id', false);
 
         /**
          * Require ID
          */
         if (!$userId)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a user to delete first.']);
+            $this->redirectToRoute('company.users');
         }
 
         /**
@@ -125,8 +128,8 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
          */
         if ($userId == $this->_identity->id)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'You cannot delete yourself.'));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['warning' => 'You cannot delete yourself.']);
+            $this->redirectToRoute('company.users');
         }
 
         /**
@@ -134,15 +137,15 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
          */
         if ($userId == '1')
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a user to delete first.']);
+            $this->redirectToRoute('company.users');
         }
 
 
         /**
          * Fetch the user
          */
-        $mapper = new Application_Model_Mapper_User();
+        $mapper = new UserMapper();
         $user   = $mapper->find($userId);
 
         /**
@@ -150,8 +153,8 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
          */
         if (!$user)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a user to delete first.']);
+            $this->redirectToRoute('company.users');
         }
 
         /**
@@ -159,11 +162,11 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
          */
         if ($user->dealerId != $this->_identity->dealerId)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a user to delete first.']);
+            $this->redirectToRoute('company.users');
         }
 
-        $form = new Application_Form_Delete("Are you sure you want to delete {$user->email} ({$user->firstname} {$user->lastname})?");
+        $form = new DeleteConfirmationForm("Are you sure you want to delete {$user->email} ({$user->firstname} {$user->lastname})?");
 
         if ($this->getRequest()->isPost())
         {
@@ -171,23 +174,23 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
             if (!isset($postData ['cancel']))
             {
                 $db          = Zend_Db_table::getDefaultAdapter();
-                $roles       = Admin_Model_Mapper_Role::getInstance()->getRolesAvailableForDealers();
-                $userService = new Dealermanagement_Service_User($roles, $this->_identity->dealerId, true);
+                $roles       = RoleMapper::getInstance()->getRolesAvailableForDealers();
+                $userService = new UserService($roles, $this->_identity->dealerId, true);
                 try
                 {
                     $db->beginTransaction();
 
                     if ($userService->delete($userId))
                     {
-                        $this->_flashMessenger->addMessage(array('success' => "User deleted."));
+                        $this->_flashMessenger->addMessage(['success' => "User deleted."]);
                         $db->commit();
-                        $this->redirector('index');
+                        $this->redirectToRoute('company.users');
                     }
                     else
                     {
                         foreach ($userService->getErrors() as $message)
                         {
-                            $this->_flashMessenger->addMessage(array('danger' => $message));
+                            $this->_flashMessenger->addMessage(['danger' => $message]);
                         }
                         $db->rollBack();
                     }
@@ -195,12 +198,12 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
                 catch (Exception $e)
                 {
                     $db->rollBack();
-                    Tangent_Log::logException($e);
+                    \Tangent\Logger\Logger::logException($e);
                 }
             }
             else
             {
-                $this->redirector('index');
+                $this->redirectToRoute('company.users');
             }
         }
 
@@ -212,27 +215,26 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
      */
     public function editAction ()
     {
-        $this->view->headTitle('Users');
-        $this->view->headTitle('Edit User');
-        $userId = $this->_getParam('id', false);
+        $this->_pageTitle = ['Edit User', 'Your Users', 'Company'];
+        $userId           = $this->_getParam('id', false);
 
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to edit.'));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a user to edit.']);
+            $this->redirectToRoute('company.users');
         }
 
         if ($userId == '1' && !$this->_currentUserIsRoot)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to edit.'));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a user to edit.']);
+            $this->redirectToRoute('company.users');
         }
 
         /**
          * Fetch the user
          */
-        $mapper = new Application_Model_Mapper_User();
+        $mapper = new UserMapper();
         $user   = $mapper->find($userId);
 
         /**
@@ -240,8 +242,8 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
          */
         if (!$user)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to edit.'));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a user to edit.']);
+            $this->redirectToRoute('company.users');
         }
 
         /**
@@ -249,12 +251,12 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
          */
         if ($user->dealerId != $this->_identity->dealerId)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to edit.'));
-            $this->redirector('index');
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a user to edit.']);
+            $this->redirectToRoute('company.users');
         }
 
-        $roles       = Admin_Model_Mapper_Role::getInstance()->getRolesAvailableForDealers();
-        $userService = new Dealermanagement_Service_User($roles, $this->_identity->dealerId);
+        $roles       = RoleMapper::getInstance()->getRolesAvailableForDealers();
+        $userService = new UserService($roles, $this->_identity->dealerId);
 
         $form = $userService->getForm($user);
 
@@ -270,14 +272,14 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
 
                     if ($userService->update($postData, $userId))
                     {
-                        $this->_flashMessenger->addMessage(array('success' => 'User saved. If you changed the password then an email will be sent out to the user with the new password and instructions on how to proceed.'));
+                        $this->_flashMessenger->addMessage(['success' => 'User saved. If you changed the password then an email will be sent out to the user with the new password and instructions on how to proceed.']);
                         $db->commit();
                     }
                     else
                     {
                         foreach ($userService->getErrors() as $message)
                         {
-                            $this->_flashMessenger->addMessage(array('danger' => $message));
+                            $this->_flashMessenger->addMessage(['danger' => $message]);
                         }
                         $db->rollBack();
                     }
@@ -285,12 +287,12 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
                 catch (Exception $e)
                 {
                     $db->rollBack();
-                    Tangent_Log::logException($e);
+                    \Tangent\Logger\Logger::logException($e);
                 }
             }
             else
             {
-                $this->redirector('index');
+                $this->redirectToRoute('company.users');
             }
         }
 

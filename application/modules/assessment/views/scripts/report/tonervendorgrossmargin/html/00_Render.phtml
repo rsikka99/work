@@ -1,240 +1,167 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$brandName = My_Brand::getDealerBranding()->mpsProgramName;
-$companyName = My_Brand::getDealerBranding()->shortDealerName;
-?>
-<div class="container full-width gross-margin" id="htmlReportContainer">
-<div class="rows">
-<h2 class="reportTitle text-center">Toner Vendor Gross Margin Report</h2><br />
+$brandName           = My_Brand::getDealerBranding()->mpsProgramName;
+$companyName         = My_Brand::getDealerBranding()->shortDealerName;
 
-<div class="span" style="width:200px">
-    <div class="text-center">Select a Toner Preference</div>
-    <ul class="nav nav-tabs nav-stacked">
-        <li class="active"><a data-toggle="tab" href="#summary">Summary</a></li>
-        <?php
-        $tabCounter = 0;
-        foreach ($this->vendorSeparatedData as $vendorData)
-        {
-            ?>
-            <li><a data-toggle="tab" href="#tab<?php echo $tabCounter; ?>"><?php echo $vendorData['pageTitle'] ?></a></li>
-            <?php $tabCounter++;
-        }
-        ?>
-    </ul>
-</div>
-<div class="tab-content">
-<div class="tab-pane active" id="summary">
-    <div class="span9">
-        <h3>Summary</h3>
+/**
+ * Format the highest toner vendor configuration names
+ */
+$vendorConfigurationNames = implode(', ', $this->highestNames);
 
-        <p>
-            There are <?php echo number_format(count($this->vendorSeparatedData) - 2) ?> toner vendors in the system. Out of the <?php echo number_format(count($this->vendorSeparatedData)) ?> Toner
-            Preferences, <?php
-            $vendorConfigurationNames = implode(', ', $this->highestNames);
-            // Replace last occurrence of a comma to an and
-            if (strrpos($vendorConfigurationNames, ',') > 0)
-            {
-                $vendorConfigurationNames = substr_replace($vendorConfigurationNames, ' and ', strrpos($vendorConfigurationNames, ','), 1);
-            }
-            echo $vendorConfigurationNames;
-            ?> has the highest overall gross margin at <?php echo $this->highestMargin ?>.
-        </p>
-        <table class="table">
-            <tr>
-                <td><strong>Toner Preference</strong></td>
-                <td><strong>Overall Gross Margin</strong></td>
-            </tr>
-
-            <?php
-            $highestMarginArray = [];
-            foreach ($this->vendorSeparatedData as $vendorData)
-            {
-                $vendorOverallMargin = $vendorData['statisticsGroup']['right']['Overall Margin'];
-                $vendorName          = $vendorData['pageTitle'];
-                ?>
-                <tr <?php echo(in_array($vendorName, $this->highestNames) ? 'style="background-color:#C3FFA6"' : '') ?>>
-                    <td><?php echo $vendorName ?></td>
-                    <td><?php echo $vendorOverallMargin; ?>%</td>
-                </tr>
-            <?php } ?>
-        </table>
-    </div>
-</div>
-
-
-<?php
-$tabCounter = 0;
-foreach ($this->vendorSeparatedData as $vendorData)
+// Replace last occurrence of a comma to an and
+if (strrpos($vendorConfigurationNames, ',') > 0)
 {
-    ?>
-    <div class="tab-pane" id="tab<?php echo $tabCounter; ?>">
-        <div class="span9">
-            <div>
-                <h3 class="reportTitle"><?php echo $vendorData['pageTitle']; ?></h3>
-                <em>AMPV = Average Monthly Page Volume</em>
-            </div>
+    $vendorConfigurationNames = substr_replace($vendorConfigurationNames, ' and ', strrpos($vendorConfigurationNames, ','), 1);
+}
 
-            <br />
+?>
+<div class="container-fluid">
+    <div class="jumbotron">
+        <h1>Toner Vendors</h1>
 
-            <table id="grossMarginInformation">
-                <tbody>
-                <tr>
-                    <td class="column1">
-                        <div class="heading"><?php echo My_Brand::getDealerBranding()->mpsProgramName; ?> Monochrome CPP:</div>
-                    </td>
-                    <td class="column2">
-                        <div><?php echo $vendorData['statisticsGroup']['left'][My_Brand::getDealerBranding()->mpsProgramName . ' Monochrome CPP'] ?></div>
-                    </td>
-                    <td class="column3">
-                        <div class="heading">Total Cost:</div>
-                    </td>
-                    <td class="column4">
-                        <div><?php echo $vendorData['statisticsGroup']['right']['Total Cost'] ?></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="column1">
-                        <div class="heading"><?php echo My_Brand::getDealerBranding()->mpsProgramName; ?> Color CPP:</div>
-                    </td>
-                    <td class="column2">
-                        <div><?php echo $vendorData['statisticsGroup']['left'][My_Brand::getDealerBranding()->mpsProgramName . ' Color CPP'] ?></div>
-                    </td>
-                    <td class="column3">
-                        <div class="heading">Total Revenue:</div>
-                    </td>
-                    <td class="column4">
-                        <div><?php echo $vendorData['statisticsGroup']['right']['Total Revenue'] ?></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="column1">
-                        <div class="heading">Weighted Monochrome CPP:</div>
-                    </td>
-                    <td class="column2">
-                        <div><?php echo $vendorData['statisticsGroup']['left']['Weighted Monochrome CPP'] ?></div>
-                    </td>
-                    <td class="column3">
-                        <div class="heading">Monthly Profit:</div>
-                    </td>
-                    <td class="column4">
-                        <div><?php echo $vendorData['statisticsGroup']['right']['Monthly Profit'] ?></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="column1">
-                        <div class="heading">Weighted Color CPP:</div>
-                    </td>
-                    <td class="column2">
-                        <div><?php echo $vendorData['statisticsGroup']['left']['Weighted Color CPP'] ?></div>
-                    </td>
-                    <td class="column3">
-                        <div class="heading">Overall Margin:</div>
-                    </td>
-                    <td class="column4">
-                        <div><?php echo $vendorData['statisticsGroup']['right']['Overall Margin'] ?>%</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="column1">
-                        <div class="heading">Monochrome Margin:</div>
-                    </td>
-                    <td class="column2">
-                        <div><?php echo $vendorData['statisticsGroup']['left']['Monochrome Margin'] ?></div>
-                    </td>
-                    <td class="column3">
-                        <div class="heading">Color Margin:</div>
-                    </td>
-                    <td class="column4">
-                        <div><?php echo $vendorData['statisticsGroup']['right']['Color Margin'] ?></div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        <p>You might be wondering who has the
+            <strong>best profitability?</strong> <?= $vendorConfigurationNames; ?> <?= (count($this->highestNames) > 1) ? 'have' : 'has' ?> the highest overall gross margin at <?= $this->highestMargin ?>.
+        </p>
+    </div>
+    <div class="tabbable">
+        <ul class="nav nav-tabs">
+            <?php $tabCounter = 0; ?>
+            <?php foreach ($this->vendorSeparatedData as $vendorData) : ?>
+                <li class="<?= ($tabCounter === 0) ? 'active' : '' ?>">
+                    <a data-toggle="tab" href="#tab<?= $tabCounter; ?>"><?= $vendorData['pageTitle'] ?> (<?= $vendorData['statisticsGroup']['right']['Overall Margin']; ?>%)</a>
+                </li>
+                <?php $tabCounter++; ?>
+            <?php endforeach; ?>
+        </ul>
+        <div class="tab-content">
+            <?php $tabCounter = 0; ?>
+            <?php foreach ($this->vendorSeparatedData as $vendorData) : ?>
+                <div class="tab-pane <?= ($tabCounter === 0) ? 'active' : '' ?>" id="tab<?= $tabCounter; ?>">
+                    <div>
+                        <em>AMPV = Average Monthly Page Volume</em>
+                    </div>
 
-            <br />
+                    <br />
 
-            <div class="center">
-                <em class="center">Yellow highlighted rows indicate devices that have not been assigned toners matching your selected first
-                    toner vendor
-                    preference.<br />
-                    For these devices the system has selected the best available alternative based on the current toner preference.</em>
-                <br /><br />
-            </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-lg-push-1 col-sm-6">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                    <tr>
+                                        <th><?= My_Brand::getDealerBranding()->mpsProgramName; ?> Monochrome CPP:</th>
+                                        <td class="cost-per-page"><?= $vendorData['statisticsGroup']['left'][My_Brand::getDealerBranding()->mpsProgramName . ' Monochrome CPP'] ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th><?= My_Brand::getDealerBranding()->mpsProgramName; ?> Color CPP:</th>
+                                        <td class="cost-per-page"><?= $vendorData['statisticsGroup']['left'][My_Brand::getDealerBranding()->mpsProgramName . ' Color CPP'] ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Weighted Monochrome CPP:</th>
+                                        <td class="cost-per-page"><?= $vendorData['statisticsGroup']['left']['Weighted Monochrome CPP'] ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Weighted Color CPP:</th>
+                                        <td class="cost-per-page"><?= $vendorData['statisticsGroup']['left']['Weighted Color CPP'] ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Monochrome Margin:</th>
+                                        <td class="margin"><?= $vendorData['statisticsGroup']['left']['Monochrome Margin'] ?></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-lg-push-3 col-sm-6">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                    <tr>
+                                        <th>Total Cost:</th>
+                                        <td class="cost"><?= $vendorData['statisticsGroup']['right']['Total Cost'] ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Total Revenue:</th>
+                                        <td class="cost"><?= $vendorData['statisticsGroup']['right']['Total Revenue'] ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Monthly Profit:</th>
+                                        <td class="cost"><?= $vendorData['statisticsGroup']['right']['Monthly Profit'] ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Overall Margin:</th>
+                                        <td class="margin"><?= $vendorData['statisticsGroup']['right']['Overall Margin'] ?>%</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Color Margin:</th>
+                                        <td class="margin"><?= $vendorData['statisticsGroup']['right']['Color Margin'] ?></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
-            <table id="grossMarginDeviceSummary">
-                <thead>
-                <tr class="center">
-                    <th class="column1" rowspan="2">Device Name<br>(Serial Number - IP Address)</th>
-                    <th colspan="5">Monochrome</th>
-                    <th colspan="5">Color</th>
-                </tr>
+                    <p class="text-muted">Yellow highlighted rows indicate devices that have not been assigned toners matching your selected first toner vendor preference. For these devices the system has selected the best available alternative based on the current toner preference.</p>
 
-                <tr class="center">
-                    <th class="column2">AMPV</th>
-                    <th class="column3">Toner Cost</th>
-                    <th class="column4">Toner Yield</th>
-                    <th class="column5">CPP</th>
-                    <th class="column6">Total Printing Cost</th>
-                    <th class="column7">AMPV</th>
-                    <th class="column8">Toner Cost</th>
-                    <th class="column9">Toner Yield</th>
-                    <th class="column10">CPP</th>
-                    <th class="column11">Total Printing Cost</th>
-                </tr>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th rowspan="2">Device Name<br>(IP Address - Serial Number)
+                                </th>
+                                <th colspan="5">Monochrome</th>
+                                <th colspan="5">Color</th>
+                            </tr>
+                            <tr>
+                                <th>AMPV</th>
+                                <th>Toner Cost</th>
+                                <th>Toner Yield</th>
+                                <th>CPP</th>
+                                <th>Total Printing Cost</th>
+                                <th>AMPV</th>
+                                <th>Toner Cost</th>
+                                <th>Toner Yield</th>
+                                <th>CPP</th>
+                                <th>Total Printing Cost</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($vendorData['fieldLists'] as $key => $fields) : ?>
+                                <tr class="<?= ($fields['completeMono']) ? "" : "nonCompliantMono" ?> <?= ($fields['completeColor']) ? "" : "nonCompliantColor" ?>">
+                                    <td class="device-name"><?= $fields[0]['deviceName'] ?>
+                                        <br /><?= sprintf('(%s - %s)', $fields[0]['serialNumber'], $fields[0]['ipAddress']) ?>
+                                    </td>
+                                    <td class="page-volume mono"><?= number_format($fields[1]) ?></td>
+                                    <td class="cost mono"><?= is_numeric($fields[2]) ? $this->currency($fields[2]) : '-' ?></td>
+                                    <td class="yield mono"><?= is_numeric($fields[3]) ? number_format($fields[3]) : '-' ?></td>
+                                    <td class="cost-per-page mono"><?= is_numeric($fields[4]) ? $this->formatCostPerPage($fields[4]) : '-' ?></td>
+                                    <td class="cost mono"><?= is_numeric($fields[5]) ? $this->currency($fields[5]) : '-' ?></td>
 
-                </thead>
-                <tbody>
-                <?php
-                // Display all the data on each device
-                foreach ($vendorData['fieldLists'] as $key => $fields)
-                {
-                    ?>
-                    <tr class="<?php echo ($fields['completeMono']) ? "" : "nonCompliantMono" ?> <?php echo ($fields['completeColor']) ? "" : "nonCompliantColor" ?>">
-                        <td class=""><?php echo $fields[0]['deviceName'] ?>
-                            <br /><?php echo '(' . $fields[0]['serialNumber'] . ' - ' . $fields[0]['ipAddress'] . ')' ?></td>
-                        <td class="mono"><?php echo number_format($fields[1]) ?></td>
-                        <td class="mono"><?php echo $this->currency($fields[2]) ?></td>
-                        <td class="mono"><?php echo number_format($fields[3]) ?></td>
-                        <td class="mono"><?php echo $this->formatCostPerPage($fields[4]) ?></td>
-                        <td class="mono"><?php echo $this->currency($fields[5]) ?></td>
+                                    <td class="page-volume color"><?= (is_numeric($fields[6]) ? number_format($fields[6]) : "-") ?></td>
+                                    <td class="cost color"><?= (is_numeric($fields[7]) ? $this->currency($fields[7]) : "-") ?></td>
+                                    <td class="yield color"><?= (is_numeric($fields[8]) ? number_format($fields[8]) : "-") ?></td>
+                                    <td class="cost-per-page color"><?= (is_numeric($fields[9]) ? $this->formatCostPerPage($fields[9]) : "-") ?></td>
+                                    <td class="cost color"><?= (is_numeric($fields[10]) ? $this->currency($fields[10]) : "-") ?></td>
 
-                        <td class="color"><?php echo(is_numeric($fields[6]) ? number_format($fields[6]) : "-") ?></td>
-                        <td class="color"><?php echo(is_numeric($fields[7]) ? $this->currency($fields[7]) : "-") ?></td>
-                        <td class="color"><?php echo(is_numeric($fields[8]) ? number_format($fields[8]) : "-") ?></td>
-                        <td class="color"><?php echo(is_numeric($fields[9]) ? $this->formatCostPerPage($fields[9]) : "-") ?></td>
-                        <td class="color"><?php echo(is_numeric($fields[10]) ? $this->currency($fields[10]) : "-") ?></td>
-
-                    </tr>
-                <?php
-
-                }
-                ?>
-                <tr class="totals">
-                    <td class="column1">
-                        <div><?php echo $vendorData['fieldTotals'][0] ?></div>
-                    </td>
-                    <td>
-                        <div class="right"><?php echo number_format($vendorData['fieldTotals'][4]) ?></div>
-                    </td>
-                    <td colspan="3"></td>
-                    <td class="column2">
-                        <div class="right"><?php echo $this->currency($vendorData['fieldTotals'][8]) ?></div>
-                    </td>
-                    <td>
-                        <div class="center"><?php echo number_format($vendorData['fieldTotals'][9]) ?></div>
-                    </td>
-                    <td colspan="3"></td>
-                    <td>
-                        <div class="right"><?php echo $this->currency($vendorData['fieldTotals'][13]) ?></div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                                </tr>
+                            <?php endforeach ?>
+                            <tr class="totals">
+                                <td><?= $vendorData['fieldTotals'][0] ?></td>
+                                <td class="page-volume mono"><?= number_format($vendorData['fieldTotals'][4]) ?></td>
+                                <td colspan="3"></td>
+                                <td class="cost mono"><?= $this->currency($vendorData['fieldTotals'][8]) ?></td>
+                                <td class="page-volume color"><?= number_format($vendorData['fieldTotals'][9]) ?></td>
+                                <td colspan="3"></td>
+                                <td class="cost color"><?= $this->currency($vendorData['fieldTotals'][13]) ?></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <?php $tabCounter++; ?>
+            <?php endforeach ?>
         </div>
     </div>
-    <?php $tabCounter++;
-}
-?>
-</div>
 </div>

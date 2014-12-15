@@ -1,4 +1,24 @@
 <?php
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\QuoteDeviceOptionMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\QuoteDeviceGroupDeviceMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\QuoteDeviceConfigurationOptionMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\QuoteDeviceConfigurationMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\QuoteDeviceMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\LeasingSchemaRateMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\DeviceOptionMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\DeviceConfigurationMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\QuoteMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceOptionModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceConfigurationOptionModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceConfigurationModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceConfigurationModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\LeasingSchemaRateModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteStepsModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Services\QuoteDeviceService;
 
 /**
  * This base class takes care of common code for sub controllers for quotes and quote device configurations.
@@ -11,9 +31,16 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
     const QUOTE_SESSION_NAMESPACE = 'quotegen';
 
     /**
+     * The navigation steps
+     *
+     * @var QuoteStepsModel
+     */
+    protected $_navigation;
+
+    /**
      * The quote model.
      *
-     * @var Quotegen_Model_Quote
+     * @var QuoteModel
      */
     protected $_quote;
 
@@ -38,8 +65,15 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
      */
     protected $_userId;
 
-    /** @var  Quotegen_Service_QuoteDevice */
+    /**
+     * @var QuoteDeviceService
+     */
     protected $_quoteDeviceService;
+
+    /**
+     * @var string
+     */
+    protected $_firstStepName = QuoteStepsModel::STEP_ADD_HARDWARE;
 
     /**
      * Last initialization step, called from the constructor.
@@ -48,14 +82,16 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
     public function init ()
     {
         parent::init();
-        
+
+        $this->_navigation = QuoteStepsModel::getInstance();
+
         if (!My_Feature::canAccess(My_Feature::HARDWARE_QUOTE))
         {
             $this->_flashMessenger->addMessage(array(
                 "error" => "You do not have permission to access this."
             ));
 
-            $this->redirector('index', 'index', 'index');
+            $this->redirectToRoute('app.dashboard');
         }
 
         $this->_helper->contextSwitch()
@@ -96,22 +132,32 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
         if ($this->_quoteId)
         {
             $this->_quoteId = (int)$this->_quoteId;
-            $this->_quote   = Quotegen_Model_Mapper_Quote::getInstance()->find($this->_quoteId);
+            $this->_quote   = QuoteMapper::getInstance()->find($this->_quoteId);
             if (!$this->_quote)
             {
-                $this->_flashMessenger->addMessage(array(
-                    'danger' => 'Could not find the selected quote.'
-                ));
-                $this->redirector('index', 'index');
+                $this->_flashMessenger->addMessage(array('danger' => 'Could not find the selected quote.'));
+                $this->redirectToRoute('app.dashboard');
             }
         }
         else
         {
             // Create a new one
-            $this->_quote = new Quotegen_Model_Quote();
+            $this->_quote = new QuoteModel();
         }
 
-
+        if (isset($this->_mpsSession->selectedClientId))
+        {
+            $client = ClientMapper::getInstance()->find($this->_mpsSession->selectedClientId);
+            if (!$client instanceof ClientModel || $client->dealerId != $this->_identity->dealerId)
+            {
+                $this->_flashMessenger->addMessage(array("danger" => "A client is not selected."));
+                $this->redirectToRoute('app.dashboard');
+            }
+            else
+            {
+                $this->_navigation->clientName = $client->companyName;
+            }
+        }
     }
 
     /**
@@ -130,11 +176,11 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
         // If we already have an id then we update, otherwise insert
         if ($this->_quoteId)
         {
-            Quotegen_Model_Mapper_Quote::getInstance()->save($this->_quote);
+            QuoteMapper::getInstance()->save($this->_quote);
         }
         else
         {
-            $this->_quoteId = Quotegen_Model_Mapper_Quote::getInstance()->insert($this->_quote);
+            $this->_quoteId = QuoteMapper::getInstance()->insert($this->_quote);
         }
 
         return $this->_quoteId;
@@ -177,10 +223,10 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
                     if ($selectedRange)
                     {
                         // Get the rate
-                        $leasingSchemaRate                       = new Quotegen_Model_LeasingSchemaRate();
+                        $leasingSchemaRate                       = new LeasingSchemaRateModel();
                         $leasingSchemaRate->leasingSchemaRangeId = $selectedRange->id;
                         $leasingSchemaRate->leasingSchemaTermId  = $leasingSchemaTerm->id;
-                        $rateMapper                              = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
+                        $rateMapper                              = LeasingSchemaRateMapper::getInstance();
                         $leasingSchemaRate                       = $rateMapper->find($rateMapper->getPrimaryKeyValueForObject($leasingSchemaRate));
 
                         // Set the quote lease months and lease rate so that we can just directly use the values
@@ -193,9 +239,9 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
     }
 
     /**
-     * @param Quotegen_Model_QuoteDevice $quoteDevice
+     * @param QuoteDeviceModel $quoteDevice
      */
-    protected function recalculateQuoteDevice (Quotegen_Model_QuoteDevice &$quoteDevice)
+    protected function recalculateQuoteDevice (QuoteDeviceModel &$quoteDevice)
     {
         // Recalculate the package cost
         $quoteDevice->packageCost = $quoteDevice->calculatePackageCost();
@@ -207,7 +253,7 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
      *
      * @param string $paramIdField The parameter that the quote device id resides in
      *
-     * @return \Quotegen_Model_QuoteDevice
+     * @return \MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceModel
      */
     public function getQuoteDevice ($paramIdField = 'id')
     {
@@ -217,16 +263,16 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
         if (!$quoteDeviceId)
         {
             $this->_flashMessenger->addMessage(array('warning' => 'Please select a device to edit first.'));
-            $this->redirector('index', null, null, array('quoteId' => $this->_quoteId));
+            $this->redirectToRoute('quotes', array('quoteId' => $this->_quoteId));
         }
 
-        $quoteDevice = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($quoteDeviceId);
+        $quoteDevice = QuoteDeviceMapper::getInstance()->find($quoteDeviceId);
 
         // Validate that we have a quote device that is associated with the quote
-        if (!$quoteDevice || $quoteDevice->quoteId !== $this->_quoteId)
+        if (!$quoteDevice || (int)$quoteDevice->quoteId !== (int)$this->_quoteId)
         {
             $this->_flashMessenger->addMessage(array('warning' => 'You may only edit devices associated with this quote.'));
-            $this->redirector('index', null, null, array('quoteId' => $this->_quoteId));
+            $this->redirectToRoute('quotes', array('quoteId' => $this->_quoteId));
         }
 
         return $quoteDevice;
@@ -242,18 +288,20 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
         if (!$this->_quoteId || !$this->_quote)
         {
             $this->_flashMessenger->addMessage(array('danger' => 'There was an error getting the quote you previously selected. Please try selecting a quote again and contact the system administrator if the issue persists.'));
-            $this->redirector('index', 'index');
+            $this->redirectToRoute('app.dashboard');
         }
     }
 
-    /*
+    /**
      *  Gets a fully qualified quote device server
+     *
+     * @return QuoteDeviceService
      */
     public function getQuoteDeviceService ()
     {
         if (!isset($this->_quoteDeviceService))
         {
-            $this->_quoteDeviceService = new Quotegen_Service_QuoteDevice($this->_userId, $this->_quoteId);
+            $this->_quoteDeviceService = new QuoteDeviceService($this->_userId, $this->_quoteId);
         }
 
         return $this->_quoteDeviceService;
@@ -269,7 +317,7 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
         if (!$this->_quoteId || !$this->_quote)
         {
             $this->_flashMessenger->addMessage(array('danger' => 'Invalid quote group selected!'));
-            $this->redirector('index', null, null, array('quoteId' => $this->_quoteId));
+            $this->redirectToRoute('quotes', array('quoteId' => $this->_quoteId));
         }
     }
 
@@ -279,8 +327,7 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
     public function initDocxContext ()
     {
         // Include php word and initialize a new instance
-        $this->view->phpword = new \PhpOffice\PhpWord\PhpWord()
-        ;
+        $this->view->phpword = new \PhpOffice\PhpWord\PhpWord();
     }
 
     public function postDocxContext ()
@@ -305,8 +352,8 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
     /**
      * Clones a favorite device into a new quote device
      *
-     * @param int|Quotegen_Model_DeviceConfiguration $favoriteDevice The device configuration to clone
-     * @param int|float                              $defaultMargin  The margin to apply?
+     * @param int|DeviceConfigurationModel $favoriteDevice The device configuration to clone
+     * @param int|float                    $defaultMargin  The margin to apply?
      *
      * @return int The quote device id, or false on error
      */
@@ -315,58 +362,58 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
         try
         {
             // If it's not an object, it must be an id, so try and find it
-            if (!($favoriteDevice instanceof Quotegen_Model_DeviceConfiguration))
+            if (!($favoriteDevice instanceof DeviceConfigurationModel))
             {
-                $favoriteDevice = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($favoriteDevice);
+                $favoriteDevice = DeviceConfigurationMapper::getInstance()->find($favoriteDevice);
             }
 
             // Get a new device and sync the device properties
-            $quoteDeviceService         = new Quotegen_Service_QuoteDevice($this->_userId, $this->_quote->id);
+            $quoteDeviceService         = new QuoteDeviceService($this->_userId, $this->_quote->id);
             $quoteDevice                = $quoteDeviceService->syncDevice($favoriteDevice->getDevice()->masterDeviceId);
             $quoteDevice->quoteId       = $this->_quote->id;
             $quoteDevice->margin        = $defaultMargin;
             $quoteDevice->buyoutValue   = 0;
             $quoteDevice->packageMarkup = 0;
             $quoteDevice->packageCost   = $quoteDevice->calculatePackageCost();
-            $quoteDeviceId              = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
+            $quoteDeviceId              = QuoteDeviceMapper::getInstance()->insert($quoteDevice);
 
             // Insert link to device
-            $quoteDeviceConfiguration                 = new Quotegen_Model_QuoteDeviceConfiguration();
+            $quoteDeviceConfiguration                 = new QuoteDeviceConfigurationModel();
             $quoteDeviceConfiguration->masterDeviceId = $favoriteDevice->masterDeviceId;
             $quoteDeviceConfiguration->quoteDeviceId  = $quoteDeviceId;
-            Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->insert($quoteDeviceConfiguration);
+            QuoteDeviceConfigurationMapper::getInstance()->insert($quoteDeviceConfiguration);
 
             // Prepare option link
-            $quoteDeviceConfigurationOption                 = new Quotegen_Model_QuoteDeviceConfigurationOption();
+            $quoteDeviceConfigurationOption                 = new QuoteDeviceConfigurationOptionModel();
             $quoteDeviceConfigurationOption->masterDeviceId = $favoriteDevice->masterDeviceId;
 
             // Add to the default group
-            Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->insertDeviceInDefaultGroup($this->_quote->id, (int)$quoteDeviceId);
+            QuoteDeviceGroupDeviceMapper::getInstance()->insertDeviceInDefaultGroup($this->_quote->id, (int)$quoteDeviceId);
 
             foreach ($favoriteDevice->getOptions() as $option)
             {
                 // Get the device option
-                $deviceOption = Quotegen_Model_Mapper_DeviceOption::getInstance()->find(array(
+                $deviceOption = DeviceOptionMapper::getInstance()->find(array(
                     $favoriteDevice->masterDeviceId,
                     $option->optionId
                 ));
 
                 // Insert quote device option
-                $quoteDeviceOption = $quoteDeviceService->syncOption(new Quotegen_Model_QuoteDeviceOption(), $deviceOption);
+                $quoteDeviceOption = $quoteDeviceService->syncOption(new QuoteDeviceOptionModel(), $deviceOption);
 
                 $quoteDeviceOption->quoteDeviceId = $quoteDeviceId;
                 $quoteDeviceOption->quantity      = $option->quantity;
-                $quoteDeviceOptionId              = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->insert($quoteDeviceOption);
+                $quoteDeviceOptionId              = QuoteDeviceOptionMapper::getInstance()->insert($quoteDeviceOption);
 
                 // Insert link
                 $quoteDeviceConfigurationOption->quoteDeviceOptionId = $quoteDeviceOptionId;
                 $quoteDeviceConfigurationOption->optionId            = $option->optionId;
-                Quotegen_Model_Mapper_QuoteDeviceConfigurationOption::getInstance()->insert($quoteDeviceConfigurationOption);
+                QuoteDeviceConfigurationOptionMapper::getInstance()->insert($quoteDeviceConfigurationOption);
             }
         }
         catch (Exception $e)
         {
-            Tangent_Log::logException($e);
+            \Tangent\Logger\Logger::logException($e);
 
             return false;
         }
@@ -395,6 +442,74 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
         }
 
         return $quantities;
+    }
+
+    /**
+     * (non-PHPdoc)
+     *
+     * @see Zend_Controller_Action::postDispatch()
+     */
+    public function postDispatch ()
+    {
+        $stage = ($this->_quote->stepName) ?: $this->_firstStepName;
+        $this->_navigation->updateAccessibleSteps($stage);
+
+        /**
+         * FIXME lrobert: Sort of a bad fix to prevent NavigationMenu from being rendered on pages with no layout
+         *
+         * Added this in so that scripts that are being
+         * called as part of ajax or otherwise not needing a layout won't
+         * try to render a navigation menu. Sort of a bad fix as it isn't
+         * controlling what pages should have a navigation menu.
+         */
+        if ($this->getLayout()->isEnabled())
+        {
+            $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation, array('quoteId' => $this->_quoteId)));
+        }
+
+        parent::postDispatch();
+    }
+
+    /**
+     * Updates an assessment to be at the next available step
+     *
+     * @param bool $force Whether or not to force the update
+     */
+    public function updateQuoteStepName ($force = false)
+    {
+        // We can only do this when we have an active step
+        if ($this->_navigation->activeStep instanceof My_Navigation_Step)
+        {
+            // That step also needs a next step for this to work
+            if ($this->_navigation->activeStep->nextStep instanceof My_Navigation_Step)
+            {
+                $update = true;
+                // We only want to update
+                if ($force)
+                {
+                    $update = true;
+                }
+                else
+                {
+                    $newStepName = $this->_navigation->activeStep->nextStep->enumValue;
+
+                    foreach ($this->_navigation->steps as $step)
+                    {
+                        // No need to update the step if we were going back in time.
+                        if ($step->enumValue == $newStepName && $step->canAccess)
+                        {
+                            $update = false;
+                            break;
+                        }
+                    }
+                }
+
+                if ($update)
+                {
+                    $this->_quote->stepName = $this->_navigation->activeStep->nextStep->enumValue;
+                }
+            }
+        }
     }
 }
 

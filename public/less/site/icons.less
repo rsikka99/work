@@ -1,0 +1,61 @@
+/* MPS Icons */
+[class^="mpsicon-"],
+[class*="mpsicon-"] {
+    display           : inline-block;
+    //    .ie7-restore-right-whitespace();
+    line-height       : 14px;
+    width             : 32px;
+    height            : 32px;
+    vertical-align    : middle;
+    background-image  : url("../../img/icons/mpsicons.png");
+    background-color  : transparent;
+    background-repeat : no-repeat;
+}
+
+.mpsicon-assessment { background-position : 0 0; }
+
+.mpsicon-healthcheck { background-position : -33px 0; }
+
+.mpsicon-optimize { background-position : -66px 0; }
+
+.mpsicon-quote { background-position : -99px 0; }
+
+.mpsicon-service { background-position : -132px 0; }
+
+.mpsicon-supplies { background-position : -165px 0; }
+
+table {
+    .positive-change-up:after,
+    .positive-change-down:after,
+    .negative-change-up:after,
+    .negative-change-down:after,
+    .no-change:after {
+        .fa;
+        .fa-fw;
+        margin-left : 5px;
+    }
+
+    .positive-change-up:after {
+        content : "\f062";
+        color   : @brand-success;
+    }
+
+    .positive-change-down:after {
+        content : "\f063";
+        color   : @brand-success;
+    }
+
+    .negative-change-up:after {
+        content : "\f062";
+        color   : @brand-danger;
+    }
+
+    .negative-change-down:after {
+        content : "\f063";
+        color   : @brand-danger;
+    }
+
+    .no-change:after {
+        content : "\f068";
+    }
+}

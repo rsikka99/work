@@ -1,60 +1,43 @@
 <?php
+
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 ?>
-    <h4 class="paraHeader">Other Printing Devices Not Included in Assessment</h4>
+    <div class="jumbotron">
+        <h2>Other Printing Devices</h2>
+
+        <p>The following devices are not included in the assessment.</p>
+    </div>
 <?php if (count($assessmentViewModel->getExcludedDevices()) > 0) : ?>
-    <table class="genericTable" id="ExcludedDevicesTable" style="font-size: 9pt;">
+    <table class="table table-bordered table-condensed" id="ExcludedDevicesTable">
         <thead>
         <tr>
-            <th class="left">Manufacturer</th>
-            <th class="left">Model</th>
-            <th class="center">Serial Number</th>
-            <th class="center">IP Address</th>
-            <th class="center">Exclusion Reason</th>
+            <th>Manufacturer</th>
+            <th>Model</th>
+            <th>Serial Number</th>
+            <th>IP Address</th>
+            <th>Exclusion Reason</th>
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($assessmentViewModel->getExcludedDevices() as $device):
-            /* @var $device Proposalgen_Model_DeviceInstance */
-            ?>
-            <?php $SerialNumber = (strlen($device->serialNumber) == 0) ? 'Unknown Serial' : $device->serialNumber; ?>
+        <?php foreach ($assessmentViewModel->getExcludedDevices() as $device): ?>
             <tr>
                 <?php if ($device->getIsMappedToMasterDevice()) : ?>
-                    <td>
-                        <div class=" left"><?php echo $device->getMasterDevice()->getManufacturer()->displayname; ?></div>
-                    </td>
-                    <td>
-                        <div class=" left"><?php echo $device->getMasterDevice()->modelName; ?></div>
-                    </td>
+                    <td class="manufacturer"><?= $device->getMasterDevice()->getManufacturer()->displayname; ?></td>
+                    <td class="model-name"><?= $device->getMasterDevice()->modelName; ?></td>
                 <?php else : ?>
-                    <td>
-                        <div class=" left"><?php echo $device->getRmsUploadRow()->manufacturer; ?></div>
-                    </td>
-                    <td>
-                        <div class=" left"><?php echo $device->getRmsUploadRow()->modelName; ?></div>
-                    </td>
+                    <td class="manufacturer"><?= $device->getRmsUploadRow()->manufacturer; ?></td>
+                    <td class="model-name"><?= $device->getRmsUploadRow()->modelName; ?></td>
                 <?php endif; ?>
-                <td>
-                    <div class=" center"><?php echo $SerialNumber; ?></div>
-                </td>
-                <td>
-                    <div class=" left"><?php if ($device->ipAddress)
-                        {
-                            echo $device->ipAddress;
-                        }
-                        else
-                        {
-                            echo 'Unknown IP';
-                        } ?></div>
-                </td>
-                <td>
-                    <div class=" left"><?php echo ($device->isExcluded) ? 'Manually excluded.' : 'Not mapped.'; ?></div>
-                </td>
+                <td class="serial-number"><?= (strlen($device->serialNumber) == 0) ? 'Unknown Serial' : $device->serialNumber; ?></td>
+                <td class="ip-address"><?= ($device->ipAddress) ?: 'Unknown IP' ?></td>
+                <td class="is-excluded"><?= ($device->isExcluded) ? 'Manually excluded.' : 'Not mapped.'; ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
     </table>
 <?php else: ?>
-    <br /><p><em>No devices were excluded from this report.</em></p>
+    <div class="alert alert-info">No devices were excluded from this report.</div>
 <?php endif ?>

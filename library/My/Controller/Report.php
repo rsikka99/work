@@ -1,6 +1,12 @@
 <?php
 
-abstract class My_Controller_Report extends Tangent_Controller_Action
+use MPSToolbox\Legacy\Mappers\DealerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerVendorManufacturerMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
+use Tangent\Controller\Action;
+use Tangent\Filter\Filename;
+
+abstract class My_Controller_Report extends Action
 {
     /**
      * The Zend_Auth identity
@@ -247,7 +253,7 @@ abstract class My_Controller_Report extends Tangent_Controller_Action
      */
     public function getDealerLogoFile ()
     {
-        $dealer   = Application_Model_Mapper_Dealer::getInstance()->find($this->_identity->dealerId);
+        $dealer   = DealerMapper::getInstance()->find($this->_identity->dealerId);
         $logoFile = false;
         if ($dealer)
         {
@@ -273,7 +279,7 @@ abstract class My_Controller_Report extends Tangent_Controller_Action
      */
     public function redirectToLatestStep ($stepName)
     {
-        $stage = ($stepName) ? : $this->_firstStepName;
+        $stage = ($stepName) ?: $this->_firstStepName;
         $this->_navigation->updateAccessibleSteps($stage);
 
         $firstStep  = false;
@@ -295,27 +301,131 @@ abstract class My_Controller_Report extends Tangent_Controller_Action
 
         if ($latestStep)
         {
-            $this->redirector($latestStep->action, $latestStep->controller, $latestStep->module);
+            $this->redirectToRoute($latestStep->route);
         }
         else
         {
-            $this->redirector($firstStep->action, $firstStep->controller, $firstStep->module);
+            $this->redirectToRoute($firstStep->route);
         }
     }
 
     /**
      *  Generates a filename for a report
      *
-     * @param $clientModel Quotegen_Model_Client
+     * @param $clientModel ClientModel
      * @param $reportName  string
      *
      * @return string
      */
     public function generateReportFilename ($clientModel, $reportName)
     {
-        $filter = new Tangent_Filter_Filename();
+        $filter = new Filename();
 
         return $filter->filter($clientModel->companyName . "_" . $reportName);
+    }
+
+
+    /**
+     * @var \MPSToolbox\Settings\Form\AllSettingsForm
+     */
+    protected $allSettingsForm;
+
+    /**
+     * @var \MPSToolbox\Settings\Service\ClientSettingsService
+     */
+    protected $clientSettingsService;
+
+    /**
+     * Handles routing the index action
+     */
+    public function settingsAction ()
+    {
+        $this->_pageTitle = array('Settings', 'Client');
+
+        if ($this->getRequest()->isPost())
+        {
+            $this->saveClientSettingsForm($this->getRequest()->getPost());
+        }
+        else
+        {
+            $this->showClientSettingsForm();
+        }
+    }
+
+    /**
+     * Handles showing the client settings form
+     */
+    public function showClientSettingsForm ()
+    {
+        $form    = $this->getAllSettingsForm();
+        $service = $this->getClientSettingsService();
+
+        // TODO lrobert: Handle better client settings logic here. This is for testing purposes only
+        $clientSettings = $service->getClientSettings($this->getSelectedClient()->id, $this->getIdentity()->dealerId);
+
+        $form->currentFleetSettingsForm->populateCurrentFleetSettings($clientSettings->currentFleetSettings);
+        $form->proposedFleetSettingsForm->populateProposedFleetSettings($clientSettings->proposedFleetSettings);
+        $form->genericSettingsForm->populateGenericSettings($clientSettings->genericSettings);
+        $form->quoteSettingsForm->populateQuoteSettings($clientSettings->quoteSettings);
+        $form->optimizationSettingsForm->populateOptimizationSettings($clientSettings->optimizationSettings);
+
+        $this->view->form = $form;
+    }
+
+    /**
+     * Handles saving client settings
+     *
+     * @param array $data
+     *
+     * @throws Zend_Form_Exception
+     */
+    public function saveClientSettingsForm ($data)
+    {
+        $form = $this->getAllSettingsForm();
+
+        if ($form->isValid($data))
+        {
+            $service        = $this->getClientSettingsService();
+            $clientSettings = $service->getClientSettings($this->getSelectedClient()->id, $this->getIdentity()->dealerId);
+            $service->saveAllSettingsForm($form, $clientSettings);
+        }
+        else
+        {
+            $this->_flashMessenger->addMessage(array('error' => 'Please correct the errors below.'));
+        }
+
+
+        $this->showClientSettingsForm();
+    }
+
+    /**
+     * Gets an instance of the client settings form
+     *
+     * @return \MPSToolbox\Settings\Form\AllSettingsForm
+     */
+    public function getAllSettingsForm ()
+    {
+        if (!isset($this->allSettingsForm))
+        {
+            $this->allSettingsForm = new \MPSToolbox\Settings\Form\AllSettingsForm(['tonerVendorList' => TonerVendorManufacturerMapper::getInstance()->fetchAllForDealerDropdown()], \MPSToolbox\Legacy\Forms\FormWithNavigation::FORM_BUTTON_MODE_NAVIGATION);
+        }
+
+        return $this->allSettingsForm;
+    }
+
+    /**
+     * Gets an instance of the client settings service
+     *
+     * @return \MPSToolbox\Settings\Service\ClientSettingsService
+     */
+    public function getClientSettingsService ()
+    {
+        if (!isset($this->clientSettingsService))
+        {
+            $this->clientSettingsService = new \MPSToolbox\Settings\Service\ClientSettingsService();
+        }
+
+        return $this->clientSettingsService;
     }
 
 }

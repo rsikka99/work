@@ -6,7 +6,7 @@ $assessmentViewModel = $this->assessmentViewModel;
     <div class="header">
         <div class="title-page-logo-box-wrapper">
             <div class="title-page-logo-box">
-                <img class="title-page-logo" src="<?php echo $this->serverUrl($this->dealerLogoFile) ?>" />
+                <img class="title-page-logo" src="<?= $this->serverUrl($this->dealerLogoFile) ?>" />
             </div>
         </div>
     </div>
@@ -21,8 +21,8 @@ $assessmentViewModel = $this->assessmentViewModel;
             <?= $assessmentViewModel->assessment->getClient()->companyName; ?>
         </h3>
 
-        <p><?php echo nl2br($assessmentViewModel->assessment->getClient()->getAddress()); ?></p>
+        <p><?= nl2br($assessmentViewModel->assessment->getClient()->getAddress()); ?></p>
         <br>
-        <p>Date: <?php echo $assessmentViewModel->getDateReportPrepared(); ?></p>
+        <p>Date: <?= $assessmentViewModel->getDateReportPrepared(); ?></p>
     </div>
 </div>

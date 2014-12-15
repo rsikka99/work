@@ -1,0 +1,99 @@
+<?php
+
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\QuoteProfitabilityForm;
+
+/* @var $form QuoteProfitabilityForm */
+$form     = $this->element;
+$quote    = $form->getQuote();
+$isLeased = $quote->isLeased();
+?>
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+    <div class="table-responsive">
+        <table class="table table-condensed table-striped table-bordered">
+            <tr>
+                <th>Item</th>
+                <th>Cost Per Unit</th>
+                <th style="width: 150px;">Markup ($)</th>
+                <th style="width: 100px;">Margin (%)</th>
+                <th>Price Per Unit</th>
+                <?php if ($isLeased) : ?>
+                    <th style="width: 150px;">Lease Buyout Per Unit ($)</th>
+                <?php endif; ?>
+                <th>Quantity</th>
+                <th>Price</th>
+                <?php if ($isLeased) : ?>
+                    <th>Monthly Subtotal</th>
+                <?php endif; ?>
+            </tr>
+            <?php foreach ($quote->getQuoteDevices() as $quoteDevice) : ?>
+                <?php if ($quoteDevice->calculateTotalQuantity() > 0) : ?>
+                    <tr>
+                        <td>
+                            <h5><?= $quoteDevice->name ?><br />
+                                <small><?= $quoteDevice->oemSku ?></small>
+                            </h5>
+                        </td>
+
+                        <td class="cost"><?= $this->currency($quoteDevice->calculatePackageCost()); ?></td>
+
+                        <td class="<?= ($form->getElement("packageMarkup_{$quoteDevice->id}")->hasErrors()) ?: '' ?>">
+                            <?= $this->RenderFormText($form->getElement("packageMarkup_{$quoteDevice->id}"), array(), '$') ?>
+                            <?= $this->RenderFormElementErrors($form->getElement("packageMarkup_{$quoteDevice->id}")) ?>
+                        </td>
+
+                        <td class="margin <?= ($form->getElement("margin_{$quoteDevice->id}")->hasErrors()) ?: '' ?>">
+                            <?= $this->RenderFormText($form->getElement("margin_{$quoteDevice->id}"), array(), null, '%') ?>
+                            <?= $this->RenderFormElementErrors($form->getElement("margin_{$quoteDevice->id}")) ?>
+                        </td>
+
+                        <td class="price"><?= $this->currency((float)$quoteDevice->calculatePackagePrice()); ?></td>
+
+                        <?php if ($isLeased) : ?>
+                            <td class="residual <?= ($form->getElement("residual_{$quoteDevice->id}")->hasErrors()) ?: '' ?>">
+                                <?= $this->RenderFormText($form->getElement("residual_{$quoteDevice->id}"), array(), '$') ?>
+                                <?= $this->RenderFormElementErrors($form->getElement("residual_{$quoteDevice->id}")) ?>
+                            </td>
+                        <?php endif; ?>
+
+                        <td class="quantity"><?= number_format($quoteDevice->calculateTotalQuantity()); ?></td>
+
+                        <td class="price"><?= $this->currency((float)$quoteDevice->calculateTotalPrice()); ?></td>
+
+                        <?php if ($isLeased) : ?>
+                            <td class="price"><?= $this->currency((float)$quoteDevice->calculateTotalMonthlyLeasePrice()); ?></td>
+                        <?php endif; ?>
+                    </tr>
+                <?php endif ?>
+            <?php endforeach; ?>
+            <tr class="totals-row">
+                <?php if ($isLeased) : ?>
+                    <td colspan="7" class="text-right">Totals:</td>
+                <?php else : ?>
+                    <td colspan="6" class="text-right">Totals:</td>
+                <?php endif; ?>
+                <td class="price"><?= $this->currency((float)$quote->calculateTotalPrice()); ?></td>
+                <?php if ($isLeased) : ?>
+                    <td class="price"><?= $this->currency((float)$quote->calculateTotalMonthlyLeasePrice()); ?></td>
+                <?php endif; ?>
+            </tr>
+        </table>
+    </div>
+<?php if ($isLeased) : ?>
+    <div class="form-inline pull-right">
+        <span>Lease Term:</span>
+
+        <div class="form-group <?= ($form->getElement('leasingSchemaId')->hasErrors()) ?: '' ?>">
+            <?= $this->RenderFormSelect($form->getElement('leasingSchemaId')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('leasingSchemaId')) ?>
+        </div>
+        <div class="form-group <?= ($form->getElement('leasingSchemaTermId')->hasErrors()) ?: '' ?>">
+            <?= $this->RenderFormSelect($form->getElement('leasingSchemaTermId')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('leasingSchemaTermId')) ?>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <hr>
+<?php endif; ?>
+
+<?= $form->getDisplayGroup('form-actions') ?>
+<?= $this->RenderFormClose($form) ?>

@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\QuoteDeviceGroupPageForm;
 
 /**
  * Class Quotegen_Form_QuoteDeviceGroupPageTest
@@ -7,11 +8,11 @@ class Quotegen_Form_QuoteDeviceGroupPageTest extends Tangent_PHPUnit_Framework_Z
 {
 
     /**
-     * @return Quotegen_Form_QuoteDeviceGroupPage
+     * @return QuoteDeviceGroupPageForm
      */
     public function getForm ()
     {
-        return new Quotegen_Form_QuoteDeviceGroupPage();
+        return new QuoteDeviceGroupPageForm();
     }
 
     /**

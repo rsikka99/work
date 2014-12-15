@@ -1,4 +1,6 @@
 <?php
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentStepsModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
 
 /**
  * Class Assessment_Report_FleetattributesController
@@ -16,7 +18,7 @@ class Assessment_Report_FleetattributesController extends Assessment_Library_Con
                 "error" => "You do not have permission to access this."
             ));
 
-            $this->redirector('index', 'index', 'index');
+            $this->redirectToRoute('assessment');
         }
 
         parent::init();
@@ -24,9 +26,8 @@ class Assessment_Report_FleetattributesController extends Assessment_Library_Con
 
     public function indexAction ()
     {
-        $this->view->headTitle('Assessment');
-        $this->view->headTitle('Fleet Attributes');
-        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
+        $this->_pageTitle = array('Assessment', 'Fleet Attributes');
+        $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
@@ -54,8 +55,8 @@ class Assessment_Report_FleetattributesController extends Assessment_Library_Con
      */
     public function generateAction ()
     {
-        $this->view->headTitle('Generate Fleet Attributes');
-        $format = $this->_getParam("format", "excel");
+        $this->_pageTitle = array('Generate Fleet Attributes');
+        $format           = $this->_getParam("format", "excel");
 
         switch ($format)
         {
@@ -105,7 +106,7 @@ class Assessment_Report_FleetattributesController extends Assessment_Library_Con
         $dealerId            = Zend_Auth::getInstance()->getIdentity()->dealerId;
 
         /**
-         * @var $deviceInstance Proposalgen_Model_DeviceInstance
+         * @var $deviceInstance DeviceInstanceModel
          */
         foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
         {

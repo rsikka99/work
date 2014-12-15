@@ -1,0 +1,114 @@
+<?php
+if (APPLICATION_ENV == 'production')
+{
+    return;
+}
+
+$errors        = My_Error_Handler::$errors;
+$hasExceptions = isset($this->exceptions);
+/* @var $exceptions stdClass[] */
+$exceptions   = $this->exceptions;
+$hasPHPErrors = (count($errors) > 0);
+
+if ($hasExceptions || $hasPHPErrors) : ?>
+    <script>
+        <?php $this->headScript()->captureStart(); ?>
+        require(['jquery', 'bootstrap.modal.manager'], function ($)
+        {
+            $(document).ready(function ()
+            {
+                $('#errorModal').modal({width: 960});
+                $('#errorModalViewButton').on('click', function ()
+                {
+                    $($(this).attr('href')).modal({width: 960});
+                });
+            });
+        });
+        <?php $this->headScript()->captureEnd(); ?>
+    </script>
+    <a id="errorModalViewButton" href="#errorModal" class="btn btn-danger" style="position: fixed; bottom: 0; left: 0;">Errors Occurred! Click to view.</a>
+    <div class="modal" id="errorModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title">Errors Occurred!</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs ">
+                            <?php if ($hasPHPErrors) : ?>
+                                <li <?= ($hasExceptions) ? '' : 'class="active"'; ?>>
+                                    <a href="#PHPErrors" data-toggle="tab">PHP Errors</a>
+                                </li>
+                            <?php endif; ?>
+                            <?php if ($hasExceptions) : ?>
+                                <li class="active">
+                                    <a href="#ExceptionTabs" data-toggle="tab">Application Exception</a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                        <div class="tab-content">
+                            <?php if ($hasPHPErrors) : ?>
+                                <div class="tab-pane <?= ($hasExceptions) ? '' : 'active' ?>" id="PHPErrors">
+                                    <?php foreach ($errors as $error) : ?>
+                                        <div class="panel panel-<?= $this->escape($error->color); ?>">
+                                            <div class="panel-heading"><?= $this->escape($error->message); ?></div>
+                                            <div class="panel-body">
+                                                <pre style="font-size: 10px;"><?= $this->escape(str_replace(APPLICATION_BASE_PATH, '', $error->trace)); ?></pre>
+                                            </div>
+                                            <div class="panel-footer">Error Number: <?= $this->escape($error->number) ?></div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($hasExceptions): ?>
+                                <div class="tab-pane active" id="ExceptionTabs">
+                                    <div class="tabbable tabs-left">
+                                        <ul class="nav nav-tabs ">
+                                            <li>
+                                                <a href="#RequestParams" data-toggle="tab">Request Parameters</a>
+                                            </li>
+                                            <?php for ($exceptionCount = 0; $exceptionCount < count($exceptions); $exceptionCount++) : ?>
+                                                <li <?= ($exceptionCount === 0) ? 'class="active"' : '' ?>>
+                                                    <a href="#Exception<?= $exceptionCount + 1; ?>" data-toggle="tab">Exception
+                                                        #<?= $exceptionCount + 1; ?></a>
+                                                </li>
+                                            <?php endfor; ?>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane" id="RequestParams">
+                                                <h3>Request Parameters:</h3>
+
+                                                <div class="well">
+                                                    <pre><?php var_dump($this->request->getParams()); ?></pre>
+                                                </div>
+                                            </div>
+                                            <?php for ($exceptionCount = 0; $exceptionCount < count($exceptions); $exceptionCount++) : ?>
+                                                <div class="tab-pane <?= ($exceptionCount === 0) ? 'active' : '' ?>" id="Exception<?= $exceptionCount + 1; ?>">
+                                                    <h3>Exception #<?= $exceptionCount + 1; ?>:</h3>
+
+                                                    <div class="well">
+                                                        <pre style="overflow: auto;  word-wrap: normal; white-space: pre;"><b>Message:</b> <?= $this->escape($exceptions[$exceptionCount]->message); ?></pre>
+                                                        <h3>Stack trace:</h3>
+                                                <pre style="overflow: auto;  word-wrap: normal; white-space: pre;"><?= $exceptions[$exceptionCount]->stackTrace; ?>
+                                                    </pre>
+                                                    </div>
+                                                </div>
+                                            <?php endfor; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

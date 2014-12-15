@@ -1,113 +1,122 @@
 <?php
-$quote = $this->Quote();
-/* @var $quote Quotegen_Model_Quote */
-$devices = $this->devices;
-$this->headScript()->appendScript("$('i').popover();");
-?>
-<?php echo $this->render('_partials/quoteHeading.phtml'); ?>
 
-<div class="well">
-    <div class='pull-right' style='padding: 7px;'>
-        <a href="<?php echo $this->url(array('action' => 'sync-all-device-configurations')); ?>" title="Sync all configurations with current information." class="btn btn-info "><i class="icon-refresh"></i>
-            Sync All Devices</a>
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\DeviceConfigurationMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+
+$this->headScript()->appendScript("require(['jquery', 'bootstrap'], function($) { $('i').popover(); });");
+
+/* @var $quote QuoteModel */
+$quote = $this->Quote();
+
+/* @var $devices QuoteDeviceModel[] */
+$devices = $this->devices;
+?>
+
+<?= $this->render('_partials/quoteHeading.phtml'); ?>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-6">
+            <?= $this->addDeviceForm; ?>
+        </div>
+        <div class="col-md-6">
+            <?= $this->addFavoriteDeviceForm; ?>
+        </div>
     </div>
 
-    <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
-        <tr class="header-row">
-            <th colspan="12">
-                <div class='pull-right'>
-                    <?php echo $this->addFavoriteDeviceForm; ?>
-                </div>
-                <?php echo $this->addDeviceForm; ?>
-            </th>
-        </tr>
+    <table class="table table-condensed table-bordered table-striped">
         <tr class="header-row">
             <th>Item</th>
-            <th style="width: 1;">SKU</th>
+            <th>SKU</th>
             <th>Description</th>
-            <th style="width: 70px;">Cost</th>
-            <th style="width: 60px;">Quantity</th>
+            <th>Cost</th>
+            <th>Quantity</th>
             <th>Subtotal</th>
-            <th style="width: 30px"></th>
+            <th style="width: 130px">
+                <a href="<?= $this->url(array('quoteId' => $quote->id), 'quotes.sync-all-device-configurations'); ?>" title="Sync all configurations with current information." class="btn btn-primary btn-xs btn-block"><i class="glyphicon glyphicon-refresh"></i> Sync All Devices</a>
+            </th>
         </tr>
-        <?php /* @var $device Quotegen_Model_QuoteDevice */
-        foreach ($devices as $device) : ?>
+        <?php foreach ($devices as $device) : ?>
             <tr class="deviceRow">
-                <td><h4><?php echo $device->name; ?></h4></td>
-                <td><h4><?php echo $device->oemSku; ?></h4></td>
+                <td><h4><?= $device->name; ?></h4></td>
+                <td><h4><?= $device->oemSku; ?></h4></td>
                 <td></td>
-                <td style="text-align: right"><h4><?php echo $this->currency((float)$device->cost) ?></h4></td>
+                <td class="cost">
+                    <h4><?= $this->currency((float)$device->cost) ?></h4>
+                </td>
                 <td></td>
-                <td style="text-align: right"><h4><?php echo $this->currency((float)$device->cost) ?></h4></td>
-                <td>
-                    <div class="btn-group">
-                        <a href="#" class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i></a>
-                        <ul class="dropdown-menu pull-right">
-                            <li><strong>Device</strong></li>
+                <td class="cost">
+                    <h4><?= $this->currency((float)$device->cost) ?></h4>
+                </td>
+                <td class="single-button">
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <i class="glyphicon glyphicon-wrench"></i>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+
                             <?php if ($device->getDevice()) : ?>
                                 <li>
-                                    <a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $device->id)); ?>"><i class="icon-refresh"></i>
-                                        Sync Device</a></li>
+                                    <a href="<?= $this->url(array('id' => $device->id, 'quoteId' => $quote->id), 'quotes.sync-device-configurations'); ?>">
+                                        <i class="glyphicon glyphicon-refresh"></i>
+                                        Sync Device
+                                    </a>
+                                </li>
                             <?php endif; ?>
-                            <li><a href="<?php echo $this->url(array('action' => 'edit-quote-device', 'id' => $device->id)); ?>"><i class="icon-pencil"></i>
-                                    Edit Device</a></li>
-                            <li><a href="<?php echo $this->url(array('action' => 'delete-quote-device', 'id' => $device->id)); ?>"><i class="icon-trash"></i>
-                                    Delete Device</a></li>
-                            <?php
-                            $configurations = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAllDeviceConfigurationByDeviceIdAndDealerId($device->getDevice()->masterDeviceId);
-                            if (count($configurations) > 0) :
-                                ?>
+                            <li>
+                                <a href="<?= $this->url(array('id' => $device->id, 'quoteId' => $quote->id), 'quotes.add-hardware.edit'); ?>">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                    Edit Device
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?= $this->url(array('id' => $device->id, 'quoteId' => $quote->id), 'quotes.add-hardware.delete'); ?>">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                    Delete Device
+                                </a>
+                            </li>
+                            <?php $configurations = DeviceConfigurationMapper::getInstance()->fetchAllDeviceConfigurationByDeviceIdAndDealerId($device->getDevice()->masterDeviceId); ?>
+                            <?php if (count($configurations) > 0) : ?>
                                 <li><strong>Use Configuration</strong></li>
-                                <?php
-                                foreach ($configurations as $configuration) :
-                                    ?>
+                                <?php foreach ($configurations as $configuration) : ?>
                                     <li>
-                                        <a href="<?php echo $this->url(array('action' => 'use-configuration', 'deviceId' => $device->id, 'configurationId' => $configuration->id)); ?>">
-                                            <?php
-                                            echo $configuration->name;
-                                            ?>
+                                        <a href="<?= $this->url(array('deviceId' => $device->id, 'configurationId' => $configuration->id), 'quotes.use-configuration'); ?>">
+                                            <?= $configuration->name; ?>
                                         </a>
                                     </li>
-                                <?php
-                                endforeach;
-                            endif;
-                            ?>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </div>
                 </td>
             </tr>
             <?php if (count($device->getQuoteDeviceOptions()) > 0) : ?>
-                <?php foreach ($device->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
+                <?php foreach ($device->getQuoteDeviceOptions() as $quoteDeviceOption) : ?>
                     <tr class="optionRow">
-                        <td style="padding-left: 25px;"><?php echo $quoteDeviceOption->name; ?></td>
-                        <td><?php echo $quoteDeviceOption->oemSku; ?></td>
-                        <td><?php echo $quoteDeviceOption->description; ?></td>
-                        <td style="text-align: right"><?php echo $this->currency($quoteDeviceOption->cost); ?></td>
-                        <td style="text-align: right"><?php echo number_format($quoteDeviceOption->quantity); ?></td>
-                        <td style="text-align: right"><?php echo $this->currency($quoteDeviceOption->getTotalCost()); ?></td>
+                        <td><?= $quoteDeviceOption->name; ?></td>
+                        <td><?= $quoteDeviceOption->oemSku; ?></td>
+                        <td><?= $quoteDeviceOption->description; ?></td>
+                        <td><?= $this->currency($quoteDeviceOption->cost); ?></td>
+                        <td><?= number_format($quoteDeviceOption->quantity); ?></td>
+                        <td><?= $this->currency($quoteDeviceOption->getTotalCost()); ?></td>
                         <td></td>
                     </tr>
                 <?php endforeach; ?>
             <?php endif; ?>
             <tr>
-                <td colspan='5' style='text-align: right'><strong> Package Cost </strong></td>
-                <td style='text-align: right'><?php echo $this->currency($device->calculatePackageCost()); ?></td>
+                <td class="text-right" colspan='5'>
+                    <strong>Package Cost</strong>
+                </td>
+                <td class="cost">
+                    <strong><?= $this->currency($device->calculatePackageCost()); ?></strong>
+                </td>
                 <td></td>
             </tr>
-            <tr>
-                <td colspan='7'>&nbsp;</td>
-            </tr>
         <?php endforeach; ?>
-        <tr class="header-row">
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
     </table>
 
-    <?php echo $this->navigationForm; ?>
+    <?= $this->navigationForm; ?>
+
 </div>

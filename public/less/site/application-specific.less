@@ -1,0 +1,22 @@
+table {
+    td {
+        &.cost,
+        &.cost-per-page,
+        &.margin,
+        &.markup,
+        &.price,
+        &.page-volume,
+        &.quantity,
+        &.yield {
+            text-align : right;
+
+            & input {
+                text-align : right;
+            }
+        }
+    }
+
+    tr.totals-row {
+        font-weight : bold;
+    }
+}

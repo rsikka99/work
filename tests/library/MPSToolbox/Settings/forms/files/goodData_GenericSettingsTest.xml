@@ -1,0 +1,45 @@
+<?xml version="1.0" standalone="yes"?>
+<genericSettingsGoodData>
+    <testData>
+        <data>
+            <defaultEnergyCost>0.11</defaultEnergyCost>
+            <defaultMonthlyLeasePayment>250</defaultMonthlyLeasePayment>
+            <defaultPrinterCost>1000</defaultPrinterCost>
+            <leasedMonochromeCostPerPage>0.02</leasedMonochromeCostPerPage>
+            <leasedColorCostPerPage>0.09</leasedColorCostPerPage>
+            <mpsMonochromeCostPerPage>0.015</mpsMonochromeCostPerPage>
+            <mpsColorCostPerPage>0.09</mpsColorCostPerPage>
+            <tonerMargin>28</tonerMargin>
+            <targetMonochromeCostPerPage>0.017</targetMonochromeCostPerPage>
+            <targetColorCostPerPage>0.11</targetColorCostPerPage>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <defaultEnergyCost>0.09</defaultEnergyCost>
+            <defaultMonthlyLeasePayment>225</defaultMonthlyLeasePayment>
+            <defaultPrinterCost>750</defaultPrinterCost>
+            <leasedMonochromeCostPerPage>0.01</leasedMonochromeCostPerPage>
+            <leasedColorCostPerPage>0.08</leasedColorCostPerPage>
+            <mpsMonochromeCostPerPage>0.012</mpsMonochromeCostPerPage>
+            <mpsColorCostPerPage>0.08</mpsColorCostPerPage>
+            <tonerMargin>20</tonerMargin>
+            <targetMonochromeCostPerPage>0.016</targetMonochromeCostPerPage>
+            <targetColorCostPerPage>0.010</targetColorCostPerPage>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <defaultEnergyCost>0.08</defaultEnergyCost>
+            <defaultMonthlyLeasePayment>200</defaultMonthlyLeasePayment>
+            <defaultPrinterCost>500</defaultPrinterCost>
+            <leasedMonochromeCostPerPage>0.01</leasedMonochromeCostPerPage>
+            <leasedColorCostPerPage>0.06</leasedColorCostPerPage>
+            <mpsMonochromeCostPerPage>0.011</mpsMonochromeCostPerPage>
+            <mpsColorCostPerPage>0.08</mpsColorCostPerPage>
+            <tonerMargin>15</tonerMargin>
+            <targetMonochromeCostPerPage>0.015</targetMonochromeCostPerPage>
+            <targetColorCostPerPage>0.09</targetColorCostPerPage>
+        </data>
+    </testData>
+</genericSettingsGoodData>

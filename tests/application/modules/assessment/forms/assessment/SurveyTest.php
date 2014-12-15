@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentSurveyForm;
 
 /**
  * Class Assessment_Form_Assessment_SurveyTest
@@ -8,11 +9,11 @@ class Assessment_Form_Assessment_SurveyTest extends Tangent_PHPUnit_Framework_Ze
     /**
      * Gets the form to be used in testing
      *
-     * @return Assessment_Form_Assessment_Survey|Zend_Form
+     * @return AssessmentSurveyForm
      */
     public function getForm ()
     {
-        return new Assessment_Form_Assessment_Survey();
+        return new AssessmentSurveyForm();
     }
 
     /**

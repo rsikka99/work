@@ -19,7 +19,7 @@ class My_Controller_Plugin_ForceUserAction extends Zend_Controller_Plugin_Abstra
                 {
                     // Redirect to the login page
                     $r = new Zend_Controller_Action_Helper_Redirector();
-                    $r->gotoSimple('changepassword', 'auth', 'default');
+                    $r->gotoRoute(array(), 'auth.login.change-password');
                 }
             }
 

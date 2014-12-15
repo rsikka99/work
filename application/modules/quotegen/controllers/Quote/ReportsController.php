@@ -1,4 +1,9 @@
 <?php
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\QuoteGeneralForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\QuoteNavigationForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ContractTemplateMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\QuoteMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ContractTemplateModel;
 
 /**
  * Class Quotegen_Quote_ReportsController
@@ -23,7 +28,7 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
     public function init ()
     {
         parent::init();
-        Quotegen_View_Helper_Quotemenu::setActivePage(Quotegen_View_Helper_Quotemenu::REPORTS_CONTROLLER);
+        $this->_navigation->setActiveStep(\MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteStepsModel::STEP_FINISHED);
 
         // Require that we have a quote object in the database to use this page
         $this->requireQuote();
@@ -36,11 +41,10 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
-        $this->view->headTitle('Quote');
-        $this->view->headTitle('Reports');
-        $request = $this->getRequest();
+        $this->_pageTitle = array('Quote', 'Reports');
+        $request          = $this->getRequest();
 
-        $form = new Quotegen_Form_Quote_General($this->_quote);
+        $form = new QuoteGeneralForm($this->_quote);
         if ($request->isPost())
         {
             $values = $request->getPost();
@@ -50,7 +54,7 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
                 {
                     $this->_quote->populate($values);
                     $this->saveQuote();
-                    Quotegen_Model_Mapper_Quote::getInstance()->save($this->_quote);
+                    QuoteMapper::getInstance()->save($this->_quote);
                 }
                 else
                 {
@@ -61,14 +65,14 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
             }
             else
             {
-                $this->redirector('index', 'quote_profitability', null, array(
+                $this->redirectToRoute('quotes.hardware-financing', array(
                     'quoteId' => $this->_quoteId
                 ));
             }
         }
 
         $this->view->form           = $form;
-        $this->view->navigationForm = new Quotegen_Form_Quote_Navigation(Quotegen_Form_Quote_Navigation::BUTTONS_BACK);
+        $this->view->navigationForm = new QuoteNavigationForm(QuoteNavigationForm::BUTTONS_BACK);
     }
 
     /**
@@ -119,8 +123,8 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
         /**
          * Users can only use contract templates that are owned by them or flagged as system templates
          */
-        $contractTemplate = Quotegen_Model_Mapper_ContractTemplate::getInstance()->find((int)$contractTemplateId);
-        if (!$contractTemplate instanceof Quotegen_Model_ContractTemplate || ($contractTemplate->dealerId != $this->_identity->dealerId && !$contractTemplate->isSystemTemplate))
+        $contractTemplate = ContractTemplateMapper::getInstance()->find((int)$contractTemplateId);
+        if (!$contractTemplate instanceof ContractTemplateModel || ($contractTemplate->dealerId != $this->_identity->dealerId && !$contractTemplate->isSystemTemplate))
         {
             $this->sendJsonError('Invalid Contract Template');
         }

@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentStepsModel;
 
 /**
  * Class Assessment_Report_AssessmentController
@@ -13,8 +14,8 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
      */
     public function indexAction ()
     {
-        $this->view->headTitle('Assessment');
-        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
+        $this->_pageTitle = array('Assessment');
+        $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
 
         $this->initReportList();
@@ -49,7 +50,7 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
             }
             else
             {
-                throw new Exception("Assessment View Model is false");
+                throw new Exception(sprintf('Assessment View Model is false. ["%s"]', implode(' | ', $this->view->ErrorMessages)));
             }
             $this->view->assessmentViewModel = $assessmentViewModel;
         }

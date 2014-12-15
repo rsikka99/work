@@ -1,25 +1,29 @@
 <?php
-/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+/* @var $hardwareOptimization HardwareOptimizationModel */
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel;
+
 $hardwareOptimization = $this->hardwareOptimization;
 
-$title = $this->title;
-$description = $this->description;
-$descriptionIfZero = $this->descriptionIfZeroDevices;
-$totalNumberOfDevices = $this->totalNumberOfDevices;
+$title                  = $this->title;
+$description            = $this->description;
+$descriptionIfZero      = $this->descriptionIfZeroDevices;
+$totalNumberOfDevices   = $this->totalNumberOfDevices;
 $showReplacementDevices = $this->showReplacementDevices;
-$showReason = $this->showReason;
-$scrollSpyId = $this->scrollSpyId;
+$showReason             = $this->showReason;
+$scrollSpyId            = $this->scrollSpyId;
 
-/* @var $deviceInstances Proposalgen_Model_DeviceInstance[] */
+/* @var $deviceInstances DeviceInstanceModel[] */
 $deviceInstances = $this->deviceInstances;
 ?>
-<div class="pheader" id="<?php echo $scrollSpyId; ?>">
-    <?php echo $title; ?>
-    <em> (<?php echo number_format(count($deviceInstances)) ?> out of <?php echo number_format($totalNumberOfDevices) ?> devices)</em>
+<div class="pheader" id="<?= $scrollSpyId; ?>">
+    <?= $title; ?>
+    <em> (<?= number_format(count($deviceInstances)) ?> out of <?= number_format($totalNumberOfDevices) ?> devices)</em>
 </div>
 
 <?php if (count($deviceInstances)): ?>
-    <p><?php echo $description; ?></p>
+    <p><?= $description; ?></p>
 
     <table class="rDevices">
         <thead>
@@ -31,7 +35,7 @@ $deviceInstances = $this->deviceInstances;
             <th>Life Page Count</th>
             <th>Device Age</th>
             <?php if ($showReplacementDevices) : ?>
-                <th style="width:175px;">Replacement Device<?php echo ($showReason) ? " & Reason" : "" ?></th>
+                <th style="width:175px;">Replacement Device<?= ($showReason) ? " & Reason" : "" ?></th>
             <?php else : ?>
                 <?php if ($showReason) : ?>
                     <th>Reason</th>
@@ -43,46 +47,46 @@ $deviceInstances = $this->deviceInstances;
         <?php foreach ($deviceInstances as $deviceInstance) :
             $masterDevice            = $deviceInstance->getMasterDevice();
             $replacementMasterDevice = $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getMasterDevice();
-            $isColor                 = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+            $isColor                 = ($masterDevice->tonerConfigId !== TonerConfigModel::BLACK_ONLY) ? true : false;
             ?>
             <tr>
                 <td class="deviceName">
-                    <em><?php echo $masterDevice->getManufacturer()->fullname ?></em>
+                    <em><?= $masterDevice->getManufacturer()->fullname ?></em>
                     <br>
-                    <strong><?php echo $masterDevice->modelName ?></strong>
+                    <strong><?= $masterDevice->modelName ?></strong>
                 </td>
                 <td class="serialNumber">
-                    <?php echo $deviceInstance->serialNumber ?>
+                    <?= $deviceInstance->serialNumber ?>
                     <br>
-                    <?php echo $deviceInstance->ipAddress; ?>
+                    <?= $deviceInstance->ipAddress; ?>
                 </td>
                 <!-- Monthly Statistics -->
-                <td class="pageVolume"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()) ?></td>
-                <td class="pageVolume"><?php echo ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : ' - ' ?></td>
-                <td class="pageVolume"><?php echo $this->formatPageVolume($deviceInstance->getMeter()->endMeterLife) ?></td>
-                <td class="deviceAge"><?php echo $deviceInstance->getAge() ?>y</td>
+                <td class="pageVolume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()) ?></td>
+                <td class="pageVolume"><?= ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : ' - ' ?></td>
+                <td class="pageVolume"><?= $this->formatPageVolume($deviceInstance->getMeter()->endMeterLife) ?></td>
+                <td class="deviceAge"><?= $deviceInstance->getAge() ?>y</td>
                 <?php if ($showReplacementDevices && $replacementMasterDevice) : ?>
                     <td>
-                        <em><?php echo $replacementMasterDevice->getManufacturer()->fullname ?></em>
+                        <em><?= $replacementMasterDevice->getManufacturer()->fullname ?></em>
                         <br>
-                        <strong><?php echo $replacementMasterDevice->modelName ?></strong>
+                        <strong><?= $replacementMasterDevice->modelName ?></strong>
                         <br>
-                        <?php echo $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason ?>
+                        <?= $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason ?>
                     </td>
                 <?php elseif ($showReplacementDevices) : ?>
                     <?php if ($showReason) : ?>
-                        <td class="optimizationReason"><?php echo $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason ?></td>
+                        <td class="optimizationReason"><?= $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason ?></td>
                     <?php endif; ?>
                 <?php
                 else : ?>
                     <?php if ($showReason) : ?>
-                        <td class="optimizationReason"><?php echo $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason ?></td>
+                        <td class="optimizationReason"><?= $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason ?></td>
                     <?php endif; ?>
                 <?php endif; ?>
             </tr>
         <?php endforeach; ?>
     </table>
 <?php else : ?>
-    <p><?php echo $descriptionIfZero; ?></p>
+    <p><?= $descriptionIfZero; ?></p>
 <?php endif; ?>
 <br>

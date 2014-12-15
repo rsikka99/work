@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\QuoteNavigationForm;
 
 /**
  * Class Quotegen_Form_Quote_NavigationTest
@@ -6,13 +7,13 @@
 class Quotegen_Form_Quote_NavigationTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Quotegen_Form_Quote_Navigation
+     * @var QuoteNavigationForm
      */
     protected $_form;
 
     public function setUp ()
     {
-        $this->_form = new Quotegen_Form_Quote_Navigation();
+        $this->_form = new QuoteNavigationForm();
         parent::setUp();
     }
 

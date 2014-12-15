@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Forms\DeviceSwapsForm;
 
 /**
  * Class Proposalgen_Form_DeviceSwapTest
@@ -6,11 +7,11 @@
 class Proposalgen_Form_DeviceSwapTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
     /**
-     * @return Hardwareoptimization_Form_DeviceSwaps
+     * @return DeviceSwapsForm
      */
     public function getForm ()
     {
-        return new Hardwareoptimization_Form_DeviceSwaps();
+        return new DeviceSwapsForm();
     }
 
     /**

@@ -31,11 +31,18 @@ abstract class Tangent_PHPUnit_Framework_ZendFormTestCase extends Tangent_PHPUni
      *
      * @param array $data
      *
+     * @throws Exception
      * @throws Zend_Form_Exception
      */
     public function testFormAcceptsValidData ($data)
     {
         $form = $this->getForm();
+
+        if (!$form instanceof Zend_Form)
+        {
+            debug_print_backtrace(0,1);
+        }
+
         $this->assertTrue($form->isValid($data), $this->getExpandedMessages($form));
     }
 
@@ -45,11 +52,18 @@ abstract class Tangent_PHPUnit_Framework_ZendFormTestCase extends Tangent_PHPUni
      *
      * @param array $data
      *
+     * @throws Exception
      * @throws Zend_Form_Exception
      */
     public function testFormRejectsBadData ($data)
     {
         $form = $this->getForm();
+
+        if (!$form instanceof Zend_Form)
+        {
+            debug_print_backtrace(0,1);
+        }
+
         $this->assertFalse($form->isValid($data), $this->getExpandedMessages($form));
     }
 

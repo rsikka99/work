@@ -1,0 +1,127 @@
+<?php
+
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\QuoteGroupForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceOptionModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceGroupDeviceModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceGroupModel;
+
+/* @var $form QuoteGroupForm */
+$form                    = $this->element;
+$addDeviceToGroupSubForm = $form->getSubForm('addDeviceToGroup');
+$deviceQuantitySubForm   = $form->getSubForm('deviceQuantity');
+$addGroupSubForm         = $form->getSubForm('addGroup');
+$deleteDeviceButton      = $deviceQuantitySubForm->getElement('deleteDeviceFromGroup');
+?>
+
+<?= $this->RenderFormOpen($form) ?>
+
+<fieldset>
+    <legend>Add New Group</legend>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="input-group">
+                <?= $this->RenderFormText($addGroupSubForm->getElement('name')) ?>
+                <span class="input-group-btn"><?= $this->RenderFormSubmit($addGroupSubForm->getElement('addGroup'), array('btn-success')) ?></span>
+            </div>
+            <?= $this->RenderFormDescription($addGroupSubForm->getElement('name')) ?>
+            <?= $this->RenderFormElementErrors($addGroupSubForm->getElement('name')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<hr>
+
+<fieldset>
+    <legend>Add Device To Group</legend>
+
+    <div class="form-inline">
+        <div class="form-group">
+            <?= $this->RenderFormSubmit($addDeviceToGroupSubForm->getElement('addDevice'), array('btn btn-success btn-sm')) ?>
+        </div>
+
+        <div class="form-group <?= ($addDeviceToGroupSubForm->getElement('quantity')->hasErrors()) ? 'has-error' : '' ?>">
+            <?= $this->RenderFormLabel($addDeviceToGroupSubForm->getElement('quantity'), array('sr-only')) ?>
+            <?= $this->RenderFormText($addDeviceToGroupSubForm->getElement('quantity')) ?>
+        </div>
+
+        <div class="form-group <?= ($addDeviceToGroupSubForm->getElement('quoteDeviceId')->hasErrors()) ? 'has-error' : '' ?>">
+            <?= $this->RenderFormLabel($addDeviceToGroupSubForm->getElement('quoteDeviceId'), array('sr-only')) ?>
+            <?= $this->RenderFormSelect($addDeviceToGroupSubForm->getElement('quoteDeviceId')) ?>
+        </div>
+
+        <span> device to the</span>
+
+        <div class="form-group <?= ($addDeviceToGroupSubForm->getElement('quoteDeviceGroupId')->hasErrors()) ? 'has-error' : '' ?>">
+            <?= $this->RenderFormLabel($addDeviceToGroupSubForm->getElement('quoteDeviceGroupId'), array('sr-only')) ?>
+            <?= $this->RenderFormSelect($addDeviceToGroupSubForm->getElement('quoteDeviceGroupId')) ?>
+        </div>
+
+        <span> group.</span>
+
+        <?= $this->RenderFormElementErrors($addDeviceToGroupSubForm->getElement('quantity'), 'help-inline', false) ?>
+        <?= $this->RenderFormElementErrors($addDeviceToGroupSubForm->getElement('quoteDeviceGroupId'), 'help-inline', false) ?>
+    </div>
+</fieldset>
+
+<hr>
+
+<div class="form-horizontal">
+    <?php $deviceGroups = $form->getQuote()->getQuoteDeviceGroups(); ?>
+    <?php foreach ($deviceGroups as $deviceGroup) : ?>
+        <div class="form-group">
+            <div class="col-md-5">
+                <?= $this->RenderFormText($form->getElement("groupName_{$deviceGroup->id}")) ?>
+            </div>
+            <?php if (!$deviceGroup->isDefault) : ?>
+                <small>
+                    <button type="submit" name="deleteGroup" class="btn btn-danger btn-xs" value="<?= $deviceGroup->id ?>">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </button>
+                </small>
+            <?php endif; ?>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class='table table-bordered table-striped table-condensed'>
+                    <tr>
+                        <th style='width: 200px'>Device</th>
+                        <th>SKU</th>
+                        <th> Option SKU's</th>
+                        <th style='width: 150px'>Quantity</th>
+                        <th style='width: 30px'></th>
+                    </tr>
+                    <?php $quoteDeviceGroupDevices = $deviceGroup->getQuoteDeviceGroupDevices(); ?>
+                    <?php foreach ($quoteDeviceGroupDevices as $quoteDeviceGroupDevice) : ?>
+                        <tr>
+                            <td><?= $quoteDeviceGroupDevice->getQuoteDevice()->name ?></td>
+                            <td><?= $quoteDeviceGroupDevice->getQuoteDevice()->oemSku ?></td>
+                            <td>
+                                <?php if (count($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions()) > 0) : ?>
+                                    <?php
+                                    $optionList = array();
+                                    foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption)
+                                    {
+                                        $optionList [] = "{$quoteDeviceOption->oemSku} (x{$quoteDeviceOption->quantity})";
+                                    }
+                                    ?>
+                                    <?= implode($optionList, ", "); ?>
+                                <?php endif; ?>
+                            </td>
+                            <td><?= $this->RenderFormText($deviceQuantitySubForm->getElement("quantity_{$quoteDeviceGroupDevice->quoteDeviceGroupId}_{$quoteDeviceGroupDevice->quoteDeviceId}")) ?>
+                            </td>
+                            <td>
+                                <button type="submit" name="deleteDeviceFromGroup" value="<?= "{$quoteDeviceGroupDevice->quoteDeviceId}_{$quoteDeviceGroupDevice->quoteDeviceGroupId}" ?>" class="btn btn-danger btn-xs">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </table>
+            </div>
+        </div>
+    <?php endforeach ?>
+</div>
+
+<?= $form->getDisplayGroup('form-actions') ?>
+<?= $this->RenderFormClose($form) ?>

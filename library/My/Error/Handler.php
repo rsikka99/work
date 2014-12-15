@@ -15,7 +15,7 @@ class My_Error_Handler
         "E_OTHER"      => 0,
     );
 
-    static $errorNames = array(
+    static $errorNames  = array(
         1     => "E_ERROR",
         2     => "E_WARNING",
         4     => "E_PARSE",
@@ -34,24 +34,24 @@ class My_Error_Handler
         32767 => "E_ALL"
     );
     static $errorColors = array(
-        1     => "alert-danger",
+        1     => "danger",
         2     => "",
-        4     => "alert-danger",
-        8     => "alert-info",
-        16    => "alert-danger",
+        4     => "danger",
+        8     => "info",
+        16    => "danger",
         32    => "",
-        64    => "alert-danger",
+        64    => "danger",
         128   => "",
-        256   => "alert-danger",
+        256   => "danger",
         512   => "",
-        1024  => "alert-info",
-        2048  => "alert-danger",
-        4096  => "alert-danger",
-        8192  => "alert-warning",
-        16384 => "alert-warning",
-        32767 => "alert-danger"
+        1024  => "info",
+        2048  => "danger",
+        4096  => "danger",
+        8192  => "warning",
+        16384 => "warning",
+        32767 => "danger"
     );
-    static $errors = array();
+    static $errors      = array();
 
     /**
      * Handles php errors
@@ -106,6 +106,7 @@ class My_Error_Handler
         $error           = new stdClass();
         $error->message  = "{$errorName} : {$errorString} in {$fileName} on line {$errorLineNumber}${shortPath}";
         $error->color    = (array_key_exists($errorNumber, self::$errorColors)) ? self::$errorColors [$errorNumber] : '';
+        $error->trace    = self::generateCallTrace();
         $error->number   = $errorNumber;
         self::$errors [] = $error;
     }
@@ -116,5 +117,29 @@ class My_Error_Handler
     public static function set ()
     {
         set_error_handler(array(__CLASS__, 'handle'));
+    }
+
+    /**
+     * @return string
+     */
+    protected static function generateCallTrace ()
+    {
+        $e     = new Exception();
+        $trace = explode("\n", $e->getTraceAsString());
+        // reverse array to make steps line up chronologically
+        $trace = array_reverse($trace);
+        array_shift($trace); // remove {main}
+        array_pop($trace); // remove call to this method
+        array_pop($trace); // remove call to previous method
+        $trace  = array_reverse($trace);
+        $length = count($trace);
+        $result = array();
+
+        for ($i = 0; $i < $length; $i++)
+        {
+            $result[] = ($i + 1) . ')' . substr($trace[$i], strpos($trace[$i], ' ')); // replace '#someNum' with '$i)', set the right ordering
+        }
+
+        return "\t" . implode("\n\t", $result);
     }
 }

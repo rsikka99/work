@@ -1,13 +1,16 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareQuoteForm;
+
 class Proposalgen_Form_MasterDeviceManagement_HardwareQuotesFormTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
+
 {
     /**
-     * @return Proposalgen_Form_MasterDeviceManagement_HardwareQuote
+     * @return HardwareQuoteForm
      */
     public function getForm ()
     {
-        return new Proposalgen_Form_MasterDeviceManagement_HardwareQuote();
+        return new HardwareQuoteForm();
     }
 
     /**

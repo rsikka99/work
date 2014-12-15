@@ -1,15 +1,22 @@
 <?php
-/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+/* @var $hardwareOptimization HardwareOptimizationModel */
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationDealerModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationDeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\OptimizationViewModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+
 $hardwareOptimization = $this->hardwareOptimization;
 
-/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+/* @var $optimization OptimizationViewModel */
 $optimization = $this->optimization;
 
-/* @var $customerOptimization Hardwareoptimization_Model_Optimization_Dealer */
+/* @var $customerOptimization OptimizationDealerModel */
 $dealerOptimization = $this->dealerOptimization;
 
-/* @var $suggestedDeviceInstances Proposalgen_Model_DeviceInstance[] */
-$suggestedDeviceInstances = (isset($this->deviceInstances[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_REPLACE]) ? $this->deviceInstances[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_REPLACE] : array());
+/* @var $suggestedDeviceInstances DeviceInstanceModel[] */
+$suggestedDeviceInstances = (isset($this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE]) ? $this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE] : array());
+
 
 /* @var $graphs array */
 $graphs = $this->graphs;
@@ -17,13 +24,16 @@ $graphs = $this->graphs;
 $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
 ?>
 <div class="pheader" id="replacements">
-    Suggested Replacement Devices <em><?php echo '(' . number_format(count($suggestedDeviceInstances)) . ' of ' . $this->totalDevices . ')' ?></em>
+    Suggested Replacement Devices
+    <em><?= '(' . number_format(count($suggestedDeviceInstances)) . ' of ' . $this->totalDevices . ')' ?></em>
 </div>
 
 <!-- Only display message and table if there are replacement devices assigned -->
 <?php if ($suggestedDeviceInstances) : ?>
-    <p>The following devices have been targeted for replacement, either for a monthly cost savings greater
-        than <?php echo $this->currency($hardwareOptimization->getHardwareOptimizationSetting()->costThreshold); ?> or other considerations made by the dealer.</p>
+    <p>The following devices have been targeted for replacement, either for a
+        monthly cost savings greater
+        than <?= $this->currency($hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->costThreshold); ?>
+        or other considerations made by the dealer.</p>
 
     <table class="rDevices">
         <tr class="header">
@@ -46,25 +56,27 @@ $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
             <th>Cost Delta</th>
         </tr>
         <?php foreach ($suggestedDeviceInstances as $deviceInstance) :
-            $masterDevice      = $deviceInstance->getMasterDevice();
-            $isColor           = $masterDevice->isColor();
-            $replacementDevice = $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getMasterDevice();
+            $masterDevice                  = $deviceInstance->getMasterDevice();
+            $isColor                       = $masterDevice->isColor();
+            $replacementDevice             = $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getMasterDevice();
+            $replacementCostPerPageSetting = $optimization->getCostPerPageSettingForReplacements();
             ?>
-            <tr class="<?php echo $this->cycle(array("rowOne", "rowTwo"))->next(); ?>">
-                <td class="device-name"><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>'; ?></td>
-                <td class="serial-number"><?php echo $deviceInstance->serialNumber . '<br/>' . $deviceInstance->ipAddress . '</em>'; ?></td>
-                <td class="cost-per-page"><?php echo $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage); ?></td>
-                <td class="cost-per-page"><?php echo ($isColor) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage) : ' - '; ?></td>
-                <td class="border-right"><?php echo $this->currency($deviceInstance->calculateMonthlyCost($costPerPageSetting)); ?></td>
+            <tr class="<?= $this->cycle(array("rowOne", "rowTwo"))->next(); ?>">
+                <td class="device-name"><?= '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>'; ?></td>
+                <td class="serial-number"><?= $deviceInstance->serialNumber . '<br/>' . $deviceInstance->ipAddress . '</em>'; ?></td>
+                <td class="cost-per-page"><?= $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage); ?></td>
+                <td class="cost-per-page"><?= ($isColor) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage) : ' - '; ?></td>
+                <td class="border-right"><?= $this->currency($deviceInstance->calculateMonthlyCost($costPerPageSetting)); ?></td>
                 <!-- Replacement Devices -->
-                <td class="device-name"><?php echo '<em>' . $replacementDevice->getManufacturer()->fullname . '</em><br/><strong>' . $replacementDevice->modelName . '</strong>'; ?></td>
-                <td><?php echo $this->formatCostPerPage($replacementDevice->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostOfInkAndTonerPerPage()->monochromeCostPerPage) ?></td>
-                <td><?php echo ($isColor) ? $this->currency($replacementDevice->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostOfInkAndTonerPerPage()->colorCostPerPage) : ' - '; ?></td>
-                <td class="border-right"><?php echo $this->currency($deviceInstance->calculateMonthlyCost($costPerPageSetting, $replacementDevice)); ?></td>
+                <td class="device-name"><?= '<em>' . $replacementDevice->getManufacturer()->fullname . '</em><br/><strong>' . $replacementDevice->modelName . '</strong>'; ?></td>
+                <td><?= $this->formatCostPerPage($deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->monochromeCostPerPage) ?></td>
+                <td><?= ($replacementDevice->isColor()) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->colorCostPerPage) : ' - '; ?></td>
+                <td class="border-right"><?= $this->currency($deviceInstance->calculateMonthlyCost($costPerPageSetting, $replacementDevice)); ?></td>
                 <!-- Monthly Statistics -->
-                <td class="page-volume"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
-                <td class="page-volume"><?php echo ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A'; ?></td>
-                <td><?php echo $this->currency($deviceInstance->calculateMonthlyCost($costPerPageSetting) - $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDevice())); ?></td>
+                <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
+                <td class="page-volume"><?= ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : '-'; ?></td>
+                <td><?= $this->currency(($deviceInstance->calculateMonthlyCost($costPerPageSetting) - ($deviceInstance->calculateMonthlyCost($costPerPageSetting, $replacementDevice)))); ?></td>
+
             </tr>
         <?php endforeach ?>
     </table>

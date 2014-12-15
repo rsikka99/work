@@ -2,10 +2,12 @@
 /**
  * Solution - Let {company_name} Take Care of Your Business Print
  */
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+
 /* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
-/* @var $quote Quotegen_Model_Quote */
+/* @var $quote QuoteModel */
 $quote = $this->quote;
 
 $section->addPageBreak();
@@ -28,5 +30,5 @@ $section->addTitle($this->translate('Eco-Smart Solutions'), 2);
 $section->addText($this->translate('Office Depot was recognized by Newsweek as the No. 1 Green Retailer. Our eco-preferable initiatives include recycling programs for supplies and equipment, and product lines of refurbished printers and remanufactured supplies.'));
 
 $section->addText($this->translate('Let us take care of your print so you can get back to business.'));
-$section->addText($this->translate('1-855-OD-GO-MPS'),'bold_text','nospacing');
+$section->addText($this->translate('1-855-OD-GO-MPS'), 'bold_text', 'nospacing');
 $section->addText($this->translate('1-855-634-6677'));

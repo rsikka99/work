@@ -1,10 +1,13 @@
-<?php $this->headScript()->appendFile($this->baseUrl('js/preferences/tonerVendors.js')); ?>
 <?php
+
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+
+/* @var $quote QuoteModel */
 $quote = $this->Quote();
-/* @var $quote Quotegen_Model_Quote */
-$this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.phtml'));
+
+$this->headScript()->appendFile($this->baseUrl('js/app/legacy/preferences/TonerVendors.js'));
 ?>
-<?php echo $this->render('_partials/quoteHeading.phtml'); ?>
-<div class='well'>
-    <?php echo $this->form; ?>
+<?= $this->render('_partials/quoteHeading.phtml'); ?>
+<div class="container">
+    <?= $this->form ?>
 </div>

@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\DDefault\Forms\ChangePasswordForm;
 
 /**
  * Class Default_Form_ChangePasswordTest
@@ -8,7 +9,7 @@ class Default_Form_ChangePasswordTest extends Tangent_PHPUnit_Framework_ZendForm
 
     public function getForm ()
     {
-        return new Default_Form_ChangePassword();
+        return new ChangePasswordForm();
     }
 
     /**

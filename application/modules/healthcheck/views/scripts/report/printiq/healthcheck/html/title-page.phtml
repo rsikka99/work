@@ -6,21 +6,15 @@ $healthcheckViewModel = $this->healthcheckViewModel;
     <div class="header">
         <div class="title-page-logo-box-wrapper">
             <div class="title-page-logo-box">
-                <img class="printiq-title-page-logo" src="<?php echo $this->serverUrl($this->dealerLogoFile) ?> " />
+                <img class="printiq-title-page-logo" src="<?= $this->serverUrl($this->dealerLogoFile) ?> " />
             </div>
         </div>
     </div>
     <div class="right printiq-title-page-text">
         <div class="printiq-title-page-header"><?= My_Brand::getDealerBranding()->healthCheckTitle ?></div>
         <div><i>Prepared for:</i></div>
-        <div><?php echo $healthcheckViewModel->healthcheck->getClient()->companyName; ?></div>
-        <div>
-            <?php
-            echo $healthcheckViewModel->healthcheck->getClient()->getAddress()->addressLine1 . ((strlen($healthcheckViewModel->healthcheck->getClient()->getAddress()->addressLine2)) > 0 ? ", " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->addressLine2 : "");
-            ?>
-        </div>
-        <div><?php echo $healthcheckViewModel->healthcheck->getClient()->getAddress()->city . " " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->getRegionName() . ", " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->postCode ?></div>
-        <div><?php echo $healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry() == "United States" ? "USA" : ($healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry() == "Canada" ? "CAN" : $healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry()) ?></div>
+        <div><?= $healthcheckViewModel->healthcheck->getClient()->companyName; ?></div>
+        <div><?= nl2br($healthcheckViewModel->healthcheck->getClient()->getAddress()->getFullAddressMultipleLines()) ?></div>
     </div>
     <br />
 

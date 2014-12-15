@@ -1,0 +1,24 @@
+<?php
+/* @var $form \MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentNavigationForm */
+$form = $this->element;
+
+$goBackButton          = $form->getElement('goBack');
+$saveButton            = $form->getElement('save');
+$saveAndContinueButton = $form->getElement('saveAndContinue');
+
+?>
+<?= $this->RenderFormOpen($form) ?>
+    <ul class="pager">
+        <?php if ($goBackButton instanceof Zend_Form_Element_Submit || $goBackButton instanceof Zend_Form_Element_Button) : ?>
+            <li class="previous"><?= $this->RenderFormSubmit($goBackButton) ?></li>
+        <?php endif; ?>
+
+        <?php if ($saveButton instanceof Zend_Form_Element_Submit || $saveButton instanceof Zend_Form_Element_Button) : ?>
+            <li><?= $this->RenderFormSubmit($saveButton) ?></li>
+        <?php endif; ?>
+
+        <?php if ($saveAndContinueButton instanceof Zend_Form_Element_Submit || $saveAndContinueButton instanceof Zend_Form_Element_Button) : ?>
+            <li class="next"><?= $this->RenderFormSubmit($saveAndContinueButton) ?></li>
+        <?php endif; ?>
+    </ul>
+<?= $this->RenderFormClose($form) ?>

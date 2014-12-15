@@ -1,27 +1,31 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
+
 class Proposalgen_Model_MasterDeviceTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Proposalgen_Model_CostPerPageSetting
+     * @var CostPerPageSettingModel
      */
     protected $_costPerPageSetting;
 
     /**
-     * @var Proposalgen_Model_MasterDevice
+     * @var MasterDeviceModel
      */
     protected $_masterDevice;
 
     /**
      * @param bool $createNew
      *
-     * @return Proposalgen_Model_CostPerPageSetting
+     * @return CostPerPageSettingModel
      */
     public function getCostPerPageSetting ($createNew = false)
     {
         if (!isset($this->_costPerPageSetting) || $createNew)
         {
-            $this->_costPerPageSetting                         = new Proposalgen_Model_CostPerPageSetting();
+            $this->_costPerPageSetting                         = new CostPerPageSettingModel();
             $this->_costPerPageSetting->adminCostPerPage       = 0.05;
             $this->_costPerPageSetting->laborCostPerPage       = 0.06;
             $this->_costPerPageSetting->partsCostPerPage       = 0.07;
@@ -35,13 +39,13 @@ class Proposalgen_Model_MasterDeviceTest extends PHPUnit_Framework_TestCase
     /**
      * @param bool $createNew
      *
-     * @return Proposalgen_Model_MasterDevice
+     * @return MasterDeviceModel
      */
     public function getMasterDevice ($createNew = false)
     {
         if (!isset($this->_masterDevice) || $createNew)
         {
-            $this->_masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find(1);
+            $this->_masterDevice = MasterDeviceMapper::getInstance()->find(1);
         }
 
         return $this->_masterDevice;

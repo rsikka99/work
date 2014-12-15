@@ -1,0 +1,43 @@
+<?php
+
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareOptimizationForm;
+
+/* @var $form HardwareOptimizationForm */
+$form = $this->element;
+?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<div class="clearfix">
+    <fieldset class="col-md-10 col-md-offset-1">
+        <div class="form-group <?= ($form->getElement('isDeviceSwap')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('isDeviceSwap'), array('col-md-4')) ?>
+
+            <div class="col-md-4">
+                <?= $this->RenderFormBootstrapSwitch($form->getElement('isDeviceSwap'), array('js-yes-no-switch')) ?>
+                <?= $this->RenderFormDescription($form->getElement('isDeviceSwap')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('isDeviceSwap')) ?>
+            </div>
+        </div>
+
+        <div class="form-group <?= ($form->getElement('minimumPageCount')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('minimumPageCount'), array('col-md-4')) ?>
+
+            <div class="col-md-4">
+                <?= $this->RenderFormText($form->getElement('minimumPageCount')) ?>
+                <?= $this->RenderFormDescription($form->getElement('minimumPageCount')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('minimumPageCount')) ?>
+            </div>
+        </div>
+
+        <div class="form-group <?= ($form->getElement('maximumPageCount')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('maximumPageCount'), array('col-md-4')) ?>
+
+            <div class="col-md-4">
+                <?= $this->RenderFormText($form->getElement('maximumPageCount')) ?>
+                <?= $this->RenderFormDescription($form->getElement('maximumPageCount')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('maximumPageCount')) ?>
+            </div>
+        </div>
+    </fieldset>
+</div>
+<?= $this->RenderFormClose($form) ?>

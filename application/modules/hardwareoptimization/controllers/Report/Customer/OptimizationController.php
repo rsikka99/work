@@ -1,4 +1,6 @@
 <?php
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationCustomerModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationStepsModel;
 
 /**
  * Class Hardwareoptimization_Report_Customer_OptimizationController
@@ -7,9 +9,8 @@ class Hardwareoptimization_Report_Customer_OptimizationController extends Hardwa
 {
     public function indexAction ()
     {
-        $this->view->headTitle('Hardware Optimization');
-        $this->view->headTitle('Customer');
-        $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_FINISHED);
+        $this->_pageTitle = array('Hardware Optimization', 'Customer');
+        $this->_navigation->setActiveStep(HardwareOptimizationStepsModel::STEP_FINISHED);
         $this->initHtmlReport();
         $this->initReportList();
 
@@ -44,7 +45,7 @@ class Hardwareoptimization_Report_Customer_OptimizationController extends Hardwa
                 throw new Exception("CSV Format not available through this page yet!");
                 break;
             case "docx" :
-                $customerOptimization   = new Hardwareoptimization_Model_Optimization_Customer($this->_hardwareOptimization);
+                $customerOptimization   = new OptimizationCustomerModel($this->_hardwareOptimization);
                 $graphs                 = $this->cachePNGImages($customerOptimization->getGraphs(), true);
                 $this->view->phpword    = new \PhpOffice\PhpWord\PhpWord();
                 $this->view->wordStyles = $this->getWordStyles();

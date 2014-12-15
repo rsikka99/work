@@ -1,0 +1,17 @@
+<?xml version="1.0" standalone="yes"?>
+<quoteSettingsBadData>
+    <testData>
+        <data>
+            <defaultPageMargin>empty</defaultPageMargin>
+        </data>
+    </testData>
+    <testData>
+        <data>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <defaultDeviceMargin>empty</defaultDeviceMargin>
+        </data>
+    </testData>
+</quoteSettingsBadData>

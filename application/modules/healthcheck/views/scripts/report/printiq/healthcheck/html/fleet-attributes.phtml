@@ -1,26 +1,34 @@
 <?php
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+
 $healthcheckViewModel = $this->healthcheckViewModel;
 ?>
 <div class="h1">Fleet Attributes</div>
 <p>The following provides a summary of your existing printing devices.</p>
 <p>Devices marked for future consideration are shown in gray.</p>
 
-<div class="pheader">Devices compatible with <?php echo My_Brand::getDealerBranding()->mpsProgramName; ?></div>
+<div class="pheader">Devices compatible with <?= My_Brand::getDealerBranding()->mpsProgramName; ?></div>
 <table cellspacing="0" class="genericTable" style="font-size: 10pt;">
     <thead>
     <tr class="shaded">
-        <th style="width: 170px;vertical-align: middle"><strong>Device Name</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo My_Brand::$jit; ?></strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo My_Brand::$jit; ?> Program</strong></th>
+        <th style="width: 170px;vertical-align: middle">
+            <strong>Device Name</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Device Age (Years)</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Monthly Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Percent of Total Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Comp. with <?= My_Brand::$jit; ?></strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Linked to <?= My_Brand::$jit; ?> Program</strong></th>
     </tr>
     </thead>
     <tbody>
     <?php
-    /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+    /* @var $deviceInstance DeviceInstanceModel */
     foreach ($healthcheckViewModel->getDevices()->compatibleDeviceInstances->getDeviceInstances() as $deviceInstance): ?>
         <?php
         $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
@@ -30,28 +38,34 @@ $healthcheckViewModel = $this->healthcheckViewModel;
             echo ' shaded';
         }
         ?>">
-            <td><?php echo $deviceName ?>
-                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
-                <br /> <?php echo $deviceInstance->ipAddress; ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
-            <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
-            <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
+            <td><?= $deviceName ?>
+                <br /> <?= (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                <br /> <?= $deviceInstance->ipAddress; ?></td>
+            <td class="right"><?= number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
+            <td class="right"><?= number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
+            <td class="center"> <?= ($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
+            <td class="center"> <?= ($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
-<div class="pheader">Devices not compatible with <?php echo My_Brand::getDealerBranding()->mpsProgramName; ?></div>
+<div class="pheader">Devices not compatible with <?= My_Brand::getDealerBranding()->mpsProgramName; ?></div>
 <table cellspacing="0" class="genericTable" style="font-size: 10pt;">
     <thead>
     <tr class="shaded">
-        <th style="width: 170px;vertical-align: middle"><strong>Device Name</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo My_Brand::$jit; ?></strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo My_Brand::$jit; ?> Program</strong></th>
+        <th style="width: 170px;vertical-align: middle">
+            <strong>Device Name</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Device Age (Years)</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Monthly Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Percent of Total Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Comp. with <?= My_Brand::$jit; ?></strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Linked to <?= My_Brand::$jit; ?> Program</strong></th>
     </tr>
     </thead>
     <tbody>
@@ -65,14 +79,14 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         {
             echo ' shaded';
         }?>">
-            <td><?php echo $deviceName ?>
-                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
-                <br /> <?php echo $deviceInstance->ipAddress; ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
-            <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
-            <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
+            <td><?= $deviceName ?>
+                <br /> <?= (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                <br /> <?= $deviceInstance->ipAddress; ?></td>
+            <td class="right"><?= number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
+            <td class="right"><?= number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
+            <td class="center"> <?= ($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
+            <td class="center"> <?= ($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -82,12 +96,18 @@ $healthcheckViewModel = $this->healthcheckViewModel;
 <table cellspacing="0" class="genericTable" style="font-size: 10pt;">
     <thead>
     <tr class="shaded">
-        <th style="width: 170px;vertical-align: middle"><strong>Device Name</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo My_Brand::$jit; ?></strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo My_Brand::$jit; ?> Program</strong></th>
+        <th style="width: 170px;vertical-align: middle">
+            <strong>Device Name</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Device Age (Years)</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Monthly Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Percent of Total Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Comp. with <?= My_Brand::$jit; ?></strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Linked to <?= My_Brand::$jit; ?> Program</strong></th>
     </tr>
     </thead>
     <tbody>
@@ -100,14 +120,14 @@ $healthcheckViewModel = $this->healthcheckViewModel;
             echo ' shaded';
         }
         ?>">
-            <td><?php echo $deviceName ?>
-                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
-                <br /> <?php echo $deviceInstance->ipAddress; ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(), 0) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
-            <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
+            <td><?= $deviceName ?>
+                <br /> <?= (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                <br /> <?= $deviceInstance->ipAddress; ?></td>
+            <td class="right"><?= number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?= number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(), 0) ?></td>
+            <td class="right"><?= number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
+            <td class="center"> <?= ($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
+            <td class="center"> <?= ($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -117,14 +137,22 @@ $healthcheckViewModel = $this->healthcheckViewModel;
     <thead>
     <tr class="shaded">
         <th style="width: 30px;vertical-align: middle"><strong>Device Name</th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Suggested Max. Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Suggested Max. Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo My_Brand::$jit; ?></strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo My_Brand::$jit; ?> Program</strong></th>
-        <th style="vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Device Age (Years)</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Monthly Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Suggested Max. Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Percent of Suggested Max. Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Percent of Monthly Cost</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Comp. with <?= My_Brand::$jit; ?></strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Linked to <?= My_Brand::$jit; ?> Program</strong></th>
+        <th style="vertical-align: middle" class="center">
+            <strong>Suggested Action</strong></th>
     </tr>
     </thead>
     <tbody>
@@ -138,17 +166,17 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         {
             echo ' shaded';
         }?>">
-            <td><?php echo $deviceName ?>
-                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
-                <br /> <?php echo $deviceInstance->ipAddress; ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
-            <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 2) ?>%</td>
-            <td class="right"><?php echo number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
-            <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
-            <td>Migrate all page volume to <?php echo My_Brand::$jit; ?> compatible device.</td>
+            <td><?= $deviceName ?>
+                <br /> <?= (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                <br /> <?= $deviceInstance->ipAddress; ?></td>
+            <td class="right"><?= number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
+            <td class="right"><?= number_format($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></td>
+            <td class="right"><?= number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 2) ?>%</td>
+            <td class="right"><?= number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getClient()->getClientSettings()->genericSettings->defaultMonthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>%</td>
+            <td class="center"> <?= ($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
+            <td class="center"> <?= ($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
+            <td>Migrate all page volume to <?= My_Brand::$jit; ?> compatible device.</td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -158,14 +186,22 @@ $healthcheckViewModel = $this->healthcheckViewModel;
     <thead>
     <tr class="shaded">
         <th style="width: 170px;vertical-align: middle"><strong>Device Name</th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Suggested Max. Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Suggested Max. Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo My_Brand::$jit; ?></strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo My_Brand::$jit; ?> Program</strong></th>
-        <th style="width: 220px;vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Device Age (Years)</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Monthly Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Suggested Max. Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Percent of Suggested Max. Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Percent of Monthly Cost</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Comp. with <?= My_Brand::$jit; ?></strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Linked to <?= My_Brand::$jit; ?> Program</strong></th>
+        <th style="width: 220px;vertical-align: middle" class="center">
+            <strong>Suggested Action</strong></th>
     </tr>
     </thead>
     <tbody>
@@ -178,17 +214,17 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         {
             echo ' shaded';
         }?>">
-            <td><?php echo $deviceName ?>
-                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
-                <br /> <?php echo $deviceInstance->ipAddress; ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
-            <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 2) ?>%</td>
-            <td class="right"><?php echo number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
-            <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
-            <td>Migrate excess page volume to an <?php echo My_Brand::$jit; ?> compatible device.</td>
+            <td><?= $deviceName ?>
+                <br /> <?= (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                <br /> <?= $deviceInstance->ipAddress; ?></td>
+            <td class="right"><?= number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
+            <td class="right"><?= number_format($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></td>
+            <td class="right"><?= number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 2) ?>%</td>
+            <td class="right"><?= number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getClient()->getClientSettings()->genericSettings->defaultMonthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>%</td>
+            <td class="center"> <?= ($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
+            <td class="center"> <?= ($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
+            <td>Migrate excess page volume to an <?= My_Brand::$jit; ?> compatible device.</td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -198,13 +234,20 @@ $healthcheckViewModel = $this->healthcheckViewModel;
     <thead>
     <tr class="shaded">
         <th style="width: 170px;vertical-align: middle"><strong>Device Name</th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo My_Brand::$jit; ?></strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo My_Brand::$jit; ?> Program</strong></th>
-        <th style="width: 220px;vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Device Age (Years)</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Monthly Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Percent of Total Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Percent of Monthly Cost</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Comp. with <?= My_Brand::$jit; ?></strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Linked to <?= My_Brand::$jit; ?> Program</strong></th>
+        <th style="width: 220px;vertical-align: middle" class="center">
+            <strong>Suggested Action</strong></th>
     </tr>
     </thead>
     <tbody>
@@ -216,16 +259,16 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         {
             echo ' shaded';
         }?>">
-            <td><?php echo $deviceName ?>
-                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
-                <br /> <?php echo $deviceInstance->ipAddress; ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
-            <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
-            <td class="right"><?php echo number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
-            <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
-            <td>Migrate all page volume to a newer <?php echo My_Brand::$jit; ?> compatible device.</td>
+            <td><?= $deviceName ?>
+                <br /> <?= (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                <br /> <?= $deviceInstance->ipAddress; ?></td>
+            <td class="right"><?= number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
+            <td class="right"><?= number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
+            <td class="right"><?= number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getClient()->getClientSettings()->genericSettings->defaultMonthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>%</td>
+            <td class="center"> <?= ($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
+            <td class="center"> <?= ($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
+            <td>Migrate all page volume to a newer <?= My_Brand::$jit; ?> compatible device.</td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -235,13 +278,20 @@ $healthcheckViewModel = $this->healthcheckViewModel;
     <thead>
     <tr class="shaded">
         <th style="width: 170px;vertical-align: middle"><strong>Device Name</th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo My_Brand::$jit; ?></strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo My_Brand::$jit; ?> Program</strong></th>
-        <th style="width: 220px;vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Device Age (Years)</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Monthly Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Percent of Total Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Percent of Monthly Cost</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Comp. with <?= My_Brand::$jit; ?></strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center">
+            <strong>Linked to <?= My_Brand::$jit; ?> Program</strong></th>
+        <th style="width: 220px;vertical-align: middle" class="center">
+            <strong>Suggested Action</strong></th>
     </tr>
     </thead>
     <tbody>
@@ -254,16 +304,16 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         {
             echo ' shaded';
         }?>">
-            <td><?php echo $deviceName ?>
-                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
-                <br /> <?php echo $deviceInstance->ipAddress; ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
-            <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
-            <td class="right"><?php echo number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
-            <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
-            <td>Migrate all page volume to <?php echo My_Brand::$jit; ?> compatible device.</td>
+            <td><?= $deviceName ?>
+                <br /> <?= (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                <br /> <?= $deviceInstance->ipAddress; ?></td>
+            <td class="right"><?= number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
+            <td class="right"><?= number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
+            <td class="right"><?= number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getClient()->getClientSettings()->genericSettings->defaultMonthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>%</td>
+            <td class="center"> <?= ($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
+            <td class="center"> <?= ($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
+            <td>Migrate all page volume to <?= My_Brand::$jit; ?> compatible device.</td>
         </tr>
     <?php endforeach; ?>
     </tbody>

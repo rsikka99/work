@@ -1,4 +1,6 @@
 <?php
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentStepsModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
 
 /**
  * Class Assessment_Report_PrintingdevicelistController
@@ -16,7 +18,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
                 "error" => "You do not have permission to access this."
             ));
 
-            $this->redirector('index', 'index', 'index');
+            $this->redirectToRoute('assessment');
         }
 
         parent::init();
@@ -24,9 +26,8 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
 
     public function indexAction ()
     {
-        $this->view->headTitle('Assessment');
-        $this->view->headTitle('Printing Device List');
-        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
+        $this->_pageTitle = array('Assessment', 'Printing Device List');
+        $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
@@ -116,7 +117,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
         $appendix_values = "";
         try
         {
-            /* @var $device Proposalgen_Model_DeviceInstance */
+            /* @var $device DeviceInstanceModel */
             foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
                 $row               = array();
@@ -138,12 +139,12 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
         $this->view->appendix_values = $appendix_values;
 
         // Define our field titles
-        $this->view->excluded_titles = array("Manufacturer","Model","Serial","IP Address","Exclusion Reason");
+        $this->view->excluded_titles = array("Manufacturer", "Model", "Serial", "IP Address", "Exclusion Reason");
 
         $excluded_values = "";
         try
         {
-            /* @var $device Proposalgen_Model_DeviceInstance */
+            /* @var $device DeviceInstanceModel */
             foreach ($assessmentViewModel->getExcludedDevices() as $device)
             {
                 $row = array();

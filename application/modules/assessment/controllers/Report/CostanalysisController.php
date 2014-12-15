@@ -1,4 +1,7 @@
 <?php
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentStepsModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel;
 
 /**
  * Class Assessment_Report_CostanalysisController
@@ -15,8 +18,7 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
             $this->_flashMessenger->addMessage(array(
                 "error" => "You do not have permission to access this."
             ));
-
-            $this->redirector('index', 'index', 'index');
+            $this->redirectToRoute('assessment');
         }
 
         parent::init();
@@ -24,9 +26,8 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
 
     public function indexAction ()
     {
-        $this->view->headTitle('Assessment');
-        $this->view->headTitle('Cost Analysis');
-        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
+        $this->_pageTitle = array('Assessment', 'Cost Analysis');
+        $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
@@ -121,12 +122,12 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
         try
         {
             $fieldList_Values = "";
-            /* @var $deviceInstance Proposalgen_Model_DeviceInstance() */
+            /* @var $deviceInstance DeviceInstanceModel() */
             foreach ($assessmentViewModel->getMonthlyHighCostPurchasedDevice($assessmentViewModel->getCostPerPageSettingForCustomer()) as $deviceInstance)
             {
 
                 $percentOfMonthlyCost = ($assessmentViewModel->calculateTotalMonthlyCost() > 0) ? number_format($deviceInstance->calculateMonthlyCost($assessmentViewModel->getCostPerPageSettingForCustomer()) / $assessmentViewModel->calculateTotalMonthlyCost() * 100, 2) : 0;
-                $isColor              = ($deviceInstance->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+                $isColor              = ($deviceInstance->getMasterDevice()->tonerConfigId != TonerConfigModel::BLACK_ONLY) ? true : false;
 
                 // Create an array of purchased devices (this will be the dynamic CSV body)
                 $fieldList    = array();

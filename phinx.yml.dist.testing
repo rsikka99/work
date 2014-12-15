@@ -6,6 +6,7 @@ environments:
     default_database: testing
     production:
         adapter: mysql
+        mysql_attr_init_command: 'SET CHARACTER SET utf8'
         host: localhost
         name: production_db
         user: root
@@ -14,6 +15,7 @@ environments:
                 
     development:
         adapter: mysql
+        mysql_attr_init_command: 'SET CHARACTER SET utf8'
         host: localhost
         name: _mpstoolbox
         user: username
@@ -22,6 +24,7 @@ environments:
                     
     testing:
         adapter: mysql
+        mysql_attr_init_command: 'SET CHARACTER SET utf8'
         host: localhost
         name: mpstoolbox_test
         user: mpstoolbox_test

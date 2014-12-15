@@ -1,5 +1,7 @@
 <?php
 
+namespace Tangent\Validate;
+
 /**
  * Custom_Validate_FieldDepends
  * Requires field presence based on provided value of radio element.
@@ -19,7 +21,7 @@
  * @author "Lee Robert"
  * @uses   Zend_Validate_Abstract
  */
-class Tangent_Validate_FieldDepends extends Tangent_Validate_FieldDependsOnValue
+class FieldDepends extends Tangent_Validate_FieldDependsOnValue
 {
     /**
      * FieldDepends constructor

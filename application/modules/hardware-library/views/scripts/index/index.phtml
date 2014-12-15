@@ -1,0 +1,29 @@
+<?php
+
+use MPSToolbox\Legacy\Models\Acl\ProposalgenAclModel;
+use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
+
+?>
+<div class="container">
+    <?php if ($this->isAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX)) : ?>
+        <a class="btn btn-default" href="<?= $this->url(array(), 'hardware-library.all-devices'); ?>">
+            <i class="fa fa-print fa-4x fa-fw"></i>
+            <br />
+            <br />
+            All Devices
+            <br />
+            <br />
+        </a>
+    <?php endif; ?>
+
+    <?php if ($this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING)) : ?>
+        <a class="btn btn-default" href="<?= $this->url(array(), 'hardware-library.bulk-hardware-pricing-updates'); ?>">
+            <i class="fa fa-money fa-4x fa-fw"></i>
+            <br />
+            <br />
+            Bulk Pricing Updates
+            <br />
+            <br />
+        </a>
+    <?php endif; ?>
+</div>

@@ -2,35 +2,35 @@
 <tonersBadData>
     <testData>
         <data>
-            <availableTonersmanufacturerId>2</availableTonersmanufacturerId>
-            <availableTonerstonerColorId>3</availableTonerstonerColorId>
-            <availableTonersdealerSku>1</availableTonersdealerSku>
-            <availableTonerssystemSku>1</availableTonerssystemSku>
-            <availableTonersyield>0</availableTonersyield>
-            <availableTonersdealerCost>1</availableTonersdealerCost>
-            <availableTonerssystemCost>1</availableTonerssystemCost>
+            <manufacturerId>2</manufacturerId>
+            <tonerColorId>3</tonerColorId>
+            <dealerSku>1</dealerSku>
+            <sku>1</sku>
+            <yield>0</yield>
+            <dealerCost>1</dealerCost>
+            <cost>1</cost>
         </data>
     </testData>
     <testData>
         <data>
-            <availableTonersmanufacturerId>1</availableTonersmanufacturerId>
-            <availableTonerstonerColorId>1</availableTonerstonerColorId>
-            <availableTonersdealerSku>1</availableTonersdealerSku>
-            <availableTonerssystemSku>1</availableTonerssystemSku>
-            <availableTonersyield>1</availableTonersyield>
-            <availableTonersdealerCost>a</availableTonersdealerCost>
-            <availableTonerssystemCost>a</availableTonerssystemCost>
+            <manufacturerId>1</manufacturerId>
+            <tonerColorId>1</tonerColorId>
+            <dealerSku>1</dealerSku>
+            <sku>1</sku>
+            <yield>1</yield>
+            <dealerCost>a</dealerCost>
+            <cost>a</cost>
         </data>
     </testData>
     <testData>
         <data>
-            <availableTonersmanufacturerId>Ã</availableTonersmanufacturerId>
-            <availableTonerstonerColorId>Ã</availableTonerstonerColorId>
-            <availableTonersdealerSku>testS1122344</availableTonersdealerSku>
-            <availableTonerssystemSku>55667878787_2s</availableTonerssystemSku>
-            <availableTonersyield>666</availableTonersyield>
-            <availableTonersdealerCost>1.1</availableTonersdealerCost>
-            <availableTonerssystemCost>1.1</availableTonerssystemCost>
+            <manufacturerId>Ã</manufacturerId>
+            <tonerColorId>Ã</tonerColorId>
+            <dealerSku>testS1122344</dealerSku>
+            <sku>55667878787_2s</sku>
+            <yield>666</yield>
+            <dealerCost>1.1</dealerCost>
+            <cost>1.1</cost>
         </data>
     </testData>
 </tonersBadData>

@@ -1,0 +1,39 @@
+<?xml version="1.0" standalone="yes"?>
+<proposedFleetSettingsGoodData>
+    <testData>
+        <data>
+            <proposedUseDevicePageCoverages>true</proposedUseDevicePageCoverages>
+            <proposedPageCoverageMono>0</proposedPageCoverageMono>
+            <proposedPageCoverageColor>20</proposedPageCoverageColor>
+            <proposedDefaultAdminCostPerPage>0.0005</proposedDefaultAdminCostPerPage>
+            <proposedDefaultLaborCostPerPage>0.0015</proposedDefaultLaborCostPerPage>
+            <proposedDefaultPartsCostPerPage>0.0015</proposedDefaultPartsCostPerPage>
+            <proposedMonochromeRankSetArray>1</proposedMonochromeRankSetArray>
+            <proposedColorRankSetArray>2</proposedColorRankSetArray>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <proposedUseDevicePageCoverages>false</proposedUseDevicePageCoverages>
+            <proposedPageCoverageMono>10</proposedPageCoverageMono>
+            <proposedPageCoverageColor>30</proposedPageCoverageColor>
+            <proposedDefaultAdminCostPerPage>0.0009</proposedDefaultAdminCostPerPage>
+            <proposedDefaultLaborCostPerPage>0.0025</proposedDefaultLaborCostPerPage>
+            <proposedDefaultPartsCostPerPage>0.005</proposedDefaultPartsCostPerPage>
+            <proposedMonochromeRankSetArray>3</proposedMonochromeRankSetArray>
+            <proposedColorRankSetArray>2</proposedColorRankSetArray>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <proposedUseDevicePageCoverages>true</proposedUseDevicePageCoverages>
+            <proposedPageCoverageMono>5</proposedPageCoverageMono>
+            <proposedPageCoverageColor>25</proposedPageCoverageColor>
+            <proposedDefaultAdminCostPerPage>0.0007</proposedDefaultAdminCostPerPage>
+            <proposedDefaultLaborCostPerPage>0.0019</proposedDefaultLaborCostPerPage>
+            <proposedDefaultPartsCostPerPage>0.0018</proposedDefaultPartsCostPerPage>
+            <proposedMonochromeRankSetArray>2</proposedMonochromeRankSetArray>
+            <proposedColorRankSetArray>2</proposedColorRankSetArray>
+        </data>
+    </testData>
+</proposedFleetSettingsGoodData>

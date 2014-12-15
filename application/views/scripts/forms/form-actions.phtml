@@ -1,0 +1,33 @@
+<?php
+
+use MPSToolbox\Legacy\Forms\FormWithNavigation;
+
+/* @var $displayGroup \Zend_Form_DisplayGroup */
+$displayGroup = $this->element;
+
+/* @var $form \MPSToolbox\Legacy\Forms\FormWithNavigation */
+$form = $displayGroup->getForm();
+
+?>
+
+<?php if ($form->getFormButtonMode() === FormWithNavigation::FORM_BUTTON_MODE_DIALOG) : ?>
+    <ul class="pager">
+        <li class="">
+            <?= $this->RenderFormSubmit($form->getElement('save'), array('class' => 'btn btn-primary')) ?>
+            <span class="divider-vertical"></span>
+            <?= $this->RenderFormSubmit($form->getElement('cancel'), array('class' => 'btn btn-default')) ?>
+        </li>
+    </ul>
+<?php elseif ($form->getFormButtonMode() === FormWithNavigation::FORM_BUTTON_MODE_NAVIGATION) : ?>
+    <ul class="pager">
+        <li class="previous">
+            <?= $this->RenderFormSubmit($form->getElement('goBack'), array('class' => 'btn btn-default')) ?>
+        </li>
+        <li>
+            <?= $this->RenderFormSubmit($form->getElement('save'), array('class' => 'btn btn-success')) ?>
+        </li>
+        <li class="next">
+            <?= $this->RenderFormSubmit($form->getElement('saveAndContinue'), array('class' => 'btn btn-primary')) ?>
+        </li>
+    </ul>
+<?php endif; ?>

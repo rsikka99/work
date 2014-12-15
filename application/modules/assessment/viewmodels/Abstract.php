@@ -1,4 +1,7 @@
 <?php
+use MPSToolbox\Legacy\Modules\Assessment\Mappers\AssessmentMapper;
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel;
 
 /**
  * Class Assessment_ViewModel_Abstract
@@ -11,26 +14,26 @@ class Assessment_ViewModel_Abstract
     protected $_devices;
 
     /**
-     * @var Assessment_Model_Assessment
+     * @var AssessmentModel
      */
     public $assessment;
 
     /**
      * The cost page setting when displaying numbers to a customer
      *
-     * @var Proposalgen_Model_CostPerPageSetting
+     * @var CostPerPageSettingModel
      */
     protected $_costPerPageSettingForCustomer;
     /**
      * The cost page setting when displaying numbers to a dealer
      *
-     * @var Proposalgen_Model_CostPerPageSetting
+     * @var CostPerPageSettingModel
      */
     protected $_costPerPageSettingForDealer;
     /**
      * The cost page setting when selecting replacement devices
      *
-     * @var Proposalgen_Model_CostPerPageSetting
+     * @var CostPerPageSettingModel
      */
     protected $_costPerPageSettingForReplacements;
 
@@ -42,17 +45,17 @@ class Assessment_ViewModel_Abstract
     /**
      * Constructor
      *
-     * @param int|Assessment_Model_Assessment $report The report model, or the id of our report
+     * @param int|AssessmentModel $report The report model, or the id of our report
      */
     public function __construct ($report)
     {
-        if ($report instanceof Assessment_Model_Assessment)
+        if ($report instanceof AssessmentModel)
         {
             $this->assessment = $report;
         }
         else
         {
-            $this->assessment = Assessment_Model_Mapper_Assessment::getInstance()->find($report);
+            $this->assessment = AssessmentMapper::getInstance()->find($report);
         }
     }
 
@@ -65,7 +68,13 @@ class Assessment_ViewModel_Abstract
     {
         if (!isset($this->_devices))
         {
-            $this->_devices = new Assessment_ViewModel_Devices($this->assessment->rmsUploadId, $this->assessment->getAssessmentSettings()->laborCostPerPage, $this->assessment->getAssessmentSettings()->partsCostPerPage, $this->assessment->getAssessmentSettings()->adminCostPerPage);
+            $clientSettings = $this->assessment->getClient()->getClientSettings();
+            $this->_devices = new Assessment_ViewModel_Devices(
+                $this->assessment->rmsUploadId,
+                $clientSettings->currentFleetSettings->defaultLaborCostPerPage,
+                $clientSettings->currentFleetSettings->defaultPartsCostPerPage,
+                $clientSettings->currentFleetSettings->adminCostPerPage
+            );
         }
 
         return $this->_devices;
@@ -74,22 +83,27 @@ class Assessment_ViewModel_Abstract
     /**
      * Gets the cost per page settings for the customers point of view
      *
-     * @return Proposalgen_Model_CostPerPageSetting
+     * @return CostPerPageSettingModel
      */
     public function getCostPerPageSettingForCustomer ()
     {
         if (!isset($this->_costPerPageSettingForCustomer))
         {
-            $this->_costPerPageSettingForCustomer                                          = new Proposalgen_Model_CostPerPageSetting();
-            $assessmentSettings                                                            = $this->assessment->getAssessmentSettings();
-            $this->_costPerPageSettingForCustomer->adminCostPerPage                        = $assessmentSettings->adminCostPerPage;
-            $this->_costPerPageSettingForCustomer->pageCoverageColor                       = $this->getPageCoverageColor();
-            $this->_costPerPageSettingForCustomer->pageCoverageMonochrome                  = $this->getPageCoverageBlackAndWhite();
-            $this->_costPerPageSettingForCustomer->monochromeTonerRankSet                  = $assessmentSettings->getCustomerMonochromeRankSet();
-            $this->_costPerPageSettingForCustomer->colorTonerRankSet                       = $assessmentSettings->getCustomerColorRankSet();
-            $this->_costPerPageSettingForCustomer->useDevicePageCoverages                  = $assessmentSettings->useDevicePageCoverages;
-            $this->_costPerPageSettingForCustomer->pricingMargin                           = $assessmentSettings->assessmentReportMargin;
+            $this->_costPerPageSettingForCustomer = new CostPerPageSettingModel();
+
+            $clientSettings = $this->assessment->getClient()->getClientSettings();
+
+            $this->_costPerPageSettingForCustomer->adminCostPerPage       = $clientSettings->currentFleetSettings->adminCostPerPage;
+            $this->_costPerPageSettingForCustomer->pageCoverageMonochrome = $clientSettings->currentFleetSettings->defaultMonochromeCoverage;
+            $this->_costPerPageSettingForCustomer->pageCoverageColor      = $clientSettings->currentFleetSettings->defaultColorCoverage;
+
+            $this->_costPerPageSettingForCustomer->monochromeTonerRankSet = $clientSettings->currentFleetSettings->getMonochromeRankSet();
+            $this->_costPerPageSettingForCustomer->colorTonerRankSet      = $clientSettings->currentFleetSettings->getColorRankSet();
+            
             $this->_costPerPageSettingForCustomer->useCustomerCostPerPageForManagedDevices = true;
+            
+            $this->_costPerPageSettingForCustomer->useDevicePageCoverages = $clientSettings->currentFleetSettings->useDevicePageCoverages;
+            $this->_costPerPageSettingForCustomer->pricingMargin          = $clientSettings->genericSettings->tonerPricingMargin;
         }
 
         return $this->_costPerPageSettingForCustomer;
@@ -98,23 +112,24 @@ class Assessment_ViewModel_Abstract
     /**
      * Gets the cost per page settings for the dealers point of view
      *
-     * @return Proposalgen_Model_CostPerPageSetting
+     * @return CostPerPageSettingModel
      */
     public function getCostPerPageSettingForDealer ()
     {
         if (!isset($this->_costPerPageSettingForDealer))
         {
-            $this->_costPerPageSettingForDealer = new Proposalgen_Model_CostPerPageSetting();
+            $this->_costPerPageSettingForDealer = new CostPerPageSettingModel();
 
-            $assessmentSettings                                         = $this->assessment->getAssessmentSettings();
-            $this->_costPerPageSettingForDealer->adminCostPerPage       = $assessmentSettings->adminCostPerPage;
-            $this->_costPerPageSettingForDealer->partsCostPerPage       = $assessmentSettings->partsCostPerPage;
-            $this->_costPerPageSettingForDealer->laborCostPerPage       = $assessmentSettings->laborCostPerPage;
-            $this->_costPerPageSettingForDealer->pageCoverageColor      = $assessmentSettings->actualPageCoverageColor;
-            $this->_costPerPageSettingForDealer->pageCoverageMonochrome = $assessmentSettings->actualPageCoverageMono;
-            $this->_costPerPageSettingForDealer->monochromeTonerRankSet = $assessmentSettings->getDealerMonochromeRankSet();
-            $this->_costPerPageSettingForDealer->colorTonerRankSet      = $assessmentSettings->getDealerColorRankSet();
-            $this->_costPerPageSettingForDealer->useDevicePageCoverages = $assessmentSettings->useDevicePageCoverages;
+            $clientSettings                                             = $this->assessment->getClient()->getClientSettings();
+            $this->_costPerPageSettingForDealer->adminCostPerPage       = $clientSettings->proposedFleetSettings->adminCostPerPage;
+            $this->_costPerPageSettingForDealer->pageCoverageMonochrome = $clientSettings->proposedFleetSettings->defaultMonochromeCoverage;
+            $this->_costPerPageSettingForDealer->pageCoverageColor      = $clientSettings->proposedFleetSettings->defaultColorCoverage;
+            $this->_costPerPageSettingForDealer->partsCostPerPage       = $clientSettings->proposedFleetSettings->defaultPartsCostPerPage;
+            $this->_costPerPageSettingForDealer->laborCostPerPage       = $clientSettings->proposedFleetSettings->defaultLaborCostPerPage;
+
+            $this->_costPerPageSettingForDealer->monochromeTonerRankSet = $clientSettings->proposedFleetSettings->getMonochromeRankSet();
+            $this->_costPerPageSettingForDealer->colorTonerRankSet      = $clientSettings->proposedFleetSettings->getColorRankSet();
+            $this->_costPerPageSettingForDealer->useDevicePageCoverages = $clientSettings->proposedFleetSettings->useDevicePageCoverages;
         }
 
         return $this->_costPerPageSettingForDealer;
@@ -127,7 +142,7 @@ class Assessment_ViewModel_Abstract
     {
         if (!isset($this->PageCoverageBlackAndWhite))
         {
-            $this->PageCoverageBlackAndWhite = $this->assessment->getSurvey()->pageCoverageMonochrome;
+            $this->PageCoverageBlackAndWhite = $this->assessment->getClient()->getSurvey()->pageCoverageMonochrome;
         }
 
         return $this->PageCoverageBlackAndWhite;
@@ -140,7 +155,7 @@ class Assessment_ViewModel_Abstract
     {
         if (!isset($this->PageCoverageColor))
         {
-            $this->PageCoverageColor = $this->assessment->getSurvey()->pageCoverageColor;
+            $this->PageCoverageColor = $this->assessment->getClient()->getSurvey()->pageCoverageColor;
         }
 
         return $this->PageCoverageColor;

@@ -1,11 +1,15 @@
 <?php
-/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+/* @var $hardwareOptimization HardwareOptimizationModel */
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationCustomerModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\OptimizationViewModel;
+
 $hardwareOptimization = $this->hardwareOptimization;
 
-/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+/* @var $optimization OptimizationViewModel */
 $optimization = $this->optimization;
 
-/* @var $customerOptimization Hardwareoptimization_Model_Optimization_Customer */
+/* @var $customerOptimization OptimizationCustomerModel */
 $customerOptimization = $this->customerOptimization;
 
 /* @var $graphs array */
@@ -15,7 +19,7 @@ $graphs = $this->graphs;
     <div class="header">
         <div class="title-page-logo-box-wrapper">
             <div class="title-page-logo-box">
-                <img class="title-page-logo" src="<?php echo $this->serverUrl($this->dealerLogoFile) ?> " />
+                <img class="title-page-logo" src="<?= $this->serverUrl($this->dealerLogoFile) ?> " />
             </div>
         </div>
     </div>
@@ -30,8 +34,9 @@ $graphs = $this->graphs;
             <?= $hardwareOptimization->getClient()->companyName; ?>
         </h3>
 
-        <p><?php echo nl2br($hardwareOptimization->getClient()->getAddress()); ?></p>
+        <p><?= nl2br($hardwareOptimization->getClient()->getAddress()); ?></p>
         <br>
-        <p>Date: <?php echo $hardwareOptimization->getFormattedDatePrepared(); ?></p>
+
+        <p>Date: <?= $hardwareOptimization->getFormattedDatePrepared(); ?></p>
     </div>
 </div>

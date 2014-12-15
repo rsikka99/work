@@ -1,4 +1,7 @@
 <?php
+use MPSToolbox\Legacy\Modules\HealthCheck\Models\HealthCheckModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsUploadModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
 
 /**
  * Class Healthcheck_Model_HealthcheckTest
@@ -6,13 +9,13 @@
 class Healthcheck_Model_HealthcheckTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Healthcheck_Model_Healthcheck
+     * @var HealthCheckModel
      */
     protected $_healthcheckModel;
 
     public function setUp ()
     {
-        $this->_healthcheckModel = new Healthcheck_Model_Healthcheck();
+        $this->_healthcheckModel = new HealthCheckModel();
         parent::setUp();
     }
 
@@ -25,9 +28,9 @@ class Healthcheck_Model_HealthcheckTest extends PHPUnit_Framework_TestCase
     public function testCanSetRmsUpload ()
     {
         /**
-         * @var $rmsUpload Proposalgen_Model_Rms_Upload
+         * @var $rmsUpload RmsUploadModel
          */
-        $rmsUpload = $this->getMock('Proposalgen_Model_Rms_Upload');
+        $rmsUpload = $this->getMock('MPSToolbox\Legacy\Modules\ProposalGenerator\Models\Proposalgen_Model_Rms_Upload');
         $this->_healthcheckModel->setRmsUpload($rmsUpload);
         $this->assertEquals($rmsUpload, $this->_healthcheckModel->getRmsUpload());
     }
@@ -35,20 +38,10 @@ class Healthcheck_Model_HealthcheckTest extends PHPUnit_Framework_TestCase
     public function testCanSetClient ()
     {
         /**
-         * @var $client Quotegen_Model_Client
+         * @var $client ClientModel
          */
-        $client = $this->getMock('Quotegen_Model_Client');
+        $client = $this->getMock('MPSToolbox\Legacy\Modules\QuoteGenerator\Models\Quotegen_Model_Client');
         $this->_healthcheckModel->setClient($client);
         $this->assertEquals($client, $this->_healthcheckModel->getClient());
-    }
-
-    public function testCanSetSettings ()
-    {
-        /**
-         * @var $settings Healthcheck_Model_Healthcheck_Setting
-         */
-        $settings = $this->getMock('Healthcheck_Model_Healthcheck_Setting');
-        $this->_healthcheckModel->setHealthcheckSettings($settings);
-        $this->assertEquals($settings, $this->_healthcheckModel->getHealthcheckSettings());
     }
 }

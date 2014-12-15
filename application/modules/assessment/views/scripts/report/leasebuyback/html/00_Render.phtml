@@ -1,10 +1,13 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DealerMasterDeviceAttributeModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+
 $assessmentViewModel = $this->assessmentViewModel;
 ?>
-<div class="container full-width lease-buyback" id="htmlReportContainer">
-    <h2 class="reportTitle">Lease Buyback</h2><br />
-    <table class="mainTable">
+<div class="container-fluid full-width lease-buyback" id="htmlReportContainer">
+    <h2>Lease Buyback</h2>
+    <table class="table table-bordered table-condensed">
         <tbody>
         <tr>
             <th>Device Name</th>
@@ -12,16 +15,12 @@ $assessmentViewModel = $this->assessmentViewModel;
             <th>IP Address</th>
             <th>Lease Buyback Price</th>
         </tr>
-        <?php
-
-        /**
-         * @var $deviceInstance Proposalgen_Model_DeviceInstance
-         */
-        foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance) :
+        <?php foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance) : ?>
+            <?php
             $leaseBuybackPrice            = "-";
             $dealerMasterDeviceAttributes = $deviceInstance->getMasterDevice()->getDealerAttributes();
 
-            if ($dealerMasterDeviceAttributes instanceof Proposalgen_Model_Dealer_Master_Device_Attribute)
+            if ($dealerMasterDeviceAttributes instanceof DealerMasterDeviceAttributeModel)
             {
                 if ($dealerMasterDeviceAttributes->leaseBuybackPrice != null && $dealerMasterDeviceAttributes->leaseBuybackPrice >= 0)
                 {
@@ -31,20 +30,19 @@ $assessmentViewModel = $this->assessmentViewModel;
             ?>
             <tr class="center">
                 <td class="column1">
-                    <div class="center"><?php echo str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) ?></div>
+                    <div class="center"><?= str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) ?></div>
                 </td>
                 <td class="column3">
-                    <div class="center"><?php echo $deviceInstance->serialNumber; ?></div>
+                    <div class="center"><?= $deviceInstance->serialNumber; ?></div>
                 </td>
                 <td class="column2">
-                    <div class="center"><?php echo $deviceInstance->ipAddress; ?></div>
+                    <div class="center"><?= $deviceInstance->ipAddress; ?></div>
                 </td>
                 <td class="column4">
-                    <div class="center"><?php echo $leaseBuybackPrice; ?></div>
+                    <div class="center"><?= $leaseBuybackPrice; ?></div>
                 </td>
             </tr>
-        <?php
-        endforeach; ?>
+        <?php endforeach; ?>
         <tr class="center">
             <td class="column1">
                 <div class="center"><strong>Total</strong></div>
@@ -56,7 +54,9 @@ $assessmentViewModel = $this->assessmentViewModel;
                 <div class="center"></div>
             </td>
             <td class="column4">
-                <div class="center"><strong><?php echo $this->currency($assessmentViewModel->getTotalLeaseBuybackPrice()); ?></strong></div>
+                <div class="center">
+                    <strong><?= $this->currency($assessmentViewModel->getTotalLeaseBuybackPrice()); ?></strong>
+                </div>
             </td>
         </tr>
         </tbody>

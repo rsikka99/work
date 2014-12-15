@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\Admin\Forms\UserForm;
 
 /**
  * Class Admin_Form_UserTest
@@ -16,7 +17,7 @@ class Admin_Form_UserTest extends PHPUnit_Framework_TestCase
     protected $_badData;
 
     /**
-     * @var Admin_Form_User
+     * @var UserForm
      */
     protected $_form;
 
@@ -26,11 +27,11 @@ class Admin_Form_UserTest extends PHPUnit_Framework_TestCase
      * @param      $formMode
      * @param bool $isAdmin
      *
-     * @return \Admin_Form_User
+     * @return \MPSToolbox\Legacy\Modules\Admin\Forms\UserForm
      */
     public function getForm ($formMode, $isAdmin = false)
     {
-        $this->_form = new Admin_Form_User($formMode, $isAdmin);
+        $this->_form = new UserForm($formMode, $isAdmin);
 
         return $this->_form;
     }
@@ -45,38 +46,38 @@ class Admin_Form_UserTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 'Zend_Form_Element_Select',
-                Admin_Form_User::MODE_CREATE,
+                UserForm::MODE_CREATE,
                 'dealerId'
             ),
             array(
                 'Zend_Form_Element_Select',
-                Admin_Form_User::MODE_EDIT,
+                UserForm::MODE_EDIT,
                 'dealerId'
             ),
             array('Zend_Form_Element_Text',
-                  Admin_Form_User::MODE_EDIT,
+                  UserForm::MODE_EDIT,
                   'loginAttempts',
             ),
             array('Zend_Form_Element_Checkbox',
-                  Admin_Form_User::MODE_EDIT,
+                  UserForm::MODE_EDIT,
                   'resetLoginAttempts',
             ),
             array('My_Form_Element_DateTimePicker',
-                  Admin_Form_User::MODE_EDIT,
+                  UserForm::MODE_EDIT,
                   'frozenUntil',
             ),
 
             array('Zend_Form_Element_Checkbox',
-                  Admin_Form_User::MODE_EDIT,
+                  UserForm::MODE_EDIT,
                   'locked',
             ),
             array('Zend_Form_Element_Checkbox',
-                  Admin_Form_User::MODE_EDIT,
+                  UserForm::MODE_EDIT,
                   'reset_password',
             ),
             array(
                 'Zend_Form_Element_Checkbox',
-                Admin_Form_User::MODE_CREATE,
+                UserForm::MODE_CREATE,
                 'resetPasswordOnNextLogin',
             ),
         );
@@ -99,24 +100,24 @@ class Admin_Form_UserTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array('Zend_Form_Element_Text',
-                  Admin_Form_User::MODE_CREATE,
+                  UserForm::MODE_CREATE,
                   'loginAttempts',
             ),
             array('Zend_Form_Element_Checkbox',
-                  Admin_Form_User::MODE_CREATE,
+                  UserForm::MODE_CREATE,
                   'resetLoginAttempts',
             ),
             array('My_Form_Element_DateTimePicker',
-                  Admin_Form_User::MODE_CREATE,
+                  UserForm::MODE_CREATE,
                   'frozenUntil',
             ),
 
             array('Zend_Form_Element_Checkbox',
-                  Admin_Form_User::MODE_CREATE,
+                  UserForm::MODE_CREATE,
                   'locked',
             ),
             array('Zend_Form_Element_Checkbox',
-                  Admin_Form_User::MODE_CREATE,
+                  UserForm::MODE_CREATE,
                   'reset_password',
             ),
         );

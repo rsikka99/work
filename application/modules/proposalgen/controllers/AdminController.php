@@ -1,9 +1,28 @@
 <?php
+use MPSToolbox\Legacy\Modules\ProposalGenerator\DbTables\DeviceInstanceMasterDeviceDbTable;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\DbTables\DeviceTonerDbTable;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\DbTables\ManufacturerDbTable;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\DbTables\MasterDeviceDbTable;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\DbTables\TonerDbTable;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceTonerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\RmsDeviceMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\RmsMasterMatchupMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerVendorManufacturerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\ManufacturerModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsMasterMatchupModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\DeviceMapper;
+use Tangent\Controller\Action;
+use Tangent\Service\JQGrid;
 
 /**
  * Class Proposalgen_AdminController
  */
-class Proposalgen_AdminController extends Tangent_Controller_Action
+class Proposalgen_AdminController extends Action
 {
     /**
      * The application configuration
@@ -42,7 +61,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
-        $this->view->headTitle('Admin Console');
+        $this->_pageTitle = array('Admin Console');
     }
 
     /**
@@ -53,7 +72,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $manufacturerId      = $this->getParam('manufacturerid', false);
         $jsonResponse        = new stdClass();
         $jsonResponse->rows  = array();
-        $master_devicesTable = new Proposalgen_Model_DbTable_MasterDevice();
+        $master_devicesTable = new MasterDeviceDbTable();
         $result              = $master_devicesTable->fetchAll(array('manufacturerId = ?' => $manufacturerId), 'modelName');
 
         if (count($result) > 0)
@@ -88,11 +107,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 // get toners for device
                 $select = $db->select()
                              ->from(array(
-                        't' => 'toners'
-                    ))
+                                 't' => 'toners'
+                             ))
                              ->join(array(
-                        'td' => 'device_toners'
-                    ), 't.id = td.toner_id')
+                                 'td' => 'device_toners'
+                             ), 't.id = td.toner_id')
                              ->where('td.master_device_id = ?', $deviceID);
                 $stmt   = $db->query($select);
 
@@ -109,14 +128,14 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                 $select      = $db->select()
                                   ->from(array(
-                        'md' => 'master_devices'
-                    ))
+                                      'md' => 'master_devices'
+                                  ))
                                   ->joinLeft(array(
-                        'm' => 'manufacturers'
-                    ), 'm.id = md.manufacturerId')
+                                      'm' => 'manufacturers'
+                                  ), 'm.id = md.manufacturerId')
                                   ->joinLeft(array(
-                        'rd' => 'replacement_devices'
-                    ), 'rd.masterDeviceId = md.id')
+                                      'rd' => 'replacement_devices'
+                                  ), 'rd.masterDeviceId = md.id')
                                   ->where('md.id = ?', $deviceID);
                 $stmt        = $db->query($select);
                 $row         = $stmt->fetchAll();
@@ -166,7 +185,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     {
         $master_device_id = $this->_getParam('id', 0);
 
-        $device_instance_master_devicesTable = new Proposalgen_Model_DbTable_Device_Instance_Master_Device();
+        $device_instance_master_devicesTable = new DeviceInstanceMasterDeviceDbTable();
         $where                               = $device_instance_master_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $master_device_id, 'INTEGER');
         $device_instances                    = $device_instance_master_devicesTable->fetchAll($where);
 
@@ -293,11 +312,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
          */
         if ($tonerArray != '')
         {
-            $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchListOfToners($tonerArray, $masterDeviceId);
+            $toners = TonerMapper::getInstance()->fetchListOfToners($tonerArray, $masterDeviceId);
         }
         else if ($masterDeviceId !== false)
         {
-            $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchTonersAssignedToDevice($masterDeviceId);
+            $toners = TonerMapper::getInstance()->fetchTonersAssignedToDevice($masterDeviceId);
         }
 
         if (count($toners) > 0)
@@ -315,7 +334,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     $toner->sku,
                     $toner->getManufacturer()->displayname,
                     'Remove Part Types!',
-                    Proposalgen_Model_TonerColor::$ColorNames[$toner->tonerColorId],
+                    TonerColorModel::$ColorNames[$toner->tonerColorId],
                     $toner->yield,
                     $toner->cost,
                     $masterDeviceId,
@@ -386,10 +405,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             try
             {
                 // GET TONER
-                $toner          = Proposalgen_Model_Mapper_Toner::getInstance()->find($toner_id);
+                $toner          = TonerMapper::getInstance()->find($toner_id);
                 $toner_color_id = $toner->tonerColorId;
                 // GET NUMBER OF DEVICES USING THIS TONER
-                $deviceToners      = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchDeviceTonersByTonerId($toner_id);
+                $deviceToners      = DeviceTonerMapper::getInstance()->fetchDeviceTonersByTonerId($toner_id);
                 $deviceTonersCount = count($deviceToners);
 
                 // GET NUMBER OF DEVICES WHERE LAST TONER FOR THIS COLOR
@@ -511,11 +530,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         try
         {
             // GET TONER
-            $toner          = Proposalgen_Model_Mapper_Toner::getInstance()->find($toner_id);
+            $toner          = TonerMapper::getInstance()->find($toner_id);
             $toner_color_id = $toner->tonerColorId;
 
             // GET NUMBER OF DEVICES USING THIS TONER
-            $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchDeviceTonersByTonerId($toner_id);
+            $deviceToners = DeviceTonerMapper::getInstance()->fetchDeviceTonersByTonerId($toner_id);
 
             // GET NUMBER OF DEVICES WHERE LAST TONER FOR THIS COLOR
             $num_devices_count = 0;
@@ -571,11 +590,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         }
 
         // GET TONER
-        $toner          = Proposalgen_Model_Mapper_Toner::getInstance()->find($replace_id);
+        $toner          = TonerMapper::getInstance()->find($replace_id);
         $toner_color_id = $toner->tonerColorId;
 
         // GET ALL DEVICES USING THIS TONER
-        $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchDeviceTonersByTonerId($replace_id);
+        $deviceToners = DeviceTonerMapper::getInstance()->fetchDeviceTonersByTonerId($replace_id);
 
         $db->beginTransaction();
         try
@@ -590,9 +609,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 {
                     // UPDATE ALL DEVICES WITH THIS TONER (replace_id) TO
                     // REPLACEMENT TONER (with_id)
-                    $device_toner           = Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($replace_id, $deviceToner->master_device_id));
+                    $device_toner           = DeviceTonerMapper::getInstance()->find(array($replace_id, $deviceToner->master_device_id));
                     $device_toner->toner_id = $with_id;
-                    Proposalgen_Model_Mapper_DeviceToner::getInstance()->insert($device_toner);
+                    DeviceTonerMapper::getInstance()->insert($device_toner);
                     $toner_count += 1;
                 }
                 $message = "The toner has been replaced and deleted successfully.";
@@ -612,9 +631,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         {
                             // UPDATE ALL DEVICES WITH THIS TONER (replace_id)
                             // TO REPLACEMENT TONER (with_id)
-                            $device_toner           = Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($replace_id, $master_device_id));
+                            $device_toner           = DeviceTonerMapper::getInstance()->find(array($replace_id, $master_device_id));
                             $device_toner->toner_id = $with_id;
-                            Proposalgen_Model_Mapper_DeviceToner::getInstance()->insert($device_toner);
+                            DeviceTonerMapper::getInstance()->insert($device_toner);
                             $toner_count += 1;
                         }
                         else
@@ -636,9 +655,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             {
                                 // UPDATE THIS DEVICE WITH REPLACEMENT TONER
                                 // (with_id)
-                                $device_toner           = Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($replace_id, $master_device_id));
+                                $device_toner           = DeviceTonerMapper::getInstance()->find(array($replace_id, $master_device_id));
                                 $device_toner->toner_id = $with_id;
-                                Proposalgen_Model_Mapper_DeviceToner::getInstance()->insert($device_toner);
+                                DeviceTonerMapper::getInstance()->insert($device_toner);
                                 $toner_count += 1;
                             }
                         }
@@ -660,17 +679,17 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             // *****************************************************************
 
             // REMOVE DEVICE TONER MAPPINGS
-            $device_tonerTable = new Proposalgen_Model_DbTable_DeviceToner();
+            $device_tonerTable = new DeviceTonerDbTable();
             $where             = $device_tonerTable->getAdapter()->quoteInto('toner_id = ?', $replace_id, 'INTEGER');
             $device_tonerTable->delete($where);
 
             // REMOVE TONER
-            $tonerTable = new Proposalgen_Model_DbTable_Toner();
+            $tonerTable = new TonerDbTable();
             $where      = $tonerTable->getAdapter()->quoteInto('id = ?', $replace_id, 'INTEGER');
             $tonerTable->delete($where);
 
             // Update the toner vendor manufacturer
-            Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->updateTonerVendorByManufacturerId($toner->manufacturerId);
+            TonerVendorManufacturerMapper::getInstance()->updateTonerVendorByManufacturerId($toner->manufacturerId);
 
             $uniqueMasterDevices = array();
             foreach ($deviceToners as $deviceToner)
@@ -681,9 +700,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 }
             }
 
-            $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
+            $masterDeviceMapper = MasterDeviceMapper::getInstance();
 
-            /* @var $uniqueMasterDevices Proposalgen_Model_MasterDevice[] */
+            /* @var $uniqueMasterDevices MasterDeviceModel[] */
             foreach ($uniqueMasterDevices as $masterDevice)
             {
                 $masterDevice->recalculateMaximumRecommendedMonthlyPageVolume();
@@ -712,7 +731,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     public function manufacturerdetailsAction ()
     {
         $manufacturerId    = $this->_getParam('manufacturerid', false);
-        $manufacturerTable = new Proposalgen_Model_DbTable_Manufacturer();
+        $manufacturerTable = new ManufacturerDbTable();
         $manufacturer      = $manufacturerTable->fetchRow(array('id = ?' => $manufacturerId));
 
         try
@@ -774,8 +793,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         {
             // Based on the filter allow the mappers to return the appropriate device
 
-            $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllMasterDevices($sortIndex, $sortOrder, $this->dealerId, $filter, $criteria, $limit, $start, false);
-            $count         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllMasterDevices($sortIndex, $sortOrder, $this->dealerId, $filter, $criteria, $limit, 0, true);
+            $masterDevices = MasterDeviceMapper::getInstance()->fetchAllMasterDevices($sortIndex, $sortOrder, $this->dealerId, $filter, $criteria, $limit, $start, false);
+            $count         = MasterDeviceMapper::getInstance()->fetchAllMasterDevices($sortIndex, $sortOrder, $this->dealerId, $filter, $criteria, $limit, 0, true);
             // Set the total pages that we have
             if ($count > 0)
             {
@@ -905,34 +924,34 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             // Get count
             $select = $db->select()
                          ->from(array(
-                    't' => 'toners'
-                ), $toner_fields_list)
+                             't' => 'toners'
+                         ), $toner_fields_list)
                          ->joinLeft(array(
-                    'dt' => 'device_toners'
-                ), 'dt.toner_id = t.id', array(
-                    'master_device_id'
-                ))
+                             'dt' => 'device_toners'
+                         ), 'dt.toner_id = t.id', array(
+                             'master_device_id'
+                         ))
                          ->joinLeft(array(
-                    'tm' => 'manufacturers'
-                ), 'tm.id = t.manufacturerId', array(
-                    'tm.fullname AS toner_manufacturer'
-                ))
+                             'tm' => 'manufacturers'
+                         ), 'tm.id = t.manufacturerId', array(
+                             'tm.fullname AS toner_manufacturer'
+                         ))
                          ->joinLeft(array(
-                    'md' => 'master_devices'
-                ), 'md.id = dt.master_device_id')
+                             'md' => 'master_devices'
+                         ), 'md.id = dt.master_device_id')
                          ->joinLeft(array(
-                    'mdm' => 'manufacturers'
-                ), 'mdm.id = md.manufacturerId', array(
-                    'mdm.fullname AS manufacturer_name'
-                ))
+                             'mdm' => 'manufacturers'
+                         ), 'mdm.id = md.manufacturerId', array(
+                             'mdm.fullname AS manufacturer_name'
+                         ))
                          ->joinLeft(array(
-                    'tc' => 'toner_colors'
-                ), 'tc.id = t.tonerColorId', array(
-                    'name AS toner_color_name'
-                ))
+                             'tc' => 'toner_colors'
+                         ), 'tc.id = t.tonerColorId', array(
+                             'name AS toner_color_name'
+                         ))
                          ->joinLeft(array(
-                    'dta' => 'dealer_toner_attributes'
-                ), "t.id = dta.tonerId AND dealerId = {$dealerId}", array('cost AS toner_dealer_price', 'dealerSku'))
+                             'dta' => 'dealer_toner_attributes'
+                         ), "t.id = dta.tonerId AND dealerId = {$dealerId}", array('cost AS toner_dealer_price', 'dealerSku'))
                          ->where('t.id > 0' . $where);
 
             if ($where_compatible)
@@ -1006,11 +1025,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
     public function managematchupsAction ()
     {
-        $this->view->headTitle('Manage Printer Matchups');
+        $this->_pageTitle   = array('Manage Printer Matchups');
         $this->view->source = "PrintFleet";
 
         // Fill manufacturers drop down
-        $manufacturersTable            = new Proposalgen_Model_DbTable_Manufacturer();
+        $manufacturersTable            = new ManufacturerDbTable();
         $manufacturers                 = $manufacturersTable->fetchAll('isDeleted = false', 'fullname');
         $this->view->manufacturer_list = $manufacturers;
     }
@@ -1031,16 +1050,16 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         if ($rmsProviderId !== false && $rmsModelId !== false && $masterDeviceId !== false)
         {
             $masterDeviceId = (int)$masterDeviceId;
-            $masterDevice   = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
+            $masterDevice   = MasterDeviceMapper::getInstance()->find($masterDeviceId);
 
             if ($masterDeviceId === 0 || $masterDevice)
             {
-                $rmsDevice = Proposalgen_Model_Mapper_Rms_Device::getInstance()->find(array($rmsProviderId, $rmsModelId));
+                $rmsDevice = RmsDeviceMapper::getInstance()->find(array($rmsProviderId, $rmsModelId));
 
                 if ($rmsDevice)
                 {
                     // If all is good, lets perform our update
-                    $rmsMasterMatchup = Proposalgen_Model_Mapper_Rms_Master_Matchup::getInstance()->find(array($rmsProviderId, $rmsModelId));
+                    $rmsMasterMatchup = RmsMasterMatchupMapper::getInstance()->find(array($rmsProviderId, $rmsModelId));
                     if ($rmsMasterMatchup)
                     {
                         if ($masterDeviceId > 0)
@@ -1049,7 +1068,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             if ($rmsMasterMatchup->masterDeviceId != $masterDeviceId)
                             {
                                 $rmsMasterMatchup->masterDeviceId = $masterDeviceId;
-                                $updateResult                     = Proposalgen_Model_Mapper_Rms_Master_Matchup::getInstance()->save($rmsMasterMatchup);
+                                $updateResult                     = RmsMasterMatchupMapper::getInstance()->save($rmsMasterMatchup);
                                 if ($updateResult === 0)
                                 {
                                     $errorMessage = 'Error while updating the matchup';
@@ -1059,7 +1078,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         else
                         {
                             // Delete
-                            Proposalgen_Model_Mapper_Rms_Master_Matchup::getInstance()->delete($rmsMasterMatchup);
+                            RmsMasterMatchupMapper::getInstance()->delete($rmsMasterMatchup);
                         }
                     }
                     else
@@ -1067,11 +1086,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         if ($masterDeviceId > 0)
                         {
                             // Insert
-                            $rmsMasterMatchup                 = new Proposalgen_Model_Rms_Master_Matchup();
+                            $rmsMasterMatchup                 = new RmsMasterMatchupModel();
                             $rmsMasterMatchup->rmsProviderId  = $rmsProviderId;
                             $rmsMasterMatchup->rmsModelId     = $rmsModelId;
                             $rmsMasterMatchup->masterDeviceId = $masterDeviceId;
-                            $insertResult                     = Proposalgen_Model_Mapper_Rms_Master_Matchup::getInstance()->insert($rmsMasterMatchup);
+                            $insertResult                     = RmsMasterMatchupMapper::getInstance()->insert($rmsMasterMatchup);
                             if (!$insertResult)
                             {
                                 $errorMessage = 'Error while adding the new matchup';
@@ -1116,8 +1135,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
      */
     public function matchuplistAction ()
     {
-        $rmsDeviceMapper = Proposalgen_Model_Mapper_Rms_Device::getInstance();
-        $jqGrid          = new Tangent_Service_JQGrid();
+        $rmsDeviceMapper = RmsDeviceMapper::getInstance();
+        $jqGrid          = new JQGrid();
 
         $jqGridParameters = array(
             'sidx' => $this->_getParam('sidx', 'rmsProviderName'),
@@ -1194,31 +1213,39 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
     /**
      * This action is used for searching for master devices via manufacturerId
-     *
      */
     public function searchForDeviceAction ()
     {
-        $onlyQuoteDevices = $this->_getParam("onlyQuoteDevices", false);
-        $searchTerm       = "%" . implode('%', explode(' ', $this->_getParam('searchTerm', ''))) . "%";
-        $manufacturerId   = $this->_getParam('manufacturerId', false);
+        $masterDeviceId = $this->getParam('masterDeviceId', false);
 
-        $filterByManufacturer = null;
-        if ($manufacturerId !== false)
+        if ($masterDeviceId !== false)
         {
-            $manufacturer = Proposalgen_Model_Mapper_Manufacturer::getInstance()->find($manufacturerId);
-            if ($manufacturer instanceof Proposalgen_Model_Manufacturer)
-            {
-                $filterByManufacturer = $manufacturer->id;
-            }
-        }
-
-        if ($onlyQuoteDevices)
-        {
-            $jsonResponse = Quotegen_Model_Mapper_Device::getInstance()->searchByName($searchTerm, Zend_Auth::getInstance()->getIdentity()->dealerId, $filterByManufacturer);
+            // TODO: Return a result (maybe move this whole thing over to the api module?)
         }
         else
         {
-            $jsonResponse = Proposalgen_Model_Mapper_MasterDevice::getInstance()->searchByName($searchTerm, $filterByManufacturer);
+            $onlyQuoteDevices = $this->_getParam("onlyQuoteDevices", false);
+            $searchTerm       = "%" . implode('%', explode(' ', $this->_getParam('searchTerm', ''))) . "%";
+            $manufacturerId   = $this->_getParam('manufacturerId', false);
+
+            $filterByManufacturer = null;
+            if ($manufacturerId !== false)
+            {
+                $manufacturer = ManufacturerMapper::getInstance()->find($manufacturerId);
+                if ($manufacturer instanceof ManufacturerModel)
+                {
+                    $filterByManufacturer = $manufacturer->id;
+                }
+            }
+
+            if ($onlyQuoteDevices)
+            {
+                $jsonResponse = DeviceMapper::getInstance()->searchByName($searchTerm, Zend_Auth::getInstance()->getIdentity()->dealerId, $filterByManufacturer);
+            }
+            else
+            {
+                $jsonResponse = MasterDeviceMapper::getInstance()->searchByName($searchTerm, $filterByManufacturer);
+            }
         }
 
 

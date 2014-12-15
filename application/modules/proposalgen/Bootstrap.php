@@ -1,4 +1,6 @@
 <?php
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Models\Acl\ProposalgenAclModel;
 
 /**
  * Class Proposalgen_Bootstrap
@@ -29,9 +31,9 @@ class Proposalgen_Bootstrap extends Zend_Application_Module_Bootstrap
     protected function _initAddToAcl ()
     {
         $acl = Zend_Registry::get('Zend_Acl');
-        if ($acl instanceof Application_Model_Acl)
+        if ($acl instanceof AppAclModel)
         {
-            Proposalgen_Model_Acl::setupAcl($acl);
+            ProposalgenAclModel::setupAcl($acl);
         }
     }
 }

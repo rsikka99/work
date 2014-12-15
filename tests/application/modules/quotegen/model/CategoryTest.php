@@ -1,17 +1,19 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\CategoryModel;
+
 class Quotegen_Model_CategoryTest extends PHPUnit_Framework_TestCase
 {
 
     public function testCanCreateCategoryObject ()
     {
-        $category = new Quotegen_Model_Category();
-        $this->assertInstanceOf('Quotegen_Model_Category', $category);
+        $category = new CategoryModel();
+        $this->assertInstanceOf('MPSToolbox\Legacy\Modules\QuoteGenerator\Models\CategoryModel', $category);
     }
 
     public function testCanPopulate ()
     {
-        $category = new Quotegen_Model_Category();
+        $category = new CategoryModel();
         $data     = array(
             'id'          => 1,
             'dealerId'    => 1,

@@ -1,9 +1,13 @@
 <?php
+use MPSToolbox\Legacy\Forms\DeleteConfirmationForm;
+use MPSToolbox\Legacy\Modules\Admin\Services\ClientService;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper;
+use Tangent\Controller\Action;
 
 /**
  * Class Admin_ClientController
  */
-class Admin_ClientController extends Tangent_Controller_Action
+class Admin_ClientController extends Action
 {
     /**
      * @var Zend_Session_Namespace
@@ -20,11 +24,9 @@ class Admin_ClientController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
-        $this->view->headTitle('System');
-        $this->view->headTitle('Clients');
-        $this->view->headTitle('Client Management');
+        $this->_pageTitle = array('System', 'Clients', 'Client Management');
         // Display all of the clients
-        $mapper    = Quotegen_Model_Mapper_Client::getInstance();
+        $mapper    = ClientMapper::getInstance();
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
 
         // Set the current page we're on
@@ -42,31 +44,29 @@ class Admin_ClientController extends Tangent_Controller_Action
      */
     public function deleteAction ()
     {
-        $this->view->headTitle('System');
-        $this->view->headTitle('Clients');
-        $this->view->headTitle('Delete Client');
-        $clientId = $this->_getParam('id', false);
+        $this->_pageTitle = array('System', 'Clients', 'Delete Client');
+        $clientId         = $this->_getParam('id', false);
 
         if (!$clientId)
         {
             $this->_flashMessenger->addMessage(array(
                 'warning' => 'Please select a client to delete first.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('admin.clients');
         }
 
-        $clientMapper = Quotegen_Model_Mapper_Client::getInstance();
+        $clientMapper = ClientMapper::getInstance();
         $client       = $clientMapper->find($clientId);
         if (!$client)
         {
             $this->_flashMessenger->addMessage(array(
                 'danger' => 'There was an error selecting the client to delete.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('admin.clients');
         }
 
         $message = "Are you sure you want to completely delete {$client->companyName} including all quotes, assessments and proposals? <br/>This is an irreversible operation";
-        $form    = new Application_Form_Delete($message);
+        $form    = new DeleteConfirmationForm($message);
 
         $request = $this->getRequest();
         if ($request->isPost())
@@ -79,7 +79,7 @@ class Admin_ClientController extends Tangent_Controller_Action
                     try
                     {
                         // Delete the client from the database
-                        $clientService = new Admin_Service_Client();
+                        $clientService = new ClientService();
                         $clientService->delete($client->id);
                         $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
                         if ($client->id == $this->_mpsSession->selectedClientId)
@@ -92,18 +92,18 @@ class Admin_ClientController extends Tangent_Controller_Action
                         $this->_flashMessenger->addMessage(array(
                             'danger' => "Client {$client->companyName} cannot be deleted since there are  quote(s) attached."
                         ));
-                        $this->redirector('index');
+                        $this->redirectToRoute('admin.clients');
                     }
 
                     $this->_flashMessenger->addMessage(array(
                         'success' => "Client  {$client->companyName} was deleted successfully."
                     ));
-                    $this->redirector('index');
+                    $this->redirectToRoute('admin.clients');
                 }
             }
             else // User has selected cancel button, go back. 
             {
-                $this->redirector('index');
+                $this->redirectToRoute('admin.clients');
             }
         }
         $this->view->form = $form;
@@ -114,16 +114,14 @@ class Admin_ClientController extends Tangent_Controller_Action
      */
     public function createAction ()
     {
-        $this->view->headTitle('System');
-        $this->view->headTitle('Clients');
-        $this->view->headTitle('Create Client');
-        $clientService = new Admin_Service_Client();
+        $this->_pageTitle = array('System', 'Clients', 'Create Client');
+        $clientService    = new ClientService();
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
             if (isset($values ['Cancel']))
             {
-                $this->redirector('index');
+                $this->redirectToRoute('admin.clients');
             }
 
             try
@@ -142,9 +140,8 @@ class Admin_ClientController extends Tangent_Controller_Action
                     'success' => "Client successfully created."
                 ));
                 // Redirect with client id so that the client is preselected
-                $this->redirector('index', null, null, array(
-                    'clientId' => $clientId
-                ));
+                $this->redirectToRoute('admin.clients', array(
+                    'clientId' => $clientId));
             }
             else
             {
@@ -159,15 +156,13 @@ class Admin_ClientController extends Tangent_Controller_Action
 
     public function editAction ()
     {
-        $this->view->headTitle('System');
-        $this->view->headTitle('Clients');
-        $this->view->headTitle('Edit Client');
+        $this->_pageTitle = array('System', 'Clients', 'Edit Client');
         // Get the passed client id
         $clientId = $this->_getParam('id', false);
         // Get the client object from the database
-        $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
+        $client = ClientMapper::getInstance()->find($clientId);
         // Start the client service
-        $clientService = new Admin_Service_Client();
+        $clientService = new ClientService();
         if ($client)
         {
             //This sets the form to not be a dealer management form
@@ -176,14 +171,14 @@ class Admin_ClientController extends Tangent_Controller_Action
         }
         else
         {
-            $this->redirector('index');
+            $this->redirectToRoute('admin.clients');
         }
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
             if (isset($values ['Cancel']))
             {
-                $this->redirector('index');
+                $this->redirectToRoute('admin.clients');
             }
 
             try
@@ -202,7 +197,7 @@ class Admin_ClientController extends Tangent_Controller_Action
                     'success' => "Client {$client->companyName} successfully updated."
                 ));
                 // Redirect with client id so that the client is preselected
-                $this->redirector('index', null, null, array(
+                $this->redirectToRoute('admin.clients', array(
                     'clientId' => $clientId
                 ));
             }

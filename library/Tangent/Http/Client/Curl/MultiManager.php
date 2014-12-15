@@ -1,6 +1,8 @@
 <?php
 
-class Tangent_Http_Client_Curl_MultiManager
+namespace Tangent\Http\Client\Curl;
+
+class MultiManager
 {
     /**
      * Maximum number of all requests.
@@ -19,14 +21,14 @@ class Tangent_Http_Client_Curl_MultiManager
     /**
      * Current running requests.
      *
-     * @var Tangent_Http_Client_Curl_MultiRequest[]
+     * @var MultiRequest[]
      */
     private $_requests = array();
 
     /**
      * Array of failed requests that need to be tried again.
      *
-     * @var Tangent_Http_Client_Curl_MultiRequest[]
+     * @var MultiRequest[]
      */
     private $_retryRequests = array();
 
@@ -52,11 +54,11 @@ class Tangent_Http_Client_Curl_MultiManager
      *
      * @param $url string
      *
-     * @return Tangent_Http_Client_Curl_MultiRequest
+     * @return MultiRequest
      */
     public function newRequest ($url)
     {
-        return new Tangent_Http_Client_Curl_MultiRequest($url);
+        return new MultiRequest($url);
     }
 
     /**
@@ -65,7 +67,7 @@ class Tangent_Http_Client_Curl_MultiManager
      * @param string $key   cURL Option Key
      * @param mixed  $value Value
      *
-     * @return Tangent_Http_Client_Curl_MultiManager
+     * @return MultiManager
      */
     public function setCurlOption ($key, $value)
     {
@@ -81,7 +83,7 @@ class Tangent_Http_Client_Curl_MultiManager
      * @param $maxRequests Number of maximal parallel Requests.
      *
      * @throws InvalidArgumentException
-     * @return Tangent_Http_Client_Curl_MultiManager
+     * @return MultiManager
      */
     public function setMaxRequests ($maxRequests)
     {
@@ -109,7 +111,7 @@ class Tangent_Http_Client_Curl_MultiManager
      * Initializes cURL Multi handle.
      *
      * @throws Exception
-     * @return Tangent_Http_Client_Curl_MultiManager
+     * @return MultiManager
      */
     protected function initCurl ()
     {
@@ -125,12 +127,12 @@ class Tangent_Http_Client_Curl_MultiManager
     /**
      * Start a new Requests or wait till a slot becomes free.
      *
-     * @param Tangent_Http_Client_Curl_MultiRequest $request      Request to start
-     * @param boolean                               $useNewHandle Should a new cURL Handle be used.
+     * @param MultiRequest $request      Request to start
+     * @param boolean      $useNewHandle Should a new cURL Handle be used.
      *
-     * @return Tangent_Http_Client_Curl_MultiManager
+     * @return MultiManager
      */
-    public function startRequest (Tangent_Http_Client_Curl_MultiRequest $request, $useNewHandle = false)
+    public function startRequest (MultiRequest $request, $useNewHandle = false)
     {
 
         // Wait for free slots
@@ -163,7 +165,7 @@ class Tangent_Http_Client_Curl_MultiManager
     /**
      * Finishes all requests and start retries.
      *
-     * @return Tangent_Http_Client_Curl_MultiManager
+     * @return MultiManager
      */
     public function finishAllRequests ()
     {
@@ -195,7 +197,7 @@ class Tangent_Http_Client_Curl_MultiManager
      * Process cURL multi handle and handle finished.
      *
      * @throws Exception
-     * @return Tangent_Http_Client_Curl_MultiManager|bool
+     * @return MultiManager|bool
      */
     protected function processRequests ()
     {
@@ -261,7 +263,7 @@ class Tangent_Http_Client_Curl_MultiManager
      *
      * @param int $max Maximum Number if active requests
      *
-     * @return Tangent_Http_Client_Curl_MultiManager
+     * @return MultiManager
      */
     protected function waitForMaxActive ($max)
     {

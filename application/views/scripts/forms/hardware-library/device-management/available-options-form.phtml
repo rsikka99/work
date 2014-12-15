@@ -1,0 +1,50 @@
+<?php
+
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\AvailableOptionsForm;
+
+/* @var $form AvailableOptionsForm */
+$form = $this->element;
+?>
+
+<?= $this->RenderFormOpen($form, array('js-option-form')) ?>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group <?= ($form->getElement('name')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('name')) ?>
+                <?= $this->RenderFormText($form->getElement('name')) ?>
+                <?= $this->RenderFormDescription($form->getElement('name')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('name')) ?>
+            </div>
+
+            <div class="form-group <?= ($form->getElement('description')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('description')) ?>
+                <?= $this->RenderFormTextArea($form->getElement('description')) ?>
+                <?= $this->RenderFormDescription($form->getElement('description')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('description')) ?>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('cost')) ?>
+                <?= $this->RenderFormText($form->getElement('cost'), array(), '$') ?>
+                <?= $this->RenderFormDescription($form->getElement('cost')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('cost')) ?>
+            </div>
+
+            <div class="form-group <?= ($form->getElement('oemSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('oemSku')) ?>
+                <?= $this->RenderFormText($form->getElement('oemSku')) ?>
+                <?= $this->RenderFormDescription($form->getElement('oemSku')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('oemSku')) ?>
+            </div>
+
+            <div class="form-group <?= ($form->getElement('dealerSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('dealerSku')) ?>
+                <?= $this->RenderFormText($form->getElement('dealerSku')) ?>
+                <?= $this->RenderFormDescription($form->getElement('dealerSku')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('dealerSku')) ?>
+            </div>
+        </div>
+    </div>
+<?= $this->RenderFormHidden($form->getElement('id')) ?>
+<?= $this->RenderFormClose($form) ?>

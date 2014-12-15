@@ -60,7 +60,7 @@ class My_View_Helper_NumberFormat extends Zend_View_Helper_Abstract
         {
             $this->_numberFormat =
                 Zend_Controller_Action_HelperBroker::getStaticHelper(
-                                                   'NumberFormat');
+                    'NumberFormat');
         }
 
         return $this->_numberFormat;

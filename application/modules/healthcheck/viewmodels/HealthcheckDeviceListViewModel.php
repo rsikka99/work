@@ -64,7 +64,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
     }
 
     /**
-     * @return array|Proposalgen_Model_DeviceInstance[]
+     * @return array|\MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel[]
      */
     public function getGetCompatibleWithProgramDevices ()
     {
@@ -98,7 +98,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
     }
 
     /**
-     * @return array|Proposalgen_Model_DeviceInstance[]
+     * @return array|\MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel[]
      */
     public function getNotCompatibleWithProgramDevices ()
     {
@@ -132,7 +132,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
     }
 
     /**
-     * @return array|Proposalgen_Model_DeviceInstance[]
+     * @return array|\MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel[]
      */
     public function getOptimizedDevices ()
     {
@@ -166,7 +166,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
     }
 
     /**
-     * @return array|Proposalgen_Model_DeviceInstance[]
+     * @return array|\MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel[]
      */
     public function getUnderUtilizedDevices ()
     {
@@ -195,7 +195,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
 
                     'percentOfMonthlyCost'           => ($deviceInstance->isLeased)
                         ? $deviceInstance->getLeasedMonthlyRatePercentage(
-                            $this->healthCheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment,
+                            $this->healthCheckViewModel->healthcheck->getClient()->getClientSettings()->genericSettings->defaultMonthlyLeasePayment,
                             $this->healthCheckViewModel->getLeasedBlackAndWhiteCharge(),
                             $this->healthCheckViewModel->getLeasedColorCharge(),
                             $this->healthCheckViewModel->calculateTotalMonthlyCost()
@@ -214,7 +214,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
     }
 
     /**
-     * @return array|Proposalgen_Model_DeviceInstance[]
+     * @return array|\MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel[]
      */
     public function getOverUtilizedDevices ()
     {
@@ -243,7 +243,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
 
                     'percentOfMonthlyCost'           => ($deviceInstance->isLeased)
                         ? $deviceInstance->getLeasedMonthlyRatePercentage(
-                            $this->healthCheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment,
+                            $this->healthCheckViewModel->healthcheck->getClient()->getClientSettings()->genericSettings->defaultMonthlyLeasePayment,
                             $this->healthCheckViewModel->getLeasedBlackAndWhiteCharge(),
                             $this->healthCheckViewModel->getLeasedColorCharge(),
                             $this->healthCheckViewModel->calculateTotalMonthlyCost()
@@ -262,7 +262,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
     }
 
     /**
-     * @return array|Proposalgen_Model_DeviceInstance[]
+     * @return array|\MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel[]
      */
     public function getOldDevices ()
     {
@@ -291,7 +291,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
 
                     'percentOfMonthlyCost'           => ($deviceInstance->isLeased)
                         ? $deviceInstance->getLeasedMonthlyRatePercentage(
-                            $this->healthCheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment,
+                            $this->healthCheckViewModel->healthcheck->getClient()->getClientSettings()->genericSettings->defaultMonthlyLeasePayment,
                             $this->healthCheckViewModel->getLeasedBlackAndWhiteCharge(),
                             $this->healthCheckViewModel->getLeasedColorCharge(),
                             $this->healthCheckViewModel->calculateTotalMonthlyCost()
@@ -310,7 +310,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
     }
 
     /**
-     * @return array|Proposalgen_Model_DeviceInstance[]
+     * @return array|\MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel[]
      */
     public function getDevicesNotReportingTonerLevels ()
     {
@@ -340,7 +340,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
 
                     'percentOfMonthlyCost'           => ($deviceInstance->isLeased)
                         ? $deviceInstance->getLeasedMonthlyRatePercentage(
-                            $this->healthCheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment,
+                            $this->healthCheckViewModel->healthcheck->getClient()->getClientSettings()->genericSettings->defaultMonthlyLeasePayment,
                             $this->healthCheckViewModel->getLeasedBlackAndWhiteCharge(),
                             $this->healthCheckViewModel->getLeasedColorCharge(),
                             $this->healthCheckViewModel->calculateTotalMonthlyCost()
@@ -359,7 +359,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
     }
 
     /**
-     * @return array|Proposalgen_Model_DeviceInstance[]
+     * @return array|\MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel[]
      */
     public function getFaxAndScanDevices ()
     {
@@ -369,7 +369,6 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
             /**
              * Devices Not Reporting Toner Levels Data
              *
-             * @var $deviceInstance Proposalgen_Model_DeviceInstance
              */
             foreach ($this->healthCheckViewModel->getFaxAndScanTableDevices() as $deviceInstance)
             {
@@ -399,7 +398,7 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
     }
 
     /**
-     * @return array|Proposalgen_Model_DeviceInstance[]
+     * @return array|\MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel[]
      */
     public function getA3Devices ()
     {
@@ -409,7 +408,6 @@ class Healthcheck_ViewModel_HealthcheckDeviceListViewModel
             /**
              * Devices Not Reporting Toner Levels Data
              *
-             * @var $deviceInstance Proposalgen_Model_DeviceInstance
              */
             foreach ($this->healthCheckViewModel->getDevices()->a3DeviceInstances->getDeviceInstances() as $deviceInstance)
             {

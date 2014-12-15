@@ -1,44 +1,50 @@
 <?php
+
 /**
  * Include our javascript
  */
-$this->headScript()->appendFile($this->baseUrl('/js/manageMatchups.js'));
-?>
-<div class="page-header">
-    <h1>Manage Printer Matchups</h1>
-</div>
-<div class="alert alert-warning">
-    <p>This page is where you would manage default matchups for printers.</p>
+$this->headScript()->appendFile($this->baseUrl('/js/app/legacy/ManageMatchups.js'));
 
-    <p>
-        <small>Please keep in mind that this will affect all users in the system.</small>
-    </p>
-</div>
-<div class="well">
-    <form class="form-inline" method="post">
-        <div id="filter_container">
-            <div id="criteria_container" style="display: inline; padding: 0;">
-                <label for="criteria_filter">Filter:</label>
-                <select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 200px; margin: 0 0 0 26px;">
-                    <option value="model">Model Id</option>
-                    <option value="printer">Provider Device Name</option>
-                    <option value="onlyUnmapped">Show Only Unmapped</option>
-                </select>
-                <label for="txtCriteria" style="padding: 0 0 0 10px;">for</label>
-                <input type="text" name="txtCriteria" style="width: 200px;" id="txtCriteria" value="<?php echo $this->pf_model_id; ?>" />
-                <input type="button" name="btnSearch" id="btnSearch" value="Search" class='btn btn-info' onclick="update_grid('search');" />
-                <input type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" class='btn' onclick="update_grid('clear');" />
-            </div>
-        </div>
-    </form>
-    <hr>
-    <div id="grid_container">
-        <table id="grid_list"></table>
-        <div id="grid_pager"></div>
-    </div>
-    <div class="form-actions">
+?>
+<div class="container">
+    <div class="alert alert-warning">
+        <p>This page is where you would manage default matchups for printers.</p>
+
         <p>
-            <a href="<?php echo $this->url(array('action' => 'index', 'controller' => 'index', 'module' => 'admin')); ?>" title="Go Back" class="btn btn-inverse">Go Back</a>
+            <small>Please keep in mind that this will affect all users in the system.</small>
         </p>
+    </div>
+    <div class="well">
+        <form class="form-inline" method="post">
+            <div id="filter_container">
+                <div class="form-group">
+                    <label class="control-label" for="criteria_filter">Filter:</label>
+                    <select class="form-control filter_dropdown" name="criteria_filter" id="criteria_filter">
+                        <option value="model">Model Id</option>
+                        <option value="printer">Provider Device Name</option>
+                        <option value="onlyUnmapped">Show Only Unmapped</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="txtCriteria">for</label>
+                    <input class="form-control" type="text" name="txtCriteria" id="txtCriteria" value="<?= $this->pf_model_id ?>" />
+                </div>
+                <div class="form-group btn-group">
+                    <input class='btn btn-info form-control' type="button" name="btnSearch" id="btnSearch" value="Search" onclick="update_grid('search');" />
+                    <input class='btn btn-default form-control' type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" onclick="update_grid('clear');" />
+                </div>
+            </div>
+        </form>
+        <hr>
+        <div id="grid_container">
+            <table id="grid_list"></table>
+            <div id="grid_pager"></div>
+        </div>
+        <div class="form-actions">
+            <p>
+                <a href="<?= $this->url(array(), 'admin'); ?>" title="Go Back" class="btn btn-default">Go
+                    Back</a>
+            </p>
+        </div>
     </div>
 </div>

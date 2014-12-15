@@ -4,6 +4,8 @@
  *
  * This script contains everything for the main table of the cost analysis.
  */
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+
 /* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
@@ -36,7 +38,7 @@ $table->addCell($tcStyle->col5Width, $tcStyle->header->cell)->addText('AMPV', $t
 $table->addCell($tcStyle->col6Width, $tcStyle->header->cell)->addText(sprintf('%1$s Compatible', My_Brand::$jit), $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
 foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
-    /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+    /* @var $deviceInstance DeviceInstanceModel */
 {
     $table->addRow($tcStyle->cell->rowheight, $tcStyle->rowstyle);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText($deviceInstance->getMasterDevice()->getManufacturer()->fullname, $tcStyle->row->fontStyle, $tcStyle->leftalign);

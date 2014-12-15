@@ -1,4 +1,6 @@
 <?php
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentStepsModel;
+use MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentNavigationForm;
 
 /**
  * Class Assessment_Report_IndexController
@@ -37,9 +39,8 @@ class Assessment_Report_IndexController extends Assessment_Library_Controller_Ac
      */
     public function indexAction ()
     {
-        $this->view->headTitle('Assessment');
-        $this->view->headTitle('Report');
-        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
+        $this->_pageTitle = array('Assessment', 'Report');
+        $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         if ($this->getRequest()->isPost())
         {
@@ -51,13 +52,13 @@ class Assessment_Report_IndexController extends Assessment_Library_Controller_Ac
         }
         $this->initReportList();
 
-        $this->view->headScript()->prependFile($this->view->baseUrl("/js/htmlReport.js"));
+        $this->view->headScript()->appendFile($this->view->baseUrl("/js/app/legacy/HtmlReport.js"));
         $this->view->formTitle = "Report Summary";
 
         $assessment              = $this->getAssessment();
         $this->view->companyName = $assessment->getClient()->companyName;
         $this->view->reportName  = $assessment->getClient()->companyName;
 
-        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK);
+        $this->view->navigationForm = new AssessmentNavigationForm(AssessmentNavigationForm::BUTTONS_BACK);
     }
 }

@@ -1,0 +1,62 @@
+<?php
+/* @var $hardwareOptimization HardwareOptimizationModel */
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationDealerModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationDeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\OptimizationViewModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization OptimizationViewModel */
+$optimization = $this->optimization;
+
+/* @var $customerOptimization OptimizationDealerModel */
+$dealerOptimization = $this->dealerOptimization;
+
+/* @var $excessDeviceInstances DeviceInstanceModel[] */
+$excessDeviceInstances = (isset($this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE]) ? $this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE] : array());
+
+/* @var $graphs array */
+$graphs = $this->graphs;
+
+$costPerPageSetting   = $optimization->getCostPerPageSettingForDealer();
+$totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->getCount();
+?>
+<div class="pheader" id="excess">
+    Excess Inventory
+    <em><?= '(' . number_format(count($excessDeviceInstances)) . ')' ?></em>
+</div>
+
+<!-- Only display message and table if there are replacement devices assigned -->
+<?php if ($excessDeviceInstances): ?>
+    <p>The following devices are excess devices that can still be used inside your client's fleet.</p>
+
+    <table class="rDevices">
+        <tr class="header">
+            <th class="device-name">Device Name</th>
+            <th>Serial<br />IP Address</th>
+            <th><?= My_Brand::$jit; ?><br />Compatible</th>
+            <th>Life Page<br />Count</th>
+            <th>Mono CPP</th>
+            <th>Color CPP</th>
+        </tr>
+        <?php foreach ($excessDeviceInstances as $deviceInstance) : ?>
+            <?php
+            $masterDevice = $deviceInstance->getMasterDevice();
+            $isColor      = $masterDevice->isColor();
+            ?>
+            <tr>
+                <td class="device-name"><?= '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>'; ?></td>
+                <td class="serial-number"><?= $deviceInstance->serialNumber . '<br/>' . $deviceInstance->ipAddress . '</em>'; ?></td>
+                <td><?= ($deviceInstance->isCapableOfReportingTonerLevels) ? 'Yes' : 'No'; ?></td>
+                <td class="pageVolume"><?= $this->formatPageVolume($deviceInstance->getMeter()->endMeterLife); ?></td>
+                <td class="cost-per-page"><?= $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage); ?></td>
+                <td class="cost-per-page"><?= ($isColor) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage) : ' - '; ?></td>
+            </tr>
+        <?php endforeach ?>
+    </table>
+<?php else: ?>
+    <em>There are currently no excess devices that can still be used inside your client's fleet.</em>
+<?php endif; ?>
+<br />

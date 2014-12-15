@@ -1,9 +1,14 @@
 <?php
-/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+/* @var $hardwareOptimization HardwareOptimizationModel */
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationDealerModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel;
+
 $hardwareOptimization = $this->hardwareOptimization;
 
 
-/* @var $profitabiltyDevices Hardwareoptimization_Model_Optimization_Dealer */
+/* @var $profitabiltyDevices OptimizationDealerModel */
 $profitabiltyDevices = $this->profitabilityDevices;
 
 
@@ -17,7 +22,7 @@ $showReplacementDevices = $this->showReplacementDevices;
 $showReason             = $this->showReason;
 $cellStyle              = $this->cellStyle;
 
-/* @var $deviceInstances Proposalgen_Model_DeviceInstance[] */
+/* @var $deviceInstances DeviceInstanceModel[] */
 $deviceInstances = $this->deviceInstances;
 
 $section->addTitle($title . " (" . number_format(count($deviceInstances)) . " out of " . number_format($totalNumberOfDevices) . " devices)", 2);
@@ -57,7 +62,7 @@ if (count($deviceInstances) > 0)
     {
         $masterDevice            = $deviceInstance->getMasterDevice();
         $replacementMasterDevice = $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getMasterDevice();
-        $isColor                 = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+        $isColor                 = ($masterDevice->tonerConfigId !== TonerConfigModel::BLACK_ONLY) ? true : false;
         $cycle                   = ($this->cycle(array(true, false))->next()->current());
         if ($cycle)
         {

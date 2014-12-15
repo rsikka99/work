@@ -1,4 +1,15 @@
 <?php
+use MPSToolbox\Legacy\Modules\HealthCheck\Models\HealthCheckModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ClientTonerOrderMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\ClientTonerOrderModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\PageCountsModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerVendorRankingSetModel;
 
 /**
  * Class Healthcheck_ViewModel_Healthcheck
@@ -18,7 +29,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     const OLD_DEVICE_THRESHOLD   = 10;
     const GALLONS_WATER_PER_PAGE = 2.6; // Number of pages * this gives amount of gallons
-    const PAGES_PER_TREE = 7800; //Number of pages divided by this, gives amount of trees
+    const PAGES_PER_TREE         = 7800; //Number of pages divided by this, gives amount of trees
     public static $Proposal;
 
     // New Separated Proposal
@@ -109,51 +120,51 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     protected $CostOfExecutingSuppliesOrder;
     protected $Graphs;
     // Device Replacement
-    protected $DevicesToBeReplaced;
-    protected $UniqueVendorCount;
-    protected $NumberOfOrdersPerMonth;
-    protected $EmployeeCount;
-    protected $ReplacementDevices;
-    protected $ReplacementDeviceCount;
-    protected $LeftOverBlackAndWhitePageCount;
-    protected $LeftOverColorPageCount;
-    protected $LeftOverPrintIQCost;
-    protected $LeftOverCostOfColorDevices;
-    protected $LeftOverCostOfBlackAndWhiteDevices;
-    protected $CostOfRemainingDevices;
-    protected $CurrentCostOfReplacedColorPrinters;
-    protected $CurrentCostOfReplacedBlackAndWhitePrinters;
-    protected $ProposedCostOfReplacedBlackAndWhitePrinters;
-    protected $ProposedCostOfReplacedColorPrinters;
-    protected $CurrentCostOfReplacedColorMFPPrinters;
-    protected $CurrentCostOfReplacedBlackAndWhiteMFPPrinters;
-    protected $ProposedCostOfReplacedBlackAndWhiteMFPPrinters;
-    protected $ProposedCostOfReplacedColorMFPPrinters;
-    protected $TotalProposedAnnualCost;
-    protected $TotalAnnualSavings;
-    protected $GrossMarginMonthlyProfit;
-    protected $GrossMarginOverallMargin;
-    protected $GrossMarginWeightedCPP;
-    protected $GrossMarginBlackAndWhiteMargin;
-    protected $GrossMarginColorMargin;
-    protected $UniqueTonerList;
-    protected $UniquePurchasedTonerList;
-    protected $UniqueDeviceList;
-    protected $UniquePurchasedDeviceList;
-    protected $_averageCompatibleOnlyCostPerPage;
-    protected $_averageOemOnlyCostPerPage;
-    protected $_maximumMonthlyPurchasedPrintVolume;
-    protected $_purchasedTotalMonthlyCost;
-    protected $_purchasedColorMonthlyCost;
-    protected $_purchasedMonochromeMonthlyCost;
-    protected $_optimizedDevices;
-    protected $_includedDevicesSortedAscendingByAge;
-    protected $_includedDevicesSortedDescendingByAge;
-    protected $_uniqueDeviceCountArray;
-    protected $_deviceVendorCount;
-    protected $_underutilizedA3Devices;
-    protected $_pageCounts;
-    public $highCostPurchasedDevices;
+    protected     $DevicesToBeReplaced;
+    protected     $UniqueVendorCount;
+    protected     $NumberOfOrdersPerMonth;
+    protected     $EmployeeCount;
+    protected     $ReplacementDevices;
+    protected     $ReplacementDeviceCount;
+    protected     $LeftOverBlackAndWhitePageCount;
+    protected     $LeftOverColorPageCount;
+    protected     $LeftOverPrintIQCost;
+    protected     $LeftOverCostOfColorDevices;
+    protected     $LeftOverCostOfBlackAndWhiteDevices;
+    protected     $CostOfRemainingDevices;
+    protected     $CurrentCostOfReplacedColorPrinters;
+    protected     $CurrentCostOfReplacedBlackAndWhitePrinters;
+    protected     $ProposedCostOfReplacedBlackAndWhitePrinters;
+    protected     $ProposedCostOfReplacedColorPrinters;
+    protected     $CurrentCostOfReplacedColorMFPPrinters;
+    protected     $CurrentCostOfReplacedBlackAndWhiteMFPPrinters;
+    protected     $ProposedCostOfReplacedBlackAndWhiteMFPPrinters;
+    protected     $ProposedCostOfReplacedColorMFPPrinters;
+    protected     $TotalProposedAnnualCost;
+    protected     $TotalAnnualSavings;
+    protected     $GrossMarginMonthlyProfit;
+    protected     $GrossMarginOverallMargin;
+    protected     $GrossMarginWeightedCPP;
+    protected     $GrossMarginBlackAndWhiteMargin;
+    protected     $GrossMarginColorMargin;
+    protected     $UniqueTonerList;
+    protected     $UniquePurchasedTonerList;
+    protected     $UniqueDeviceList;
+    protected     $UniquePurchasedDeviceList;
+    protected     $_averageCompatibleOnlyCostPerPage;
+    protected     $_averageOemOnlyCostPerPage;
+    protected     $_maximumMonthlyPurchasedPrintVolume;
+    protected     $_purchasedTotalMonthlyCost;
+    protected     $_purchasedColorMonthlyCost;
+    protected     $_purchasedMonochromeMonthlyCost;
+    protected     $_optimizedDevices;
+    protected     $_includedDevicesSortedAscendingByAge;
+    protected     $_includedDevicesSortedDescendingByAge;
+    protected     $_uniqueDeviceCountArray;
+    protected     $_deviceVendorCount;
+    protected     $_underutilizedA3Devices;
+    protected     $_pageCounts;
+    public        $highCostPurchasedDevices;
     public static $COLOR_ARRAY = array(
         "FF7E00", "7CB9E8", "C9FFE5", "B284BE", "5D8AA8", "00308F", "72A0C1", "AF002A", "E32636", "C46210",
         "EFDECD", "A8BB19", "F19CBB", "3B7A57", "FFBF00", "FF9900", "FF033E", "9966CC", "A4C639", "9FA91F",
@@ -178,14 +189,14 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     );
 
     /**
-     * @var Proposalgen_Model_Client_Toner_Order[]
+     * @var ClientTonerOrderModel[]
      */
     protected $_clientTonerOrders;
 
     /**
-     * @param Healthcheck_Model_Healthcheck $report
+     * @param HealthCheckModel $report
      */
-    public function __construct (Healthcheck_Model_Healthcheck $report)
+    public function __construct (HealthCheckModel $report)
     {
         parent::__construct($report);
         $this->DealerCompany = My_Brand::getDealerBranding()->shortDealerName;
@@ -196,22 +207,20 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         // Get the report settings
-        $healthcheckSettings = $this->healthcheck->getHealthcheckSettings();
-
-        Proposalgen_Model_DeviceInstance::$KWH_Cost = $healthcheckSettings->kilowattsPerHour;
+        DeviceInstanceModel::$KWH_Cost = $this->healthcheck->getClient()->getClientSettings()->genericSettings->defaultEnergyCost;
 
         if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly() > 0)
         {
-            Proposalgen_Model_DeviceInstance::$ITCostPerPage = (($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly());
+            DeviceInstanceModel::$ITCostPerPage = (($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly());
         }
         else
         {
-            Proposalgen_Model_DeviceInstance::$ITCostPerPage = 0.0;
+            DeviceInstanceModel::$ITCostPerPage = 0.0;
         }
     }
 
     /**
-     * @return Proposalgen_Model_PageCounts
+     * @return PageCountsModel
      */
     public function getPageCounts ()
     {
@@ -243,7 +252,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->healthcheckMargin))
         {
-            $this->healthcheckMargin = $this->healthcheck->getHealthcheckSettings()->healthcheckMargin;
+            $this->healthcheckMargin = $this->healthcheck->getClient()->getClientSettings()->genericSettings->tonerPricingMargin;
         }
 
         return $this->healthcheckMargin;
@@ -256,8 +265,9 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->CombinedAnnualLeasePayments))
         {
-
-            $this->CombinedAnnualLeasePayments = $this->healthcheck->getHealthcheckSettings()->monthlyLeasePayment * $this->getDevices()->leasedDeviceInstances->getCount() * 12;
+            $this->CombinedAnnualLeasePayments =
+                $this->healthcheck->getClient()->getClientSettings()->genericSettings->defaultMonthlyLeasePayment *
+                $this->getDevices()->leasedDeviceInstances->getCount() * 12;
         }
 
         return $this->CombinedAnnualLeasePayments;
@@ -270,7 +280,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->LeasedBlackAndWhiteCharge))
         {
-            $this->LeasedBlackAndWhiteCharge = $this->healthcheck->getHealthcheckSettings()->leasedBwCostPerPage;
+            $this->LeasedBlackAndWhiteCharge = $this->healthcheck->getClient()->getClientSettings()->genericSettings->leasedMonochromeCostPerPage;
         }
 
         return $this->LeasedBlackAndWhiteCharge;
@@ -283,7 +293,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->LeasedColorCharge))
         {
-            $this->LeasedColorCharge = $this->healthcheck->getHealthcheckSettings()->leasedColorCostPerPage;
+            $this->LeasedColorCharge = $this->healthcheck->getClient()->getClientSettings()->genericSettings->leasedColorCostPerPage;
         }
 
         return $this->LeasedColorCharge;
@@ -319,7 +329,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             if ($this->getDevices()->purchasedDeviceInstances->getCount())
             {
                 $averageAge                          = $totalAge / $this->getDevices()->purchasedDeviceInstances->getCount();
-                $this->AnnualCostOfHardwarePurchases = ($this->getDevices()->allIncludedDeviceInstances->getCount() / $averageAge) * $this->healthcheck->getHealthcheckSettings()->defaultPrinterCost;
+                $this->AnnualCostOfHardwarePurchases = ($this->getDevices()->allIncludedDeviceInstances->getCount() / $averageAge) * $this->healthcheck->getClient()->getClientSettings()->genericSettings->defaultPrinterCost;
             }
             else
             {
@@ -332,7 +342,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
 
     /**
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param CostPerPageSettingModel $costPerPageSetting
      *
      * @return float
      */
@@ -353,7 +363,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param CostPerPageSettingModel $costPerPageSetting
      *
      * @return float
      */
@@ -460,7 +470,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getUnderutilizedA3Devices ()
     {
@@ -488,8 +498,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * Callback function for uSort when we want to sort a device based on its a3 page volume
      *
-     * @param $deviceA \Proposalgen_Model_DeviceInstance
-     * @param $deviceB \Proposalgen_Model_DeviceInstance
+     * @param $deviceA \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel
+     * @param $deviceB \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel
      *
      * @return int
      */
@@ -504,7 +514,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getUnderutilizedDevices ()
     {
@@ -525,7 +535,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getOverutilizedDevices ()
     {
@@ -547,7 +557,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
 
     /**
-     * @return \Proposalgen_Model_DeviceInstance[]
+     * @return \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel[]
      */
     public function getLeastUsedDevices ()
     {
@@ -572,8 +582,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * Callback function for uSort when we want to sort a device based on usage
      *
-     * @param $deviceA \Proposalgen_Model_DeviceInstance
-     * @param $deviceB \Proposalgen_Model_DeviceInstance
+     * @param $deviceA \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel
+     * @param $deviceB \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel
      *
      * @return int
      */
@@ -591,8 +601,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      * Callback function for uSort when we want to sort a device based on
      * monthly cost
      *
-     * @param Proposalgen_Model_DeviceInstance $deviceA
-     * @param Proposalgen_Model_DeviceInstance $deviceB
+     * @param DeviceInstanceModel $deviceA
+     * @param DeviceInstanceModel $deviceB
      *
      * @return int
      */
@@ -609,8 +619,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * Callback function for uSort when we want to sort a device based on usage
      *
-     * @param \Proposalgen_Model_DeviceInstance $deviceA
-     * @param \Proposalgen_Model_DeviceInstance $deviceB
+     * @param \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel $deviceA
+     * @param \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel $deviceB
      *
      * @return int
      */
@@ -625,7 +635,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getOptimizedDevices ()
     {
@@ -665,7 +675,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getMostUsedDevices ()
     {
@@ -706,7 +716,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getHighPowerConsumptionDevices ()
     {
@@ -724,17 +734,17 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param CostPerPageSettingModel $costPerPageSetting
      *
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
-    public function getMonthlyHighCostPurchasedColorDevices (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    public function getMonthlyHighCostPurchasedColorDevices (CostPerPageSettingModel $costPerPageSetting)
     {
         if (!isset($this->HighCostDevices))
         {
             $deviceArray = $this->getDevices()->purchasedDeviceInstances->getDeviceInstances();
             $costArray   = array();
-            /**@var $value Proposalgen_Model_DeviceInstance */
+            /**@var $value DeviceInstanceModel */
             foreach ($deviceArray as $key => $deviceInstance)
             {
                 if ($deviceInstance->getMasterDevice()->isColor())
@@ -762,8 +772,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      * Callback function for uSort when we want to sort a device based on power
      * consumption
      *
-     * @param Proposalgen_Model_DeviceInstance $deviceA
-     * @param Proposalgen_Model_DeviceInstance $deviceB
+     * @param DeviceInstanceModel $deviceA
+     * @param DeviceInstanceModel $deviceB
      *
      * @return int
      */
@@ -781,8 +791,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      * Callback function for uSort when we want to sort a device based on power
      * consumption
      *
-     * @param Proposalgen_Model_DeviceInstance $deviceA
-     * @param Proposalgen_Model_DeviceInstance $deviceB
+     * @param DeviceInstanceModel $deviceA
+     * @param DeviceInstanceModel $deviceB
      *
      * @return int
      */
@@ -813,18 +823,18 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * Calculates the average cost per page for only toners that are OEM.
      *
-     * @return Proposalgen_Model_CostPerPage
+     * @return CostPerPageModel
      */
     public function calculateAverageOemOnlyCostPerPage ()
     {
         if (!isset($this->_averageOemOnlyCostPerPage))
         {
             $costPerPageSetting                         = clone $this->getCostPerPageSettingForCustomer();
-            $oemRankSet                                 = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+            $oemRankSet                                 = new TonerVendorRankingSetModel();
             $costPerPageSetting->monochromeTonerRankSet = $oemRankSet;
             $costPerPageSetting->colorTonerRankSet      = $oemRankSet;
 
-            $costPerPage                        = new Proposalgen_Model_CostPerPage();
+            $costPerPage                        = new CostPerPageModel();
             $costPerPage->monochromeCostPerPage = 0;
             $costPerPage->colorCostPerPage      = 0;
             $numberOfColorDevices               = 0;
@@ -845,9 +855,18 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                     $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfColorDevices;
                 }
             }
-            $costPerPage->monochromeCostPerPage = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->healthcheck->getHealthcheckSettings()->healthcheckMargin);
-            $costPerPage->colorCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->healthcheck->getHealthcheckSettings()->healthcheckMargin);
-            $this->_averageOemOnlyCostPerPage   = $costPerPage;
+
+            $costPerPage->monochromeCostPerPage = \Tangent\Accounting::applyMargin(
+                $costPerPage->monochromeCostPerPage,
+                $this->healthcheck->getClient()->getClientSettings()->genericSettings->tonerPricingMargin
+            );
+
+            $costPerPage->colorCostPerPage = \Tangent\Accounting::applyMargin(
+                $costPerPage->colorCostPerPage,
+                $this->healthcheck->getClient()->getClientSettings()->genericSettings->tonerPricingMargin
+            );
+
+            $this->_averageOemOnlyCostPerPage = $costPerPage;
         }
 
         return $this->_averageOemOnlyCostPerPage;
@@ -856,14 +875,14 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * Calculates the average cost per page for only toners that are Comp.
      *
-     * @return Proposalgen_Model_CostPerPage
+     * @return CostPerPageModel
      */
     public function calculateAverageCompatibleOnlyCostPerPage ()
     {
         if (!isset($this->_averageCompatibleOnlyCostPerPage))
         {
             $costPerPageSetting   = clone $this->getCostPerPageSettingForCustomer();
-            $costPerPage          = new Proposalgen_Model_CostPerPage();
+            $costPerPage          = new CostPerPageModel();
             $numberOfColorDevices = 0;
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
@@ -882,8 +901,17 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                     $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfDevices;
                 }
             }
-            $costPerPage->monochromeCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->healthcheck->getHealthcheckSettings()->healthcheckMargin);
-            $costPerPage->colorCostPerPage           = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->healthcheck->getHealthcheckSettings()->healthcheckMargin);
+
+            $costPerPage->monochromeCostPerPage = \Tangent\Accounting::applyMargin(
+                $costPerPage->monochromeCostPerPage,
+                $this->healthcheck->getClient()->getClientSettings()->genericSettings->tonerPricingMargin
+            );
+
+            $costPerPage->colorCostPerPage = \Tangent\Accounting::applyMargin(
+                $costPerPage->colorCostPerPage,
+                $this->healthcheck->getClient()->getClientSettings()->genericSettings->tonerPricingMargin
+            );
+
             $this->_averageCompatibleOnlyCostPerPage = $costPerPage;
         }
 
@@ -929,7 +957,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->AveragePowerCostPerMonth))
         {
-            $this->AveragePowerCostPerMonth = $this->getAveragePowerUsagePerMonth() * Proposalgen_Model_DeviceInstance::getKWH_Cost();
+            $this->AveragePowerCostPerMonth = $this->getAveragePowerUsagePerMonth() * DeviceInstanceModel::getKWH_Cost();
 
         }
 
@@ -960,7 +988,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getDevicesNotReportingTonerLevels ()
     {
@@ -1019,8 +1047,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * Callback function for uSort when we want to sort devices based on age
      *
-     * @param Proposalgen_Model_DeviceInstance $deviceA
-     * @param Proposalgen_Model_DeviceInstance $deviceB
+     * @param DeviceInstanceModel $deviceA
+     * @param DeviceInstanceModel $deviceB
      *
      * @return int
      */
@@ -1035,7 +1063,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getOldDevices ()
     {
@@ -1066,7 +1094,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->WeeklyITHours))
         {
-            $this->WeeklyITHours = $this->healthcheck->getHealthcheckSettings()->hoursSpentOnIt;
+            $this->WeeklyITHours = $this->healthcheck->getClient()->getSurvey()->hoursSpentOnIt;
             if (!$this->WeeklyITHours)
             {
                 $this->WeeklyITHours = $this->getDevices()->allIncludedDeviceInstances->getCount() * 0.25;
@@ -1096,7 +1124,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->AverageITRate))
         {
-            $this->AverageITRate = $this->healthcheck->getHealthcheckSettings()->averageItHourlyRate;
+            $this->AverageITRate = $this->healthcheck->getClient()->getSurvey()->averageItHourlyRate;
         }
 
         return $this->AverageITRate;
@@ -1281,7 +1309,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- AverageMonthlyPagesPerEmployeeBarGraph
              */
-            $pagesPerEmployee = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $employeeCount);
+            $pagesPerEmployee = ($employeeCount > 0) ? round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $employeeCount) : 0;
             $highest          = (Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
             $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average Monthly Pages|per Employee");
@@ -1458,7 +1486,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->CostOfExecutingSuppliesOrders))
         {
-            $this->CostOfExecutingSuppliesOrders = $this->healthcheck->getHealthcheckSettings()->costToExecuteSuppliesOrder * $this->healthcheck->getHealthcheckSettings()->numberOfSupplyOrdersPerMonth * 12;
+            $this->CostOfExecutingSuppliesOrders = $this->healthcheck->getClient()->getSurvey()->costToExecuteSuppliesOrder * $this->healthcheck->getClient()->getSurvey()->numberOfSupplyOrdersPerMonth * 12;
         }
 
         return $this->CostOfExecutingSuppliesOrders;
@@ -1484,7 +1512,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->AnnualCostOfOutSourcing))
         {
-            $this->AnnualCostOfOutSourcing = $this->healthcheck->getHealthcheckSettings()->costOfLabor;
+            $this->AnnualCostOfOutSourcing = $this->healthcheck->getClient()->getSurvey()->costOfLabor;
             if ($this->AnnualCostOfOutSourcing === null)
             {
                 $this->AnnualCostOfOutSourcing = $this->getDevices()->purchasedDeviceInstances->getCount() * 200;
@@ -1566,7 +1594,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_MasterDevice[]
+     * @return MasterDeviceModel[]
      */
     public function getUniquePurchasedDeviceList ()
     {
@@ -1587,7 +1615,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_Toner[]
+     * @return TonerModel[]
      */
     public function getUniquePurchasedTonerList ()
     {
@@ -1670,7 +1698,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_MasterDevice[]
+     * @return MasterDeviceModel[]
      */
     public function getUniqueDeviceList ()
     {
@@ -1736,19 +1764,19 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         {
             switch ($deviceInstance->getMasterDevice()->tonerConfigId)
             {
-                case Proposalgen_Model_TonerConfig::BLACK_ONLY:
+                case TonerConfigModel::BLACK_ONLY:
                     $maximumNumberOfSupplyTypes += 1;
                     $hasMonoDevices = true;
                     break;
-                case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED:
+                case TonerConfigModel::THREE_COLOR_SEPARATED:
                     $maximumNumberOfSupplyTypes += 4;
                     $hasColorDevices = true;
                     break;
-                case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED:
+                case TonerConfigModel::THREE_COLOR_COMBINED:
                     $maximumNumberOfSupplyTypes += 2;
                     $hasThreeColorCombinedDevices = true;
                     break;
-                case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED:
+                case TonerConfigModel::FOUR_COLOR_COMBINED:
                     $maximumNumberOfSupplyTypes += 1;
                     $hasFourColorCombinedDevices = true;
                     break;
@@ -2670,7 +2698,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- AverageMonthlyPagesPerEmployeeBarGraph
              */
-            $pagesPerEmployee = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $employeeCount);
+            $pagesPerEmployee = ($employeeCount > 0) ? round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $employeeCount) : 0;
             $highest          = (Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
             $barGraph         = new gchart\gBarChart(165, 300);
             $barGraph->setTitle("Average Monthly Pages|per Employee");
@@ -3241,13 +3269,13 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return int|Proposalgen_Model_Client_Toner_Order[]
+     * @return int|ClientTonerOrderModel[]
      */
     public function getClientTonerOrders ()
     {
         if (!isset($this->_clientTonerOrders))
         {
-            $this->_clientTonerOrders = Proposalgen_Model_Mapper_Client_Toner_Order::getInstance()->fetchAllForClient($this->healthcheck->clientId, $this->healthcheck->dealerId);
+            $this->_clientTonerOrders = ClientTonerOrderMapper::getInstance()->fetchAllForClient($this->healthcheck->clientId, $this->healthcheck->dealerId);
             usort($this->_clientTonerOrders, array(
                 $this,
                 "descendingSortClientTonerOrdersByNetSavings"
@@ -3260,8 +3288,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * Callback function for uSort when we want to sort Client Toner Orders by their net savings
      *
-     * @param $clientTonerA \Proposalgen_Model_Client_Toner_Order
-     * @param $clientTonerB \Proposalgen_Model_Client_Toner_Order
+     * @param $clientTonerA \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\ClientTonerOrderModel
+     * @param $clientTonerB \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\ClientTonerOrderModel
      *
      * @return int
      */
@@ -3345,7 +3373,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $totalOemCost = 0.0;
             foreach ($this->getClientTonerOrders() as $clientTonerOrder)
             {
-                if ($clientTonerOrder->getToner() instanceof Proposalgen_Model_Toner)
+                if ($clientTonerOrder->getToner() instanceof TonerModel)
                 {
                     if ($clientTonerOrder->getToner()->isCompatible())
                     {
@@ -3396,7 +3424,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $totalOptimizedCost = 0.0;
             foreach ($this->getClientTonerOrders() as $clientTonerOrder)
             {
-                if ($clientTonerOrder->getReplacementToner() instanceof Proposalgen_Model_Toner)
+                if ($clientTonerOrder->getReplacementToner() instanceof TonerModel)
                 {
                     $totalOptimizedCost += $clientTonerOrder->getReplacementTonerCost($this->getHealthcheckMargin()) * $clientTonerOrder->quantity;
                 }
@@ -3425,7 +3453,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * Gets the list of fax/scan capable devices sorted by scan volume
      *
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getFaxAndScanTableDevices ()
     {
@@ -3453,8 +3481,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * Callback function for uSort when we want to sort a device based on its scan and fax page volume
      *
-     * @param $deviceA \Proposalgen_Model_DeviceInstance
-     * @param $deviceB \Proposalgen_Model_DeviceInstance
+     * @param $deviceA \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel
+     * @param $deviceB \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel
      *
      * @return int
      */

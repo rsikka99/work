@@ -1,50 +1,55 @@
-<?php $quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */ ?>
-<div class="row">
-    <div class="span12">
-        <?php foreach ($quote->getQuoteDeviceGroups() as $quoteDeviceGroup) : /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */ ?>
-            <?php if ($quoteDeviceGroup->calculateTotalQuantity() > 0) : ?>
-                <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
-                    <tr class="header-row">
-                        <th style="width: 220px;">Item</th>
-                        <th style="width: 140px;">SKU</th>
-                        <th>Description and Features</th>
-                        <th style="width: 80px;">Price</th>
-                        <th style="width: 40px;">Qty</th>
-                        <th style="width: 70px;">Subtotal</th>
-                    </tr>
-                    <?php foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice) : /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */ ?>
-                        <?php if ($quoteDeviceGroupDevice->quantity > 0) : ?>
-                            <tr class="deviceRow">
-                                <th><h5><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->name; ?></h5></th>
-                                <td><?php echo $quoteDeviceGroupDevice->getQuoteDevice()->oemSku; ?></td>
-                                <td></td>
-                                <td style="text-align: right;"><?php echo $this->currency($quoteDeviceGroupDevice->getQuoteDevice()->calculatePackagePrice()); ?></td>
-                                <td style="text-align: right;"><?php echo number_format($quoteDeviceGroupDevice->quantity); ?></td>
-                                <td style="text-align: right;"><?php echo $this->currency($quoteDeviceGroupDevice->getQuoteDevice()->calculateTotalPrice()); ?></td>
-                            </tr>
-                            <?php if (count($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions()) > 0) : ?>
-                                <?php foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
-                                    <tr class="optionRow">
-                                        <td><?php echo $quoteDeviceOption->name; ?></td>
-                                        <td><?php echo $quoteDeviceOption->oemSku; ?></td>
-                                        <td><?php echo $quoteDeviceOption->description; ?></td>
-                                        <td></td>
-                                        <td style="text-align: right"><?= number_format($quoteDeviceOption->quantity); ?></td>
-                                        <td></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
+<?php
+
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+
+/* @var $quote QuoteModel */
+$quote = $this->Quote(); ?>
+<div class="col-sm-12">
+    <?php foreach ($quote->getQuoteDeviceGroups() as $quoteDeviceGroup) : ?>
+        <?php if ($quoteDeviceGroup->calculateTotalQuantity() > 0) : ?>
+            <table class="table table-condensed table-bordered table-striped">
+                <tr class="header-row">
+                    <th style="width: 220px;">Item</th>
+                    <th style="width: 140px;">SKU</th>
+                    <th>Description and Features</th>
+                    <th style="width: 80px;">Price</th>
+                    <th style="width: 40px;">Qty</th>
+                    <th style="width: 70px;">Subtotal</th>
+                </tr>
+                <?php foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice) : ?>
+                    <?php if ($quoteDeviceGroupDevice->quantity > 0) : ?>
+                        <tr class="deviceRow">
+                            <th>
+                                <h5><?= $quoteDeviceGroupDevice->getQuoteDevice()->name; ?></h5>
+                            </th>
+                            <td><?= $quoteDeviceGroupDevice->getQuoteDevice()->oemSku; ?></td>
+                            <td></td>
+                            <td style="text-align: right;"><?= $this->currency($quoteDeviceGroupDevice->getQuoteDevice()->calculatePackagePrice()); ?></td>
+                            <td style="text-align: right;"><?= number_format($quoteDeviceGroupDevice->quantity); ?></td>
+                            <td style="text-align: right;"><?= $this->currency($quoteDeviceGroupDevice->getQuoteDevice()->calculateTotalPrice()); ?></td>
+                        </tr>
+                        <?php if (count($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions()) > 0) : ?>
+                            <?php foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption) : ?>
+                                <tr class="optionRow">
+                                    <td><?= $quoteDeviceOption->name; ?></td>
+                                    <td><?= $quoteDeviceOption->oemSku; ?></td>
+                                    <td><?= $quoteDeviceOption->description; ?></td>
+                                    <td></td>
+                                    <td style="text-align: right"><?= number_format($quoteDeviceOption->quantity); ?></td>
+                                    <td></td>
+                                </tr>
+                            <?php endforeach; ?>
                         <?php endif; ?>
-                    <?php endforeach; ?>
-                    <tr>
-                        <td colspan="5"></td>
-                        <th style="text-align: right;"><?php echo $this->currency($quoteDeviceGroup->calculateGroupSubtotal()); ?></th>
-                    </tr>
-                </table>
-            <?php endif; ?>
-        <?php endforeach; ?>
-        <div class='pull-right'>
-            <h3>Quote Total: <?php echo $this->currency($quote->calculateQuoteSubtotal()); ?></h3>
-        </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+                <tr>
+                    <td colspan="5"></td>
+                    <th style="text-align: right;"><?= $this->currency($quoteDeviceGroup->calculateGroupSubtotal()); ?></th>
+                </tr>
+            </table>
+        <?php endif; ?>
+    <?php endforeach; ?>
+    <div class='pull-right'>
+        <h3>Quote Total: <?= $this->currency($quote->calculateQuoteSubtotal()); ?></h3>
     </div>
 </div>

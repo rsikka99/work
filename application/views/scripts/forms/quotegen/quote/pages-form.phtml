@@ -1,0 +1,225 @@
+<?php
+
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\QuotePageForm;
+
+/* @var $form QuotePageForm */
+$form  = $this->element;
+$quote = $form->getQuote();
+?>
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<p class="text-right"><i class="fa fa-fw fa-info-circle"></i> Skip this step for a purchased quote or MPS Hardware</p>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <h4>
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse1"> Page Settings </a>
+            </h4>
+        </div>
+        <div id="collapse1" class="accordion-body in">
+            <div class="accordion-inner">
+                <div class='row'>
+                    <div class='span12'>
+                        <div class="row">
+                            <div class='span4'>
+
+                                <div class="form-group <?= ($form->getElement('adminCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                                    <?= $this->RenderFormLabel($form->getElement('adminCostPerPage'), array('col-md-3')) ?>
+
+                                    <div class="col-md-2">
+                                        <?= $this->RenderFormText($form->getElement('adminCostPerPage')) ?>
+                                        <?= $this->RenderFormDescription($form->getElement('adminCostPerPage')) ?>
+                                        <?= $this->RenderFormElementErrors($form->getElement('adminCostPerPage')) ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-group <?= ($form->getElement('pageCoverageColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                                    <?= $this->RenderFormLabel($form->getElement('pageCoverageColor'), array('col-md-3')) ?>
+
+                                    <div class="col-md-2">
+                                        <?= $this->RenderFormText($form->getElement('pageCoverageColor')) ?>
+                                        <?= $this->RenderFormDescription($form->getElement('pageCoverageColor')) ?>
+                                        <?= $this->RenderFormElementErrors($form->getElement('pageCoverageColor')) ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-group <?= ($form->getElement('pageCoverageMonochrome')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                                    <?= $this->RenderFormLabel($form->getElement('pageCoverageMonochrome'), array('col-md-3')) ?>
+
+                                    <div class="col-md-2">
+                                        <?= $this->RenderFormText($form->getElement('pageCoverageMonochrome')) ?>
+                                        <?= $this->RenderFormDescription($form->getElement('pageCoverageMonochrome')) ?>
+                                        <?= $this->RenderFormElementErrors($form->getElement('pageCoverageMonochrome')) ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+
+                            <div class="col-md-offset-1">
+                                <h5> Monochrome Toner Preference </h5>
+
+                                <div class="form-group <?= ($form->getElement('dealerMonochromeRankSetArray')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                                    <?= $this->RenderFormLabel($form->getElement('dealerMonochromeRankSetArray'), array('col-md-3')) ?>
+
+                                    <div class="col-md-5">
+                                        <?= $this->RenderFormSelect($form->getElement('dealerMonochromeRankSetArray')) ?>
+                                        <?= $this->RenderFormDescription($form->getElement('dealerMonochromeRankSetArray')) ?>
+                                        <?= $this->RenderFormElementErrors($form->getElement('dealerMonochromeRankSetArray')) ?>
+                                    </div>
+                                </div>
+                                <em class="col-md-offset-3">OEM toners will be used by default</em>
+                                <br />
+                                <br />
+
+                                <p> Color Toner Preference </p>
+
+                                <div class="form-group <?= ($form->getElement('dealerColorRankSetArray')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                                    <?= $this->RenderFormLabel($form->getElement('dealerColorRankSetArray'), array('col-md-3')) ?>
+
+                                    <div class="col-md-5">
+                                        <?= $this->RenderFormSelect($form->getElement('dealerColorRankSetArray')) ?>
+                                        <?= $this->RenderFormDescription($form->getElement('dealerColorRankSetArray')) ?>
+                                        <?= $this->RenderFormElementErrors($form->getElement('dealerColorRankSetArray')) ?>
+                                    </div>
+                                </div>
+                                <em class="col-md-offset-3">OEM toners will be used by default</em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php foreach ($quote->getQuoteDeviceGroups() as $quoteDeviceGroup) : ?>
+    <h3><?php echo $quoteDeviceGroup->name; ?></h3>
+    <table class='table table-bordered table-striped table-condensed'>
+        <tr class='header-row'>
+            <th style='width: 225px;'>Device</th>
+            <th>SKU</th>
+            <th style='width: 50px;'> Quantity</th>
+            <th style='width: 100px;'> Black CPP</th>
+            <th style='width: 80px;'> Black Pages Per Device</th>
+            <th style='width: 100px;'> Color CPP</th>
+            <th style='width: 80px;'> Color Pages Per Device</th>
+        </tr>
+        <tr>
+            <?php foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice) : ?>
+            <?php $quoteDevice = $quoteDeviceGroupDevice->getQuoteDevice(); ?>
+            <td><?php echo $quoteDevice->name; ?></td>
+            <td><?php echo $quoteDevice->oemSku; ?></td>
+            <td><?php echo $quoteDeviceGroupDevice->quantity ?>
+            <td><?php echo $this->formatCostPerPage($quoteDevice->calculateMonochromeCostPerPage()); ?></td>
+            <td class="form-group <?= ($form->getElement('quantity_monochrome_' . $quoteDeviceGroup->id . '_' . $quoteDeviceGroupDevice->quoteDeviceId)->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormText($form->getElement('quantity_monochrome_' . $quoteDeviceGroup->id . '_' . $quoteDeviceGroupDevice->quoteDeviceId)) ?>
+                <?= $this->RenderFormDescription($form->getElement('quantity_monochrome_' . $quoteDeviceGroup->id . '_' . $quoteDeviceGroupDevice->quoteDeviceId)) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('quantity_monochrome_' . $quoteDeviceGroup->id . '_' . $quoteDeviceGroupDevice->quoteDeviceId)) ?>
+            </td>
+            <td><?php echo(($quoteDeviceGroupDevice->getQuoteDevice()->isColorCapable()) ? $this->formatCostPerPage($quoteDevice->calculateColorCostPerPage()) : 'N/A'); ?></td>
+            <?php if ($quoteDeviceGroupDevice->getQuoteDevice()->isColorCapable()) : ?>
+                <td class="form-group <?= ($form->getElement('quantity_color_' . $quoteDeviceGroup->id . '_' . $quoteDeviceGroupDevice->quoteDeviceId)->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormText($form->getElement('quantity_color_' . $quoteDeviceGroup->id . '_' . $quoteDeviceGroupDevice->quoteDeviceId)) ?>
+                    <?= $this->RenderFormDescription($form->getElement('quantity_color_' . $quoteDeviceGroup->id . '_' . $quoteDeviceGroupDevice->quoteDeviceId)) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('quantity_color_' . $quoteDeviceGroup->id . '_' . $quoteDeviceGroupDevice->quoteDeviceId)) ?>
+                </td>
+            <?php else: ?>
+                <td>N/A</td>
+            <?php endif; ?>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+<?php endforeach; ?>
+
+<div class="row">
+    <div class="col-sm-6">
+        <h3> Included Pages </h3>
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <th></th>
+                <th>Monochrome</th>
+                <th>Color</th>
+            </tr>
+            <tr>
+                <th>Quantity</th>
+                <td> <?php echo $quote->calculateTotalMonochromePages(); ?>  </td>
+                <td> <?php echo $quote->calculateTotalColorPages(); ?>  </td>
+            </tr>
+            <tr>
+                <th>Est. CPP</th>
+                <td> <?php echo $this->formatCostPerPage($quote->calculateMonochromeCostPerPage()); ?>  </td>
+                <td> <?php echo $this->formatCostPerPage($quote->calculateColorCostPerPage()); ?>  </td>
+            </tr>
+            <tr>
+                <th>Margin (%)</th>
+                <td class="form-group col-md-3 <?= ($form->getElement('monochromePageMargin')->hasErrors()) ?: '' ?>">
+                    <?= $this->RenderFormText($form->getElement('monochromePageMargin')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('monochromePageMargin')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('monochromePageMargin')) ?>
+                </td>
+                <td class="form-group col-md-3  <?= ($form->getElement('colorPageMargin')->hasErrors()) ?: '' ?>">
+                    <?= $this->RenderFormText($form->getElement('colorPageMargin')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('colorPageMargin')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('colorPageMargin')) ?>
+                </td>
+            </tr>
+            <tr>
+                <th>Price Per Page</th>
+                <td> <?php echo $this->formatCostPerPage($quote->calculateMonochromePricePerPage()); ?></td>
+                <td> <?php echo $this->formatCostPerPage($quote->calculateColorPricePerPage()); ?></td>
+            </tr>
+            <tr>
+                <th>Monthly Cost</th>
+                <td> <?php echo $this->currency($quote->calculateMonochromePageCost()); ?></td>
+                <td> <?php echo $this->currency($quote->calculateColorPageCost()); ?></td>
+            </tr>
+            <tr>
+                <th>Monthly Revenue</th>
+                <td> <?php echo $this->currency($quote->calculateMonochromePageRevenue()); ?></td>
+                <td> <?php echo $this->currency($quote->calculateColorPageRevenue()); ?></td>
+            </tr>
+            <tr>
+                <th>Monthly Profit</th>
+                <td> <?php echo $this->currency($quote->calculateMonochromePageProfit()); ?></td>
+                <td> <?php echo $this->currency($quote->calculateColorPageProfit()); ?></td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-sm-6">
+        <h3> Overage Pages </h3>
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <th></th>
+                <th>Monochrome</th>
+                <th>Color</th>
+            </tr>
+            <tr>
+                <th>Est. CPP</th>
+                <td> <?php echo $this->formatCostPerPage($quote->calculateMonochromeCostPerPage()); ?>  </td>
+                <td> <?php echo $this->formatCostPerPage($quote->calculateColorCostPerPage()); ?>  </td>
+            </tr>
+            <tr>
+                <th>Margin (%)</th>
+                <td class="form-group col-md-3 <?= ($form->getElement('monochromeOverageMargin')->hasErrors()) ?: '' ?>">
+                    <?= $this->RenderFormText($form->getElement('monochromeOverageMargin')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('monochromeOverageMargin')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('monochromeOverageMargin')) ?>
+                </td>
+                <td class="form-group col-md-3 <?= ($form->getElement('colorOverageMargin')->hasErrors()) ?: '' ?>">
+                    <?= $this->RenderFormText($form->getElement('colorOverageMargin')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('colorOverageMargin')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('colorOverageMargin')) ?>
+                </td>
+            </tr>
+            <tr>
+                <th>Overage Rate Per Page</th>
+                <td> <?php echo $this->formatCostPerPage($quote->calculateMonochromeOverageRatePerPage()); ?></td>
+                <td> <?php echo $this->formatCostPerPage($quote->calculateColorOverageRatePerPage()); ?></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<?= $form->getDisplayGroup('form-actions') ?>
+<?= $this->RenderFormClose($form) ?>

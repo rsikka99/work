@@ -1,194 +1,125 @@
 <?php
+
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
+
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 ?>
 
-<div>
-    <h2 class="reportTitle"><?php echo My_Brand::$jit; ?> Supply and Toner SKU Report</h2><br />
+<div class="jumbotron">
+    <h2><?= My_Brand::$jit; ?> Supply and Toner SKU Report</h2>
+
+    <p>This is a list of all the unique supplies and SKUs in the fleet</p>
 </div>
 
-<div class="container full-width jit-toner" id="htmlReportContainer">
-    <table class="essentialsTable">
+<div class="container-fluid full-width jit-toner" id="htmlReportContainer">
+    <table class="table table-bordered table-condensed">
         <thead>
         <tr>
-            <th class="topleftcell" colspan="3"></th>
+            <th colspan="3"></th>
             <th colspan="12">Customer Preferred</th>
             <th colspan="12">Dealer Preferred</th>
         </tr>
         <tr>
-            <th class="column1">Device Name</th>
-            <th class="column2">Serial Number</th>
-            <th class="column3">IP Address</th>
-            <th class="column4">Black SKU</th>
-            <th class="column5">Black Cost</th>
-            <th class="column6">Cyan SKU</th>
-            <th class="column7">Cyan Cost</th>
-            <th class="column8">Magenta SKU</th>
-            <th class="column9">Magenta Cost</th>
-            <th class="column10">Yellow SKU</th>
-            <th class="column11">Yellow Cost</th>
-            <th class="column12">3Color SKU</th>
-            <th class="column13">3Color Cost</th>
-            <th class="column14">4Color SKU</th>
-            <th class="column15">4Color Cost</th>
-            <th class="column16">Black SKU</th>
-            <th class="column17">Black Cost</th>
-            <th class="column18">Cyan SKU</th>
-            <th class="column19">Cyan Cost</th>
-            <th class="column20">Magenta SKU</th>
-            <th class="column21">Magenta Cost</th>
-            <th class="column22">Yellow SKU</th>
-            <th class="column23">Yellow Cost</th>
-            <th class="column24">3Color SKU</th>
-            <th class="column25">3Color Cost</th>
-            <th class="column26">4Color SKU</th>
-            <th class="column27">4Color Cost</th>
-
+            <th>Device Name</th>
+            <th>Serial Number</th>
+            <th>IP Address</th>
+            <th>Black SKU</th>
+            <th>Black Cost</th>
+            <th>Cyan SKU</th>
+            <th>Cyan Cost</th>
+            <th>Magenta SKU</th>
+            <th>Magenta Cost</th>
+            <th>Yellow SKU</th>
+            <th>Yellow Cost</th>
+            <th>3Color SKU</th>
+            <th>3Color Cost</th>
+            <th>4Color SKU</th>
+            <th>4Color Cost</th>
+            <th>Black SKU</th>
+            <th>Black Cost</th>
+            <th>Cyan SKU</th>
+            <th>Cyan Cost</th>
+            <th>Magenta SKU</th>
+            <th>Magenta Cost</th>
+            <th>Yellow SKU</th>
+            <th>Yellow Cost</th>
+            <th>3Color SKU</th>
+            <th>3Color Cost</th>
+            <th>4Color SKU</th>
+            <th>4Color Cost</th>
         </tr>
         </thead>
         <tbody>
         <?php
         $customerCostPerPageSetting = $assessmentViewModel->getCostPerPageSettingForCustomer();
-        $dealerCostPerPageSetting = $assessmentViewModel->getCostPerPageSettingForDealer();
-        foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance) :
+        $dealerCostPerPageSetting   = $assessmentViewModel->getCostPerPageSettingForDealer();
+        ?>
+        <?php foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance) : ?>
+            <?php
             $toners           = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($customerCostPerPageSetting);
             $compatibleToners = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($dealerCostPerPageSetting);
             ?>
+            <tr>
+                <td class="device-name"><?= str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) ?></td>
+                <td class="serial-number"><?= $deviceInstance->serialNumber; ?></td>
+                <td class="ip-address"><?= $deviceInstance->ipAddress; ?></td>
 
-            <tr class="center">
-                <td class="column1">
-                    <div class="center"><?php echo str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) ?></div>
-                </td>
-                <td class="column3">
-                    <div class="center"><?php echo $deviceInstance->serialNumber; ?></div>
-                </td>
-                <td class="column2">
-                    <div class="center"><?php echo $deviceInstance->ipAddress; ?></div>
-                </td>
                 <!-- OEM -->
-                <td class="column4">
-                    <div class="center"><?php echo (isset($toners[Proposalgen_Model_TonerColor::BLACK])) ? $toners[Proposalgen_Model_TonerColor::BLACK]->sku : "-"; ?></div>
-                </td>
-                <td class="column5">
-                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::BLACK])) ? $this->currency($toners[Proposalgen_Model_TonerColor::BLACK]->cost) : "-"; ?></div>
-                </td>
-                <td class="column6">
-                    <div class="center"><?php echo (isset($toners[Proposalgen_Model_TonerColor::CYAN])) ? $toners[Proposalgen_Model_TonerColor::CYAN]->sku : "-"; ?></div>
-                </td>
-                <td class="column7">
-                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::CYAN])) ? $this->currency($toners[Proposalgen_Model_TonerColor::CYAN]->cost) : "-"; ?></div>
-                </td>
-                <td class="column8">
-                    <div class="center"><?php echo (isset($toners[Proposalgen_Model_TonerColor::MAGENTA])) ? $toners[Proposalgen_Model_TonerColor::MAGENTA]->sku : "-"; ?></div>
-                </td>
-                <td class="column9">
-                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::MAGENTA])) ? $this->currency($toners[Proposalgen_Model_TonerColor::MAGENTA]->cost) : "-"; ?></div>
-                </td>
-                <td class="column10">
-                    <div class="center"><?php echo (isset($toners[Proposalgen_Model_TonerColor::YELLOW])) ? $toners[Proposalgen_Model_TonerColor::YELLOW]->sku : "-"; ?></div>
-                </td>
-                <td class="column11">
-                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::YELLOW])) ? $this->currency($toners[Proposalgen_Model_TonerColor::YELLOW]->cost) : "-"; ?></div>
-                </td>
-                <td class="column12">
-                    <div class="center"><?php echo (isset($toners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? $toners[Proposalgen_Model_TonerColor::THREE_COLOR]->sku : "-"; ?></div>
-                </td>
-                <td class="column13">
-                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? $this->currency($toners[Proposalgen_Model_TonerColor::THREE_COLOR]->cost) : "-"; ?></div>
-                </td>
-                <td class="column14">
-                    <div class="center"><?php echo (isset($toners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $toners[Proposalgen_Model_TonerColor::FOUR_COLOR]->sku : "-"; ?></div>
-                </td>
-                <td class="column15">
-                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $this->currency($toners[Proposalgen_Model_TonerColor::FOUR_COLOR]->cost) : "-"; ?></div>
-                </td>
+                <td class="sku"><?= (isset($toners[TonerColorModel::BLACK])) ? $toners[TonerColorModel::BLACK]->sku : "-"; ?></td>
+                <td class="cost"><?= (isset($toners[TonerColorModel::BLACK])) ? $this->currency($toners[TonerColorModel::BLACK]->cost) : "-"; ?></td>
+                <td class="sku"><?= (isset($toners[TonerColorModel::CYAN])) ? $toners[TonerColorModel::CYAN]->sku : "-"; ?></td>
+                <td class="cost"><?= (isset($toners[TonerColorModel::CYAN])) ? $this->currency($toners[TonerColorModel::CYAN]->cost) : "-"; ?></td>
+                <td class="sku"><?= (isset($toners[TonerColorModel::MAGENTA])) ? $toners[TonerColorModel::MAGENTA]->sku : "-"; ?></td>
+                <td class="cost"><?= (isset($toners[TonerColorModel::MAGENTA])) ? $this->currency($toners[TonerColorModel::MAGENTA]->cost) : "-"; ?></td>
+                <td class="sku"><?= (isset($toners[TonerColorModel::YELLOW])) ? $toners[TonerColorModel::YELLOW]->sku : "-"; ?></td>
+                <td class="cost"><?= (isset($toners[TonerColorModel::YELLOW])) ? $this->currency($toners[TonerColorModel::YELLOW]->cost) : "-"; ?></td>
+                <td class="sku"><?= (isset($toners[TonerColorModel::THREE_COLOR])) ? $toners[TonerColorModel::THREE_COLOR]->sku : "-"; ?></td>
+                <td class="cost"><?= (isset($toners[TonerColorModel::THREE_COLOR])) ? $this->currency($toners[TonerColorModel::THREE_COLOR]->cost) : "-"; ?></td>
+                <td class="sku"><?= (isset($toners[TonerColorModel::FOUR_COLOR])) ? $toners[TonerColorModel::FOUR_COLOR]->sku : "-"; ?></td>
+                <td class="cost"><?= (isset($toners[TonerColorModel::FOUR_COLOR])) ? $this->currency($toners[TonerColorModel::FOUR_COLOR]->cost) : "-"; ?></td>
+
                 <!-- COMPATIBLE -->
-                <td class="column16">
-                    <div class="center"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::BLACK])) ? $compatibleToners[Proposalgen_Model_TonerColor::BLACK]->sku : "-"; ?></div>
-                </td>
-                <td class="column16">
-                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::BLACK])) ? $this->currency($compatibleToners[Proposalgen_Model_TonerColor::BLACK]->cost) : "-"; ?></div>
-                </td>
-                <td class="column18">
-                    <div class="center"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::CYAN])) ? $compatibleToners[Proposalgen_Model_TonerColor::CYAN]->sku : "-"; ?></div>
-                </td>
-                <td class="column18">
-                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::CYAN])) ? $this->currency($compatibleToners[Proposalgen_Model_TonerColor::CYAN]->cost) : "-"; ?></div>
-                </td>
-                <td class="column20">
-                    <div class="center"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::MAGENTA])) ? $compatibleToners[Proposalgen_Model_TonerColor::MAGENTA]->sku : "-"; ?></div>
-                </td>
-                <td class="column20">
-                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::MAGENTA])) ? $this->currency($compatibleToners[Proposalgen_Model_TonerColor::MAGENTA]->cost) : "-"; ?></div>
-                </td>
-                <td class="column22">
-                    <div class="center"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::YELLOW])) ? $compatibleToners[Proposalgen_Model_TonerColor::YELLOW]->sku : "-"; ?></div>
-                </td>
-                <td class="column23">
-                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::YELLOW])) ? $this->currency($compatibleToners[Proposalgen_Model_TonerColor::YELLOW]->cost) : "-"; ?></div>
-                </td>
-                <td class="column24">
-                    <div class="center"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? $compatibleToners[Proposalgen_Model_TonerColor::THREE_COLOR]->sku : "-"; ?></div>
-                </td>
-                <td class="column25">
-                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? $compatibleToners[Proposalgen_Model_TonerColor::THREE_COLOR]->cost : "-"; ?></div>
-                </td>
-                <td class="column26">
-                    <div class="center"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $compatibleToners[Proposalgen_Model_TonerColor::FOUR_COLOR]->sku : "-"; ?></div>
-                </td>
-                <td class="column27">
-                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $this->currency($compatibleToners[Proposalgen_Model_TonerColor::FOUR_COLOR]->cost) : "-"; ?></div>
-                </td>
+                <td class="sku"><?= (isset($compatibleToners[TonerColorModel::BLACK])) ? $compatibleToners[TonerColorModel::BLACK]->sku : "-"; ?></td>
+                <td class="cost"><?= (isset($compatibleToners[TonerColorModel::BLACK])) ? $this->currency($compatibleToners[TonerColorModel::BLACK]->cost) : "-"; ?></td>
+                <td class="sku"><?= (isset($compatibleToners[TonerColorModel::CYAN])) ? $compatibleToners[TonerColorModel::CYAN]->sku : "-"; ?></td>
+                <td class="cost"><?= (isset($compatibleToners[TonerColorModel::CYAN])) ? $this->currency($compatibleToners[TonerColorModel::CYAN]->cost) : "-"; ?></td>
+                <td class="sku"><?= (isset($compatibleToners[TonerColorModel::MAGENTA])) ? $compatibleToners[TonerColorModel::MAGENTA]->sku : "-"; ?></td>
+                <td class="cost"><?= (isset($compatibleToners[TonerColorModel::MAGENTA])) ? $this->currency($compatibleToners[TonerColorModel::MAGENTA]->cost) : "-"; ?></td>
+                <td class="sku"><?= (isset($compatibleToners[TonerColorModel::YELLOW])) ? $compatibleToners[TonerColorModel::YELLOW]->sku : "-"; ?></td>
+                <td class="cost"><?= (isset($compatibleToners[TonerColorModel::YELLOW])) ? $this->currency($compatibleToners[TonerColorModel::YELLOW]->cost) : "-"; ?></td>
+                <td class="sku"><?= (isset($compatibleToners[TonerColorModel::THREE_COLOR])) ? $compatibleToners[TonerColorModel::THREE_COLOR]->sku : "-"; ?></td>
+                <td class="cost"><?= (isset($compatibleToners[TonerColorModel::THREE_COLOR])) ? $compatibleToners[TonerColorModel::THREE_COLOR]->cost : "-"; ?></td>
+                <td class="sku"><?= (isset($compatibleToners[TonerColorModel::FOUR_COLOR])) ? $compatibleToners[TonerColorModel::FOUR_COLOR]->sku : "-"; ?></td>
+                <td class="cost"><?= (isset($compatibleToners[TonerColorModel::FOUR_COLOR])) ? $this->currency($compatibleToners[TonerColorModel::FOUR_COLOR]->cost) : "-"; ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
     </table>
 
-
-
-    <?php
-    $excludedDevices = $assessmentViewModel->getExcludedDevices();
-    if (count($excludedDevices) > 0) : ?>
-
-        <div>
-            <br />
-
-            <h3 class="reportTitle">Excluded Devices</h3><br />
+    <?php $excludedDevices = $assessmentViewModel->getExcludedDevices(); ?>
+    <?php if (count($excludedDevices) > 0) : ?>
+        <div class="jumbotron">
+            <h2>Excluded Devices</h2>
         </div>
 
-        <table class="essentialsTable" id="ExcludedDevicesTable" style="font-size: 9pt;">
+        <table class="table table-bordered table-condensed" id="ExcludedDevicesTable" style="font-size: 9pt;">
             <thead>
             <tr>
-                <th class="left">Device Name</th>
-                <th class="center">IP Address</th>
-                <th class="center">Serial Number</th>
-                <th class="center">Exclusion Reason</th>
+                <th>Device Name</th>
+                <th>IP Address</th>
+                <th>Serial Number</th>
+                <th>Exclusion Reason</th>
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($excludedDevices as $deviceInstance):
-                /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
-                ?>
-                <?php $SerialNumber = (strlen($deviceInstance->serialNumber) === "") ? 'Unknown Serial' : $deviceInstance->serialNumber; ?>
+            <?php foreach ($excludedDevices as $deviceInstance): ?>
                 <tr>
-                    <td>
-                        <div class=" left"><?php echo $deviceInstance->getDeviceName(); ?>
-                            <td>
-                                <div class=" left"><?php if ($deviceInstance->ipAddress)
-                                    {
-                                        echo $deviceInstance->ipAddress;
-                                    }
-                                    else
-                                    {
-                                        echo 'Unknown IP';
-                                    }?></div>
-                            </td>
-                            <td>
-                                <div class=" center"><?php echo $SerialNumber; ?></div>
-                            </td>
-                            <td>
-                                <div class=" left"><?php echo $deviceInstance->_exclusionReason; ?></div>
-                            </td>
+                    <td class="device-name"><?= $deviceInstance->getDeviceName(); ?></td>
+                    <td class="ip-address"><?= ($deviceInstance->ipAddress) ?: 'Unknown IP' ?></td>
+                    <td><?= (strlen($deviceInstance->serialNumber) === "") ? 'Unknown Serial' : $deviceInstance->serialNumber; ?></td>
+                    <td><?= $deviceInstance->_exclusionReason; ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

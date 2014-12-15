@@ -1,9 +1,15 @@
 <?php
+use MPSToolbox\Legacy\Forms\DeleteConfirmationForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\CategoryForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\OptionCategoryMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\CategoryMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\CategoryModel;
+use Tangent\Controller\Action;
 
 /**
  * Class Quotegen_CategoryController
  */
-class Quotegen_CategoryController extends Tangent_Controller_Action
+class Quotegen_CategoryController extends Action
 {
 
     public function init ()
@@ -14,7 +20,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
     public function indexAction ()
     {
         // Get all current items in categories table
-        $categoryMapper = new Quotegen_Model_Mapper_Category();
+        $categoryMapper = new CategoryMapper();
         $paginator      = new Zend_Paginator(new My_Paginator_MapperAdapter($categoryMapper, array('dealerId = ?' => Zend_Auth::getInstance()->getIdentity()->dealerId)));
 
         // Set current page
@@ -36,18 +42,18 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'warning' => 'Please select a category to delete first.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.category-options');
         }
 
-        // Get a Quotegen_Model_Category object from the id that was passed.
-        $category = Quotegen_Model_Mapper_Category::getInstance()->find($categoryId);
+        // Get a MPSToolbox\Legacy\Modules\QuoteGenerator\Models\CategoryModel object from the id that was passed.
+        $category = CategoryMapper::getInstance()->find($categoryId);
 
         if (!$category)
         {
             $this->_flashMessenger->addMessage(array(
                 'danger' => 'There was an error selecting the category to delete.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.category-options');
         }
         // If we are trying to access a category from another dealer, kick them back to index
         if ($category && $category->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
@@ -56,10 +62,10 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                 'danger' => 'You do not have permission to access this.'
             ));
             // Redirect
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.category-options');
         }
         $message = "Are you sure you want to delete {$category->name}?";
-        $form    = new Application_Form_Delete($message);
+        $form    = new DeleteConfirmationForm($message);
         $request = $this->getRequest();
 
         if ($request->isPost())
@@ -72,16 +78,16 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                     if ($form->isValid($values))
                     {
                         // Delete the entry from the lookup table by the category id.
-                        Quotegen_Model_Mapper_OptionCategory::getInstance()->deleteByCategoryId($categoryId);
+                        OptionCategoryMapper::getInstance()->deleteByCategoryId($categoryId);
                         // Delete the entry from the category table.
-                        Quotegen_Model_Mapper_Category::getInstance()->delete($category);
+                        CategoryMapper::getInstance()->delete($category);
 
                         $this->_flashMessenger->addMessage(array(
                             'success' => "Category  {$this->view->escape($category->name)} was deleted successfully."
                         ));
 
                         // Redirect the user back to index action of this controller.
-                        $this->redirector('index');
+                        $this->redirectToRoute('quotes.category-options');
                     }
                 }
                 catch (Exception $e)
@@ -94,7 +100,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
             else
             {
                 // Redirect the user back to index action of this controller.
-                $this->redirector('index');
+                $this->redirectToRoute('quotes.category-options');
             }
         }
         $this->view->form = $form;
@@ -102,7 +108,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
 
     public function createAction ()
     {
-        $form    = new Quotegen_Form_Category();
+        $form    = new CategoryForm();
         $request = $this->getRequest();
 
         if ($request->isPost())
@@ -116,13 +122,13 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                     if ($form->isValid($values))
                     {
                         // Attempt to save the category to the database.
-                        $category           = new Quotegen_Model_Category();
+                        $category           = new CategoryModel();
                         $category->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
                         $category->populate($values);
-                        Quotegen_Model_Mapper_Category::getInstance()->insert($category);
+                        CategoryMapper::getInstance()->insert($category);
 
                         // Redirect client back to index
-                        $this->redirector('index');
+                        $this->redirectToRoute('quotes.category-options');
                     }
                     else
                     {
@@ -140,7 +146,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
             }
             else // If user has selected cancel send user back to the index pages of this Controller
             {
-                $this->redirector('index');
+                $this->redirectToRoute('quotes.category-options');
             }
         }
         $this->view->form = $form;
@@ -155,12 +161,12 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'warning' => 'Please select a category first.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.category-options');
         }
 
         // Find client and pass form object
-        $form     = new Quotegen_Form_Category();
-        $category = Quotegen_Model_Mapper_Category::getInstance()->find($categoryId);
+        $form     = new CategoryForm();
+        $category = CategoryMapper::getInstance()->find($categoryId);
 
         // If we are trying to access a category from another dealer, kick them back to index
         if ($category && $category->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
@@ -169,7 +175,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                 'danger' => 'You do not have permission to access this.'
             ));
             // Redirect
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.category-options');
         }
         $form->populate($category->toArray());
 
@@ -187,13 +193,13 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                         // Update quote setting and message to confirm
                         $category->populate($values);
                         $category->id = $categoryId;
-                        Quotegen_Model_Mapper_Category::getInstance()->save($category, $categoryId);
+                        CategoryMapper::getInstance()->save($category, $categoryId);
 
                         $this->_flashMessenger->addMessage(array(
                             'success' => "Category was updated successfully."
                         ));
 
-                        $this->redirector('index');
+                        $this->redirectToRoute('quotes.category-options');
                     }
                     else
                     {
@@ -212,7 +218,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled - redirect
-                $this->redirector('index');
+                $this->redirectToRoute('quotes.category-options');
             }
         }
         $this->view->form = $form;
@@ -223,7 +229,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
         $categoryId = $this->_getParam('id', false);
 
         // Get the client
-        $mapper   = new Quotegen_Model_Mapper_Category();
+        $mapper   = new CategoryMapper();
         $category = $mapper->find($categoryId);
         // If we are trying to access a category from another dealer, kick them back to index
         if ($category && $category->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
@@ -232,7 +238,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                 'danger' => 'You do not have permission to access this.'
             ));
             // Redirect
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.category-options');
         }
         $this->view->category = $category;
     }

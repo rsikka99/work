@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="yes"?>
+<currentFleetSettingsGoodData>
+    <testData>
+        <data>
+            <currentUseDevicePageCoverages>5</currentUseDevicePageCoverages>
+            <currentPageCoverageMono>5</currentPageCoverageMono>
+            <currentPageCoverageColor>5</currentPageCoverageColor>
+            <currentMonochromeRankSetArray>2</currentMonochromeRankSetArray>
+            <currentColorRankSetArray>2</currentColorRankSetArray>
+        </data>
+    </testData>
+</currentFleetSettingsGoodData>

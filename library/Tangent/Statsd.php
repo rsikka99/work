@@ -1,11 +1,13 @@
 <?php
 
-class Tangent_Statsd
+namespace Tangent;
+
+class Statsd
 {
     public static $rootBucket = 'mpstoolbox.unknownsite';
-    public static $enabled = false;
-    public static $host = '';
-    public static $port = 8125;
+    public static $enabled    = false;
+    public static $host       = '';
+    public static $port       = 8125;
 
     /**
      * Sets one or more timing values
@@ -15,7 +17,7 @@ class Tangent_Statsd
      **/
     public static function timing ($stats, $time)
     {
-        Tangent_Statsd::updateStats($stats, $time, 1, 'ms');
+        self::updateStats($stats, $time, 1, 'ms');
     }
 
     /**
@@ -26,7 +28,7 @@ class Tangent_Statsd
      **/
     public static function gauge ($stats, $value)
     {
-        Tangent_Statsd::updateStats($stats, $value, 1, 'g');
+        self::updateStats($stats, $value, 1, 'g');
     }
 
     /**
@@ -45,7 +47,7 @@ class Tangent_Statsd
      **/
     public static function set ($stats, $value)
     {
-        Tangent_Statsd::updateStats($stats, $value, 1, 's');
+        self::updateStats($stats, $value, 1, 's');
     }
 
     /**
@@ -58,7 +60,7 @@ class Tangent_Statsd
      **/
     public static function increment ($stats, $sampleRate = 1.0)
     {
-        Tangent_Statsd::updateStats($stats, 1, $sampleRate, 'c');
+        self::updateStats($stats, 1, $sampleRate, 'c');
     }
 
     /**
@@ -71,7 +73,7 @@ class Tangent_Statsd
      **/
     public static function decrement ($stats, $sampleRate = 1.0)
     {
-        Tangent_Statsd::updateStats($stats, -1, $sampleRate, 'c');
+        self::updateStats($stats, -1, $sampleRate, 'c');
     }
 
     /**
@@ -96,7 +98,7 @@ class Tangent_Statsd
             $data[$stat] = "$delta|$metric";
         }
 
-        Tangent_Statsd::send($data, $sampleRate);
+        self::send($data, $sampleRate);
     }
 
     /**
@@ -171,7 +173,7 @@ class Tangent_Statsd
                 fclose($filePointer);
             }
         }
-        catch (Exception $e)
+        catch (\Exception $e)
         {
         }
     }

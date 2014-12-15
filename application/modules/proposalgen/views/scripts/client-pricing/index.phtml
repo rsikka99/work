@@ -1,83 +1,100 @@
-<?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
-var dealerSkuName = '<?php echo My_Brand::$dealerSku; ?>';
-<?php $this->headScript()->captureEnd(); ?>
-<?php $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/client-pricing/index.js')); ?>
+<script>
+    <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
+    var dealerSkuName = '<?= My_Brand::$dealerSku; ?>';
+    <?php $this->headScript()->captureEnd(); ?>
+</script>
+<?php $this->headScript()->appendFile($this->baseUrl('/js/app/legacy/proposalgen/client-pricing/Index.js')); ?>
 
-<div class="page-header">
-    <h1>Client Pricing</h1>
-</div>
-<div id="toners_criteria_container" style="display: inline; padding: 0px 0px 0px 0px;">
+<div id="toners_criteria_container">
     Filter:
-    <select id="tonersFilter" name="tonersFilter" class="input-large" style="margin:0px 0px 0px 0px">
+    <select id="tonersFilter" name="tonersFilter" class="input-large">
         <option value="sku">SKU</option>
         <option value="cost">Cost</option>
     </select>
-    <input type="text" id="tonersCriteria" class="input-medium" style="margin:0px 0px 0px 0px" />
-    <input id="tonersSearch" type="button" value="Search" class="btn btn-mini btn-success" />
-    <input id="tonersReset" type="button" value="Reset" class="btn btn-mini btn-inverse" />
-    <a class="btn btn-mini btn-success pull-right" href="<?php echo $this->url(array("action" => "upload", "controller" => "client-pricing", "module" => "proposalgen")); ?>">Upload</a>
+    <input type="text" id="tonersCriteria" class="input-medium" />
+    <input id="tonersSearch" type="button" value="Search" class="btn btn-xs btn-success" />
+    <input id="tonersReset" type="button" value="Reset" class="btn btn-xs btn-default" />
+    <a class="btn btn-xs btn-success pull-right" href="<?= $this->url(array(), 'client.pricing.pricing-upload'); ?>">Upload</a>
 </div>
 <table id="clientToners"></table>
 <div id='clientToners_Pager'></div>
 <hr>
 <div class="alert-danger"><h1>DANGER ZONE!</h1></div>
-<input id="deleteAllClientPricing" type="button" value="Delete All Client Pricing" class="btn btn-mini btn-danger pull-right" />
+<input id="deleteAllClientPricing" type="button" value="Delete All Client Pricing" class="btn btn-xs btn-danger pull-right" />
 
-<div class="modal hide" id="clientTonersModal">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">x</a>
+<div class="modal fade" id="clientTonersModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">&times;</a>
 
-        <h3 style="text-align: center">Edit Client Pricing</h3>
-    </div>
-    <div class="modal-body">
-        <form id="clientTonersForm" class="form-horizontal form-center-actions">
-            <?php echo $this->clientTonersForm; ?>
-        </form>
-        <div style="text-align: center;padding-bottom:10px">
-            <input type="button" class="btn btn-primary" value="Save" id="availableTonersFormBtn" onclick="javascript: saveClientToners();" />
-            <input type="button" class="btn" value="Cancel" data-dismiss='modal' " />
-        </div>
-    </div>
-</div>
-<div class="modal hide" id="alertMessageModal">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">x</a>
-        <h4 style="text-align: center">Please select a row</h4>
-    </div>
-    <div class="modal-body">
-        <div class="form-horizontal">
-            <div style="text-align:center">
-                <input type="button" class="btn btn-primary" value="Ok" data-dismiss="modal" style="margin-bottom: 4px" />
+                <h3 class="modal-title">Edit Client Pricing</h3>
+            </div>
+            <div class="modal-body">
+                <form id="clientTonersForm" class="form-horizontal form-center-actions">
+                    <?= $this->clientTonersForm; ?>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" value="Save" id="availableTonersFormBtn" onclick="javascript: saveClientToners();" />
+                <input type="button" class="btn btn-default" value="Cancel" data-dismiss='modal' " />
             </div>
         </div>
     </div>
 </div>
-<div class="modal hide" id="alertDeleteModal">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">x</a>
-        <h4 style="text-align: center">Are you sure you want to delete?</h4>
+<div class="modal fade" id="alertMessageModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">&times;</a>
+
+                <h3 class="modal-title">Please select a row</h3>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div>
+                        <input type="button" class="btn btn-primary" value="Ok" data-dismiss="modal" />
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="modal-body">
-        <div class="form-horizontal">
-            <div style="text-align:center">
+</div>
+<div class="modal fade" id="alertDeleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">&times;</a>
+
+                <h3 class="modal-title">Are you sure you want to delete?</h3>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="form-horizontal">
                 <input type="hidden" id="deleteClientTonerOrderId" name="deleteClientTonerOrderId" />
-                <input type="button" class="btn btn-primary" value="Yes" data-dismiss="modal" style="margin-bottom: 4px" onclick="javascript: deleteClientToner();" />
-                <input type="button" class="btn" value="No" data-dismiss="modal" style="margin-bottom: 4px" />
+                <input type="button" class="btn btn-primary" value="Yes" data-dismiss="modal" onclick="javascript: deleteClientToner();" />
+                <input type="button" class="btn btn-default" value="No" data-dismiss="modal" />
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal hide" id="alertDeleteAllModal">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">x</a>
-        <h4 style="text-align: center">Are you sure you want to delete all pricing<br /> for this client?</h4>
-    </div>
-    <div class="modal-body">
-        <div class="form-horizontal">
-            <div style="text-align:center">
-                <input type="button" class="btn btn-primary" value="Yes" data-dismiss="modal" style="margin-bottom: 4px" onclick="javascript: deleteAllClientPricing();" />
-                <input type="button" class="btn" value="No" data-dismiss="modal" style="margin-bottom: 4px" />
+<div class="modal fade" id="alertDeleteAllModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">&times;</a>
+
+                <h3 class="modal-title">Are you sure you want to delete all pricing<br /> for this client?
+                </h3>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div>
+                    <input type="button" class="btn btn-primary" value="Yes" data-dismiss="modal" onclick="javascript: deleteAllClientPricing();" />
+                    <input type="button" class="btn btn-default" value="No" data-dismiss="modal" />
+                </div>
             </div>
         </div>
     </div>

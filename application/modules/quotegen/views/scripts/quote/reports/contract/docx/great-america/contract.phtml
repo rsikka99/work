@@ -1,8 +1,10 @@
 <?php
 /* @var $section \PhpOffice\PhpWord\Element\Section */
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ContractTemplateSectionModel;
+
 $section = $this->section;
 
-/* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
+/* @var $contractTemplateSection ContractTemplateSectionModel */
 $contractTemplateSection = $this->contractTemplateSection;
 
 $tableSpan      = $this->tableStyle->gridSpan;

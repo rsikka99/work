@@ -8,7 +8,6 @@ class My_Feature
     /**
      * Constants for each feature
      */
-    const MEMJET_OPTIMIZATION                        = "hardware_optimization_memjet";
     const HARDWARE_OPTIMIZATION                      = "hardware_optimization";
     const HARDWARE_QUOTE                             = "hardware_quote";
     const HEALTHCHECK                                = "healthcheck";
@@ -24,7 +23,7 @@ class My_Feature
     const ASSESSMENT_LEASE_BUYBACK                   = "assessment_lease_buyback";
     const ASSESSMENT_FLEET_ATTRIBUTES                = "assessment_fleet_attributes";
     const ASSESSMENT_UTILIZATION                     = "assessment_utilization";
-    const CLIENT_PRICING                           = "client_pricing";
+    const CLIENT_PRICING                             = "client_pricing";
 
     /**
      * @var My_Feature_AdapterInterface

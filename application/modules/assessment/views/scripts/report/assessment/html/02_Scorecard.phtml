@@ -7,7 +7,7 @@ $graphs = $assessmentViewModel->getGraphs();
 <p>It can be a challenge to understand your printing needs, and there are many factors to consider: hardware functionality, supplies delivery, service, parts,
     maintenance kits,
     IT time spent supporting printers -- and the cost for all of this. This free <?= My_Brand::getDealerBranding()->assessmentTitle ?> will allow you to make sense
-    of your printing needs and costs. <?php echo $this->companyName; ?>
+    of your printing needs and costs. <?= $this->companyName; ?>
     can help you get your office print under control with our smart and flexible managed print services solutions.</p>
 <br />
 <div class="pheader">Score Card</div>
@@ -22,7 +22,7 @@ $graphs = $assessmentViewModel->getGraphs();
                 types.</p>
         </td>
 
-        <td class="gradeNumber"><?php echo number_format($assessmentViewModel->getRanking()->getSuppliesAndServiceLogistics()->Rank, 1); ?></td>
+        <td class="gradeNumber"><?= number_format($assessmentViewModel->getRanking()->getSuppliesAndServiceLogistics()->Rank, 1); ?></td>
     </tr>
     <tr>
         <td class="gradeDescription">
@@ -30,7 +30,7 @@ $graphs = $assessmentViewModel->getGraphs();
 
             <p>Total number of printing devices, average print volumes, underused and overused equipment, and color print usage.</p>
         </td>
-        <td class="gradeNumber"><?php echo number_format($assessmentViewModel->getRanking()->getPrintingHardwareUsage()->Rank, 1); ?></td>
+        <td class="gradeNumber"><?= number_format($assessmentViewModel->getRanking()->getPrintingHardwareUsage()->Rank, 1); ?></td>
     </tr>
     <tr>
         <td class="gradeDescription">
@@ -38,7 +38,7 @@ $graphs = $assessmentViewModel->getGraphs();
 
             <p>Age of printing devices, IT time spent managing printers, and availability of technology features that improve workflow and productivity.</p>
         </td>
-        <td class="gradeNumber"><?php echo number_format($assessmentViewModel->getRanking()->getTechnologyReliabilityAndUserProductivity()->Rank, 1); ?></td>
+        <td class="gradeNumber"><?= number_format($assessmentViewModel->getRanking()->getTechnologyReliabilityAndUserProductivity()->Rank, 1); ?></td>
     </tr>
     <tr>
         <td class="gradeDescription">
@@ -46,7 +46,7 @@ $graphs = $assessmentViewModel->getGraphs();
 
             <p>Energy consumption from printing hardware and availability of green print technology features.</p>
         </td>
-        <td class="gradeNumber"><?php echo number_format($assessmentViewModel->getRanking()->getEnvironmentalFriendliness()->Rank, 1); ?></td>
+        <td class="gradeNumber"><?= number_format($assessmentViewModel->getRanking()->getEnvironmentalFriendliness()->Rank, 1); ?></td>
     </tr>
     <tr>
         <td class="gradeDescription">
@@ -54,16 +54,16 @@ $graphs = $assessmentViewModel->getGraphs();
 
             <p>Your estimated annual expenses for print-related hardware, supplies, service, and internal support and administration.</p>
         </td>
-        <td class="gradeNumber"><?php echo number_format($assessmentViewModel->getRanking()->getExpense()->Rank, 1); ?></td>
+        <td class="gradeNumber"><?= number_format($assessmentViewModel->getRanking()->getExpense()->Rank, 1); ?></td>
     </tr>
 </table>
 <br />
 <div class="center">
-    <img src="<?php echo $graphs[0]; ?>" /> <!-- Annual printing costs for purchased hardware -->
+    <img src="<?= $graphs[0]; ?>" /> <!-- Annual printing costs for purchased hardware -->
 </div>
 <br />
 <br />
 <div class="annualSavings">
-    Our <?php echo $this->brandName; ?> program could provide you with annual savings of up to
-    <strong><?php echo $this->currency($assessmentViewModel->getPrintIQSavings(), array('precision' => 0)); ?></strong>
+    Our <?= $this->brandName; ?> program could provide you with annual savings of up to
+    <strong><?= $this->currency($assessmentViewModel->getPrintIQSavings(), array('precision' => 0)); ?></strong>
 </div>

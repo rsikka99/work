@@ -1,20 +1,37 @@
 <?php
+use MPSToolbox\Legacy\Forms\DeleteConfirmationForm;
+use MPSToolbox\Legacy\Mappers\DealerFeatureMapper;
+use MPSToolbox\Legacy\Mappers\DealerMapper;
+use MPSToolbox\Legacy\Models\DealerFeatureModel;
+use MPSToolbox\Legacy\Models\DealerModel;
+use MPSToolbox\Legacy\Modules\Admin\Forms\DealerRmsProvidersForm;
+use MPSToolbox\Legacy\Modules\Admin\Forms\DealerTonerVendorsForm;
+use MPSToolbox\Legacy\Modules\Admin\Forms\DealerForm;
+use MPSToolbox\Legacy\Modules\Admin\Mappers\ImageMapper;
+use MPSToolbox\Legacy\Modules\Admin\Models\ImageModel;
+use MPSToolbox\Legacy\Modules\Admin\Services\DealerRmsProvidersService;
+use MPSToolbox\Legacy\Modules\Admin\Services\DealerTonerVendorsService;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Mappers\DeviceSwapReasonMapper;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Mappers\DeviceSwapReasonDefaultMapper;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\DeviceSwapReasonDefaultModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\DeviceSwapReasonModel;
+use MPSToolbox\Legacy\Modules\Preferences\Mappers\DealerSettingMapper;
+use MPSToolbox\Legacy\Modules\Preferences\Models\DealerSettingModel;
+use Tangent\Controller\Action;
 
 /**
  * Class Admin_DealerController
  */
-class Admin_DealerController extends Tangent_Controller_Action
+class Admin_DealerController extends Action
 {
     /**
      * This action lists all the dealers in the system
      */
     public function indexAction ()
     {
-        $this->view->headTitle('System');
-        $this->view->headTitle('Dealers');
-        $this->view->headTitle('Dealer Management');
-        $dealerMapper = Application_Model_Mapper_Dealer::getInstance();
-        $paginator    = new Zend_Paginator(new My_Paginator_MapperAdapter($dealerMapper));
+        $this->_pageTitle = array('System', 'Dealers', 'Dealer Management');
+        $dealerMapper     = DealerMapper::getInstance();
+        $paginator        = new Zend_Paginator(new My_Paginator_MapperAdapter($dealerMapper));
 
         // Gets the current page for the passed parameter
         $paginator->setCurrentPageNumber($this->getRequest()->getUserParam('page', 1));
@@ -30,26 +47,56 @@ class Admin_DealerController extends Tangent_Controller_Action
      */
     public function viewAction ()
     {
-        $this->view->headTitle('View Dealer');
-        $this->view->headTitle('Dealers');
-        $this->view->headTitle('System');
+
         $dealerId = $this->getRequest()->getUserParam('id', false);
 
         if ($dealerId === false)
         {
             $this->_flashMessenger->addMessage(array('warning' => 'You must select a dealer to edit.'));
-            $this->redirect('index');
+            $this->redirectToRoute('admin.dealers');
         }
 
-        $dealerMapper = Application_Model_Mapper_Dealer::getInstance();
+        $dealerMapper = DealerMapper::getInstance();
         $dealer       = $dealerMapper->find($dealerId);
-        if (!$dealer instanceof Application_Model_Dealer)
+        if (!$dealer instanceof DealerModel)
         {
             $this->_flashMessenger->addMessage(array('warning' => 'Invalid dealer selected.'));
-            $this->redirect('index');
+            $this->redirectToRoute('admin.dealers');
         }
 
+        $this->_pageTitle = array($dealer->dealerName, 'Dealers', 'System');
+
         $this->view->dealer = $dealer;
+    }
+
+    /**
+     * Gets a dealer. Will redirect the user
+     *
+     * @param $dealerId
+     *
+     * @return DealerModel
+     */
+    public function getDealer ($dealerId)
+    {
+        if ($dealerId === false)
+        {
+            $this->_flashMessenger->addMessage(array('warning' => 'You must select a dealer to edit.'));
+            $this->redirectToRoute('admin.dealers');
+        }
+
+        /**
+         * Fetch the dealer
+         */
+        $dealerMapper = DealerMapper::getInstance();
+        $dealer       = $dealerMapper->find($dealerId);
+
+        if (!$dealer instanceof DealerModel)
+        {
+            $this->_flashMessenger->addMessage(array('warning' => 'Invalid dealer selected.'));
+            $this->redirectToRoute('admin.dealers');
+        }
+
+        return $dealer;
     }
 
     /**
@@ -57,29 +104,14 @@ class Admin_DealerController extends Tangent_Controller_Action
      */
     public function editAction ()
     {
-        $this->view->headTitle('System');
-        $this->view->headTitle('Dealers');
-        $this->view->headTitle('Edit Dealer');
-        $dealerId = $this->getRequest()->getUserParam('id', false);
+        $dealerFeatureMapper = DealerFeatureMapper::getInstance();
+        $dealerMapper        = DealerMapper::getInstance();
+        $dealerId            = $this->getRequest()->getUserParam('id', false);
+        $dealer              = $this->getDealer($dealerId);
 
-        if ($dealerId === false)
-        {
-            $this->_flashMessenger->addMessage(array('warning' => 'You must select a dealer to edit.'));
-            $this->redirect('index');
-        }
+        $this->_pageTitle = array('Edit: ' . $dealer->dealerName, 'Dealers', 'System');
 
-        /**
-         * Fetch the dealer
-         */
-        $dealerMapper        = Application_Model_Mapper_Dealer::getInstance();
-        $dealerFeatureMapper = Application_Model_Mapper_Dealer_Feature::getInstance();
-        $dealer              = $dealerMapper->find($dealerId);
 
-        if (!$dealer instanceof Application_Model_Dealer)
-        {
-            $this->_flashMessenger->addMessage(array('warning' => 'Invalid dealer selected.'));
-            $this->redirect('index');
-        }
         $featureList = $dealerFeatureMapper->fetchFeatureListForDealer($dealerId);
         $features    = array();
         foreach ($featureList as $feature)
@@ -87,7 +119,7 @@ class Admin_DealerController extends Tangent_Controller_Action
             $features['dealerFeatures'][] = $feature->featureId;
         }
 
-        $form = new Admin_Form_Dealer();
+        $form = new DealerForm();
         $form->populate($dealer->toArray());
         $form->populate($features);
 
@@ -96,7 +128,7 @@ class Admin_DealerController extends Tangent_Controller_Action
             $postData = $this->getRequest()->getPost();
             if (isset($postData ['cancel']))
             {
-                $this->redirector('view', null, null, array('id' => $dealerId));
+                $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
             }
             else
             {
@@ -105,6 +137,7 @@ class Admin_DealerController extends Tangent_Controller_Action
                     $db = Zend_Db_Table::getDefaultAdapter();
                     try
                     {
+                        $db->beginTransaction();
                         $this->_processDealerLogoImage($form, $dealer);
 
                         // Save dealer object
@@ -129,7 +162,7 @@ class Admin_DealerController extends Tangent_Controller_Action
                             // If the feature is new
                             if (!$hasFeature)
                             {
-                                $dealerFeature            = new Application_Model_Dealer_Feature();
+                                $dealerFeature            = new DealerFeatureModel();
                                 $dealerFeature->featureId = $featureId;
                                 $dealerFeature->dealerId  = $dealerId;
                                 $dealerFeatureMapper->insert($dealerFeature);
@@ -159,13 +192,13 @@ class Admin_DealerController extends Tangent_Controller_Action
 
                         // All done
                         $this->_flashMessenger->addMessage(array('success' => "{$dealer->dealerName} has been successfully updated!"));
-                        $this->redirector('view', null, null, array('id' => $dealerId));
+                        $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
                     }
                     catch (Exception $e)
                     {
                         $db->rollBack();
                         $this->_flashMessenger->addMessage(array('danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."));
-                        Tangent_Log::logException($e);
+                        \Tangent\Logger\Logger::logException($e);
                     }
                 }
             }
@@ -179,8 +212,88 @@ class Admin_DealerController extends Tangent_Controller_Action
     }
 
     /**
-     * @param Admin_Form_Dealer  $form
-     * @param Application_Model_Dealer $dealer
+     * Edits toner vendors for a given dealership
+     */
+    public function editTonerVendorsAction ()
+    {
+        $dealerId                 = $this->getRequest()->getUserParam('id', false);
+        $dealer                   = $this->getDealer($dealerId);
+        $dealerTonerVendorService = new DealerTonerVendorsService();
+        $form                     = new DealerTonerVendorsForm();
+
+        if ($this->getRequest()->isPost())
+        {
+            $postData = $this->getRequest()->getPost();
+            if (isset($postData['cancel']))
+            {
+                $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+            }
+            else
+            {
+                if ($form->isValid($postData))
+                {
+                    $formValues = $form->getValues($postData);
+
+                    $dealerTonerVendorService->updateDealerTonerVendors($dealerId, $formValues);
+
+                    $this->_flashMessenger->addMessage(array('success' => "Dealer Toner Vendors successfully updated"));
+                    $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                }
+            }
+        }
+        else
+        {
+            $form->populate(array('manufacturerIds' => $dealerTonerVendorService->getDealerTonerVendorsAsArray($dealerId)));
+        }
+
+        $this->_pageTitle = array('Edit Toner Vendors for: ' . $dealer->dealerName, 'Dealers', 'System');
+
+        $this->view->form = $form;
+    }
+
+    /**
+     * Edits RMS Providers for a given dealership
+     */
+    public function editRmsProvidersAction ()
+    {
+        $dealerId                 = $this->getRequest()->getUserParam('id', false);
+        $dealer                   = $this->getDealer($dealerId);
+        $dealerRmsProviderService = new DealerRmsProvidersService();
+        $form                     = new DealerRmsProvidersForm();
+
+        if ($this->getRequest()->isPost())
+        {
+            $postData = $this->getRequest()->getPost();
+            if (isset($postData['cancel']))
+            {
+                $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+            }
+            else
+            {
+                if ($form->isValid($postData))
+                {
+                    $formValues = $form->getValues($postData);
+
+                    $dealerRmsProviderService->updateDealerRmsProviders($dealerId, $formValues);
+
+                    $this->_flashMessenger->addMessage(array('success' => "Dealer RMS Providers successfully updated"));
+                    $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                }
+            }
+        }
+        else
+        {
+            $form->populate(array('rmsProviderIds' => $dealerRmsProviderService->getDealerRmsProvidersAsArray($dealerId)));
+        }
+
+        $this->_pageTitle = array('Edit RMS Providers for: ' . $dealer->dealerName, 'Dealers', 'System');
+
+        $this->view->form = $form;
+    }
+
+    /**
+     * @param DealerForm  $form
+     * @param DealerModel $dealer
      */
     protected function _processDealerLogoImage ($form, &$dealer)
     {
@@ -227,15 +340,15 @@ class Admin_DealerController extends Tangent_Controller_Action
                     /**
                      * Insert the image into the database
                      */
-                    $image           = new Admin_Model_Image();
+                    $image           = new ImageModel();
                     $image->filename = $uploadedImageFileName;
                     $image->image    = $base64ImageString;
-                    $imageId         = Admin_Model_Mapper_Image::getInstance()->insert($image);
+                    $imageId         = ImageMapper::getInstance()->insert($image);
                     if ($imageId)
                     {
                         if ($dealer->dealerLogoImageId > 0)
                         {
-                            Admin_Model_Mapper_Image::getInstance()->delete($dealer->dealerLogoImageId);
+                            ImageMapper::getInstance()->delete($dealer->dealerLogoImageId);
                         }
                         $dealer->dealerLogoImageId = $imageId;
 
@@ -251,10 +364,8 @@ class Admin_DealerController extends Tangent_Controller_Action
      */
     public function createAction ()
     {
-        $this->view->headTitle('System');
-        $this->view->headTitle('Dealers');
-        $this->view->headTitle('Create Dealer');
-        $form = new Admin_Form_Dealer();
+        $this->_pageTitle = array('System', 'Dealers', 'Create Dealer');
+        $form             = new DealerForm();
 
         $request = $this->getRequest();
         if ($request->isPost())
@@ -270,7 +381,7 @@ class Admin_DealerController extends Tangent_Controller_Action
                         $db->beginTransaction();
 
                         // Create a new dealer object
-                        $dealer = new Application_Model_Dealer();
+                        $dealer = new DealerModel();
 
                         $this->_processDealerLogoImage($form, $dealer);
 
@@ -278,36 +389,36 @@ class Admin_DealerController extends Tangent_Controller_Action
                         $dealer->dateCreated = date("Y-m-d");
 
                         // Save the dealer with the id to the database
-                        $dealerId = Application_Model_Mapper_Dealer::getInstance()->insert($dealer);
+                        $dealerId = DealerMapper::getInstance()->insert($dealer);
 
                         $newDeviceSwapReasonArray = array();
                         // Copy the systems default reason for the dealers system default reason
-                        foreach (Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->fetchAllReasonByDealerId(1) as $deviceSwapReason)
+                        foreach (DeviceSwapReasonMapper::getInstance()->fetchAllReasonByDealerId(1) as $deviceSwapReason)
                         {
-                            $newDeviceSwapReason           = new Hardwareoptimization_Model_Device_Swap_Reason($deviceSwapReason->toArray());
+                            $newDeviceSwapReason           = new DeviceSwapReasonModel($deviceSwapReason->toArray());
                             $newDeviceSwapReason->dealerId = $dealerId;
                             // Insert thew row into the database
-                            $newDeviceSwapReason->id = Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->insert($newDeviceSwapReason);
+                            $newDeviceSwapReason->id = DeviceSwapReasonMapper::getInstance()->insert($newDeviceSwapReason);
 
-                            $defaultReason = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($newDeviceSwapReason->deviceSwapReasonCategoryId, 1);
+                            $defaultReason = DeviceSwapReasonDefaultMapper::getInstance()->findDefaultByDealerId($newDeviceSwapReason->deviceSwapReasonCategoryId, 1);
 
-                            if ($defaultReason instanceof Hardwareoptimization_Model_Device_Swap_Reason_Default && $deviceSwapReason->id === $defaultReason->deviceSwapReasonId)
+                            if ($defaultReason instanceof DeviceSwapReasonDefaultModel && $deviceSwapReason->id === $defaultReason->deviceSwapReasonId)
                             {
-                                $newDefaultReason                             = new Hardwareoptimization_Model_Device_Swap_Reason_Default();
+                                $newDefaultReason                             = new DeviceSwapReasonDefaultModel();
                                 $newDefaultReason->dealerId                   = $dealerId;
                                 $newDefaultReason->deviceSwapReasonId         = $newDeviceSwapReason->id;
                                 $newDefaultReason->deviceSwapReasonCategoryId = $newDeviceSwapReason->deviceSwapReasonCategoryId;
 
-                                Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->insert($newDefaultReason);
+                                DeviceSwapReasonDefaultMapper::getInstance()->insert($newDefaultReason);
                             }
                         }
 
-                        $dealerFeatureMapper = Application_Model_Mapper_Dealer_Feature::getInstance();
+                        $dealerFeatureMapper = DealerFeatureMapper::getInstance();
 
                         // Loop through our new features
                         foreach ($values ["dealerFeatures"] as $featureId)
                         {
-                            $dealerFeature            = new Application_Model_Dealer_Feature();
+                            $dealerFeature            = new DealerFeatureModel();
                             $dealerFeature->featureId = $featureId;
                             $dealerFeature->dealerId  = $dealerId;
                             $dealerFeatureMapper->insert($dealerFeature);
@@ -318,7 +429,7 @@ class Admin_DealerController extends Tangent_Controller_Action
                         if ($dealerId)
                         {
                             $this->_flashMessenger->addMessage(array('success' => "Dealer {$dealer->dealerName} successfully created"));
-                            $this->redirector('index');
+                            $this->redirectToRoute('admin.dealers');
                         }
                         else
                         {
@@ -329,7 +440,7 @@ class Admin_DealerController extends Tangent_Controller_Action
                     {
                         $db->rollBack();
                         $this->_flashMessenger->addMessage(array('danger' => "Error saving dealer to database. If problem persists please contact your system administrator."));
-                        Tangent_Log::logException($e);
+                        \Tangent\Logger\Logger::logException($e);
                     }
                 }
                 else
@@ -339,7 +450,7 @@ class Admin_DealerController extends Tangent_Controller_Action
             }
             else
             {
-                $this->redirector('index');
+                $this->redirectToRoute('admin.dealers');
             }
         }
 
@@ -351,26 +462,24 @@ class Admin_DealerController extends Tangent_Controller_Action
      */
     public function deleteAction ()
     {
-        $this->view->headTitle('System');
-        $this->view->headTitle('Dealers');
-        $this->view->headTitle('Delete Dealer');
-        $dealerId = $this->getRequest()->getUserParam('id');
-        $dealer   = Application_Model_Mapper_Dealer::getInstance()->find($dealerId);
+        $this->_pageTitle = array('System', 'Dealers', 'Delete Dealer');
+        $dealerId         = $this->getRequest()->getUserParam('id');
+        $dealer           = DealerMapper::getInstance()->find($dealerId);
 
         if ($dealerId == 1)
         {
             $this->_flashMessenger->addMessage(array('danger' => 'You cannot delete the root dealer company.'));
-            $this->redirect('index');
+            $this->redirect('admin.dealers');
         }
 
-        if (!$dealer instanceof Application_Model_Dealer)
+        if (!$dealer instanceof DealerModel)
         {
             $this->_flashMessenger->addMessage(array('warning' => 'Invalid dealer selected.'));
-            $this->redirect('index');
+            $this->redirect('admin.dealers');
         }
 
         $message = "Are you sure you want to delete {$dealer->dealerName}";
-        $form    = new Application_Form_Delete($message);
+        $form    = new DeleteConfirmationForm($message);
 
         if ($this->getRequest()->isPost())
         {
@@ -379,7 +488,7 @@ class Admin_DealerController extends Tangent_Controller_Action
             {
                 if (isset($postData ['cancel']))
                 {
-                    $this->redirector("index");
+                    $this->redirectToRoute('admin.dealers');
                 }
                 else
                 {
@@ -389,26 +498,26 @@ class Admin_DealerController extends Tangent_Controller_Action
                         $db->beginTransaction();
 
                         // Delete the dealer and the related report setting
-                        $reportSetting = Preferences_Model_Mapper_Dealer_Setting::getInstance()->find($dealer->id);
-                        if ($reportSetting instanceof Preferences_Model_Dealer_Setting)
+                        $reportSetting = DealerSettingMapper::getInstance()->find($dealer->id);
+                        if ($reportSetting instanceof DealerSettingModel)
                         {
-                            Preferences_Model_Mapper_Dealer_Setting::getInstance()->delete($dealer);
+                            DealerSettingMapper::getInstance()->delete($dealer);
                         }
 
-                        Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->deleteDefaultReasonByDealerId($dealer->id);
-                        Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->deleteReasonsByDealerId($dealer->id);
-                        Application_Model_Mapper_Dealer::getInstance()->delete($dealer);
+                        DeviceSwapReasonDefaultMapper::getInstance()->deleteDefaultReasonByDealerId($dealer->id);
+                        DeviceSwapReasonMapper::getInstance()->deleteReasonsByDealerId($dealer->id);
+                        DealerMapper::getInstance()->delete($dealer);
 
                         $db->commit();
 
                         // We have successfully deleted it then redirect and display message
                         $this->_flashMessenger->addMessage(array("success" => "Successfully deleted {$dealer->dealerName}."));
-                        $this->redirector("index");
+                        $this->redirectToRoute('admin.dealers');
                     }
                     catch (Exception $e)
                     {
                         $db->rollBack();
-                        Tangent_Log::logException($e);
+                        \Tangent\Logger\Logger::logException($e);
                         $this->_flashMessenger->addMessage(array("danger" => "Error deleting {$dealer->dealerName}, please try again."));
                     }
                 }

@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\Admin\Forms\ClientForm;
 
 /**
  * Class Admin_Form_ClientTest
@@ -12,7 +13,7 @@ class Admin_Form_ClientTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
      * @param bool $dealerManagement
      * @param bool $isAdmin
      *
-     * @return \Admin_Form_Client
+     * @return \MPSToolbox\Legacy\Modules\Admin\Forms\ClientForm
      */
     public function getForm ($dealerManagement = true, $isAdmin = false)
     {
@@ -22,7 +23,7 @@ class Admin_Form_ClientTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
              ->method('IsAllowed')
              ->will($this->returnValue($isAdmin));
 
-        return new Admin_Form_Client($dealerManagement, array('view' => $view));
+        return new ClientForm($dealerManagement, array('view' => $view));
     }
 
     /**

@@ -1,0 +1,25 @@
+<?php
+use MPSToolbox\Legacy\Modules\Admin\Forms\LeasingSchemaForm;
+
+/* @var $form LeasingSchemaForm */
+$form = $this->element;
+?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<fieldset>
+    <div class="form-group col-sm-12 <?= ($form->getElement('name')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('name'), array('col-md-1')) ?>
+
+        <div class="col-md-4">
+            <?= $this->RenderFormText($form->getElement('name')) ?>
+            <?= $this->RenderFormDescription($form->getElement('name')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('name')) ?>
+        </div>
+    </div>
+</fieldset>
+<fieldset>
+    <hr>
+    <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+</fieldset>
+<?= $this->RenderFormClose($form) ?>

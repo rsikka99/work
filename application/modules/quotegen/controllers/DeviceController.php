@@ -1,9 +1,23 @@
 <?php
+use MPSToolbox\Legacy\Forms\DeleteConfirmationForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\DeviceForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\SelectOptionsForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\OptionMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\GlobalDeviceConfigurationMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\DeviceOptionMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\DeviceConfigurationOptionMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\DeviceConfigurationMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\DeviceMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\UserDeviceConfigurationMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceConfigurationModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceOptionModel;
+use Tangent\Controller\Action;
 
 /**
  * Class Quotegen_DeviceController
  */
-class Quotegen_DeviceController extends Tangent_Controller_Action
+class Quotegen_DeviceController extends Action
 {
 
     public function init ()
@@ -16,7 +30,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
      *
      * @param int $id
      *
-     * @return \Quotegen_Model_Device
+     * @return \MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceModel
      */
     public function getDevice ($id)
     {
@@ -26,11 +40,11 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
     /**
      * Gets the mapper
      *
-     * @return Quotegen_Model_Mapper_Device
+     * @return DeviceMapper
      */
     public function getDeviceMapper ()
     {
-        return Quotegen_Model_Mapper_Device::getInstance();
+        return DeviceMapper::getInstance();
     }
 
     /**
@@ -63,7 +77,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'warning' => 'Please select a device to delete first.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.devices');
         }
 
         $device = $this->getDevice($deviceId);
@@ -72,14 +86,14 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'danger' => 'There was an error selecting the device to delete.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.devices');
         }
 
         // Get all the deviceConfiguration associated with the masterDeviceId
-        $deviceConfigurations = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAllDeviceConfigurationByDeviceId($deviceId);
+        $deviceConfigurations = DeviceConfigurationMapper::getInstance()->fetchAllDeviceConfigurationByDeviceId($deviceId);
 
         $message = "Are you sure you want to delete {$device->masterDeviceId}?";
-        $form    = new Application_Form_Delete($message);
+        $form    = new DeleteConfirmationForm($message);
 
         $request = $this->getRequest();
         if ($request->isPost())
@@ -91,31 +105,31 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
                 if ($form->isValid($values))
                 {
                     // Delete quote device options link 
-                    Quotegen_Model_Mapper_DeviceOption::getInstance()->deleteOptionsByDeviceId($deviceId);
+                    DeviceOptionMapper::getInstance()->deleteOptionsByDeviceId($deviceId);
 
-                    /* @var $deviceConfiguration Quotegen_Model_DeviceConfiguration */
+                    /* @var $deviceConfiguration DeviceConfigurationModel */
                     foreach ($deviceConfigurations as $deviceConfiguration)
                     {
                         $deviceConfigurationId = $deviceConfiguration->id;
                         // Delete user device configuration link
-                        Quotegen_Model_Mapper_UserDeviceConfiguration::getInstance()->deleteUserDeviceConfigurationByDeviceId($deviceConfigurationId);
+                        UserDeviceConfigurationMapper::getInstance()->deleteUserDeviceConfigurationByDeviceId($deviceConfigurationId);
                         // Delete global device configurations link
-                        Quotegen_Model_Mapper_GlobalDeviceConfiguration::getInstance()->delete($deviceConfigurationId);
+                        GlobalDeviceConfigurationMapper::getInstance()->delete($deviceConfigurationId);
                         // Delete the device configuration options 
-                        Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->deleteDeviceConfigurationOptionById($deviceConfigurationId);
+                        DeviceConfigurationOptionMapper::getInstance()->deleteDeviceConfigurationOptionById($deviceConfigurationId);
                         // Delete the deviceConfiguration
-                        Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->delete($deviceConfiguration);
+                        DeviceConfigurationMapper::getInstance()->delete($deviceConfiguration);
                     }
                     $this->getDeviceMapper()->delete($device);
                     $this->_flashMessenger->addMessage(array(
                         'success' => "Device  '{$device->getMasterDevice()->getFullDeviceName()}' was deleted successfully."
                     ));
-                    $this->redirector('index');
+                    $this->redirectToRoute('quotes.devices');
                 }
             }
             else
             {
-                $this->redirector('index');
+                $this->redirectToRoute('quotes.devices');
             }
         }
         $this->view->form = $form;
@@ -127,7 +141,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
     public function createAction ()
     {
         $request = $this->getRequest();
-        $form    = new Quotegen_Form_Device();
+        $form    = new DeviceForm();
 
         if ($request->isPost())
         {
@@ -142,7 +156,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
                         // Save to the database
                         try
                         {
-                            $device = new Quotegen_Model_Device();
+                            $device = new DeviceModel();
                             $device->populate($values);
                             $deviceId = $this->getDeviceMapper()->insert($device);
 
@@ -151,7 +165,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
                             ));
 
                             // Redirect them here so that the form reloads
-                            $this->redirector('edit', null, null, array(
+                            $this->redirectToRoute('quotes.devices.edit', array(
                                 'id' => $deviceId
                             ));
                         }
@@ -176,7 +190,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->redirector('index');
+                $this->redirectToRoute('quotes.devices');
             }
         }
         $this->view->form = $form;
@@ -195,11 +209,11 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'warning' => 'Please select a device to edit first.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.devices');
         }
 
         // Get the device
-        $deviceMapper = Quotegen_Model_Mapper_Device::getInstance();
+        $deviceMapper = DeviceMapper::getInstance();
 
         $device = $deviceMapper->find($deviceId);
         // If the device doesn't exist, send them back to the view all devices page
@@ -208,11 +222,11 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'danger' => 'There was an error selecting the device to edit.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.devices');
         }
 
         // Create a new form with the mode and roles set
-        $form = new Quotegen_Form_Device($deviceId);
+        $form = new DeviceForm($deviceId);
 
         // Prepare the data for the form
         $request = $this->getRequest();
@@ -235,7 +249,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
                     if ($form->isValid($values))
                     {
                         // Save individual option included quantities
-                        $deviceOptionMapper = Quotegen_Model_Mapper_DeviceOption::getInstance();
+                        $deviceOptionMapper = DeviceOptionMapper::getInstance();
                         foreach ($form->getDeviceOptionElements() as $object)
                         {
                             $includeQuantity = $object->deviceOptionElement->getValue();
@@ -256,7 +270,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
 
                         if (isset($values ['addOption']))
                         {
-                            $this->redirector('addoptions', null, null, array(
+                            $this->redirectToRoute('quotes.devices.add-options', array(
                                 'deviceId' => $deviceId
                             ));
                         }
@@ -277,9 +291,19 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->redirector('index');
+                $this->redirectToRoute('quotes.devices');
             }
         }
+
+        $form->setDecorators(array(
+            array(
+                'ViewScript',
+                array(
+                    'viewScript' => 'forms/quotegen/edit-form.phtml',
+                )
+            )
+        ));
+
         $this->view->form = $form;
     }
 
@@ -290,18 +314,18 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
     {
         $deviceId = $this->_getParam('deviceId', false);
 
-        $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAllAvailableOptionsForDevice($deviceId);
+        $availableOptions = OptionMapper::getInstance()->fetchAllAvailableOptionsForDevice($deviceId);
         if (count($availableOptions) < 1)
         {
             $this->_flashMessenger->addMessage(array(
                 'info' => "There are no more options to add to this device."
             ));
-            $this->redirector('edit', null, null, array(
+            $this->redirectToRoute('quotes.devices.edit', array(
                 'id' => $deviceId
             ));
         }
 
-        $form = new Quotegen_Form_SelectOptions($availableOptions);
+        $form = new SelectOptionsForm($availableOptions);
         // Prepare the data for the form
         $request = $this->getRequest();
 
@@ -323,8 +347,8 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
                     // Validate the form
                     if ($form->isValid($values))
                     {
-                        $deviceOptionMapper           = Quotegen_Model_Mapper_DeviceOption::getInstance();
-                        $deviceOption                 = new Quotegen_Model_DeviceOption();
+                        $deviceOptionMapper           = DeviceOptionMapper::getInstance();
+                        $deviceOption                 = new DeviceOptionModel();
                         $deviceOption->masterDeviceId = $device->masterDeviceId;
 
                         $insertedOptions = 0;
@@ -347,7 +371,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
                         $this->_flashMessenger->addMessage(array(
                             'success' => "Successfully added {$insertedOptions} options to {$device->getMasterDevice()->getFullDeviceName()} successfully."
                         ));
-                        $this->redirector('edit', null, null, array(
+                        $this->redirectToRoute('quotes.devices.edit', array(
                             'id' => $deviceId
                         ));
                     }
@@ -366,7 +390,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. Go back to the edit page
-                $this->redirector('edit', null, null, array(
+                $this->redirectToRoute('quotes.devices.edit', array(
                     'id' => $deviceId
                 ));
             }
@@ -386,10 +410,10 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
 
         try
         {
-            $deviceOption                 = new Quotegen_Model_DeviceOption();
+            $deviceOption                 = new DeviceOptionModel();
             $deviceOption->masterDeviceId = $id;
             $deviceOption->optionId       = $optionId;
-            Quotegen_Model_Mapper_DeviceOption::getInstance()->delete($deviceOption);
+            DeviceOptionMapper::getInstance()->delete($deviceOption);
             $this->_flashMessenger->addMessage(array(
                 'success' => "Option deleted successfully."
             ));
@@ -401,7 +425,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
             ));
         }
 
-        $this->redirector('edit', null, null, array(
+        $this->redirectToRoute('quotes.devices.edit', array(
             'id' => $id
         ));
     }
@@ -411,7 +435,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
      */
     public function viewAction ()
     {
-        $this->view->device = Quotegen_Model_Mapper_Device::getInstance()->find($this->_getParam('id', false));
+        $this->view->device = DeviceMapper::getInstance()->find($this->_getParam('id', false));
     }
 }
 

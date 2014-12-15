@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Forms\DeleteConfirmationForm;
 
 /**
  * Class Application_Form_DeleteTest
@@ -6,13 +7,13 @@
 class Application_Form_DeleteTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
     /**
-     * @var Application_Form_Delete
+     * @var DeleteConfirmationForm
      */
     protected $_form;
 
     public function setUp ()
     {
-        $this->_form = new Application_Form_Delete();
+        $this->_form = new DeleteConfirmationForm();
         parent::setUp();
     }
 
@@ -27,7 +28,7 @@ class Application_Form_DeleteTest extends Zend_Test_PHPUnit_ControllerTestCase
      */
     public function testInit ()
     {
-        $this->_form = new Application_Form_Delete();
+        $this->_form = new DeleteConfirmationForm();
         $this->_form->init();
         $this->assertInstanceOf('Zend_Form_Element_Submit', $this->_form->getElement('submit'));
     }

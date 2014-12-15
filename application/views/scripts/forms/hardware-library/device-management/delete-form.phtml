@@ -1,0 +1,21 @@
+<?php
+
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeleteForm;
+
+/* @var $form DeleteForm */
+$form = $this->element;
+?>
+
+<?= $this->RenderFormOpen($form) ?>
+    <div class="clearfix">
+        <fieldset class="col-md-10 col-md-offset-1">
+            <div class="form-group">
+                <?= $this->RenderFormSubmit($form->getElement('delete'), array('btn', 'btn-danger')) ?>
+                <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+            </div>
+        </fieldset>
+    </div>
+<?php $this->FormHidden($form->getElement('deleteId')) ?>
+<?php $this->FormHidden($form->getElement('deleteColorId')) ?>
+<?php $this->FormHidden($form->getElement('deleteFormName')) ?>
+<?= $this->RenderFormClose($form) ?>

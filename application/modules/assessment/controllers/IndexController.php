@@ -1,4 +1,14 @@
 <?php
+use MPSToolbox\Legacy\Entities\SurveyEntity;
+use MPSToolbox\Legacy\Mappers\UserMapper;
+use MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentNavigationForm;
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentStepsModel;
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentSurveyModel;
+use MPSToolbox\Legacy\Modules\Assessment\Services\AssessmentSurveyService;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\SurveySettingMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\RmsUploadMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsUploadModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\SelectRmsUploadService;
 
 /**
  * Class Assessment_IndexController
@@ -18,9 +28,8 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
      */
     public function selectUploadAction ()
     {
-        $this->view->headTitle('Assessment');
-        $this->view->headTitle('Select Upload');
-        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FLEET_UPLOAD);
+        $this->_pageTitle = array('Assessment', 'Select Upload');
+        $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FLEET_UPLOAD);
 
         if ($this->getRequest()->isPost())
         {
@@ -28,9 +37,9 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
 
             if (isset($postData['selectRmsUploadId']))
             {
-                $selectRmsUploadService = new Proposalgen_Service_SelectRmsUpload($this->_mpsSession->selectedClientId);
+                $selectRmsUploadService = new SelectRmsUploadService($this->_mpsSession->selectedClientId);
                 $rmsUpload              = $selectRmsUploadService->validateRmsUploadId($postData['selectRmsUploadId']);
-                if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload)
+                if ($rmsUpload instanceof RmsUploadModel)
                 {
                     $this->getAssessment()->rmsUploadId = $rmsUpload->id;
                     $this->updateAssessmentStepName();
@@ -44,7 +53,7 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
             }
             else if (isset($postData['noUploads']))
             {
-                $this->redirector('index', 'fleet', 'proposalgen');
+                $this->redirectToRoute('rms-upload.upload-file');
             }
 
             if ($this->getAssessment()->rmsUploadId > 0)
@@ -55,9 +64,9 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
                 }
             }
         }
-        $this->view->numberOfUploads = count(Proposalgen_Model_Mapper_Rms_Upload::getInstance()->fetchAllForClient($this->getAssessment()->clientId));
+        $this->view->numberOfUploads = count(RmsUploadMapper::getInstance()->fetchAllForClient($this->getAssessment()->clientId));
         $this->view->rmsUpload       = $this->getAssessment()->getRmsUpload();
-        $this->view->navigationForm  = new Assessment_Form_Assessment_Navigation(Assessment_Form_Assessment_Navigation::BUTTONS_NEXT);
+        $this->view->navigationForm  = new AssessmentNavigationForm(AssessmentNavigationForm::BUTTONS_NEXT);
     }
 
     /**
@@ -65,30 +74,21 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
      */
     public function surveyAction ()
     {
-        $this->view->headTitle('Assessment');
-        $this->view->headTitle('Survey');
-        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_SURVEY);
-
-        /**
-         * Fetch Survey Settings
-         */
-        $surveySetting = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemSurveySettings();
-        $user          = Application_Model_Mapper_User::getInstance()->find($this->_identity->id);;
-        $surveySetting->populate($user->getUserSettings()->getSurveySettings()->toArray());
-
+        $this->_pageTitle = array('Assessment', 'Survey');
+        $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_SURVEY);
 
         /**
          * Get data to populate
          */
-        $survey = $this->getAssessment()->getSurvey();
+        $survey = $this->getAssessment()->getClient()->getSurvey();
 
-        if (!$survey instanceof Assessment_Model_Assessment_Survey)
+        if (!$survey instanceof SurveyEntity)
         {
-            $survey = new Assessment_Model_Assessment_Survey();
+            $survey = new SurveyEntity();
         }
 
 
-        $assessmentSurveyService = new Assessment_Service_Assessment_Survey($survey, $surveySetting);
+        $assessmentSurveyService = new AssessmentSurveyService($survey);
         $form                    = $assessmentSurveyService->getForm();
 
 
@@ -115,7 +115,7 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
                     $this->updateAssessmentStepName();
                     $this->saveAssessment();
 
-                    if ($assessmentSurveyService->save($postData, $this->getAssessment()->id))
+                    if ($assessmentSurveyService->save($postData, $this->getAssessment()->clientId))
                     {
                         $db->commit();
 
@@ -138,7 +138,7 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
                 catch (Exception $e)
                 {
                     $db->rollBack();
-                    Tangent_Log::logException($e);
+                    \Tangent\Logger\Logger::logException($e);
                 }
             }
         }
@@ -152,59 +152,33 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
      */
     public function settingsAction ()
     {
-        $this->view->headTitle('Assessment');
-        $this->view->headTitle('Settings');
-        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_SETTINGS);
-
-        $assessment                = $this->getAssessment();
-        $assessmentSettingsService = new Assessment_Service_Assessment_Settings($assessment->id, $this->_identity->id, $this->_identity->dealerId);
+        $this->_pageTitle = array('Assessment', 'Settings');
+        $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_SETTINGS);
 
         if ($this->getRequest()->isPost())
         {
             $postData = $this->getRequest()->getPost();
-            if (isset($postData['goBack']))
+
+            if (!isset($postData['goBack']))
             {
-                $this->gotoPreviousNavigationStep($this->_navigation);
+                $this->saveClientSettingsForm($postData);
+                $this->saveAssessment();
+
+                if (isset($postData['saveAndContinue']))
+                {
+                    $this->updateAssessmentStepName();
+                    $this->saveAssessment();
+                    $this->gotoNextNavigationStep($this->_navigation);
+                }
             }
             else
             {
-                $db = Zend_Db_Table::getDefaultAdapter();
-                try
-                {
-                    $db->beginTransaction();
-                    $postData = $this->getRequest()->getPost();
-                    if ($assessmentSettingsService->update($postData))
-                    {
-                        $this->updateAssessmentStepName();
-                        $this->saveAssessment();
-
-                        $db->commit();
-
-                        if (isset($postData['saveAndContinue']))
-                        {
-                            $this->gotoNextNavigationStep($this->_navigation);
-                        }
-                        else if (isset($postData['goBack']))
-                        {
-                            $this->gotoPreviousNavigationStep($this->_navigation);
-                        }
-                    }
-                    else
-                    {
-                        $db->rollBack();
-                        $this->_flashMessenger->addMessage(array('danger' => 'There was an error saving your settings.'));
-                    }
-                }
-                catch (Exception $e)
-                {
-                    $db->rollBack();
-                    $this->_flashMessenger->addMessage(array('danger' => 'There was an error saving your settings.'));
-                    Tangent_Log::logException($e);
-                }
+                $this->gotoPreviousNavigationStep($this->_navigation);
             }
         }
-
-        $this->view->form           = $assessmentSettingsService->getForm();
-        $this->view->navigationForm = new Assessment_Form_Assessment_Navigation(Assessment_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
+        else
+        {
+            $this->showClientSettingsForm();
+        }
     }
 }

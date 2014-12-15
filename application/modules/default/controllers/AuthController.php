@@ -1,9 +1,23 @@
 <?php
+use MPSToolbox\Legacy\Mappers\EventLogMapper;
+use MPSToolbox\Legacy\Mappers\UserEventLogMapper;
+use MPSToolbox\Legacy\Mappers\UserPasswordResetRequestMapper;
+use MPSToolbox\Legacy\Mappers\UserSessionMapper;
+use MPSToolbox\Legacy\Mappers\UserMapper;
+use MPSToolbox\Legacy\Models\UserPasswordResetRequestModel;
+use MPSToolbox\Legacy\Models\UserSessionModel;
+use MPSToolbox\Legacy\Models\EventLogTypeModel;
+use MPSToolbox\Legacy\Models\UserModel;
+use MPSToolbox\Legacy\Modules\DDefault\Forms\ChangePasswordForm;
+use MPSToolbox\Legacy\Modules\DDefault\Forms\LoginForm;
+use MPSToolbox\Legacy\Modules\DDefault\Forms\ResetPasswordForm;
+use Tangent\Controller\Action;
+use Tangent\Statsd;
 
 /**
  * Class Default_AuthController
  */
-class Default_AuthController extends Tangent_Controller_Action
+class Default_AuthController extends Action
 {
 
     /**
@@ -12,7 +26,7 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     function indexAction ()
     {
-        $this->redirector('default', 'auth', 'index');
+        $this->sendJsonError('Action not implemented.');
     }
 
     /**
@@ -37,18 +51,19 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     function loginAction ()
     {
-        $this->view->headTitle('Login');
+        $this->_pageTitle = array('Login');
+
         $this->view->layout()->setLayout('auth');
         $request = $this->getRequest();
-        $form    = new Default_Form_Login();
+        $form    = new LoginForm();
 
-        Tangent_Statsd::increment('mpstoolbox.login.attempts');
+        Statsd::increment('mpstoolbox.login.attempts');
 
         if ($this->getRequest()->isPost())
         {
             if ($request->getParam('forgotPassword', false))
             {
-                $this->redirector('forgotpassword', null, null, array('email' => $request->getParam('email', '')));
+                $this->redirectToRoute('auth.login.forgotPassword', array('email' => $this->getParam('email')));
             }
             if ($form->isValid($request->getPost()))
             {
@@ -65,7 +80,7 @@ class Default_AuthController extends Tangent_Controller_Action
                 // If the value is valid, store the information
                 if ($result->isValid())
                 {
-                    Tangent_Statsd::increment('mpstoolbox.login.successes');
+                    Statsd::increment('mpstoolbox.login.successes');
 
                     // Get all the user information and only omit the password
                     // since we don't want to store it in the session.
@@ -77,7 +92,7 @@ class Default_AuthController extends Tangent_Controller_Action
                     {
                         $currentSessionId = @session_id();
                         // Get all the sessions attached to current user signed in
-                        $userSessionMapper = Application_Model_Mapper_User_Session::getInstance();
+                        $userSessionMapper = UserSessionMapper::getInstance();
                         $config            = Zend_Registry::get('config');
 
                         $userSessions = $userSessionMapper->fetchSessionsByUserId($userInfo->id);
@@ -107,13 +122,13 @@ class Default_AuthController extends Tangent_Controller_Action
                         else
                         {
                             // Create a new sessions for the new user
-                            $userSession            = new Application_Model_User_Session();
+                            $userSession            = new UserSessionModel();
                             $userSession->userId    = $userInfo->id;
                             $userSession->sessionId = $currentSessionId;
                             $userSessionMapper->insert($userSession);
                         }
 
-                        Application_Model_Mapper_User_Event_Log::getInstance()->createUserEventLog($userInfo->id, Application_Model_Event_Log_Type::LOGIN);
+                        UserEventLogMapper::getInstance()->createUserEventLog($userInfo->id, EventLogTypeModel::LOGIN);
                     }
                     catch (Exception $e)
                     {
@@ -123,12 +138,12 @@ class Default_AuthController extends Tangent_Controller_Action
                     /*
                      * Redirect them to the home page now that they are logged in.
                      */
-                    $this->redirector('index', 'index', 'index');
+                    $this->redirectToRoute('app.dashboard');
                 }
                 else
                 {
-                    Tangent_Statsd::increment('mpstoolbox.login.failures');
-                    Application_Model_Mapper_Event_Log::getInstance()->createEventLog(Application_Model_Event_Log_Type::LOGIN_FAIL, "Email: " . $request->getParam('email', ''));
+                    Statsd::increment('mpstoolbox.login.failures');
+                    EventLogMapper::getInstance()->createEventLog(EventLogTypeModel::LOGIN_FAIL, "Email: " . $request->getParam('email', ''));
 
                     switch ($result->getCode())
                     {
@@ -149,7 +164,7 @@ class Default_AuthController extends Tangent_Controller_Action
             }
             else
             {
-                Application_Model_Mapper_Event_Log::getInstance()->createEventLog(Application_Model_Event_Log_Type::LOGIN_FAIL, "Email: " . $request->getParam('email', ''));
+                EventLogMapper::getInstance()->createEventLog(EventLogTypeModel::LOGIN_FAIL, "Email: " . $request->getParam('email', ''));
             }
         }
 
@@ -165,11 +180,12 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     public function logoutAction ()
     {
-        $this->view->headTitle('Logout');
-        $this->logout();
-        $this->redirector('login');
-    } // end logoutAction
+        $this->_pageTitle = 'Logout';
 
+        $this->doLogout();
+
+        $this->redirectToRoute('auth.login');
+    }
 
     /**
      * This function handles logging a user out of the system and destroying any
@@ -177,14 +193,15 @@ class Default_AuthController extends Tangent_Controller_Action
      * We should persist all other session data as it can help keep a user
      * friendly experience
      */
-    public function logout ()
+    public function doLogout ()
     {
         $auth     = Zend_Auth::getInstance();
         $identity = $auth->getIdentity();
         $userId   = $identity->id;
         // Destroy only information that is part of a user being logged in.
         Zend_Auth::getInstance()->clearIdentity();
-        Application_Model_Mapper_User_Event_Log::getInstance()->createUserEventLog($userId, Application_Model_Event_Log_Type::LOGOUT);
+        Zend_Session::namespaceUnset('mps-tools');
+        UserEventLogMapper::getInstance()->createUserEventLog($userId, EventLogTypeModel::LOGOUT);
     }
 
     /**
@@ -192,14 +209,15 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     public function forgotpasswordAction ()
     {
-        $this->view->headTitle('Forgot Password');
+        $this->_pageTitle = 'Forgot Password';
+
         // check if this page has been posted to
         $request = $this->getRequest();
         $email   = $request->getParam('email', false);
         if ($email !== false)
         {
             // Find user by email
-            $user = Application_Model_Mapper_User::getInstance()->fetchUserByEmail($email);
+            $user = UserMapper::getInstance()->fetchUserByEmail($email);
 
             if ($user)
             {
@@ -208,9 +226,9 @@ class Default_AuthController extends Tangent_Controller_Action
                 $db->beginTransaction();
                 try
                 {
-                    Application_Model_Mapper_User_PasswordResetRequest::getInstance()->deleteByUserId($user->id);
+                    UserPasswordResetRequestMapper::getInstance()->deleteByUserId($user->id);
                     $time                                = date("Y-m-d H:i:s");
-                    $passwordResetRequest                = new Application_Model_User_PasswordResetRequest();
+                    $passwordResetRequest                = new UserPasswordResetRequestModel();
                     $passwordResetRequest->dateRequested = $time;
                     $passwordResetRequest->ipAddress     = $_SERVER ['REMOTE_ADDR'];
                     $passwordResetRequest->resetVerified = false;
@@ -220,15 +238,15 @@ class Default_AuthController extends Tangent_Controller_Action
                     // Random number + user id + unique id
                     $passwordResetRequest->resetToken = uniqid($this->getRandom(0, 12800) . $user->id, true);
 
-                    Application_Model_Mapper_User_PasswordResetRequest::getInstance()->insert($passwordResetRequest);
+                    UserPasswordResetRequestMapper::getInstance()->insert($passwordResetRequest);
                     $db->commit();
-                    Application_Model_Mapper_User_Event_Log::getInstance()->createUserEventLog($user->id, Application_Model_Event_Log_Type::FORGOT_PASSWORD_SEND);
+                    UserEventLogMapper::getInstance()->createUserEventLog($user->id, EventLogTypeModel::FORGOT_PASSWORD_SEND);
                     $this->sendForgotPasswordEmail($user, $passwordResetRequest->resetToken);
                 }
                 catch (Exception $e)
                 {
                     $db->rollback();
-                    Tangent_Log::logException($e);
+                    \Tangent\Logger\Logger::logException($e);
                 }
             }
 
@@ -239,7 +257,7 @@ class Default_AuthController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array('danger' => 'A email is required to use forgot password'));
         }
 
-        $this->redirector('auth', 'login');
+        $this->redirectToRoute('auth.login');
 
     }
 
@@ -279,17 +297,17 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     public function changepasswordAction ()
     {
-        $this->view->headTitle('Change Password');
-        $auth     = Zend_Auth::getInstance();
-        $identity = $auth->getIdentity();
+        $this->_pageTitle = 'Change Password';
+        $auth             = Zend_Auth::getInstance();
+        $identity         = $auth->getIdentity();
 
-        // If customer is flaged for a reset send them to the login page layout
+        // If customer is flagged for a reset send them to the login page layout
         if ($identity->resetPasswordOnNextLogin)
         {
             $this->view->layout()->setLayout('auth');
             $this->_helper->viewRenderer('forcechangepassword');
         }
-        $form    = new Default_Form_ChangePassword();
+        $form    = new ChangePasswordForm();
         $request = $this->getRequest();
 
         if ($request->isPost())
@@ -300,7 +318,7 @@ class Default_AuthController extends Tangent_Controller_Action
                 if ($form->isValid($values))
                 {
 
-                    $userMapper = new Application_Model_Mapper_User();
+                    $userMapper = new UserMapper();
 
                     $user     = $userMapper->find($identity->id);
                     $password = crypt($form->getValue("current_password"), $user->password);
@@ -309,11 +327,11 @@ class Default_AuthController extends Tangent_Controller_Action
                     if (strcmp($password, $user->password) === 0)
                     {
                         // Process password change and remove change flag
-                        $user->password                 = (Application_Model_User::cryptPassword($form->getValue("password")));
+                        $user->password                 = (UserModel::cryptPassword($form->getValue("password")));
                         $user->resetPasswordOnNextLogin = 0;
                         $userMapper->save($user);
 
-                        Application_Model_Mapper_User_Event_Log::getInstance()->createUserEventLog($user->id, Application_Model_Event_Log_Type::CHANGE_PASSWORD);
+                        UserEventLogMapper::getInstance()->createUserEventLog($user->id, EventLogTypeModel::CHANGE_PASSWORD);
                         // Remove flag on session
                         $identity->resetPasswordOnNextLogin = false;
                         $auth->getStorage()->write($identity);
@@ -323,8 +341,7 @@ class Default_AuthController extends Tangent_Controller_Action
                         ));
 
                         // Redirects user to logout screen to login again
-                        $r = new Zend_Controller_Action_Helper_Redirector();
-                        $r->gotoSimple('index', 'index', 'default');
+                        $this->redirectToRoute('auth.login');
                     }
                     else
                     {
@@ -333,22 +350,19 @@ class Default_AuthController extends Tangent_Controller_Action
                         ));
                     }
                 }
-                else
-                {
-                    $form->buildBootstrapErrorDecorators();
-                }
             }
             else // is $values ['cancel'] is set 
             {
 
                 if ($identity->resetPasswordOnNextLogin)
                 {
-                    $this->logout();
-                    $this->redirector('login');
+                    $this->doLogout();
+                    $this->redirectToRoute('auth.login');
+
                 }
                 else
                 {
-                    $this->redirector('index', 'index');
+                    $this->redirectToRoute('app.dashboard');
                 }
             }
         }
@@ -363,9 +377,9 @@ class Default_AuthController extends Tangent_Controller_Action
     function resetpasswordAction ()
     {
         $this->view->layout()->setLayout('auth');
-        $this->view->headTitle('Reset Password');
-        $this->logout();
-        $form = new Default_Form_ResetPassword();
+        $this->_pageTitle = 'Reset Password';
+        $this->doLogout();
+        $form = new ResetPasswordForm();
         // Step 1. Get the reset id
         $request = $this->getRequest();
         $values  = $request->getPost();
@@ -383,7 +397,7 @@ class Default_AuthController extends Tangent_Controller_Action
                     if (!$passwordRequest->resetVerified)
                     {
                         $passwordRequest->resetVerified = true;
-                        Application_Model_Mapper_User_PasswordResetRequest::getInstance()->save($passwordRequest);
+                        UserPasswordResetRequestMapper::getInstance()->save($passwordRequest);
                     }
                     if ($request->isPost())
                     {
@@ -398,16 +412,19 @@ class Default_AuthController extends Tangent_Controller_Action
                             if (!empty($password) && strcmp($password, $confirm) === 0)
                             {
                                 $passwordRequest->resetUsed = true;
-                                Application_Model_Mapper_User_PasswordResetRequest::getInstance()->save($passwordRequest);
-                                $user           = Application_Model_Mapper_User::getInstance()->find($passwordRequest->userId);
-                                $user->password = (Application_Model_User::cryptPassword($this->_request->getParam('password')));
-                                Application_Model_Mapper_User::getInstance()->save($user);
-                                Application_Model_Mapper_User_PasswordResetRequest::getInstance()->deleteByUserId($user->id);
-                                Application_Model_Mapper_User_Event_Log::getInstance()->createUserEventLog($user->id, Application_Model_Event_Log_Type::FORGOT_PASSWORD_CHANGED);
+                                UserPasswordResetRequestMapper::getInstance()->save($passwordRequest);
+                                $user           = UserMapper::getInstance()->find($passwordRequest->userId);
+                                $user->password = (UserModel::cryptPassword($this->_request->getParam('password')));
+
+                                UserMapper::getInstance()->save($user);
+                                UserPasswordResetRequestMapper::getInstance()->deleteByUserId($user->id);
+                                UserEventLogMapper::getInstance()->createUserEventLog($user->id, EventLogTypeModel::FORGOT_PASSWORD_CHANGED);
+
                                 $this->_flashMessenger->addMessage(array(
                                     "success" => 'Password has been updated'
                                 ));
-                                $this->redirector('index', 'index');
+
+                                $this->redirectToRoute('app.dashboard');
 
                             }
                         }
@@ -422,13 +439,13 @@ class Default_AuthController extends Tangent_Controller_Action
             }
             else
             {
-                $this->redirector('index', 'index');
+                $this->redirectToRoute('app.dashboard');
             }
 
         }
         else
         {
-            $this->redirector('index', 'index');
+            $this->redirectToRoute('app.dashboard');
         }
 
     }
@@ -438,7 +455,7 @@ class Default_AuthController extends Tangent_Controller_Action
      *
      * @param string $resetUid
      *
-     * @return Application_Model_User_PasswordResetRequest
+     * @return UserPasswordResetRequestModel
      */
     function verifyPasswordReset ($resetUid)
     {
@@ -446,7 +463,7 @@ class Default_AuthController extends Tangent_Controller_Action
         if ($resetUid !== null)
         {
             // Step 2. Verify the reset id and update the request
-            $passwordResetRequest = Application_Model_Mapper_User_PasswordResetRequest::getInstance()->fetch(array(
+            $passwordResetRequest = UserPasswordResetRequestMapper::getInstance()->fetch(array(
                 "resetToken = ?" => $resetUid
             ));
             if ($passwordResetRequest)
@@ -490,7 +507,7 @@ class Default_AuthController extends Tangent_Controller_Action
     }
 
     /**
-     * @param $user  Application_Model_User
+     * @param $user  UserModel
      * @param $token String
      */
     public function sendForgotPasswordEmail ($user, $token)

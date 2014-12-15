@@ -1,4 +1,7 @@
 <?php
+use MPSToolbox\Legacy\Forms\DeleteConfirmationForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\QuoteMapper;
 
 /**
  * Class Quotegen_QuoteController
@@ -9,7 +12,7 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
     public function indexAction ()
     {
         // Display all of the quotes
-        $mapper    = Quotegen_Model_Mapper_Quote::getInstance();
+        $mapper    = QuoteMapper::getInstance();
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
 
         // Set the current page we're on
@@ -31,10 +34,10 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
             $this->_flashMessenger->addMessage(array(
                 'warning' => 'Please select a quote to delete first.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.view-and-print-reports');
         }
 
-        $quoteMapper = new Quotegen_Model_Mapper_Quote();
+        $quoteMapper = new QuoteMapper();
         $quote       = $quoteMapper->find($quoteId);
 
         if (!$quote->id)
@@ -42,12 +45,12 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
             $this->_flashMessenger->addMessage(array(
                 'danger' => 'There was an error selecting the quote to delete.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.view-and-print-reports');
         }
 
-        $client  = Quotegen_Model_Mapper_Client::getInstance()->find($quote->clientId);
+        $client  = ClientMapper::getInstance()->find($quote->clientId);
         $message = "Are you sure you want to delete the quote for {$client->companyName} ?";
-        $form    = new Application_Form_Delete($message);
+        $form    = new DeleteConfirmationForm($message);
 
         $request = $this->getRequest();
         if ($request->isPost())
@@ -64,12 +67,12 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
                     $this->_flashMessenger->addMessage(array(
                         'success' => "Quote was deleted successfully."
                     ));
-                    $this->redirector('index');
+                    $this->redirectToRoute('quotes.reports', array('quoteId' => $quote->id));
                 }
             }
             else
             {
-                $this->redirector('index');
+                $this->redirectToRoute('quotes.reports', array('quoteId' => $quote->id));
             }
         }
         $this->view->form = $form;

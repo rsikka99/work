@@ -1,11 +1,15 @@
 <?php
-/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+/* @var $hardwareOptimization HardwareOptimizationModel */
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationCustomerModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\OptimizationViewModel;
+
 $hardwareOptimization = $this->hardwareOptimization;
 
-/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+/* @var $optimization OptimizationViewModel */
 $optimization = $this->optimization;
 
-/* @var $customerOptimization Hardwareoptimization_Model_Optimization_Customer */
+/* @var $customerOptimization OptimizationCustomerModel */
 $customerOptimization = $this->customerOptimization;
 
 /* @var $graphs array */
@@ -14,19 +18,21 @@ $graphs = $this->graphs;
 <div class="pheader" id="color-usage">
     Color Usage
 </div>
-<p>You currently have <strong><?php echo number_format($optimization->getNumberOfColorCapableDevices()); ?></strong> color printing
-    <?php echo(count($optimization->getNumberOfColorCapableDevices()) == 1 ? ' devices that print' : ' device that prints '); ?>
+<p>You currently have
+    <strong><?= number_format($optimization->getNumberOfColorCapableDevices()); ?></strong> color printing
+    <?= (count($optimization->getNumberOfColorCapableDevices()) == 1 ? ' devices that print' : ' device that prints '); ?>
     a total monthly average of
-    <strong><?php echo $this->formatPageVolume($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></strong> color pages per
-    month, which is <strong><?php echo number_format(($optimization->getPercentages()->TotalColorPercentage * 100), 1); ?>%</strong> of your total monthly print
+    <strong><?= $this->formatPageVolume($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></strong> color pages per
+    month, which is
+    <strong><?= number_format(($optimization->getPercentages()->TotalColorPercentage * 100), 1); ?>%</strong> of your total monthly print
     volume.</p>
 <table class='center'>
     <tr>
-        <td><img src="<?php echo $graphs[14]; ?>" /></td>
-        <td><img src="<?php echo $graphs[15]; ?>" /></td>
+        <td><img src="<?= $graphs[14]; ?>" /></td>
+        <td><img src="<?= $graphs[15]; ?>" /></td>
     </tr>
 </table>
 <p>Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of
     color in important documents can enhance your company's professional image, improve comprehension and increase readership.
-    <?php echo My_Brand::getDealerBranding()->mpsProgramName; ?> can help you track your color printing and provide low-cost color hardware options.</p>
+    <?= My_Brand::getDealerBranding()->mpsProgramName; ?> can help you track your color printing and provide low-cost color hardware options.</p>
 <br />

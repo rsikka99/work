@@ -1,5 +1,7 @@
 <?php
 
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+
 class My_View_Helper_IsAllowed extends Zend_View_Helper_Abstract
 {
     /**
@@ -8,13 +10,13 @@ class My_View_Helper_IsAllowed extends Zend_View_Helper_Abstract
     protected $_userId;
 
     /**
-     * @var Application_Model_Acl
+     * @var \MPSToolbox\Legacy\Models\Acl\AppAclModel
      */
     protected $_acl;
 
     public function __construct ()
     {
-        $this->_acl = Application_Model_Acl::getInstance();
+        $this->_acl = AppAclModel::getInstance();
 
         if (Zend_Auth::getInstance()->hasIdentity())
         {

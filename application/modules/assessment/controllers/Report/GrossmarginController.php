@@ -1,4 +1,9 @@
 <?php
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentStepsModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DealerTonerAttributeMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DealerTonerAttributeModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
 
 /**
  * Class Assessment_Report_GrossmarginController
@@ -16,7 +21,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 "error" => "You do not have permission to access this."
             ));
 
-            $this->redirector('index', 'index', 'index');
+            $this->redirectToRoute('assessment');
         }
 
         parent::init();
@@ -27,9 +32,8 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
      */
     public function indexAction ()
     {
-        $this->view->headTitle('Assessment');
-        $this->view->headTitle('Gross Margin');
-        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
+        $this->_pageTitle = array('Assessment', 'Gross Margin');
+        $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
@@ -173,7 +177,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
         {
             $dealerId         = Zend_Auth::getInstance()->getIdentity()->dealerId;
             $fieldList_Values = array();
-            /* @var $deviceInstance Proposalgen_Model_DeviceInstance() */
+            /* @var $deviceInstance DeviceInstanceModel() */
             foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $blackToner = null;
@@ -184,42 +188,42 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
 
                 foreach ($toners as $toner)
                 {
-                    $dealerTonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner->id, $dealerId);
+                    $dealerTonerAttribute = DealerTonerAttributeMapper::getInstance()->findTonerAttributeByTonerId($toner->id, $dealerId);
                     $dealerSku            = null;
 
-                    if ($dealerTonerAttribute instanceof Proposalgen_Model_Dealer_Toner_Attribute)
+                    if ($dealerTonerAttribute instanceof DealerTonerAttributeModel)
                     {
                         $dealerSku = $dealerTonerAttribute->dealerSku;
                     }
 
                     switch ($toner->tonerColorId)
                     {
-                        case Proposalgen_Model_TonerColor::BLACK:
+                        case TonerColorModel::BLACK:
                             $blackToner                      = $toner;
                             $tonerSkus['black']['sku']       = $toner->sku;
                             $tonerSkus['black']['dealerSku'] = $dealerSku;
                             break;
-                        case Proposalgen_Model_TonerColor::CYAN:
+                        case TonerColorModel::CYAN:
                             $colorToner                     = $toner;
                             $tonerSkus['cyan']['sku']       = $toner->sku;
                             $tonerSkus['cyan']['dealerSku'] = $dealerSku;
                             break;
-                        case Proposalgen_Model_TonerColor::MAGENTA:
+                        case TonerColorModel::MAGENTA:
                             $tonerSkus['magenta']['sku']       = $toner->sku;
                             $tonerSkus['magenta']['dealerSku'] = $dealerSku;
                             $colorToner                        = $toner;
                             break;
-                        case Proposalgen_Model_TonerColor::YELLOW:
+                        case TonerColorModel::YELLOW:
                             $tonerSkus['yellow']['sku']       = $toner->sku;
                             $tonerSkus['yellow']['dealerSku'] = $dealerSku;
                             $colorToner                       = $toner;
                             break;
-                        case Proposalgen_Model_TonerColor::THREE_COLOR:
+                        case TonerColorModel::THREE_COLOR:
                             $tonerSkus['threeColor']['sku']       = $toner->sku;
                             $tonerSkus['threeColor']['dealerSku'] = $dealerSku;
                             $colorToner                           = $toner;
                             break;
-                        case Proposalgen_Model_TonerColor::FOUR_COLOR:
+                        case TonerColorModel::FOUR_COLOR:
                             $tonerSkus['fourColor']['sku']       = $toner->sku;
                             $tonerSkus['fourColor']['dealerSku'] = $dealerSku;
                             $blackToner                          = $toner;

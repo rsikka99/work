@@ -1,9 +1,30 @@
 <?php
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Models\Acl\AdminAclModel;
+use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceTonerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DealerMasterDeviceAttributeModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceTonerModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\DeviceSetupForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\OptionMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\DeviceOptionMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\DeviceConfigurationMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\DeviceMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceOptionModel;
+use Tangent\Controller\Action;
+use Tangent\Service\JQGrid;
 
 /**
  * Class Quotegen_DevicesetupController
  */
-class Quotegen_DevicesetupController extends Tangent_Controller_Action
+class Quotegen_DevicesetupController extends Action
 {
 
     public function init ()
@@ -16,7 +37,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
-        $this->isAdmin       = $this->view->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_TONER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $this->_pageTitle    = array('All Devices');
+        $this->isAdmin       = $this->view->IsAllowed(AdminAclModel::RESOURCE_ADMIN_TONER_WILDCARD, AppAclModel::PRIVILEGE_ADMIN);
         $this->view->isAdmin = $this->isAdmin;
     }
 
@@ -25,73 +47,43 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
      */
     public function allDevicesListAction ()
     {
-        $jqGrid             = new Tangent_Service_JQGrid();
-        $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
+        $postData          = $this->getAllParams();
+        $filterCanSell     = ($this->_getParam('filterCanSell', null) == 'true') ? true : false;
+        $filterUnapproved  = ($this->_getParam('filterUnapproved', null) == 'true') ? true : false;
+        $filterSearchIndex = $this->_getParam('filterSearchIndex', null);
+        $filterSearchValue = $this->_getParam('filterSearchValue', null);
+        $columnFactory     = new \Tangent\Grid\Order\ColumnFactory(array(
+            'deviceName', 'oemSku', 'dealerSku', 'isSystemDevice'
+        ));
 
-        $jqGridParameters = array(
-            'sidx' => $this->_getParam('sidx', 'modelName'),
-            'sord' => $this->_getParam('sord', 'desc'),
-            'page' => $this->_getParam('page', 1),
-            'rows' => $this->_getParam('rows', 10),
-        );
-        $canSell          = ($this->_getParam('canSell', false) === "true");
-        $unapproved       = ($this->_getParam('unapproved', false) === "true");
+        $gridRequest        = new \Tangent\Grid\Request\JqGridRequest($postData, $columnFactory);
+        $gridResponse       = new \Tangent\Grid\Response\JqGridResponse();
+        $masterDeviceMapper = MasterDeviceMapper::getInstance();
+        $dataAdapter        = new \MPSToolbox\Grid\DataAdapter\MasterDeviceDataAdapter($masterDeviceMapper, $filterCanSell);
 
-        if ($canSell)
+        /**
+         * Setup Filters
+         */
+        $filterCriteriaValidator = new Zend_Validate_InArray(array('haystack' => array('deviceName', 'oemSku', 'dealerSku')));
+
+
+        if ($filterSearchIndex !== null && $filterSearchValue !== null && $filterCriteriaValidator->isValid($filterSearchIndex))
         {
-            $sortColumns = array(
-                'modelName',
-                'oemSku',
-                'dealerSku',
-                'isSystemDevice'
-            );
+            $dataAdapter->addFilter(new \Tangent\Grid\Filter\Contains($filterSearchIndex, $filterSearchValue));
         }
-        else
+
+        if ($filterUnapproved)
         {
-            $sortColumns = array(
-                'modelName',
-            );
+            $dataAdapter->addFilter(new \Tangent\Grid\Filter\IsNot('isSystemDevice', true));
         }
-        $jqGrid->setValidSortColumns($sortColumns);
-        $jqGrid->parseJQGridPagingRequest($jqGridParameters);
-        if ($jqGrid->sortingIsValid())
-        {
-            $searchCriteria = $this->_getParam('criteriaFilter', null);
-            $searchValue    = $this->_getParam('criteria', null);
 
-            $filterCriteriaValidator = new Zend_Validate_InArray(array(
-                'haystack' => array(
-                    'deviceName',
-                    'oemSku',
-                    'dealerSku'
-                )
-            ));
+        /**
+         * Setup grid
+         */
+        $gridService = new \Tangent\Grid\Grid($gridRequest, $gridResponse, $dataAdapter);
+        $this->sendJson($gridService->getGridResponseAsArray());
 
-            // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
-            if ($searchCriteria === null || $searchValue === null || !$filterCriteriaValidator->isValid($searchCriteria))
-            {
-                $searchCriteria = null;
-                $searchValue    = null;
-            }
-
-            $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
-
-            $jqGrid->setRecordCount($masterDeviceMapper->getCanSellMasterDevices($jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $searchCriteria, $searchValue, null, null, $canSell, $unapproved, true));
-
-            if ($jqGrid->getCurrentPage() < 1)
-            {
-                $jqGrid->setCurrentPage(1);
-            }
-            else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
-            {
-                $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
-                $startRecord = ($jqGrid->getCurrentPage() * $jqGrid->getRecordsPerPage()) - $jqGrid->getRecordsPerPage();
-            }
-
-            $jqGrid->setRows($masterDeviceMapper->getCanSellMasterDevices($jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $searchCriteria, $searchValue, $jqGrid->getRecordsPerPage(), $startRecord, $canSell, $unapproved));
-
-        }
-        $this->sendJson($jqGrid->createPagerResponseArray());
+        return;
     }
 
     /**
@@ -107,10 +99,10 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         $cboCriteria    = null;
 
         // Populate manufacturers drop down
-        $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
+        $manufacturers = ManufacturerMapper::getInstance()->fetchAll();
 
         // Create a new form with the mode and roles set
-        $form = new Quotegen_Form_DeviceSetup();
+        $form = new DeviceSetupForm();
 
         // Make sure we are posting data
         $request = $this->getRequest();
@@ -170,16 +162,16 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         }
 
                         // An array of required toners
-                        $requiredToners = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($toner_config_id);
+                        $requiredToners = TonerConfigModel::getRequiredTonersForTonerConfig($toner_config_id);
 
                         // An array for counting each color
                         $tonerCounts = array(
-                            Proposalgen_Model_TonerColor::BLACK       => 0,
-                            Proposalgen_Model_TonerColor::CYAN        => 0,
-                            Proposalgen_Model_TonerColor::MAGENTA     => 0,
-                            Proposalgen_Model_TonerColor::YELLOW      => 0,
-                            Proposalgen_Model_TonerColor::THREE_COLOR => 0,
-                            Proposalgen_Model_TonerColor::FOUR_COLOR  => 0
+                            TonerColorModel::BLACK       => 0,
+                            TonerColorModel::CYAN        => 0,
+                            TonerColorModel::MAGENTA     => 0,
+                            TonerColorModel::YELLOW      => 0,
+                            TonerColorModel::THREE_COLOR => 0,
+                            TonerColorModel::FOUR_COLOR  => 0
                         );
 
                         $tonerErrorMessage = "";
@@ -189,7 +181,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         foreach ($toners as $toner_id)
                         {
                             // Validate that the toner exists in our database
-                            if (($curToner = Proposalgen_Model_Mapper_Toner::getInstance()->find((int)$toner_id)) != false)
+                            if (($curToner = TonerMapper::getInstance()->find((int)$toner_id)) != false)
                             {
                                 $tonerCounts [$curToner->tonerColorId]++;
                             }
@@ -207,7 +199,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                     $requiredTonerList = array();
                                     foreach ($requiredToners as $tonerColorId)
                                     {
-                                        $requiredTonerList [] = Proposalgen_Model_TonerColor::$ColorNames [$tonerColorId];
+                                        $requiredTonerList [] = TonerColorModel::$ColorNames [$tonerColorId];
                                     }
 
                                     $hasValidToners    = false;
@@ -221,7 +213,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                 if ($tonerCount > 0)
                                 {
                                     $hasValidToners    = false;
-                                    $tonerErrorMessage = "You cannot add a " . Proposalgen_Model_TonerColor::$ColorNames [$tonerColorId] . " toner to this device because your toner configuration is set to " . Proposalgen_Model_TonerConfig::$TonerConfigNames [$toner_config_id] . ".";
+                                    $tonerErrorMessage = "You cannot add a " . TonerColorModel::$ColorNames [$tonerColorId] . " toner to this device because your toner configuration is set to " . TonerConfigModel::$TonerConfigNames [$toner_config_id] . ".";
                                     break;
                                 }
                             }
@@ -231,8 +223,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         if ($hasValidToners)
                         {
                             // Save Master Device
-                            $masterDeviceMapper        = new Proposalgen_Model_Mapper_MasterDevice();
-                            $masterDevice              = new Proposalgen_Model_MasterDevice();
+                            $masterDeviceMapper        = new MasterDeviceMapper();
+                            $masterDevice              = new MasterDeviceModel();
                             $masterDevice->dateCreated = date('Y-m-d H:i:s');
 
                             foreach ($values as $value)
@@ -263,10 +255,10 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                 // Save Toners
                                 foreach ($toners as $value)
                                 {
-                                    $deviceToner                   = new Proposalgen_Model_DeviceToner();
+                                    $deviceToner                   = new DeviceTonerModel();
                                     $deviceToner->toner_id         = $value;
                                     $deviceToner->master_device_id = $masterDeviceId;
-                                    Proposalgen_Model_Mapper_DeviceToner::getInstance()->save($deviceToner);
+                                    DeviceTonerMapper::getInstance()->save($deviceToner);
                                 }
 
                                 // Save Quotegen Device
@@ -276,8 +268,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                 if ($masterDeviceId > 0 && strlen($oemSku) > 0)
                                 {
                                     // Save Device SKU
-                                    $devicemapper = new Quotegen_Model_Mapper_Device();
-                                    $device       = new Quotegen_Model_Device();
+                                    $devicemapper = new DeviceMapper();
+                                    $device       = new DeviceModel();
                                     $devicevalues = array(
                                         'masterDeviceId' => $masterDeviceId,
                                         'dealerId'       => Zend_Auth::getInstance()->getIdentity()->dealerId,
@@ -294,7 +286,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                 ));
 
                                 // Redirect them here so that the form reloads
-                                $this->redirector('edit', null, null, array(
+                                $this->redirectToRoute('hardware-library.all-devices.edit', array(
                                     'id' => $masterDeviceId
                                 ));
                             }
@@ -323,12 +315,12 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->redirector('index');
+                $this->redirectToRoute('hardware-library.all-devices');
             }
         }
 
         // Display filtered list of toners
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Proposalgen_Model_Mapper_Toner::getInstance(), $where));
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(TonerMapper::getInstance(), $where));
 
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
@@ -341,7 +333,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             array(
                 'ViewScript',
                 array(
-                    'viewScript'     => 'devicesetup/forms/createdevice.phtml',
+                    'viewScript'     => 'forms/quotegen/create-new-device-form.phtml',
                     'manufacturers'  => $manufacturers,
                     'assignedToners' => $assignedToners,
                     'paginator'      => $paginator,
@@ -367,11 +359,11 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$masterDeviceId)
         {
             $this->_flashMessenger->addMessage(array('warning' => 'Please select a master device to edit first.'));
-            $this->redirector('index');
+            $this->redirectToRoute('hardware-library.all-devices');
         }
 
         // Get the masterDevice
-        $mapper                 = new Proposalgen_Model_Mapper_MasterDevice();
+        $mapper                 = new MasterDeviceMapper();
         $masterDevice           = $mapper->find($masterDeviceId);
         $this->view->devicename = $masterDevice->getFullDeviceName();
 
@@ -379,15 +371,15 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$masterDevice)
         {
             $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the master device to edit.'));
-            $this->redirector('index');
+            $this->redirectToRoute('hardware-library.all-devices');
         }
 
         // Create a new form with the mode and roles set
-        $form = new Quotegen_Form_DeviceSetup();
+        $form = new DeviceSetupForm();
 
         // Prepare the data for the form
         $form->populate($masterDevice->toArray());
-        $isAdmin = $this->view->IsAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $isAdmin = $this->view->IsAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, AppAclModel::PRIVILEGE_ADMIN);
         if (!$isAdmin)
         {
             $tempAttribute = $masterDevice->getDealerAttributes();
@@ -418,7 +410,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
         // Populate SKU
         $oemSku                     = null;
-        $deviceMapper               = new Quotegen_Model_Mapper_Device();
+        $deviceMapper               = new DeviceMapper();
         $quoteDevice                = $deviceMapper->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
         $this->view->quotegendevice = $quoteDevice;
         if ($quoteDevice)
@@ -451,8 +443,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         if ($isAdmin)
                         {
                             // Save Master Device
-                            $mapper       = new Proposalgen_Model_Mapper_MasterDevice();
-                            $masterDevice = new Proposalgen_Model_MasterDevice();
+                            $mapper       = new MasterDeviceMapper();
+                            $masterDevice = new MasterDeviceModel();
                             foreach ($values as &$value)
                             {
                                 if (strlen($value) < 1)
@@ -473,11 +465,11 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             // Get the dealer id from the session
                             $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
 
-                            $quoteDevice                 = new Quotegen_Model_Device($formValues);
+                            $quoteDevice                 = new DeviceModel($formValues);
                             $quoteDevice->dealerId       = $dealerId;
                             $quoteDevice->masterDeviceId = $masterDeviceId;
 
-                            $dealerMasterDeviceAttributes                 = new Proposalgen_Model_Dealer_Master_Device_Attribute($formValues);
+                            $dealerMasterDeviceAttributes                 = new DealerMasterDeviceAttributeModel($formValues);
                             $dealerMasterDeviceAttributes->masterDeviceId = $masterDeviceId;
                             $dealerMasterDeviceAttributes->dealerId       = $dealerId;
 
@@ -512,9 +504,18 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->redirector('index');
+                $this->redirectToRoute('hardware-library.all-devices');
             }
         }
+        // Add form to page
+        $form->setDecorators(array(
+            array(
+                'ViewScript',
+                array(
+                    'viewScript' => 'forms/quotegen/device-setup-form.phtml',
+                )
+            )
+        ));
         $this->view->form = $form;
     }
 
@@ -529,7 +530,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $this->sendJsonError('Missing Master Device ID');
         }
 
-        $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
+        $masterDevice = MasterDeviceMapper::getInstance()->find($masterDeviceId);
         if (!$masterDevice)
         {
             $this->sendJsonError('Invalid Master Device');
@@ -539,15 +540,15 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         try
         {
             $db->beginTransaction();
-            Proposalgen_Model_Mapper_MasterDevice::getInstance()->delete($masterDevice);
+            MasterDeviceMapper::getInstance()->delete($masterDevice);
             $db->commit();
             $this->sendJson(array('success' => true, 'message' => 'Device successfully deleted'));
         }
         catch (Exception $e)
         {
             $db->rollBack();
-            Tangent_Log::logException($e);
-            $this->sendJsonError('A server error occurred when trying to delete the master device. Error ID #' . Tangent_Log::getUniqueId());
+            \Tangent\Logger\Logger::logException($e);
+            $this->sendJsonError('A server error occurred when trying to delete the master device. Error ID #' . \Tangent\Logger\Logger::getUniqueId());
         }
     }
 
@@ -571,11 +572,11 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'warning' => 'Please select a master device to edit first.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('hardware-library.all-devices');
         }
 
         // Get the master device
-        $mapper                 = new Proposalgen_Model_Mapper_MasterDevice();
+        $mapper                 = new MasterDeviceMapper();
         $masterDevice           = $mapper->find($masterDeviceId);
         $this->view->devicename = $masterDevice->getFullDeviceName();
 
@@ -585,19 +586,19 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'danger' => 'There was an error selecting the master device to edit.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('hardware-library.all-devices');
         }
-        $tonerConfig = $masterDevice->getTonerConfig()->tonerConfigName;
+        $tonerConfig = $masterDevice->getTonerConfig()->name;
 
         // Get the toner colors that we require
-        $requiredTonerColors = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($masterDevice->tonerConfigId);
+        $requiredTonerColors = TonerConfigModel::getRequiredTonersForTonerConfig($masterDevice->tonerConfigId);
 
         // Get quotegen device
-        $device                     = Quotegen_Model_Mapper_Device::getInstance()->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
+        $device                     = DeviceMapper::getInstance()->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
         $this->view->quotegendevice = $device;
 
         // Populate manufacturers drop down
-        $manufacturers             = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
+        $manufacturers             = ManufacturerMapper::getInstance()->fetchAll();
         $this->view->manufacturers = $manufacturers;
 
         // Make sure we are posting data
@@ -642,17 +643,17 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         if ($tonerId && $masterDeviceId)
                         {
                             // Get toner
-                            $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($tonerId);
+                            $toner = TonerMapper::getInstance()->find($tonerId);
 
                             $validToner = in_array($toner->tonerColorId, $requiredTonerColors);
 
                             if ($validToner)
                             {
                                 // Save device toner
-                                $deviceToner                   = new Proposalgen_Model_DeviceToner();
+                                $deviceToner                   = new DeviceTonerModel();
                                 $deviceToner->toner_id         = $tonerId;
                                 $deviceToner->master_device_id = $masterDeviceId;
-                                Proposalgen_Model_Mapper_DeviceToner::getInstance()->save($deviceToner);
+                                DeviceTonerMapper::getInstance()->save($deviceToner);
 
                                 $this->_flashMessenger->addMessage(array(
                                     'success' => "The toner was assigned successfully."
@@ -672,16 +673,16 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                     {
                         // An array for counting each color
                         $tonerCounts = array(
-                            Proposalgen_Model_TonerColor::BLACK       => 0,
-                            Proposalgen_Model_TonerColor::CYAN        => 0,
-                            Proposalgen_Model_TonerColor::MAGENTA     => 0,
-                            Proposalgen_Model_TonerColor::YELLOW      => 0,
-                            Proposalgen_Model_TonerColor::THREE_COLOR => 0,
-                            Proposalgen_Model_TonerColor::FOUR_COLOR  => 0
+                            TonerColorModel::BLACK       => 0,
+                            TonerColorModel::CYAN        => 0,
+                            TonerColorModel::MAGENTA     => 0,
+                            TonerColorModel::YELLOW      => 0,
+                            TonerColorModel::THREE_COLOR => 0,
+                            TonerColorModel::FOUR_COLOR  => 0
                         );
 
                         $safeToDelete         = true;
-                        $tonersByManufacturer = Proposalgen_Model_Mapper_Toner::getInstance()->getTonersForDevice($masterDeviceId);
+                        $tonersByManufacturer = TonerMapper::getInstance()->getTonersForDevice($masterDeviceId);
 
                         // Count the toners
                         foreach ($tonersByManufacturer as $tonersByColor)
@@ -692,7 +693,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             }
                         }
 
-                        $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($tonerId);
+                        $toner = TonerMapper::getInstance()->find($tonerId);
 
                         // Make sure we're not dropping below one valid toner for the color
                         if ($tonerCounts [$toner->tonerColorId] < 2)
@@ -703,7 +704,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         // If it's safe to delete, do so.
                         if ($safeToDelete)
                         {
-                            Proposalgen_Model_Mapper_DeviceToner::getInstance()->delete(array(
+                            DeviceTonerMapper::getInstance()->delete(array(
                                 'toner_id = ?'         => $tonerId,
                                 'master_device_id = ?' => $masterDeviceId
                             ));
@@ -720,7 +721,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                     else if (isset($values ['btnSearch']))
                     {
                         // Get Device Toners List
-                        $deviceToners   = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($masterDeviceId);
+                        $deviceToners   = DeviceTonerMapper::getInstance()->getDeviceToners($masterDeviceId);
                         $assignedToners = array(
                             ''
                         );
@@ -772,11 +773,11 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->redirector('index');
+                $this->redirectToRoute('hardware-library.all-devices');
             }
         }
 
-        $deviceToners   = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($masterDeviceId);
+        $deviceToners   = DeviceTonerMapper::getInstance()->getDeviceToners($masterDeviceId);
         $assignedToners = array();
         foreach ($deviceToners as $deviceToner)
         {
@@ -817,7 +818,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             'tonerColorId IN ( ? )' => $validTonerColors
         ));
 
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Proposalgen_Model_Mapper_Toner::getInstance(), $where));
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(TonerMapper::getInstance(), $where));
 
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
@@ -855,11 +856,11 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'warning' => 'Please select a master device to edit first.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('hardware-library.all-devices');
         }
 
         // Get the device and assigned options
-        $quoteDevice            = Quotegen_Model_Mapper_Device::getInstance()->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
+        $quoteDevice            = DeviceMapper::getInstance()->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
         $this->view->devicename = $quoteDevice->getMasterDevice()->getFullDeviceName();
 
         // Get device options list
@@ -886,8 +887,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 {
                     // Get Option ID
                     $optionId           = $values ['optionid'];
-                    $deviceOptionMapper = new Quotegen_Model_Mapper_DeviceOption();
-                    $deviceOption       = new Quotegen_Model_DeviceOption();
+                    $deviceOptionMapper = new DeviceOptionMapper();
+                    $deviceOption       = new DeviceOptionModel();
 
                     // Save if option and device id
                     if ($optionId && $masterDeviceId)
@@ -951,13 +952,13 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 catch (Exception $e)
                 {
                     $this->_flashMessenger->addMessage(array('error' => "An error has occurred."));
-                    Tangent_Log::logException($e);
+                    \Tangent\Logger\Logger::logException($e);
                 }
             }
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->redirector('index');
+                $this->redirectToRoute('hardware-library.all-devices');
             }
         }
 
@@ -1017,7 +1018,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         $this->view->view_filter = $view;
 
         // Display filtered list of options
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_Option::getInstance(), $where));
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(OptionMapper::getInstance(), $where));
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
 
@@ -1048,15 +1049,15 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'warning' => 'Please select a master device to edit first.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('hardware-library.all-devices');
         }
 
         // Get the device
-        $device                 = Quotegen_Model_Mapper_Device::getInstance()->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
+        $device                 = DeviceMapper::getInstance()->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
         $this->view->devicename = $device->getMasterDevice()->getFullDeviceName();
 
         // Get device configurations list
-        $deviceConfiguration    = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAll(array(
+        $deviceConfiguration    = DeviceConfigurationMapper::getInstance()->fetchAll(array(
             'masterDeviceId = ?' => $masterDeviceId,
             'dealerId = ?'       => Zend_Auth::getInstance()->getIdentity()->dealerId
         ));
@@ -1083,18 +1084,18 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 catch (Exception $e)
                 {
                     $this->_flashMessenger->addMessage(array('error' => "An error has occurred."));
-                    Tangent_Log::logException($e);
+                    \Tangent\Logger\Logger::logException($e);
                 }
             }
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->redirector('index');
+                $this->redirectToRoute('hardware-library.all-devices');
             }
         }
 
         // Display all of the devices
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_DeviceConfiguration::getInstance(), $where));
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(DeviceConfigurationMapper::getInstance(), $where));
 
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));

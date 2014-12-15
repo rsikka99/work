@@ -6,17 +6,17 @@ $graphs               = $healthcheckViewModel->getGraphs();
 <div class="h1">Analysis: Printing Hardware Usage</div>
 <div class="pheader">Print Volume and Number of Printing Devices</div>
 <p>You currently have
-    <strong><?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices that print an average of
-    <strong><?php echo number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()); ?>
+    <strong><?= $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices that print an average of
+    <strong><?= number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()); ?>
     </strong> pages each per month, for an average total monthly print volume of
-    <strong><?php echo $this->formatPageVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></strong> pages.
+    <strong><?= $this->formatPageVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></strong> pages.
     Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.
 </p>
 <br /> <br />
 <div class="center">
-    <img src="<?php echo $graphs['AverageMonthlyPagesBarGraph']; ?>" style="width: 30%; height: 30%;" /> <!-- Average monthly pages per networked printer -->
-    <img src="<?php echo $graphs['AverageMonthlyPagesPerEmployeeBarGraph']; ?>" style="width: 30%; height: 30%;" /> <!-- Average monthly pages per employee -->
-    <img src="<?php echo $graphs['EmployeesPerDeviceBarGraph']; ?>" style="width: 30%; height: 30%;" /> <!-- Employees per printing device -->
+    <img src="<?= $graphs['AverageMonthlyPagesBarGraph']; ?>" style="width: 30%; height: 30%;" /> <!-- Average monthly pages per networked printer -->
+    <img src="<?= $graphs['AverageMonthlyPagesPerEmployeeBarGraph']; ?>" style="width: 30%; height: 30%;" /> <!-- Average monthly pages per employee -->
+    <img src="<?= $graphs['EmployeesPerDeviceBarGraph']; ?>" style="width: 30%; height: 30%;" /> <!-- Employees per printing device -->
 </div>
 <br /> <br />
 <div class="pheader">Hardware Utilization and Capacity</div>
@@ -25,28 +25,28 @@ $graphs               = $healthcheckViewModel->getGraphs();
 <table cellspacing="0" class="genericTable">
     <tr>
         <td width="400px">Number of networked printing devices</td>
-        <td width="400px" style="text-align:right"><?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount() ?></td>
+        <td width="400px" style="text-align:right"><?= $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount() ?></td>
     </tr>
     <tr>
         <td width="400px">Average number of total printed pages per month</td>
-        <td width="400px" style="text-align:right"><?php echo $this->formatPageVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></td>
+        <td width="400px" style="text-align:right"><?= $this->formatPageVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></td>
     </tr>
     <tr>
         <td width="400px">Average number of pages per device, per month</td>
-        <td width="400px" style="text-align:right"><?php echo number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()); ?></td>
+        <td width="400px" style="text-align:right"><?= number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()); ?></td>
     </tr>
 </table>
 <br />
 <p>A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer's stated yield of a single print cartridge. In essence, you should not have to change the same toner cartridge more than once per month.</p>
 <p>Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices. As a guide we suggest that total company printing should range between 30 and 50% of maximum fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets. Most companies find that they have more printing hardware than they need. The following chart displays your estimated monthly page volume compared to your maximum monthly page capacity.</p>
 <div class="center">
-    <img src="<?php echo $graphs['HardwareUtilizationCapacityBar']; ?>" /> <!-- Monthly Usage compared to maximum fleet capacity -->
-    <img src="<?php echo $graphs['HardwareUtilizationCapacityPercent']; ?>" /> <!-- Monthly Usage compared to optimal fleet capacity -->
+    <img src="<?= $graphs['HardwareUtilizationCapacityBar']; ?>" /> <!-- Monthly Usage compared to maximum fleet capacity -->
+    <img src="<?= $graphs['HardwareUtilizationCapacityPercent']; ?>" /> <!-- Monthly Usage compared to optimal fleet capacity -->
 </div>
 <div class="pheader">Underused and Overused Printing Devices</div>
 <p>Currently,
-    <strong><?php echo number_format($healthcheckViewModel->getPercentDevicesUnderused()); ?>%</strong> of your printing devices are printing less than one quarter of our recommended monthly print volume, and
-    <strong><?php echo number_format($healthcheckViewModel->getPercentDevicesOverused()); ?>%</strong> are printing above our recommended monthly print volume. Our recommended monthly print volumes are equal to the manufacturer's stated yield for a single print cartridge (for monochrome devices, the black cartridge, and for color devices, a single color cartridge unless the device is not being used for color).
+    <strong><?= number_format($healthcheckViewModel->getPercentDevicesUnderused()); ?>%</strong> of your printing devices are printing less than one quarter of our recommended monthly print volume, and
+    <strong><?= number_format($healthcheckViewModel->getPercentDevicesOverused()); ?>%</strong> are printing above our recommended monthly print volume. Our recommended monthly print volumes are equal to the manufacturer's stated yield for a single print cartridge (for monochrome devices, the black cartridge, and for color devices, a single color cartridge unless the device is not being used for color).
 </p>
 <p>Underused printing devices can be consolidated or retired to free up floor and desk space, reduce the amount of cash held in unused supplies inventory, and reduce the energy costs associated with powering underused machines. Devices printing fewer than 250 pages per month are likely performing less than 3 print jobs per day, and that volume can easily be accommodated by any nearby device. </p>
 <p>Overused printing devices risk having more frequent breakdowns and should have a portion of their print volumes moved to underused printers or new higher-capacity machines. As an example, small print devices can have paper trays of fewer than 250 pages, and may result in several paper tray changes per day which can lead to user frustration and machine failure.</p>
@@ -65,19 +65,19 @@ $graphs               = $healthcheckViewModel->getGraphs();
     <?php foreach ($healthcheckViewModel->getLeastUsedDevices() as $deviceInstance) : ?>
         <tr>
             <td class="column1">
-                <div><?php echo $deviceInstance->getDeviceName() ?></div>
+                <div><?= $deviceInstance->getDeviceName() ?></div>
             </td>
             <td class="column2">
-                <div class=" center"><?php echo ($deviceInstance->serialNumber) ?: 'Unknown'; ?></div>
+                <div class=" center"><?= ($deviceInstance->serialNumber) ?: 'Unknown'; ?></div>
             </td>
             <td class="column3">
-                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
+                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
             </td>
             <td class="column4">
-                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></div>
+                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></div>
             </td>
             <td class="column5">
-                <div class=" center"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) ?>%</div>
+                <div class=" center"><?= number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) ?>%</div>
             </td>
 
         </tr>
@@ -99,19 +99,19 @@ $graphs               = $healthcheckViewModel->getGraphs();
     <?php foreach ($healthcheckViewModel->getMostUsedDevices() as $deviceInstance) : ?>
         <tr>
             <td class="column1">
-                <div><?php echo $deviceInstance->getDeviceName() ?></div>
+                <div><?= $deviceInstance->getDeviceName() ?></div>
             </td>
             <td class="column2">
-                <div class=" center"><?php echo ($deviceInstance->serialNumber) ?: 'Unknown' ?></div>
+                <div class=" center"><?= ($deviceInstance->serialNumber) ?: 'Unknown' ?></div>
             </td>
             <td class="column3">
-                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
+                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
             </td>
             <td class="column4">
-                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></div>
+                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></div>
             </td>
             <td class="column5">
-                <div class=" center"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) ?>%</div>
+                <div class=" center"><?= number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) ?>%</div>
             </td>
 
         </tr>
@@ -123,20 +123,19 @@ $graphs               = $healthcheckViewModel->getGraphs();
 
 <div class="pheader">Color Usage</div>
 <p>You currently have
-    <strong><?php echo $healthcheckViewModel->getDevices()->colorCapableDeviceInstances->getCount(); ?></strong> color printing devices that print a monthly average of
-    <strong><?php echo $this->formatPageVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></strong> color pages per month, which is
-    <strong><?php echo number_format($healthcheckViewModel->calculatePercentOfTotalVolumeColorMonthly(), 2); ?>%</strong> of your total monthly print volume.
+    <strong><?= $healthcheckViewModel->getDevices()->colorCapableDeviceInstances->getCount(); ?></strong> color printing devices that print a monthly average of
+    <strong><?= $this->formatPageVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></strong> color pages per month, which is
+    <strong><?= number_format($healthcheckViewModel->calculatePercentOfTotalVolumeColorMonthly(), 2); ?>%</strong> of your total monthly print volume.
 </p>
 <br />
 <div class="center">
     <table>
         <tbody>
         <tr>
-            <td>
-                <img src="<?php echo $graphs['ColorCapablePrintingDevices']; ?>" />
+            <td><img src="<?= $graphs['ColorCapablePrintingDevices']; ?>" />
             </td>
             <!-- Devices Purchased -->
-            <td><img src="<?php echo $graphs['ColorVSBWPagesGraph']; ?>" /></td>
+            <td><img src="<?= $graphs['ColorVSBWPagesGraph']; ?>" /></td>
             <!-- Monthly pages on devices not leased -->
         </tr>
         </tbody>
@@ -162,7 +161,7 @@ $graphs               = $healthcheckViewModel->getGraphs();
     <?php foreach ($healthcheckViewModel->getMonthlyHighCostPurchasedColorDevices($healthcheckViewModel->getCostPerPageSettingForCustomer()) as $deviceInstance): ?>
         <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()); ?>
         <tr>
-            <td><?php echo $deviceName ?>
+            <td><?= $deviceName ?>
             <td class="center"><?php if ($deviceInstance->serialNumber)
                 {
                     echo $deviceInstance->serialNumber;
@@ -171,12 +170,12 @@ $graphs               = $healthcheckViewModel->getGraphs();
                 {
                     echo 'Unknown';
                 } ?></td>
-            <td class="center"><?php echo number_format(($deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>
+            <td class="center"><?= number_format(($deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>
                 %
             </td>
-            <td class="center"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()); ?></td>
-            <td><?php echo $this->formatCostPerPage($deviceInstance->getColorCostPerPageWithMargin($healthcheckViewModel->getCostPerPageSettingForCustomer())); ?></td>
-            <td><?php echo $this->currency($deviceInstance->getCostOfColorInkAndToner($healthcheckViewModel->getCostPerPageSettingForCustomer())) ?></td>
+            <td class="center"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()); ?></td>
+            <td><?= $this->formatCostPerPage($deviceInstance->getColorCostPerPageWithMargin($healthcheckViewModel->getCostPerPageSettingForCustomer())); ?></td>
+            <td><?= $this->currency($deviceInstance->getCostOfColorInkAndToner($healthcheckViewModel->getCostPerPageSettingForCustomer())) ?></td>
         </tr>
         <?php
         if (++$ctr >= 3)
@@ -188,4 +187,4 @@ $graphs               = $healthcheckViewModel->getGraphs();
     </tbody>
 </table>
 <p>In general, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company's professional image, improve comprehension and increase readership.</p>
-<p><?php echo My_Brand::getDealerBranding()->shortDealerName ?> can help you track your color printing and provide low-cost color hardware options.</p>
+<p><?= My_Brand::getDealerBranding()->shortDealerName ?> can help you track your color printing and provide low-cost color hardware options.</p>

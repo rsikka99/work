@@ -1,30 +1,38 @@
 <?php
-/* @var $rmsUpload Proposalgen_Model_Rms_Upload */
+
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsUploadModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\UploadLineModel;
+
+/* @var $rmsUpload RmsUploadModel */
 $rmsUpload = $this->rmsUpload;
 
-/* @var $invalidDevices Proposalgen_Service_Rms_Upload_Line[] */
+/* @var $invalidDevices UploadLineModel[] */
 $invalidDevices = $this->invalidDevices;
 ?>
-<?php if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) : ?>
-    <div class="well">
+<div class="container">
+    <?php if ($rmsUpload instanceof RmsUploadModel) : ?>
         <h1>Upload Complete</h1>
 
-        <p>You uploaded a <?php echo $this->escape($rmsUpload->getRmsProvider()->name); ?> CSV file. The name of the file is
-            "<?php echo $this->escape($rmsUpload->fileName); ?>". There were <strong><?php echo number_format($rmsUpload->validRowCount); ?></strong> valid
-            devices
-            imported.</p>
+        <p>
+            You uploaded a <?= $this->escape($rmsUpload->getRmsProvider()->name); ?> CSV file.
+            The name of the file is "<?= $this->escape($rmsUpload->fileName); ?>".
+            There were
+            <span class="badge"><?= number_format($rmsUpload->validRowCount); ?></span> valid devices imported.
+        </p>
 
         <?php if ($rmsUpload->invalidRowCount > 0) : ?>
-            <p>The CSV file that was uploaded also contained <strong><?php echo number_format($rmsUpload->invalidRowCount); ?></strong> invalid rows.</p>
+            <p>The CSV file that was uploaded also contained
+                <span class="badge"><?= number_format($rmsUpload->invalidRowCount); ?></span> invalid rows.
+            </p>
         <?php endif; ?>
 
         <?php if ($rmsUpload->invalidRowCount > 0 && $rmsUpload->validRowCount > 1) : ?>
             <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
-            var rmsUploadId = <?php echo $rmsUpload->id; ?>
+            var rmsUploadId = <?= $rmsUpload->id; ?>
             <?php $this->headScript()->captureEnd(); ?>
-            <?php $this->headScript()->appendFile($this->baseUrl('js/proposalgen/fleet/excludedRows.js')); ?>
-            <table id="excludedTable"></table>
-            <div id="excludedPager"></div>
+            <?php $this->headScript()->appendFile($this->baseUrl('js/app/legacy/proposalgen/fleet/FleetExcludedRows.js')); ?>
+            <table id="rms-upload-excluded-rows-grid"></table>
+            <div id="rms-upload-excluded-rows-grid-pager"></div>
         <?php elseif ($rmsUpload->invalidRowCount > 0 && is_array($invalidDevices)) : ?>
             <table class="table table-striped tabled-bordered">
                 <thead>
@@ -44,12 +52,8 @@ $invalidDevices = $this->invalidDevices;
             </table>
         <?php endif; ?>
 
-        <?php echo $this->navigationForm; ?>
-    </div>
-
-<?php else : ?>
-    <div class="well">
-        <?php echo $this->form; ?>
-        <?php echo $this->navigationForm; ?>
-    </div>
-<?php endif; ?>
+        <?= $this->navigationForm; ?>
+    <?php else : ?>
+        <?= $this->form ?>
+    <?php endif; ?>
+</div>

@@ -1,4 +1,11 @@
 <?php
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Forms\HardwareOptimizationQuoteForm;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Mappers\HardwareOptimizationQuoteMapper;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Mappers\HardwareOptimizationDeviceInstanceMapper;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationStepsModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationQuoteModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Services\QuoteDeviceService;
 
 /**
  * Class Hardwareoptimization_Report_IndexController
@@ -7,12 +14,11 @@ class Hardwareoptimization_Report_IndexController extends Hardwareoptimization_L
 {
     public function indexAction ()
     {
-        $this->view->headTitle('Hardware Optimization');
-        $this->view->headTitle('Report');
-        $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_FINISHED);
+        $this->_pageTitle = array('Hardware Optimization', 'Report');
+        $this->_navigation->setActiveStep(HardwareOptimizationStepsModel::STEP_FINISHED);
         $this->initReportList();
 
-        $form = new Hardwareoptimization_Form_Hardware_Optimization_Quote();
+        $form = new HardwareOptimizationQuoteForm();
 
         if ($this->getRequest()->isPost())
         {
@@ -25,31 +31,31 @@ class Hardwareoptimization_Report_IndexController extends Hardwareoptimization_L
                     $db->beginTransaction();
 
                     $userId  = Zend_Auth::getInstance()->getIdentity()->id;
-                    $quote   = new Quotegen_Model_Quote();
+                    $quote   = new QuoteModel();
                     $quoteId = 0;
 
                     if (isset($postData['purchasedQuote']))
                     {
-                        $quoteId = $quote->createNewQuote(Quotegen_Model_Quote::QUOTE_TYPE_PURCHASED, $this->_hardwareOptimization->clientId, $userId)->id;
+                        $quoteId = $quote->createNewQuote(QuoteModel::QUOTE_TYPE_PURCHASED, $this->_hardwareOptimization->clientId, $userId)->id;
                     }
                     else if (isset($postData['leasedQuote']))
                     {
-                        $quoteId = $quote->createNewQuote(Quotegen_Model_Quote::QUOTE_TYPE_LEASED, $this->_hardwareOptimization->clientId, $userId)->id;
+                        $quoteId = $quote->createNewQuote(QuoteModel::QUOTE_TYPE_LEASED, $this->_hardwareOptimization->clientId, $userId)->id;
                     }
 
                     /**
                      * Linking a hardware optimization to a quote lets us know what the quote was for.
                      */
-                    $hardwareOptimizationQuote                         = new Hardwareoptimization_Model_Hardware_Optimization_Quote();
+                    $hardwareOptimizationQuote                         = new HardwareOptimizationQuoteModel();
                     $hardwareOptimizationQuote->hardwareOptimizationId = $this->_hardwareOptimization->id;
                     $hardwareOptimizationQuote->quoteId                = $quoteId;
-                    Hardwareoptimization_Model_Mapper_Hardware_Optimization_Quote::getInstance()->insert($hardwareOptimizationQuote);
+                    HardwareOptimizationQuoteMapper::getInstance()->insert($hardwareOptimizationQuote);
 
                     /**
                      * Add devices to the quote
                      */
-                    $quoteDeviceService = new  Quotegen_Service_QuoteDevice($userId, $quoteId);
-                    $masterDeviceIds    = Hardwareoptimization_Model_Mapper_Hardware_Optimization_DeviceInstance::getInstance()->getMasterDeviceQuantitiesForHardwareOptimization($this->_hardwareOptimization->id);
+                    $quoteDeviceService = new  QuoteDeviceService($userId, $quoteId);
+                    $masterDeviceIds    = HardwareOptimizationDeviceInstanceMapper::getInstance()->getMasterDeviceQuantitiesForHardwareOptimization($this->_hardwareOptimization->id);
 
                     /**
                      * TODO lrobert: Calling the rows this way ($row["somecolumn"]) isn't fantastic. Gotta find a better way.
@@ -60,7 +66,7 @@ class Hardwareoptimization_Report_IndexController extends Hardwareoptimization_L
                     }
 
                     $db->commit();
-                    $this->redirector('index', 'quote_devices', 'quotegen', array('quoteId' => $quoteId));
+                    $this->redirectToRoute('quotes', array('quoteId' => $quoteId));
                 }
                 else
                 {
@@ -71,11 +77,11 @@ class Hardwareoptimization_Report_IndexController extends Hardwareoptimization_L
             {
                 $db->rollBack();
 
-                Tangent_Log::logException($e);
+                \Tangent\Logger\Logger::logException($e);
                 $this->_flashMessenger->addMessage(array("danger" => "Error creating quote from device list.  If problem persists please contact system administrator"));
             }
         }
         $this->view->form = $form;
-        $this->view->headScript()->prependFile($this->view->baseUrl("/js/htmlReport.js"));
+        $this->view->headScript()->appendFile($this->view->baseUrl("/js/app/legacy/HtmlReport.js"));
     }
 }

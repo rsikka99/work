@@ -1,89 +1,86 @@
 <?php
+
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceConfigurationModel;
+
 $id = $this->id;
 ?>
-
-<div class="clearfix">
-    <div class="page-header">
-        <h1>Hardware Quote Devices -
-            <small><?php echo $this->devicename; ?></small>
-        </h1>
-    </div>
-</div>
-
-<div class="tabbable"> <!-- Only required for left/right tabs -->
-    <ul class="nav nav-tabs">
-        <li>
-            <a href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'edit', 'id' => $id), null, true); ?>">Details</a>
-        </li>
-        <?php
-        $isAdmin = $this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
-        if ($isAdmin)
-        {
-            ?>
+<div class="container">
+    <div class="tabbable"> <!-- Only required for left/right tabs -->
+        <ul class="nav nav-tabs">
             <li>
-                <a href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'toners', 'id' => $id), null, true); ?>">Toners</a>
+                <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.edit', true); ?>">Details</a>
             </li>
-        <?php } ?>
-        <li>
-            <a href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'options', 'id' => $id), null, true); ?>">Available Options</a>
-        </li>
-        <li class="active"><a href="#tab4" data-toggle="tab">Hardware Configurations</a></li>
-    </ul>
-    <div class="tab-content">
-        <form name="frmOptions" id="frmOptions" action="" method="post">
-            <input type="hidden" name="configurationid" id="configurationid" value="" />
+            <?php $isAdmin = $this->isAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, AppAclModel::PRIVILEGE_ADMIN); ?>
+            <?php if ($isAdmin) : ?>
+                <li>
+                    <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.toners', true); ?>">Toners</a>
+                </li>
+            <?php endif ?>
+            <li>
+                <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.options', true); ?>">Available Options</a>
+            </li>
+            <li class="active">
+                <a href="#tab4" data-toggle="tab">Hardware Configurations</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <form name="frmOptions" id="frmOptions" action="" method="post">
+                <input type="hidden" name="configurationid" id="configurationid" value="" />
 
-            <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
+                <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
 
-                <div class="clearfix">
-                    <a class="btn btn-success btn-small pull-right create-button" href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'configuration', 'action' => 'create', 'id' => $id, 'page' => 'configurations')) ?>">
-                        <i class="icon-white icon-plus-sign"></i> Create new</a>
-                </div>
+                    <div class="clearfix">
+                        <a class="btn btn-success btn-sm pull-right create-button" href="<?= $this->url(array('id' => $id, 'page' => 'configurations'), 'quotes.configurations.create.id') ?>">
+                            <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
+                    </div>
 
-                <table class="table table-striped table-condensed table-bordered">
-                    <thead>
-                    <tr>
-                        <th style="width: 30px;">ID</th>
-                        <th style="width: 200px;">Configuration Name</th>
-                        <th>Description</th>
-                        <th style="width: 100px; text-align: center;">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <?php foreach ($this->paginator as $configuration) : /* @var $configuration Quotegen_Model_DeviceConfiguration */ ?>
+                    <table class="table table-striped table-condensed table-bordered">
+                        <thead>
                         <tr>
-                            <td><?php echo $configuration->id; ?></td>
-                            <td><?php echo $configuration->name; ?></td>
-                            <td><?php echo $configuration->description; ?></td>
-                            <td>
-                                <div class="" style="text-align: center;">
-                                    <a class="btn btn-warning btn-mini" title="Edit Configuration" href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'configuration', 'action' => 'edit', 'id' => $id, 'configurationid' => $configuration->id, 'page' => 'configurations')); ?>"><i class="icon-pencil icon-white"></i></a>
-                                    <a class="btn btn-danger btn-mini" title="Delete Configuration" href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'configuration', 'action' => 'delete', 'id' => $id, 'configurationid' => $configuration->id, 'page' => 'configurations')); ?>"><i class="icon-trash icon-white"></i></a>
-                                </div>
-                            </td>
+                            <th style="width: 30px;">ID</th>
+                            <th style="width: 200px;">Configuration Name</th>
+                            <th>Description</th>
+                            <th style="width: 100px; text-align: center;">Action</th>
                         </tr>
-                    <?php endforeach; ?>
+                        </thead>
+                        <tbody>
+                        <?php /* @var $configuration DeviceConfigurationModel */ ?>
+                        <?php foreach ($this->paginator as $configuration) : ?>
+                            <tr>
+                                <td><?= $configuration->id; ?></td>
+                                <td><?= $configuration->name; ?></td>
+                                <td><?= $configuration->description; ?></td>
+                                <td>
+                                    <div class="" style="text-align: center;">
+                                        <a class="btn btn-warning btn-xs" title="Edit Configuration" href="<?= $this->url(array('id' => $id, 'configurationid' => $configuration->id, 'page' => 'configurations'), 'quotes.configurations.edit.page'); ?>"><i class="glyphicon glyphicon-pencil icon-white"></i></a>
+                                        <a class="btn btn-danger btn-xs" title="Delete Configuration" href="<?= $this->url(array('id' => $id, 'configurationid' => $configuration->id, 'page' => 'configurations'), 'quotes.configurations.delete.page'); ?>"><i class="glyphicon glyphglyphicon glyphicon-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
 
-                    </tbody>
-                </table>
-                <?php echo $this->paginationControl($this->paginator); ?>
+                        </tbody>
+                    </table>
+                    <?= $this->paginationControl($this->paginator); ?>
 
-            <?php else : ?>
+                <?php else : ?>
 
-                <h4>There are no configurations</h4>
-                <br />
-                <div class="clearfix">
-                    <a class="btn btn-success btn-small create-button" href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'configuration', 'action' => 'create', 'id' => $id, 'page' => 'configurations')) ?>">
-                        <i class="icon-white icon-plus-sign"></i> Create new</a>
+                    <h4>There are no configurations</h4>
+                    <br />
+                    <div class="clearfix">
+                        <a class="btn btn-success btn-sm create-button" href="<?= $this->url(array('id' => $id, 'page' => 'configurations'), 'quotes.configurations.create.id') ?>">
+                            <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
+                    </div>
+
+                <?php endif; ?>
+
+                <div style="text-align: center;">
+                    <a class="btn btn-default" title="Done" href="<?= $this->url(array(), 'hardware-library.all-devices', true); ?>">Done</a>
                 </div>
 
-            <?php endif; ?>
-
-            <div style="text-align: center;">
-                <a class="btn" title="Done" href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index'), null, true); ?>">Done</a>
-            </div>
-
-        </form>
+            </form>
+        </div>
     </div>
 </div>

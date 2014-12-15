@@ -1,9 +1,10 @@
 <?php
+use Tangent\Controller\Action;
 
 /**
  * Class Admin_ContractTemplate
  */
-class Admin_ContractTemplateController extends Tangent_Controller_Action
+class Admin_ContractTemplateController extends Action
 {
     /**
      * @var Zend_Session_Namespace

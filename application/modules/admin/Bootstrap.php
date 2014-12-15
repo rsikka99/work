@@ -1,4 +1,6 @@
 <?php
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Models\Acl\AdminAclModel;
 
 /**
  * Class Admin_Bootstrap
@@ -8,9 +10,9 @@ class Admin_Bootstrap extends Zend_Application_Module_Bootstrap
     protected function _initAddToAcl ()
     {
         $acl = Zend_Registry::get('Zend_Acl');
-        if ($acl instanceof Application_Model_Acl)
+        if ($acl instanceof AppAclModel)
         {
-            Admin_Model_Acl::setupAcl($acl);
+            AdminAclModel::setupAcl($acl);
         }
     }
 

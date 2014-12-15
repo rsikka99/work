@@ -1,14 +1,18 @@
 <?php
 
+namespace Tangent\View\Helper;
+
 /**
+ * Class NumberFormat
+ *
  * View Helper to Format Numbers.
  *
- * @package Tangent_View
+ * @package Tangent\View\Helper
  */
-class Tangent_View_Helper_NumberFormat extends Zend_View_Helper_Abstract
+class NumberFormat extends \Zend_View_Helper_Abstract
 {
 
-    private $_numberFormat = null;
+    protected $_numberFormat = null;
 
     /**
      * Custom Format for Decimal Numbers.
@@ -37,18 +41,9 @@ class Tangent_View_Helper_NumberFormat extends Zend_View_Helper_Abstract
     public function numberFormat ($number, $maxPrecision = 5)
     {
 
-        $RemainingPrecision = 0;
-        //echo $number;
-        //echo '<br/>';
-        $trimmedNumber = (string)number_format($number, $maxPrecision);
-        //echo $trimmedNumber;
-        //echo '<br/>';
-        $trimmedNumber = rtrim($trimmedNumber, '0');
-        //echo $trimmedNumber;
-        //echo '<br/>';
+        $trimmedNumber      = (string)number_format($number, $maxPrecision);
+        $trimmedNumber      = rtrim($trimmedNumber, '0');
         $RemainingPrecision = strlen($trimmedNumber) - 1 - strrpos($trimmedNumber, '.');
-        //echo $RemainingPrecision;
-        //echo '<br/>';
 
         //Add zeros to make sure we are displaying at least two decimal places.
         for ($i = $RemainingPrecision; $i < 2; $i++)
@@ -62,15 +57,13 @@ class Tangent_View_Helper_NumberFormat extends Zend_View_Helper_Abstract
     /**
      * Lazily fetches FlashMessenger Instance.
      *
-     * @return Zend_Controller_Action_Helper_FlashMessenger
+     * @return \Zend_Controller_Action_Helper_FlashMessenger
      */
     public function _getNumberFormat ()
     {
         if (null === $this->_numberFormat)
         {
-            $this->_numberFormat =
-                Zend_Controller_Action_HelperBroker::getStaticHelper(
-                                                   'NumberFormat');
+            $this->_numberFormat = \Zend_Controller_Action_HelperBroker::getStaticHelper('NumberFormat');
         }
 
         return $this->_numberFormat;

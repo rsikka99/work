@@ -1,0 +1,32 @@
+<?php
+use MPSToolbox\Legacy\Modules\Admin\Forms\DealerTonerVendorsForm;
+
+/* @var $form DealerTonerVendorsForm */
+$form = $this->element;
+?>
+
+<form class="form-horizontal" method="<?= $form->getMethod() ?>" accept-charset="UTF-8" action="<?= $form->getAction() ?>">
+    <div class="row">
+        <div class="col-sm-12">
+            <fieldset>
+                <legend>Select Toner Vendors</legend>
+
+                <div class="form-group <?= ($form->getElement('manufacturerIds')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('manufacturerIds'), array('col-md-3')) ?>
+
+                    <div class="col-md-9">
+                        <?= $this->RenderFormCheckbox($form->getElement('manufacturerIds')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('manufacturerIds')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('manufacturerIds')) ?>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <fieldset>
+        <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
+        <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+    </fieldset>
+
+</form>

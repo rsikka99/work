@@ -1,13 +1,16 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\SuppliesAndServiceForm;
+
 class Proposalgen_Form_MasterDeviceManagement_SuppliesAndServicesFormTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
+
 {
     /**
-     * @return Proposalgen_Form_MasterDeviceManagement_SuppliesAndService
+     * @return SuppliesAndServiceForm
      */
     public function getForm ()
     {
-        return new Proposalgen_Form_MasterDeviceManagement_SuppliesAndService();
+        return new SuppliesAndServiceForm();
     }
 
     /**

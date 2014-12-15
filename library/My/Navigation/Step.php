@@ -5,14 +5,14 @@ class My_Navigation_Step extends My_Model_Abstract
     /**
      * The previous step in a proposal
      *
-     * @var Proposalgen_Model_Assessment_Step
+     * @var My_Navigation_Step
      */
     public $previousStep = null;
 
     /**
      * The next step in a proposal
      *
-     * @var Proposalgen_Model_Assessment_Step
+     * @var My_Navigation_Step
      */
     public $nextStep = null;
 
@@ -24,25 +24,11 @@ class My_Navigation_Step extends My_Model_Abstract
     public $name;
 
     /**
-     * The module that the step is on
+     * The route name of the step
      *
      * @var string
      */
-    public $module;
-
-    /**
-     * The controller that the step is on
-     *
-     * @var string
-     */
-    public $controller;
-
-    /**
-     * The action that the step is on
-     *
-     * @var string
-     */
-    public $action;
+    public $route;
 
     /**
      * Is the step active?
@@ -90,19 +76,9 @@ class My_Navigation_Step extends My_Model_Abstract
             $this->name = $params->name;
         }
 
-        if (isset($params->module) && !is_null($params->module))
+        if (isset($params->route) && !is_null($params->route))
         {
-            $this->module = $params->module;
-        }
-
-        if (isset($params->controller) && !is_null($params->controller))
-        {
-            $this->controller = $params->controller;
-        }
-
-        if (isset($params->action) && !is_null($params->action))
-        {
-            $this->action = $params->action;
+            $this->route = $params->route;
         }
 
         if (isset($params->active) && !is_null($params->active))
@@ -131,9 +107,7 @@ class My_Navigation_Step extends My_Model_Abstract
             "previousStep" => $this->previousStep,
             "nextStep"     => $this->nextStep,
             "name"         => $this->name,
-            "module"       => $this->module,
-            "controller"   => $this->controller,
-            "action"       => $this->action,
+            "route"        => $this->route,
             "active"       => $this->active,
             "canAccess"    => $this->canAccess,
             "enumValue"    => $this->enumValue,

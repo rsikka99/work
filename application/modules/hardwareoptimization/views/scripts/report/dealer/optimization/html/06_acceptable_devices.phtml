@@ -1,0 +1,68 @@
+<?php
+/* @var $hardwareOptimization HardwareOptimizationModel */
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationDealerModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationDeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\OptimizationViewModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization OptimizationViewModel */
+$optimization = $this->optimization;
+
+/* @var $customerOptimization OptimizationDealerModel */
+$dealerOptimization = $this->dealerOptimization;
+
+/* @var $acceptableDeviceInstances DeviceInstanceModel[] */
+$acceptableDeviceInstances = (isset($this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_KEEP]) ? $this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_KEEP] : array());
+
+/* @var $graphs array */
+$graphs = $this->graphs;
+
+$costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
+?>
+<div class="pheader" id="acceptable">
+    Acceptable Devices
+    <em><?= '(' . number_format(count($acceptableDeviceInstances)) . ' of ' . $this->totalDevices . ')' ?></em>
+</div>
+
+<!-- Only display message and table if there are replacement devices assigned -->
+<?php if ($acceptableDeviceInstances): ?>
+    <p>The following devices have been deemed productive and fall within the target cost per page.</p>
+
+    <table class="rDevices">
+        <tr class="header">
+            <th class="device-name">Device Name</th>
+            <th>Serial<br />IP Address</th>
+            <th>Mono AMPV</th>
+            <th>Color AMPV</th>
+            <th>Life Page Count</th>
+            <th>Device Age</th>
+            <th>Mono CPP</th>
+            <th>Color CPP</th>
+            <th>Monthly Cost</th>
+        </tr>
+        <?php
+
+        foreach ($acceptableDeviceInstances as $deviceInstance) :
+            $masterDevice = $deviceInstance->getMasterDevice();
+            $isColor      = $masterDevice->isColor();
+            ?>
+            <tr class='<?= $this->cycle(array("rowOne", "rowTwo"))->next(); ?>'>
+                <td class="device-name"><?= '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>'; ?></td>
+                <td class="serial-number"><?= $deviceInstance->serialNumber . '<br/>' . $deviceInstance->ipAddress . '</em>'; ?></td>
+                <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
+                <td class="page-volume"><?= ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : ' - '; ?></td>
+                <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getMeter()->endMeterLife) ?></td>
+                <td class="number"><?= number_format($deviceInstance->getMasterDevice()->getAge()) . 'y'; ?></td>
+                <td class="cost-per-page"><?= $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage); ?></td>
+                <td class="cost-per-page"><?= ($isColor) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage) : ' - '; ?></td>
+                <td><?= $this->currency($deviceInstance->calculateMonthlyCost($costPerPageSetting)); ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+<?php else: ?>
+    <em>There are currently no devices deemed productive and that fall within the target cost per page.</em>
+<?php endif; ?>
+<br />

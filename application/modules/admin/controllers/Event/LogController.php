@@ -1,9 +1,14 @@
 <?php
+use MPSToolbox\Legacy\Mappers\EventLogTypeMapper;
+use MPSToolbox\Legacy\Mappers\EventLogMapper;
+use MPSToolbox\Legacy\Mappers\UserMapper;
+use Tangent\Controller\Action;
+use Tangent\Service\JQGrid;
 
 /**
  * Class Admin_Event_LogController
  */
-class Admin_Event_LogController extends Tangent_Controller_Action
+class Admin_Event_LogController extends Action
 {
 
     /**
@@ -11,26 +16,27 @@ class Admin_Event_LogController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
-        $postData = $this->getRequest()->getPost();
+        $this->_pageTitle = array('Event Log');
+        $postData         = $this->getRequest()->getPost();
 
         if ($this->getRequest()->isPost())
         {
             if (isset($postData['clearAllLogs']))
             {
-//                Application_Model_Mapper_Event_Log::getInstance()->deleteAllEventLogs();
+//                MPSToolbox\Legacy\Mappers\EventLogMapper::getInstance()->deleteAllEventLogs();
                 $this->_flashMessenger->addMessage(array('error' => 'Clearing disabled due to the lack of a confirmation dialog.'));
-                $this->redirector('index');
+                $this->redirectToRoute('admin.event-log');
             }
         }
 
-        $users  = Application_Model_Mapper_User::getInstance()->fetchAll();
+        $users  = UserMapper::getInstance()->fetchAll();
         $emails = array();
         foreach ($users as $user)
         {
             $emails[] = $user->email;
         }
 
-        $eventLogTypes = Application_Model_Mapper_Event_Log_Type::getInstance()->fetchAll();
+        $eventLogTypes = EventLogTypeMapper::getInstance()->fetchAll();
         $types         = array();
         foreach ($eventLogTypes as $eventLogType)
         {
@@ -47,7 +53,7 @@ class Admin_Event_LogController extends Tangent_Controller_Action
      */
     public function getEventLogsAction ()
     {
-        $jqGridService = new Tangent_Service_JQGrid();
+        $jqGridService = new JQGrid();
         $email         = $this->_getParam('email', false);
         $type          = $this->_getParam('type', false);
 
@@ -65,11 +71,12 @@ class Admin_Event_LogController extends Tangent_Controller_Action
         );
 
         $jqGridService->setValidSortColumns($sortColumns);
+        $jqGridService->parseJQGridPagingRequest($jqGridParameters);
+
         if ($jqGridService->sortingIsValid())
         {
-            $eventLogMapper = Application_Model_Mapper_Event_Log::getInstance();
+            $eventLogMapper = EventLogMapper::getInstance();
 
-            $jqGridService->parseJQGridPagingRequest($jqGridParameters);
             try
             {
                 $jqGridService->setRecordCount(count($eventLogMapper->fetchAllForJqGrid(null, 10000, 0, $email, $type)));
@@ -102,7 +109,7 @@ class Admin_Event_LogController extends Tangent_Controller_Action
             }
             catch (Exception $e)
             {
-                Tangent_Log::logException($e);
+                \Tangent\Logger\Logger::logException($e);
                 $errorMessage = "Failed to get the events";
                 $this->sendJsonError($errorMessage);
             }
@@ -128,7 +135,7 @@ class Admin_Event_LogController extends Tangent_Controller_Action
 
         if ($searchTerm !== false)
         {
-            foreach (Application_Model_Mapper_User::getInstance()->searchByEmail($searchTerm) as $user)
+            foreach (UserMapper::getInstance()->searchByEmail($searchTerm) as $user)
             {
                 $results[] = array(
                     "id"   => $user->email,

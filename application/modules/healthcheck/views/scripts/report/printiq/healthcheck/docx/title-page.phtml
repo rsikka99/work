@@ -29,11 +29,14 @@ $textCell->addText(sprintf('%1$s', $healthcheckViewModel->healthcheck->getClient
     'align'       => 'right',
     'spaceBefore' => 200,
 ));
-$textCell->addText(sprintf('%1$s', $healthcheckViewModel->healthcheck->getClient()->getAddress()->addressLine1 . ((strlen($healthcheckViewModel->healthcheck->getClient()->getAddress()->addressLine2)) > 0 ? ", " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->addressLine2 : "")), 'titlepage_subtitle', 'rightalign');
-$textCell->addText(sprintf('%1$s', $healthcheckViewModel->healthcheck->getClient()->getAddress()->city . " " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->getRegionName() . ", " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->postCode), 'titlepage_subtitle', 'rightalign');
-$textCell->addText(sprintf('%1$s', $healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry() == "United States" ? "USA" : ($healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry() == "Canada" ? "CAN" : $healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry())), 'titlepage_subtitle', 'rightalign');
 
-$titlePage->addText('', null, 'titleStyle2');
+$addressModel = $healthcheckViewModel->healthcheck->getClient()->getAddress();
+
+$textCell->addText($addressModel->addressLine1, 'titlepage_subtitle', 'rightalign');
+$textCell->addText($addressModel->addressLine2, 'titlepage_subtitle', 'rightalign');
+$textCell->addText(sprintf('%s, %s', $addressModel->city, $addressModel->region), 'titlepage_subtitle', 'rightalign');
+$textCell->addText($addressModel->getCountry()->name, 'titlepage_subtitle', 'rightalign');
+
 $titlePage->addText('', null, 'titleStyle2');
 $titlePage->addText('', null, 'titleStyle2');
 $titlePage->addText('', null, 'titleStyle2');

@@ -1,9 +1,10 @@
 <?php
+use Tangent\Controller\Action;
 
 /**
  * Class Admin_IndexController
  */
-class Admin_IndexController extends Tangent_Controller_Action
+class Admin_IndexController extends Action
 {
 
     public function init ()
@@ -14,7 +15,7 @@ class Admin_IndexController extends Tangent_Controller_Action
     public function indexAction ()
     {
         // action body
-        $this->view->headTitle('Administration');
+        $this->_pageTitle = array('Administration');
     }
 }
 

@@ -1,0 +1,15 @@
+<?php
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Forms\HardwareOptimizationQuoteForm;
+
+/* @var $form HardwareOptimizationQuoteForm */
+$form = $this->element;
+?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<fieldset>
+    <div class="row">
+        <div class="col-md-3"><?= $this->RenderFormSubmit($form->getElement('purchasedQuote'), array('btn')) ?></div>
+        <div class="col-md-offset-1"><?= $this->RenderFormSubmit($form->getElement('leasedQuote'), array('btn')) ?></div>
+    </div>
+</fieldset>
+<?= $this->RenderFormClose($form) ?>

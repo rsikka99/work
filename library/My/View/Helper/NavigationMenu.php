@@ -6,15 +6,17 @@ class My_View_Helper_NavigationMenu extends Zend_View_Helper_Abstract
     /**
      * @param My_Navigation_Abstract $navigation
      *
+     * @param array                  $parameters
+     *
      * @return string
      */
-    public function NavigationMenu ($navigation = null)
+    public function NavigationMenu ($navigation = null, $parameters = array())
     {
         $steps = $navigation->steps;
         $html  = array();
         if ($steps !== null)
         {
-            $html [] = '<ul class="nav nav-tabs" id="navigationMenu">';
+            $html [] = '<ul class="nav navbar-nav" id="navigationMenu">';
 
             foreach ($steps as $step)
             {
@@ -32,10 +34,7 @@ class My_View_Helper_NavigationMenu extends Zend_View_Helper_Abstract
                 }
 
                 // Get the url and name
-                $url  = $this->view->url(array(
-                    'controller' => $step->controller,
-                    'action'     => $step->action
-                ));
+                $url  = $this->view->url($parameters, $step->route);
                 $name = $step->name;
 
                 if ($step->canAccess)
@@ -44,7 +43,7 @@ class My_View_Helper_NavigationMenu extends Zend_View_Helper_Abstract
                 }
                 else
                 {
-                    $html [] = "<p>{$name}</p>";
+                    $html [] = "<a>{$name}</a>";
                 }
 
 
@@ -55,8 +54,9 @@ class My_View_Helper_NavigationMenu extends Zend_View_Helper_Abstract
 //                    break;
                 }
             }
-            $html [] = "<li class='active pull-right'><p>" . $navigation->title . " - " . $navigation->clientName . "</p></a>";
             $html [] = '</ul>';
+
+            $html [] = sprintf('<p class="navbar-text navbar-right"><i class="fa fa-user fa-fw"></i> %1$s > <i class="fa fa-file-text fa-fw"></i> %2$s</p>', $navigation->clientName, $navigation->title);
         }
 
         return implode(PHP_EOL, $html);

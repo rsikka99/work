@@ -1,0 +1,77 @@
+<?php
+
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\SuppliesAndServiceForm;
+
+/* @var $form SuppliesAndServiceForm */
+$form = $this->element;
+?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<fieldset>
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="form-group <?= ($form->getElement('tonerConfigId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('tonerConfigId'), array('col-md-4')) ?>
+
+                <div class="col-md-8">
+                    <?= $this->RenderFormSelect($form->getElement('tonerConfigId')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('tonerConfigId')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('tonerConfigId')) ?>
+                </div>
+            </div>
+
+            <div class="form-group <?= ($form->getElement('dealerPartsCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('dealerPartsCostPerPage'), array('col-md-4')) ?>
+
+                <div class="col-md-8">
+                    <?= $this->RenderFormText($form->getElement('dealerPartsCostPerPage')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('dealerPartsCostPerPage')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('dealerPartsCostPerPage')) ?>
+                </div>
+            </div>
+
+            <div class="form-group <?= ($form->getElement('dealerLaborCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('dealerLaborCostPerPage'), array('col-md-4')) ?>
+
+                <div class="col-md-8">
+                    <?= $this->RenderFormText($form->getElement('dealerLaborCostPerPage')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('dealerLaborCostPerPage')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('dealerLaborCostPerPage')) ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group <?= ($form->getElement('isLeased')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('isLeased'), array('col-md-4')) ?>
+
+                <div class="col-md-8">
+                    <?= $this->RenderFormBootstrapSwitch($form->getElement('isLeased'), array('js-yes-no-switch'), false) ?>
+                    <?= $this->RenderFormDescription($form->getElement('isLeased')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('isLeased')) ?>
+                </div>
+            </div>
+
+            <div class="form-group <?= ($form->getElement('leasedTonerYield')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('leasedTonerYield'), array('col-md-4')) ?>
+
+                <div class="col-md-8">
+                    <?= $this->RenderFormText($form->getElement('leasedTonerYield')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('leasedTonerYield')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('leasedTonerYield')) ?>
+                </div>
+            </div>
+
+            <div class="form-group <?= ($form->getElement('leaseBuybackPrice')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('leaseBuybackPrice'), array('col-md-4')) ?>
+
+                <div class="col-md-8">
+                    <?= $this->RenderFormText($form->getElement('leaseBuybackPrice')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('leaseBuybackPrice')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('leaseBuybackPrice')) ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+<?= $this->RenderFormClose($form) ?>

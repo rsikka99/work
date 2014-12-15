@@ -1,15 +1,17 @@
 <?php
 return array(
-    'appnamespace'         => 'Application',
+    'appnamespace'         => 'App',
     'autoloadernamespaces' => array(
-        'my'               => 'My_',
-        'easybib'          => 'EasyBib_',
-        'phpexcel'         => 'PHPExcel',
         'twitterbootstrap' => 'Twitter_Bootstrap_',
     ),
     'app'                  => array(
-        'uploadPath' => DATA_PATH . '/uploads',
-        'copyright'  => 'Tangent MTW',
+        'uploadPath'     => DATA_PATH . '/uploads',
+        'copyright'      => 'Tangent MTW',
+        'useAnalytics'   => false,
+        'useFeedbackTab' => false,
+        'useChatTab'     => false,
+        'supportEmail'   => 'support@tangentmtw.com',
+        'locale'         => 'en_GB',
     ),
     'bootstrap'            => array(
         'path'  => APPLICATION_PATH . '/Bootstrap.php',
@@ -18,7 +20,7 @@ return array(
     'feature'              => array(
         'adapter' => 'My_Feature_DbTableAdapter',
         'options' => array(
-            'className' => 'Application_Model_DbTable_Dealer_Feature',
+            'className' => 'MPSToolbox\Legacy\DbTables\DealerFeatureDbTable',
         ),
     ),
     'includePaths'         => array(
@@ -72,7 +74,7 @@ return array(
             ),
         ),
         'db'              => array(
-            'adapter'               => 'mysqli',
+            'adapter'               => 'Pdo_Mysql',
             'isDefaultTableAdapter' => true,
         ),
         'frontController' => array(
@@ -86,10 +88,11 @@ return array(
                 'My_Controller_Plugin_Acl',
                 'My_Controller_Plugin_ForceUserAction',
                 'My_Controller_Plugin_UserActivity',
+                '\\MPSToolbox\\Legacy\\Controllers\\Plugins\\AddScriptPath',
             ),
         ),
         'jquery'          => array(
-            'version'    => '1.10.2',
+            'version'    => '1.11.1',
             'ui_enable'  => true,
             'ui_version' => '1.10.3',
         ),
@@ -130,10 +133,11 @@ return array(
         ),
         'view'            => array(
             'helperPath' => array(
-                'My_View_Helper'            => 'My/View/Helper',
-                'My_View_Helper_Navigation' => 'My/View/Helper/Navigation',
-                'Tangent_View_Helper'       => 'Tangent/View/Helper',
-                'Application_View_Helper'   => APPLICATION_PATH . '/layouts/helpers',
+                'My_View_Helper'             => 'My/View/Helper',
+                'My_View_Helper_Navigation'  => 'My/View/Helper/Navigation',
+                'Tangent\\View\\Helper\\'    => 'Tangent/View/Helper',
+                'Bootstrap3\\View\\Helper\\' => 'Bootstrap3/View/Helper',
+                'App_View_Helper'            => APPLICATION_PATH . '/layouts/helpers',
             ),
         ),
     ),

@@ -1,10 +1,14 @@
 <?php
-/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+/* @var $optimization OptimizationViewModel */
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationCustomerModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\OptimizationViewModel;
+
 $optimization = $this->optimization;
-/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+/* @var $hardwareOptimization HardwareOptimizationModel */
 $hardwareOptimization = $this->hardwareOptimization;
 
-$customerOptimization = new Hardwareoptimization_Model_Optimization_Customer($hardwareOptimization);
+$customerOptimization = new OptimizationCustomerModel($hardwareOptimization);
 
 $graphs = $customerOptimization->getGraphs();
 
@@ -53,9 +57,9 @@ $h3Color                   = My_Brand::getDealerBranding()->h1FontColor;
 // H2 Style #5881BC
 // Title page
 $phpWord->addTitleStyle(1, array(
-    'size'   => 12,
-    'color'  => $h2Background,
-    'bold'   => true,
+    'size'  => 12,
+    'color' => $h2Background,
+    'bold'  => true,
 ));
 
 $phpWord->addTitleStyle(2, array(
@@ -110,62 +114,62 @@ $phpWord->addFontStyle('titlepage_address', array(
 
 $styles = (object)array(
     "tables" => (object)array(
-            "rowheader"          => array(
-                'tblHeader' => true,
-                'cantSplit' => true,
-            ),
-            "rowstyle"           => array(
-                "cantSplit" => true,
-            ),
-            "singleimage"        => (object)array(
-                    "tablestyle" => array(),
-                    "cell1"      => array(
-                        "valign" => "center"
-                    )
-                ),
-            "doubleimage"        => (object)array(
-                    "tablestyle" => array(),
-                    "cell1"      => array(
-                        "valign" => "center"
-                    ),
-                    "cell2"      => array(
-                        "valign" => "center"
-                    )
-                ),
-            "tripleimage"        => (object)array(
-                    "tablestyle" => array(),
-                    "cell1"      => array(
-                        "valign" => "center"
-                    ),
-                    "cell2"      => array(
-                        "valign" => "center"
-                    ),
-                    "cell3"      => array(
-                        "valign" => "center"
-                    )
-                ),
-            "twoColumnDataTable" => (object)array(
-                    "tablestyle" => array(
-                        'cellMarginTop'    => 100,
-                        'cellMarginRight'  => 100,
-                        'cellMarginBottom' => 100,
-                        'cellMarginLeft'   => 100
-                    ),
-
-                    "rowheight"  => null,
-                    "cell1"      => array(
-                        "valign" => "center"
-                    ),
-                    "cell2"      => array(
-                        "valign" => "center"
-                    )
-                ),
+        "rowheader"          => array(
+            'tblHeader' => true,
+            'cantSplit' => true,
         ),
-    "images" => (object)array(
-            "center" => array(
-                "align" => "center"
+        "rowstyle"           => array(
+            "cantSplit" => true,
+        ),
+        "singleimage"        => (object)array(
+            "tablestyle" => array(),
+            "cell1"      => array(
+                "valign" => "center"
             )
         ),
+        "doubleimage"        => (object)array(
+            "tablestyle" => array(),
+            "cell1"      => array(
+                "valign" => "center"
+            ),
+            "cell2"      => array(
+                "valign" => "center"
+            )
+        ),
+        "tripleimage"        => (object)array(
+            "tablestyle" => array(),
+            "cell1"      => array(
+                "valign" => "center"
+            ),
+            "cell2"      => array(
+                "valign" => "center"
+            ),
+            "cell3"      => array(
+                "valign" => "center"
+            )
+        ),
+        "twoColumnDataTable" => (object)array(
+            "tablestyle" => array(
+                'cellMarginTop'    => 100,
+                'cellMarginRight'  => 100,
+                'cellMarginBottom' => 100,
+                'cellMarginLeft'   => 100
+            ),
+
+            "rowheight"  => null,
+            "cell1"      => array(
+                "valign" => "center"
+            ),
+            "cell2"      => array(
+                "valign" => "center"
+            )
+        ),
+    ),
+    "images" => (object)array(
+        "center" => array(
+            "align" => "center"
+        )
+    ),
 
 );
 
@@ -258,19 +262,19 @@ $standard_cell_left = (object)array(
         'align'      => 'left'
     ),
     "manufacturerName" => (object)array(
-            "fontStyle"      => array('italic' => true),
-            "paragraphStyle" => array(
-                'spaceAfter' => 0,
-                'align'      => 'left'
-            ),
+        "fontStyle"      => array('italic' => true),
+        "paragraphStyle" => array(
+            'spaceAfter' => 0,
+            'align'      => 'left'
         ),
+    ),
     "modelName"        => (object)array(
-            "fontStyle"      => array(),
-            "paragraphStyle" => array(
-                'spaceAfter' => 0,
-                'align'      => 'left'
-            ),
+        "fontStyle"      => array(),
+        "paragraphStyle" => array(
+            'spaceAfter' => 0,
+            'align'      => 'left'
         ),
+    ),
 );
 
 $standard_cell_no_right_border = (object)array(
@@ -314,18 +318,18 @@ $acceptableDevices = (object)array(
     "col5Width"  => $widthTwips * 0.15,
     "col6Width"  => $widthTwips * 0.15,
     "body"       => (object)array(
-            "rowheight" => null,
-            "cell1"     => $standard_cell_left,
-            "cell2"     => $standard_cell_left,
-            "cell3"     => $standard_cell_right,
-            "cell4"     => $standard_cell_right,
-            "cell5"     => $standard_cell_right,
-            "cell6"     => $standard_cell_no_right_border,
-        ),
+        "rowheight" => null,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
+        "cell3"     => $standard_cell_right,
+        "cell4"     => $standard_cell_right,
+        "cell5"     => $standard_cell_right,
+        "cell6"     => $standard_cell_no_right_border,
+    ),
     "header"     => (object)array(
-            'header'     => $standard_header,
-            'sub_header' => $standard_sub_header,
-        ),
+        'header'     => $standard_header,
+        'sub_header' => $standard_sub_header,
+    ),
 );
 
 $suggestedDevices = (object)array(
@@ -343,19 +347,49 @@ $suggestedDevices = (object)array(
     "col6Width"  => $widthTwips * 0.10,
     "col7Width"  => $widthTwips * 0.25,
     "body"       => (object)array(
-            "rowheight" => null,
-            "cell1"     => $standard_cell_left,
-            "cell2"     => $standard_cell_left,
-            "cell3"     => $standard_cell_right,
-            "cell4"     => $standard_cell_right,
-            "cell5"     => $standard_cell_right,
-            "cell6"     => $standard_cell_right,
-            "cell7"     => $standard_cell_left
-        ),
+        "rowheight" => null,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
+        "cell3"     => $standard_cell_right,
+        "cell4"     => $standard_cell_right,
+        "cell5"     => $standard_cell_right,
+        "cell6"     => $standard_cell_right,
+        "cell7"     => $standard_cell_left
+    ),
     "header"     => (object)array(
-            'header'     => $standard_header,
-            'sub_header' => $standard_sub_header,
-        ),
+        'header'     => $standard_header,
+        'sub_header' => $standard_sub_header,
+    ),
+);
+
+$upgradedDevices = (object)array(
+    "tablestyle" => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
+        'cellMarginBottom' => 50,
+        'cellMarginLeft'   => 50
+    ),
+    "col1Width"  => $widthTwips * 0.20,
+    "col2Width"  => $widthTwips * 0.20,
+    "col3Width"  => $widthTwips * 0.10,
+    "col4Width"  => $widthTwips * 0.10,
+    "col5Width"  => $widthTwips * 0.05,
+    "col6Width"  => $widthTwips * 0.10,
+    "col7Width"  => $widthTwips * 0.25,
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
+        "cell3"     => $standard_cell_right,
+        "cell4"     => $standard_cell_right,
+        "cell5"     => $standard_cell_right,
+        "cell6"     => $standard_cell_right,
+        "cell7"     => $standard_cell_left
+    ),
+    "header"     => (object)array(
+        'header'     => $standard_header,
+        'sub_header' => $standard_sub_header,
+    ),
 );
 
 $retiredDevices = (object)array(
@@ -372,18 +406,18 @@ $retiredDevices = (object)array(
     "col5Width"  => $widthTwips * 0.15,
     "col6Width"  => $widthTwips * 0.15,
     "body"       => (object)array(
-            "rowheight" => null,
-            "cell1"     => $standard_cell_left,
-            "cell2"     => $standard_cell_left,
-            "cell3"     => $standard_cell_right,
-            "cell4"     => $standard_cell_right,
-            "cell5"     => $standard_cell_right,
-            "cell6"     => $standard_cell_no_right_border,
-        ),
+        "rowheight" => null,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
+        "cell3"     => $standard_cell_right,
+        "cell4"     => $standard_cell_right,
+        "cell5"     => $standard_cell_right,
+        "cell6"     => $standard_cell_no_right_border,
+    ),
     "header"     => (object)array(
-            'header'     => $standard_header,
-            'sub_header' => $standard_sub_header,
-        ),
+        'header'     => $standard_header,
+        'sub_header' => $standard_sub_header,
+    ),
 );
 
 $flaggedDevices = (object)array(
@@ -401,49 +435,50 @@ $flaggedDevices = (object)array(
     "col6Width"  => $widthTwips * 0.10,
     "col7Width"  => $widthTwips * 0.20,
     "body"       => (object)array(
-            "rowheight" => null,
-            "cell1"     => $standard_cell_left,
-            "cell2"     => $standard_cell_left,
-            "cell3"     => $standard_cell_right,
-            "cell4"     => $standard_cell_right,
-            "cell5"     => $standard_cell_right,
-            "cell6"     => $standard_cell_right,
-            "cell7"     => $standard_cell_left,
-        ),
+        "rowheight" => null,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
+        "cell3"     => $standard_cell_right,
+        "cell4"     => $standard_cell_right,
+        "cell5"     => $standard_cell_right,
+        "cell6"     => $standard_cell_right,
+        "cell7"     => $standard_cell_left,
+    ),
     "header"     => (object)array(
-            'header'     => $standard_header,
-            'sub_header' => $standard_sub_header,
-        ),
+        'header'     => $standard_header,
+        'sub_header' => $standard_sub_header,
+    ),
 );
 
 $deviceTables = (object)array(
     "tables" => (object)array(
-            "replacement" => $suggestedDevices,
-            "acceptable"  => $acceptableDevices,
-            "retire"      => $retiredDevices,
-            "flagged"     => $flaggedDevices,
-        ));
+        "replacement" => $suggestedDevices,
+        "upgraded"    => $upgradedDevices,
+        "acceptable"  => $acceptableDevices,
+        "retire"      => $retiredDevices,
+        "flagged"     => $flaggedDevices,
+    ));
 
 $doubleCenterTable = (object)array(
     "tablestyle" => array(),
     "col1Width"  => $widthTwips * 0.50,
     "col2Width"  => $widthTwips * 0.50,
     "body"       => (object)array(
-            "cell1" => array(
-                "valign" => "center"
-            ),
-            "cell2" => array(
-                "valign" => "center"
-            )
+        "cell1" => array(
+            "valign" => "center"
         ),
-    "image"      => (object)array(
-            "cell1" => array(
-                'align' => 'right'
-            ),
-            "cell2" => array(
-                'align' => 'left'
-            ),
+        "cell2" => array(
+            "valign" => "center"
         )
+    ),
+    "image"      => (object)array(
+        "cell1" => array(
+            'align' => 'right'
+        ),
+        "cell2" => array(
+            'align' => 'left'
+        ),
+    )
 );
 
 $titleData = array(
@@ -455,7 +490,7 @@ $titleData = array(
     "companyName"          => My_Brand::getDealerBranding()->shortDealerName,
 );
 
-$profitabilityDevices = new Hardwareoptimization_Model_Optimization_Customer($hardwareOptimization);
+$profitabilityDevices = new OptimizationCustomerModel($hardwareOptimization);
 
 $data = array(
     "phpword"              => $phpWord,

@@ -1,9 +1,17 @@
 <?php
+use MPSToolbox\Legacy\Forms\DeleteConfirmationForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\OptionForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\OptionCategoryMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\OptionMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\OptionCategoryModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\OptionModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\CategoryModel;
+use Tangent\Controller\Action;
 
 /**
  * Class Quotegen_OptionController
  */
-class Quotegen_OptionController extends Tangent_Controller_Action
+class Quotegen_OptionController extends Action
 {
 
     public function init ()
@@ -13,7 +21,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
     public function indexAction ()
     {
         // Get all current items in categories table
-        $optionMapper = Quotegen_Model_Mapper_Option::getInstance();
+        $optionMapper = OptionMapper::getInstance();
         $paginator    = new Zend_Paginator(new My_Paginator_MapperAdapter($optionMapper, array('dealerId = ?' => Zend_Auth::getInstance()->getIdentity()->dealerId)));
 
         // Set current page
@@ -35,10 +43,10 @@ class Quotegen_OptionController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'warning' => 'Please select an option to delete first.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.category-options');
         }
 
-        $optionMapper = Quotegen_Model_Mapper_Option::getInstance();
+        $optionMapper = OptionMapper::getInstance();
         $option       = $optionMapper->find($optionId);
 
         if (!$option)
@@ -46,7 +54,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'danger' => 'There was an error finding that option to delete.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.category-options');
         }
         // If we are trying to access a option from another dealer, kick them back
         else if ($option->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
@@ -55,11 +63,11 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                 'danger' => 'You do not have permission to access this.'
             ));
             // Redirect
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.category-options');
         }
 
         $message = "Are you sure you want to delete {$option->name}?";
-        $form    = new Application_Form_Delete($message);
+        $form    = new DeleteConfirmationForm($message);
 
         $request = $this->getRequest();
         if ($request->isPost())
@@ -70,18 +78,18 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                 // Delete quote from database
                 if ($form->isValid($values))
                 {
-                    Quotegen_Model_Mapper_OptionCategory::getInstance()->deleteByOptionId($option->id);
+                    OptionCategoryMapper::getInstance()->deleteByOptionId($option->id);
                     $optionMapper->delete($option);
 
                     $this->_flashMessenger->addMessage(array(
                         'success' => "Option  {$this->view->escape($option->name)} was deleted successfully."
                     ));
-                    $this->redirector('index');
+                    $this->redirectToRoute('quotes.category-options');
                 }
             }
             else // Go back
             {
-                $this->redirector('index');
+                $this->redirectToRoute('quotes.category-options');
             }
         }
         $this->view->form = $form;
@@ -93,7 +101,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
         $page = $this->_getParam('page', false);
         $id   = $this->_getParam('id', false);
 
-        $form = new Quotegen_Form_Option();
+        $form = new OptionForm();
 
         // If the form is on POST insert data
         $request = $this->getRequest();
@@ -108,21 +116,21 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                 {
                     if ($form->isValid($values))
                     {
-                        $optionMapper = Quotegen_Model_Mapper_Option::getInstance();
+                        $optionMapper = OptionMapper::getInstance();
 
-                        $option = new Quotegen_Model_Option();
+                        $option = new OptionModel();
                         $option->populate($values);
                         $option->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
                         $optionId         = $optionMapper->insert($option);
 
                         // Create optionCategory with $optionId to save 
-                        $optionCategory           = new Quotegen_Model_OptionCategory();
+                        $optionCategory           = new OptionCategoryModel();
                         $optionCategory->optionId = $optionId;
 
                         foreach ($values ['categories'] as $categoryId)
                         {
                             $optionCategory->categoryId = $categoryId;
-                            Quotegen_Model_Mapper_OptionCategory::getInstance()->insert($optionCategory);
+                            OptionCategoryMapper::getInstance()->insert($optionCategory);
                         }
                         $this->_flashMessenger->addMessage(array(
                             'success' => "Option {$values['name']} Created"
@@ -130,14 +138,14 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                         if ($page == "options")
                         {
                             // User has cancelled. Go back to the edit page
-                            $this->redirector('options', 'devicesetup', 'quotegen', array(
+                            $this->redirectToRoute('hardware-library.all-devices.options', array(
                                 'id' => $id
                             ));
                         }
                         else
                         {
                             // User has cancelled. Go back to the edit page
-                            $this->redirector('index');
+                            $this->redirectToRoute('quotes.category-options');
                         }
                     }
                     else // Values in form data aren't valid.
@@ -157,17 +165,26 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                 if ($page == "options")
                 {
                     // User has cancelled. Go back to the edit page
-                    $this->redirector('options', 'devicesetup', 'quotegen', array(
+                    $this->redirectToRoute('hardware-library.all-devices.options', array(
                         'id' => $id
                     ));
                 }
                 else
                 {
                     // User has cancelled. Go back to the edit page
-                    $this->redirector('index');
+                    $this->redirectToRoute('quotes.category-options');
                 }
             }
         }
+        // Add form to page
+        $form->setDecorators(array(
+            array(
+                'ViewScript',
+                array(
+                    'viewScript' => 'forms/quotegen/option-form.phtml',
+                )
+            )
+        ));
 
         $this->view->form = $form;
     }
@@ -183,14 +200,14 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                 'warning' => 'Please select an option first.'
             ));
             // Redirect
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.category-options');
         }
 
         // Load the form for use
-        $form = new Quotegen_Form_Option();
+        $form = new OptionForm();
 
         // Find the option by id
-        $optionMapper = Quotegen_Model_Mapper_Option::getInstance();
+        $optionMapper = OptionMapper::getInstance();
         $option       = $optionMapper->find($optionId);
 
         // If we are trying to access a option from another dealer, kick them back
@@ -200,12 +217,12 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                 'danger' => 'You do not have permission to access this.'
             ));
             // Redirect
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.category-options');
         }
 
 
         $optionValues = $option->toArray();
-        /* @var $category Quotegen_Model_Category */
+        /* @var $category CategoryModel */
         foreach ($option->getCategories() as $category)
         {
             $optionValues ['categories'] [] = $category->id;
@@ -229,13 +246,13 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                         // Update quote setting and message to confirm
                         $option->populate($values);
 
-                        $optionCategoryMapper = Quotegen_Model_Mapper_OptionCategory::getInstance();
+                        $optionCategoryMapper = OptionCategoryMapper::getInstance();
                         // Create a new category since we know the option id will stay the same at all times.
-                        $optionCategory           = new Quotegen_Model_OptionCategory();
+                        $optionCategory           = new OptionCategoryModel();
                         $optionCategory->optionId = $option->id;
 
                         $categoryIds [] = array();
-                        /* @var $category Quotegen_Model_Category */
+                        /* @var $category CategoryModel */
                         foreach ($option->getCategories() as $category)
                         {
 
@@ -263,7 +280,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                             'success' => "Category setting was updated successfully."
                         ));
 
-                        $this->redirector('index');
+                        $this->redirectToRoute('quotes.category-options');
                     }
                     else
                     {
@@ -280,16 +297,26 @@ class Quotegen_OptionController extends Tangent_Controller_Action
             else // Client hit cancel, redirect
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->redirector('index');
+                $this->redirectToRoute('quotes.category-options');
             }
         }
+
+        // Add form to page
+        $form->setDecorators(array(
+            array(
+                'ViewScript',
+                array(
+                    'viewScript' => 'forms/quotegen/option-form.phtml',
+                )
+            )
+        ));
 
         $this->view->form = $form;
     }
 
     public function viewAction ()
     {
-        $this->view->option = Quotegen_Model_Mapper_Option::getInstance()->find($this->_getParam('id', false));
+        $this->view->option = OptionMapper::getInstance()->find($this->_getParam('id', false));
     }
 }
 

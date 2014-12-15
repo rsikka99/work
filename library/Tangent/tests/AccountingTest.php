@@ -22,7 +22,7 @@ class Library_Tangent_AccountingTest extends PHPUnit_Framework_TestCase
      */
     public function testApplyMargin ($cost, $marginPercent, $expectedResult)
     {
-        $this->assertEquals($expectedResult, Tangent_Accounting::applyMargin($cost, $marginPercent), "apply margin gives incorrect value!");
+        $this->assertEquals($expectedResult, \Tangent\Accounting::applyMargin($cost, $marginPercent), "apply margin gives incorrect value!");
     }
 
     /**
@@ -42,7 +42,7 @@ class Library_Tangent_AccountingTest extends PHPUnit_Framework_TestCase
      */
     public function testApplyMarginOutOfBounds ($cost, $marginPercent)
     {
-        Tangent_Accounting::applyMargin($cost, $marginPercent);
+        \Tangent\Accounting::applyMargin($cost, $marginPercent);
     }
 
     /**
@@ -63,7 +63,7 @@ class Library_Tangent_AccountingTest extends PHPUnit_Framework_TestCase
      */
     public function testReverseMargin ($cost, $price, $expectedResult)
     {
-        $this->assertEquals($expectedResult, Tangent_Accounting::reverseEngineerMargin($cost, $price), "Reverse Engineering Margin is incorrect");
+        $this->assertEquals($expectedResult, \Tangent\Accounting::reverseEngineerMargin($cost, $price), "Reverse Engineering Margin is incorrect");
     }
 }
 

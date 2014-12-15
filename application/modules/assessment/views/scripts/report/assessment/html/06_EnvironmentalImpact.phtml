@@ -7,9 +7,9 @@ $graphs = $assessmentViewModel->getGraphs();
 <table cellspacing="0" class="gradesTable">
     <tr>
         <td class="gradeDescription">
-            <p><?php echo $assessmentViewModel->getRanking()->getEnvironmentalFriendliness()->RankingText; ?></p>
+            <p><?= $assessmentViewModel->getRanking()->getEnvironmentalFriendliness()->RankingText; ?></p>
         </td>
-        <td class="gradeNumber"><?php echo number_format($assessmentViewModel->getRanking()->getEnvironmentalFriendliness()->Rank, 1); ?></td>
+        <td class="gradeNumber"><?= number_format($assessmentViewModel->getRanking()->getEnvironmentalFriendliness()->Rank, 1); ?></td>
     </tr>
 </table>
 <br />
@@ -18,8 +18,8 @@ $graphs = $assessmentViewModel->getGraphs();
 {
     ?>
     <p>You are currently using an estimated average of
-        <strong><?php echo number_format($assessmentViewModel->getAveragePowerUsagePerMonth()); ?> kWh</strong> per month to operate printing devices at an estimated monthly cost of
-        <strong><?php echo $this->currency($assessmentViewModel->getAveragePowerCostPerMonth()); ?></strong>, assuming a cost of <?php echo $this->currency($assessmentViewModel->assessment->getAssessmentSettings()->kilowattsPerHour, 2); ?> per kWh.
+        <strong><?= number_format($assessmentViewModel->getAveragePowerUsagePerMonth()); ?> kWh</strong> per month to operate printing devices at an estimated monthly cost of
+        <strong><?= $this->currency($assessmentViewModel->getAveragePowerCostPerMonth()); ?></strong>, assuming a cost of <?= $this->currency($assessmentViewModel->assessment->getClient()->getClientSettings()->genericSettings->defaultEnergyCost, 2); ?> per kWh.
     </p>
     <p>The following lists the devices with the highest average power consumption per month.</p>
     <table cellspacing="0" class="genericTable" style="font-size: 10pt;">
@@ -37,7 +37,7 @@ $graphs = $assessmentViewModel->getGraphs();
             <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
             <tr>
                 <td>
-                    <div style="width: 160px; padding: 0;"><?php echo $deviceName; ?></div>
+                    <div style="width: 160px; padding: 0;"><?= $deviceName; ?></div>
                 </td>
                 <td class="center"><?php if ($deviceInstance->serialNumber)
                     {
@@ -47,8 +47,8 @@ $graphs = $assessmentViewModel->getGraphs();
                     {
                         echo 'Unknown';
                     } ?></td>
-                <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyPowerConsumption()); ?> kWh</td>
-                <td class="center"><?php echo $this->currency($deviceInstance->getAverageMonthlyPowerCost(), 2); ?></td>
+                <td class="center"><?= number_format($deviceInstance->getAverageMonthlyPowerConsumption()); ?> kWh</td>
+                <td class="center"><?= $this->currency($deviceInstance->getAverageMonthlyPowerCost(), 2); ?></td>
             </tr>
             <?php $ctr++;
             if ($ctr > 2)
@@ -67,6 +67,6 @@ else
 <div class="pheader">Green Features: Duplexing and Scanning</div>
 <p>If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplexing and scanning capabilities:</p>
 <div class="center">
-    <img src="<?php echo $graphs[13]; ?>" />
-    <img src="<?php echo $graphs[14]; ?>" />
+    <img src="<?= $graphs[13]; ?>" />
+    <img src="<?= $graphs[14]; ?>" />
 </div>

@@ -1,191 +1,160 @@
 <?php
+
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\ManufacturerModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
+
 $id = $this->id;
+
+/* @var $manufacturers ManufacturerModel[] */
 $manufacturers = $this->manufacturers;
 ?>
 
-<?php $this->headScript()->captureStart('append', 'text/javascript') ?>
+<script>
+    <?php $this->headScript()->captureStart('append', 'text/javascript') ?>
 
-$(document).ready(function() {
+    $(document).ready(function ()
+    {
+        var $criteriaFilter = $("#criteria_filter");
+        var $txtCriteria = $("#txtCriteria");
+        var $cboCriteria = $("#cboCriteria");
+        var $textCriteria = $("#text_criteria");
+        var $listCriteria = $("#list_criteria");
 
-// Toggle the filter field
-$("#criteria_filter").change(function() {
-var url = '';
-
-//clear searches
-$("#txtCriteria").val('');
-$("#cboCriteria").val('');
-
-switch (this.value) {
-case "manufacturer":
-$("#text_criteria").hide();
-$("#list_criteria").show();
-break;
-case "sku":
-$("#list_criteria").hide();
-$("#text_criteria").show();
-break;
-default:
-break;
-}
-});
-
-// Set up filter values
-<?php if ($this->search_filter == "manufacturer")
-{
-    ?>
-    $("#text_criteria").hide();
-    $("#list_criteria").show();
-    $("#cboCriteria").val(<?php echo $this->cboCriteria; ?>);
-<?php
-}
-else
-{
-    ?>
-    $("#list_criteria").hide();
-    $("#text_criteria").show();
-    $("#txtCriteria").val("<?php echo $this->txtCriteria; ?>");
-<?php } ?>
-
-});
-
-<?php $this->headScript()->captureEnd() ?>
-
-<div class="clearfix">
-    <div class="page-header">
-        <h1>Hardware Quote Devices -
-            <small><?php echo $this->devicename; ?></small>
-        </h1>
-    </div>
-</div>
-
-<div class="tabbable"> <!-- Only required for left/right tabs -->
-    <ul class="nav nav-tabs">
-        <li>
-            <a href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'edit', 'id' => $id), null, true); ?>">Details</a>
-        </li>
-        <li class="active"><a href="#tab2" data-toggle="tab">Toners</a></li>
-        <?php if ($this->quotegendevice)
+        // Toggle the filter field
+        $criteriaFilter.change(function ()
         {
-            ?>
-            <li>
-                <a href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'options', 'id' => $id), null, true); ?>">Available
-                    Options</a></li>
-            <li>
-                <a href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'configurations', 'id' => $id), null, true); ?>">Hardware
-                    Configurations</a></li>
-        <?php } ?>
-    </ul>
-    <div class="tab-content">
-        <form name="frmToners" id="frmToners" action="" method="post">
-            <input type="hidden" name="tonerid" id="tonerid" value="" />
+            var url = '';
 
-            <div id="filter" class="well">
-                <p id="view_filter">
-                    <label for="cboView" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">View:</label>
-                    <select name="cboView" id="cboView" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
-                        <option value="all" <?php if ($this->view_filter == "all")
-                        {
-                            echo "selected";
-                        } ?>>All
-                        </option>
-                        <option value="assigned" <?php if ($this->view_filter == "assigned")
-                        {
-                            echo "selected";
-                        } ?>>Assigned
-                        </option>
-                        <option value="unassigned" <?php if ($this->view_filter == "unassigned")
-                        {
-                            echo "selected";
-                        } ?>>Unassigned
-                        </option>
-                    </select>
-                </p>
-                <p id="search_filter">
-                    <label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
-                    <select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
-                        <option value="sku" <?php if ($this->search_filter == 'sku')
-                        {
-                            echo "selected";
-                        } ?>>SKU
-                        </option>
-                        <option value="manufacturer" <?php if ($this->search_filter == 'manufacturer')
-                        {
-                            echo "selected";
-                        } ?>>Manufacturer
-                        </option>
-                    </select>
-                    <label for="txtCriteria" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">for</label>
-                    <span id="text_criteria"><input type="text" name="txtCriteria" style="width: 152px; margin: 0px 10px 0px 0px;" id="txtCriteria" <?php if ($this->search_criteria != '')
-                        {
-                            echo 'value="' . $this->search_criteria . '"';
-                        } ?> /></span>
+            // Clear searches
+            $txtCriteria.val('');
+            $cboCriteria.val('');
+
+            switch (this.value)
+            {
+                case "manufacturer":
+                    $textCriteria.hide();
+                    $listCriteria.show();
+                    break;
+                case "sku":
+                    $listCriteria.hide();
+                    $textCriteria.show();
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        // Set up filter values
+        <?php if ($this->search_filter == "manufacturer") : ?>
+        $textCriteria.hide();
+        $listCriteria.show();
+        $cboCriteria.val(<?= $this->cboCriteria; ?>);
+        <?php else : ?>
+        $listCriteria.hide();
+        $textCriteria.show();
+        $txtCriteria.val("<?= $this->txtCriteria; ?>");
+        <?php endif; ?>
+    });
+
+    <?php $this->headScript()->captureEnd() ?>
+</script>
+<div class="container">
+    <div class="tabbable"> <!-- Only required for left/right tabs -->
+        <ul class="nav nav-tabs">
+            <li>
+                <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.edit', true); ?>">Details</a>
+            </li>
+            <li class="active"><a href="#tab2" data-toggle="tab">Toners</a></li>
+            <?php if ($this->quotegendevice) : ?>
+                <li>
+                    <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.options', true); ?>">Available
+                        Options</a></li>
+                <li>
+                    <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.configurations', true); ?>">Hardware
+                        Configurations</a></li>
+            <?php endif; ?>
+        </ul>
+        <div class="tab-content">
+            <form name="frmToners" id="frmToners" action="" method="post">
+                <input type="hidden" name="tonerid" id="tonerid" value="" />
+
+                <div id="filter" class="well">
+                    <p id="view_filter">
+                        <label for="cboView" class="details_label" style="display: inline; padding: 0;">View:</label>
+                        <select name="cboView" id="cboView" class="filter_dropdown" style="width: 160px; margin: 0 0 0 10px;">
+                            <option value="all" <?= ($this->view_filter == "all") ? "selected" : "" ?>>All</option>
+                            <option value="assigned" <?= ($this->view_filter == "assigned") ? "selected" : "" ?>>Assigned</option>
+                            <option value="unassigned" <?= ($this->view_filter == "unassigned") ? "selected" : "" ?>>Unassigned</option>
+                        </select>
+                    </p>
+                    <p id="search_filter">
+                        <label for="criteria_filter" class="details_label" style="display: inline; padding: 0;">Filter:</label>
+                        <select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0 0 0 10px;">
+                            <option value="sku" <?= ($this->view_filter == "sku") ? "selected" : "" ?>>SKU</option>
+                            <option value="manufacturer" <?= ($this->view_filter == "manufacturer") ? "selected" : "" ?>>Manufacturer</option>
+                        </select>
+                        <label for="txtCriteria" class="details_label" style="display: inline; padding: 0 10px 0 10px;">for</label>
+                        <span id="text_criteria"><input type="text" name="txtCriteria" style="width: 152px; margin: 0 10px 0 0;" id="txtCriteria" value="<?= $this->search_criteria ?>" /></span>
 					<span id="list_criteria" style="display: none;">
-						<select name="cboCriteria" id="cboCriteria" style="width: 160px; margin: 0px 10px 0px 0px;">
-                            <?php foreach ($manufacturers as $manufacturer)
-                            {
-                                /* @var $manufacturer Proposalgen_Model_Manufacturer */
-                                ?>
-                                <option value="<?php echo $manufacturer->id; ?>"><?php echo $manufacturer->displayname; ?></option>
-                            <?php } ?>
+						<select name="cboCriteria" id="cboCriteria" style="width: 160px; margin: 0 10px 0 0;">
+                            <?php foreach ($manufacturers as $manufacturer) : ?>
+                                <option value="<?= $manufacturer->id; ?>"><?= $manufacturer->displayname; ?></option>
+                            <?php endforeach; ?>
                         </select>
 					</span>
-                </p>
-                <input type="submit" name="btnSearch" id="btnSearch" value="Search" class="btn" />
-                <input type="submit" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn" />
-            </div>
+                    </p>
+                    <input type="submit" name="btnSearch" id="btnSearch" value="Search" class="btn btn-default" />
+                    <input type="submit" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn btn-default" />
+                </div>
 
-            <div id="results">
-                <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
-                    <table class="table table-striped table-condensed table-bordered">
-                        <thead>
-                        <tr>
-                            <th>SKU</th>
-                            <th>Manufacturer</th>
-                            <th>Color</th>
-                            <th>Yield</th>
-                            <th>Cost</th>
-                            <th style="width: 120px; text-align: center;">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach ($this->paginator->getCurrentItems() as $toner) : /* @var $toner Proposalgen_Model_Toner */ ?>
+                <div id="results">
+                    <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
+                        <table class="table table-striped table-condensed table-bordered">
+                            <thead>
                             <tr>
-                                <td><?php echo $toner->sku; ?></td>
-                                <td><?php echo $toner->getManufacturer()->displayname; ?></td>
-                                <td style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->tonerColorName); ?></td>
-                                <td style="text-align: right;"><?php echo number_format($toner->yield, 0, '', ','); ?></td>
-                                <td style="text-align: right;"><?php echo $this->currency($toner->cost); ?></td>
-                                <td>
-                                    <div class="" style="text-align: center;">
-                                        <?php if (in_array($toner->id, $this->assignedToners))
-                                        {
-                                            ?>
-                                            <button type="submit" name="btnUnassign" id="btnUnassign" class="btn btn-danger btn-mini" onclick="javascript: $('#tonerid').val(<?php echo $toner->id; ?>);">
-                                                <i class="icon-minus-sign icon-white"></i> Unassign
-                                            </button>
-                                        <?php
-                                        }
-                                        else
-                                        {
-                                            ?>
-                                            <button type="submit" name="btnAssign" id="btnAssign" class="btn btn-success btn-mini" onclick="javascript: $('#tonerid').val(<?php echo $toner->id; ?>);">
-                                                <i class="icon-plus-sign icon-white"></i> Assign
-                                            </button>
-                                        <?php } ?>
-                                    </div>
-                                </td>
+                                <th>SKU</th>
+                                <th>Manufacturer</th>
+                                <th>Color</th>
+                                <th>Yield</th>
+                                <th>Cost</th>
+                                <th style="width: 120px; text-align: center;">Action</th>
                             </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                    <?php echo $this->paginationControl($this->paginator); ?>
-                <?php else : ?>
-                    <h4>There are no toners assigned to this device.</h4>
-                <?php endif; ?>
-            </div>
-            <div style="text-align: center;">
-                <a class="btn" title="Done" href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index'), null, true); ?>">Done</a>
-            </div>
-        </form>
+                            </thead>
+                            <tbody>
+                            <?php /* @var $toner TonerModel */ ?>
+                            <?php foreach ($this->paginator->getCurrentItems() as $toner) : ?>
+                                <tr>
+                                    <td><?= $toner->sku; ?></td>
+                                    <td><?= $toner->getManufacturer()->displayname; ?></td>
+                                    <td style="text-transform: capitalize;"><?= strToLower($toner->getTonerColor()->name); ?></td>
+                                    <td style="text-align: right;"><?= number_format($toner->yield, 0, '', ','); ?></td>
+                                    <td style="text-align: right;"><?= $this->currency($toner->cost); ?></td>
+                                    <td>
+                                        <div class="" style="text-align: center;">
+                                            <?php if (in_array($toner->id, $this->assignedToners)) : ?>
+                                                <button type="submit" name="btnUnassign" id="btnUnassign" class="btn btn-danger btn-xs" onclick="$('#tonerid').val(<?= $toner->id; ?>);">
+                                                    <i class="glyphicon glyphicon-minus-sign icon-white"></i> Unassign
+                                                </button>
+                                            <?php else : ?>
+                                                <button type="submit" name="btnAssign" id="btnAssign" class="btn btn-success btn-xs" onclick="$('#tonerid').val(<?= $toner->id; ?>);">
+                                                    <i class="glyphicon glyphicon-plus-sign icon-white"></i> Assign
+                                                </button>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        <?= $this->paginationControl($this->paginator); ?>
+                    <?php else : ?>
+                        <h4>There are no toners assigned to this device.</h4>
+                    <?php endif; ?>
+                </div>
+                <div style="text-align: center;">
+                    <a class="btn btn-default" title="Done" href="<?= $this->url(array(), 'hardware-library.all-devices', true); ?>">Done</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>

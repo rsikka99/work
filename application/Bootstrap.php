@@ -1,4 +1,9 @@
 <?php
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Services\NavigationService;
+use MPSToolbox\Legacy\Services\LessCssService;
+use Tangent\Statsd;
+
 
 /**
  * Class Bootstrap
@@ -15,12 +20,64 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initConfig ()
     {
         $config = new Zend_Config($this->getOptions());
-        if (!Zend_Registry::isRegistered("config"))
+        if (!Zend_Registry::isRegistered('config'))
         {
-            Zend_Registry::set("config", $config);
+            Zend_Registry::set('config', $config);
         }
 
         return $config;
+    }
+
+    protected function _initRedisCache ()
+    {
+        $this->bootstrap('cachemanager');
+
+        /* @var $cm Zend_Cache_Manager */
+        $cm = $this->getResource('cachemanager');
+
+//        $navigationCache = $cm->getCache('navigation_cache');
+//        $navigationCache->setOption('cache_id_prefix', 'MPST_Navigation_');
+//        $navigationCache->setBackend(new Rediska_Zend_Cache_Backend_Redis(array('rediska' => new Rediska())));
+//        $defaultCache = $cm->getCache('default');
+//        $defaultCache->setBackend(new Rediska_Zend_Cache_Backend_Redis(array('rediska' => new Rediska())));
+
+//        echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
+//        var_dump($cm->getCaches());
+//        die();
+
+        return $cm;
+    }
+
+    /**
+     * Initializes Laravel's database layer
+     */
+    protected function _initEloquent ()
+    {
+        $options = $this->getOptions();
+
+        $capsule = new Illuminate\Database\Capsule\Manager();
+        Zend_Registry::set('Illuminate\Database\Capsule\Manager', $capsule);
+
+        $capsule->addConnection([
+            'driver'    => 'mysql',
+            'host'      => $options['resources']['db']['params']['host'],
+            'database'  => $options['resources']['db']['params']['dbname'],
+            'username'  => $options['resources']['db']['params']['username'],
+            'password'  => $options['resources']['db']['params']['password'],
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+        ]);
+        $capsule->bootEloquent();
+
+    }
+
+    /**
+     * Initializes the routing
+     */
+    protected function _initRoutes ()
+    {
+        include APPLICATION_PATH . '/configs/routes.php';
     }
 
     protected function _initBrand ()
@@ -43,11 +100,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $options = $this->getOptions();
         if (isset($options['statsd']))
         {
-            Tangent_Statsd::$rootBucket = $options['statsd']['rootBucket'];
-            Tangent_Statsd::$enabled    = $options['statsd']['enabled'];
-            Tangent_Statsd::$host       = $options['statsd']['host'];
-            Tangent_Statsd::$port       = $options['statsd']['port'];
-            Tangent_Statsd::increment('mpstoolbox.pageloads', 1);
+            Statsd::$rootBucket = $options['statsd']['rootBucket'];
+            Statsd::$enabled    = $options['statsd']['enabled'];
+            Statsd::$host       = $options['statsd']['host'];
+            Statsd::$port       = $options['statsd']['port'];
+            Statsd::increment('mpstoolbox.pageloads', 1);
         }
     }
 
@@ -64,7 +121,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         {
             if ($auth->getIdentity()->id > 0)
             {
-                Application_Service_Navigation::$userId = $auth->getIdentity()->id;
+                NavigationService::$userId = $auth->getIdentity()->id;
             }
         }
     }
@@ -75,12 +132,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initPhpSettings ()
     {
         $options = $this->getOptions();
-        date_default_timezone_set($options ["phpSettings"] ["timezone"]);
+        date_default_timezone_set($options ['phpSettings'] ['timezone']);
 
         // Turn on the display of errors
         if (APPLICATION_ENV != 'production')
         {
-            @ini_set("display_errors", 1);
+            @ini_set('display_errors', 1);
         }
     }
 
@@ -123,12 +180,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
          */
         try
         {
-            Application_Service_Less::compileSiteStyles($forceRecompile);
+            LessCssService::compileSiteStyles($forceRecompile);
         }
         catch (Exception $e)
         {
             // Retry in case of a directory error.
-            Application_Service_Less::compileSiteStyles($forceRecompile);
+            LessCssService::compileSiteStyles($forceRecompile);
         }
 
         /**
@@ -136,12 +193,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
          */
         try
         {
-            Application_Service_Less::compileSiteThemeStyles($forceRecompile);
+            LessCssService::compileSiteThemeStyles($forceRecompile);
         }
         catch (Exception $e)
         {
             // Retry in case of a directory error.
-            Application_Service_Less::compileSiteThemeStyles($forceRecompile);
+            LessCssService::compileSiteThemeStyles($forceRecompile);
         }
 
         /**
@@ -149,33 +206,25 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
          */
         try
         {
-            Application_Service_Less::compileReportStyles($forceRecompile);
+            LessCssService::compileReportStyles($forceRecompile);
         }
         catch (Exception $e)
         {
             // Retry in case of a directory error.
-            Application_Service_Less::compileReportStyles($forceRecompile);
+            LessCssService::compileReportStyles($forceRecompile);
         }
 
-        $view->headLink()->prependStylesheet($view->baseUrl(sprintf("css/reports/reports_dealer_%s.css", $dealerId)));
-        $view->headLink()->prependStylesheet($view->theme("/css/site/styles.css"));
-        $view->headLink()->prependStylesheet($view->baseUrl("/css/site/styles.css"));
-        $view->headLink()->prependStylesheet($view->theme("/jquery/ui/grid/ui.jqgrid.css"));
-        $view->headLink()->prependStylesheet($view->theme("/jquery/ui/jquery-ui-1.10.3.custom.min.css"));
-        $view->headLink()->prependStylesheet($view->baseUrl("/css/site/bootstrap.css"));
+        /**
+         * CSS Styles
+         */
+        $view->headLink()->prependStylesheet($view->baseUrl(sprintf('css/reports/reports_dealer_%s.css', $dealerId)));
+        $view->headLink()->prependStylesheet($view->theme('/css/site/styles.css'));
+        $view->headLink()->prependStylesheet($view->baseUrl('/css/site/styles.css'));
 
-        // Add default scripts
-        $view->headScript()->prependFile($view->baseUrl("/js/script.js"));
-        $view->headScript()->prependFile($view->baseUrl("/js/plugins.js"));
-        $view->headScript()->prependFile($view->baseUrl("/js/downloadPlugin.js"));
-        $view->headScript()->prependFile($view->baseUrl("/js/libs/select2/select2.min.js"));
-        $view->headScript()->prependFile($view->baseUrl("/js/libs/bootstrap-switch.js"));
-        $view->headScript()->prependFile($view->baseUrl("/js/libs/bootstrap-modalmanager.js"));
-        $view->headScript()->prependFile($view->baseUrl("/js/libs/bootstrap-modal.js"));
-        $view->headScript()->prependFile($view->baseUrl("/js/libs/bootstrap.min.js"));
-
-        $view->headScript()->prependFile($view->baseUrl("/js/libs/jqgrid/jquery.jqGrid.min.js"));
-        $view->headScript()->prependFile($view->baseUrl("/js/libs/jqgrid/i18n/grid.locale-en.js"));
+        /**
+         * Common.js used for require.js setup
+         */
+        $view->headScript()->prependFile($view->baseUrl('/js/common.js'));
     }
 
     /**
@@ -183,7 +232,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initAcl ()
     {
-        $acl = Application_Model_Acl::getInstance();
+        $acl = AppAclModel::getInstance();
         Zend_Registry::set('Zend_Acl', $acl);
 
         return $acl;
@@ -207,7 +256,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initCurrency ()
     {
-        $currency = new Zend_Currency('en_US');
+        $currency = new Zend_Currency(['currency' => 'EUR'], 'en_US');
         Zend_Registry::set('Zend_Currency', $currency);
     }
 

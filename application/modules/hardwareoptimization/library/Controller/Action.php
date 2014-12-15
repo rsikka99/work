@@ -1,4 +1,11 @@
 <?php
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentStepsModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Mappers\HardwareOptimizationMapper;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationStepsModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\OptimizationViewModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
 
 /**
  * Class Hardwareoptimization_Library_Controller_Action
@@ -7,21 +14,22 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
 {
 
     /**
-     * @var Hardwareoptimization_Model_Hardware_Optimization
+     * @var HardwareOptimizationModel
      */
     protected $_hardwareOptimization;
 
     /**
-     * @var Hardwareoptimization_ViewModel_Optimization
+     * @var OptimizationViewModel
      */
     protected $_optimizationViewModel;
 
     /**
      * The navigation steps
      *
-     * @var Hardwareoptimization_Model_Hardware_Optimization_Steps
+     * @var HardwareOptimizationStepsModel
      */
     protected $_navigation;
+
 
     /**
      * An object containing various word styles
@@ -40,7 +48,7 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
     /**
      * @var string
      */
-    protected $_firstStepName = Assessment_Model_Assessment_Steps::STEP_FLEET_UPLOAD;
+    protected $_firstStepName = HardwareOptimizationStepsModel::STEP_OPTIMIZE;
 
     /**
      * Called from the constructor as the final step of initialization
@@ -52,7 +60,7 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
     {
         parent::init();
 
-        $this->_navigation = Hardwareoptimization_Model_Hardware_Optimization_Steps::getInstance();
+        $this->_navigation = HardwareOptimizationStepsModel::getInstance();
         $this->_dealerId   = Zend_Auth::getInstance()->getIdentity()->dealerId;
 
         if (!My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION))
@@ -61,25 +69,29 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
                 "error" => "You do not have permission to access this."
             ));
 
-            $this->redirector('index', 'index', 'index');
+            $this->redirectToRoute('hardwareoptimization');
         }
 
-        if (isset($this->_mpsSession->selectedClientId))
+        if (!$this->getSelectedClient() instanceof \MPSToolbox\Legacy\Entities\ClientEntity)
         {
-            $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);
-            if (!$client instanceof Quotegen_Model_Client)
-            {
-                $this->_flashMessenger->addMessage(array(
-                    "error" => "A client is not selected."
-                ));
+            $this->_flashMessenger->addMessage(array(
+                "danger" => "A client is not selected."
+            ));
 
-                $this->redirector('index', 'index', 'index');
-            }
-            else
-            {
-                $this->_navigation->clientName = $client->companyName;
-            }
+            $this->redirectToRoute('app.dashboard');
         }
+
+        $this->_navigation->clientName = $this->getSelectedClient()->companyName;
+
+        if (!$this->getSelectedUpload() instanceof \MPSToolbox\Legacy\Entities\RmsUploadEntity)
+        {
+            $this->_flashMessenger->addMessage(array(
+                "danger" => "An RMS upload is not selected."
+            ));
+
+            $this->redirectToRoute('app.dashboard');
+        }
+
 
         $this->_fullCachePath     = PUBLIC_PATH . "/cache/reports/hardwareoptimization/" . $this->getHardwareOptimization()->id;
         $this->_relativeCachePath = "/cache/reports/hardwareoptimization/" . $this->_hardwareOptimization->id;
@@ -93,11 +105,11 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
             }
         }
 
-//        Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE(6 / 100);
-//        Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_COLOR(24 / 100);
+//        MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel::setESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE(6 / 100);
+//        MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel::setESTIMATED_PAGE_COVERAGE_COLOR(24 / 100);
 //         Gross Margin Report Page Coverage
-//        Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE(6 / 100);
-//        Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_COLOR(24 / 100);
+//        MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel::setACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE(6 / 100);
+//        MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel::setACTUAL_PAGE_COVERAGE_COLOR(24 / 100);
 
         $this->view->ReportAbsoluteCachePath = $this->_fullCachePath;
         $this->view->ReportCachePath         = $this->_relativeCachePath;
@@ -110,17 +122,17 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
             "Reports"              => array(
                 "pagetitle" => "Select a report...",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/hardwareoptimization/report_index/index')
+                "url"       => $this->view->baseUrl('/hardwareoptimization/report-index')
             ),
             "CustomerOptimization" => array(
                 "pagetitle" => "Customer Optimization",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/hardwareoptimization/report_customer_optimization/index')
+                "url"       => $this->view->baseUrl('/hardwareoptimization/report-customer-optimization')
             ),
             "DealerOptimization"   => array(
                 "pagetitle" => "Dealer Optimization",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/hardwareoptimization/report_dealer_optimization/index')
+                "url"       => $this->view->baseUrl('/hardwareoptimization/report-dealer-optimization')
             ),
         );
     }
@@ -132,14 +144,14 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
      */
     public function initHtmlReport ()
     {
-        $this->view->headScript()->appendFile($this->view->baseUrl('/js/htmlReport.js'));
+        $this->view->headScript()->appendFile($this->view->baseUrl('/js/app/legacy/HtmlReport.js'));
 
         if ($this->getHardwareOptimization()->id < 1)
         {
             $this->_flashMessenger->addMessage(array("error" => "Please select a report first."));
 
             // Send user to the index
-            $this->redirector('index', 'index', 'index');
+            $this->redirectToRoute('hardwareoptimization');
         }
         $this->view->dealerLogoFile = $this->getDealerLogoFile();
     }
@@ -166,10 +178,12 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
      */
     public function postDispatch ()
     {
-        $stage = ($this->getHardwareOptimization()->stepName) ? : $this->_firstStepName;
+        $stage = ($this->getHardwareOptimization()->stepName) ?: $this->_firstStepName;
         $this->_navigation->updateAccessibleSteps($stage);
 
         $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation));
+
+        parent::postDispatch();
     }
 
     /**
@@ -196,24 +210,27 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
     /**
      * Gets the hardware optimization we're working on
      *
-     * @return Hardwareoptimization_Model_Hardware_Optimization
+     * @return HardwareOptimizationModel
      */
     public function getHardwareOptimization ()
     {
         if (!isset($this->_hardwareOptimization))
         {
-            if (isset($this->_mpsSession->hardwareOptimizationId) && $this->_mpsSession->hardwareOptimizationId > 0)
+            if (isset($this->getMpsSession()->hardwareOptimizationId) && $this->getMpsSession()->hardwareOptimizationId > 0)
             {
-                $this->_hardwareOptimization = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($this->_mpsSession->hardwareOptimizationId);
+                $this->_hardwareOptimization = HardwareOptimizationMapper::getInstance()->find($this->getMpsSession()->hardwareOptimizationId);
             }
             else
             {
-                $this->_hardwareOptimization               = new Hardwareoptimization_Model_Hardware_Optimization();
+                $this->_hardwareOptimization               = new HardwareOptimizationModel();
                 $this->_hardwareOptimization->dateCreated  = date('Y-m-d H:i:s');
                 $this->_hardwareOptimization->lastModified = date('Y-m-d H:i:s');
                 $this->_hardwareOptimization->name         = "Hardware Optimization " . date('Y/m/d');
-                $this->_hardwareOptimization->dealerId     = $this->_identity->dealerId;
-                $this->_hardwareOptimization->clientId     = $this->_mpsSession->selectedClientId;
+                $this->_hardwareOptimization->dealerId     = $this->getIdentity()->dealerId;
+                $this->_hardwareOptimization->clientId     = $this->getSelectedClient()->id;
+                $this->_hardwareOptimization->rmsUploadId  = $this->getSelectedUpload()->id;
+
+                HardwareOptimizationMapper::getInstance()->insert($this->_hardwareOptimization);
             }
         }
 
@@ -223,13 +240,13 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
     /**
      * Gets the optimization view model
      *
-     * @return \Hardwareoptimization_ViewModel_Optimization
+     * @return \MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\OptimizationViewModel
      */
     public function getOptimizationViewModel ()
     {
         if (!isset($this->_optimizationViewModel))
         {
-            $this->_optimizationViewModel = new Hardwareoptimization_ViewModel_Optimization($this->_hardwareOptimization);
+            $this->_optimizationViewModel = new OptimizationViewModel($this->_hardwareOptimization);
         }
 
         return $this->_optimizationViewModel;
@@ -245,12 +262,11 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
         {
             // Update the last modified date
             $this->_hardwareOptimization->lastModified = date('Y-m-d H:i:s');
-            Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->save($this->_hardwareOptimization);
+            HardwareOptimizationMapper::getInstance()->save($this->_hardwareOptimization);
         }
         else
         {
-            $this->_hardwareOptimization->hardwareOptimizationSettingId = Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->insert(new Hardwareoptimization_Model_Hardware_Optimization_Setting());
-            Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->insert($this->_hardwareOptimization);
+            HardwareOptimizationMapper::getInstance()->insert($this->_hardwareOptimization);
             $this->_mpsSession->hardwareOptimizationId = $this->_hardwareOptimization->id;
         }
     }

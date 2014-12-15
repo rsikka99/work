@@ -1,0 +1,68 @@
+<?php
+/* @var $hardwareOptimization HardwareOptimizationModel */
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationDealerModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\OptimizationViewModel;
+
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization OptimizationViewModel */
+$optimization = $this->optimization;
+
+/* @var $customerOptimization OptimizationDealerModel */
+$dealerOptimization = $this->dealerOptimization;
+
+/* @var $graphs array */
+$graphs = $this->graphs;
+
+
+$excludedDeviceInstances = $optimization->getDevices()->excludedDeviceInstances->getDeviceInstances();
+
+$unmappedInstances = $optimization->getDevices()->unmappedDeviceInstances->getDeviceInstances();
+
+$totalNumberOfDevices = $optimization->getDevices()->excludedDeviceInstances->getCount() + $optimization->getDevices()->unmappedDeviceInstances->getCount();
+
+?>
+    <div class="pheader" id="excluded">
+        Excluded and Unmapped Devices
+        <em>(<?= number_format($totalNumberOfDevices) ?>)</em>
+    </div>
+
+    <!-- Only display message and table if there are replacement devices assigned -->
+<?php if ($totalNumberOfDevices): ?>
+    <p>Devices that have been manually excluded or have not been mapped during previous steps.</p>
+
+    <table class="rDevices">
+        <tr class="header">
+            <th style="width:175px;">Device Name</th>
+            <th>Serial Number</th>
+            <th>IP Address</th>
+            <th>Mono AMPV</th>
+            <th>Color AMPV</th>
+            <th>Reason</th>
+        </tr>
+        <?php foreach ($excludedDeviceInstances as $deviceInstance) : ?>
+            <tr>
+                <td class="device-name"><?= $deviceInstance->getDeviceName() ?></td>
+                <td class="serial-number"><?= $deviceInstance->serialNumber ?></td>
+                <td class="ip-address"><?= $deviceInstance->ipAddress ?></td>
+                <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()) ?></td>
+                <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) ?></td>
+                <td>Manually Excluded</td>
+            </tr>
+        <?php endforeach ?>
+
+        <?php foreach ($unmappedInstances as $deviceInstance) : ?>
+            <tr>
+                <td class="deviceName"><?= $deviceInstance->getDeviceName() ?></td>
+                <td class="serial-number"><?= $deviceInstance->serialNumber ?></td>
+                <td class="ip-address"><?= $deviceInstance->ipAddress ?></td>
+                <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()) ?></td>
+                <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) ?></td>
+                <td>Not Mapped</td>
+            </tr>
+        <?php endforeach ?>
+    </table>
+<?php else: ?>
+    <em>There are no devices that have been manually excluded or have not been mapped during previous steps.</em>
+<?php endif; ?>

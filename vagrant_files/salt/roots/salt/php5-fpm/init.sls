@@ -17,7 +17,7 @@ php5-fpm:
       - pkg: php5-json
       - pkg: php5-mcrypt
       - file: /etc/php5/fpm/conf.d/20-mcrypt.ini
-      - file: /etc/php5/cli/conf.d/20-mcrypt.ini
+#      - file: /etc/php5/cli/conf.d/20-mcrypt.ini
       - pkg: php5-mysqlnd
       - pkg: php5-readline
       - pkg: php5-redis
@@ -111,11 +111,12 @@ php5-mcrypt:
     - require:
         - pkg: php5-mcrypt
 
-/etc/php5/cli/conf.d/20-mcrypt.ini:
-  file.symlink:
-    - target: /etc/php5/mods-available/mcrypt.ini
-    - require:
-        - pkg: php5-mcrypt
+# Disabled because the cli version of 20-mcrypt can't be found at the moment.
+#/etc/php5/cli/conf.d/20-mcrypt.ini:
+#  file.symlink:
+#    - target: /etc/php5/mods-available/mcrypt.ini
+#    - require:
+#        - pkg: php5-mcrypt
 
 php5-mysqlnd:
   pkg.latest:

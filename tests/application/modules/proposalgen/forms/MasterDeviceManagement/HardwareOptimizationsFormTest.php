@@ -1,13 +1,16 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareOptimizationForm;
+
 class Proposalgen_Form_MasterDeviceManagement_HardwareOptimizationsFormTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
+
 {
     /**
-     * @return Proposalgen_Form_MasterDeviceManagement_HardwareOptimization
+     * @return HardwareOptimizationForm
      */
     public function getForm ()
     {
-        return new Proposalgen_Form_MasterDeviceManagement_HardwareOptimization();
+        return new HardwareOptimizationForm();
     }
 
     /**

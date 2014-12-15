@@ -1,13 +1,16 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\AvailableTonersForm;
+
 class Proposalgen_Form_MasterDeviceManagement_AvailableTonersFormTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
+
 {
     /**
-     * @return Proposalgen_Form_MasterDeviceManagement_AvailableToners
+     * @return AvailableTonersForm
      */
     public function getForm ()
     {
-        return new Proposalgen_Form_MasterDeviceManagement_AvailableToners();
+        return new AvailableTonersForm();
     }
 
     /**

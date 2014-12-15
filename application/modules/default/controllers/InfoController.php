@@ -1,36 +1,20 @@
 <?php
+use Tangent\Controller\Action;
 
 /**
  * Class Default_InfoController
  */
-class Default_InfoController extends Tangent_Controller_Action
+class Default_InfoController extends Action
 {
-
-    /**
-     * Display the company Terms and Conditions
-     */
-    public function termsandconditionsAction ()
-    {
-        $this->view->headTitle('Terms and Conditions');
-        $file = APPLICATION_PATH . "/../data/info/termsandconditions.txt";
-        $text = 'Not Available';
-
-        if (file_exists($file))
-        {
-            $text = str_replace("�", "'", file_get_contents($file));
-        }
-
-        $this->view->text = $text;
-    }
 
     /**
      * Display the company End User License Agreement (EULA)
      */
     public function eulaAction ()
     {
-        $this->view->headTitle('End User License Agreement');
-        $file = APPLICATION_PATH . "/../data/info/eula.txt";
-        $text = 'Not Available';
+        $this->_pageTitle = array('End User License Agreement');
+        $file             = APPLICATION_PATH . "/../data/info/eula.txt";
+        $text             = 'Not Available';
 
         if (file_exists($file))
         {
@@ -45,7 +29,7 @@ class Default_InfoController extends Tangent_Controller_Action
      */
     public function aboutAction ()
     {
-        $this->view->headTitle('About');
+        $this->_pageTitle = array('About ' . $this->view->App()->title);
         // These things could be moved into a view helper....
         $this->view->buildinfo       = $this->getBuildInfo()->build;
         $this->view->changelog       = $this->getChangelog();

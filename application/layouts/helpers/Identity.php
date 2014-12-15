@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Application_View_Helper_Identity
+ * App_View_Helper_Identity
  *
  * @author Lee Robert
  *
  */
-class Application_View_Helper_Identity extends Zend_View_Helper_Abstract
+class App_View_Helper_Identity extends Zend_View_Helper_Abstract
 {
     static $identity;
 

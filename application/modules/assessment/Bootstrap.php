@@ -1,4 +1,6 @@
 <?php
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Models\Acl\AssessmentAclModel;
 
 /**
  * Class Assessment_Bootstrap
@@ -24,14 +26,14 @@ class Assessment_Bootstrap extends Zend_Application_Module_Bootstrap
     /**
      * Adds ACL
      *
-     * @return Application_Model_Acl|mixed
+     * @return \MPSToolbox\Legacy\Models\Acl\AppAclModel|mixed
      */
     protected function _initAddToAcl ()
     {
         $acl = Zend_Registry::get('Zend_Acl');
-        if ($acl instanceof Application_Model_Acl)
+        if ($acl instanceof AppAclModel)
         {
-            Assessment_Model_Acl::setupAcl($acl);
+            AssessmentAclModel::setupAcl($acl);
         }
 
         return $acl;

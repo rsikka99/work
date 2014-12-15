@@ -5,20 +5,25 @@
  * This scripts will show the appropriate graphs for HWO replacement devices
  * as well as related devices information
  */
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationDeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\OptimizationViewModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
 
 /* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
-/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+/* @var $optimization OptimizationViewModel */
 $optimization = $this->optimization;
 
-/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+/* @var $hardwareOptimization HardwareOptimizationModel */
 $hardwareOptimization = $this->hardwareOptimization;
 
-/* @var $suggestedDeviceInstances Proposalgen_Model_DeviceInstance[] */
-$suggestedDeviceInstances = $this->deviceInstances[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_REPLACE];
+/* @var $suggestedDeviceInstances DeviceInstanceModel[] */
+$suggestedDeviceInstances = $this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE];
 
-$costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
+$costPerPageSetting            = $optimization->getCostPerPageSettingForDealer();
+$replacementCostPerPageSetting = $optimization->getCostPerPageSettingForReplacements();
 
 $section->addPageBreak();
 $section->addTitle(sprintf('Suggested Replacement Devices (%1$s of %2$s)', number_format(count($suggestedDeviceInstances)), number_format($this->totalDevices)), 2);
@@ -26,7 +31,7 @@ $section->addTitle(sprintf('Suggested Replacement Devices (%1$s of %2$s)', numbe
 if (count($suggestedDeviceInstances) > 0)
 {
     $section->addText(sprintf('The following devices have been targeted for replacement, either for a monthly cost savings greater than %1$s or other
-considerations made by the dealer.', $this->currency($hardwareOptimization->getHardwareOptimizationSetting()->costThreshold)));
+considerations made by the dealer.', $this->currency($hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->costThreshold)));
 
 // Table with values
     $tcStyle = $this->styles->tables->replacement;
@@ -83,12 +88,12 @@ considerations made by the dealer.', $this->currency($hardwareOptimization->getH
         $cell6->addText($replacementDevice->modelName, $tcStyle->body->cell6->modelName->fontStyle, $tcStyle->body->cell6->modelName->paragraphStyle);
 
 
-        $table->addCell($tcStyle->col7Width, $style)->addText($this->formatCostPerPage($replacementDevice->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostOfInkAndTonerPerPage()->monochromeCostPerPage), $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);
-        $table->addCell($tcStyle->col8Width, $style)->addText(($deviceInstance->getMasterDevice()->isColor()) ? $this->formatCostPerPage($replacementDevice->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostOfInkAndTonerPerPage()->colorCostPerPage) : ' - ', $tcStyle->body->cell8->fontStyle, $tcStyle->body->cell8->paragraphStyle);
+        $table->addCell($tcStyle->col7Width, $style)->addText($this->formatCostPerPage($deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->monochromeCostPerPage), $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);
+        $table->addCell($tcStyle->col8Width, $style)->addText(($replacementDevice->isColor()) ? $this->formatCostPerPage($replacementDevice->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->colorCostPerPage) : ' - ', $tcStyle->body->cell8->fontStyle, $tcStyle->body->cell8->paragraphStyle);
         $table->addCell($tcStyle->col9Width, $style)->addText($this->currency($deviceInstance->calculateMonthlyCost($costPerPageSetting, $replacementDevice)), $tcStyle->body->cell9->fontStyle, $tcStyle->body->cell9->paragraphStyle);
         $table->addCell($tcStyle->col10Width, $style)->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell10->fontStyle, $tcStyle->body->cell10->paragraphStyle);
         $table->addCell($tcStyle->col11Width, $style)->addText(($deviceInstance->getMasterDevice()->isColor()) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : ' - ', $tcStyle->body->cell11->fontStyle, $tcStyle->body->cell11->paragraphStyle);
-        $table->addCell($tcStyle->col12Width, $style)->addText($this->currency($deviceInstance->calculateMonthlyCost($costPerPageSetting) - $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDevice())), $tcStyle->body->cell12->fontStyle, $tcStyle->body->cell12->paragraphStyle);
+        $table->addCell($tcStyle->col12Width, $style)->addText($this->currency(($deviceInstance->calculateMonthlyCost($costPerPageSetting) - ($deviceInstance->calculateMonthlyCost($costPerPageSetting, $replacementDevice)))), $tcStyle->body->cell12->fontStyle, $tcStyle->body->cell12->paragraphStyle);
     }
 }
 else

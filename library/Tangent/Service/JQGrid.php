@@ -1,6 +1,8 @@
 <?php
 
-class Tangent_Service_JQGrid
+namespace Tangent\Service;
+
+class JQGrid
 {
     const JQGRID_SORT_ASC  = 'asc';
     const JQGRID_SORT_DESC = 'desc';
@@ -85,7 +87,7 @@ class Tangent_Service_JQGrid
     {
         if (is_array($postData))
         {
-            $postData = new ArrayObject($postData, ArrayObject::ARRAY_AS_PROPS);
+            $postData = new \ArrayObject($postData, \ArrayObject::ARRAY_AS_PROPS);
         }
 
         if (isset($postData->sidx) && !is_null($postData->sidx))
@@ -97,7 +99,10 @@ class Tangent_Service_JQGrid
 
             if (count($sortIndexSections) > 1)
             {
-                $this->setSortColumn($sortIndexSections[1]);
+                if (strlen($sortIndexSections[1]) > 0)
+                {
+                    $this->setSortColumn($sortIndexSections[1]);
+                }
 
                 $groupByParameters = explode(' ', $sortIndexSections[0]);
 
@@ -137,10 +142,12 @@ class Tangent_Service_JQGrid
     public function createPagerResponseArray ()
     {
         $jsonResponse = array(
-            'page'    => $this->getCurrentPage(),
-            'total'   => $this->calculateTotalPages(),
-            'records' => $this->getRecordCount(),
-            'rows'    => $this->getRows()
+            'page'            => $this->getCurrentPage(),
+            'total'           => $this->calculateTotalPages(),
+            'records'         => $this->getRecordCount(),
+            'recordsTotal'    => $this->getRecordCount(),
+            'recordsFiltered' => $this->getRecordCount(),
+            'rows'            => $this->getRows()
         );
 
         return $jsonResponse;
@@ -155,7 +162,7 @@ class Tangent_Service_JQGrid
     {
         $isValid = true;
         // Sort column must exist in our valid columns list
-        if (!in_array($this->getSortColumn(), $this->getValidSortColumns()) && !empty($this->_sortColumn))
+        if (empty($this->_sortColumn) || !in_array($this->getSortColumn(), $this->getValidSortColumns()))
         {
             $isValid = false;
         }
@@ -196,7 +203,7 @@ class Tangent_Service_JQGrid
      * @param array $_validSortColumns
      *                 The new value
      *
-     * @return \Tangent_Service_JQGrid
+     * @return $this
      */
     public function setValidSortColumns ($_validSortColumns)
     {
@@ -221,7 +228,7 @@ class Tangent_Service_JQGrid
      * @param string $_sortColumn
      *            The new value
      *
-     * @return \Tangent_Service_JQGrid
+     * @return $this
      */
     public function setSortColumn ($_sortColumn)
     {
@@ -246,7 +253,7 @@ class Tangent_Service_JQGrid
      * @param string $_sortDirection
      *            The new value
      *
-     * @return \Tangent_Service_JQGrid
+     * @return $this
      */
     public function setSortDirection ($_sortDirection)
     {
@@ -271,7 +278,7 @@ class Tangent_Service_JQGrid
      * @param number|array $_rows
      *            The new value
      *
-     * @return \Tangent_Service_JQGrid
+     * @return $this
      */
     public function setRows ($_rows)
     {
@@ -296,7 +303,7 @@ class Tangent_Service_JQGrid
      * @param number $_recordCount
      *            The new value
      *
-     * @return \Tangent_Service_JQGrid
+     * @return $this
      */
     public function setRecordCount ($_recordCount)
     {
@@ -321,7 +328,7 @@ class Tangent_Service_JQGrid
      * @param number $_currentPage
      *            The new value
      *
-     * @return \Tangent_Service_JQGrid
+     * @return $this
      */
     public function setCurrentPage ($_currentPage)
     {
@@ -346,7 +353,7 @@ class Tangent_Service_JQGrid
      * @param number $_recordsPerPage
      *            The new value
      *
-     * @return \Tangent_Service_JQGrid
+     * @return $this
      */
     public function setRecordsPerPage ($_recordsPerPage)
     {

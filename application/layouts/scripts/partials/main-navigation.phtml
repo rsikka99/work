@@ -1,0 +1,58 @@
+<!-- Start of Navbar -->
+<nav class="navbar navbar-default navbar-static-top" id="top-navbar-1" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#top-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand navbar-brand-image" href="<?php echo $this->url(array(), 'app.dashboard'); ?>" title="<?= $this->app()->title; ?>"><img src="<?= $this->baseUrl('img/branding/logo/navbar_brand.png') ?>" alt="MPS Toolbox Logo" /></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="top-navbar-collapse-1">
+
+            <?= $this->RenderNavbarNav($this->MyNavigation()->getContainer()) ?>
+
+            <ul class="nav navbar-nav navbar-right">
+                <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
+                    <?php $clientMenu = $this->Clientmenu($this->currentClient()); ?>
+                    <li class="dropdown <?php echo (stripos($clientMenu, 'active') !== false) ? 'active' : '' ?>">
+                        <?php if ($this->currentClient()) : ?>
+                            <a href="#" class="client-menu dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-user fa-fw"></i> <?= $this->escape($this->currentClient()->companyName) ?>
+                                <b class="caret"></b>
+                            </a>
+                            <?php echo $clientMenu; ?>
+                        <?php else : ?>
+                            <a class="label-danger" href="<?= $this->url(array(), 'app.dashboard.select-client') ?>" title="Select a client">
+                                <i class="fa fa-user fa-fw"></i>
+                                Select a client
+                            </a>
+                        <?php endif; ?>
+                    </li>
+
+                    <?php $userMenu = $this->Usermenu(); ?>
+                    <li class="user-menu dropdown <?php echo (stripos($userMenu, 'active') !== false) ? 'active' : '' ?>">
+                        <a href="#" class="dropdown-toggle visible-xs" data-toggle="dropdown"><?= $this->UserAvatar(45); ?> Logged in as <?= $this->escape($this->Username()) ?>
+                            <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle hidden-xs image" data-toggle="dropdown"><?= $this->UserAvatar(45); ?>
+                            <b class="caret"></b></a>
+
+                        <?php echo $userMenu; ?>
+                    </li>
+                <?php else : ?>
+                    <li>
+                        <a class="btn btn-danger" href="<?php echo $this->url(array(), 'auth.login'); ?>">Login</a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</nav>
+<!-- /Navbar -->

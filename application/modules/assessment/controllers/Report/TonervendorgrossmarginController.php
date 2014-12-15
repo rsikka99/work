@@ -1,4 +1,9 @@
 <?php
+use MPSToolbox\Legacy\Modules\Admin\Mappers\DealerTonerVendorMapper;
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentStepsModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerVendorRankingSetModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerVendorRankingModel;
 
 /**
  * Class Assessment_Report_TonerVendorGrossmarginController
@@ -16,7 +21,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
                 "error" => "You do not have permission to access this."
             ));
 
-            $this->redirector('index', 'index', 'index');
+            $this->redirectToRoute('assessment');
         }
 
         parent::init();
@@ -27,9 +32,8 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
      */
     public function indexAction ()
     {
-        $this->view->headTitle('Assessment');
-        $this->view->headTitle('Toner Vendor Gross Margin');
-        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
+        $this->_pageTitle = array('Assessment', 'Toner Vendor Gross Margin');
+        $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
@@ -125,16 +129,22 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
         $fieldTitles         = array($fieldTitlesLvl1, $fieldTitlesLvl2);
         $vendorSeparatedData = array();
 
-        // Your Preferences
-        $vendorSeparatedData[] = $this->getReportData($assessmentViewModel, $fieldTitles, "Your Preferences", 0);
+        $dealerTonerVendors = DealerTonerVendorMapper::getInstance()->fetchAllForDealer($this->_identity->dealerId);
+
+        if (count($dealerTonerVendors) > 0)
+        {
+            // Your Preferences
+            $vendorSeparatedData[] = $this->getReportData($assessmentViewModel, $fieldTitles, "Your Preferences", 0);
+        }
 
         // OEM
         $vendorSeparatedData[] = $this->getReportData($assessmentViewModel, $fieldTitles, "OEM", -1);
 
         // Individual Vendors
-        foreach (Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAll() as $tonerVendor)
+        foreach ($dealerTonerVendors as $dealerTonerVendor)
         {
-            $vendorSeparatedData[] = $this->getReportData($assessmentViewModel, $fieldTitles, $tonerVendor->getManufacturerName(), $tonerVendor->manufacturerId);
+
+            $vendorSeparatedData[] = $this->getReportData($assessmentViewModel, $fieldTitles, $dealerTonerVendor->getManufacturer()->fullname, $dealerTonerVendor->manufacturerId);
         }
 
         $highestMarginNames = [];
@@ -168,12 +178,12 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
      */
     function getStatistics ($assessmentViewModel, $costPerPageSetting)
     {
-        $statisticsGroup                                                   = array();
+        $statisticsGroup                                                                            = array();
         $statisticsGroup['left'][My_Brand::getDealerBranding()->mpsProgramName . ' Monochrome CPP'] = $this->view->formatCostPerPage($assessmentViewModel->getMPSBlackAndWhiteCPP());
         $statisticsGroup['left'][My_Brand::getDealerBranding()->mpsProgramName . ' Color CPP']      = $this->view->formatCostPerPage($assessmentViewModel->getMPSColorCPP());
-        $statisticsGroup['left']['Weighted Monochrome CPP']                = $this->view->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP($costPerPageSetting)->BlackAndWhite);
-        $statisticsGroup['left']['Weighted Color CPP']                     = $this->view->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP($costPerPageSetting)->Color);
-        $statisticsGroup['left']['Monochrome Margin']                      = number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin($costPerPageSetting)) . "%";
+        $statisticsGroup['left']['Weighted Monochrome CPP']                                         = $this->view->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP($costPerPageSetting)->BlackAndWhite);
+        $statisticsGroup['left']['Weighted Color CPP']                                              = $this->view->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP($costPerPageSetting)->Color);
+        $statisticsGroup['left']['Monochrome Margin']                                               = number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin($costPerPageSetting)) . "%";
 
         $statisticsGroup['right']['Total Cost']     = $this->view->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost($costPerPageSetting)->Combined);
         $statisticsGroup['right']['Total Revenue']  = $this->view->currency($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined);
@@ -203,10 +213,10 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
         // If we are using a specific toner vendor
         if ($tonerVendorId > 0)
         {
-            $tonerRankSet            = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
-            $ranking                 = new Proposalgen_Model_Toner_Vendor_Ranking();
+            $tonerRankSet            = new TonerVendorRankingSetModel();
+            $ranking                 = new TonerVendorRankingModel();
             $ranking->manufacturerId = $tonerVendorId;
-            $tonerRankSet->setRankings($ranking);
+            $tonerRankSet->setRankings([$ranking]);
             $costPerPageSetting                         = $assessmentViewModel->getCostPerPageSettingForDealer();
             $costPerPageSetting->monochromeTonerRankSet = $tonerRankSet;
             $costPerPageSetting->colorTonerRankSet      = $tonerRankSet;
@@ -219,7 +229,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
         // OEM
         else
         {
-            $tonerRankSet                               = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+            $tonerRankSet                               = new TonerVendorRankingSetModel();
             $costPerPageSetting                         = $assessmentViewModel->getCostPerPageSettingForDealer();
             $costPerPageSetting->monochromeTonerRankSet = $tonerRankSet;
             $costPerPageSetting->colorTonerRankSet      = $tonerRankSet;
@@ -250,18 +260,18 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
                 {
                     switch ($toner->tonerColorId)
                     {
-                        case Proposalgen_Model_TonerColor::BLACK:
+                        case TonerColorModel::BLACK:
                             $blackToner = $toner;
                             break;
-                        case Proposalgen_Model_TonerColor::CYAN:
-                        case Proposalgen_Model_TonerColor::MAGENTA:
-                        case Proposalgen_Model_TonerColor::YELLOW:
+                        case TonerColorModel::CYAN:
+                        case TonerColorModel::MAGENTA:
+                        case TonerColorModel::YELLOW:
                             $colorToner = $toner;
                             break;
-                        case Proposalgen_Model_TonerColor::THREE_COLOR:
+                        case TonerColorModel::THREE_COLOR:
                             $colorToner = $toner;
                             break;
-                        case Proposalgen_Model_TonerColor::FOUR_COLOR:
+                        case TonerColorModel::FOUR_COLOR:
                             $blackToner = $toner;
                             $colorToner = $toner;
                             break;
@@ -271,12 +281,18 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
                 }
 
                 // Black Toner
-                $blackCost  = $blackToner->calculatedCost;
-                $blackYield = $blackToner->yield;
+                $blackCost  = '-';
+                $blackYield = '-';
+                if ($blackToner instanceof \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel)
+                {
+                    $blackCost  = $blackToner->calculatedCost;
+                    $blackYield = $blackToner->yield;
+                }
+
 
                 // Color Toner
-                $colorCost  = "-";
-                $colorYield = "-";
+                $colorCost  = '-';
+                $colorYield = '-';
                 $isColor    = false;
 
                 if ($colorToner)

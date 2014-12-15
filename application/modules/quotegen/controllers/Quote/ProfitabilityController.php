@@ -1,4 +1,11 @@
 <?php
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\QuoteProfitabilityForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\QuoteDeviceMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\LeasingSchemaMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\QuoteLeaseTermMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\LeasingSchemaTermModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteLeaseTermModel;
 
 /**
  * Class Quotegen_Quote_ProfitabilityController
@@ -9,7 +16,7 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
     public function init ()
     {
         parent::init();
-        Quotegen_View_Helper_Quotemenu::setActivePage(Quotegen_View_Helper_Quotemenu::PROFITABILITY_CONTROLLER);
+        $this->_navigation->setActiveStep(\MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteStepsModel::STEP_FINANCING);
     }
 
     /**
@@ -17,11 +24,10 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
      */
     public function indexAction ()
     {
-        $this->view->headTitle('Quote');
-        $this->view->headTitle('Hardware Financing');
+        $this->_pageTitle = array('Quote', 'Hardware Financing');
 
         $selectedLeasingSchemaId = $this->_getParam('leasingSchemaId', null);
-        $form                    = new Quotegen_Form_Quote_Profitability($this->_quote, $selectedLeasingSchemaId);
+        $form                    = new QuoteProfitabilityForm($this->_quote, $selectedLeasingSchemaId);
 
         $request = $this->getRequest();
         if ($request->isPost())
@@ -30,7 +36,7 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
 
             if (isset($values ['goBack']))
             {
-                $this->redirector('index', 'quote_pages', null, array(
+                $this->redirectToRoute('quotes.manage-pages', array(
                     'quoteId' => $this->_quoteId
                 ));
             }
@@ -45,10 +51,10 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                         $db->beginTransaction();
 
                         $changesMade       = false;
-                        $quoteDeviceMapper = Quotegen_Model_Mapper_QuoteDevice::getInstance();
+                        $quoteDeviceMapper = QuoteDeviceMapper::getInstance();
 
                         // Save the devices
-                        /* @var $quoteDevice Quotegen_Model_QuoteDevice */
+                        /* @var $quoteDevice QuoteDeviceModel */
                         foreach ($this->_quote->getQuoteDevices() as $quoteDevice)
                         {
                             $quoteDeviceHasChanges = false;
@@ -102,18 +108,18 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                             if (!$leasingSchemaTerm || (int)$form->getValue('leasingSchemaTermId') != (int)$leasingSchemaTerm->id)
                             {
 
-                                $quoteLeaseTerm          = new Quotegen_Model_QuoteLeaseTerm();
+                                $quoteLeaseTerm          = new QuoteLeaseTermModel();
                                 $quoteLeaseTerm->quoteId = $this->_quote->id;
 
                                 $quoteLeaseTerm->leasingSchemaTermId = $form->getValue('leasingSchemaTermId');
 
                                 if ($leasingSchemaTerm)
                                 {
-                                    Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->save($quoteLeaseTerm);
+                                    QuoteLeaseTermMapper::getInstance()->save($quoteLeaseTerm);
                                 }
                                 else
                                 {
-                                    Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->insert($quoteLeaseTerm);
+                                    QuoteLeaseTermMapper::getInstance()->insert($quoteLeaseTerm);
                                 }
 
                                 // Reset the leasing schema term for the quote since it has changed.
@@ -143,14 +149,14 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
 
                         if (isset($values ['saveAndContinue']))
                         {
-                            $this->redirector('index', 'quote_reports', null, array(
-                                'quoteId' => $this->_quoteId
-                            ));
+                            $this->updateQuoteStepName();
+                            $this->saveQuote();
+                            $this->redirectToRoute('quotes.reports', array('quoteId' => $this->_quoteId));
                         }
                         else
                         {
                             // Refresh the page
-                            $this->redirector(null, null, null, array(
+                            $this->redirectToRoute(null, array(
                                 'quoteId' => $this->_quoteId
                             ));
                         }
@@ -158,7 +164,7 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                     catch (Exception $e)
                     {
                         $db->rollBack();
-                        Tangent_Log::logException($e);
+                        \Tangent\Logger\Logger::logException($e);
                     }
                 }
                 else
@@ -200,11 +206,11 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
         {
             if ($leasingSchemaId > 0)
             {
-                $leasingSchema = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
+                $leasingSchema = LeasingSchemaMapper::getInstance()->find($leasingSchemaId);
                 if ($leasingSchema)
                 {
 
-                    /* @var $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm */
+                    /* @var $leasingSchemaTerm LeasingSchemaTermModel */
                     $i = 0;
                     foreach ($leasingSchema->getTerms() as $leasingSchemaTerm)
                     {

@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Forms\OptimizeActionsForm;
 
 /**
  * Class Hardwareoptimization_Form_OptimizeActionsTest
@@ -6,13 +7,13 @@
 class Hardwareoptimization_Form_OptimizeActionsTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Hardwareoptimization_Form_OptimizeActions
+     * @var OptimizeActionsForm
      */
     protected $_form;
 
     public function setUp ()
     {
-        $this->_form = new Hardwareoptimization_Form_OptimizeActions();
+        $this->_form = new OptimizeActionsForm();
         parent::setUp();
     }
 
@@ -27,9 +28,9 @@ class Hardwareoptimization_Form_OptimizeActionsTest extends PHPUnit_Framework_Te
      */
     public function testFormElementsExist ()
     {
-        $this->assertInstanceOf('Twitter_Bootstrap_Form_Element_Button', $this->_form->getElement('Submit'));
-        $this->assertInstanceOf('Twitter_Bootstrap_Form_Element_Button', $this->_form->getElement('Analyze'));
-        $this->assertInstanceOf('Twitter_Bootstrap_Form_Element_Button', $this->_form->getElement('ResetReplacements'));
+        $this->assertInstanceOf('Zend_Form_Element_Submit', $this->_form->getElement('Submit'));
+        $this->assertInstanceOf('Zend_Form_Element_Submit', $this->_form->getElement('Analyze'));
+        $this->assertInstanceOf('Zend_Form_Element_Submit', $this->_form->getElement('ResetReplacements'));
     }
 
 }

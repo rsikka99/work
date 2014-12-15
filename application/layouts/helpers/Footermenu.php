@@ -1,18 +1,20 @@
 <?php
 
 /**
- * Application_View_Helper_Footermenu
+ * App_View_Helper_Footermenu
  *
  * @author Lee Robert
  *
  */
-class Application_View_Helper_Footermenu extends Zend_View_Helper_Abstract
+class App_View_Helper_Footermenu extends Zend_View_Helper_Abstract
 {
 
     /**
+     * @param string $class
+     *
      * @return string
      */
-    public function Footermenu ()
+    public function Footermenu ($class = 'nav nav-pills')
     {
         // Get the container
         $html = "";
@@ -33,10 +35,10 @@ class Application_View_Helper_Footermenu extends Zend_View_Helper_Abstract
             $html = $this->view->MyNavigation()
                                ->menu()
                                ->renderMenu($container, array(
-                    'minDepth' => 0,
-                    'maxDepth' => 0,
-                    'ulClass'  => 'footer-nav'
-                ));
+                                   'minDepth' => 0,
+                                   'maxDepth' => 0,
+                                   'ulClass'  => $class
+                               ));
 
             // Bring back it's original visibility
             if ($wasInvisible)

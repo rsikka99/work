@@ -1,4 +1,6 @@
 <?php
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentStepsModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
 
 /**
  * Class Assessment_Report_UtilizationController
@@ -16,7 +18,7 @@ class Assessment_Report_UtilizationController extends Assessment_Library_Control
                 "error" => "You do not have permission to access this."
             ));
 
-            $this->redirector('index', 'index', 'index');
+            $this->redirectToRoute('assessment');
         }
 
         parent::init();
@@ -24,9 +26,8 @@ class Assessment_Report_UtilizationController extends Assessment_Library_Control
 
     public function indexAction ()
     {
-        $this->view->headTitle('Assessment');
-        $this->view->headTitle('Utilization');
-        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
+        $this->_pageTitle = array('Assessment', 'Utilization');
+        $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
@@ -54,8 +55,8 @@ class Assessment_Report_UtilizationController extends Assessment_Library_Control
      */
     public function generateAction ()
     {
-        $this->view->headTitle('Generate Utilization Report');
-        $format = $this->_getParam("format", "excel");
+        $this->_pageTitle = array('Generate Utilization Report');
+        $format           = $this->_getParam("format", "excel");
 
         switch ($format)
         {
@@ -104,7 +105,7 @@ class Assessment_Report_UtilizationController extends Assessment_Library_Control
         $deviceCounter   = 0;
 
         /**
-         * @var $deviceInstance Proposalgen_Model_DeviceInstance
+         * @var $deviceInstance DeviceInstanceModel
          */
         foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
         {

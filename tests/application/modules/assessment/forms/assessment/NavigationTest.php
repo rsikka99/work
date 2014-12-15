@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentNavigationForm;
 
 /**
  * Class Assessment_Form_Assessment_NavigationTest
@@ -6,13 +7,13 @@
 class Assessment_Form_Assessment_NavigationTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Assessment_Form_Assessment_Navigation
+     * @var AssessmentNavigationForm
      */
     protected $_form;
 
     public function setUp ()
     {
-        $this->_form = new Assessment_Form_Assessment_Navigation();
+        $this->_form = new AssessmentNavigationForm();
         parent::setUp();
     }
 
@@ -22,10 +23,11 @@ class Assessment_Form_Assessment_NavigationTest extends PHPUnit_Framework_TestCa
         $this->_form = null;
     }
 
+    // Why are we testing this?
     public function testFormLoadsAllButtons ()
     {
-        $this->assertNotInstanceOf('Zend_Form_Element_Button', $this->_form->getElement('goBack'));
-        $this->assertNotInstanceOf('Zend_Form_Element_Button', $this->_form->getElement('save'));
-        $this->assertNotInstanceOf('Zend_Form_Element_Button', $this->_form->getElement('saveAndContinue'));
+        $this->assertInstanceOf('Zend_Form_Element_Button', $this->_form->getElement('goBack'));
+        $this->assertInstanceOf('Zend_Form_Element_Button', $this->_form->getElement('save'));
+        $this->assertInstanceOf('Zend_Form_Element_Button', $this->_form->getElement('saveAndContinue'));
     }
 }

@@ -1,0 +1,58 @@
+<?php
+/* @var $hardwareOptimization HardwareOptimizationModel */
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationDealerModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\OptimizationViewModel;
+
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization OptimizationViewModel */
+$optimization = $this->optimization;
+
+/* @var $customerOptimization OptimizationDealerModel */
+$dealerOptimization = $this->dealerOptimization;
+
+/* @var $graphs array */
+$graphs = $this->graphs;
+
+$leasedDeviceInstances = $optimization->getDevices()->leasedDeviceInstances->getDeviceInstances();
+
+$costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
+
+$totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->getCount();
+?>
+<div class="pheader" id="leased">
+    Leased Devices
+    <em><?= '(' . number_format(count($leasedDeviceInstances)) . ')' ?></em>
+</div>
+
+<!-- Only display message and table if there are replacement devices assigned -->
+<?php if ($leasedDeviceInstances): ?>
+    <p>The following devices were flagged as leased within the ownership section.</p>
+
+    <table class="rDevices">
+        <tr class="header">
+            <th style="width:175px;">Device Name</th>
+            <th>Serial Number</th>
+            <th> IP Address</th>
+            <th>Mono AMPV</th>
+            <th>Color AMPV</th>
+        </tr>
+        <?php foreach ($leasedDeviceInstances as $deviceInstance) :
+            $masterDevice = $deviceInstance->getMasterDevice();
+            $isColor      = $masterDevice->isColor();
+            ?>
+            <tr>
+
+                <td class="device-name"><?= '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>'; ?></td>
+                <td class="serial-number"><?= $deviceInstance->serialNumber ?></td>
+                <td class="ip-address"><?= $deviceInstance->ipAddress ?></td>
+                <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
+                <td class="page-volume"><?= ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : ' - '; ?></td>
+            </tr>
+        <?php endforeach ?>
+    </table>
+<?php else : ?>
+    <em>There are no devices currently flagged as leased within the ownership section.</em>
+<?php endif; ?>
+<br />

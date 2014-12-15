@@ -1,4 +1,8 @@
 <?php
+use MPSToolbox\Legacy\Mappers\DealerBrandingMapper;
+use MPSToolbox\Legacy\Mappers\DealerMapper;
+use MPSToolbox\Legacy\Models\DealerBrandingModel;
+use MPSToolbox\Legacy\Models\DealerModel;
 
 /**
  * Class My_Brand
@@ -9,7 +13,7 @@ class My_Brand
     public static $reportWhiteTitlePageTextColor = "#000000";
 
     // Branding Text Replacements
-    public static $jit = "JIT";
+    public static $jit       = "JIT";
     public static $dealerSku = "Dealer SKU";
 
     protected static $dealerBrandingCache = array();
@@ -52,7 +56,7 @@ class My_Brand
      *
      * @param null $dealerId
      *
-     * @return Application_Model_Dealer_Branding
+     * @return DealerBrandingModel
      */
     public static function getDealerBranding ($dealerId = null)
     {
@@ -68,13 +72,13 @@ class My_Brand
 
         if (!isset(self::$dealerBrandingCache[$dealerId]))
         {
-            $dealerBranding = Application_Model_Mapper_Dealer_Branding::getInstance()->find($dealerId);
-            if (!$dealerBranding instanceof Application_Model_Dealer_Branding)
+            $dealerBranding = DealerBrandingMapper::getInstance()->find($dealerId);
+            if (!$dealerBranding instanceof DealerBrandingModel)
             {
-                $dealerBranding = new Application_Model_Dealer_Branding();
+                $dealerBranding = new DealerBrandingModel();
 
-                $dealer = Application_Model_Mapper_Dealer::getInstance()->find($dealerId);
-                if ($dealer instanceof Application_Model_Dealer)
+                $dealer = DealerMapper::getInstance()->find($dealerId);
+                if ($dealer instanceof DealerModel)
                 {
                     $dealerBranding->dealerName      = $dealer->dealerName;
                     $dealerBranding->shortDealerName = $dealer->dealerName;
@@ -90,7 +94,7 @@ class My_Brand
     /**
      * Reset the dealer branding cache
      */
-    public static function resetDealerBrandingCache()
+    public static function resetDealerBrandingCache ()
     {
         self::$dealerBrandingCache = array();
     }

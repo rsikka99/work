@@ -1,0 +1,29 @@
+<?xml version="1.0" standalone="yes"?>
+<proposedFleetSettingsBadData>
+    <testData>
+        <data>
+            <proposedPageCoverageMono>0</proposedPageCoverageMono>
+            <proposedDefaultAdminCostPerPage>0.0005</proposedDefaultAdminCostPerPage>
+            <proposedDefaultLaborCostPerPage>asdf</proposedDefaultLaborCostPerPage>
+            <proposedMonochromeRankSetArray>1</proposedMonochromeRankSetArray>
+            <proposedColorRankSetArray>2</proposedColorRankSetArray>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <proposedUseDevicePageCoverages>true</proposedUseDevicePageCoverages>
+            <proposedDefaultPartsCostPerPage>0.0015</proposedDefaultPartsCostPerPage>
+            <proposedMonochromeRankSetArray>asdf</proposedMonochromeRankSetArray>
+            <proposedColorRankSetArray>2</proposedColorRankSetArray>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <proposedDefaultAdminCostPerPage>asdf</proposedDefaultAdminCostPerPage>
+            <proposedDefaultLaborCostPerPage>0.0015</proposedDefaultLaborCostPerPage>
+            <proposedDefaultPartsCostPerPage>0.0015</proposedDefaultPartsCostPerPage>
+            <proposedMonochromeRankSetArray>1</proposedMonochromeRankSetArray>
+            <proposedColorRankSetArray>2</proposedColorRankSetArray>
+        </data>
+    </testData>
+</proposedFleetSettingsBadData>

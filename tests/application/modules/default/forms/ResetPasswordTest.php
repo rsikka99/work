@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\DDefault\Forms\ResetPasswordForm;
 
 /**
  * Class Default_Form_ResetPasswordTest
@@ -8,11 +9,11 @@ class Default_Form_ResetPasswordTest extends Tangent_PHPUnit_Framework_ZendFormT
     /**
      * Gets the form to use in the test
      *
-     * @return Default_Form_ResetPassword
+     * @return ResetPasswordForm
      */
     public function getForm ()
     {
-        return new Default_Form_ResetPassword();
+        return new ResetPasswordForm();
     }
 
     /**

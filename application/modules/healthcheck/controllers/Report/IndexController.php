@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\HealthCheck\Models\HealthCheckStepsModel;
 
 /**
  * Class Healthcheck_Report_IndexController
@@ -30,9 +31,8 @@ class Healthcheck_Report_IndexController extends Healthcheck_Library_Controller_
      */
     public function indexAction ()
     {
-        $this->view->headTitle('Healthcheck');
-        $this->view->headTitle('Report');
-        $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED);
+        $this->_pageTitle = array('Healthcheck', 'Report');
+        $this->_navigation->setActiveStep(HealthCheckStepsModel::STEP_FINISHED);
 
         if ($this->getRequest()->isPost())
         {
@@ -45,13 +45,13 @@ class Healthcheck_Report_IndexController extends Healthcheck_Library_Controller_
 
         $this->initReportList();
 
-        $this->view->headScript()->prependFile($this->view->baseUrl("/js/htmlReport.js"));
+        $this->view->headScript()->appendFile($this->view->baseUrl("/js/app/legacy/HtmlReport.js"));
         $this->view->formTitle = "Report Summary";
 
         $healthcheck             = $this->getHealthcheck();
         $this->view->companyName = $healthcheck->getClient()->companyName;
         $this->view->reportName  = $healthcheck->getClient()->companyName;
 
-        $this->view->navigationForm = new Healthcheck_Form_Healthcheck_Navigation(Healthcheck_Form_Healthcheck_Navigation::BUTTONS_BACK);
+        $this->view->navigationForm = $this->view->navigationForm  = new \MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentNavigationForm(\MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentNavigationForm::BUTTONS_BACK);
     }
 }

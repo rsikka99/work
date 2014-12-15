@@ -1,13 +1,14 @@
 <?php
-/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+/* @var $hardwareOptimization \MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel */
 $hardwareOptimization = $this->hardwareOptimization;
-/* @var $form Proposalgen_Form_DeviceSwapChoice */
+
+/* @var $form \MPSToolbox\Legacy\Modules\HardwareOptimization\Forms\DeviceSwapChoiceForm */
 $form = $this->form;
 
-$thresholdPercent = 30;
-$targetBlackCPP = (float)$hardwareOptimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage;
+$thresholdPercent  = 30;
+$targetBlackCPP    = (float)$hardwareOptimization->getClient()->getClientSettings()->genericSettings->targetMonochromeCostPerPage;
 $thresholdBlackCpp = $targetBlackCPP * (1 - ($thresholdPercent / 100));
-$targetColorCPP = (float)$hardwareOptimization->getHardwareOptimizationSetting()->targetColorCostPerPage;
+$targetColorCPP    = (float)$hardwareOptimization->getClient()->getClientSettings()->genericSettings->targetColorCostPerPage;
 $thresholdColorCpp = $targetColorCPP * (1 - ($thresholdPercent / 100));
 
 $formActions [] = $form->getElement('ResetReplacements');
@@ -15,50 +16,52 @@ $formActions [] = $form->getElement('ResetReplacements');
 $formActions [] = $form->getElement('Analyze');
 
 ?>
-<br />
-<form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
-    <div class="clearfix">
-        <?php foreach ($formActions as $element) : ?>
-            <?php echo $element->renderViewHelper(); ?>
-        <?php endforeach; ?>
-    </div>
-    <br />
-    <!-- Begin Optimization Summary table -->
-    <div id="optimizationSummary" style="position: relative; min-height: 100px">
-        <div id="loadingDiv" style="position: absolute; height: 100%; width: 100%; top: 0; left:0; background-color: rgb(255,255,255);">
-            <div class="spinner64"></div>
+<div class="container">
+    <form id="<?= $form->getId(); ?>" class='<?= $form->getAttrib('class') ?>' action="<?= $form->getAction() ?>" method="<?= $form->getMethod() ?>" name="<?= $form->getName() ?>">
+        <div class="clearfix">
+            <?php foreach ($formActions as $element) : ?>
+                <?= $element->renderViewHelper(); ?>
+            <?php endforeach; ?>
         </div>
-        <div id="optimizationTable">
+        <br />
+        <!-- Begin Optimization Summary table -->
+        <div id="optimizationSummary" style="position: relative; min-height: 100px">
+            <div id="optimizationTable">
+            </div>
+            <div id="loadingDiv" style="position: absolute; height: 100%; width: 100%; top: 0; left:0; background-color: #fff; background-color: rgb(255,255,255);">
+                <div class="spinner64"></div>
+            </div>
+
         </div>
+
+        <div id='replacementDevices'>
+
+        </div>
+        <div class="replacementDevicesTableWrapper">
+
+            <table id='replacementDeviceTable' style="width: 100%" class="scroll"></table>
+            <div id="replacementDevicePager"></div>
+        </div>
+
+    </form>
+
+
+    <script>
+        <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
+
+        var targetCostPerPageMono           = <?= $targetBlackCPP ?>,
+            targetCostPerPageMonoThreshold  = <?= $thresholdBlackCpp ?>,
+            targetCostPerPageColor          = <?= $targetColorCPP ?>,
+            targetCostPerPageColorThreshold = <?= $thresholdColorCpp ?>,
+            deviceListUrl                   = '<?= $this->baseUrl('hardwareoptimization/index/get-device-by-device-instance-id'); ?>';
+
+        <?php $this->headScript()->captureEnd(); ?>
+    </script>
+    <?php $this->headScript()->appendFile($this->baseUrl('/js/app/legacy/hardwareoptimization/Optimize.js')); ?>
+    <div id="deviceInstanceInformationModal">
+        <table id="replacementInformationModalTable" style="width: 300px; float: right; border:1px solid black;"></table>
+        <table id="deviceInstanceInformationModalTable" style="width: 300px; border:1px solid black;"></table>
+        <p id="replacementReason"></p>
     </div>
-
-    <div id='replacementDevices'>
-
-    </div>
-
-    <table id='replacementDeviceTable' style="width: 100%" class="scroll"></table>
-    <div id="replacementDevicePager"></div>
-
-</form>
-
-
-
-<?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
-
-var targetCostPerPageMono               = <?php echo $targetBlackCPP ?>;
-var targetCostPerPageMonoThreshold      = <?php echo $thresholdBlackCpp ?>;
-var targetCostPerPageColor              = <?php echo $targetColorCPP ?>;
-var targetCostPerPageColorThreshold     = <?php echo $thresholdColorCpp ?>;
-var deviceListUrl                       = '<?php echo $this->baseUrl('hardwareoptimization/index/get-device-by-device-instance-id'); ?>'
-
-<?php $this->headScript()->captureEnd(); ?>
-<?php $this->headScript()->appendFile($this->baseUrl('/js/hardwareoptimization/optimize.js')); ?>
-<div id="deviceInstanceInformationModal">
-    <table id="replacementInformationModalTable" style="width: 300px; float: right; border:1px solid black;">
-    </table>
-    <table id="deviceInstanceInformationModalTable" style="width: 300px; border:1px solid black;">
-    </table>
-    <p id="replacementReason"></p>
+    <?= $this->navigationForm; ?>
 </div>
-<?php echo $this->navigationForm; ?>
-

@@ -1,11 +1,15 @@
 <?php
-/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+/* @var $hardwareOptimization HardwareOptimizationModel */
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationDealerModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\OptimizationViewModel;
+
 $hardwareOptimization = $this->hardwareOptimization;
 
-/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+/* @var $optimization OptimizationViewModel */
 $optimization = $this->optimization;
 
-/* @var $customerOptimization Hardwareoptimization_Model_Optimization_Dealer */
+/* @var $customerOptimization OptimizationDealerModel */
 $dealerOptimization = $this->dealerOptimization;
 
 /* @var $graphs array */
@@ -16,8 +20,8 @@ $graphs = $this->graphs;
 </div>
 <table class="center">
     <tr>
-        <td><img src="<?php echo $graphs[0]; ?>" /></td>
-        <td><img src="<?php echo $graphs[1]; ?>" /></td>
+        <td><img src="<?= $graphs[0]; ?>" /></td>
+        <td><img src="<?= $graphs[1]; ?>" /></td>
     </tr>
 </table>
-<br/>
+<br />

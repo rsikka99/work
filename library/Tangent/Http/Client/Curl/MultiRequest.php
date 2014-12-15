@@ -1,6 +1,7 @@
 <?php
+namespace Tangent\Http\Client\Curl;
 
-class Tangent_Http_Client_Curl_MultiRequest
+class MultiRequest
 {
     /**
      * Current number of tries for this request.
@@ -145,7 +146,7 @@ class Tangent_Http_Client_Curl_MultiRequest
     /**
      * Marks this Request so that the Manager executes them again.
      *
-     * @return Tangent_Http_Client_Curl_MultiRequest
+     * @return MultiRequest
      */
     public function doRetry ()
     {
@@ -160,7 +161,7 @@ class Tangent_Http_Client_Curl_MultiRequest
      * @param $number Number of Tries
      *
      * @throws InvalidArgumentException
-     * @return Tangent_Http_Client_Curl_MultiRequest
+     * @return MultiRequest
      */
     public function setMaximumRetryAttempts ($number)
     {
@@ -181,7 +182,7 @@ class Tangent_Http_Client_Curl_MultiRequest
      * @param $callback Callback
      *
      * @throws InvalidArgumentException
-     * @return Tangent_Http_Client_Curl_MultiRequest
+     * @return MultiRequest
      */
     public function setCallback ($callback)
     {
@@ -199,7 +200,7 @@ class Tangent_Http_Client_Curl_MultiRequest
      *
      * @param mixed $param
      *
-     * @return Tangent_Http_Client_Curl_MultiRequest
+     * @return MultiRequest
      */
     public function setCallbackParameter ($param)
     {
@@ -223,7 +224,7 @@ class Tangent_Http_Client_Curl_MultiRequest
      *
      * @param $url String Url
      *
-     * @return Tangent_Http_Client_Curl_MultiRequest
+     * @return MultiRequest
      */
     public function setUrl ($url)
     {
@@ -238,7 +239,7 @@ class Tangent_Http_Client_Curl_MultiRequest
      * @param $key   string cURL Options Key
      * @param $value mixed  cURL option value
      *
-     * @return Tangent_Http_Client_Curl_MultiRequest
+     * @return MultiRequest
      */
     public function setCurlOption ($key, $value = null)
     {
@@ -274,11 +275,11 @@ class Tangent_Http_Client_Curl_MultiRequest
      * Process completed request.
      * Sets data from cURL Handle and calls callback.
      *
-     * @param $curlMultiManager Tangent_Http_Client_Curl_MultiManager Instance of Manager
+     * @param $curlMultiManager MultiManager Instance of Manager
      *
      * @return Boolean
      */
-    public function process (Tangent_Http_Client_Curl_MultiManager $curlMultiManager = null)
+    public function process (MultiManager $curlMultiManager = null)
     {
         // Init
         $this->_retryAttempts++;

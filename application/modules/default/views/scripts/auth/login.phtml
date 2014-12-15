@@ -1,6 +1,43 @@
-<div class="page-header">
-    <h1>Please Login</h1>
-</div>
-<div class="well well-small">
-    <?php echo $this->form; ?>
+<?php
+
+use MPSToolbox\Legacy\Modules\DDefault\Forms\LoginForm;
+
+/* @var $loginForm LoginForm */
+$loginForm = $this->form;
+?>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-center-block">
+            <div class="login-panel panel <?= ($loginForm->hasErrors() ? 'panel-danger' : 'panel-primary') ?>">
+
+                <div class="panel-heading text-center">
+                    <img src="<?= $this->baseUrl('/img/branding/logo/auth_brand.png') ?>" alt="MPSToolbox Logo" />
+                </div>
+
+                <div class="panel-body">
+                    <?= $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
+                    <?= $loginForm; ?>
+                </div>
+
+                <div class="panel-footer">
+                    <a href="<?= $this->url(array(), 'auth.login.forgot-password') ?>" class="btn-link">Forgot Password?</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <style>
+        html {
+            background              : url('/img/mps_login_bg.png') no-repeat top center fixed;
+            -webkit-background-size : cover;
+            -moz-background-size    : cover;
+            -o-background-size      : cover;
+            background-size         : cover;
+        }
+
+        body {
+            background : transparent;
+        }
+    </style>
 </div>

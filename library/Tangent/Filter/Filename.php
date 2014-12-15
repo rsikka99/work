@@ -1,5 +1,5 @@
 <?php
-
+namespace Tangent\Filter;
 /**
  *   Windows filename conventions:
  *   http://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx#naming_conventions
@@ -25,14 +25,14 @@
  *  system may support such names, the Windows shell and user interface does not. However, it is
  *  acceptable to specify a period as the first character of a name. For example, ".temp"
  */
-class Tangent_Filter_Filename implements Zend_Filter_Interface
+class Filename implements \Zend_Filter_Interface
 {
     /**
      *  Convert a given string into an acceptable filename.  See above for details on valid filenames.
      *
      * @param  array|string $filename
      *
-     * @throws Zend_Filter_Exception If filtering $value is impossible
+     * @throws \Zend_Filter_Exception If filtering $value is impossible
      * @return array|string
      */
     public function filter ($filename)
@@ -50,7 +50,7 @@ class Tangent_Filter_Filename implements Zend_Filter_Interface
             $filename = trim($filename, ' ');
 
             // Transliterate to ASCII.
-            $transliterator = Transliterator::create("Any-Latin; Latin-ASCII");
+            $transliterator = \Transliterator::create("Any-Latin; Latin-ASCII");
             $filename       = transliterator_transliterate($transliterator, $filename);
 
             // Replace whitespace

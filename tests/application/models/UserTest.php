@@ -1,16 +1,18 @@
 <?php
 
+use MPSToolbox\Legacy\Models\UserModel;
+
 class Application_Model_UserTest extends PHPUnit_Framework_TestCase
 {
     /**
      *
-     * @var Application_Model_User
+     * @var UserModel
      */
     protected $_user;
 
     public function setUp ()
     {
-        $this->_user = new Application_Model_User();
+        $this->_user = new UserModel();
         parent::setUp();
     }
 

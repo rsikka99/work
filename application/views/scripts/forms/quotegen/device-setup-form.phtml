@@ -1,0 +1,210 @@
+<?php
+/* @var $form DeviceSetupForm; */
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\DeviceSetupForm;
+
+$form = $this->element;
+?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<fieldset>
+    <div class="form-group <?= ($form->getElement('manufacturerId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('manufacturerId'), array('col-md-2')) ?>
+
+        <div class="col-md-5 input-group">
+            <?= $this->RenderFormSelect($form->getElement('manufacturerId')) ?>
+            <?= $this->RenderFormDescription($form->getElement('manufacturerId')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('manufacturerId')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('modelName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('modelName'), array('col-md-2')) ?>
+
+        <div class="col-md-5 input-group">
+            <?= $this->RenderFormText($form->getElement('modelName')) ?>
+            <?= $this->RenderFormDescription($form->getElement('modelName')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('modelName')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('can_sell')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('can_sell'), array('col-md-2')) ?>
+
+        <div class="col-md-5   input-group">
+            <?= $this->RenderFormCheckbox($form->getElement('can_sell')) ?>
+            <?= $this->RenderFormDescription($form->getElement('can_sell')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('can_sell')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('oemSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('oemSku'), array('col-md-2')) ?>
+
+        <div class="col-md-5  input-group ">
+            <?= $this->RenderFormText($form->getElement('oemSku')) ?>
+            <?= $this->RenderFormDescription($form->getElement('oemSku')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('oemSku')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('dealerSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('dealerSku'), array('col-md-2')) ?>
+
+        <div class="col-md-5  input-group ">
+            <?= $this->RenderFormText($form->getElement('dealerSku')) ?>
+            <?= $this->RenderFormDescription($form->getElement('dealerSku')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('dealerSku')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('description')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('description'), array('col-md-2')) ?>
+
+        <div class="col-md-5  input-group ">
+            <?= $this->RenderFormTextArea($form->getElement('description')) ?>
+            <?= $this->RenderFormDescription($form->getElement('description')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('description')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('cost'), array('col-md-2')) ?>
+
+        <div class="col-md-2  input-group">
+            <span class="input-group-addon">$</span>
+            <?= $this->RenderFormText($form->getElement('cost')) ?>
+            <?= $this->RenderFormDescription($form->getElement('cost')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('cost')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('tonerConfigId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <div class="col-md-3 col-md-push-2 input-group">
+            <?= $this->RenderFormSelect($form->getElement('tonerConfigId')) ?>
+            <?= $this->RenderFormDescription($form->getElement('tonerConfigId')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('tonerConfigId')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('isCopier')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <div class="col-md-5  col-md-push-2 input-group">
+            <?= $this->RenderFormCheckbox($form->getElement('isCopier')) ?>
+            <?= $this->RenderFormDescription($form->getElement('isCopier')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('isCopier')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('isFax')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <div class="col-md-5 col-md-push-2 input-group">
+            <?= $this->RenderFormCheckbox($form->getElement('isFax')) ?>
+            <?= $this->RenderFormDescription($form->getElement('isFax')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('isFax')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('isDuplex')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <div class="col-md-5 col-md-push-2 input-group">
+            <?= $this->RenderFormCheckbox($form->getElement('isDuplex')) ?>
+            <?= $this->RenderFormDescription($form->getElement('isDuplex')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('isDuplex')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('reportsTonerLevels')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <div class="col-md-5 col-md-push-2 input-group">
+            <?= $this->RenderFormCheckbox($form->getElement('reportsTonerLevels')) ?>
+            <?= $this->RenderFormDescription($form->getElement('reportsTonerLevels')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('reportsTonerLevels')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('wattsPowerNormal')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('wattsPowerNormal'), array('col-md-2')) ?>
+
+        <div class="col-md-2  input-group ">
+            <?= $this->RenderFormText($form->getElement('wattsPowerNormal')) ?>
+            <?= $this->RenderFormDescription($form->getElement('wattsPowerNormal')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('wattsPowerNormal')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('wattsPowerIdle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('wattsPowerIdle'), array('col-md-2')) ?>
+
+        <div class="col-md-2  input-group ">
+            <?= $this->RenderFormText($form->getElement('wattsPowerIdle')) ?>
+            <?= $this->RenderFormDescription($form->getElement('wattsPowerIdle')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('wattsPowerIdle')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('partsCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('partsCostPerPage'), array('col-md-2')) ?>
+
+        <div class="col-md-2 input-group">
+            <span class="input-group-addon">$</span>
+            <?= $this->RenderFormText($form->getElement('partsCostPerPage')) ?>
+            <?= $this->RenderFormDescription($form->getElement('partsCostPerPage')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('partsCostPerPage')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('laborCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('laborCostPerPage'), array('col-md-2')) ?>
+
+        <div class="col-md-2  input-group ">
+            <span class="input-group-addon">$</span>
+            <?= $this->RenderFormText($form->getElement('laborCostPerPage')) ?>
+            <?= $this->RenderFormDescription($form->getElement('laborCostPerPage')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('laborCostPerPage')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('ppmBlack')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('ppmBlack'), array('col-md-2')) ?>
+
+        <div class="col-md-2  input-group ">
+            <?= $this->RenderFormText($form->getElement('ppmBlack')) ?>
+            <?= $this->RenderFormDescription($form->getElement('ppmBlack')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('ppmBlack')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('ppmColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('ppmColor'), array('col-md-2')) ?>
+
+        <div class="col-md-2  input-group ">
+            <?= $this->RenderFormText($form->getElement('ppmColor')) ?>
+            <?= $this->RenderFormDescription($form->getElement('ppmColor')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('ppmColor')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('isLeased')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <div class="col-md-5 col-md-push-2 input-group">
+            <?= $this->RenderFormCheckbox($form->getElement('isLeased')) ?>
+            <?= $this->RenderFormDescription($form->getElement('isLeased')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('isLeased')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('leasedTonerYield')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('leasedTonerYield'), array('col-md-2')) ?>
+
+        <div class="col-md-2  input-group ">
+            <?= $this->RenderFormText($form->getElement('leasedTonerYield')) ?>
+            <?= $this->RenderFormDescription($form->getElement('leasedTonerYield')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('leasedTonerYield')) ?>
+        </div>
+    </div>
+
+</fieldset>
+
+<fieldset>
+    <hr>
+    <?= ($form->getElement('toner_array')) ?>
+    <?= $this->formHidden($form->getElement('toner_array')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+</fieldset>
+<?= $this->RenderFormClose($form) ?>

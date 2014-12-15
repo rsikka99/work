@@ -5,7 +5,6 @@
 <deviceSwapReasonsBadData>
     <testData>
         <data>
-            <reasonCategory>3</reasonCategory>
             <reason>this is text</reason>
             <isDefault>true</isDefault>
         </data>

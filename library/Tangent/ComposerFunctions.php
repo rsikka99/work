@@ -1,10 +1,12 @@
 <?php
 
+namespace Tangent;
+
 use Composer\Package\Package;
 use Composer\Script\Event;
 use Composer\Script\PackageEvent;
 
-class Tangent_ComposerFunctions
+class ComposerFunctions
 {
 
     /**
@@ -37,12 +39,17 @@ class Tangent_ComposerFunctions
             $io->write("  - Removing require_once entries from Zend ", false);
             self::removeRequireOnceFromZend($installPath . "/library/Zend");
             $io->write(" ... <info>DONE</info>");
-
+            $io->write("");
+        }
+        else if (stristr($package->getName(), "zf1-extras") !== false)
+        {
+            $installPath = $event->getComposer()->getInstallationManager()->getInstallPath($package);
             $io->write("  - Removing require_once entries from ZendX", false);
-            self::removeRequireOnceFromZend($installPath . "/extras/library/ZendX");
+            self::removeRequireOnceFromZend($installPath . "/library/ZendX");
             $io->write(" ... <info>DONE</info>");
             $io->write("");
         }
+
     }
 
     /**

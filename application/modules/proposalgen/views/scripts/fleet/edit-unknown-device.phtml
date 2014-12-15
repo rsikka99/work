@@ -1,14 +1,15 @@
-<?php $this->headScript()->appendFile($this->baseUrl('js/proposalgen/fleet/editUnknownDevice.js')); ?>
-<div class="page-header">
-    <h1>Fleet
-        <small> - Add unknown device</small>
-    </h1>
-    <div class="well">
-        <?php if (isset($this->rmsUploadRow)) :
-            /* @var $rmsUploadRow Proposalgen_Model_Rms_Upload_Row */
-            $rmsUploadRow = $this->rmsUploadRow;
-            ?>
-            <h3 class='header'>Device: <?php echo $rmsUploadRow->manufacturer . " " . $rmsUploadRow->modelName; ?> </h3>
-        <?php endif; ?>
-        <?php echo $this->form; ?>
-    </div>
+<?php
+
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsUploadRowModel;
+
+$this->headScript()->appendFile($this->baseUrl('js/app/legacy/proposalgen/fleet/FleetEditUnknownDevice.js'));
+
+/* @var $rmsUploadRow RmsUploadRowModel */
+$rmsUploadRow = $this->rmsUploadRow;
+?>
+<div class="container">
+    <?php if ($rmsUploadRow instanceof RmsUploadRowModel) : ?>
+        Device: <?= $rmsUploadRow->manufacturer . " " . $rmsUploadRow->modelName; ?>
+    <?php endif; ?>
+    <?= $this->form ?>
+</div>

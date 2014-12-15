@@ -2,33 +2,33 @@
 <tonersGoodData>
     <testData>
         <data>
-            <availableTonersmanufacturerId>1</availableTonersmanufacturerId>
-            <availableTonerstonerColorId>3</availableTonerstonerColorId>
-            <availableTonerssystemSku>ed2d2</availableTonerssystemSku>
-            <availableTonersyield>3000</availableTonersyield>
-            <availableTonersdealerCost>155</availableTonersdealerCost>
-            <availableTonerssystemCost>150</availableTonerssystemCost>
+            <manufacturerId>1</manufacturerId>
+            <tonerColorId>3</tonerColorId>
+            <sku>ed2d2</sku>
+            <yield>3000</yield>
+            <dealerCost>155</dealerCost>
+            <cost>150</cost>
         </data>
     </testData>
     <testData>
         <data>
-            <availableTonersmanufacturerId>25</availableTonersmanufacturerId>
-            <availableTonerstonerColorId>2</availableTonerstonerColorId>
-            <availableTonersdealerSku>testDealerSku1234</availableTonersdealerSku>
-            <availableTonerssystemSku>system[]sku</availableTonerssystemSku>
-            <availableTonersyield>144.00</availableTonersyield>
-            <availableTonersdealerCost>3</availableTonersdealerCost>
-            <availableTonerssystemCost>242.224244</availableTonerssystemCost>
+            <manufacturerId>25</manufacturerId>
+            <tonerColorId>2</tonerColorId>
+            <dealerSku>testDealerSku1234</dealerSku>
+            <sku>system[]sku</sku>
+            <yield>144.00</yield>
+            <dealerCost>3</dealerCost>
+            <cost>242.224244</cost>
         </data>
     </testData>
     <testData>
         <data>
-            <availableTonersmanufacturerId>1</availableTonersmanufacturerId>
-            <availableTonerstonerColorId>3</availableTonerstonerColorId>
-            <availableTonerssystemSku>1</availableTonerssystemSku>
-            <availableTonersyield>1</availableTonersyield>
-            <availableTonersdealerCost>252</availableTonersdealerCost>
-            <availableTonerssystemCost>150</availableTonerssystemCost>
+            <manufacturerId>1</manufacturerId>
+            <tonerColorId>3</tonerColorId>
+            <sku>1</sku>
+            <yield>1</yield>
+            <dealerCost>252</dealerCost>
+            <cost>150</cost>
         </data>
     </testData>
 </tonersGoodData>

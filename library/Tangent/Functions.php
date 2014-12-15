@@ -1,6 +1,8 @@
 <?php
 
-class Tangent_Functions
+namespace Tangent;
+
+class Functions
 {
 
     /**
@@ -40,7 +42,7 @@ class Tangent_Functions
     /**
      * Sets the headers so that the browser will download the page
      *
-     * @param string $fileType The filename that you want to use as a suggestion to the user.
+     * @param string $fileName The filename that you want to use as a suggestion to the user.
      * @param string $mimeType Can be used to change the MIME type. You should probably leave this alone though. Defaults to "binary/octet-stream"
      */
     public static function setHeadersForDownload ($fileName, $mimeType = "binary/octet-stream")
@@ -48,7 +50,7 @@ class Tangent_Functions
         header("Cache-Control: no-cache");
         header("Content-Description: File Transfer");
         header("Content-Disposition: attachment; filename=" . urlencode($fileName));
-        header("Content-Type: binary/octet-stream");
+        header("Content-Type: " . $mimeType);
         header("Content-Transfer-Encoding: binary");
     }
 
@@ -58,7 +60,7 @@ class Tangent_Functions
      * @param string $fileName         The local path to the file you want the user to download
      * @param string $friendlyFileName The filename that you want to use as a suggestion to the user.
      *
-     * @return Returns false if the file did not exist
+     * @return bool False if the file did not exist
      */
     public static function forceDownloadFileAndExit ($fileName, $friendlyFileName = null)
     {
@@ -88,7 +90,7 @@ class Tangent_Functions
                     exit();
                 }
             }
-            catch (Exception $e)
+            catch (\Exception $e)
             {
                 return false;
             }
@@ -100,9 +102,9 @@ class Tangent_Functions
     /**
      * Takes a base64 encoded image and saves it to disk
      *
-     * @param unknown_type $base64Image
-     * @param unknown_type $savePath
-     * @param unknown_type $quality
+     * @param string $base64Image
+     * @param string $savePath
+     * @param int    $quality
      */
     public static function createJPEGImageFromDatabaseData ($base64Image, $savePath, $quality = 85)
     {
@@ -120,102 +122,12 @@ class Tangent_Functions
     }
 
     /**
+     * Checks to see if a value is a date
      *
-     * Inserts rows of data into the database
+     * @param $value
      *
-     * @param 2D array $dataArray 2D array of rows of data to add to the database
-     * @param array  $columns   Array of column names in the table
-     * @param string $tableName Name of the table to add rows to.
+     * @return bool
      */
-    public static function addArrayToDatabase ($dataArray, $columns, $tableName)
-    {
-        $ctr = 1;
-        $db  = Zend_Db_Table::getDefaultAdapter();
-        $db->beginTransaction();
-        try
-        {
-            //Get database connection.
-            $db->getConnection();
-            //preparing the SQL statement
-            $sql = "INSERT INTO " . $tableName . " (";
-            //setting up the columns names, the last column name omits the comman
-            foreach ($columns as $column)
-            {
-                if ($ctr == count($columns))
-                {
-                    $sql .= $column;
-                }
-                else
-                {
-                    $sql .= $column . ",";
-                }
-                $ctr++;
-            }
-            //adding the values
-            $sql .= ") VALUES ";
-            $outerCtr = 1;
-            foreach ($dataArray as $dataRow)
-            {
-                $sql .= "(";
-                $ctr = 1;
-                foreach ($dataRow as $value)
-                {
-                    //if the value is NOT numeric, need to add quotation marks around it
-                    //the last value omits the comma
-                    if (is_numeric($value) || Tangent_Functions::isDate($value))
-                    {
-                        if ($ctr == count($dataRow))
-                        {
-                            $sql .= $value;
-                        }
-                        else
-                        {
-                            $sql .= $value . ",";
-                        }
-                    }
-                    else
-                    {
-                        if ($ctr == count($dataRow))
-                        {
-                            $sql .= "'" . $value . "'";
-                        }
-                        else
-                        {
-                            $sql .= "'" . $value . "',";
-                        }
-                    }
-                    $ctr++;
-                }
-                if ($outerCtr == count($dataArray))
-                {
-                    $sql .= ")";
-                }
-                else
-                {
-                    $sql .= "),";
-                }
-                $outerCtr++;
-            }
-            //executing the query
-            $stmt = $db->query($sql);
-            $db->commit();
-        }
-        catch (Zend_Db_Exception $e)
-        {
-            $db->rollback();
-
-            return "Your file was not saved. Please double check the file and try again. If you continue to experience problems saving, contact your administrator.<br /><br />";
-        }
-        catch (Exception $e)
-        {
-            $db->rollback();
-
-            return "Your file was not saved. Please double check the file and try again. If you continue to experience problems saving, contact your administrator.<br /><br />";
-        }
-
-        return null;
-    }
-
     public static function isDate ($value)
     {
         $pattern = '/^([0-9]{4})\/([0-9]{2})\/([0-9]{2}) ([0-5][0-9])\:([0-5][0-9])/';

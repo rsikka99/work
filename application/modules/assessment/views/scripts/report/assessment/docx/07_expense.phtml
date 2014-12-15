@@ -2,6 +2,7 @@
 /**
  * Assessment - Analysis: Expense
  */
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
 
 /* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
@@ -59,7 +60,7 @@ $assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->co
 $assumedLeasedCostsTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $cell = $assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border);
 $cell->addText('Estimated annual total lease payments', null, 'nospacing');
-$cell->addText(sprintf('Based on $%1$s per month per device', number_format($assessmentViewModel->assessment->getAssessmentSettings()->monthlyLeasePayment)), 'small_italic_text', 'nospacing');
+$cell->addText(sprintf('Based on $%1$s per month per device', number_format($assessmentViewModel->assessment->getClient()->getClientSettings()->genericSettings->defaultMonthlyLeasePayment)), 'small_italic_text', 'nospacing');
 
 $assumedLeasedCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText($this->currency($assessmentViewModel->getCombinedAnnualLeasePayments()), null, 'nospacing_rightalign');
 
@@ -135,7 +136,7 @@ $hardwareTable = $section->addTable($this->styles->tables->expenseSummaryTable->
 $hardwareTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $cell = $hardwareTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border);
 $cell->addText('Total estimated annual cost of hardware purchases', 'bold_text', 'nospacing');
-$cell->addText(sprintf('Based on the age of your devices and an average purchase price of $%1$s.', number_format($assessmentViewModel->assessment->getAssessmentSettings()->defaultPrinterCost)), 'small_italic_text', 'nospacing');
+$cell->addText(sprintf('Based on the age of your devices and an average purchase price of $%1$s.', number_format($assessmentViewModel->assessment->getClient()->getClientSettings()->genericSettings->defaultPrinterCost)), 'small_italic_text', 'nospacing');
 $hardwareTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText($this->currency($assessmentViewModel->getAnnualCostOfHardwarePurchases()), null, 'nospacing_rightalign');
 
 $hardwareTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
@@ -168,7 +169,7 @@ $expensiveTable->addCell($this->styles->tables->mostexpensive->col2Width, $this-
 $expensiveTable->addCell($this->styles->tables->mostexpensive->col3Width, $this->styles->tables->mostexpensive->cell3)->addText('Monthly Volume', 'bold_text', 'nospacing_centeralign');
 $expensiveTable->addCell($this->styles->tables->mostexpensive->col4Width, $this->styles->tables->mostexpensive->cell4)->addText('Monthly Cost', 'bold_text', 'nospacing_centeralign');
 $rowCounter = 0;
-/* @var $device Proposalgen_Model_DeviceInstance */
+/* @var $device DeviceInstanceModel */
 foreach ($assessmentViewModel->getMostExpensiveDevices() as $device)
 {
     $expensiveTable->addRow($this->styles->tables->mostexpensive->rowheight, $this->styles->tables->rowstyle);

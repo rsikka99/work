@@ -2,6 +2,8 @@
 /**
  * Healthcheck - Analysis: Expense
  */
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+
 /* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 
@@ -47,20 +49,19 @@ $section->addTitle("Optimized Devices - No Changes Necessary", 2);
 
 $optimizedDevicesTable = $section->addTable($tcStyle->tablestyle);
 $optimizedDevicesTable->addRow($tcStyle->rowheight, $tcStyle->rowheader);
-$optimizedDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'bold_text', 'nospacing_centeralign');
-$optimizedDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'bold_text', 'nospacing_centeralign');
-$optimizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
-$optimizedDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText('Percent of Fleet\'s Total Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
-$optimizedDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText('Suggested Max. Page Volume', 'bold_text', 'nospacing_centeralign');
-$optimizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText('Life Page Count', 'bold_text', 'nospacing_centeralign');
-$optimizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText('A3', 'bold_text', 'nospacing_centeralign');
-$optimizedDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText('Color', 'bold_text', 'nospacing_centeralign');
-$optimizedDevicesTable->addCell($cellWidths [8], $tcStyle->cellHeader)->addText('Duplex', 'bold_text', 'nospacing_centeralign');
-$optimizedDevicesTable->addCell($cellWidths [9], $tcStyle->cellHeader)->addText('MFP', 'bold_text', 'nospacing_centeralign');
-$optimizedDevicesTable->addCell($cellWidths [10], $tcStyle->cellHeader)->addText('Fax', 'bold_text', 'nospacing_centeralign');
-$optimizedDevicesTable->addCell($cellWidths [11], $tcStyle->cellHeader)->addText('Reports Toner Levels', 'bold_text', 'nospacing_centeralign');
-$optimizedDevicesTable->addCell($cellWidths [12], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'bold_text', 'nospacing_centeralign');
-/* @var $device Proposalgen_Model_DeviceInstance */
+$optimizedDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'small_cell_heading', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'small_cell_heading', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'small_cell_heading', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText('Percent of Fleet\'s Total Monthly Page Volume', 'small_cell_heading', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText('Suggested Max. Page Volume', 'small_cell_heading', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText('Life Page Count', 'small_cell_heading', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText('A3', 'small_cell_heading', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText('Color', 'small_cell_heading', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [8], $tcStyle->cellHeader)->addText('Duplex', 'small_cell_heading', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [9], $tcStyle->cellHeader)->addText('MFP', 'small_cell_heading', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [10], $tcStyle->cellHeader)->addText('Fax', 'small_cell_heading', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [11], $tcStyle->cellHeader)->addText('Reports Toner Levels', 'small_cell_heading', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [12], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'small_cell_heading', 'nospacing_centeralign');
 foreach ($healthcheckViewModel->getOptimizedDevices() as $device)
 {
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
@@ -73,13 +74,13 @@ foreach ($healthcheckViewModel->getOptimizedDevices() as $device)
     $optimizedDevicesTable->addCell($cellWidths [1], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
     $optimizedDevicesTable->addCell($cellWidths [2], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell3))->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_rightalign');
     $optimizedDevicesTable->addCell($cellWidths [3], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format($device->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) . '%'), null, 'nospacing_rightalign');
-    $optimizedDevicesTable->addCell($cellWidths [4], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($device->getMasterDevice()->calculateEstimatedMaxLifeCount(), null, 'nospacing_rightalign');
-    $optimizedDevicesTable->addCell($cellWidths [5], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($device->getMeter()->endMeterLife, null, 'nospacing_rightalign');
-    $optimizedDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($device->getMasterDevice()->isA3 ? 'Yes' : 'No', null, 'nospacing_rightalign');
-    $optimizedDevicesTable->addCell($cellWidths [7], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($device->getMasterDevice()->isColor() ? 'Yes' : 'No', null, 'nospacing_rightalign');
-    $optimizedDevicesTable->addCell($cellWidths [8], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($device->getMasterDevice()->isDuplex ? 'Yes' : 'No', null, 'nospacing_rightalign');
-    $optimizedDevicesTable->addCell($cellWidths [9], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($device->getMasterDevice()->isMfp() ? 'Yes' : 'No', null, 'nospacing_rightalign');
-    $optimizedDevicesTable->addCell($cellWidths [10], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($device->getMasterDevice()->isFax ? 'Yes' : 'No', null, 'nospacing_rightalign');
+    $optimizedDevicesTable->addCell($cellWidths [4], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->formatPageVolume($device->getMasterDevice()->calculateEstimatedMaxLifeCount()), null, 'nospacing_rightalign');
+    $optimizedDevicesTable->addCell($cellWidths [5], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->formatPageVolume($device->getMeter()->endMeterLife), null, 'nospacing_rightalign');
+    $optimizedDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($device->getMasterDevice()->isA3 ? 'Yes' : 'No', null, 'nospacing_centeralign');
+    $optimizedDevicesTable->addCell($cellWidths [7], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($device->getMasterDevice()->isColor() ? 'Yes' : 'No', null, 'nospacing_centeralign');
+    $optimizedDevicesTable->addCell($cellWidths [8], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($device->getMasterDevice()->isDuplex ? 'Yes' : 'No', null, 'nospacing_centeralign');
+    $optimizedDevicesTable->addCell($cellWidths [9], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($device->getMasterDevice()->isMfp() ? 'Yes' : 'No', null, 'nospacing_centeralign');
+    $optimizedDevicesTable->addCell($cellWidths [10], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($device->getMasterDevice()->isFax ? 'Yes' : 'No', null, 'nospacing_centeralign');
     $optimizedDevicesTable->addCell($cellWidths [11], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->isCapableOfReportingTonerLevels() ? 'Yes' : 'No')), null, 'nospacing_centeralign');
     $optimizedDevicesTable->addCell($cellWidths [12], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->isLeased ? 'No' : ($device->isManaged ? 'Yes' : 'No'))), null, 'nospacing_centeralign');
 }
@@ -93,20 +94,19 @@ $section->addTitle("Underutilized Devices", 2);
 
 $UnderutilizedDevicesTable = $section->addTable($tcStyle->tablestyle);
 $UnderutilizedDevicesTable->addRow($tcStyle->rowheight, $tcStyle->rowheader);
-$UnderutilizedDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'bold_text', 'nospacing_centeralign');
-$UnderutilizedDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'bold_text', 'nospacing_centeralign');
-$UnderutilizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
-$UnderutilizedDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText('Percent of Fleet\'s Total Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
-$UnderutilizedDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText('Suggested Max. Page Volume', 'bold_text', 'nospacing_centeralign');
-$UnderutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText('Life Page Count', 'bold_text', 'nospacing_centeralign');
-$UnderutilizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText('A3', 'bold_text', 'nospacing_centeralign');
-$UnderutilizedDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText('Color', 'bold_text', 'nospacing_centeralign');
-$UnderutilizedDevicesTable->addCell($cellWidths [8], $tcStyle->cellHeader)->addText('Duplex', 'bold_text', 'nospacing_centeralign');
-$UnderutilizedDevicesTable->addCell($cellWidths [9], $tcStyle->cellHeader)->addText('MFP', 'bold_text', 'nospacing_centeralign');
-$UnderutilizedDevicesTable->addCell($cellWidths [10], $tcStyle->cellHeader)->addText('Fax', 'bold_text', 'nospacing_centeralign');
-$UnderutilizedDevicesTable->addCell($cellWidths [11], $tcStyle->cellHeader)->addText('Reports Toner Levels', 'bold_text', 'nospacing_centeralign');
-$UnderutilizedDevicesTable->addCell($cellWidths [12], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'bold_text', 'nospacing_centeralign');
-/* @var $device Proposalgen_Model_DeviceInstance */
+$UnderutilizedDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'small_cell_heading', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'small_cell_heading', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'small_cell_heading', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText('Percent of Fleet\'s Total Monthly Page Volume', 'small_cell_heading', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText('Suggested Max. Page Volume', 'small_cell_heading', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText('Life Page Count', 'small_cell_heading', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText('A3', 'small_cell_heading', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText('Color', 'small_cell_heading', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [8], $tcStyle->cellHeader)->addText('Duplex', 'small_cell_heading', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [9], $tcStyle->cellHeader)->addText('MFP', 'small_cell_heading', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [10], $tcStyle->cellHeader)->addText('Fax', 'small_cell_heading', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [11], $tcStyle->cellHeader)->addText('Reports Toner Levels', 'small_cell_heading', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [12], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'small_cell_heading', 'nospacing_centeralign');
 foreach ($healthcheckViewModel->getUnderutilizedDevices() as $device)
 {
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
@@ -138,21 +138,21 @@ $section->addTitle("Overutilized Devices", 2);
 
 $OverutilizedDevicesTable = $section->addTable($tcStyle->tablestyle);
 $OverutilizedDevicesTable->addRow($tcStyle->rowheight, $tcStyle->rowheader);
-$OverutilizedDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'bold_text', 'nospacing_centeralign');
-$OverutilizedDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'bold_text', 'nospacing_centeralign');
-$OverutilizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
-$OverutilizedDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText('Percent of Fleet\'s Total Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
-$OverutilizedDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText('Suggested Max. Page Volume', 'bold_text', 'nospacing_centeralign');
-$OverutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText('Life Page Count', 'bold_text', 'nospacing_centeralign');
-$OverutilizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText('A3', 'bold_text', 'nospacing_centeralign');
-$OverutilizedDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText('Color', 'bold_text', 'nospacing_centeralign');
-$OverutilizedDevicesTable->addCell($cellWidths [8], $tcStyle->cellHeader)->addText('Duplex', 'bold_text', 'nospacing_centeralign');
-$OverutilizedDevicesTable->addCell($cellWidths [9], $tcStyle->cellHeader)->addText('MFP', 'bold_text', 'nospacing_centeralign');
-$OverutilizedDevicesTable->addCell($cellWidths [10], $tcStyle->cellHeader)->addText('Fax', 'bold_text', 'nospacing_centeralign');
-$OverutilizedDevicesTable->addCell($cellWidths [11], $tcStyle->cellHeader)->addText('Reports Toner Levels', 'bold_text', 'nospacing_centeralign');
-$OverutilizedDevicesTable->addCell($cellWidths [12], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'bold_text', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'small_cell_heading', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'small_cell_heading', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'small_cell_heading', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText('Percent of Fleet\'s Total Monthly Page Volume', 'small_cell_heading', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText('Suggested Max. Page Volume', 'small_cell_heading', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText('Life Page Count', 'small_cell_heading', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText('A3', 'small_cell_heading', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText('Color', 'small_cell_heading', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [8], $tcStyle->cellHeader)->addText('Duplex', 'small_cell_heading', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [9], $tcStyle->cellHeader)->addText('MFP', 'small_cell_heading', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [10], $tcStyle->cellHeader)->addText('Fax', 'small_cell_heading', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [11], $tcStyle->cellHeader)->addText('Reports Toner Levels', 'small_cell_heading', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [12], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'small_cell_heading', 'nospacing_centeralign');
 
-/* @var $device Proposalgen_Model_DeviceInstance */
+/* @var $device DeviceInstanceModel */
 foreach ($healthcheckViewModel->getOverutilizedDevices() as $device)
 {
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
@@ -200,7 +200,7 @@ $oldDevicesTable->addCell($cellWidths [11], $tcStyle->cellHeader)->addText('Fax'
 $oldDevicesTable->addCell($cellWidths [12], $tcStyle->cellHeader)->addText('Reports Toner Levels', 'small_cell_heading', 'nospacing_centeralign');
 $oldDevicesTable->addCell($cellWidths [13], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'small_cell_heading', 'nospacing_centeralign');
 
-/* @var $device Proposalgen_Model_DeviceInstance */
+/* @var $device DeviceInstanceModel */
 foreach ($healthcheckViewModel->getOldDevices() as $device)
 {
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
@@ -245,21 +245,21 @@ $section->addTitle("Devices Not Reporting Toner Levels", 2);
 
 $notReportingTonerDevicesTable = $section->addTable($tcStyle->tablestyle);
 $notReportingTonerDevicesTable->addRow($tcStyle->rowheight, $tcStyle->rowheader);
-$notReportingTonerDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'bold_text', 'nospacing_centeralign');
-$notReportingTonerDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'bold_text', 'nospacing_centeralign');
-$notReportingTonerDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
-$notReportingTonerDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText('Percent of Fleet\'s Total Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
-$notReportingTonerDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText('Suggested Max. Page Volume', 'bold_text', 'nospacing_centeralign');
-$notReportingTonerDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText('Life Page Count', 'bold_text', 'nospacing_centeralign');
-$notReportingTonerDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText('A3', 'bold_text', 'nospacing_centeralign');
-$notReportingTonerDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText('Color', 'bold_text', 'nospacing_centeralign');
-$notReportingTonerDevicesTable->addCell($cellWidths [8], $tcStyle->cellHeader)->addText('Duplex', 'bold_text', 'nospacing_centeralign');
-$notReportingTonerDevicesTable->addCell($cellWidths [9], $tcStyle->cellHeader)->addText('MFP', 'bold_text', 'nospacing_centeralign');
-$notReportingTonerDevicesTable->addCell($cellWidths [10], $tcStyle->cellHeader)->addText('Fax', 'bold_text', 'nospacing_centeralign');
-$notReportingTonerDevicesTable->addCell($cellWidths [11], $tcStyle->cellHeader)->addText('Reports Toner Levels', 'bold_text', 'nospacing_centeralign');
-$notReportingTonerDevicesTable->addCell($cellWidths [12], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'bold_text', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'small_cell_heading', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'small_cell_heading', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'small_cell_heading', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText('Percent of Fleet\'s Total Monthly Page Volume', 'small_cell_heading', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText('Suggested Max. Page Volume', 'small_cell_heading', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText('Life Page Count', 'small_cell_heading', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText('A3', 'small_cell_heading', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText('Color', 'small_cell_heading', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [8], $tcStyle->cellHeader)->addText('Duplex', 'small_cell_heading', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [9], $tcStyle->cellHeader)->addText('MFP', 'small_cell_heading', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [10], $tcStyle->cellHeader)->addText('Fax', 'small_cell_heading', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [11], $tcStyle->cellHeader)->addText('Reports Toner Levels', 'small_cell_heading', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [12], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'small_cell_heading', 'nospacing_centeralign');
 
-/* @var $device Proposalgen_Model_DeviceInstance */
+/* @var $device DeviceInstanceModel */
 foreach ($healthcheckViewModel->getDevicesNotReportingTonerLevels() as $device)
 {
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());

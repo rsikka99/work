@@ -29,7 +29,7 @@
     <user>
         <formMode>create</formMode>
         <data>
-            <dealerId>3</dealerId>
+            <dealerId>1</dealerId>
             <email>valid@data.com</email>
             <firstname>boo</firstname>
             <lastname>barr</lastname>
@@ -42,23 +42,23 @@
     <user>
         <formMode>edit</formMode>
         <data>
-            <dealerId>3</dealerId>
+            <dealerId>1</dealerId>
             <email>valid@data.com</email>
             <firstname>boo</firstname>
             <lastname>barr</lastname>
             <password>ilikecats23</password>
             <password_confirm>ilikecats23</password_confirm>
             <resetPasswordOnNextLogin>0</resetPasswordOnNextLogin>
-            <fronzenUntil>2013-08-15 00:00</fronzenUntil>
+            <fronzenUntil>2015-12-15 00:00</fronzenUntil>
             <resetLoginAttempts>0</resetLoginAttempts>
             <locked>0</locked>
-            <userRoles>1</userRoles>
+            <userRoles>2</userRoles>
         </data>
     </user>
     <user>
         <formMode>edit</formMode>
         <data>
-            <dealerId>3</dealerId>
+            <dealerId>1</dealerId>
             <email>valid@data.com</email>
             <firstname>boo</firstname>
             <lastname>barr</lastname>
@@ -66,9 +66,9 @@
             <password_confirm>ili$$kecats23</password_confirm>
             <resetPasswordOnNextLogin>0</resetPasswordOnNextLogin>
             <resetLoginAttempts>9</resetLoginAttempts>
-            <fronzenUntil>2013-08-15 00:00</fronzenUntil>
+            <fronzenUntil>2015-12-15 00:00</fronzenUntil>
             <locked>1</locked>
-            <userRoles>1</userRoles>
+            <userRoles>4</userRoles>
         </data>
     </user>
 </users>

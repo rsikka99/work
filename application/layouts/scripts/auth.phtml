@@ -9,95 +9,29 @@
 <html class="no-js" lang="en">
 <!--<![endif]-->
 <head>
+    <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width" />
+    <meta name="viewport" content="initial-scale=1.0" />
     <meta charset="utf-8" />
-    <?php echo $this->headTitle($this->App()->title)->setSeparator(' - '); ?>
+    <?= $this->headTitle($this->App()->title)->setSeparator(' - '); ?>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width">
-    <meta name="author" content="Tangent MTW"><?php echo $this->headLink(); ?>
+    <meta name="author" content="Tangent MTW">
+    <?= $this->headLink(); ?>
 
-    <script src="<?php echo $this->baseUrl("/js/libs/modernizr-2.5.3.min.js"); ?>"></script>
-
+    <script src="<?= $this->baseUrl('js/lib/require/require.min.js') ?>"></script>
 </head>
 <body>
-<!-- Prompt to upgrade browsers/install chrome frame if IE 6 -->
-<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or
-    <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
-
-<!-- Start of Navbar -->
-<div class="navbar navbar-inverse">
-    <div class="navbar-inner">
-        <div class="container navbar-container">
-
-        </div>
-    </div>
-</div>
-<!-- /Navbar -->
-
-<!-- Header -->
-<div id="header-background">
-    <header id="headerLogo"></header>
-</div>
-<!-- /Header -->
-
-<div class="container body-container" id="meat">
-    <!-- Start of main container -->
-    <div class="container" id="authContent">
-        <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
-        <?php echo $this->layout()->content ?>
-
-        <hr>
-
-        <!-- Footer -->
-        <footer>
-            <div class="row">
-                <div class="span6">Copyright <?php echo $this->App()->copyright; ?> &copy; <?php echo date("Y"); ?>. All Rights Reserved.</div>
-            </div>
-        </footer>
-    </div>
-    <!-- End of main container -->
+<?= $this->partial('partials/browser-upgrade.phtml') ?>
+<div class="container">
+    <?= $this->layout()->content ?>
 </div>
 
+<?= $this->partial('partials/php-errors.phtml', array('exceptions' => $this->exceptions, 'request' => $this->request)) ?>
 
-<?php
-if (APPLICATION_ENV != 'production')
-{
-    echo $this->partial('phpErrorPartial.phtml', array('exceptions' => $this->exceptions, 'request' => $this->request));
-}
-?>
-
-<!-- JavaScript at the bottom for fast page loading -->
 <script type="text/javascript">
-    var TMTW_BASEURL = '<?php echo $this->serverUrl('/'); ?>';
+    var TMTW_BASEURL = '<?= $this->serverUrl('/'); ?>';
 </script>
 
-<!-- Load jQuery Libraries -->
-<?php echo $this->jQuery()->setCdnSsl((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'))->enable(); ?>
-<script>window.jQuery || document.write('<script src="js/libs/jquery-1.9.1.min.js"><\/script>');</script>
-
-<!-- Scripts concatenated and minified via build script -->
-<?php echo $this->headScript(); ?>
-<!-- /Scripts -->
-
-<?php if ($this->App()->useAnalytics) : ?>
-    <script>
-        (function (i, s, o, g, r, a, m)
-        {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function ()
-            {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-        ga('create', 'UA-40085726-1', 'mpstoolbox.com');
-        ga('send', 'pageview');
-
-    </script>
-<?php endif; ?>
+<?= $this->headScript(); ?>
+<?= ($this->App()->useAnalytics && APPLICATION_ENV == 'production') ? $this->partial('google-analytics.phtml') : ""; ?>
 </body>
 </html>

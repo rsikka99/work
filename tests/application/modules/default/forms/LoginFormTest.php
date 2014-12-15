@@ -1,10 +1,13 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\DDefault\Forms\LoginForm;
+
 class Default_Form_LoginFormTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
+
 {
     public function getForm ()
     {
-        return new Default_Form_Login();
+        return new LoginForm();
     }
 
     public function testCanRunPHPUNIT ()

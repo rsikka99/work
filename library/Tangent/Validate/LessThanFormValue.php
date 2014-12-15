@@ -1,12 +1,14 @@
 <?php
 
+namespace Tangent\Validate;
+
 /**
  * Class My_Validate_LessThanFormValue
  * A validator for that checks to see if element1 is less than element 2
  *
  * @author "Lee Robert"
  */
-class Tangent_Validate_LessThanFormValue extends Zend_Validate_Abstract
+class LessThanFormValue extends \Zend_Validate_Abstract
 {
     const NOT_LESS_THAN = 'not_less_than';
     protected $_messageTemplates = array(

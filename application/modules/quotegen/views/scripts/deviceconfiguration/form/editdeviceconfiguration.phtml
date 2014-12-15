@@ -1,23 +1,26 @@
 <?php
-/* @var $form Quotegen_Form_DeviceConfiguration */
+
+/* @var $form DeviceConfigurationForm */
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\DeviceConfigurationForm;
+
 $form = $this->element;
 ?>
-<form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+<form id="<?= $form->getId(); ?>" class='<?= $form->getAttrib('class') ?>' action="<?= $form->getAction() ?>" method="<?= $form->getMethod() ?>" name="<?= $form->getName() ?>">
     <h3>Device Configuration</h3>
-    <?php echo $form->getElement('deviceName'); ?>
+    <?= $form->getElement('deviceName'); ?>
 
-    <h3>Options <?php echo $form->getElement('add')->renderViewHelper(); ?></h3>
+    <h3>Options <?= $form->getElement('add')->renderViewHelper(); ?></h3>
     <br>
     <?php if (count($form->getOptionElements()) > 0) : ?>
         <?php foreach ($form->getOptionElements() as $element) : ?>
-            <div class="control-group <?php echo ($element->hasErrors()) ? 'error' : '' ?>">
-                <?php echo $element->renderLabel(); ?>
+            <div class="control-group <?= ($element->hasErrors()) ? 'error' : '' ?>">
+                <?= $element->renderLabel(); ?>
                 <div class="controls">
                     <div class="input-prepend input-append">
-                        <span class="add-on">Qty:</span><?php echo trim($element->renderViewHelper()); // Trim shouldn't need to happen, but the element has a newline rendered with it. ?>
-                        <a href="<?php echo $this->url(array('action' => 'delete-option-from-device-configuration', 'optionId' => $element->getDescription())); ?>" class="add-on btn btn-danger"><i class="icon-trash"></i></a>
+                        <span class="add-on">Qty:</span><?= trim($element->renderViewHelper()); // Trim shouldn't need to happen, but the element has a newline rendered with it.   ?>
+                        <a href="<?= $this->url(array('optionId' => $element->getDescription()), 'quotes.device-configurations.delete-option'); ?>" class="add-on btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
                     </div>
-                    <?php echo $element->renderErrors(); ?>
+                    <?= $element->renderErrors(); ?>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -25,6 +28,6 @@ $form = $this->element;
         <p>There are no options added to this device yet.</p>
     <?php endif; ?>
 
-    <?php echo $form->getElement('submit'); ?>
-    <?php echo $form->getElement('cancel'); ?>
+    <?= $form->getElement('submit'); ?>
+    <?= $form->getElement('cancel'); ?>
 </form>

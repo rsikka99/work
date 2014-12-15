@@ -6,19 +6,19 @@
     </testData>
     <testData>
         <data>
-            <availableOptionsname>testNane</availableOptionsname>
-            <availableOptionsdescription>qweqwe</availableOptionsdescription>
-            <availableOptionscost>2CAN</availableOptionscost>
-            <availableOptionsoemSku>22</availableOptionsoemSku>
-            <availableOptionsdealerSku>qwe</availableOptionsdealerSku>
+            <name>testNane</name>
+            <description>qweqwe</description>
+            <cost>2CAN</cost>
+            <oemSku>22</oemSku>
+            <dealerSku>qwe</dealerSku>
         </data>
     </testData>
     <testData>
         <data>
-            <availableOptionsname>33</availableOptionsname>
-            <availableOptionsdescription>22</availableOptionsdescription>
-            <availableOptionsoemSku>232</availableOptionsoemSku>
-            <availableOptionsdealerSku>123</availableOptionsdealerSku>
+            <name>33</name>
+            <description>22</description>
+            <oemSku>232</oemSku>
+            <dealerSku>123</dealerSku>
         </data>
     </testData>
 </optionsBadData>

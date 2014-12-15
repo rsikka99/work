@@ -1,0 +1,32 @@
+<?xml version="1.0" standalone="yes"?>
+<genericSettingsBadData>
+    <testData>
+        <data>
+            <defaultPrinterCost>empty</defaultPrinterCost>
+            <leasedMonochromeCostPerPage>empty</leasedMonochromeCostPerPage>
+            <leasedColorCostPerPage>empty</leasedColorCostPerPage>
+            <mpsMonochromeCostPerPage>empty</mpsMonochromeCostPerPage>
+            <targetMonochromeCostPerPage>empty</targetMonochromeCostPerPage>
+            <targetColorCostPerPage>empty</targetColorCostPerPage>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <defaultEnergyCost>empty</defaultEnergyCost>
+            <defaultMonthlyLeasePayment>empty</defaultMonthlyLeasePayment>
+            <mpsMonochromeCostPerPage>empty</mpsMonochromeCostPerPage>
+            <mpsColorCostPerPage>empty</mpsColorCostPerPage>
+            <tonerMargin>empty</tonerMargin>
+            <targetMonochromeCostPerPage>empty</targetMonochromeCostPerPage>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <defaultPrinterCost>empty</defaultPrinterCost>
+            <leasedMonochromeCostPerPage>empty</leasedMonochromeCostPerPage>
+            <leasedColorCostPerPage>empty</leasedColorCostPerPage>
+            <mpsMonochromeCostPerPage>empty</mpsMonochromeCostPerPage>
+            <targetColorCostPerPage>empty</targetColorCostPerPage>
+        </data>
+    </testData>
+</genericSettingsBadData>

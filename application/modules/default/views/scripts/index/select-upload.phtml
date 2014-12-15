@@ -1,0 +1,56 @@
+<?php
+
+use MPSToolbox\Legacy\Entities\RmsUploadEntity;
+
+?>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-10">
+            <p class="lead">Please select an upload to use. You can also upload a new file here as well.</p>
+        </div>
+        <div class="col-sm-2">
+            <a class="btn btn-primary" href="<?= $this->url(array(), 'rms-upload.upload-file') ?>" title="Upload New">
+                <i class="fa fa-user fa-upload"></i>
+                Upload New
+            </a>
+        </div>
+    </div>
+
+    <h3>Existing RMS Uploads</h3>
+
+    <form method="POST">
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th>Uploaded</th>
+                    <th>File Name</th>
+                    <th>Valid</th>
+                    <th>Invalid</th>
+                    <th>Type</th>
+                    <th style="width: 120px;">Action</th>
+                </tr>
+
+                <?php /* @var $rmsUpload RmsUploadEntity */ ?>
+                <?php foreach ($this->availableRmsUploads as $rmsUpload) : ?>
+                    <tr>
+                        <td>
+                            <i class="fa fa-fw fa-clock-o js-tooltip btn-link" title="<?= strftime("%B %d, %Y %I:%M:%S %p", strtotime($rmsUpload->uploadDate)); ?>"></i> <?= $rmsUpload->uploadDate->diffForHumans(); ?>
+                        </td>
+                        <td><?= $rmsUpload->fileName; ?></td>
+                        <td><?= number_format($rmsUpload->validRowCount); ?></td>
+                        <td><?= number_format($rmsUpload->invalidRowCount); ?></td>
+                        <td><?= $rmsUpload->rmsProvider->name; ?></td>
+                        <td>
+                            <div class="btn-group">
+                            <button name="rmsUploadId" value="<?= $rmsUpload->id; ?>" class="btn btn-primary btn-xs">
+                                <i class="fa fa-fw fa-check"></i> Select
+                            </button>
+                            <a class="btn btn-danger btn-xs js-delete-confirmation" href="<?= $this->url(['rmsUploadId' => $rmsUpload->id], 'app.dashboard.delete-rms-upload') ?>" title="Delete"><i class="fa fa-fw fa-trash-o"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
+    </form>
+</div>

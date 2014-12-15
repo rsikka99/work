@@ -1,57 +1,44 @@
 <?php
+
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 
-$this->brandName = My_Brand::getDealerBranding()->mpsProgramName;
+$this->brandName   = My_Brand::getDealerBranding()->mpsProgramName;
 $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
-$this->jit = My_Brand::$jit;
+$this->jit         = My_Brand::$jit;
 ?>
-<div class="h1">Printing Device List</div>
-<p>Below is a list of your printing device models and whether or not they are qualified for just-in-time supplies fulfillment. For devices not qualified for just-in-time supplies fulfillment, you can call into our office to order supplies for next-day delivery. Consider upgrading these devices to be on a 100% just-in-time supplies fulfillment model. Devices not included in the report are listed in a subsequent table. These devices are typically older models that are not compatible with remote monitoring software or do not qualify for our managed print program.</p>
-<br />
-<table class="genericTable" id="AppendixDeviceTable">
+<div class="jumbotron">
+    <h1>Printing Device List</h1>
+
+    <p>Below is a list of your printing device models and whether or not they are qualified for just-in-time supplies fulfillment. For devices not qualified for just-in-time supplies fulfillment, you can call into our office to order supplies for next-day delivery. Consider upgrading these devices to be on a 100% just-in-time supplies fulfillment model. Devices not included in the report are listed in a subsequent table. These devices are typically older models that are not compatible with remote monitoring software or do not qualify for our managed print program.</p>
+</div>
+<table class="table table-condensed" id="AppendixDeviceTable">
     <thead>
-    <tr class="center">
-        <th class="left">Manufacturer</th>
-        <th class="left">Model</th>
+    <tr>
+        <th>Manufacturer</th>
+        <th>Model</th>
         <th>Serial No.</th>
         <th>IP Address</th>
         <th>Age (Years)</th>
-        <th>Purchased or<br />Leased</th>
+        <th>Purchased or Leased</th>
         <th>AMPV</th>
-        <th><?php echo $this->jit; ?> <br />Comp.</th>
+        <th><?= $this->jit; ?> Comp.</th>
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance) : /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ ?>
+    <?php foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance) : ?>
         <tr>
-            <td class="column1">
-                <div><?php echo $deviceInstance->getMasterDevice()->getManufacturer()->displayname; ?></div>
-            </td>
-            <td class="column2">
-                <div><?php echo $deviceInstance->getMasterDevice()->modelName; ?></div>
-            </td>
-            <td class="column3">
-                <div class="center"><?php echo ($deviceInstance->serialNumber) ? : "Unknown"; ?></div>
-            </td>
-            <td class="column3">
-                <div class="center"><?php echo ($deviceInstance->ipAddress) ? : "Unknown"; ?></div>
-            </td>
-            <td class="column3">
-                <div class="center"><?php echo ($deviceInstance->getAge()) ? : "Unknown"; ?></div>
-            </td>
-            <td class="column4">
-                <div class="center"><?php echo ($deviceInstance->isLeased) ? "Leased" : "Purchased"; ?></div>
-            </td>
-            <td class="column5">
-                <div class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></div>
-            </td>
-            <td class="column6">
-                <div class="center"><?php echo ($deviceInstance->isCapableOfReportingTonerLevels) ? "Yes" : "No"; ?></div>
-            </td>
+            <td class="manufacturer"><?= $deviceInstance->getMasterDevice()->getManufacturer()->displayname; ?></td>
+            <td class="model-name"><?= $deviceInstance->getMasterDevice()->modelName; ?></td>
+            <td class="serial-number"><?= ($deviceInstance->serialNumber) ?: "Unknown"; ?></td>
+            <td class="ip-address"><?= ($deviceInstance->ipAddress) ?: "Unknown"; ?></td>
+            <td class="age"><?= ($deviceInstance->getAge()) ?: "Unknown"; ?></td>
+            <td class="is-leased"><?= ($deviceInstance->isLeased) ? "Leased" : "Purchased"; ?></td>
+            <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></td>
+            <td class="reports-toner-levels"><?= ($deviceInstance->isCapableOfReportingTonerLevels) ? "Yes" : "No"; ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
-<br />
-<br />

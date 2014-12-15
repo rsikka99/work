@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Application_View_Helper_Usermenu
+ * App_View_Helper_Usermenu
  *
  * @author Lee Robert
  *
  */
-class Application_View_Helper_Usermenu extends Zend_View_Helper_Abstract
+class App_View_Helper_Usermenu extends Zend_View_Helper_Abstract
 {
 
     /**
@@ -30,13 +30,7 @@ class Application_View_Helper_Usermenu extends Zend_View_Helper_Abstract
             }
 
             // Render the menu
-            $html = $this->view->MyNavigation()
-                               ->menu()
-                               ->renderMenu($container, array(
-                    'minDepth' => 0,
-                    'maxDepth' => 0,
-                    'ulClass'  => 'dropdown-menu'
-                ));
+            $html = $this->view->RenderNavbarNav($container, 'dropdown-menu', 1);
 
             // Bring back it's original visibility
             if ($wasInvisible)

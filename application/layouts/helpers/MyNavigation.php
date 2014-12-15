@@ -1,12 +1,13 @@
 <?php
+use MPSToolbox\Legacy\Services\NavigationService;
 
 /**
- * Application_View_Helper_MyNavigation
+ * App_View_Helper_MyNavigation
  *
  * @author Lee Robert
  *
  */
-class Application_View_Helper_MyNavigation extends Zend_View_Helper_Navigation
+class App_View_Helper_MyNavigation extends Zend_View_Helper_Navigation
 {
     /**
      * Helper entry point
@@ -44,8 +45,8 @@ class Application_View_Helper_MyNavigation extends Zend_View_Helper_Navigation
             /**
              * Fetch from the service
              */
-            $navigationService = new Application_Service_Navigation();
-            $nav               = $navigationService->getNavigationContainer(Application_Service_Navigation::USE_CACHE);
+            $navigationService = new NavigationService();
+            $nav               = $navigationService->getNavigationContainer(NavigationService::USE_CACHE);
             if ($nav instanceof Zend_Navigation_Container)
             {
                 return $this->_container = $nav;

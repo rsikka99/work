@@ -1,0 +1,30 @@
+<?xml version="1.0" standalone="yes"?>
+<currentFleetSettingsBadData>
+    <testData>
+        <data>
+            <currentMonochromeRankSetArray>empty</currentMonochromeRankSetArray>
+            <currentColorRankSetArray>empty</currentColorRankSetArray>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <currentUseDevicePageCoverages>asdf</currentUseDevicePageCoverages>
+            <currentPageCoverageMono>asdf</currentPageCoverageMono>
+            <currentColorRankSetArray>1000</currentColorRankSetArray>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <currentMonochromeRankSetArray>null</currentMonochromeRankSetArray>
+            <currentColorRankSetArray>1000</currentColorRankSetArray>
+        </data>
+    </testData>
+    <testData>
+        <data>
+            <currentUseDevicePageCoverages>1000000</currentUseDevicePageCoverages>
+            <currentPageCoverageMono>10000</currentPageCoverageMono>
+            <currentPageCoverageColor>999</currentPageCoverageColor>
+            <currentMonochromeRankSetArray>500</currentMonochromeRankSetArray>
+        </data>
+    </testData>
+</currentFleetSettingsBadData>

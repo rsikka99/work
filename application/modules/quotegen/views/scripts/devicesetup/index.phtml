@@ -1,85 +1,61 @@
 <?php
-$this->headScript()
-     ->appendFile($this->baseUrl('js/quotegen/devicesetup/deviceSetup.js'))
-     ->appendFile($this->baseUrl('js/proposalgen/managedevices/managemasterdevices.js'))
-     ->appendFile($this->baseUrl('js/proposalgen/managedevices/suppliesandservice.js'))
-     ->appendFile($this->baseUrl('js/proposalgen/managedevices/deviceattributes.js'))
-     ->appendFile($this->baseUrl('js/proposalgen/managedevices/availableoptions.js'))
-     ->appendFile($this->baseUrl('js/proposalgen/managedevices/hardwarequote.js'))
-     ->appendFile($this->baseUrl('js/proposalgen/managedevices/hardwareconfigurations.js'));
 
-$this->headScript()->captureStart('append', 'text/javascript'); ?>
-var isSaveAndApproveAdmin = <?php echo($this->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN) ? 'true' : 'false'); ?>;
-var canDelete = <?php echo($this->IsAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_DELETE, Application_Model_Acl::PRIVILEGE_VIEW) ? 'true' : 'false'); ?>;
-var dealerSkuName = '<?php echo My_Brand::$dealerSku; ?>';
-<?php $this->headScript()->captureEnd();
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Models\Acl\ProposalgenAclModel;
+use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
+
+$this->headScript()->appendFile($this->baseUrl('js/app/legacy/hardware-library/ManageDevices.js'));
 ?>
-<div class="clearfix">
-    <div class="page-header">
-        <h1>Hardware Library -
-            <small>All Devices</small>
-        </h1>
-    </div>
+<div class="container">
+    <script>
+        var isSaveAndApproveAdmin = <?=($this->IsAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, AppAclModel::PRIVILEGE_ADMIN) ? 'true' : 'false'); ?>,
+            canDelete             = <?=($this->IsAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETUP_DELETE, AppAclModel::PRIVILEGE_VIEW) ? 'true' : 'false'); ?>,
+            dealerSkuName         = '<?= My_Brand::$dealerSku; ?>';
+    </script>
+
+    <input type="hidden" id="isAdmin" value="<?= $this->isAdmin; ?>" />
+
     <div class="well">
-        <form id="editMasterDeviceForm" class="form-inline" onsubmit="javascript: updateGrid('search');return false">
-            <div id="filter_container">
-                <div id="criteria_container" style="display: inline; padding: 0px 0px 0px 0px;">
-                    <label for="criteria_filter">Filter:</label>
-                    <select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 200px; margin: 0px 0px 0px 26px;">
-                        <option value="deviceName">Device Name</option>
-                        <option value="oemSku">OEM SKU</option>
-                        <option value="dealerSku"><?php echo My_Brand::$dealerSku; ?></option>
-                    </select>
-                    <label for="txtCriteria" style="padding: 0px 0px 0px 10px;">For</label>
-                    <input type="text" name="txtCriteria" style="width: 200px;" id="txtCriteria" value="<?php echo $this->pf_model_id; ?>" />
-                    <input type="button" name="btnSearch" class='btn btn-info' id="btnSearch" value="Search" onclick="javascript: updateGrid('search');" />
-                    <input type="button" name="btnClearSearch" id="btnClearSearch" class='btn' value="Clear" onclick="javascript: updateGrid('clear');" />
-                    </br>
-                    <span>Show only:</span>
-                    <label for="chkCanSell" style="padding: 5px 0px 0px 10px;">Can Sell</label>
-                    <input type="checkbox" name="chkCanSell" id="chkCanSell" style="margin-bottom:5px" />
-                    <label for="chkUnapproved" style="padding: 5px 0px 0px 10px;">Unapproved</label>
-                    <input type="checkbox" name="chkUnapproved" id="chkUnapproved" style="margin-bottom:5px" />
+        <form id="editMasterDeviceForm" class="form-inline" onsubmit="return false">
+            <div class="form-group">
+                <label class="control-label" for="filter-index">Filter:</label>
+                <select class="form-control" name="filter-index" id="filter-index">
+                    <option value="deviceName">Device Name</option>
+                    <option value="oemSku">OEM SKU</option>
+                    <option value="dealerSku"><?= My_Brand::$dealerSku; ?></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="filter-value">for</label>
+                <input class="form-control" type="text" name="filter-value" id="filter-value" />
+                <button class='btn btn-info form-control js-perform-search'>Search</button>
+                <button class='btn btn-default form-control js-clear-search' type="button">Clear</button>
+            </div>
+
+            <div class="pull-right">
+                <button class="btn btn-xs btn-success js-create-master-device" type="button">
+                    <i class="glyphicon glyphicon-plus-sign"></i> Create new
+                </button>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input id="can-sell" type="checkbox"> Show only quotable SKUs
+                </label>
+            </div>
+
+            <?php if ($this->isAdmin) : ?>
+                <div class="checkbox">
+                    <label>
+                        <input id="unapproved" type="checkbox"> Show only unapproved devices
+                    </label>
                 </div>
-                <a class="btn btn-success btn-small pull-right" onclick="javascript: showMasterDeviceManagementModal(0,0,true);">
-                    <i class="icon-white icon-plus-sign"></i> Create new
-                </a>
-            </div>
-            <input type="hidden" name="deviceInstanceIds" id="unknownDeviceDeviceInstanceIds" />
+            <?php endif; ?>
+
         </form>
-        <form>
-            <table id="devicesGrid"></table>
-        </form>
-        <div id="devicesGridPager"></div>
     </div>
-</div>
-<?php
-/**
- * This is the modal that is created when you want to create or edit a master device
- */
 
-?>
-<div class="modal hide masterDeviceModal" data-backdrop="static" id="manageMasterDeviceModal">
-    <div class="modal-body" style="max-height:700px">
-        <div id="masterDeviceManagement">
-        </div>
-    </div>
+    <table id="devicesGrid"></table>
+    <div id="devicesGridPager"></div>
 </div>
-
-<div class="modal hide" id="alertDeleteModal">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">x</a>
-        <h4 style="text-align: center">Are you sure you want to delete</h4>
-    </div>
-    <div class="modal-body">
-        <div class="form-horizontal">
-            <div style="text-align:center">
-                <input type="button" class="btn btn-danger" value="Delete" id="deleteMasterDevice" data-dismiss="modal" style="margin-bottom: 4px" onclick="javascript: deleteMasterDevice()" />
-                <input type="button" class="btn btn-inverse" value="Cancel" data-dismiss="modal" style="margin-bottom: 4px" />
-            </div>
-        </div>
-    </div>
-    <input type="hidden" id="deleteMasterDeviceId">
-</div>
-
-<input type="hidden" id="isAdmin" value="<?php echo $this->isAdmin; ?>" />

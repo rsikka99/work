@@ -1,42 +1,48 @@
-<div class="page-header">
-    <h1>Device Management</h1>
-</div>
-<div class="clearfix">
-    <a class="btn btn-success pull-right btn-small create-button" href="<?php echo $this->url(array('action' => 'create')) ?>">
-        <i class="icon-white icon-plus-sign"></i> Create new</a>
-</div>
-<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
-    <table class="table table-striped table-condensed table-bordered">
-        <thead>
-        <tr>
-            <th style="width: 30px;">ID</th>
-            <th>Full Device Name</th>
-            <th>SKU</th>
-            <th style="width: 120px;">Action</th>
-        </tr>
-        </thead>
-        <tbody>
+<?php
 
-        <?php foreach ($this->paginator->getCurrentItems() as $device) : /* @var $device Quotegen_Model_Device */ ?>
-            <tr>
-                <td><?php echo $device->masterDeviceId; ?></td>
-                <td><?php echo $device->getMasterDevice()->getFullDeviceName(); ?></td>
-                <td><?php echo $device->oemSku; ?></td>
-                <td>
-                    <div class="btn-group">
-                        <a class="btn btn-info" title="View Device" href="<?php echo $this->url(array('action' => 'view', 'id' => $device->masterDeviceId)); ?>"><i class="icon-eye-open"></i></a>
-                        <a class="btn btn-warning" title="Edit Device" href="<?php echo $this->url(array('action' => 'edit', 'id' => $device->masterDeviceId)); ?>"><i class="icon-pencil"></i></a>
-                        <a class="btn btn-danger" title="Delete Device" href="<?php echo $this->url(array('action' => 'delete', 'id' => $device->masterDeviceId)); ?>"><i class="icon-trash"></i></a>
-                    </div>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-    <?php echo $this->paginationControl($this->paginator); ?>
-<?php else : ?>
-    <div class='well'>
-        <h1>There are no devices</h1>
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceModel;
+
+?>
+<div class="container">
+    <div class="clearfix">
+        <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url(array(), 'quotes.devices.create') ?>">
+            <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
     </div>
-<?php endif; ?>
-
+    <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
+        <table class="table table-striped table-condensed table-bordered">
+            <thead>
+            <tr>
+                <th style="width: 30px;">ID</th>
+                <th>Full Device Name</th>
+                <th>SKU</th>
+                <th style="width: 120px;">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php /* @var $device DeviceModel */ ?>
+            <?php foreach ($this->paginator->getCurrentItems() as $device) : ?>
+                <tr>
+                    <td><?= $device->masterDeviceId; ?></td>
+                    <td><?= $device->getMasterDevice()->getFullDeviceName(); ?></td>
+                    <td><?= $device->oemSku; ?></td>
+                    <td>
+                        <div class="btn-group btn-group-justified btn-group-xs">
+                            <a class="btn btn-info" title="View Device" href="<?= $this->url(array('id' => $device->masterDeviceId), 'quotes.devices.view'); ?>">
+                                <i class="glyphicon glyphicon-eye-open"></i></a>
+                            <a class="btn btn-warning" title="Edit Device" href="<?= $this->url(array('id' => $device->masterDeviceId), 'quotes.devices.edit'); ?>">
+                                <i class="glyphicon glyphicon-pencil"></i></a>
+                            <a class="btn btn-danger" title="Delete Device" href="<?= $this->url(array('id' => $device->masterDeviceId), 'quotes.devices.delete'); ?>">
+                                <i class="glyphicon glyphicon-trash"></i></a>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?= $this->paginationControl($this->paginator); ?>
+    <?php else : ?>
+        <div class='well'>
+            <h1>There are no devices</h1>
+        </div>
+    <?php endif; ?>
+</div>

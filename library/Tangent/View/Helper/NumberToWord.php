@@ -1,11 +1,17 @@
 <?php
 
+namespace Tangent\View\Helper;
+
+use Tangent\Format\NumberToWord as NumberToWordFormatter;
+
 /**
- * View Helper to Format Numbers.
+ * Class NumberToWord
  *
- * @package Tangent_View
+ * View Helper to format numbers to words
+ *
+ * @package Tangent\View\Helper
  */
-class Tangent_View_Helper_NumberToWord extends Zend_View_Helper_Abstract
+class NumberToWord extends \Zend_View_Helper_Abstract
 {
 
     /**
@@ -16,7 +22,7 @@ class Tangent_View_Helper_NumberToWord extends Zend_View_Helper_Abstract
      */
     public function numberToWord ($number, $precision = 0)
     {
-        $numberToWord = new Tangent_Format_NumberToWord();
+        $numberToWord = new NumberToWordFormatter();
         if (is_array($number))
         {
             foreach ($number as $key => $value)

@@ -1,33 +1,38 @@
-<div class="page-header">
-    <h1>All Clients</h1>
-</div>
-<a href="<?php echo $this->url(array('action' => 'index', 'controller' => 'index', 'module' => 'default')); ?>" class="btn"><i class="icon-arrow-left"></i> Go Back</a>
-<hr>
-<form method="POST" action="<?php echo $this->url(array('action' => 'index', 'controller' => 'index', 'module' => 'default')); ?>">
-    <table class="table table-bordered table-condensed table-striped table-hover">
-        <thead>
-        <tr>
-            <th style="width: 50px;"></th>
-            <th>Client Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php if ($this->clients && count($this->clients) > 0) : ?>
-            <?php foreach ($this->clients as $client) : /* @var $client Quotegen_Model_Client */ ?>
-                <tr>
-                    <td>
-                        <button class="btn btn-primary btn-mini" name="selectClient" value="<?php echo $client->id; ?>">Select</button>
-                    </td>
-                    <td><?php echo $this->escape($client->companyName); ?></td>
-                </tr>
-            <?php endforeach; ?>
-        <?php else : ?>
+<?php
+
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
+
+?>
+<div class="container">
+    <a href="<?= $this->url(array(), 'app.dashboard'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-arrow-left"></i> Go Back</a>
+    <hr>
+    <form method="POST" action="<?= $this->url(array(), 'app.dashboard.select-client'); ?>">
+        <table class="table table-bordered table-condensed table-striped table-hover">
+            <thead>
             <tr>
-                <td colspan="2">You have no clients.</td>
+                <th style="width: 50px;"></th>
+                <th>Client Name</th>
             </tr>
-        <?php endif; ?>
-        </tbody>
-    </table>
-</form>
-<hr>
-<a href="<?php echo $this->url(array('action' => 'index', 'controller' => 'index', 'module' => 'default')); ?>" class="btn"><i class="icon-arrow-left"></i> Go Back</a>
+            </thead>
+            <tbody>
+            <?php if ($this->clients && count($this->clients) > 0) : ?>
+                <?php /* @var $client ClientModel */ ?>
+                <?php foreach ($this->clients as $client) : ?>
+                    <tr>
+                        <td>
+                            <button class="btn btn-primary btn-xs" name="selectClient" value="<?= $client->id; ?>">Select</button>
+                        </td>
+                        <td><?= $this->escape($client->companyName); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <tr>
+                    <td colspan="2">You have no clients.</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </form>
+    <hr>
+    <a href="<?= $this->url(array(), 'app.dashboard'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-arrow-left"></i> Go Back</a>
+</div>

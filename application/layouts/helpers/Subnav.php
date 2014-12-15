@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Application_View_Helper_Subnav
+ * App_View_Helper_Subnav
  *
  * @author Lee Robert
  *
  */
-class Application_View_Helper_Subnav extends Zend_View_Helper_Abstract
+class App_View_Helper_Subnav extends Zend_View_Helper_Abstract
 {
     /**
      * @param string $navClass
@@ -14,9 +14,9 @@ class Application_View_Helper_Subnav extends Zend_View_Helper_Abstract
      *
      * @return string
      */
-    public function Subnav ($navClass = "nav nav-pills", $maxDepth = 2)
+    public function Subnav ($navClass = "nav navbar-nav", $maxDepth = 2)
     {
-        $html = "";
+        $html = '';
 
         /* @var $pages Zend_Navigation */
         $pages = $this->view->MyNavigation()->getContainer();
@@ -30,7 +30,14 @@ class Application_View_Helper_Subnav extends Zend_View_Helper_Abstract
         {
             if ($page->isActive(true))
             {
-                $container = $page;
+                foreach ($page as $subPage)
+                {
+                    if ($subPage->isActive(true))
+                    {
+                        $container = $subPage;
+                        break;
+                    }
+                }
                 break;
             }
         }
@@ -43,6 +50,11 @@ class Application_View_Helper_Subnav extends Zend_View_Helper_Abstract
                                ->setUlClass($navClass)
                                ->setMaxDepth($maxDepth)
                                ->render($container);
+
+            if (stripos($html, '<li') === false)
+            {
+                $html = '';
+            }
         }
 
         return $html;

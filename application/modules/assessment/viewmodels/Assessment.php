@@ -1,4 +1,15 @@
 <?php
+use MPSToolbox\Legacy\Models\UserModel;
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DealerMasterDeviceAttributeModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\PageCountsModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsExcludedRowModel;
 
 /**
  * Class Assessment_ViewModel_Assessment
@@ -156,9 +167,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     public $highCostPurchasedDevices;
 
     /**
-     * @param Assessment_Model_Assessment $report
+     * @param AssessmentModel $report
      */
-    public function __construct (Assessment_Model_Assessment $report)
+    public function __construct (AssessmentModel $report)
     {
         parent::__construct($report);
 
@@ -168,12 +179,10 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         }
 
         // Get the report settings
-        $assessmentSettings = $this->assessment->getAssessmentSettings();
-
-        Proposalgen_Model_DeviceInstance::$KWH_Cost = $assessmentSettings->kilowattsPerHour;
+        DeviceInstanceModel::$KWH_Cost = $this->assessment->getClient()->getClientSettings()->genericSettings->defaultEnergyCost;
         if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly() > 0)
         {
-            Proposalgen_Model_DeviceInstance::$ITCostPerPage = (($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly());
+            DeviceInstanceModel::$ITCostPerPage = (($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly());
         }
     }
 
@@ -299,7 +308,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_Rms_Excluded_Row[]
+     * @return RmsExcludedRowModel[]|DeviceInstanceModel[]
      */
     public function getExcludedDevices ()
     {
@@ -352,40 +361,12 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * @return float
      */
-    public function getPurchasedEstimatedBlackAndWhiteCPP ()
-    {
-        if (!isset($this->PurchasedEstimatedBlackAndWhiteCPP))
-        {
-            // FIXME: hard coding for now
-            $this->PurchasedEstimatedBlackAndWhiteCPP = 0.05;
-        }
-
-        return $this->PurchasedEstimatedBlackAndWhiteCPP;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPurchasedEstimatedColorCPP ()
-    {
-        if (!isset($this->PurchasedEstimatedColorCPP))
-        {
-            // FIXME: hard coding for now
-            $this->PurchasedEstimatedColorCPP = 0.08;
-        }
-
-        return $this->PurchasedEstimatedColorCPP;
-    }
-
-    /**
-     * @return float
-     */
     public function getCombinedAnnualLeasePayments ()
     {
         if (!isset($this->CombinedAnnualLeasePayments))
         {
 
-            $this->CombinedAnnualLeasePayments = $this->assessment->getAssessmentSettings()->monthlyLeasePayment * $this->getDevices()->leasedDeviceInstances->getCount() * 12;
+            $this->CombinedAnnualLeasePayments = $this->assessment->getClient()->getClientSettings()->genericSettings->defaultMonthlyLeasePayment * $this->getDevices()->leasedDeviceInstances->getCount() * 12;
         }
 
         return $this->CombinedAnnualLeasePayments;
@@ -408,7 +389,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return Application_Model_User|null
+     * @return UserModel|null
      */
     public function getUser ()
     {
@@ -422,7 +403,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @param Application_Model_User $User
+     * @param UserModel $User
      *
      * @return Assessment_ViewModel_Assessment
      */
@@ -441,7 +422,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->ReportMargin))
         {
-            $this->ReportMargin = $this->assessment->getAssessmentSettings()->assessmentReportMargin;
+            $this->ReportMargin = $this->assessment->getClient()->getClientSettings()->genericSettings->tonerPricingMargin;
         }
 
         return $this->ReportMargin;
@@ -454,7 +435,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->LeasedBlackAndWhiteCharge))
         {
-            $this->LeasedBlackAndWhiteCharge = $this->assessment->getAssessmentSettings()->leasedBwCostPerPage;
+            $this->LeasedBlackAndWhiteCharge = $this->assessment->getClient()->getClientSettings()->genericSettings->leasedMonochromeCostPerPage;
         }
 
         return $this->LeasedBlackAndWhiteCharge;
@@ -467,7 +448,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->LeasedColorCharge))
         {
-            $this->LeasedColorCharge = $this->assessment->getAssessmentSettings()->leasedColorCostPerPage;
+            $this->LeasedColorCharge = $this->assessment->getClient()->getClientSettings()->genericSettings->leasedColorCostPerPage;
         }
 
         return $this->LeasedColorCharge;
@@ -503,7 +484,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             if ($this->getDevices()->purchasedDeviceInstances->getCount())
             {
                 $averageAge                          = $totalAge / $this->getDevices()->purchasedDeviceInstances->getCount();
-                $this->AnnualCostOfHardwarePurchases = ($this->getDevices()->allIncludedDeviceInstances->getCount() / $averageAge) * $this->assessment->getAssessmentSettings()->defaultPrinterCost;
+                $this->AnnualCostOfHardwarePurchases = ($this->getDevices()->allIncludedDeviceInstances->getCount() / $averageAge) * $this->assessment->getClient()->getClientSettings()->genericSettings->defaultPrinterCost;
             }
             else
             {
@@ -518,7 +499,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * Calculates the cost of ink and toner per month
      *
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param CostPerPageSettingModel $costPerPageSetting
      *
      * @return float
      */
@@ -539,7 +520,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param CostPerPageSettingModel $costPerPageSetting
      *
      * @return float
      */
@@ -728,7 +709,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $numberOfDevices = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
-                if ($device->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
+                if ($device->getMasterDevice()->tonerConfigId != TonerConfigModel::BLACK_ONLY)
                 {
                     $numberOfDevices++;
                 }
@@ -749,7 +730,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $numberOfDevices = 0;
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
-                if ($device->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
+                if ($device->getMasterDevice()->tonerConfigId != TonerConfigModel::BLACK_ONLY)
                 {
                     $numberOfDevices++;
                 }
@@ -811,7 +792,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_PageCounts
+     * @return PageCountsModel
      */
     public function getPageCounts ()
     {
@@ -830,7 +811,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->AverageCostOfDevices))
         {
-            $this->AverageCostOfDevices = $this->assessment->getAssessmentSettings()->defaultPrinterCost;
+            $this->AverageCostOfDevices = $this->assessment->getClient()->getClientSettings()->genericSettings->defaultPrinterCost;
         }
 
         return $this->AverageCostOfDevices;
@@ -879,7 +860,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getUnderutilizedDevices ()
     {
@@ -900,7 +881,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return \Proposalgen_Model_DeviceInstance[]
+     * @return \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel[]
      */
     public function getLeastUsedDevices ()
     {
@@ -939,8 +920,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * Callback function for uSort when we want to sort a device based on usage
      *
-     * @param $deviceA \Proposalgen_Model_DeviceInstance
-     * @param $deviceB \Proposalgen_Model_DeviceInstance
+     * @param $deviceA \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel
+     * @param $deviceB \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel
      *
      * @return int
      */
@@ -957,8 +938,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * Callback function for uSort when we want to sort a device based on usage
      *
-     * @param \Proposalgen_Model_DeviceInstance $deviceA
-     * @param \Proposalgen_Model_DeviceInstance $deviceB
+     * @param \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel $deviceA
+     * @param \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel $deviceB
      *
      * @return int
      */
@@ -973,7 +954,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getOptimizedDevices ()
     {
@@ -1013,7 +994,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getMostUsedDevices ()
     {
@@ -1081,7 +1062,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getHighPowerConsumptionDevices ()
     {
@@ -1099,9 +1080,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param CostPerPageSettingModel $costPerPageSetting
      *
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getMonthlyHighCostColorDevices ($costPerPageSetting)
     {
@@ -1109,7 +1090,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         {
             $deviceArray = $this->getDevices()->allIncludedDeviceInstances->getDeviceInstances();
             $costArray   = array();
-            /**@var $value Proposalgen_Model_DeviceInstance */
+            /**@var $value DeviceInstanceModel */
             foreach ($deviceArray as $key => $deviceInstance)
             {
                 if ($deviceInstance->getMasterDevice()->isColor())
@@ -1135,18 +1116,18 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
 
     /**
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param CostPerPageSettingModel $costPerPageSetting
      *
-     * @return Proposalgen_Model_DeviceInstance []
+     * @return DeviceInstanceModel []
      */
-    public function getMonthlyHighCostPurchasedDevice (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    public function getMonthlyHighCostPurchasedDevice (CostPerPageSettingModel $costPerPageSetting)
     {
         if (!isset($this->highCostPurchasedDevices))
         {
             $deviceArray = $this->getDevices()->purchasedDeviceInstances->getDeviceInstances();
             $costArray   = array();
 
-            /**@var $value Proposalgen_Model_DeviceInstance */
+            /**@var $value DeviceInstanceModel */
             foreach ($deviceArray as $key => $deviceInstance)
             {
                 $costArray[] = array(
@@ -1175,17 +1156,17 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
 
     /**
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param CostPerPageSettingModel $costPerPageSetting
      *
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
-    public function getMonthlyHighCostPurchasedColorDevices (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    public function getMonthlyHighCostPurchasedColorDevices (CostPerPageSettingModel $costPerPageSetting)
     {
         if (!isset($this->HighCostDevices))
         {
             $deviceArray = $this->getDevices()->purchasedDeviceInstances->getDeviceInstances();
             $costArray   = array();
-            /**@var $value Proposalgen_Model_DeviceInstance */
+            /**@var $value DeviceInstanceModel */
             foreach ($deviceArray as $key => $deviceInstance)
             {
                 if ($deviceInstance->getMasterDevice()->isColor())
@@ -1210,17 +1191,17 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param CostPerPageSettingModel $costPerPageSetting
      *
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
-    public function getMonthlyHighCostMonochromeDevices (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    public function getMonthlyHighCostMonochromeDevices (CostPerPageSettingModel $costPerPageSetting)
     {
         if (!isset($this->HighCostMonochromeDevices))
         {
             $deviceArray = $this->getDevices()->purchasedDeviceInstances->getDeviceInstances();
             $costArray   = array();
-            /**@var $value Proposalgen_Model_DeviceInstance */
+            /**@var $value DeviceInstanceModel */
             foreach ($deviceArray as $key => $deviceInstance)
             {
                 $costArray[] = array($key, $deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage);
@@ -1245,8 +1226,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      * Callback function for uSort when we want to sort a device based on power
      * consumption
      *
-     * @param Proposalgen_Model_DeviceInstance $deviceA
-     * @param Proposalgen_Model_DeviceInstance $deviceB
+     * @param DeviceInstanceModel $deviceA
+     * @param DeviceInstanceModel $deviceB
      *
      * @return int
      */
@@ -1264,8 +1245,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      * Callback function for uSort when we want to sort a device based on power
      * consumption
      *
-     * @param Proposalgen_Model_DeviceInstance $deviceA
-     * @param Proposalgen_Model_DeviceInstance $deviceB
+     * @param DeviceInstanceModel $deviceA
+     * @param DeviceInstanceModel $deviceB
      *
      * @return int
      */
@@ -1280,7 +1261,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getMostExpensiveDevices ()
     {
@@ -1302,8 +1283,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      * Callback function for uSort when we want to sort a device based on
      * monthly cost
      *
-     * @param Proposalgen_Model_DeviceInstance $deviceA
-     * @param Proposalgen_Model_DeviceInstance $deviceB
+     * @param DeviceInstanceModel $deviceA
+     * @param DeviceInstanceModel $deviceB
      *
      * @return int
      */
@@ -1370,7 +1351,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->AveragePowerCostPerMonth))
         {
-            $this->AveragePowerCostPerMonth = $this->getAveragePowerUsagePerMonth() * Proposalgen_Model_DeviceInstance::getKWH_Cost();
+            $this->AveragePowerCostPerMonth = $this->getAveragePowerUsagePerMonth() * DeviceInstanceModel::getKWH_Cost();
 
         }
 
@@ -1479,7 +1460,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getDevicesReportingTonerLevels ()
     {
@@ -1496,7 +1477,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getDevicesNotReportingTonerLevels ()
     {
@@ -1513,7 +1494,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getNumberOfDevicesReportingTonerLevels ()
     {
@@ -1526,7 +1507,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getNumberOfDevicesNotReportingTonerLevels ()
     {
@@ -1567,7 +1548,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
 
     /**
-     * @param null|Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param null|CostPerPageSettingModel $costPerPageSetting
      *
      * @return stdClass
      */
@@ -1640,7 +1621,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->NumberOfRepairs))
         {
-            $this->NumberOfRepairs = $this->assessment->getSurvey()->averageMonthlyBreakdowns;
+            $this->NumberOfRepairs = $this->assessment->getClient()->getSurvey()->averageMonthlyBreakdowns;
             if (!$this->NumberOfRepairs)
             {
                 $this->NumberOfRepairs = $this->getDevices()->allIncludedDeviceInstances->getCount() * 0.05;
@@ -1657,7 +1638,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->AverageTimeBetweenBreakdownAndFix))
         {
-            $this->AverageTimeBetweenBreakdownAndFix = $this->assessment->getSurvey()->averageRepairTime;
+            $this->AverageTimeBetweenBreakdownAndFix = $this->assessment->getClient()->getSurvey()->averageRepairTime;
         }
 
         return $this->AverageTimeBetweenBreakdownAndFix;
@@ -1713,14 +1694,14 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->PercentPrintingDoneOnInkjet))
         {
-            $this->PercentPrintingDoneOnInkjet = $this->assessment->getSurvey()->percentageOfInkjetPrintVolume;
+            $this->PercentPrintingDoneOnInkjet = $this->assessment->getClient()->getSurvey()->percentageOfInkjetPrintVolume;
         }
 
         return $this->PercentPrintingDoneOnInkjet;
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return DeviceInstanceModel[]
      */
     public function getHighRiskDevices ()
     {
@@ -1773,8 +1754,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      * Callback function for uSort when we want to sort devices based on life
      * usage
      *
-     * @param Proposalgen_Model_DeviceInstance $deviceA
-     * @param Proposalgen_Model_DeviceInstance $deviceB
+     * @param DeviceInstanceModel $deviceA
+     * @param DeviceInstanceModel $deviceB
      *
      * @return int
      */
@@ -1791,8 +1772,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * Callback function for uSort when we want to sort devices based on age
      *
-     * @param Proposalgen_Model_DeviceInstance $deviceA
-     * @param Proposalgen_Model_DeviceInstance $deviceB
+     * @param DeviceInstanceModel $deviceA
+     * @param DeviceInstanceModel $deviceB
      *
      * @return int
      */
@@ -1810,8 +1791,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      * Callback function for uSort when we want to sort devices based their risk
      * ranking
      *
-     * @param Proposalgen_Model_DeviceInstance $deviceA
-     * @param Proposalgen_Model_DeviceInstance $deviceB
+     * @param DeviceInstanceModel $deviceA
+     * @param DeviceInstanceModel $deviceB
      *
      * @return int
      */
@@ -1852,6 +1833,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
     /**
      * Gets the devices sorted by ascending age
+     *
+     * @return DeviceInstanceModel[]
      */
     public function getIncludedDevicesSortedAscendingByAge ()
     {
@@ -1907,7 +1890,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->WeeklyITHours))
         {
-            $this->WeeklyITHours = $this->assessment->getSurvey()->hoursSpentOnIt;
+            $this->WeeklyITHours = $this->assessment->getClient()->getSurvey()->hoursSpentOnIt;
             if (!$this->WeeklyITHours)
             {
                 $this->WeeklyITHours = $this->getDevices()->allIncludedDeviceInstances->getCount() * 0.25;
@@ -1937,7 +1920,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->AverageITRate))
         {
-            $this->AverageITRate = $this->assessment->getSurvey()->averageItHourlyRate;
+            $this->AverageITRate = $this->assessment->getClient()->getSurvey()->averageItHourlyRate;
         }
 
         return $this->AverageITRate;
@@ -2157,7 +2140,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             /**
              * -- AverageMonthlyPagesPerEmployeeBarGraph
              */
-            $pagesPerEmployee = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $employeeCount);
+            $pagesPerEmployee = ($employeeCount > 0) ? round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $employeeCount) : 0;
             $highest          = (Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
             $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average Monthly Pages|per Employee");
@@ -2476,7 +2459,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->CostOfExecutingSuppliesOrders))
         {
-            $this->CostOfExecutingSuppliesOrders = $this->assessment->getSurvey()->costToExecuteSuppliesOrder * $this->assessment->getSurvey()->numberOfSupplyOrdersPerMonth * 12;
+            $this->CostOfExecutingSuppliesOrders = $this->assessment->getClient()->getSurvey()->costToExecuteSuppliesOrder * $this->assessment->getClient()->getSurvey()->numberOfSupplyOrdersPerMonth * 12;
         }
 
         return $this->CostOfExecutingSuppliesOrders;
@@ -2502,7 +2485,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->AnnualCostOfOutSourcing))
         {
-            $this->AnnualCostOfOutSourcing = $this->assessment->getSurvey()->costOfLabor;
+            $this->AnnualCostOfOutSourcing = $this->assessment->getClient()->getSurvey()->costOfLabor;
             if ($this->AnnualCostOfOutSourcing === null)
             {
                 $this->AnnualCostOfOutSourcing = $this->getDevices()->purchasedDeviceInstances->getCount() * 200;
@@ -2603,7 +2586,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->MPSBlackAndWhiteCPP))
         {
-            $this->MPSBlackAndWhiteCPP = $this->assessment->getAssessmentSettings()->mpsBwCostPerPage;
+            $this->MPSBlackAndWhiteCPP = $this->assessment->getClient()->getClientSettings()->genericSettings->mpsMonochromeCostPerPage;
         }
 
         return $this->MPSBlackAndWhiteCPP;
@@ -2616,7 +2599,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->MPSColorCPP))
         {
-            $this->MPSColorCPP = $this->assessment->getAssessmentSettings()->mpsColorCostPerPage;
+            $this->MPSColorCPP = $this->assessment->getClient()->getClientSettings()->genericSettings->mpsColorCostPerPage;
         }
 
         return $this->MPSColorCPP;
@@ -2629,7 +2612,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->InternalAdminCost))
         {
-            $this->InternalAdminCost = $this->assessment->getSurvey()->costToExecuteSuppliesOrder * 12;
+            $this->InternalAdminCost = $this->assessment->getClient()->getSurvey()->costToExecuteSuppliesOrder * 12;
         }
 
         return $this->InternalAdminCost;
@@ -2668,7 +2651,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->NumberOfOrdersPerMonth))
         {
-            $this->NumberOfOrdersPerMonth = $this->assessment->getSurvey()->numberOfSupplyOrdersPerMonth;
+            $this->NumberOfOrdersPerMonth = $this->assessment->getClient()->getSurvey()->numberOfSupplyOrdersPerMonth;
         }
 
         return $this->NumberOfOrdersPerMonth;
@@ -2712,7 +2695,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->CostOfExecutingSuppliesOrder))
         {
-            $this->CostOfExecutingSuppliesOrder = $this->assessment->getSurvey()->costToExecuteSuppliesOrder * $this->getNumberOfAnnualInkTonerOrders();
+            $this->CostOfExecutingSuppliesOrder = $this->assessment->getClient()->getSurvey()->costToExecuteSuppliesOrder * $this->getNumberOfAnnualInkTonerOrders();
         }
 
         return $this->CostOfExecutingSuppliesOrder;
@@ -2732,7 +2715,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @param null|Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param null|CostPerPageSettingModel $costPerPageSetting
      *
      * @return float
      */
@@ -2747,7 +2730,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @param null|Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param null|CostPerPageSettingModel $costPerPageSetting
      *
      * @return float
      */
@@ -2769,7 +2752,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @param null|Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param null|CostPerPageSettingModel $costPerPageSetting
      *
      * @return stdClass
      */
@@ -2794,7 +2777,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @param null|Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param null|CostPerPageSettingModel $costPerPageSetting
      *
      * @return float
      */
@@ -2802,14 +2785,19 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->GrossMarginBlackAndWhiteMargin))
         {
-            $this->GrossMarginBlackAndWhiteMargin = ($this->getMPSBlackAndWhiteCPP() - $this->getGrossMarginWeightedCPP($costPerPageSetting)->BlackAndWhite) / $this->getMPSBlackAndWhiteCPP() * 100;
+            $this->GrossMarginBlackAndWhiteMargin = 0;
+
+            if ($this->getMPSBlackAndWhiteCPP() > 0)
+            {
+                $this->GrossMarginBlackAndWhiteMargin = ($this->getMPSBlackAndWhiteCPP() - $this->getGrossMarginWeightedCPP($costPerPageSetting)->BlackAndWhite) / $this->getMPSBlackAndWhiteCPP() * 100;
+            }
         }
 
         return $this->GrossMarginBlackAndWhiteMargin;
     }
 
     /**
-     * @param null|Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param null|CostPerPageSettingModel $costPerPageSetting
      *
      * @return float
      */
@@ -2817,14 +2805,19 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->GrossMarginColorMargin))
         {
-            $this->GrossMarginColorMargin = ($this->getMPSColorCPP() - $this->getGrossMarginWeightedCPP($costPerPageSetting)->Color) / $this->getMPSColorCPP() * 100;;
+            $this->GrossMarginColorMargin = 0;
+
+            if ($this->getMPSColorCPP() > 0)
+            {
+                $this->GrossMarginColorMargin = ($this->getMPSColorCPP() - $this->getGrossMarginWeightedCPP($costPerPageSetting)->Color) / $this->getMPSColorCPP() * 100;
+            }
         }
 
         return $this->GrossMarginColorMargin;
     }
 
     /**
-     * @return Proposalgen_Model_Toner[]
+     * @return TonerModel[]
      */
     public function getUniqueTonerList ()
     {
@@ -2849,7 +2842,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_MasterDevice[]
+     * @return MasterDeviceModel[]
      */
     public function getUniquePurchasedDeviceList ()
     {
@@ -2870,7 +2863,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_Toner[]
+     * @return TonerModel[]
      */
     public function getUniquePurchasedTonerList ()
     {
@@ -2895,7 +2888,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_MasterDevice[]
+     * @return MasterDeviceModel[]
      */
     public function getUniqueDeviceList ()
     {
@@ -2971,19 +2964,19 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         {
             switch ($deviceInstance->getMasterDevice()->tonerConfigId)
             {
-                case Proposalgen_Model_TonerConfig::BLACK_ONLY:
+                case TonerConfigModel::BLACK_ONLY:
                     $maximumNumberOfSupplyTypes += 1;
                     $hasMonoDevices = true;
                     break;
-                case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED:
+                case TonerConfigModel::THREE_COLOR_SEPARATED:
                     $maximumNumberOfSupplyTypes += 4;
                     $hasColorDevices = true;
                     break;
-                case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED:
+                case TonerConfigModel::THREE_COLOR_COMBINED:
                     $maximumNumberOfSupplyTypes += 2;
                     $hasThreeColorCombinedDevices = true;
                     break;
-                case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED:
+                case TonerConfigModel::FOUR_COLOR_COMBINED:
                     $maximumNumberOfSupplyTypes += 1;
                     $hasFourColorCombinedDevices = true;
                     break;
@@ -3040,13 +3033,13 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * Calculates the weighted average monthly cost per page of the current fleet
      *
-     * @return Proposalgen_Model_CostPerPage
+     * @return CostPerPageModel
      */
     public function calculateDealerWeightedAverageMonthlyCostPerPage ()
     {
         if (!isset($this->_dealerWeightedAverageMonthlyCostPerPage))
         {
-            $this->_dealerWeightedAverageMonthlyCostPerPage = new Proposalgen_Model_CostPerPage();
+            $this->_dealerWeightedAverageMonthlyCostPerPage = new CostPerPageModel();
 
             $costPerPageSetting            = $this->getCostPerPageSettingForDealer();
             $totalMonthlyMonoPagesPrinted  = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly();
@@ -3075,20 +3068,20 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * The weighted average monthly cost per page for customers
      *
-     * @var Proposalgen_Model_CostPerPage
+     * @var CostPerPageModel
      */
     protected $_customerWeightedAverageMonthlyCostPerPage;
 
     /**
      * Calculates the weighted average monthly cost per page of the current fleet
      *
-     * @return Proposalgen_Model_CostPerPage
+     * @return CostPerPageModel
      */
     public function calculateCustomerWeightedAverageMonthlyCostPerPage ()
     {
         if (!isset($this->_customerWeightedAverageMonthlyCostPerPage))
         {
-            $this->_customerWeightedAverageMonthlyCostPerPage = new Proposalgen_Model_CostPerPage();
+            $this->_customerWeightedAverageMonthlyCostPerPage = new CostPerPageModel();
 
             $costPerPageSetting            = $this->getCostPerPageSettingForCustomer();
             $totalMonthlyMonoPagesPrinted  = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly();
@@ -3140,38 +3133,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * Calculates the dealers monthly revenue when using a target cost per page schema
-     *
-     * @return number
-     */
-    public function calculateDealerMonthlyRevenueUsingTargetCostPerPage ()
-    {
-        if (!isset($this->_dealerMonthlyRevenueUsingTargetCostPerPage))
-        {
-            $this->_dealerMonthlyRevenueUsingTargetCostPerPage = 0;
-
-            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
-            {
-                $this->_dealerMonthlyRevenueUsingTargetCostPerPage += $deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() * $this->assessment->getAssessmentSettings()->targetMonochromeCostPerPage;
-                $this->_dealerMonthlyRevenueUsingTargetCostPerPage += $deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() * $this->assessment->getAssessmentSettings()->targetColorCostPerPage;
-            }
-        }
-
-        return $this->_dealerMonthlyRevenueUsingTargetCostPerPage;
-    }
-
-    /**
-     * Calculates the dealers monthly profit when using a target cost per page schema
-     *
-     * @return number
-     */
-    public function calculateDealerMonthlyProfitUsingTargetCostPerPage ()
-    {
-        return $this->calculateDealerMonthlyRevenueUsingTargetCostPerPage() - $this->calculateDealerMonthlyCost();
-    }
-
-
-    /**
      * The dealers monthly cost with replacements
      *
      * @var number
@@ -3181,7 +3142,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * The weighted average monthly cost per page when using replacements
      *
-     * @var Proposalgen_Model_CostPerPage
+     * @var CostPerPageModel
      */
     protected $_dealerWeightedAverageMonthlyCostPerPageWithReplacements;
 
@@ -3248,12 +3209,12 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $totalBuybackPrice = 0;
 
             /**
-             * @var $deviceInstance Proposalgen_Model_DeviceInstance
+             * @var $deviceInstance DeviceInstanceModel
              */
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $dealerMasterDeviceAttributes = $deviceInstance->getMasterDevice()->getDealerAttributes();
-                if ($dealerMasterDeviceAttributes instanceof Proposalgen_Model_Dealer_Master_Device_Attribute && $dealerMasterDeviceAttributes->leaseBuybackPrice != null && $dealerMasterDeviceAttributes->leaseBuybackPrice >= 0)
+                if ($dealerMasterDeviceAttributes instanceof DealerMasterDeviceAttributeModel && $dealerMasterDeviceAttributes->leaseBuybackPrice != null && $dealerMasterDeviceAttributes->leaseBuybackPrice >= 0)
                 {
                     $totalBuybackPrice += $dealerMasterDeviceAttributes->leaseBuybackPrice;
                 }

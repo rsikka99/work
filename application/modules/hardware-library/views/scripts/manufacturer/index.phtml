@@ -1,0 +1,60 @@
+<?php
+
+use MPSToolbox\Legacy\Models\Acl\ProposalgenAclModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\ManufacturerModel;
+
+?>
+<div class="container">
+    <?php if ($this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_MANUFACTURER_CREATE)) : ?>
+        <div class="clearfix">
+            <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url(array(), 'hardware-library.manufacturers.create') ?>">
+                <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
+        </div>
+    <?php endif ?>
+
+    <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
+        <table class="table table-striped table-condensed table-bordered">
+            <thead>
+            <tr>
+                <th style="width: 30px;">ID</th>
+                <th>Full Name</th>
+                <th>Display Name</th>
+                <th style="width: 80px;">Is Toner Vendor</th>
+                <th style="width: 80px;">Is Deleted</th>
+                <?php if ($this->canEdit) : ?>
+                    <th style="width: 85px;">Action</th>
+                <?php endif; ?>
+            </tr>
+            </thead>
+            <tbody>
+            <?php /* @var $manufacturer ManufacturerModel */ ?>
+            <?php foreach ($this->paginator->getCurrentItems() as $manufacturer) : ?>
+                <tr>
+                    <td><?= $manufacturer->id; ?></td>
+                    <td><?= $manufacturer->fullname; ?></td>
+                    <td><?= $manufacturer->displayname; ?></td>
+                    <td><?= ($manufacturer->isTonerVendor()) ? "Yes" : ""; ?></td>
+                    <td><?= ($manufacturer->isDeleted) ? "Deleted" : ""; ?></td>
+                    <?php if ($this->canEdit) : ?>
+                        <td>
+                            <div class="btn-group btn-group-justified btn-group-xs">
+                                <?php if ($this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_MANUFACTURER_EDIT)) : ?>
+                                    <a class="btn btn-warning" title="Edit Manufacturer" href="<?= $this->url(array('id' => $manufacturer->id), 'hardware-library.manufacturers.edit'); ?>">
+                                        <i class="glyphicon glyphicon-pencil"></i></a>
+                                <?php endif; ?>
+                                <?php if ($this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_MANUFACTURER_DELETE)) : ?>
+                                    <a class="btn btn-danger" title="Delete Manufacturer" href="<?= $this->url(array('id' => $manufacturer->id), 'hardware-library.manufacturers.delete'); ?>">
+                                        <i class="glyphicon glyphicon-trash"></i></a>
+                                <?php endif; ?>
+                            </div>
+                        </td>
+                    <?php endif; ?>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?= $this->paginationControl($this->paginator); ?>
+    <?php else : ?>
+        <h1>There are no manufacturers</h1>
+    <?php endif ?>
+</div>

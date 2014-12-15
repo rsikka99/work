@@ -1,4 +1,7 @@
 <?php
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentStepsModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DealerMasterDeviceAttributeModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
 
 /**
  * Class Assessment_Report_LeasebuybackController
@@ -16,7 +19,7 @@ class Assessment_Report_LeasebuybackController extends Assessment_Library_Contro
                 "error" => "You do not have permission to access this."
             ));
 
-            $this->redirector('index', 'index', 'index');
+            $this->redirectToRoute('assessment');
         }
 
         parent::init();
@@ -24,9 +27,8 @@ class Assessment_Report_LeasebuybackController extends Assessment_Library_Contro
 
     public function indexAction ()
     {
-        $this->view->headTitle('Assessment');
-        $this->view->headTitle('Lease Buyback');
-        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
+        $this->_pageTitle = array('Assessment', 'Lease Buyback');
+        $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
@@ -54,8 +56,8 @@ class Assessment_Report_LeasebuybackController extends Assessment_Library_Contro
      */
     public function generateAction ()
     {
-        $this->view->headTitle('Generate Lease Buyback');
-        $format = $this->_getParam("format", "excel");
+        $this->_pageTitle = array('Generate Lease Buyback');
+        $format           = $this->_getParam("format", "excel");
 
         switch ($format)
         {
@@ -104,13 +106,13 @@ class Assessment_Report_LeasebuybackController extends Assessment_Library_Contro
         $deviceCounter   = 0;
 
         /**
-         * @var $deviceInstance Proposalgen_Model_DeviceInstance
+         * @var $deviceInstance DeviceInstanceModel
          */
         foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
         {
             $leaseBuybackPrice            = "-";
             $dealerMasterDeviceAttributes = $deviceInstance->getMasterDevice()->getDealerAttributes();
-            if ($dealerMasterDeviceAttributes instanceof Proposalgen_Model_Dealer_Master_Device_Attribute && $dealerMasterDeviceAttributes->leaseBuybackPrice != null && $dealerMasterDeviceAttributes->leaseBuybackPrice >= 0)
+            if ($dealerMasterDeviceAttributes instanceof DealerMasterDeviceAttributeModel && $dealerMasterDeviceAttributes->leaseBuybackPrice != null && $dealerMasterDeviceAttributes->leaseBuybackPrice >= 0)
             {
                 $leaseBuybackPrice = $this->view->currency($dealerMasterDeviceAttributes->leaseBuybackPrice);
             }

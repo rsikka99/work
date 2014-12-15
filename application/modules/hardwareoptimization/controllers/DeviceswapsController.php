@@ -1,9 +1,23 @@
 <?php
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Forms\DeviceSwapReasonsForm;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Forms\DeviceSwapsForm;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Forms\HardwareOptimizationNavigationForm;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Mappers\DeviceSwapMapper;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Mappers\DeviceSwapReasonMapper;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Mappers\DeviceSwapReasonCategoryMapper;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Mappers\DeviceSwapReasonDefaultMapper;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\DeviceSwapReasonCategoryModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\DeviceSwapReasonDefaultModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\DeviceSwapReasonModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\DeviceSwapModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\DeviceSwapViewModel;
+use Tangent\Controller\Action;
+use Tangent\Service\JQGrid;
 
 /**
  * Class Hardwareoptimization_DeviceswapsController
  */
-class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Action
+class Hardwareoptimization_DeviceswapsController extends Action
 {
     /**
      * The Zend_Auth identity
@@ -19,13 +33,13 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
 
     public function indexAction ()
     {
-        $this->view->headTitle('Device Swaps');
-        $form           = new Hardwareoptimization_Form_DeviceSwaps();
-        $deviceSwapForm = new Hardwareoptimization_Form_DeviceSwapReasons();
+        $this->_pageTitle = array('Device Swaps');
+        $form             = new DeviceSwapsForm();
+        $deviceSwapForm   = new DeviceSwapReasonsForm();
 
-        $this->view->deviceSwap     = new Hardwareoptimization_ViewModel_DeviceSwap();
-        $this->view->reasons        = Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->fetchAllReasonByDealerId($this->_identity->dealerId);
-        $this->view->navigationForm = new Hardwareoptimization_Form_Hardware_Optimization_Navigation();
+        $this->view->deviceSwap     = new DeviceSwapViewModel();
+        $this->view->reasons        = DeviceSwapReasonMapper::getInstance()->fetchAllReasonByDealerId($this->_identity->dealerId);
+        $this->view->navigationForm = new HardwareOptimizationNavigationForm();
         $this->view->form           = $form;
         $this->view->deviceSwapForm = $deviceSwapForm;
     }
@@ -33,33 +47,38 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
     public function deviceSwapListAction ()
     {
         $jsonArray        = array();
-        $jqGridService    = new Tangent_Service_JQGrid();
-        $deviceSwapMapper = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance();
+        $jqGridService    = new JQGrid();
+        $deviceSwapMapper = DeviceSwapMapper::getInstance();
 
         /*
          * Grab the incoming parameters
          */
         $jqGridServiceParameters = array(
-            'sidx' => $this->_getParam('sidx', 'deviceType'),
-            'sord' => $this->_getParam('sord', 'desc'),
+            'sidx' => $this->_getParam('sidx', 'minimumPageCount'),
+            'sord' => $this->_getParam('sord', 'asc'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10)
         );
 
+        $jqGridService->setSortColumn('minimumPageCount');
+        $jqGridService->setSortDirection('asc');
+
         // Set up validation arrays
-        $blankModel    = new Hardwareoptimization_Model_Device_Swap();
+        $blankModel    = new DeviceSwapModel();
         $sortColumns   = array_keys($blankModel->toArray());
         $sortColumns[] = "device_name";
+        $sortColumns[] = "deviceType";
 
-        $jqGridService->parseJQGridPagingRequest($jqGridServiceParameters);
         $jqGridService->setValidSortColumns($sortColumns);
 
         $groupColumns   = array();
         $groupColumns[] = "deviceType";
         $jqGridService->setValidGroupByColumns($groupColumns);
 
-        $deviceSwapViewModel = new Hardwareoptimization_ViewModel_DeviceSwap();
+        $deviceSwapViewModel = new DeviceSwapViewModel();
         $costPerPageSetting  = $deviceSwapViewModel->getCostPerPageSetting();
+
+        $jqGridService->parseJQGridPagingRequest($jqGridServiceParameters);
 
         if ($jqGridService->sortingIsValid())
         {
@@ -105,7 +124,7 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                'error' => 'Sorting parameters are invalid'
+                'error' => sprintf('Sort index "%s" or Group index "%s" is not a valid.', $jqGridService->getSortColumn(), $jqGridService->getGroupByColumn())
             ));
         }
 
@@ -116,8 +135,8 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
     public function deviceReasonListAction ()
     {
         $jsonArray              = array();
-        $jqGridService          = new Tangent_Service_JQGrid();
-        $deviceSwapReasonMapper = Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance();
+        $jqGridService          = new JQGrid();
+        $deviceSwapReasonMapper = DeviceSwapReasonMapper::getInstance();
 
         /*
          * Grab the incoming parameters
@@ -130,7 +149,7 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
         );
 
         // Set up validation arrays
-        $blankModel  = new Hardwareoptimization_Model_Device_Swap_Reason();
+        $blankModel  = new DeviceSwapReasonModel();
         $sortColumns = array_keys($blankModel->toArray());
 
         $jqGridService->parseJQGridPagingRequest($jqGridServiceParameters);
@@ -197,10 +216,10 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
             "masterDeviceId"   => $this->getParam("masterDeviceId"),
         );
 
-        $form = new Hardwareoptimization_Form_DeviceSwaps();
+        $form = new DeviceSwapsForm();
         if ($form->isValid($postData))
         {
-            $deviceSwap = new Hardwareoptimization_Model_Device_Swap();
+            $deviceSwap = new DeviceSwapModel();
             $deviceSwap->populate($postData);
             $deviceSwap->dealerId = $this->_identity->dealerId;
             $deviceSwap->saveObject();
@@ -225,7 +244,7 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
 
     public function updateDeviceReasonAction ()
     {
-        $form     = new Hardwareoptimization_Form_DeviceSwapReasons();
+        $form     = new DeviceSwapReasonsForm();
         $postData = array(
             "id"             => $this->getParam('deviceSwapReasonId'),
             "isDefault"      => $this->getParam('isDefault'),
@@ -241,28 +260,28 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
             {
                 $db->beginTransaction();
 
-                $reasonCategory = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Category::getInstance()->find($postData['reasonCategory']);
-                if ($reasonCategory instanceof Hardwareoptimization_Model_Device_Swap_Reason_Category)
+                $reasonCategory = DeviceSwapReasonCategoryMapper::getInstance()->find($postData['reasonCategory']);
+                if ($reasonCategory instanceof DeviceSwapReasonCategoryModel)
                 {
                     // Is this an edit reason ?
-                    $reason = Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->find($postData['id']);
+                    $reason = DeviceSwapReasonMapper::getInstance()->find($postData['id']);
 
-                    if ($reason instanceof Hardwareoptimization_Model_Device_Swap_Reason)
+                    if ($reason instanceof DeviceSwapReasonModel)
                     {
                         $reason->deviceSwapReasonCategoryId = $reasonCategory->id;
                         $reason->reason                     = $postData['reason'];
-                        Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->save($reason);
+                        DeviceSwapReasonMapper::getInstance()->save($reason);
                     }
                     else
                     {
-                        $reason                             = new Hardwareoptimization_Model_Device_Swap_Reason();
+                        $reason                             = new DeviceSwapReasonModel();
                         $reason->dealerId                   = $this->_identity->dealerId;
                         $reason->deviceSwapReasonCategoryId = $reasonCategory->id;
                         $reason->reason                     = $postData['reason'];
-                        Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->insert($reason);
+                        DeviceSwapReasonMapper::getInstance()->insert($reason);
                     }
 
-                    $reasonDefault = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->find(array($reasonCategory->id, $this->_identity->dealerId));
+                    $reasonDefault = DeviceSwapReasonDefaultMapper::getInstance()->find(array($reasonCategory->id, $this->_identity->dealerId));
 
                     if ($reasonDefault->deviceSwapReasonId === $reason->id)
                     {
@@ -277,18 +296,18 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
                         // Do we want to set this reason as default?
                         if ($postData['isDefault'])
                         {
-                            if ($reasonDefault instanceof Hardwareoptimization_Model_Device_Swap_Reason_Default)
+                            if ($reasonDefault instanceof DeviceSwapReasonDefaultModel)
                             {
                                 $reasonDefault->deviceSwapReasonId = $reason->id;
-                                Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->save($reasonDefault);
+                                DeviceSwapReasonDefaultMapper::getInstance()->save($reasonDefault);
                             }
                             else
                             {
-                                $reasonDefault                             = new Hardwareoptimization_Model_Device_Swap_Reason_Default();
+                                $reasonDefault                             = new DeviceSwapReasonDefaultModel();
                                 $reasonDefault->deviceSwapReasonCategoryId = $reasonCategory->id;
                                 $reasonDefault->dealerId                   = $this->_identity->dealerId;
                                 $reasonDefault->deviceSwapReasonId         = $reason->id;
-                                Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->insert($reasonDefault);
+                                DeviceSwapReasonDefaultMapper::getInstance()->insert($reasonDefault);
                             }
                         }
                     }
@@ -321,7 +340,7 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
     public function deleteDeviceAction ()
     {
         $masterDeviceId = $this->_getParam("deviceInstanceId");
-        $rowsDeleted    = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->delete(array($masterDeviceId, $this->_identity->dealerId));
+        $rowsDeleted    = DeviceSwapMapper::getInstance()->delete(array($masterDeviceId, $this->_identity->dealerId));
 
         if ($rowsDeleted > 0)
         {
@@ -344,12 +363,12 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
     {
         $reasonId = $this->_getParam('reasonId');
 
-        $swapMapper        = Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance();
-        $swapDefaultMapper = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance();
+        $swapMapper        = DeviceSwapReasonMapper::getInstance();
+        $swapDefaultMapper = DeviceSwapReasonDefaultMapper::getInstance();
         $reason            = $swapMapper->find($reasonId);
 
         // Delete defaults if they exist
-        if ($swapDefaultMapper->findDefaultByReasonId($reasonId) instanceof Hardwareoptimization_Model_Device_Swap_Reason_Default)
+        if ($swapDefaultMapper->findDefaultByReasonId($reasonId) instanceof DeviceSwapReasonDefaultModel)
         {
             $reasonsByCategory = $swapMapper->fetchAllByCategoryId($reason->deviceSwapReasonCategoryId, $reason->dealerId);
             // is this the last device in this category?
@@ -363,7 +382,7 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
                     // Re query the database for left over reasons after we deleted and select the first item in the array
                     $newReason = $swapMapper->fetchAllByCategoryId($reason->deviceSwapReasonCategoryId, $reason->dealerId)[0];
                     // Create a new default reason for the reason we just found
-                    $newDefaultReason                             = new Hardwareoptimization_Model_Device_Swap_Reason_Default();
+                    $newDefaultReason                             = new DeviceSwapReasonDefaultModel();
                     $newDefaultReason->dealerId                   = $newReason->dealerId;
                     $newDefaultReason->deviceSwapReasonCategoryId = $newReason->deviceSwapReasonCategoryId;
                     $newDefaultReason->deviceSwapReasonId         = $newReason->id;
@@ -383,7 +402,7 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
         }
         else
         {
-            Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->delete($reasonId);
+            DeviceSwapReasonMapper::getInstance()->delete($reasonId);
         }
 
         $this->sendJson(array("Successfully delete device swap reason."));

@@ -1,37 +1,40 @@
-<?php $this->headScript()->appendFile($this->baseUrl('js/proposalgen/fleet/selectRmsUpload.js'));
-/* @var $rmsUpload Proposalgen_Model_Rms_Upload */
+<?php
+
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsUploadModel;
+
+$this->headScript()->appendFile($this->baseUrl('js/app/legacy/proposalgen/fleet/FleetSelectRmsUpload.js'));
+
+/* @var $rmsUpload RmsUploadModel */
 $rmsUpload = $this->rmsUpload;
 ?>
-<div class="well">
+<div class='container'>
+    <?php if ($rmsUpload instanceof RmsUploadModel) : ?>
+        <p>You currently have selected a
+            <span class="label label-info"><?= $this->escape($rmsUpload->getRmsProvider()->name) ?></span> CSV file. The name of the file is
+            "<?= $this->escape($rmsUpload->fileName) ?>".
+        <p>
+            <span class="label label-success"><?= number_format($rmsUpload->validRowCount) ?></span> valid devices imported.
+        </p>
 
-    <?php if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) : ?>
-        <p>You currently have selected a  <?php echo $this->escape($rmsUpload->getRmsProvider()->name); ?> CSV file. The name of the file is
-            "<?php echo $this->escape($rmsUpload->fileName); ?>".
-        <p>There were <strong><?php echo number_format($rmsUpload->validRowCount); ?></strong> valid devices imported.</p>
         <?php if ($rmsUpload->invalidRowCount > 0) : ?>
-            <p>There were also <strong><?php echo number_format($rmsUpload->invalidRowCount); ?></strong> invalid rows.</p>
+            <p>
+                <span class="label label-danger"><strong><?= number_format($rmsUpload->invalidRowCount) ?></strong></span> invalid rows.
+            </p>
         <?php endif; ?>
     <?php endif; ?>
-    <?php
-    if ($this->numberOfUploads > 0)
-    {
-        ?>
+
+    <?php if ($this->numberOfUploads > 0) : ?>
         <form id="selectRmsUpload" method="POST">
-            <input type="hidden" name="selectedRmsUploadId" id="selectedRmsUploadId" value="<?php echo ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? $rmsUpload->id : -1; ?>" />
+            <input type="hidden" name="selectedRmsUploadId" id="selectedRmsUploadId" value="<?= ($rmsUpload instanceof RmsUploadModel) ? $rmsUpload->id : -1 ?>" />
             <table id="selectRmsUploadGrid"></table>
             <div id="selectRmsUploadGridPager"></div>
         </form>
-        <?php
-        echo $this->navigationForm;
-    }
-    else
-    {
-        ?>
+        <?= $this->navigationForm; ?>
+    <?php else : ?>
         <p>You have do not have any RMS Uploads for this client, Click below to go to the RMS Uploads page.</p>
+
         <form method="post">
             <input name="noUploads" type="submit" class="btn btn-primary" value="RMS Uploads" />
         </form>
-    <?php
-    }
-    ?>
+    <?php endif; ?>
 </div>

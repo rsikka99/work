@@ -1,11 +1,15 @@
 <?php
 
+namespace Tangent\View\Helper;
+
 /**
- * View Helper to Format Cost Per Page.
+ * Class FormatCostPerPage
  *
- * @package Tangent_View
+ * View helper to format cost per page
+ *
+ * @package Tangent\View\Helper
  */
-class Tangent_View_Helper_FormatCostPerPage extends Zend_View_Helper_Abstract
+class FormatCostPerPage extends \Zend_View_Helper_Abstract
 {
 
     /**

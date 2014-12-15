@@ -1,4 +1,6 @@
 <?php
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentStepsModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
 
 /**
  * Class Assessment_Report_OldDeviceListController
@@ -16,7 +18,7 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
                 "error" => "You do not have permission to access this."
             ));
 
-            $this->redirector('index', 'index', 'index');
+            $this->redirectToRoute('assessment');
         }
 
         parent::init();
@@ -24,9 +26,8 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
 
     public function indexAction ()
     {
-        $this->view->headTitle('Assessment');
-        $this->view->headTitle('Old Device List');
-        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
+        $this->_pageTitle = array('Assessment', 'Old Device List');
+        $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
@@ -105,7 +106,7 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
         $appendix_values = "";
         try
         {
-            /* @var $device Proposalgen_Model_DeviceInstance */
+            /* @var $device DeviceInstanceModel */
             foreach ($assessmentViewModel->getIncludedDevicesSortedAscendingByAge() as $device)
             {
                 $row    = array();

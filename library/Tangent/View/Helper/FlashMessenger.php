@@ -1,5 +1,7 @@
 <?php
 
+namespace Tangent\View\Helper;
+
 /**
  * View Helper to Display Flash Messages.
  *
@@ -14,10 +16,10 @@
  *
  * @package Tangent_View
  */
-class Tangent_View_Helper_FlashMessenger extends Zend_View_Helper_Abstract
+class FlashMessenger extends \Zend_View_Helper_Abstract
 {
     /**
-     * @var Zend_Controller_Action_Helper_FlashMessenger
+     * @var \Zend_Controller_Action_Helper_FlashMessenger
      */
     private $_flashMessenger = null;
 
@@ -67,15 +69,13 @@ class Tangent_View_Helper_FlashMessenger extends Zend_View_Helper_Abstract
     /**
      * Lazily fetches FlashMessenger Instance.
      *
-     * @return Zend_Controller_Action_Helper_FlashMessenger
+     * @return \Zend_Controller_Action_Helper_FlashMessenger
      */
     public function _getFlashMessenger ()
     {
         if (null === $this->_flashMessenger)
         {
-            $this->_flashMessenger =
-                Zend_Controller_Action_HelperBroker::getStaticHelper(
-                                                   'FlashMessenger');
+            $this->_flashMessenger = \Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
         }
 
         return $this->_flashMessenger;

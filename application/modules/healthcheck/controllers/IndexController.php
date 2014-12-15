@@ -1,4 +1,8 @@
 <?php
+use MPSToolbox\Legacy\Modules\HealthCheck\Models\HealthCheckStepsModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\RmsUploadMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsUploadModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\SelectRmsUploadService;
 
 /**
  * Class Healthcheck_IndexController
@@ -18,10 +22,9 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
      */
     public function selectUploadAction ()
     {
-        $this->view->headTitle('Healthcheck');
-        $this->view->headTitle('Select Upload');
+        $this->_pageTitle = array('Healthcheck', 'Select Upload');
         // Mark the step we're on as active
-        $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_SELECT_UPLOAD);
+        $this->_navigation->setActiveStep(HealthCheckStepsModel::STEP_SELECT_UPLOAD);
         $healthcheck = $this->getHealthcheck();
 
 
@@ -31,9 +34,9 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
 
             if (isset($postData['selectRmsUploadId']))
             {
-                $selectRmsUploadService = new Proposalgen_Service_SelectRmsUpload($this->_mpsSession->selectedClientId);
+                $selectRmsUploadService = new SelectRmsUploadService($this->_mpsSession->selectedClientId);
                 $rmsUpload              = $selectRmsUploadService->validateRmsUploadId($postData['selectRmsUploadId']);
-                if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload)
+                if ($rmsUpload instanceof RmsUploadModel)
                 {
                     $this->getHealthcheck()->rmsUploadId = $postData["selectRmsUploadId"];
                     $this->updateHealthcheckStepName();
@@ -47,7 +50,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
             }
             else if (isset($postData['noUploads']))
             {
-                $this->redirector('index', 'fleet', 'proposalgen');
+                $this->redirectToRoute('rms-upload.upload-file');
             }
             if ($this->getHealthcheck()->rmsUploadId > 0)
             {
@@ -57,8 +60,8 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
                 }
             }
         }
-        $this->view->numberOfUploads = count(Proposalgen_Model_Mapper_Rms_Upload::getInstance()->fetchAllForClient($this->getHealthcheck()->clientId));
-        $this->view->navigationForm  = new Healthcheck_Form_Healthcheck_Navigation(Healthcheck_Form_Healthcheck_Navigation::BUTTONS_NEXT);
+        $this->view->numberOfUploads = count(RmsUploadMapper::getInstance()->fetchAllForClient($this->getHealthcheck()->clientId));
+        $this->view->navigationForm  = new \MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentNavigationForm(\MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentNavigationForm::BUTTONS_NEXT);
         $this->view->rmsUpload       = $healthcheck->getRmsUpload();
     }
 
@@ -67,44 +70,33 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
      */
     public function settingsAction ()
     {
-        $this->view->headTitle('Healthcheck');
-        $this->view->headTitle('Settings');
-//      Mark the step we're on as active
-        $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_SETTINGS);
+        $this->_pageTitle = array('Healthcheck', 'Settings');
+        $this->_navigation->setActiveStep(HealthCheckStepsModel::STEP_SETTINGS);
 
-        $healthcheckSettingsService = new Healthcheck_Service_HealthcheckSettings($this->getHealthcheck()->id, Zend_Auth::getInstance()->getIdentity()->id, Zend_Auth::getInstance()->getIdentity()->dealerId);
         if ($this->getRequest()->isPost())
         {
-            $values = $this->getRequest()->getPost();
+            $postData = $this->getRequest()->getPost();
 
-            if (isset($values ['goBack']))
+            if (!isset($postData['goBack']))
             {
-                $this->gotoPreviousNavigationStep($this->_navigation);
-            }
-            else
-            {
-                if ($healthcheckSettingsService->update($values))
+                $this->saveClientSettingsForm($postData);
+                $this->saveHealthcheck();
+
+                if (isset($postData['saveAndContinue']))
                 {
                     $this->updateHealthcheckStepName();
                     $this->saveHealthcheck();
-                    $this->_flashMessenger->addMessage(array(
-                        'success' => 'Settings saved.'
-                    ));
-
-
-                    if (isset($values ['saveAndContinue']))
-                    {
-                        $this->gotoNextNavigationStep($this->_navigation);
-                    }
-                }
-                else
-                {
-                    $this->_flashMessenger->addMessage(array(
-                        'danger' => 'Please correct the errors below.'
-                    ));
+                    $this->gotoNextNavigationStep($this->_navigation);
                 }
             }
+            else
+            {
+                $this->gotoPreviousNavigationStep($this->_navigation);
+            }
         }
-        $this->view->form = $healthcheckSettingsService->getForm();
+        else
+        {
+            $this->showClientSettingsForm();
+        }
     }
 }

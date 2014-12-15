@@ -1,5 +1,9 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceGroupDeviceModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceGroupModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+
 $filename = $this->filename;
 $savePath = PUBLIC_PATH . "/downloads/client/{$this->clientId}/orderlist/{$this->quoteId}/";
 
@@ -16,7 +20,7 @@ $linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/orderlist/{$th
 
 
 $quote = $this->Quote();
-/* @var $quote Quotegen_Model_Quote */
+/* @var $quote QuoteModel */
 $totalQuantity = 1;
 
 $titles = array(
@@ -78,10 +82,10 @@ $activeSheet->getRowDimension('1')->setRowHeight(25);
 
 // Go through each device and build and array for output
 $quoteDeviceGroups = $quote->getQuoteDeviceGroups();
-/* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+/* @var $quoteDeviceGroup QuoteDeviceGroupModel */
 foreach ($quoteDeviceGroups as $quoteDeviceGroup)
 {
-    /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+    /* @var $quoteDeviceGroupDevice QuoteDeviceGroupDeviceModel */
     foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
     {
         $quoteDevice = $quoteDeviceGroupDevice->getQuoteDevice();
@@ -94,7 +98,7 @@ foreach ($quoteDeviceGroups as $quoteDeviceGroup)
 
         // $deviceOptions builds an array of arrays representing quote device options
         $deviceOptions = array();
-        //var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
+        //var $quoteDeviceOption MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceOptionModel */
         foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption)
         {
             $deviceOptions [] = array(

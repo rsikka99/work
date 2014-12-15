@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * This modal is used for adding new options and/or editing existing ones.
+ */
+
+?>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h1 class="modal-title text-center"></h1>
+        </div>
+        <div class="modal-body">
+            <div class="messages"></div>
+            <?= $this->form; ?>
+        </div>
+        <div class="modal-footer">
+            <input class="btn btn-primary js-save" type="button" value="Save" />
+            <input class="btn btn-default js-cancel" type="button" value="Cancel" data-dismiss='modal' />
+        </div>
+    </div>
+</div>

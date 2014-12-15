@@ -1,9 +1,15 @@
 <?php
+use MPSToolbox\Legacy\Mappers\DealerBrandingMapper;
+use MPSToolbox\Legacy\Mappers\DealerMapper;
+use MPSToolbox\Legacy\Models\DealerBrandingModel;
+use MPSToolbox\Legacy\Modules\DealerManagement\Services\DealerBrandingService;
+use MPSToolbox\Legacy\Services\LessCssService;
+use Tangent\Controller\Action;
 
 /**
  * Class Dealermanagement_BrandingController
  */
-class Dealermanagement_BrandingController extends Tangent_Controller_Action
+class Dealermanagement_BrandingController extends Action
 {
     /**
      * @var stdClass
@@ -26,22 +32,21 @@ class Dealermanagement_BrandingController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
-        $this->view->headTitle('Branding');
-        $this->view->headTitle('Dealer Management');
+        $this->_pageTitle = array('Company Branding', 'Company');
 
-        $dealerBrandingService = new Dealermanagement_Service_Dealer_Branding();
+        $dealerBrandingService = new DealerBrandingService();
         $form                  = $dealerBrandingService->getDealerBrandingForm();
 
         $dealerId = $this->_identity->dealerId;
         $create   = false;
 
-        $dealer = Application_Model_Mapper_Dealer::getInstance()->find($dealerId);
+        $dealer = DealerMapper::getInstance()->find($dealerId);
 
-        $dealerBranding = Application_Model_Mapper_Dealer_Branding::getInstance()->find($dealerId);
-        if (!$dealerBranding instanceof Application_Model_Dealer_Branding)
+        $dealerBranding = DealerBrandingMapper::getInstance()->find($dealerId);
+        if (!$dealerBranding instanceof DealerBrandingModel)
         {
             $create                          = true;
-            $dealerBranding                  = new Application_Model_Dealer_Branding();
+            $dealerBranding                  = new DealerBrandingModel();
             $dealerBranding->dealerId        = $dealerId;
             $dealerBranding->dealerName      = $dealer->dealerName;
             $dealerBranding->shortDealerName = $dealer->dealerName;
@@ -54,7 +59,7 @@ class Dealermanagement_BrandingController extends Tangent_Controller_Action
             $postData = $this->getRequest()->getPost();
             if (isset($postData['cancel']))
             {
-                $this->redirector('index', 'index', 'admin');
+                $this->redirectToRoute('admin');
             }
             else
             {
@@ -77,7 +82,7 @@ class Dealermanagement_BrandingController extends Tangent_Controller_Action
                 else
                 {
                     My_Brand::resetDealerBrandingCache();
-                    Application_Service_Less::compileReportStyles(true);
+                    LessCssService::compileReportStyles(true);
                     $this->_flashMessenger->addMessage(array('success' => 'Branding Saved.'));
                 }
             }

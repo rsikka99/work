@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Forms\HardwareOptimizationNavigationForm;
 
 /**
  * Class Hardwareoptimization_Form_Hardware_Optimization_NavigationTest
@@ -6,13 +7,13 @@
 class Hardwareoptimization_Form_Hardware_Optimization_NavigationTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Hardwareoptimization_Form_Hardware_Optimization_Navigation
+     * @var HardwareOptimizationNavigationForm
      */
     protected $_form;
 
     public function setUp ()
     {
-        $this->_form = new Hardwareoptimization_Form_Hardware_Optimization_Navigation();
+        $this->_form = new HardwareOptimizationNavigationForm();
         parent::setUp();
     }
 
@@ -27,9 +28,9 @@ class Hardwareoptimization_Form_Hardware_Optimization_NavigationTest extends PHP
      */
     public function testButtonsExist ()
     {
-        $this->assertInstanceOf('Twitter_Bootstrap_Form_Element_Button', $this->_form->getElement('saveAndContinue'));
-        $this->assertInstanceOf('Twitter_Bootstrap_Form_Element_Button', $this->_form->getElement('save'));
-        $this->assertInstanceOf('Twitter_Bootstrap_Form_Element_Button', $this->_form->getElement('goBack'));
+        $this->assertInstanceOf('Zend_Form_Element_Button', $this->_form->getElement('saveAndContinue'));
+        $this->assertInstanceOf('Zend_Form_Element_Button', $this->_form->getElement('save'));
+        $this->assertInstanceOf('Zend_Form_Element_Button', $this->_form->getElement('goBack'));
     }
 
 }

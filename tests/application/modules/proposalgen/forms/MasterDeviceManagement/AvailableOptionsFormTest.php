@@ -1,13 +1,16 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\AvailableOptionsForm;
+
 class Proposalgen_Form_MasterDeviceManagement_AvailableOptionsFormTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
+
 {
     /**
-     * @return Proposalgen_Form_MasterDeviceManagement_AvailableOptions
+     * @return AvailableOptionsForm
      */
     public function getForm ()
     {
-        return new Proposalgen_Form_MasterDeviceManagement_AvailableOptions();
+        return new AvailableOptionsForm();
     }
 
     /**

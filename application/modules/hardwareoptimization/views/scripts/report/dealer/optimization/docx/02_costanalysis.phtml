@@ -5,11 +5,13 @@
  * This script contains everything that comes before the big table of
  * information in the cost analysis.
  */
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\OptimizationViewModel;
 
-/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+/* @var $hardwareOptimization HardwareOptimizationModel */
 $hardwareOptimization = $this->hardwareOptimization;
 
-/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+/* @var $optimization OptimizationViewModel */
 $optimization = $this->optimization;
 
 /* @var $section \PhpOffice\PhpWord\Element\Section */
@@ -17,28 +19,6 @@ $section = $this->section;
 
 // todo:kate Determine if this should be rendered in its own file and all other files renumbered accordingly
 $tcStyle = $this->styles->tables->fleet;
-$section->addTitle('Fleet', 1);
-$table = $section->addTable($tcStyle->tableStyle);
-
-$table->addRow($tcStyle->body->rowheight, $this->body->cellHeader->odd);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Target Monochrome CPP: ', $tcStyle->body->cellHeader->fontStyle, $tcStyle->body->cellHeader->paragraphStyle);
-
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText($this->formatCostPerPage($hardwareOptimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cellHeader->odd)->addText('Target Color CPP: ', $tcStyle->body->cellHeader->fontStyle, $tcStyle->body->cellHeader->paragraphStyle);
-
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText($this->formatCostPerPage($hardwareOptimization->getHardwareOptimizationSetting()->targetColorCostPerPage), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-
-$table->addRow($tcStyle->body->rowheight, $tcStyle->body->cell1->even);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cellHeader->even)->addText('Monthly Monochrome Page Count: ', $tcStyle->body->cellHeader->fontStyle, $tcStyle->body->cellHeader->paragraphStyle);
-
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText($this->formatPageVolume($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cellHeader->even)->addText('Monthly Color Page Count: ', $tcStyle->body->cellHeader->fontStyle, $tcStyle->body->cellHeader->paragraphStyle);
-
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText($this->formatPageVolume($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-
-$section->addTextBreak();
 
 $section->addTitle('Cost Analysis Summary', 2);
 
@@ -53,24 +33,53 @@ $cell1->addText('Current Fleet', $tcStyle->header->header->fontStyle, $tcStyle->
 $cell2 = $table->addCell($tcStyle->span2Width, $tcStyle->headercell);
 $cell2->addText('Optimized', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 
+$table->addRow($tcStyle->body->rowheight, $this->tableStyle->rowheader);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Pre-Optimized Monochrome CPP: ', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText($this->formatCostPerPage($hardwareOptimization->getClient()->getClientSettings()->genericSettings->targetMonochromeCostPerPage), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Post-Optimized Monochrome CPP: ', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText($this->formatCostPerPage($hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->optimizedTargetMonochromeCostPerPage), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+
+$table->addRow($tcStyle->body->rowheight, $this->tableStyle->rowheader);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Pre-Optimized Color CPP: ', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText($this->formatCostPerPage($hardwareOptimization->getClient()->getClientSettings()->genericSettings->targetColorCostPerPage), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Post-Optimized Color CPP: ', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText($this->formatCostPerPage($hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->optimizedTargetColorCostPerPage), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
 
 $table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Monochrome CPP:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText($this->formatCostPerPage((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Monochrome CPP:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText($this->formatCostPerPage((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Weighted Monochrome CPP:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText($this->formatCostPerPage((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->odd)->addText('Weighted Monochrome CPP:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText($this->formatCostPerPage($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 
 $table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Color CPP:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Monthly Monochrome Page Count:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText($this->formatPageVolume($optimization->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Monthly Monochrome Page Count:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText($this->formatPageVolume($optimization->getNewPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Weighted Color CPP:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText(($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() > 0) ? $this->formatCostPerPage((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage) : 'No color volume', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->odd)->addText('Color CPP:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText(($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() > 0) ? $this->formatCostPerPage((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage) : 'No color volume', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->odd)->addText('Weighted Color CPP:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText(((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage > 0) ? $this->formatCostPerPage($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage) : '-', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 
 $table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Total Cost:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText($this->currency((float)$optimization->calculateDealerMonthlyCost()), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Total Cost:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText($this->currency((float)$optimization->calculateDealerMonthlyCostWithReplacements()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Monthly Color Page Count:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText($this->formatPageVolume($optimization->getPageCounts()->getColorPageCount()->getMonthly()), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Monthly Color Page Count:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText($this->formatPageVolume($optimization->getNewPageCounts()->getColorPageCount()->getMonthly()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Total Cost:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->odd)->addText($this->currency((float)$optimization->calculateDealerMonthlyCost()), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->odd)->addText('Total Cost:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText($this->currency((float)$optimization->calculateDealerMonthlyCostWithReplacements()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Revenue:', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText($this->currency((float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Revenue:', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText($this->currency((float)$optimization->calculateOptimizedDealerMonthlyRevenueUsingTargetCostPerPage()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->odd)->addText('Margin ($):', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
@@ -80,6 +89,8 @@ $table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->odd)->addText($this->
 
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell1->even)->addText('Margin (%):', $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText(number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCost(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) . '%', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell2->even)->addText(number_format(\Tangent\Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCost(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) . '%', $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 $table->addCell($tcStyle->colWidth, $tcStyle->body->cell3->even)->addText('Margin (%):', $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText(number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) . '%', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+$table->addCell($tcStyle->colWidth, $tcStyle->body->cell4->even)->addText(number_format(\Tangent\Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateOptimizedDealerMonthlyRevenueUsingTargetCostPerPage()), 2) . '%', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+
+$section->addPageBreak();

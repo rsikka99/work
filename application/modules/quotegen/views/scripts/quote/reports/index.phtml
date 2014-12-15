@@ -1,59 +1,99 @@
 <?php
+
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ContractTemplateMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+
+/* @var $quote QuoteModel */
 $quote = $this->Quote();
-/* @var $quote Quotegen_Model_Quote */
+
 $this->activePage = 'reports';
 echo $this->render('_partials/quoteHeading.phtml');
-$this->headScript()->appendFile($this->baseUrl('/js/htmlReport.js'));
+$this->headScript()->appendFile($this->baseUrl('/js/app/legacy/HtmlReport.js'));
 
-$contractTemplates = Quotegen_Model_Mapper_ContractTemplate::getInstance()->fetchAllForDealer($this->Identity()->dealerId);
+$contractTemplates = ContractTemplateMapper::getInstance()->fetchAllForDealer($this->Identity()->dealerId);
 ?>
-<div class="row-fluid">
-    <div class="span6">
-        <h3>Download Quote</h3>
+<div class="container">
+    <?= $this->navigationForm ?>
+    <div class="row">
 
-        <p>Download a .docx version of this quote.</p>
-        <a class="downloadButton btn btn-primary" data-ext="docx" href="<?php echo $this->url(array('action' => (($quote->isLeased()) ? 'lease' : 'purchase') . '-quote', 'format' => 'docx')); ?>">
-            <i class='icon-download-alt icon-white'></i>
-            Download Quote
-        </a>
-    </div>
-    <div class="span6">
-        <h3>Download Contract</h3>
+        <!-- Final Quote Settings -->
+        <div class='col-md-6'>
+            <div class="panel panel-primary">
+                <div class="panel-heading">Settings - Report</div>
+                <div class="panel-body">
+                    <?= $this->form ?>
+                </div>
+            </div>
+        </div>
+        <div class='col-md-6'>
 
-        <p>Download a contract based on a pre defined template.</p>
-        <div class="input-append">
-            <select id="contractTemplateId" name="contractTemplateId">
-                <?php foreach ($contractTemplates as $contractTemplate) : ?>
-                    <option value="<?= $contractTemplate->id ?>"><?= $contractTemplate->templateName ?></option>
-                <?php endforeach; ?>
-            </select>
-            <a class="downloadButton btn btn-primary" data-ext="docx" data-extra-parameter="contractTemplateId" href="<?php echo $this->url(array('action' => 'contract', 'format' => 'docx')); ?>">
-                <i class='icon-download-alt icon-white'></i>
-                Download Contract
-            </a>
+            <!-- Download Quote -->
+            <div class="panel panel-primary">
+                <div class="panel-heading">Document - Quote</div>
+                <div class="panel-body">
+                    <p>Client facing document outlining the quoted devices</p>
+
+                </div>
+                <div class="panel-footer text-right">
+                    <a class="downloadButton btn btn-primary btn-xs" title="Download quote in DOCX format" data-ext="docx" href="<?= $this->url(array('format' => 'docx', 'quoteId' => $quote->id), 'quotes.reports.' . (($quote->isLeased()) ? 'lease' : 'purchase')); ?>">
+                        <i class='fa fa-fw fa-download'></i>
+                        Download (DOCX)
+                    </a>
+                </div>
+            </div>
+
+            <!-- Download Contract -->
+            <div class="panel panel-primary">
+                <div class="panel-heading">Document - Contract</div>
+                <div class="panel-body">
+                    <p>This is a supporting contract based on either the default template or a template provided by your administrator.</p>
+
+                </div>
+                <div class="panel-footer">
+                    <div class="input-group input-group-sm">
+                        <label class="sr-only" for="contractTemplateId">Contract Template</label>
+                        <select class="form-control" id="contractTemplateId" name="contractTemplateId">
+                            <?php foreach ($contractTemplates as $contractTemplate) : ?>
+                                <option value="<?= $contractTemplate->id ?>"><?= $contractTemplate->templateName ?></option>
+                            <?php endforeach; ?>
+                        </select>
+
+                        <span class="input-group-btn">
+                            <a class="downloadButton btn btn-primary" title="Download contract in DOCX format" data-ext="docx" data-extra-parameter="contractTemplateId" href="<?= $this->url(array('format' => 'docx', 'quoteId' => $quote->id), 'quotes.reports.contract'); ?>">
+                                <i class='fa fa-fw fa-download'></i>
+                                Download (DOCX)
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order List -->
+            <div class="panel panel-primary">
+                <div class="panel-heading">Document - Order List</div>
+                <div class="panel-body">
+                    <p>An order list meant for internal consumption. It lists all the SKUs that need to be ordered to fulfill the quote.</p>
+                </div>
+                <div class="panel-footer text-right">
+                    <a class="downloadButton btn btn-success btn-xs" title="Download order list in XLSX format" data-ext="xlsx" href="<?= $this->url(array('format' => 'xlsx', 'quoteId' => $quote->id), 'quotes.reports.order-list'); ?>">
+                        <i class='fa fa-fw fa-download'></i>
+                        Download (XLSX)
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<hr>
-<div class="row-fluid">
-    <div class="span6">
-        <h3>Download Order List</h3>
 
-        <p>Download a .XLSX file for the items in this quote.</p>
-        <a class="downloadButton btn btn-success" data-ext="xlsx" href="<?php echo $this->url(array('action' => 'order-list', 'format' => 'xlsx')); ?>">
-            <i class='icon-download-alt icon-white'></i>
-            Download Order List
-        </a>
+    <!-- Quote Preview -->
+    <div class="panel panel-default">
+        <div class="panel-heading"><h2>Quote Details - Preview</h2></div>
+        <div class="panel-body">
+            <?php if ($quote->isLeased()) : ?>
+                <?= $this->render('quote/reports/lease-quote.phtml'); ?>
+            <?php else : ?>
+                <?= $this->render('quote/reports/purchase-quote.phtml'); ?>
+            <?php endif; ?>
+        </div>
     </div>
-    <div class='span6'>
-        <h3>Quote Settings</h3>
-        <?php echo $this->form; ?>
-    </div>
+    <?= $this->navigationForm ?>
 </div>
-<hr>
-<?php if ($quote->isLeased()) : ?>
-    <?php echo $this->render('quote/reports/lease-quote.phtml'); ?>
-<?php else : ?>
-    <?php echo $this->render('quote/reports/purchase-quote.phtml'); ?>
-<?php endif; ?>
-<?php echo $this->navigationForm; ?>

@@ -1,17 +1,16 @@
-<div class="page-header">
-    <h1>About <?php echo $this->App()->title; ?></h1>
-</div>
-<p><em>Version: <?php echo $this->Version(); ?></em></p>
-<p><em>Database Version: <?php echo $this->databaseVersion; ?></em></p>
-<p><em>Build Date: <?php echo $this->buildinfo->date; ?></em></p>
-<p><em>Build Hash: <?php echo $this->buildinfo->githash; ?></em></p>
-<hr>
-<div class="page-header">
-    <h1>Changelog</h1>
-</div>
-<div class="changelog">
-    <?php
-    $markdown = new \Michelf\MarkdownExtra();
-    echo $markdown->transform($this->changelog);
-    ?>
+<div class="container">
+    <p><em>Version: <?= $this->Version(); ?></em></p>
+
+    <p><em>Database Version: <?= $this->databaseVersion; ?></em></p>
+
+    <p><em>Build Date: <?= $this->buildinfo->date; ?></em></p>
+
+    <p><em>Build Hash: <?= $this->buildinfo->githash; ?></em></p>
+    <hr>
+    <div class="changelog">
+        <?php
+        $markdown = new \Michelf\MarkdownExtra();
+        echo $markdown->transform($this->changelog);
+        ?>
+    </div>
 </div>

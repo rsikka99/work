@@ -1,0 +1,296 @@
+<?php
+
+use MPSToolbox\Legacy\Entities\ClientEntity;
+use MPSToolbox\Legacy\Entities\RmsUploadEntity;
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Mappers\HardwareOptimizationQuoteMapper;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationStepsModel;
+use MPSToolbox\Legacy\Modules\HealthCheck\Models\HealthCheckModel;
+use MPSToolbox\Legacy\Modules\HealthCheck\Models\HealthCheckStepsModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ClientTonerOrderMapper;
+use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentStepsModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteStepsModel;
+
+/* @var $client ClientEntity */
+$client = $this->client;
+
+/* @var $rmsUpload RmsUploadEntity */
+$rmsUpload = $this->rmsUpload;
+?>
+<div class="container">
+    <div class="row">
+        <div class="col-md-2 text-center">
+            <div class="text-center">
+                <i class="fa fa-fw fa-5x fa-user img-thumbnail" style="background-color: #eee;"></i>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <p class="lead">
+                <i class="fa fa-fw fa-user"></i> <?= $client->companyName ?>
+                <small>(<a class="" href="<?= $this->url([], 'app.dashboard.change-client') ?>">Change</a>)
+                </small>
+            </p>
+
+            <p>
+                <a href="<?= $this->url(['rmsUploadId' => $rmsUpload->id], 'rms-upload') ?>" title="Edit Upload"><i class="fa fa-fw fa-pencil"></i>
+                    <code><i class="fa fa-fw fa-file-text"></i> <?= $rmsUpload->fileName ?></code></a> uploaded
+                <i class="fa fa-fw fa-clock-o js-tooltip btn-link" title="<?= $rmsUpload->uploadDate ?>"></i> <?= $rmsUpload->uploadDate->diffForHumans() ?>
+                <small>(<a class="" href="<?= $this->url([], 'app.dashboard.change-upload') ?>">Change</a>)
+                </small>
+            </p>
+        </div>
+    </div>
+    <br>
+
+    <div role="tabpanel">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <?php if (My_Feature::canAccess(My_Feature::ASSESSMENT)) : ?>
+                <li role="presentation" class="active">
+                    <a href="#assessments" aria-controls="assessments" role="tab" data-toggle="tab">Assess
+                        <span class="badge"><?= number_format(count($this->availableAssessments)) ?></span></a>
+                </li>
+            <?php endif ?>
+            <?php if (My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION)) : ?>
+                <li role="presentation">
+                    <a href="#optimizations" aria-controls="profile" role="tab" data-toggle="tab">Optimize
+                        <span class="badge"><?= number_format(count($this->availableHardwareOptimizations)) ?></span></a>
+                </li>
+            <?php endif ?>
+            <?php if (My_Feature::canAccess(My_Feature::HEALTHCHECK)) : ?>
+                <li role="presentation">
+                    <a href="#reviews" aria-controls="messages" role="tab" data-toggle="tab">Review
+                        <span class="badge"><?= number_format(count($this->availableHealthchecks)) ?></span></a>
+                </li>
+            <?php endif ?>
+            <?php if (My_Feature::canAccess(My_Feature::HARDWARE_QUOTE)) : ?>
+                <li role="presentation">
+                    <a href="#quotes" aria-controls="settings" role="tab" data-toggle="tab">Quote
+                        <span class="badge"><?= number_format(count($this->availableQuotes)) ?></span></a>
+                </li>
+            <?php endif ?>
+        </ul>
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+
+                <div class="tab-content">
+                    <?php if (My_Feature::canAccess(My_Feature::ASSESSMENT)) : ?>
+                        <div role="tabpanel" class="tab-pane active" id="assessments">
+                            <h3>Assess</h3>
+
+                            <form method="POST">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Date Created</th>
+                                            <th>Last Modified</th>
+                                            <th>Finished</th>
+                                            <th style="width: 120px;">Action</th>
+                                        </tr>
+                                        <tr class="info">
+                                            <td colspan="4"></td>
+                                            <td style="text-align: center;">
+                                                <button name="selectAssessment" value="0" class="btn btn-success btn-xs"> Start New</button>
+                                            </td>
+                                        </tr>
+                                        <?php /* @var $report AssessmentModel */ ?>
+                                        <?php foreach ($this->availableAssessments as $report) : ?>
+                                            <tr>
+                                                <td><?= $this->escape($report->name) ?></td>
+                                                <td><?= strftime("%B %d, %Y", strtotime($report->dateCreated)) ?></td>
+                                                <td><?= strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
+                                                <?php if ($report->stepName == AssessmentStepsModel::STEP_FINISHED) : ?>
+                                                    <td>
+                                                        <i class="fa fa-fw fa-check"></i> Finished
+                                                    </td>
+                                                <?php else : ?>
+                                                    <td>
+                                                        <i class="fa fa-fw fa-clock-o"></i> In Progress
+                                                    </td>
+                                                <?php endif; ?>
+                                                <td class="text-center">
+                                                    <div class="btn-group">
+                                                        <button name="selectAssessment" value="<?= $report->id; ?>" class="btn btn-primary btn-xs">Select</button>
+                                                        <a class="btn btn-danger btn-xs js-delete-confirmation" href="<?= $this->url(['assessmentId' => $report->id], 'app.dashboard.delete-assessment') ?>" title="Delete"><i class="fa fa-fw fa-trash-o"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </table>
+                                </div>
+                            </form>
+
+                        </div>
+                    <?php endif; ?>
+
+
+                    <?php if (My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION)) : ?>
+                        <div role="tabpanel" class="tab-pane" id="optimizations">
+                            <h3>Optimize</h3>
+
+                            <form method="POST">
+                                <table class="table">
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Date Created</th>
+                                        <th>Last Modified</th>
+                                        <th>Finished</th>
+                                        <th style="width: 120px;"> Action</th>
+                                    </tr>
+                                    <tr class="info">
+                                        <td colspan="4"></td>
+                                        <td style="text-align: center;">
+                                            <button name="selectHardwareOptimization" value="0" class="btn btn-success btn-xs">Start New</button>
+                                        </td>
+                                    </tr>
+                                    <?php /* @var $hardwareOptimization HardwareOptimizationModel */ ?>
+                                    <?php foreach ($this->availableHardwareOptimizations as $hardwareOptimization) : ?>
+                                        <tr>
+                                            <td><?= $this->escape($hardwareOptimization->name) ?></td>
+                                            <td><?= strftime("%B %d, %Y", strtotime($hardwareOptimization->dateCreated)) ?></td>
+                                            <td><?= strftime("%B %d, %Y", strtotime($hardwareOptimization->lastModified)); ?></td>
+                                            <?php if ($hardwareOptimization->stepName == HardwareOptimizationStepsModel::STEP_FINISHED) : ?>
+                                                <td>
+                                                    <i class="fa fa-fw fa-check"></i> Finished
+                                                </td>
+                                            <?php else : ?>
+                                                <td>
+                                                    <i class="fa fa-fw fa-clock-o"></i> In Progress
+                                                </td>
+                                            <?php endif; ?>
+                                            <td class="text-center">
+                                                <div class="btn-group">
+                                                    <button name="selectHardwareOptimization" value="<?= $hardwareOptimization->id; ?>" class="btn btn-primary btn-xs">Select</button>
+                                                    <a class="btn btn-danger btn-xs js-delete-confirmation" href="<?= $this->url(['hardwareOptimizationId' => $hardwareOptimization->id], 'app.dashboard.delete-optimization') ?>" title="Delete"><i class="fa fa-fw fa-trash-o"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </table>
+                            </form>
+
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (My_Feature::canAccess(My_Feature::HEALTHCHECK)) : ?>
+                        <div role="tabpanel" class="tab-pane" id="reviews">
+                            <h3>Review</h3>
+
+                            <form method="POST">
+                                <table class="table">
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Date Created</th>
+                                        <th>Last Modified</th>
+                                        <th>Finished</th>
+                                        <th style="width: 120px;"> Action</th>
+                                    </tr>
+                                    <tr class="info">
+                                        <td colspan="4"></td>
+                                        <td style="text-align: center;">
+                                            <button name="selectHealthcheck" value="0" class="btn btn-success btn-xs">Start New</button>
+                                        </td>
+                                    </tr>
+                                    <?php /* @var $healthcheck HealthCheckModel */ ?>
+                                    <?php foreach ($this->availableHealthchecks as $healthcheck) : ?>
+                                        <tr>
+                                            <td><?= $this->escape($healthcheck->name) ?></td>
+                                            <td><?= strftime("%B %d, %Y", strtotime($healthcheck->dateCreated)) ?></td>
+                                            <td><?= strftime("%B %d, %Y", strtotime($healthcheck->lastModified)); ?></td>
+                                            <?php if ($healthcheck->stepName == HealthCheckStepsModel::STEP_FINISHED) : ?>
+                                                <td>
+                                                    <i class="fa fa-fw fa-check"></i> Finished
+                                                </td>
+                                            <?php else : ?>
+                                                <td>
+                                                    <i class="fa fa-fw fa-clock-o"></i> In Progress
+                                                </td>
+                                            <?php endif; ?>
+                                            <td class="text-center">
+                                                <div class="btn-group">
+                                                    <button name="selectHealthcheck" value="<?= $healthcheck->id; ?>" class="btn btn-primary btn-xs">Select</button>
+                                                    <a class="btn btn-danger btn-xs js-delete-confirmation" href="<?= $this->url(['healthcheckId' => $healthcheck->id], 'app.dashboard.delete-healthcheck') ?>" title="Delete"><i class="fa fa-fw fa-trash-o"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </table>
+                            </form>
+
+                        </div>
+                    <?php endif; ?>
+
+
+                    <?php if (My_Feature::canAccess(My_Feature::HARDWARE_QUOTE)) : ?>
+
+                        <div role="tabpanel" class="tab-pane" id="quotes">
+                            <form method="POST">
+                                <h3>Quote
+                                    <button name="createLeasedQuote" value="0" class="btn btn-primary btn-xs">Create New Leased Quote</button>
+                                    <button name="createPurchasedQuote" value="0" class="btn btn-success btn-xs">Create New Purchased Quote</button>
+                                </h3>
+
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Date Created</th>
+                                            <th>Last Modified</th>
+                                            <th>Type</th>
+                                            <th>Finished</th>
+                                            <th style="width: 120px;">Action</th>
+                                        </tr>
+                                        <?php /* @var $quote QuoteModel */ ?>
+                                        <?php foreach ($this->availableQuotes as $quote) : ?>
+                                            <tr>
+                                                <td><?= $quote->name ?></td>
+                                                <td><?= strftime("%B %d, %Y", strtotime($quote->dateCreated)) ?></td>
+                                                <td><?= strftime("%B %d, %Y", strtotime($quote->dateModified)); ?></td>
+
+                                                <?php if ($quote->quoteType == QuoteModel::QUOTE_TYPE_LEASED) : ?>
+                                                    <td>Leased</td>
+                                                <?php else : ?>
+                                                    <td>Purchased</td>
+                                                <?php endif; ?>
+                                                <?php if ($quote->stepName == QuoteStepsModel::STEP_FINISHED) : ?>
+                                                    <td>
+                                                        <i class="fa fa-fw fa-check"></i> Finished
+                                                    </td>
+                                                <?php else : ?>
+                                                    <td>
+                                                        <i class="fa fa-fw fa-clock-o"></i> In Progress
+                                                    </td>
+                                                <?php endif; ?>
+
+                                                <td class="text-center">
+                                                    <div class="btn-group">
+                                                        <button name="selectQuote" value="<?= $quote->id; ?>" class="btn btn-primary btn-xs">Select</button>
+                                                        <a class="btn btn-danger btn-xs js-delete-confirmation" href="<?= $this->url(['quoteId' => $quote->id], 'app.dashboard.delete-quote') ?>" title="Delete"><i class="fa fa-fw fa-trash-o"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+
+
+                    <?php endif; ?>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <?php if (My_Feature::canAccess(My_Feature::CLIENT_PRICING)) : ?>
+        <h3>Client Pricing</h3>
+        <div>There are currently <?= ClientTonerOrderMapper::getInstance()->jqgridFetchAllForClient($this->selectedClientId, Zend_auth::getInstance()->getIdentity()->dealerId, null, 10000, 0, null, null, true); ?> SKUs that this client has pricing for.
+            <a class="btn btn-xs btn-primary" href="<?= $this->url(array(), 'client.pricing'); ?>">Manage Client Pricing</a>
+        </div>
+    <?php endif; ?>
+</div>

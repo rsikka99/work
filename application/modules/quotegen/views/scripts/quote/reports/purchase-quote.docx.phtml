@@ -1,5 +1,7 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+
 $filename = $this->filename;
 $savePath = PUBLIC_PATH . "/downloads/client/{$this->clientId}/quote/{$this->quoteId}/";
 
@@ -19,7 +21,7 @@ $basePath            = 'quote/reports/purchase-quote/docx';
 $commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
 
 $quote = $this->Quote();
-/* @var $quote Quotegen_Model_Quote */
+/* @var $quote QuoteModel */
 
 /* @var $phpword \PhpOffice\PhpWord\PhpWord */
 $phpword = $this->phpword;
@@ -239,85 +241,85 @@ $trueCostsTable = (object)array(
     "col2Width"  => 3764.88,
     "col3Width"  => 4042.71,
     "header"     => (object)array(
-            "rowheight" => null,
-            "cell1"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => 'bold_text',
-                    "paragraphStyle" => 'nospacing_centeralign'
-                ),
-            "cell2"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => 'bold_text',
-                    "paragraphStyle" => 'nospacing_centeralign'
-                ),
-            "cell3"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => 'bold_text',
-                    "paragraphStyle" => 'nospacing_centeralign'
-                )
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
         ),
-    "body"       => (object)array(
-            "rowheight" => null,
-            "cell1"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'bold'  => true
-                    ),
-                    "paragraphStyle" => 'nospacing'
-                ),
-            "cell2"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => null,
-                    "paragraphStyle" => 'nospacing'
-                ),
-            "cell3"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => null,
-                    "paragraphStyle" => 'nospacing'
-                )
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
         )
+    ),
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'bold' => true
+            ),
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing'
+        )
+    )
 );
 
 $purchaseQuoteTable = (object)array(
@@ -337,460 +339,460 @@ $purchaseQuoteTable = (object)array(
     "span123Width" => 7945,
     "span23Width"  => 5688,
     "header"       => (object)array(
-            "rowheight" => null,
-            "rowStyle"  => array(
-                'tblHeader' => true,
+        "rowheight" => null,
+        "rowStyle"  => array(
+            'tblHeader' => true,
+        ),
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "bgColor"          => $this->docStyles->brandBaseColor,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
             ),
-            "cell1"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "bgColor"          => $this->docStyles->brandBaseColor,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'color' => 'FFFFFF',
-                        'bold'  => true,
-                        'name'  => 'Calibri',
-                        'size'  => 11
-                    ),
-                    "paragraphStyle" => array(
-                        'nospacing'  => true,
-                        'spaceAfter' => 0
-                    )
-                ),
-            "cell2"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "bgColor"          => $this->docStyles->brandBaseColor,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'color' => 'FFFFFF',
-                        'bold'  => true,
-                        'name'  => 'Calibri',
-                        'size'  => 11
-                    ),
-                    "paragraphStyle" => array(
-                        'nospacing'  => true,
-                        'spaceAfter' => 0
-                    )
-                ),
-            "cell3"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "bgColor"          => $this->docStyles->brandBaseColor,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'color' => 'FFFFFF',
-                        'bold'  => true,
-                        'name'  => 'Calibri',
-                        'size'  => 11
-                    ),
-                    "paragraphStyle" => array(
-                        'nospacing'  => true,
-                        'spaceAfter' => 0
-                    )
-                ),
-            "cell4"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "bgColor"          => $this->docStyles->brandBaseColor,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => array(
-                        'nospacing'  => true,
-                        'align'      => 'right',
-                        'spaceAfter' => 0
-                    )
-                ),
+            "fontStyle"      => array(
+                'color' => 'FFFFFF',
+                'bold'  => true,
+                'name'  => 'Calibri',
+                'size'  => 11
+            ),
+            "paragraphStyle" => array(
+                'nospacing'  => true,
+                'spaceAfter' => 0
+            )
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "bgColor"          => $this->docStyles->brandBaseColor,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'color' => 'FFFFFF',
+                'bold'  => true,
+                'name'  => 'Calibri',
+                'size'  => 11
+            ),
+            "paragraphStyle" => array(
+                'nospacing'  => true,
+                'spaceAfter' => 0
+            )
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "bgColor"          => $this->docStyles->brandBaseColor,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'color' => 'FFFFFF',
+                'bold'  => true,
+                'name'  => 'Calibri',
+                'size'  => 11
+            ),
+            "paragraphStyle" => array(
+                'nospacing'  => true,
+                'spaceAfter' => 0
+            )
+        ),
+        "cell4"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "bgColor"          => $this->docStyles->brandBaseColor,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => array(
+                'nospacing'  => true,
+                'align'      => 'right',
+                'spaceAfter' => 0
+            )
+       )
+    ),
     "signatureTableStyle" => array(
         'cellMarginTop'    => 25,
         'cellMarginRight'  => 100,
         'cellMarginBottom' => 25,
         'cellMarginLeft'   => 100,
     ),
-        ),
     "device"       => (object)array(
-            "rowheight" => null,
-            "cell1"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => null,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'bold' => true,
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => 'nospacing'
-                ),
-            "cell2"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => null,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => 'nospacing'
-                ),
-            "cell3"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => null,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => 'nospacing'
-                ),
-            "cell4"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => null,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => array(
-                        'nospacing'  => true,
-                        'align'      => 'right',
-                        'spaceAfter' => 0
-                    )
-                )
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => null,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'bold' => true,
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => 'nospacing'
         ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => null,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => null,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell4"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => null,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => array(
+                'nospacing'  => true,
+                'align'      => 'right',
+                'spaceAfter' => 0
+            )
+        )
+    ),
     "option"       => (object)array(
-            "rowheight" => 75,
-            "cell1"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => null,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => null,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => 'nospacing'
-                ),
-            "cell2"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => null,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => null,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => 'nospacing'
-                ),
-            "cell3"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => null,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => null,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => 'nospacing'
-                ),
-            "cell4"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => null,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => null,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => array(
-                        'nospacing' => true,
-                        'align'     => 'right'
-                    )
-                )
+        "rowheight" => 75,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => null,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => null,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => 'nospacing'
         ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => null,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => null,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => null,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => null,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell4"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => null,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => null,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => array(
+                'nospacing' => true,
+                'align'     => 'right'
+            )
+        )
+    ),
     "subtotal"     => (object)array(
-            "rowheight" => 500,
-            "cell1"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "bgColor"          => 'D9D9D9',
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => 'nospacing'
-                ),
-            "cell2"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "bgColor"          => 'D9D9D9',
-                        "valign"           => 'center',
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "cell2Span3"     => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "bgColor"          => 'D9D9D9',
-                        "valign"           => 'center',
-                        "borderColor"      => 'BFBFBF',
-                        "gridSpan"         => 3,
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'bold' => true,
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => array(
-                        'nospacing'  => true,
-                        'align'      => 'right',
-                        'spaceAfter' => 0
-                    )
-                ),
-            "cell3"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "bgColor"          => 'D9D9D9',
-                        "valign"           => 'center',
-                        "borderColor"      => 'BFBFBF'
-                    ),
-
-                    "fontStyle"      => array(
-                        'bold' => true,
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => array(
-                        'nospacing'  => true,
-                        'align'      => 'right',
-                        'spaceAfter' => 0
-                    )
-                )
+        "rowheight" => 500,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "bgColor"          => 'D9D9D9',
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => 'nospacing'
         ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "bgColor"          => 'D9D9D9',
+                "valign"           => 'center',
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "cell2Span3"     => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "bgColor"          => 'D9D9D9',
+                "valign"           => 'center',
+                "borderColor"      => 'BFBFBF',
+                "gridSpan"         => 3,
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'bold' => true,
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => array(
+                'nospacing'  => true,
+                'align'      => 'right',
+                'spaceAfter' => 0
+            )
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "bgColor"          => 'D9D9D9',
+                "valign"           => 'center',
+                "borderColor"      => 'BFBFBF'
+            ),
+
+            "fontStyle"      => array(
+                'bold' => true,
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => array(
+                'nospacing'  => true,
+                'align'      => 'right',
+                'spaceAfter' => 0
+            )
+        )
+    ),
     "cpp"          => (object)array(
-            "rowheight" => null,
-            "cell1"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => 'nospacing'
-                ),
-            "cell2"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "valign"           => 'center',
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => array(
-                        'nospacing'  => true,
-                        'align'      => 'right',
-                        'spaceAfter' => 0
-                    )
-                ),
-            "cell3"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "valign"           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => array(
-                        'nospacing'  => true,
-                        'align'      => 'right',
-                        'spaceAfter' => 0
-                    )
-                )
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => 'nospacing'
         ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => 'center',
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => array(
+                'nospacing'  => true,
+                'align'      => 'right',
+                'spaceAfter' => 0
+            )
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "valign"           => 'center',
+            ),
+            "fontStyle"      => array(
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => array(
+                'nospacing'  => true,
+                'align'      => 'right',
+                'spaceAfter' => 0
+            )
+        )
+    ),
     'monthlyTotal' => (object)array(
-            "rowheight" => 500,
-            "cell1"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        "bgColor"          => 'D9D9D9',
-                        "align"            => 'right',
-                        "valign"           => "center",
-                    ),
-                    "purchaseTotal"  => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "bgColor"          => 'D9D9D9',
-                        "valign"           => 'center',
-                        "borderColor"      => 'BFBFBF',
-                    ),
-                    "fontStyle"      => array(
-                        "bold" => true,
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => array(
-                        "align"      => 'right',
-                        'spaceAfter' => 0
-                    )
-                ),
-            "cell2"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "valign"           => 'center',
-                        "borderColor"      => 'BFBFBF',
-                        "bgColor"          => 'D9D9D9'
-                    ),
-                    "fontStyle"      => array(
-                        "bold" => true,
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => array(
-                        'nospacing'  => true,
-                        'align'      => 'right',
-                        'spaceAfter' => 0
-                    )
-                )
+        "rowheight" => 500,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                "bgColor"          => 'D9D9D9',
+                "align"            => 'right',
+                "valign"           => "center",
+            ),
+            "purchaseTotal"  => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "bgColor"          => 'D9D9D9',
+                "valign"           => 'center',
+                "borderColor"      => 'BFBFBF',
+            ),
+            "fontStyle"      => array(
+                "bold" => true,
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => array(
+                "align"      => 'right',
+                'spaceAfter' => 0
+            )
         ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => 'center',
+                "borderColor"      => 'BFBFBF',
+                "bgColor"          => 'D9D9D9'
+            ),
+            "fontStyle"      => array(
+                "bold" => true,
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => array(
+                'nospacing'  => true,
+                'align'      => 'right',
+                'spaceAfter' => 0
+            )
+        )
+    ),
     "pages"        => (object)array(
-            "rowheight" => 500,
-            "cell1"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        'valign'           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => array(
-                        'nospacing'  => true,
-                        'align'      => 'right',
-                        'spaceAfter' => 0
-                    )
-                ),
+        "rowheight" => 500,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                'valign'           => 'center',
+            ),
+            "fontStyle"      => array(
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => array(
+                'nospacing'  => true,
+                'align'      => 'right',
+                'spaceAfter' => 0
+            )
+        ),
 
-            "cell2"     => (object)array(
-                    "cellStyle"      => array(
-                        "borderTopSize"    => 1,
-                        "borderRightSize"  => 1,
-                        "borderBottomSize" => 1,
-                        "borderLeftSize"   => 1,
-                        "borderColor"      => 'BFBFBF',
-                        'valign'           => 'center',
-                    ),
-                    "fontStyle"      => array(
-                        'name' => 'Calibri',
-                        'size' => 11
-                    ),
-                    "paragraphStyle" => array(
-                        'nospacing'  => true,
-                        'align'      => 'right',
-                        'spaceAfter' => 0
-                    )
-                )
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "borderColor"      => 'BFBFBF',
+                'valign'           => 'center',
+            ),
+            "fontStyle"      => array(
+                'name' => 'Calibri',
+                'size' => 11
+            ),
+            "paragraphStyle" => array(
+                'nospacing'  => true,
+                'align'      => 'right',
+                'spaceAfter' => 0
+            )
+        )
         ),
     "signature"           => (object)array(
         "rowheight" => 500,
@@ -837,9 +839,9 @@ $purchaseQuoteTable = (object)array(
  */
 $styles = (object)array(
     "tables" => (object)array(
-            "truecosts"  => $trueCostsTable,
-            "quoteTable" => $purchaseQuoteTable
-        )
+        "truecosts"  => $trueCostsTable,
+        "quoteTable" => $purchaseQuoteTable
+    )
 );
 
 $titledata = array(

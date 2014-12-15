@@ -1,5 +1,7 @@
 <?php
 
+use Tangent\Filter\Filename;
+
 class Tangent_Filter_FilenameTest extends PHPUnit_Framework_TestCase
 {
 
@@ -27,7 +29,7 @@ class Tangent_Filter_FilenameTest extends PHPUnit_Framework_TestCase
      */
     public function testFilterArray ($rawFilename, $expectedResult)
     {
-        $filter = new Tangent_Filter_Filename();
+        $filter = new Filename();
         $this->assertSame($filter->filter($rawFilename), $expectedResult);
     }
 }

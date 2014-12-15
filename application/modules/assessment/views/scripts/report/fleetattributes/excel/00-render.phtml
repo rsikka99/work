@@ -25,6 +25,7 @@ $sheetCounter = 0;
 $activeSheet  = $objPHPExcel->getActiveSheet();
 $objPHPExcel->setActiveSheetIndex(0);
 $activeSheet->setTitle("Fleet Attributes");
+        $cellStyle = $activeSheet->getStyleByColumnAndRow($fieldTitleCounter, 1)->getFont()->setBold(true);
 
 /**
  * Titles

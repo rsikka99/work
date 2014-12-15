@@ -9,162 +9,73 @@
 <html class="no-js" lang="en">
 <!--<![endif]-->
 <head>
+    <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width" />
+    <meta name="viewport" content="initial-scale=1.0" />
     <meta charset="utf-8" />
-    <?php echo $this->headTitle($this->App()->title)->setSeparator(' - '); ?>
-
+    <?= $this->headTitle($this->App()->title)->setSeparator(' - '); ?>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-    <meta name="viewport" content="width=device-width">
     <meta name="author" content="Tangent MTW">
+    <?= $this->headLink(); ?>
 
-    <?php echo $this->headLink(); ?>
-    <script src="<?php echo $this->baseUrl("/js/libs/modernizr-2.5.3.min.js"); ?>"></script>
+    <script src="<?= $this->baseUrl('js/lib/require/require.min.js') ?>"></script>
 </head>
 <body>
-<!-- Prompt to upgrade browsers/install chrome frame if IE 6 or lower -->
-<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or
-    <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+<?= $this->partial('partials/main-navigation.phtml') ?>
+<?= $this->partial('partials/sub-navigation.phtml') ?>
 
-<!-- Start of Navbar -->
-<div class="navbar navbar-inverse">
-    <div class="navbar-inner">
-        <div class="container navbar-container">
-            <div class="sidebar pull-right">
-                <div class="pull-right">
-                    <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
-                        <div class="btn-group pull-right">
-                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog icon-white"></i> <?php echo $this->Username(); ?>
-                                <b class="caret"></b></a>
-                            <?php echo $this->Usermenu(); ?>
-                        </div>
-                    <?php else : ?>
-                        <a class="btn btn-danger" href="<?php echo $this->url(array('module' => 'default', 'controller' => 'auth', 'action' => 'login')); ?>"><i class="icon-user icon-white"></i>
-                            Login</a>
-                    <?php endif; ?>
-                </div>
-            </div>
-            <?php echo $this->MyNavigation()->menu()->setUlClass('nav')->setMinDepth(0)->setMaxDepth(0)->render(); ?>
+<div class="body-container" id="meat">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1><?= $this->placeholder('page-header') ?></h1>
         </div>
     </div>
-</div>
-<!-- /Navbar -->
+    <!-- /Page Header -->
 
-<!-- Header -->
-<div id="header-background">
-    <header id="headerLogo"></header>
-</div>
-<!-- /Header -->
-
-<div class="container body-container" id="meat">
-    <!-- Sub Navbar -->
-    <?php $subNav = $this->Subnav(); ?>
-    <?php if ($subNav) : ?>
-        <div class="subnav">
-            <?php echo $subNav; ?>
-        </div>
-    <?php endif; ?>
-    <!-- /Sub Navbar -->
-
-
-    <!-- Step by step navigation -->
-    <?php echo $this->placeholder('ProgressionNav'); ?>
-    <!-- /Step by step navigation -->
-    <!-- Report List Navigation -->
-    <?php echo $this->placeholder('extraNavbar'); ?>
-    <!-- /Report List Navigation -->
-
+    <?= $this->partial('partials/progression-navigation.phtml') ?>
+    <?= $this->partial('partials/report-navigation.phtml') ?>
     <div class="container">
-        <div class="row">
-            <div class="span12">
-                <!-- Flash messages -->
-                <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
-                <!-- End Of flash messages -->
-
-
-                <!-- Main content -->
-                <?php echo $this->layout()->content; ?>
-                <!-- End main content -->
-
-            </div>
-        </div>
-        <hr>
-
-        <!-- Footer -->
-        <footer>
-            <div class="row">
-                <div class="span6">Copyright <?php echo $this->App()->copyright; ?> &copy; <?php echo date("Y"); ?>. All Rights Reserved.</div>
-                <div class="span6" id="footerLinks">
-                    <?php echo $this->Footermenu(); ?>
-                </div>
-            </div>
-        </footer>
-        <!-- /Footer -->
+        <?= $this->partial('partials/flash-messages.phtml') ?>
     </div>
+
+    <!-- Main content -->
+    <?= $this->layout()->content; ?>
+    <!-- End main content -->
 </div>
 <!-- End of main container -->
 
+<!-- Footer -->
+<footer id="page-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                <p>Need help? Have a question? Contact us at <?= sprintf('<a href="mailto:%1$s?subject=Support Request">%1$s</a>', $this->App()->supportEmail) ?>.</p>
+            </div>
+            <div class="col-md-3 col-sm-6"></div>
+            <div class="col-md-3 col-sm-6"></div>
+            <div class="col-md-3 col-sm-6" id="footerLinks">
+                <?= $this->Footermenu('nav nav-pills'); ?>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-12">
+                <p class="text-right">Copyright <?= $this->App()->copyright; ?> &copy; <?= date("Y"); ?>. All Rights Reserved.</p>
+            </div>
+        </div>
+        <!-- /Footer -->
+    </div>
+</footer>
 
-<?php
-if (APPLICATION_ENV != 'production')
-{
-    echo $this->partial('phpErrorPartial.phtml', array('exceptions' => $this->exceptions, 'request' => $this->request));
-}
-?>
+<?= $this->partial('partials/php-errors.phtml', array('exceptions' => $this->exceptions, 'request' => $this->request)) ?>
 
-<!-- JavaScript at the bottom for fast page loading -->
 <script type="text/javascript">
-    var TMTW_BASEURL = '<?php echo $this->serverUrl('/'); ?>';
+    var TMTW_BASEURL = '<?= $this->serverUrl('/'); ?>';
 </script>
 
-<!-- Load jQuery Libraries -->
-<?php echo $this->jQuery()->setCdnSsl((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'))->enable(); ?>
-<script>window.jQuery || document.write('<script src="js/libs/jquery-1.9.1.min.js"><\/script>');</script>
-
-<!-- Scripts concatenated and minified via build script -->
-<?php echo $this->headScript(); ?>
-<!-- /Scripts -->
-
-<?php if ($this->App()->useAnalytics) : ?>
-    <script>
-        // @formatter:off
-(function(i,s,o,g,r,a,m){ i['GoogleAnalyticsObject'] = r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},
-i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window, document,'script','//www.google-analytics.com/analytics.js','ga');
-ga('create', 'UA-40085726-1', 'mpstoolbox.com');
-ga('send', 'pageview');
-        // @formatter:on
-    </script>
-<?php endif; ?>
-
-<script type="text/javascript" src="//assets.zendesk.com/external/zenbox/v2.6/zenbox.js"></script>
-<style type="text/css" media="screen, projection">
-    @import url(//assets.zendesk.com/external/zenbox/v2.6/zenbox.css);
-</style>
-<script type="text/javascript">
-    if (typeof(Zenbox) !== "undefined")
-    {
-        Zenbox.init({
-            dropboxID  : "20170114",
-            url        : "https://tangentmtw.zendesk.com",
-            tabTooltip : "Support",
-            tabImageURL: "https://p2.zdassets.com/external/zenbox/images/tab_support.png",
-            tabColor   : "black",
-            tabPosition: "Left"
-        });
-    }
-</script>
-
-<!--Start of Zopim Live Chat Script-->
-<script type="text/javascript">
-    // @formatter:off
-window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
-d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
-_.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');
-$.src='//v2.zopim.com/?29VHSqKBrG2vtoDATuJGqEUVTHmN797A';z.t=+new Date;$.
-type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');
-// @formatter:on
-</script>
-<!--End of Zopim Live Chat Script-->
-
+<?= $this->headScript(); ?>
+<?= ($this->App()->useAnalytics && APPLICATION_ENV == 'production') ? $this->partial('google-analytics.phtml') : ""; ?>
+<?= ($this->App()->useChatTab && APPLICATION_ENV == 'production') ? $this->partial('zopim-chat.phtml') : ""; ?>
+<?= ($this->App()->useFeedbackTab && APPLICATION_ENV == 'production') ? $this->partial('zendesk-support.phtml') : ""; ?>
 </body>
 </html>

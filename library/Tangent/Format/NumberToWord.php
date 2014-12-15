@@ -1,4 +1,5 @@
 <?php
+namespace Tangent\Format;
 
 /**
  * Converts a number into a word version of it
@@ -8,7 +9,7 @@
  * 12345 turns into '12 thousand'
  * If we send it a precision of 2 we get '12.34 thousand'
  */
-class Tangent_Format_NumberToWord
+class NumberToWord
 {
     public $numberNameArray = array(
         "Hundred",

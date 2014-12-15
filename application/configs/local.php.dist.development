@@ -1,10 +1,13 @@
 <?php
 return array(
     'app'         => array(
-        'title'        => 'MPS Toolbox',
-        'theme'        => 'default',
-        'useAnalytics' => false,
-        'copyright'    => 'Tangent MTW',
+        'title'          => 'MPS Toolbox',
+        'theme'          => 'default',
+        'useAnalytics'   => false,
+        'useChatTab'     => false,
+        'useFeedbackTab' => false,
+        'supportEmail'   => 'support@tangentmtw.com',
+        'copyright'      => 'Tangent MTW',
     ),
     'email'       => array(
         'host'     => '',

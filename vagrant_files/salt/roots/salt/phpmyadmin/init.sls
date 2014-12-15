@@ -60,6 +60,7 @@ phpmyadmin-files:
     - archive_format: zip
     - name: "/home/{{ salt['pillar.get']('user:username', 'lrobert') }}/apps/phpmyadmin"
     - source: "salt://phpmyadmin/packages/phpMyAdmin-4.2.10.1-english.zip"
+    - if_missing: "/home/{{ salt['pillar.get']('user:username', 'lrobert') }}/apps/phpmyadmin/index.php"
     - require:
       - file: phpmyadmin-directory
 
@@ -70,14 +71,13 @@ phpmyadmin-conf:
     - source: salt://phpmyadmin/packages/phpmyadmin/config.inc.php
     - require:
       - archive: phpmyadmin-files
+      - file: phpmyadmin-directory
 
 phpmyadmin-permissions:
   file.directory:
     - name: "/home/{{ salt['pillar.get']('user:username', 'lrobert') }}/apps/phpmyadmin"
     - user: "{{ salt['pillar.get']('user:username', 'lrobert') }}"
     - group: "{{ salt['pillar.get']('user:groupname', 'lrobert') }}"
-    - require:
-      - archive: phpmyadmin-files
     - recurse:
       - group
       - user

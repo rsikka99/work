@@ -1,58 +1,55 @@
-<div class="page-header">
-    <h1>Clients -
-        <small>Client Management</small>
-    </h1>
-</div>
-<div class="clearfix">
-    <a class="btn btn-success pull-right btn-small create-button" href="<?php echo $this->url(array('action' => 'create')) ?>">
-        <i class="icon-white icon-plus-sign"></i> Create new</a>
-</div>
-<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
-    <table class="table table-striped table-condensed table-bordered">
-        <thead>
-        <tr>
-            <th style="width: 30px;">ID</th>
-            <th>Company Name</th>
-            <th>Legal Name</th>
-            <th style="width: 120px;">Action</th>
-        </tr>
-        </thead>
-        <tbody>
+<?php
 
-        <?php foreach ($this->paginator->getCurrentItems() as $client) : /* @var $client Quotegen_Model_Client */ ?>
-            <tr>
-                <td><?php echo $this->escape($client->id); ?></td>
-                <td><?php echo $this->escape($client->companyName); ?></td>
-                <td><?php echo $this->escape($client->legalName); ?></td>
-                <td>
-                    <div class="btn-group">
-                        <?php $canDelete = $this->IsAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_CLIENT_DELETE, Application_Model_Acl::PRIVILEGE_VIEW);
-                        $width = 35;
-                        if ($canDelete)
-                        {
-                            $width = 13;
-                        }
-                        ?>
-                        <a class="btn btn-info" title="View" style="width:<?php echo $width; ?>px" href="<?php echo $this->url(array('action' => 'view', 'id' => $client->id)); ?>"><i class="icon-eye-open"></i></a>
-                        <a class="btn btn-warning" title="Edit" style="width:<?php echo $width; ?>px" href="<?php echo $this->url(array('action' => 'edit', 'id' => $client->id)); ?>"><i class="icon-pencil"></i></a>
-                        <?php
-                        if ($canDelete)
-                        {
-                            ?>
-                            <a class="btn btn-danger" title="Delete" href="<?php echo $this->url(array('action' => 'delete', 'id' => $client->id)); ?>"><i class="icon-trash"></i></a>
-                        <?php
-                        }
-                        ?>
-                    </div>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-    <?php echo $this->paginationControl($this->paginator); ?>
-<?php else : ?>
-    <div class='well'>
-        <h1>There are no clients</h1>
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Models\Acl\DealerManagementAclModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
+
+?>
+<div class="container">
+    <div class="clearfix">
+        <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url(array(), 'company.clients.create') ?>">
+            <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
     </div>
-<?php endif; ?>
-
+    <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
+        <table class="table table-striped table-condensed table-bordered">
+            <thead>
+            <tr>
+                <th style="width: 30px;">ID</th>
+                <th>Company Name</th>
+                <th>Legal Name</th>
+                <th style="width: 120px;">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php /* @var $client ClientModel */ ?>
+            <?php foreach ($this->paginator->getCurrentItems() as $client) : ?>
+                <tr>
+                    <td><?= $this->escape($client->id); ?></td>
+                    <td><?= $this->escape($client->companyName); ?></td>
+                    <td><?= $this->escape($client->legalName); ?></td>
+                    <td>
+                        <div class="btn-group btn-group-justified">
+                            <a class="btn btn-xs btn-info" title="View" href="<?= $this->url(array('id' => $client->id), 'company.clients.view'); ?>">
+                                <i class="glyphicon glyphicon-eye-open"></i>
+                            </a>
+                            <a class="btn btn-xs btn-warning" title="Edit" href="<?= $this->url(array('id' => $client->id), 'company.clients.edit'); ?>">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                            </a>
+                            <?php if ($this->IsAllowed(DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_CLIENT_DELETE, AppAclModel::PRIVILEGE_VIEW)): ?>
+                                <a class="btn btn-xs btn-danger" title="Delete" href="<?= $this->url(array('id' => $client->id), 'company.clients.delete'); ?>">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?= $this->paginationControl($this->paginator); ?>
+    <?php else : ?>
+        <div class='well'>
+            <h1>There are no clients</h1>
+        </div>
+    <?php endif; ?>
+</div>

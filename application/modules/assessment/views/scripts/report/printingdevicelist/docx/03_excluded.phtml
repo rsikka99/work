@@ -4,6 +4,8 @@
  *
  * This script contains everything for the main table of the cost analysis.
  */
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+
 /* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
 
@@ -36,7 +38,7 @@ $table->addCell($tcStyle->col2Width, $tcStyle->header->cell)->addText('Serial Nu
 $table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText('IP Address', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col4Width, $tcStyle->header->cell)->addText('Exclusion Reason', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
-/* @var $device Proposalgen_Model_DeviceInstance */
+/* @var $device DeviceInstanceModel */
 foreach ($assessmentViewModel->getExcludedDevices() as $device)
 {
     $SerialNumber = (strlen($device->serialNumber) == 0) ? 'Unknown Serial' : $device->serialNumber;

@@ -1,4 +1,8 @@
 <?php
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstancesGroupModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel;
 
 /**
  * Class Healthcheck_ViewModel_Devices
@@ -7,99 +11,105 @@ class Healthcheck_ViewModel_Devices extends Assessment_ViewModel_Devices
 {
 
     /**
-     * @var Proposalgen_Model_DeviceInstancesGroup
+     * @var DeviceInstancesGroupModel
      */
     public $a3DeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstancesGroup
+     * @var DeviceInstancesGroupModel
      */
     public $faxAndScanDeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstancesGroup
+     * @var DeviceInstancesGroupModel
      */
     public $reportingTonerLevelsDeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstancesGroup
+     * @var DeviceInstancesGroupModel
      */
     public $isManagedDeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstancesGroup
+     * @var DeviceInstancesGroupModel
      */
     public $unmanagedDeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstancesGroup
+     * @var DeviceInstancesGroupModel
      */
     public $managedByThirdPartyDeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstancesGroup
+     * @var DeviceInstancesGroupModel
      */
     public $compatibleDeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstancesGroup
+     * @var DeviceInstancesGroupModel
      */
     public $notCompatibleDeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstancesGroup
+     * @var DeviceInstancesGroupModel
      */
     public $scanCapableDeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstancesGroup
+     * @var DeviceInstancesGroupModel
      */
     public $copyCapableDeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstancesGroup
+     * @var DeviceInstancesGroupModel
      */
     public $duplexCapableDeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstancesGroup
+     * @var DeviceInstancesGroupModel
      */
     public $faxCapableDeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstancesGroup
+     * @var DeviceInstancesGroupModel
      */
     public $colorCapableDeviceInstances;
 
+    /**
+     * @param int   $rmsUploadId
+     * @param float $laborCostPerPage
+     * @param float $partsCostPerPage
+     * @param float $adminCostPerPage
+     */
     public function __construct ($rmsUploadId, $laborCostPerPage, $partsCostPerPage, $adminCostPerPage)
     {
-        $this->a3DeviceInstances                   = new Proposalgen_Model_DeviceInstancesGroup();
-        $this->reportingTonerLevelsDeviceInstances = new Proposalgen_Model_DeviceInstancesGroup();
-        $this->faxAndScanDeviceInstances           = new Proposalgen_Model_DeviceInstancesGroup();
-        $this->isManagedDeviceInstances            = new Proposalgen_Model_DeviceInstancesGroup();
-        $this->unmanagedDeviceInstances            = new Proposalgen_Model_DeviceInstancesGroup();
-        $this->managedByThirdPartyDeviceInstances  = new Proposalgen_Model_DeviceInstancesGroup();
-        $this->compatibleDeviceInstances           = new Proposalgen_Model_DeviceInstancesGroup();
-        $this->notCompatibleDeviceInstances        = new Proposalgen_Model_DeviceInstancesGroup();
-        $this->scanCapableDeviceInstances          = new Proposalgen_Model_DeviceInstancesGroup();
-        $this->copyCapableDeviceInstances          = new Proposalgen_Model_DeviceInstancesGroup();
-        $this->duplexCapableDeviceInstances        = new Proposalgen_Model_DeviceInstancesGroup();
-        $this->faxCapableDeviceInstances           = new Proposalgen_Model_DeviceInstancesGroup();
-        $this->colorCapableDeviceInstances         = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->a3DeviceInstances                   = new DeviceInstancesGroupModel();
+        $this->reportingTonerLevelsDeviceInstances = new DeviceInstancesGroupModel();
+        $this->faxAndScanDeviceInstances           = new DeviceInstancesGroupModel();
+        $this->isManagedDeviceInstances            = new DeviceInstancesGroupModel();
+        $this->unmanagedDeviceInstances            = new DeviceInstancesGroupModel();
+        $this->managedByThirdPartyDeviceInstances  = new DeviceInstancesGroupModel();
+        $this->compatibleDeviceInstances           = new DeviceInstancesGroupModel();
+        $this->notCompatibleDeviceInstances        = new DeviceInstancesGroupModel();
+        $this->scanCapableDeviceInstances          = new DeviceInstancesGroupModel();
+        $this->copyCapableDeviceInstances          = new DeviceInstancesGroupModel();
+        $this->duplexCapableDeviceInstances        = new DeviceInstancesGroupModel();
+        $this->faxCapableDeviceInstances           = new DeviceInstancesGroupModel();
+        $this->colorCapableDeviceInstances         = new DeviceInstancesGroupModel();
 
         parent::__construct($rmsUploadId, $laborCostPerPage, $partsCostPerPage, $adminCostPerPage);
     }
 
 
     /**
-     * @param Proposalgen_Model_DeviceInstance $deviceInstance
+     * @param DeviceInstanceModel $deviceInstance
      */
     protected function _sortMappedDevice ($deviceInstance)
     {
         /**
          * If we're here, it's not excluded. Further sorting is needed.
          */
-        if ($deviceInstance->getMasterDevice() instanceof Proposalgen_Model_MasterDevice)
+        if ($deviceInstance->getMasterDevice() instanceof MasterDeviceModel)
         {
             if ($deviceInstance->getMasterDevice()->isA3)
             {
@@ -131,7 +141,7 @@ class Healthcheck_ViewModel_Devices extends Assessment_ViewModel_Devices
                 $this->faxCapableDeviceInstances->add($deviceInstance);
             }
 
-            if ($deviceInstance->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
+            if ($deviceInstance->getMasterDevice()->tonerConfigId != TonerConfigModel::BLACK_ONLY)
             {
                 $this->colorCapableDeviceInstances->add($deviceInstance);
             }

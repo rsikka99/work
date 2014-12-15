@@ -1,5 +1,7 @@
 <?php
 
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+
 class My_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 {
     const SEPARATOR = "__";
@@ -19,7 +21,7 @@ class My_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
         {
             if (!$this->_requestIsUnrestricted($request->getModuleName(), $request->getControllerName(), $request->getActionName()))
             {
-                /* @var $acl Application_Model_Acl */
+                /* @var $acl AppAclModel */
                 $acl = Zend_Registry::get('Zend_Acl');
 
                 $userId = null;
@@ -56,7 +58,7 @@ class My_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 
                     // Redirect to the login page
                     $r = new Zend_Controller_Action_Helper_Redirector();
-                    $r->gotoSimple('login', 'auth', 'default');
+                    $r->gotoRoute(array(), 'auth.login');
                     break;
                 default :
                     // Set up the error handler

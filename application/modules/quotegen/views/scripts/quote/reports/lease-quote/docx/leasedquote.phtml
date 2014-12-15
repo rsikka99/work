@@ -1,5 +1,10 @@
 <?php
-/* @var $quote Quotegen_Model_Quote */
+/* @var $quote QuoteModel */
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceOptionModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceGroupDeviceModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceGroupModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+
 $quote = $this->quote;
 // Get the path based on the theme
 $commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
@@ -16,7 +21,7 @@ $quoteDeviceGroups = $quote->getQuoteDeviceGroups();
 $groupCount        = 0;
 $tcStyle           = $this->styles->tables->quoteTable;
 
-/* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+/* @var $quoteDeviceGroup QuoteDeviceGroupModel */
 foreach ($this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
 {
     if ($quoteDeviceGroup->calculateTotalQuantity() > 0)
@@ -29,7 +34,7 @@ foreach ($this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
         $table->addCell($tcStyle->col3Width, $tcStyle->header->cell3->cellStyle)->addText('Description and Features', $tcStyle->header->cell3->fontStyle, $tcStyle->header->cell3->paragraphStyle);
         $table->addCell($tcStyle->col4Width, $tcStyle->header->cell4->cellStyle)->addText('Quantity', $tcStyle->header->cell4->fontStyle, $tcStyle->header->cell4->paragraphStyle);
 
-        /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+        /* @var $quoteDeviceGroupDevice QuoteDeviceGroupDeviceModel */
         foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
         {
             if ($quoteDeviceGroupDevice->quantity > 0)
@@ -47,7 +52,7 @@ foreach ($this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
 
                 // Get quote device options
                 $quoteDeviceOptions = $quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions();
-                /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
+                /* @var $quoteDeviceOption QuoteDeviceOptionModel */
                 foreach ($quoteDeviceOptions as $quoteDeviceOption)
                 {
                     $table->addRow($tcStyle->option->rowheight);

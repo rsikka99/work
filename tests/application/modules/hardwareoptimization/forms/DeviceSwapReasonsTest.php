@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Forms\DeviceSwapReasonsForm;
 
 /**
  * Class Hardwareoptimization_Form_DeviceSwapReasonsTest
@@ -7,11 +8,11 @@ class Hardwareoptimization_Form_DeviceSwapReasonsTest extends Tangent_PHPUnit_Fr
 {
 
     /**
-     * @return Hardwareoptimization_Form_DeviceSwapReasons
+     * @return DeviceSwapReasonsForm
      */
     public function getForm ()
     {
-        return new Hardwareoptimization_Form_DeviceSwapReasons();
+        return new DeviceSwapReasonsForm();
     }
 
     /**

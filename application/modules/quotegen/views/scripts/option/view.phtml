@@ -1,26 +1,23 @@
-<?php /* @var $option Quotegen_Model_Option */
-$option = $this->option; ?>
-<div class="page-header">
-    <h1>Hardware Quote Devices -
-        <small>View Option</small>
-    </h1>
-</div>
-<div class="well">
+<?php
+
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\OptionModel;
+
+/* @var $option OptionModel */
+$option = $this->option;
+?>
+<div class="container">
     <dl class="dl-horizontal">
         <dt>Name</dt>
-        <dd><?php echo $option->name; ?></dd>
+        <dd><?= $option->name; ?></dd>
         <dt>Description</dt>
-        <dd><?php echo $option->description; ?></dd>
+        <dd><?= $option->description; ?></dd>
         <dt>SKU</dt>
-        <dd><?php echo $option->oemSku ?></dd>
+        <dd><?= $option->oemSku ?></dd>
         <dt>Price</dt>
-        <dd><?php echo $option->cost ?></dd>
+        <dd><?= $option->cost ?></dd>
         <dt>Options</dt>
-
-        <?php /* @var $category Quotegen_Model_Category */
-        foreach ($option->getCategories() as $category) : ?>
-            <dd><?php echo $category->name ?></dd>
+        <?php foreach ($option->getCategories() as $category) : ?>
+            <dd><?= $category->name ?></dd>
         <?php endforeach ?>
-
     </dl>
 </div>

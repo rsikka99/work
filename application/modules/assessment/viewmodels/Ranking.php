@@ -1,9 +1,10 @@
 <?php
+use Tangent\Functions;
 
 /**
  * Class Assessment_ViewModel_Ranking
  */
-class Assessment_ViewModel_Ranking extends Tangent_Model_Abstract
+class Assessment_ViewModel_Ranking
 {
     protected $proposal;
 
@@ -39,9 +40,9 @@ class Assessment_ViewModel_Ranking extends Tangent_Model_Abstract
             $criteria = $this->getRankingCriteria();
             $criteria = $criteria ["ServiceAndSuppliesLogistics"];
 
-            $ranking["averageAgeRanking"]           = Tangent_Functions::getValueFromRangeStepTable($this->proposal->calculateAverageAgeOfPurchasedDevices(), $criteria ["AverageAge"]);
-            $ranking["differentSupplyTypesRanking"] = Tangent_Functions::getValueFromRangeStepTable($this->proposal->calculateNumberOfSupplyTypeScore(), $criteria ["DifferentSupplyTypes"], false);
-            $ranking ["reportsTonerLevelsRanking"]  = Tangent_Functions::getValueFromRangeStepTable($this->proposal->calculatePercentageOfFleetReportingTonerLevels(), $criteria ["ReportsTonerLevels"]);
+            $ranking["averageAgeRanking"]           = Functions::getValueFromRangeStepTable($this->proposal->calculateAverageAgeOfPurchasedDevices(), $criteria ["AverageAge"]);
+            $ranking["differentSupplyTypesRanking"] = Functions::getValueFromRangeStepTable($this->proposal->calculateNumberOfSupplyTypeScore(), $criteria ["DifferentSupplyTypes"], false);
+            $ranking ["reportsTonerLevelsRanking"]  = Functions::getValueFromRangeStepTable($this->proposal->calculatePercentageOfFleetReportingTonerLevels(), $criteria ["ReportsTonerLevels"]);
 
             $totalRanking = round(
                 ($ranking["averageAgeRanking"] + ($ranking["differentSupplyTypesRanking"] * 2) + $ranking ["reportsTonerLevelsRanking"]) / 4
@@ -89,11 +90,11 @@ class Assessment_ViewModel_Ranking extends Tangent_Model_Abstract
         {
             $criteria                             = $this->getRankingCriteria();
             $criteria                             = $criteria ["PrintingHardwareUsage"];
-            $AverageMonthlyPrintVolumePerPrinter  = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly(), $criteria ["AverageMonthlyPrintVolumePerPrinter"]);
-            $AverageMonthlyPrintVolumePerEmployee = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->proposal->getEmployeeCount(), $criteria ["AverageMonthlyPrintVolumePerEmployee"]);
-            $NumberOfEmployeesPerDevice           = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getEmployeeCount() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount(), $criteria ["NumberOfEmployeesPerDevice"]);
-            $UnderusedDevices                     = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getPercentDevicesUnderused(), $criteria ["UnderusedDevices"]);
-            $OverusedDevices                      = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getPercentDevicesOverused(), $criteria ["OverusedDevices"]);
+            $AverageMonthlyPrintVolumePerPrinter  = Functions::getValueFromRangeStepTable($this->proposal->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly(), $criteria ["AverageMonthlyPrintVolumePerPrinter"]);
+            $AverageMonthlyPrintVolumePerEmployee = Functions::getValueFromRangeStepTable(($this->proposal->getEmployeeCount() ? $this->proposal->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->proposal->getEmployeeCount() : 0), $criteria ["AverageMonthlyPrintVolumePerEmployee"]);
+            $NumberOfEmployeesPerDevice           = Functions::getValueFromRangeStepTable(($this->proposal->getEmployeeCount() > 0 ? $this->proposal->getEmployeeCount() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount() : 0), $criteria ["NumberOfEmployeesPerDevice"]);
+            $UnderusedDevices                     = Functions::getValueFromRangeStepTable($this->proposal->getPercentDevicesUnderused(), $criteria ["UnderusedDevices"]);
+            $OverusedDevices                      = Functions::getValueFromRangeStepTable($this->proposal->getPercentDevicesOverused(), $criteria ["OverusedDevices"]);
 
             $totalRanking = round(((($AverageMonthlyPrintVolumePerPrinter + $AverageMonthlyPrintVolumePerEmployee + $NumberOfEmployeesPerDevice) / 3) + (($UnderusedDevices + $OverusedDevices) / 2)) / 2, 1);
 
@@ -136,11 +137,11 @@ class Assessment_ViewModel_Ranking extends Tangent_Model_Abstract
         {
             $criteria           = $this->getRankingCriteria();
             $criteria           = $criteria ["TechnologyReliabilityAndUserProductivity"];
-            $AverageAge         = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getAverageDeviceAge(), $criteria ["AverageAge"]);
-            $PercentITTime      = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getweeklyITHours() * 60) / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount(), $criteria ["PercentITTime"]);
-            $ScanCapable        = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfScanCapableDevices() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["ScanCapable"]);
-            $FaxCapable         = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfFaxCapableDevices() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["FaxCapable"]);
-            $ColorCapable       = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfColorCapableDevices() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["ColorCapable"]);
+            $AverageAge         = Functions::getValueFromRangeStepTable($this->proposal->getAverageDeviceAge(), $criteria ["AverageAge"]);
+            $PercentITTime      = Functions::getValueFromRangeStepTable(($this->proposal->getweeklyITHours() * 60) / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount(), $criteria ["PercentITTime"]);
+            $ScanCapable        = Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfScanCapableDevices() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["ScanCapable"]);
+            $FaxCapable         = Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfFaxCapableDevices() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["FaxCapable"]);
+            $ColorCapable       = Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfColorCapableDevices() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["ColorCapable"]);
             $technologyFeatures = ($ScanCapable + $FaxCapable + $ColorCapable) / 3;
             $totalRanking       = round(((($AverageAge + $PercentITTime) / 2) + $technologyFeatures) / 2, 1);
 
@@ -191,15 +192,15 @@ class Assessment_ViewModel_Ranking extends Tangent_Model_Abstract
             $AverageKWHPerDevicePerMonth = 0;
             if ($this->proposal->getPercentageOfDevicesReportingPower() > $this->proposal->getDevicesReportingPowerThreshold())
             {
-                $AverageKWHPerDevicePerMonth = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getAveragePowerUsagePerMonth() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount(), $criteria ["AverageKWHPerDevicePerMonth"]);
+                $AverageKWHPerDevicePerMonth = Functions::getValueFromRangeStepTable($this->proposal->getAveragePowerUsagePerMonth() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount(), $criteria ["AverageKWHPerDevicePerMonth"]);
                 $rankingsCalculated++;
             }
 
-            $AverageOperatingWatts = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getAverageOperatingWatts(), $criteria ["AverageOperatingWatts"]);
+            $AverageOperatingWatts = Functions::getValueFromRangeStepTable($this->proposal->getAverageOperatingWatts(), $criteria ["AverageOperatingWatts"]);
             $rankingsCalculated++;
 
-            $DuplexCapable = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfDuplexCapableDevices() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["DuplexCapable"]);
-            $ScanCapable   = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfScanCapableDevices() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["ScanCapable"]);
+            $DuplexCapable = Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfDuplexCapableDevices() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["DuplexCapable"]);
+            $ScanCapable   = Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfScanCapableDevices() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["ScanCapable"]);
             $greenFeatures = ($DuplexCapable + $ScanCapable) / 2;
             $rankingsCalculated++;
 
@@ -244,14 +245,14 @@ class Assessment_ViewModel_Ranking extends Tangent_Model_Abstract
         {
             $criteria           = $this->getRankingCriteria();
             $criteria           = $criteria ["Expense"];
-            $LeasedBWPerPage    = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getLeasedEstimatedBlackAndWhiteCPP(), $criteria ["LeasedBWPerPage"]);
+            $LeasedBWPerPage    = Functions::getValueFromRangeStepTable($this->proposal->getLeasedEstimatedBlackAndWhiteCPP(), $criteria ["LeasedBWPerPage"]);
             $LeasedColorPerPage = $LeasedBWPerPage;
             if ($this->proposal->getLeasedEstimatedColorCPP() > 0)
             {
-                $LeasedColorPerPage = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getLeasedEstimatedColorCPP(), $criteria ["LeasedColorPerPage"]);
+                $LeasedColorPerPage = Functions::getValueFromRangeStepTable($this->proposal->getLeasedEstimatedColorCPP(), $criteria ["LeasedColorPerPage"]);
             }
-            $PurchasedBWPerPage    = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getEstimatedAllInBlackAndWhiteCPP(), $criteria ["PurchasedBWPerPage"]);
-            $PurchasedColorPerPage = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getEstimatedAllInColorCPP(), $criteria ["PurchasedColorPerPage"]);
+            $PurchasedBWPerPage    = Functions::getValueFromRangeStepTable($this->proposal->getEstimatedAllInBlackAndWhiteCPP(), $criteria ["PurchasedBWPerPage"]);
+            $PurchasedColorPerPage = Functions::getValueFromRangeStepTable($this->proposal->getEstimatedAllInColorCPP(), $criteria ["PurchasedColorPerPage"]);
 
             $totalRanking = round((((($LeasedBWPerPage + $LeasedColorPerPage) / 2) + (($PurchasedBWPerPage + $PurchasedColorPerPage) / 2)) / 2), 1);
 

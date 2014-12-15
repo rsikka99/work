@@ -1,19 +1,23 @@
 <?php
+use MPSToolbox\Legacy\Modules\Admin\Forms\OnboardingForm;
+use MPSToolbox\Legacy\Modules\Admin\Services\OnboardingOemService;
+use MPSToolbox\Legacy\Modules\Admin\Services\OnboardingCompatibleService;
+use Tangent\Controller\Action;
 
 /**
  * Class Admin_OnboardingController
  */
-class Admin_OnboardingController extends Tangent_Controller_Action
+class Admin_OnboardingController extends Action
 {
     /**
      * Displays the upload form
      */
     public function indexAction ()
     {
-        $this->view->headTitle('Onboarding');
+        $this->_pageTitle = array('Onboarding');
 
         $dealerId       = $this->getRequest()->getUserParam('dealerId', false);
-        $onboardingForm = new Admin_Form_Onboarding($dealerId);
+        $onboardingForm = new OnboardingForm($dealerId);
 
         if ($this->getRequest()->isPost())
         {
@@ -23,11 +27,11 @@ class Admin_OnboardingController extends Tangent_Controller_Action
 
                 if ($dealerId > 0)
                 {
-                    $this->redirector('view', 'dealer', null, array('id' => $dealerId));
+                    $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
                 }
                 else
                 {
-                    $this->redirector('index');
+                    $this->redirectToRoute('admin');
                 }
             }
             else
@@ -58,7 +62,7 @@ class Admin_OnboardingController extends Tangent_Controller_Action
     /**
      * Processes the OEM Pricing
      *
-     * @param Admin_Form_Onboarding $form
+     * @param OnboardingForm $form
      *
      * @return array
      */
@@ -72,7 +76,7 @@ class Admin_OnboardingController extends Tangent_Controller_Action
             if ($oemPricing->receive())
             {
                 $uploadedPath         = $oemPricing->getFileName();
-                $oemOnboardingService = new Admin_Service_Onboarding_Oem();
+                $oemOnboardingService = new OnboardingOemService();
                 $messages             = $oemOnboardingService->processFile($uploadedPath, $form->getValue('dealerId'));
             }
         }
@@ -83,7 +87,7 @@ class Admin_OnboardingController extends Tangent_Controller_Action
     /**
      * Processes the OEM Pricing
      *
-     * @param Admin_Form_Onboarding $form
+     * @param OnboardingForm $form
      *
      * @return array|bool|string
      */
@@ -97,7 +101,7 @@ class Admin_OnboardingController extends Tangent_Controller_Action
             if ($compPricing->receive())
             {
                 $uploadedPath                = $compPricing->getFileName();
-                $compatibleOnboardingService = new Admin_Service_Onboarding_Compatible();
+                $compatibleOnboardingService = new OnboardingCompatibleService();
                 $messages                    = $compatibleOnboardingService->processFile($uploadedPath, $form->getValue('dealerId'));
             }
         }

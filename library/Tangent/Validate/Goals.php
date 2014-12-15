@@ -1,16 +1,18 @@
 <?php
 
-/**
- * validators_ValidateGoals - Custom validater for validating goals.
- *
- * @author     Mike Christie
- * @version    v1.0
- */
+namespace Tangent\Validate;
+
+    /**
+     * validators_ValidateGoals - Custom validater for validating goals.
+     *
+     * @author     Mike Christie
+     * @version    v1.0
+     */
 
 /**
  *
  */
-class Tangent_Validate_Goals extends Zend_Validate_Abstract
+class Goals extends \Zend_Validate_Abstract
 {
     const NUMBER_ALREADY_USED = 'inUse';
 

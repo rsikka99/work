@@ -1,223 +1,143 @@
-<div class="page-header">
-    <h1>Administration</h1>
+<?php
+
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Models\Acl\ProposalgenAclModel;
+use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
+
+?>
+<div class='container'>
+    <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\AdminAclModel::RESOURCE_ADMIN_INDEX_INDEX, AppAclModel::PRIVILEGE_ADMIN)) : ?>
+        <h3>System Management</h3>
+        <div class="row">
+            <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\AdminAclModel::RESOURCE_ADMIN_CLIENT_INDEX)) : ?>
+                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'admin.clients'); ?>">
+                        <i class="fa fa-star fa-4x"></i>
+                        <br /><br />
+                        System Client <br />Management<br /></a>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\AdminAclModel::RESOURCE_ADMIN_DEALER_INDEX)) : ?>
+                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'admin.dealers'); ?>">
+                        <i class="fa fa-briefcase fa-4x"></i>
+                        <br /><br />
+                        System Dealer <br />Management<br /></a>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\AdminAclModel::RESOURCE_ADMIN_USER_INDEX)) : ?>
+                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'admin.users'); ?>">
+                        <i class="fa fa-group fa-4x"></i>
+                        <br /><br />
+                        System User <br />Management<br /></a>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_MANAGEMATCHUPS)) : ?>
+                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'hardware-library.managematchups'); ?>">
+                        <i class="fa fa-bar-chart-o fa-4x"></i>
+                        <br /><br />
+                        Manage Master <br />Matchups<br /></a>
+                </div>
+            <?php endif; ?>
+            <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\AdminAclModel::RESOURCE_ADMIN_ONBOARDING_INDEX)) : ?>
+                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'admin.dealer-on-boarding'); ?>">
+                        <i class="fa fa-cloud-upload fa-4x"></i><br /><br />
+                        Dealer
+                        <br>
+                        Onboarding
+                        <br>
+                    </a>
+                </div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+    <?php if ($this->isAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX)
+              || $this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING)
+    ) : ?>
+        <h3>Device Management</h3>
+        <div class="row">
+            <?php if ($this->isAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX)) : ?>
+                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'hardware-library.all-devices'); ?>">
+                        <i class="fa fa-print fa-4x"></i>
+                        <br /><br />
+                        All Devices<br /><br /> </a>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING)) : ?>
+                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'hardware-library.bulk-hardware-pricing-updates'); ?>">
+                        <i class="fa fa-cloud-upload fa-4x"></i>
+                        <br /><br />
+                        Bulk Hardware / <br />Pricing Updates <br /> </a>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS)) : ?>
+                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'hardware-library.device-swaps'); ?>">
+                        <i class="fa fa-print fa-4x"></i>
+                        <br /><br />
+                        Manage Device <br /> Swaps <br /> </a>
+                </div>
+            <?php endif; ?>
+        </div>
+
+    <?php endif; ?>
+    <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX)
+              || $this->isAllowed(\MPSToolbox\Legacy\Models\Acl\DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD)
+              || $this->isAllowed(\MPSToolbox\Legacy\Models\Acl\DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD)
+              || $this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE)
+    ) : ?>
+        <h3>Account Management</h3>
+        <div class="row">
+            <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX)) : ?>
+                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.clients'); ?>">
+                        <i class="fa fa-star fa-4x"></i>
+                        <br /><br />
+                        Clients<br /><br /></a>
+                </div>
+            <?php endif; ?>
+            <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD)) : ?>
+                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.leasing-schema'); ?>">
+                        <i class="fa fa-money fa-4x"></i>
+                        <br /><br />
+                        Lease Rates<br /><br /></a>
+                </div>
+            <?php endif; ?>
+            <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD)) : ?>
+                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.users'); ?>">
+                        <i class="fa fa-group fa-4x"></i>
+                        <br /><br />
+                        Users<br /><br /></a>
+                </div>
+            <?php endif; ?>
+            <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_BRANDING_WILDCARD)) : ?>
+                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                    <a class="btn btn-block btn-default" href="<?= $this->url(array(), 'company.branding'); ?>">
+                        <i class="fa fa-wrench fa-4x"></i>
+                        <br /><br />
+                        Branding<br /><br /></a>
+                </div>
+            <?php endif; ?>
+            <?php if ($this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_MANUFACTURER_CREATE)) : ?>
+                <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'hardware-library.manufacturers'); ?>">
+                        <i class="fa fa-print fa-4x"></i>
+                        <br /><br />
+                        Manufacturers<br /><br /></a>
+                </div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
 </div>
-
-<?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_ADMIN)) : ?>
-    <h3>System Management</h3>
-    <div class="row">
-        <?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_CLIENT_INDEX)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "client", "module" => "admin")); ?>"><i class="icon-star icon-4x"></i><br /><br />
-                    System Client Management</a>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_DEALER_INDEX)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "dealer", "module" => "admin")); ?>"><i class="icon-briefcase icon-4x"></i><br /><br />
-                    System Dealer Management</a>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_USER_INDEX)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "user", "module" => "admin")); ?>"><i class="icon-group icon-4x"></i><br /><br />
-                    System User Management</a>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_MANAGEMATCHUPS)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "managematchups", "controller" => "admin", "module" => "proposalgen")); ?>"><i class="icon-bar-chart icon-4x"></i><br /><br />
-                    Manage Master Matchups</a>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_ONBOARDING_INDEX)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "onboarding", "module" => "admin")); ?>"><i class="icon-cloud-upload icon-4x"></i><br /><br />
-                    Dealer Onboarding
-                    <br>
-                    <br>
-                </a>
-            </div>
-        <?php endif; ?>
-    </div>
-<?php endif; ?>
-<?php if ($this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX)
-          || $this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING)
-) : ?>
-    <h3>Device Management</h3>
-    <div class="row">
-        <?php if ($this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "devicesetup", "module" => "quotegen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
-                    All Devices<br /><br /> </a>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "bulkdevicepricing", "controller" => "costs", "module" => "proposalgen")); ?>"><i class="icon-upload-alt icon-4x"></i><br /><br />
-                    Bulk Hardware / <br />Pricing Updates <br /> </a>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "deviceswaps", "module" => "hardwareoptimization")); ?>"><i class="icon-print icon-4x"></i><br /><br />
-                    Manage Device <br /> Swaps <br /> </a>
-            </div>
-        <?php endif; ?>
-        <?php if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "memjetdeviceswaps", "module" => "admin")); ?>"><i class="icon-exchange icon-4x"></i><br /><br />
-                    Manage Memjet Device Swaps</a>
-            </div>
-        <?php endif; ?>
-    </div>
-
-<?php endif; ?>
-<?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX)
-          || $this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD)
-          || $this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD)
-          || $this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE)
-) : ?>
-    <h3>Account Management</h3>
-    <div class="row">
-        <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "client", "module" => "dealermanagement")); ?>"><i class="icon-star icon-4x"></i><br /><br />
-                    Clients<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "leasingschema", "module" => "dealermanagement")); ?>"><i class="icon-money icon-4x"></i><br /><br />
-                    Lease Rates<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "user", "module" => "dealermanagement")); ?>"><i class="icon-group icon-4x"></i><br /><br />
-                    Users<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_BRANDING_WILDCARD)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "branding", "module" => "dealermanagement")); ?>"><i class="icon-wrench icon-4x"></i><br /><br />
-                    Branding<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_MANUFACTURER_CREATE)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "manufacturer", "module" => "proposalgen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
-                    Manufacturers<br /><br /></a>
-            </div>
-        <?php endif; ?>
-    </div>
-<?php endif; ?>
-<?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_INDEX_USER)) : ?>
-    <h3>My Settings</h3>
-    <div class="row">
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_PROPOSAL_USER) && My_Feature::canAccess(My_Feature::ASSESSMENT)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "user", "controller" => "proposal", "module" => "preferences")); ?>"><i class="icon-star icon-4x"></i><br /><br />
-                    Assessment<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_QUOTE_USER) && My_Feature::canAccess(My_Feature::HARDWARE_QUOTE)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "user", "controller" => "quote", "module" => "preferences")); ?>"><i class="icon-money icon-4x"></i><br /><br />
-                    Quote<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_HEALTHCHECK_USER) && My_Feature::canAccess(My_Feature::HEALTHCHECK)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "user", "controller" => "healthcheck", "module" => "preferences")); ?>"><i class="icon-medkit icon-4x"></i><br /><br />
-                    Health Check<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_USER) && My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "user", "controller" => "hardwareoptimization", "module" => "preferences")); ?>"><i class="icon-dashboard icon-4x"></i><br />
-                    Hardware Optimization<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "user", "controller" => "memjet_optimization", "module" => "preferences")); ?>"><i class="icon-dashboard icon-4x"></i><br />
-                    Memjet<br /> Optimization<br /><br /></a>
-            </div>
-        <?php endif; ?>
-    </div>
-<?php endif; ?>
-<?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_INDEX_DEALER)) : ?>
-    <h3>Dealer Settings</h3>
-    <div class="row">
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_PROPOSAL_DEALER) && My_Feature::canAccess(My_Feature::ASSESSMENT)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "dealer", "controller" => "proposal", "module" => "preferences")); ?>"><i class="icon-star icon-4x"></i><br /><br />
-                    Assessment<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_QUOTE_DEALER) && My_Feature::canAccess(My_Feature::HARDWARE_QUOTE)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "dealer", "controller" => "quote", "module" => "preferences")); ?>"><i class="icon-money icon-4x"></i><br /><br />
-                    Quote<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_HEALTHCHECK_DEALER) && My_Feature::canAccess(My_Feature::HEALTHCHECK)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "dealer", "controller" => "healthcheck", "module" => "preferences")); ?>"><i class="icon-medkit icon-4x"></i><br /><br />
-                    Health Check<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_DEALER) && My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "dealer", "controller" => "hardwareoptimization", "module" => "preferences")); ?>"><i class="icon-dashboard icon-4x"></i><br />
-                    Hardware Optimization<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "dealer", "controller" => "memjet_optimization", "module" => "preferences")); ?>"><i class="icon-dashboard icon-4x"></i><br />
-                    Memjet<br /> Optimization<br /><br /></a>
-            </div>
-        <?php endif; ?>
-    </div>
-<?php endif; ?>
-<?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_INDEX_SYSTEM)) : ?>
-    <h3>System Settings</h3>
-    <div class="row">
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_PROPOSAL_SYSTEM)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "system", "controller" => "proposal", "module" => "preferences")); ?>"><i class="icon-star icon-4x"></i><br /><br />
-                    Assessment<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_QUOTE_SYSTEM)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "system", "controller" => "quote", "module" => "preferences")); ?>"><i class="icon-money icon-4x"></i><br /><br />
-                    Quote<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_HEALTHCHECK_SYSTEM)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "system", "controller" => "healthcheck", "module" => "preferences")); ?>"><i class="icon-medkit icon-4x"></i><br /><br />
-                    Health Check<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_SYSTEM)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "system", "controller" => "hardwareoptimization", "module" => "preferences")); ?>"><i class="icon-dashboard icon-4x"></i><br />
-                    Hardware Optimization<br /><br /></a>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_SYSTEM)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "system", "controller" => "memjet_optimization", "module" => "preferences")); ?>"><i class="icon-dashboard icon-4x"></i><br />
-                    Memjet<br /> Optimization<br /><br /></a>
-            </div>
-        <?php endif; ?>
-    </div>
-<?php endif; ?>

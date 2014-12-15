@@ -1,9 +1,10 @@
 <?php
+use Tangent\Controller\Action;
 
 /**
  * Class Proposalgen_IndexController
  */
-class Proposalgen_IndexController extends Tangent_Controller_Action
+class Proposalgen_IndexController extends Action
 {
     public function indexAction ()
     {

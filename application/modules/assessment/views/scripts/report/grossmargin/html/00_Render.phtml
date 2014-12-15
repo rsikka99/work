@@ -1,5 +1,10 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DealerTonerAttributeMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DealerTonerAttributeModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
+
 $assessmentViewModel = $this->assessmentViewModel;
 $brandName = My_Brand::getDealerBranding()->mpsProgramName;
 $companyName = My_Brand::getDealerBranding()->shortDealerName;
@@ -17,30 +22,30 @@ $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
     <tbody>
     <tr>
         <td class="column1">
-            <div class="heading"><?php echo $brandName ?> Black And White CPP:</div>
+            <div class="heading"><?= $brandName ?> Black And White CPP:</div>
         </td>
         <td class="column2">
-            <div><?php echo $this->formatCostPerPage($assessmentViewModel->getMPSBlackAndWhiteCPP()); ?></div>
+            <div><?= $this->formatCostPerPage($assessmentViewModel->getMPSBlackAndWhiteCPP()); ?></div>
         </td>
         <td class="column3">
             <div class="heading">Total Cost:</div>
         </td>
         <td class="column4">
-            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Combined); ?></div>
+            <div><?= $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Combined); ?></div>
         </td>
     </tr>
     <tr>
         <td class="column1">
-            <div class="heading"><?php echo $brandName ?> Color CPP:</div>
+            <div class="heading"><?= $brandName ?> Color CPP:</div>
         </td>
         <td class="column2">
-            <div><?php echo $this->formatCostPerPage($assessmentViewModel->getMPSColorCPP()); ?></div>
+            <div><?= $this->formatCostPerPage($assessmentViewModel->getMPSColorCPP()); ?></div>
         </td>
         <td class="column3">
             <div class="heading">Total Revenue:</div>
         </td>
         <td class="column4">
-            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined); ?></div>
+            <div><?= $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined); ?></div>
         </td>
     </tr>
     <tr>
@@ -48,13 +53,13 @@ $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
             <div class="heading">Weighted Black And White CPP:</div>
         </td>
         <td class="column2">
-            <div><?php echo $this->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP()->BlackAndWhite); ?></div>
+            <div><?= $this->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP()->BlackAndWhite); ?></div>
         </td>
         <td class="column3">
             <div class="heading">Monthly Profit:</div>
         </td>
         <td class="column4">
-            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginMonthlyProfit()); ?></div>
+            <div><?= $this->currency($assessmentViewModel->getGrossMarginMonthlyProfit()); ?></div>
         </td>
     </tr>
     <tr>
@@ -62,13 +67,13 @@ $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
             <div class="heading">Weighted Color CPP:</div>
         </td>
         <td class="column2">
-            <div><?php echo $this->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP()->Color); ?></div>
+            <div><?= $this->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP()->Color); ?></div>
         </td>
         <td class="column3">
             <div class="heading">Overall Margin:</div>
         </td>
         <td class="column4">
-            <div><?php echo number_format($assessmentViewModel->getGrossMarginOverallMargin()); ?>%</div>
+            <div><?= number_format($assessmentViewModel->getGrossMarginOverallMargin()); ?>%</div>
         </td>
     </tr>
     <tr>
@@ -76,12 +81,12 @@ $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
             <div class="heading">Black And White Margin:</div>
         </td>
         <td class="column2">
-            <div><?php echo number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin()); ?>%</div>
+            <div><?= number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin()); ?>%</div>
         </td>
         <td class="column3">
             <div class="heading">Color Margin:</div>
         </td>
-        <td class="column4"><?php echo number_format($assessmentViewModel->getGrossMarginColorMargin()); ?>%</td>
+        <td class="column4"><?= number_format($assessmentViewModel->getGrossMarginColorMargin()); ?>%</td>
     </tr>
     </tbody>
 </table>
@@ -94,7 +99,7 @@ $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
     <br /><br />
 </div>
 
-<table id="grossMarginDeviceSummary">
+<table class="table" id="grossMarginDeviceSummary">
     <thead>
     <tr class="center">
         <th class="column1" rowspan="2">Device Name<br />(IP Address - Serial Number)</th>
@@ -113,7 +118,7 @@ $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         <th class="column9">Toner Yield</th>
         <th class="column10">CPP</th>
         <th class="column11">Total Printing Cost</th>
-        <th class="column12"><?php echo My_Brand::$dealerSku; ?>s</th>
+        <th class="column12"><?= My_Brand::$dealerSku; ?>s</th>
         <th class="column13">OEM SKUs</th>
     </tr>
     </thead>
@@ -130,42 +135,42 @@ $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         $tonerSkus                 = array();
         foreach ($toners as $toner)
         {
-            $dealerTonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner->id, $dealerId);
+            $dealerTonerAttribute = DealerTonerAttributeMapper::getInstance()->findTonerAttributeByTonerId($toner->id, $dealerId);
             $dealerSku            = null;
 
-            if ($dealerTonerAttribute instanceof Proposalgen_Model_Dealer_Toner_Attribute)
+            if ($dealerTonerAttribute instanceof DealerTonerAttributeModel)
             {
                 $dealerSku = $dealerTonerAttribute->dealerSku;
             }
 
             switch ($toner->tonerColorId)
             {
-                case Proposalgen_Model_TonerColor::BLACK:
+                case TonerColorModel::BLACK:
                     $blackToner                      = $toner;
                     $tonerSkus['black']['sku']       = $toner->sku;
                     $tonerSkus['black']['dealerSku'] = $dealerSku;
                     break;
-                case Proposalgen_Model_TonerColor::CYAN:
+                case TonerColorModel::CYAN:
                     $colorToner                     = $toner;
                     $tonerSkus['cyan']['sku']       = $toner->sku;
                     $tonerSkus['cyan']['dealerSku'] = $dealerSku;
                     break;
-                case Proposalgen_Model_TonerColor::MAGENTA:
+                case TonerColorModel::MAGENTA:
                     $tonerSkus['magenta']['sku']       = $toner->sku;
                     $tonerSkus['magenta']['dealerSku'] = $dealerSku;
                     $colorToner                        = $toner;
                     break;
-                case Proposalgen_Model_TonerColor::YELLOW:
+                case TonerColorModel::YELLOW:
                     $tonerSkus['yellow']['sku']       = $toner->sku;
                     $tonerSkus['yellow']['dealerSku'] = $dealerSku;
                     $colorToner                       = $toner;
                     break;
-                case Proposalgen_Model_TonerColor::THREE_COLOR:
+                case TonerColorModel::THREE_COLOR:
                     $tonerSkus['threeColor']['sku']       = $toner->sku;
                     $tonerSkus['threeColor']['dealerSku'] = $dealerSku;
                     $colorToner                           = $toner;
                     break;
-                case Proposalgen_Model_TonerColor::FOUR_COLOR:
+                case TonerColorModel::FOUR_COLOR:
                     $tonerSkus['fourColor']['sku']       = $toner->sku;
                     $tonerSkus['fourColor']['dealerSku'] = $dealerSku;
                     $blackToner                          = $toner;
@@ -185,55 +190,55 @@ $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         $colorStyle = "right";
         $colorYield = "-";
         $isColor    = false;
-        if ($colorToner instanceof Proposalgen_Model_Toner)
+        if ($colorToner instanceof TonerModel)
         {
             $colorCost  = $this->currency($colorToner->cost);
             $colorYield = number_format($colorToner->yield);
             $isColor    = true;
         }
         ?>
-        <tr class="<?php echo ($completeMonoToners) ? "" : "nonCompliantMono" ?> <?php echo ($completeColorToners) ? "" : "nonCompliantColor" ?>">
+        <tr class="<?= ($completeMonoToners) ? "" : "nonCompliantMono" ?> <?= ($completeColorToners) ? "" : "nonCompliantColor" ?>">
             <!-- Monochrome -->
             <td class="column1">
-                <div><?php echo str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) . "<br />(" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")"; ?></div>
+                <div><?= str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) . "<br />(" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")"; ?></div>
             </td>
             <td class="column2 mono">
-                <div class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></div>
+                <div class="right"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></div>
             </td>
 
             <td class="column3 mono">
-                <div class="right"><?php echo $blackCost ?></div>
+                <div class="right"><?= $blackCost ?></div>
             </td>
             <td class="column4 mono">
-                <div class="right"><?php echo $blackYield ?></div>
+                <div class="right"><?= $blackYield ?></div>
             </td>
             <td class="column5 mono">
-                <div class="right"><?php echo $this->formatCostPerPage($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->monochromeCostPerPage); ?></div>
+                <div class="right"><?= $this->formatCostPerPage($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->monochromeCostPerPage); ?></div>
             </td>
             <td class="column6 mono">
                 <div class="right">
-                    <?php echo $this->currency($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer())); ?></div>
+                    <?= $this->currency($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer())); ?></div>
             </td>
 
             <!-- Color -->
             <td class="column7 color">
-                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : "-"; ?></div>
+                <div class="<?= $colorStyle; ?>"><?= ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : "-"; ?></div>
             </td>
             <td class="column8 color">
-                <div class="<?php echo $colorStyle; ?>"><?php echo $colorCost ?></div>
+                <div class="<?= $colorStyle; ?>"><?= $colorCost ?></div>
             </td>
             <td class="column9 color">
-                <div class="<?php echo $colorStyle; ?>"><?php echo $colorYield ?></div>
+                <div class="<?= $colorStyle; ?>"><?= $colorYield ?></div>
             </td>
             <td class="column10 color">
-                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->colorCostPerPage) : "-"; ?></div>
+                <div class="<?= $colorStyle; ?>"><?= ($isColor) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->colorCostPerPage) : "-"; ?></div>
             </td>
 
             <td class="column11 color">
-                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? $this->currency($deviceInstance->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer())) : "-"; ?></div>
+                <div class="<?= $colorStyle; ?>"><?= ($isColor) ? $this->currency($deviceInstance->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer())) : "-"; ?></div>
             </td>
             <td class="column12">
-                <div class="<?php echo $colorStyle; ?>">
+                <div class="<?= $colorStyle; ?>">
                     <?php
                     foreach ($tonerSkus as $tonerSku)
                     {
@@ -250,7 +255,7 @@ $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
                 </div>
             </td>
             <td class="column12">
-                <div class="<?php echo $colorStyle; ?>">
+                <div class="<?= $colorStyle; ?>">
                     <?php
                     foreach ($tonerSkus as $tonerSku)
                     {
@@ -263,21 +268,21 @@ $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
     <?php endforeach; ?>
     <tr class="totals">
         <td class="column1">
-            <div>Totals for <?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getCount()); ?> devices:</div>
+            <div>Totals for <?= number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getCount()); ?> devices:</div>
         </td>
         <td>
-            <div class="right"><?php echo $this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly()); ?></div>
+            <div class="right"><?= $this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly()); ?></div>
         </td>
         <td colspan="3"></td>
         <td class="column2">
-            <div class="right"><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->BlackAndWhite); ?></div>
+            <div class="right"><?= $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->BlackAndWhite); ?></div>
         </td>
         <td>
-            <div class="center"><?php echo $this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></div>
+            <div class="center"><?= $this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></div>
         </td>
         <td colspan="3"></td>
         <td>
-            <div class="right"><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Color); ?></div>
+            <div class="right"><?= $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Color); ?></div>
         </td>
         <td colspan="2"></td>
     </tr>

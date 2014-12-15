@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\Admin\Forms\LeasingSchemaForm;
 
 /**
  * Class Admin_Form_LeasingSchemaTest
@@ -6,12 +7,12 @@
 class Admin_Form_LeasingSchemaTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
     /**
-     * @var Admin_Form_LeasingSchema
+     * @var LeasingSchemaForm
      */
     protected $_form;
 
     /**
-     * @return Admin_Form_LeasingSchema
+     * @return LeasingSchemaForm
      */
     public function getForm ()
     {
@@ -51,7 +52,7 @@ class Admin_Form_LeasingSchemaTest extends Tangent_PHPUnit_Framework_ZendFormTes
              ->method('IsAllowed')
              ->will($this->returnValue($isAdmin));
 
-        $this->_form = new Admin_Form_LeasingSchema($dealerManagement, array('view' => $view));
+        $this->_form = new LeasingSchemaForm($dealerManagement, array('view' => $view));
     }
 
 

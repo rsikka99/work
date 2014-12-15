@@ -1,0 +1,17 @@
+<?php
+
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\ManufacturerModel;
+
+/* @var $manufacturer ManufacturerModel */
+$manufacturer = $this->manufacturer;
+?>
+<div class="container">
+    <dl class="dl-horizontal">
+        <dt>Full Name</dt>
+        <dd><?= $manufacturer->fullname; ?></dd>
+        <dt>Display Name</dt>
+        <dd><?= $manufacturer->displayname; ?></dd>
+        <dt>Deleted</dt>
+        <dd><?= ($manufacturer->isDeleted) ? 'This manufacturer is deleted.' : 'No.' ?></dd>
+    </dl>
+</div>

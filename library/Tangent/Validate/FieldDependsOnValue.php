@@ -1,5 +1,7 @@
 <?php
 
+namespace Tangent\Validate;
+
 /**
  * Custom_Validate_FieldDependsOnValue
  * Requires field presence based on provided value of radio element.
@@ -19,7 +21,7 @@
  * @author "Lee Robert"
  * @uses   Zend_Validate_Abstract
  */
-class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
+class FieldDependsOnValue extends \Zend_Validate_Abstract
 {
 
     /**
@@ -43,7 +45,7 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
         self::KEY_NOT_FOUND    => 'You must select an option',
         self::KEY_IS_EMPTY     => 'Based on your previous answer, this field is required');
 
-    protected $_messageVariables = array(
+    protected $_messageVariables  = array(
         'customError' => 'customErrorMessage'
     );
     protected $customErrorMessage = "Please ensure to enter valid data";
@@ -62,13 +64,17 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
     protected $_testValue;
 
 
+    /**
+     * @var \Zend_Validate[]
+     */
     protected $_validatorsToRun;
 
     /**
      * FieldDependsOnValue constructor
      *
-     * @param string $contextKey Name of parent field to test against
-     * @param string $testValue  Value of multi option that, if selected, child field required
+     * @param string           $contextKey Name of parent field to test against
+     * @param string           $testValue  Value of multi option that, if selected, child field required
+     * @param \Zend_Validate[] $validatorsToRun
      */
     public function __construct ($contextKey, $testValue = null, $validatorsToRun = null)
     {
@@ -130,11 +136,13 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
         $contextKey = $this->getContextKey();
         $value      = (string)$value;
         $this->_setValue($value);
+
+        // Make sure the parent element exists?
         if ((null === $context) || !is_array($context) || !array_key_exists($contextKey, $context))
         {
-            $this->_error(self::KEY_NOT_FOUND);
+//            $this->_error(self::KEY_NOT_FOUND);
 
-            return false;
+            return true;
         }
         if (is_array($context [$contextKey]))
         {
@@ -167,7 +175,7 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
         }
         else
         {
-            $notEmpty = new Zend_Validate_NotEmpty();
+            $notEmpty = new \Zend_Validate_NotEmpty();
             if ($notEmpty->isValid($parentField))
             {
                 foreach ($this->_validatorsToRun as $validator)
@@ -223,7 +231,7 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
     }
 
     /**
-     * @return the $_validatorsToRun
+     * @return \Zend_Validate[]
      */
     public function getValidatorsToRun ()
     {
@@ -236,7 +244,9 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
     }
 
     /**
-     * @param field_type $_validatorsToRun
+     * @param \Zend_Validate[] $_validatorsToRun
+     *
+     * @return $this
      */
     public function setValidatorsToRun ($_validatorsToRun)
     {

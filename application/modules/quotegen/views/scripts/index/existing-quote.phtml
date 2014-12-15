@@ -12,7 +12,7 @@
             $('#clientId').attr('disabled', 'disabled');
             $.ajax(
                 {
-                    url    : '<?php echo $this->url(array('format' => 'json', 'controller' => 'index', 'action' => 'get-reports-for-client',)); ?>/clientId/' + clientId,
+                    url    : '<?= $this->url(array('format' => 'json', 'controller' => 'index', 'action' => 'get-reports-for-client',)); ?>/clientId/' + clientId,
                     success: function (data)
                     {
                         var quotes = data['quotes'];
@@ -42,10 +42,6 @@
     });
     <?php $this->headScript()->captureEnd() ?>
 </script>
-<div class="page-header">
-    <h1>Quote Generator</h1>
-</div>
-<?php echo $this->Indexmenu(); ?>
-<div class="well">
-    <?php echo $this->existingQuoteForm; ?>
+<div class="container">
+    <?= $this->existingQuoteForm; ?>
 </div>

@@ -1,9 +1,18 @@
 <?php
+use MPSToolbox\Legacy\Forms\DeleteConfirmationForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\DeviceConfigurationForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\SelectOptionsForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\OptionMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\DeviceConfigurationOptionMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\DeviceConfigurationMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceConfigurationOptionModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceConfigurationModel;
+use Tangent\Controller\Action;
 
 /**
  * Class Quotegen_DeviceConfigurationController
  */
-class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
+class Quotegen_DeviceConfigurationController extends Action
 {
 
     public function init ()
@@ -17,7 +26,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
     public function indexAction ()
     {
         // Display all of the deviceConfigurations
-        $mapper    = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
+        $mapper    = DeviceConfigurationMapper::getInstance();
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
 
         // Set the current page we're on
@@ -33,7 +42,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
     public function viewglobalAction ()
     {
         // Display all of the deviceConfigurations
-        $mapper    = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
+        $mapper    = DeviceConfigurationMapper::getInstance();
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
 
         // Set the current page we're on
@@ -58,10 +67,10 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'warning' => 'Please select a device configuration to delete first.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.device-configurations');
         }
 
-        $mapper              = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
+        $mapper              = DeviceConfigurationMapper::getInstance();
         $deviceConfiguration = $mapper->find($deviceConfigurationId);
 
         if (!$deviceConfiguration)
@@ -69,11 +78,11 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'danger' => 'There was an error selecting the device configuration to delete.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.device-configurations');
         }
 
         $message = "Are you sure you want to delete {$deviceConfiguration->id}?";
-        $form    = new Application_Form_Delete($message);
+        $form    = new DeleteConfirmationForm($message);
 
         $request = $this->getRequest();
         if ($request->isPost())
@@ -88,12 +97,12 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                     $this->_flashMessenger->addMessage(array(
                         'success' => "Device configuration  {$deviceConfiguration->id} was deleted successfully."
                     ));
-                    $this->redirector('index');
+                    $this->redirectToRoute('quotes.device-configurations');
                 }
             }
             else // Go back
             {
-                $this->redirector('index');
+                $this->redirectToRoute('quotes.device-configurations');
             }
         }
         $this->view->form = $form;
@@ -105,7 +114,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
     public function createAction ()
     {
         $request = $this->getRequest();
-        $form    = new Quotegen_Form_DeviceConfiguration();
+        $form    = new DeviceConfigurationForm();
 
         if ($request->isPost())
         {
@@ -122,8 +131,8 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                         // Save to the database
                         try
                         {
-                            $mapper              = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
-                            $deviceConfiguration = new Quotegen_Model_DeviceConfiguration();
+                            $mapper              = DeviceConfigurationMapper::getInstance();
+                            $deviceConfiguration = new DeviceConfigurationModel();
                             $deviceConfiguration->populate($values);
                             $deviceConfigurationId = $mapper->insert($deviceConfiguration);
 
@@ -131,7 +140,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                                 'success' => "Device configuration {$deviceConfiguration->id} was added successfully."
                             ));
 
-                            $this->redirector('edit', null, null, array(
+                            $this->redirectToRoute('quotes.device-configurations.edit', array(
                                 'id' => $deviceConfigurationId
                             ));
                         }
@@ -176,9 +185,19 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->redirector('index');
+                $this->redirectToRoute('quotes.device-configurations');
             }
         }
+        // Add form to page
+        $form->setDecorators(array(
+            array(
+                'ViewScript',
+                array(
+                    'viewScript' => 'forms/quotegen/create-device-configuration-form.phtml',
+                )
+            )
+        ));
+
         $this->view->form = $form;
     }
 
@@ -195,11 +214,11 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'warning' => 'Please select a device configuration to edit first.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.device-configurations');
         }
 
         // Get the deviceConfiguration
-        $deviceConfigurationMapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
+        $deviceConfigurationMapper = DeviceConfigurationMapper::getInstance();
         $deviceConfiguration       = $deviceConfigurationMapper->find((int)$deviceConfigurationId);
 
         // If the deviceConfiguration doesn't exist, send them back to the view all deviceConfigurations page
@@ -208,13 +227,13 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array(
                 'danger' => 'There was an error selecting the device configuration to edit.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('quotes.device-configurations');
         }
 
         $this->view->deviceConfiguration = $deviceConfiguration;
 
         // Create a new form with the mode and roles set
-        $form = new Quotegen_Form_DeviceConfiguration($deviceConfiguration->id);
+        $form = new DeviceConfigurationForm($deviceConfiguration->id);
 
         // Prepare the data for the form
         $request = $this->getRequest();
@@ -230,7 +249,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             if (isset($values ['cancel']))
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->redirector('index');
+                $this->redirectToRoute('quotes.device-configurations');
             }
             else
             {
@@ -241,7 +260,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                     if ($form->isValid($values))
                     {
                         // Save option quantities
-                        $deviceConfigurationOption                        = new Quotegen_Model_DeviceConfigurationOption();
+                        $deviceConfigurationOption                        = new DeviceConfigurationOptionModel();
                         $deviceConfigurationOption->deviceConfigurationId = $deviceConfigurationId;
 
                         foreach ($form->getOptionElements() as $element)
@@ -249,7 +268,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                             $optionId                            = (int)$element->getDescription();
                             $deviceConfigurationOption->optionId = $optionId;
                             $deviceConfigurationOption->quantity = $values ["option$optionId"];
-                            Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->save($deviceConfigurationOption);
+                            DeviceConfigurationOptionMapper::getInstance()->save($deviceConfigurationOption);
                         }
 
                         if (isset($values ['add']))
@@ -259,8 +278,8 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                             ));
 
                             // Send to the add options page like they asked
-                            $this->redirector('addoptions', null, null, array(
-                                'id' => $deviceConfigurationId
+                            $this->redirectToRoute('quotes.configurations.edit', array(
+                                'configurationid' => $deviceConfigurationId
                             ));
                         }
                         else
@@ -270,7 +289,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                             ));
 
                             // Send back to the main list
-                            $this->redirector('index');
+                            $this->redirectToRoute('quotes.device-configurations');
                         }
                     }
                     else
@@ -286,6 +305,16 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                 }
             }
         }
+        // Add form to page
+        $form->setDecorators(array(
+            array(
+                'ViewScript',
+                array(
+                    'viewScript' => 'forms/quotegen/edit-device-configuration-form.phtml',
+                )
+            )
+        ));
+
         $this->view->form = $form;
     }
 
@@ -296,22 +325,22 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
     {
         $id = $this->_getParam('id', false);
 
-        $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAllAvailableOptionsForDeviceConfiguration($id);
+        $availableOptions = OptionMapper::getInstance()->fetchAllAvailableOptionsForDeviceConfiguration($id);
         if (count($availableOptions) < 1)
         {
             $this->_flashMessenger->addMessage(array(
                 'info' => "There are no more options to add to this device."
             ));
-            $this->redirector('edit', null, null, array(
+            $this->redirectToRoute('quotes.add-hardware.edit', array(
                 'id' => $id
             ));
         }
 
-        $form = new Quotegen_Form_SelectOptions($availableOptions);
+        $form = new SelectOptionsForm($availableOptions);
         // Prepare the data for the form
         $request = $this->getRequest();
 
-        $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($id);
+        $deviceConfiguration = DeviceConfigurationMapper::getInstance()->find($id);
 
         $form->populate($deviceConfiguration->toArray());
 
@@ -329,8 +358,8 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                     // Validate the form
                     if ($form->isValid($values))
                     {
-                        $deviceConfigurationOptionMapper                  = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance();
-                        $deviceConfigurationOption                        = new Quotegen_Model_DeviceConfigurationOption();
+                        $deviceConfigurationOptionMapper                  = DeviceConfigurationOptionMapper::getInstance();
+                        $deviceConfigurationOption                        = new DeviceConfigurationOptionModel();
                         $deviceConfigurationOption->deviceConfigurationId = $deviceConfiguration->id;
 
                         $insertedOptions = 0;
@@ -351,7 +380,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                         $this->_flashMessenger->addMessage(array(
                             'success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->getDevice()->getMasterDevice()->getFullDeviceName()} successfully."
                         ));
-                        $this->redirector('edit', null, null, array(
+                        $this->redirectToRoute('quotes.add-hardware.edit', array(
                             'id' => $id
                         ));
                     }
@@ -370,7 +399,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. Go back to the edit page
-                $this->redirector('edit', null, null, array(
+                $this->redirectToRoute('quotes.add-hardware.edit', array(
                     'id' => $id
                 ));
             }
@@ -389,10 +418,10 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
 
         try
         {
-            $deviceConfigurationOption                        = new Quotegen_Model_DeviceConfigurationOption();
+            $deviceConfigurationOption                        = new DeviceConfigurationOptionModel();
             $deviceConfigurationOption->deviceConfigurationId = $id;
             $deviceConfigurationOption->optionId              = $optionId;
-            Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->delete($deviceConfigurationOption);
+            DeviceConfigurationOptionMapper::getInstance()->delete($deviceConfigurationOption);
             $this->_flashMessenger->addMessage(array(
                 'success' => "Configuration Option deleted successfully."
             ));
@@ -404,7 +433,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             ));
         }
 
-        $this->redirector('edit', null, null, array(
+        $this->redirectToRoute('quotes.add-hardware.edit', array(
             'id' => $id
         ));
     }
@@ -414,7 +443,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
      */
     public function viewAction ()
     {
-        $this->view->deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($this->_getParam('id', false));
+        $this->view->deviceConfiguration = DeviceConfigurationMapper::getInstance()->find($this->_getParam('id', false));
     }
 }
 

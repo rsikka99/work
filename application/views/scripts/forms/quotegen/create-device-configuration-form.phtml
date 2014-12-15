@@ -1,0 +1,56 @@
+<?php
+/* @var $form DeviceConfigurationForm */
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\DeviceConfigurationForm;
+
+$form = $this->element;
+?>
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+
+<fieldset>
+    <div class="form-group <?= ($form->getElement('masterDeviceId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('masterDeviceId'), array('col-md-3')) ?>
+
+        <div class="col-md-9">
+            <?= $this->RenderFormSelect($form->getElement('masterDeviceId')) ?>
+            <?= $this->RenderFormDescription($form->getElement('masterDeviceId')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('masterDeviceId')) ?>
+        </div>
+    </div>
+
+    <?php if (count($form->getOptionElements()) > 0) : ?>
+        <?php foreach ($form->getOptionElements() as $element) : ?>
+            <div class="form-group <?= ($form->getElement("option-{$element->optionId}")->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement("option-{$element->optionId}"), array('col-md-3')) ?>
+
+                <div class=" col-md-9">
+                    <?= $this->RenderFormText($form->getElement("option-{$element->optionId}")) ?>
+                    <?= $this->RenderFormDescription($form->getElement("option-{$element->optionId}")) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement("option-{$element->optionId}")) ?>
+                </div>
+            </div>
+
+            <div class="controls">
+                <div class="input-prepend input-append">
+                    <span class="add-on">Qty:</span>
+                    <a href="<?php echo $this->url(array('optionId' => $element->optionId), 'quotes.device-configurations.delete-option'); ?>" class="add-on btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                </div>
+            </div>
+            <h3>
+                Options<?= $this->RenderFormSubmit($form->getElement('add'), array('btn', 'btn-primary')) ?></h3>
+
+            <br>
+        <?php endforeach; ?>
+    <?php else : ?>
+        <p>There are no options added to this device yet.</p>
+    <?php endif; ?>
+
+</fieldset>
+
+<fieldset>
+    <hr>
+    <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+</fieldset>
+<?= $this->RenderFormClose($form) ?>
+
+

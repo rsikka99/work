@@ -1,0 +1,64 @@
+<?php
+use MPSToolbox\Legacy\Modules\Admin\Forms\DealerForm;
+
+/* @var $form DealerForm */
+$form = $this->element;
+?>
+
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+    <div class="row">
+        <div class="col-sm-6">
+            <?php if ($form->getElement('dealerName') instanceof Zend_Form_Element) : ?>
+                <fieldset>
+                    <legend>Dealer Profile</legend>
+                    <div class="form-group <?= ($form->getElement('dealerName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                        <?= $this->RenderFormLabel($form->getElement('dealerName'), array('col-md-3')) ?>
+
+                        <div class="col-md-9">
+                            <?= $this->RenderFormText($form->getElement('dealerName')) ?>
+                            <?= $this->RenderFormDescription($form->getElement('dealerName')) ?>
+                            <?= $this->RenderFormElementErrors($form->getElement('dealerName')) ?>
+                        </div>
+                    </div>
+                </fieldset>
+            <?php endif; ?>
+            <fieldset>
+                <div class="form-group <?= ($form->getElement('userLicenses')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('userLicenses'), array('col-md-3')) ?>
+
+                    <div class="col-md-9">
+                        <?= $this->RenderFormText($form->getElement('userLicenses')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('userLicenses')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('userLicenses')) ?>
+                    </div>
+                </div>
+
+                <div class="form-group <?= ($form->getElement('dealerLogoImage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('dealerLogoImage'), array('col-md-3')) ?>
+
+                    <div class="col-md-9">
+                        <?= $this->RenderFormFile($form->getElement('dealerLogoImage')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('dealerLogoImage')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('dealerLogoImage')) ?>
+                    </div>
+                </div>
+
+                <div class="form-group <?= ($form->getElement('dealerFeatures')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('dealerFeatures'), array('col-md-3')) ?>
+
+                    <div class="col-md-9">
+                        <?= $this->RenderFormCheckbox($form->getElement('dealerFeatures')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('dealerFeatures')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('dealerFeatures')) ?>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <fieldset>
+        <hr>
+        <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
+        <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+    </fieldset>
+<?= $this->RenderFormClose($form) ?>

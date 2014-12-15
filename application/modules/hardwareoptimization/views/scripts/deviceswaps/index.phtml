@@ -1,83 +1,108 @@
-<?php $this->headScript()->appendFile($this->baseUrl('js/hardwareoptimization/deviceSwap.js')); ?>
-<h4> Manage Device Swaps </h4>
-
-<div class="modal hide" id="deviceAddModal">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">x</a>
-
-        <h3 style="text-align: center">Create / Edit Device Swap</h3>
-    </div>
-    <div class="modal-body well">
-        <div class="alert" id="save-error" style="display:none;">
-
+<?php $this->headScript()->appendFile($this->baseUrl('js/app/legacy/hardwareoptimization/DeviceSwap.js')); ?>
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="pull-right"> <button class="btn btn-success btn-xs" id="createNewBtn">Create new</button> </div>
+            Manage Device Swaps
         </div>
-        <?php echo $this->form; ?>
-        <div style="text-align: center">
-            <button type="button" id="saveDevice" class="btn btn-primary" style="width: 40%; padding: 4px;">Save</button>
-            <button type="button" id="cancelSave" class="btn cancelBtn" style="width: 40%; padding: 4px;">Cancel</button>
+        <div class="panel-body">
+            <table id='deviceSwapsTable'></table>
         </div>
-        <br /><br />
-        <em> Note only devices that have been enabled in the hardware library can be added to device swaps. Go to the All Devices Icon and enter the device you would like to add, then it will show up under the "create new" button.</em>
-    </div>
-</div>
-
-<div class="modal hide" id="deleteModal">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">x</a>
-
-        <h3 style="text-align: center">Confirm Delete Device Swap</h3>
-    </div>
-    <div class="modal-body well" style="height: 50px; text-align: center">
-        <button type="button" class="btn btn-inverse cancelBtn" style="width: 40%; padding: 4px;">Cancel</button>
-        <button type="button" id="deleteDeviceBtn" class="btn btn-danger" style="width: 40%; padding: 4px;">Delete</button>
-    </div>
-</div>
-
-<div class="modal hide" id="deleteReasonModal">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">x</a>
-
-        <h3 style="text-align: center">Confirm Delete Swap Reason</h3>
-    </div>
-    <div class="modal-body well" style="height: 150px; text-align: center">
-        <div class="alert" id="device-swap-error-message" style="display:none;">
+        <div class="panel-footer">
+            <sup>*</sup><em>Cost per page for devices are derived using OEM toners.</em>
         </div>
-        <p>Are you sure you want to delete this swap reason?</p>
-        <button type="button" id="cancelSwapBtn" class="btn btn-inverse cancelBtn" style="width: 40%; padding: 4px;">Cancel</button>
-        <button type="button" id="deleteSwapBtn" class="btn btn-danger" style="width: 40%; padding: 4px;">Delete</button>
-
     </div>
-</div>
 
-<div class="modal hide" id="reasonAddModal">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">x</a>
-
-        <h3 style="text-align: center">Create / Edit Swap Reason</h3>
-    </div>
-    <div class="modal-body well">
-        <div class="alert" id="reason-add-save-error" style="display:none;"></div>
-        <?php echo $this->deviceSwapForm; ?>
-        <div style="text-align: center">
-            <button type="button" id="saveDeviceReason" class="btn btn-primary" style="width: 40%; padding: 4px;">Submit</button>
-            <button type="button" id="cancelSave" class="btn cancelBtn" style="width: 40%; padding: 4px;">Cancel</button>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="pull-right"><button class="btn btn-success btn-xs" id="createReasonBtn">Create New</button></div>
+            Device Swap Change Logic Text
+        </div>
+        <div class="panel-body">
+            <table id='deviceReasonTable' class="scroll"></table>
         </div>
     </div>
 </div>
 
 
-<div class="well">
-    <button id="createNewBtn" class="btn btn-success" style="float:right">Create new</button>
-    <br /><br />
-    <table id='deviceSwapsTable' style="width: 100%" class="scroll">
-    </table>
-    <br />
-    <sup>*</sup><em>Cost per page for devices are derived using OEM toners.</em>
+<!-- Modals -->
+<div class="modal fade" id="deviceAddModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Create / Edit Device Swap</h4>
+            </div>
+            <div class="modal-body">
+                    <div class="alert alert-danger" id="save-error" style="display: none;">
+                </div>
+                <?= $this->form ?>
+                <p>Note only devices that have been enabled in the hardware library can be added to device swaps. Go to the All Devices Icon and enter the device
+                    you would like to add, then it will show up under the "create new" button.
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="saveDevice" class="btn btn-primary">Save</button>
+                <button type="button" id="cancelSave" class="btn cancelBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div>
-<h4> Device Swap Reasons </h4>
-<div class="well">
-    <button id='createReasonBtn' class="btn btn-success" style="float:right;">Create New</button>
-    <br /><br />
-    <table id='deviceReasonTable' style="width: 100%" class="scroll">
-    </table>
+
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Confirm Delete Device Swap</h4>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this device swap?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default cancelBtn">Cancel</button>
+                <button type="button" id="deleteDeviceBtn" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteReasonModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Confirm Delete Swap Reason</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert" id="device-swap-error-message">
+                </div>
+                <p>Are you sure you want to delete this swap reason?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="cancelSwapBtn" class="btn btn-default cancelBtn">Cancel</button>
+                <button type="button" id="deleteSwapBtn" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="reasonAddModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Create / Edit Swap Reason</h4>
+            </div>
+            <div class="modal-body">
+                    <div class="alert alert-danger" id="reason-add-save-error" style="display: none;"></div>
+                <?= $this->deviceSwapForm; ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="saveDeviceReason" class="btn btn-primary">Save</button>
+                <button type="button" id="cancelSave" class="btn cancelBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div>

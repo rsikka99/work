@@ -1,0 +1,112 @@
+<?php
+
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\ConfigurationForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceOptionModel;
+
+/* @var $form ConfigurationForm */
+$deviceOptions = $this->deviceOptions;
+$form          = $this->element;
+?>
+
+<?php $this->headScript()->captureStart('append', 'text/javascript') ?>
+
+$(document).ready(function() {
+// set default count
+update_count();
+
+$("#description").keyup(function() {
+update_count();
+});
+});
+
+function update_count() {
+var count =  $("#description").val().length;
+$("#charcounter").html(255 - count);
+if ( count > 205 ) {
+$("#charcounter").attr('style','color: red');
+} else {
+$("#charcounter").attr('style','color: black');
+}
+}
+
+<?php $this->headScript()->captureEnd() ?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<fieldset>
+    <div class="form-group <?= ($form->getElement('masterDeviceId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('masterDeviceId'), array('col-md-3')) ?>
+
+        <div class="col-md-6">
+            <?= $this->RenderFormSelect($form->getElement('masterDeviceId')) ?>
+            <?= $this->RenderFormDescription($form->getElement('masterDeviceId')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('masterDeviceId')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('name')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('name'), array('col-md-3')) ?>
+
+        <div class="col-md-6">
+            <?= $this->RenderFormText($form->getElement('name')) ?>
+            <?= $this->RenderFormDescription($form->getElement('name')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('name')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('description')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('description'), array('col-md-3')) ?>
+
+        <div class="col-md-6">
+            <?= $this->RenderFormTextArea($form->getElement('description')) ?>
+            <?= $this->RenderFormDescription($form->getElement('description')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('description')) ?>
+            <label>Characters Remaining:
+                <span id="charcounter">255</span>
+            </label>
+        </div>
+    </div>
+</fieldset>
+
+<div class="form-group">
+    <?php if (count($deviceOptions) > 0): ?>
+        <label class="control-label col-md-3" for="description">Options:</label>
+
+        <div class="controls col-md-7">
+            <table class="table table-stripped table-bordered" style="width: auto;">
+                <thead>
+                <tr>
+                    <th style="text-align: left;">Name</th>
+                    <th style="text-align: center;">Quantity</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php if (count($deviceOptions) > 0)
+                {
+                    foreach ($deviceOptions as $option)
+                    {
+                        /* @var $option MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceOptionModel */
+                        ?>
+                        <tr>
+                            <td class="form-group"><?php echo $option->getOption()->name; ?></td>
+                            <td class="form-group">
+                                <input type="text" class="col-sm-5" name="quantity<?php echo $option->optionId; ?>" id="quantity<?php echo $option->optionId; ?>" value="0" maxlength="3" />
+                            </td>
+                        </tr>
+                    <?php
+                    }
+                } ?>
+                </tbody>
+            </table>
+        </div>
+    <?php else: ?>
+        <p>There are no options available for this device.</p>
+    <?php endif; ?>
+</div>
+<fieldset>
+    <hr>
+    <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+</fieldset>
+
+<?= $this->RenderFormClose($form) ?>
+

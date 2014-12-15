@@ -1,0 +1,68 @@
+<?php
+/* @var $hardwareOptimization HardwareOptimizationModel */
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationDealerModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationDeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\OptimizationViewModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization OptimizationViewModel */
+$optimization = $this->optimization;
+
+/* @var $customerOptimization OptimizationDealerModel */
+$dealerOptimization = $this->dealerOptimization;
+
+/* @var $flaggedDeviceInstances DeviceInstanceModel[] */
+$flaggedDeviceInstances = (isset($this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_DNR]) ? $this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_DNR] : array());
+
+/* @var $graphs array */
+$graphs = $this->graphs;
+
+$costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
+?>
+
+<div class="pheader" id="flagged">
+    Devices Flagged as Do Not Repair
+    <em><?= '(' . number_format(count($flaggedDeviceInstances)) . ' of ' . $this->totalDevices . ')' ?></em>
+</div>
+
+<!-- Only display message and table if there are replacement devices assigned -->
+<?php if ($flaggedDeviceInstances): ?>
+    <p>These devices have been flagged for replacement upon breakdown based on operational reliability and not financial considerations.</p>
+
+    <table class="rDevices">
+        <tr class="header">
+            <th class="device-name">Device Name</th>
+            <th>Serial<br />IP Address</th>
+            <th>Mono AMPV</th>
+            <th>Color AMPV</th>
+            <th>Life Page Count</th>
+            <th>Device Age</th>
+            <th>Mono CPP</th>
+            <th>Color CPP</th>
+            <th>Monthly Cost</th>
+        </tr>
+        <?php foreach ($flaggedDeviceInstances as $deviceInstance) :
+            $masterDevice = $deviceInstance->getMasterDevice();
+            $isColor      = $masterDevice->isColor();
+            ?>
+            <tr>
+                <td class="device-name"><?= '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>'; ?></td>
+                <td class="serial-number"><?= $deviceInstance->serialNumber . '<br/>' . $deviceInstance->ipAddress . '</em>'; ?></td>
+                <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
+                <td class="page-volume"><?= ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : ' - '; ?></td>
+                <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getMeter()->endMeterLife) ?></td>
+                <td class="number"><?= number_format($deviceInstance->getMasterDevice()->getAge()); ?></td>
+                <td class="cost-per-page"><?= $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage); ?></td>
+                <td class="cost-per-page"><?= ($isColor) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage) : ' - '; ?></td>
+                <td><?= $this->currency($deviceInstance->calculateMonthlyCost($costPerPageSetting)); ?></td>
+            </tr>
+        <?php endforeach ?>
+    </table>
+<?php else: ?>
+    <em>There are no devices currently flagged for replacement based on operational reliability.</em>
+<?php endif; ?>
+
+<br />

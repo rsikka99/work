@@ -1,9 +1,17 @@
 <?php
+use MPSToolbox\Legacy\Forms\DeleteConfirmationForm;
+use MPSToolbox\Legacy\Mappers\UserMapper;
+use MPSToolbox\Legacy\Modules\Admin\Services\ClientService;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ContactMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\AddressMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ContactModel;
+use Tangent\Controller\Action;
 
 /**
  * Class Dealermanagement_ClientController
  */
-class Dealermanagement_ClientController extends Tangent_Controller_Action
+class Dealermanagement_ClientController extends Action
 {
     protected $_mpsSession;
 
@@ -17,11 +25,10 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
-        $this->view->headTitle('Clients');
-        $this->view->headTitle('Client Management');
+        $this->_pageTitle = array('Your Clients', 'Company');
         // Display all of the clients
-        $mapper    = Quotegen_Model_Mapper_Client::getInstance();
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper, Application_Model_Mapper_User::getInstance()->getWhereDealerId(Zend_Auth::getInstance()->getIdentity()->dealerId)));
+        $mapper    = ClientMapper::getInstance();
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper, UserMapper::getInstance()->getWhereDealerId(Zend_Auth::getInstance()->getIdentity()->dealerId)));
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
 
@@ -37,38 +44,37 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
      */
     public function deleteAction ()
     {
-        $this->view->headTitle('Clients');
-        $this->view->headTitle('Delete Client');
-        $clientId = $this->_getParam('id', false);
-        $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+        $this->_pageTitle = array('Delete Client', 'Your Clients', 'Company');
+        $clientId         = $this->_getParam('id', false);
+        $dealerId         = Zend_Auth::getInstance()->getIdentity()->dealerId;
         if (!$clientId)
         {
             $this->_flashMessenger->addMessage(array(
                 'warning' => 'Please select a client to delete first.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('company.clients');
         }
-        $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
+        $client = ClientMapper::getInstance()->find($clientId);
         if ($client && $client->dealerId != $dealerId)
         {
             $this->_flashMessenger->addMessage(array(
                 'danger' => 'Insufficient Privilege: You cannot delete this client.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('company.clients');
         }
 
-        $clientMapper = Quotegen_Model_Mapper_Client::getInstance();
+        $clientMapper = ClientMapper::getInstance();
         $client       = $clientMapper->find($clientId);
         if (!$client)
         {
             $this->_flashMessenger->addMessage(array(
                 'danger' => 'There was an error selecting the client to delete.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('company.clients');
         }
 
         $message = "Are you sure you want to completely delete {$client->companyName} including all quotes, assessments and proposals? <br/>This is an irreversible operation";
-        $form    = new Application_Form_Delete($message);
+        $form    = new DeleteConfirmationForm($message);
 
         $request = $this->getRequest();
         if ($request->isPost())
@@ -81,7 +87,7 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
                     try
                     {
                         // Delete the client from the database
-                        $clientService = new Admin_Service_Client();
+                        $clientService = new ClientService();
                         $clientService->delete($client->id);
                         $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
                         if ($client->id == $this->_mpsSession->selectedClientId)
@@ -93,16 +99,16 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
                     {
                         throw new Exception("Passing exception up the chain.", 0, $e);
                         $this->_flashMessenger->addMessage(array('danger' => "Client {$client->companyName} cannot be deleted since there are  quote(s) attached."));
-                        $this->redirector('index');
+                        $this->redirectToRoute('company.clients');
                     }
 
                     $this->_flashMessenger->addMessage(array('success' => "Client  {$client->companyName} was deleted successfully."));
-                    $this->redirector('index');
+                    $this->redirectToRoute('company.clients');
                 }
             }
             else // User has selected cancel button, go back. 
             {
-                $this->redirector('index');
+                $this->redirectToRoute('company.clients');
             }
         }
         $this->view->form = $form;
@@ -113,15 +119,14 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
      */
     public function createAction ()
     {
-        $this->view->headTitle('Clients');
-        $this->view->headTitle('Create Client');
-        $clientService = new Admin_Service_Client();
+        $this->_pageTitle = array('Create Client', 'Your Clients', 'Company');
+        $clientService    = new ClientService();
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
             if (isset($values ['Cancel']))
             {
-                $this->redirector('index');
+                $this->redirectToRoute('company.clients');
             }
 
             try
@@ -132,7 +137,7 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
             }
             catch (Exception $e)
             {
-                Tangent_Log::logException($e);
+                \Tangent\Logger\Logger::logException($e);
                 $clientId = false;
             }
 
@@ -142,7 +147,7 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
                     'success' => "Client successfully created."
                 ));
                 // Redirect with client id so that the client is preselected
-                $this->redirector('index', null, null, array(
+                $this->redirectToRoute('company.clients', array(
                     'clientId' => $clientId
                 ));
             }
@@ -159,36 +164,35 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
 
     public function editAction ()
     {
-        $this->view->headTitle('Clients');
-        $this->view->headTitle('Edit Client');
+        $this->_pageTitle = array('Edit Client', 'Your Clients', 'Company');
         // Get the passed client id
         $clientId = $this->_getParam('id', false);
         $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         // Get the client object from the database
-        $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
+        $client = ClientMapper::getInstance()->find($clientId);
         if ($client && $client->dealerId != $dealerId)
         {
             $this->_flashMessenger->addMessage(array(
                 'danger' => 'Insufficient Privilege: You cannot edit this client.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('company.clients');
         }
         // Start the client service
-        $clientService = new Admin_Service_Client();
+        $clientService = new ClientService();
         if ($client)
         {
             $clientService->populateForm($clientId);
         }
         else
         {
-            $this->redirector('index');
+            $this->redirectToRoute('company.clients');
         }
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
             if (isset($values ['Cancel']))
             {
-                $this->redirector('index');
+                $this->redirectToRoute('company.clients');
             }
 
             try
@@ -207,7 +211,7 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
                     'success' => "Client {$client->companyName} successfully updated."
                 ));
                 // Redirect with client id so that the client is preselected
-                $this->redirector('index', null, null, array(
+                $this->redirectToRoute('company.clients', array(
                     'clientId' => $clientId
                 ));
             }
@@ -226,26 +230,26 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
      */
     public function viewAction ()
     {
-        $this->view->headTitle('Clients');
-        $this->view->headTitle('View Client');
-        $this->view->client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_getParam('id', false));
+        $this->_pageTitle = array('Viewing Client', 'Your Clients', 'Company');
+
+        $this->view->client = ClientMapper::getInstance()->find($this->_getParam('id', false));
         $dealerId           = Zend_Auth::getInstance()->getIdentity()->dealerId;
         if (!$this->view->client)
         {
-            $this->redirector('index');
+            $this->redirectToRoute('company.clients');
         }
         if ($this->view->client && $this->view->client->dealerId != $dealerId)
         {
             $this->_flashMessenger->addMessage(array(
                 'danger' => 'Insufficient Privilege: You cannot view this client.'
             ));
-            $this->redirector('index');
+            $this->redirectToRoute('company.clients');
         }
-        $this->view->address = Quotegen_Model_Mapper_Address::getInstance()->find($this->_getParam('id', false));
-        $contact             = Quotegen_Model_Mapper_Contact::getInstance()->getContactByClientId($this->_getParam('id', false));
+        $this->view->address = AddressMapper::getInstance()->find($this->_getParam('id', false));
+        $contact             = ContactMapper::getInstance()->getContactByClientId($this->_getParam('id', false));
         if (!$contact)
         {
-            $contact = new Quotegen_Model_Contact();
+            $contact = new ContactModel();
         }
         $this->view->contact = $contact;
     }

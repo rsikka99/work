@@ -1,64 +1,190 @@
 <?php
-/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationDeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels\OptimizationViewModel;
+
+/* @var $optimization OptimizationViewModel */
 $optimization = $this->optmizationViewModel;
-/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+
+/* @var $hardwareOptimization HardwareOptimizationModel */
 $hardwareOptimization = $this->hardwareoptimization;
+
+/**
+ * Function to get a css class by comparing two variables
+ *
+ * @param      $oldValue
+ * @param      $newValue
+ * @param bool $increaseIsGood
+ *
+ * @return string
+ */
+$differenceClass = function ($oldValue, $newValue, $increaseIsGood = true)
+{
+    $result = 'no-change';
+    if ($newValue > $oldValue)
+    {
+        $result = ($increaseIsGood) ? 'positive-change-up' : 'negative-change-up';
+    }
+    else if ($newValue < $oldValue)
+    {
+        $result = ($increaseIsGood) ? 'negative-change-down' : 'positive-change-down';
+    }
+
+    return $result;
+};
+
+$devicesGroupedByAction = $optimization->getDevicesGroupedByAction();
+
 ?>
+<div class="row">
+    <div class="col-lg-4 col-md-6">
+        <table class='table table-condensed table-hover table-striped'>
+            <thead>
+            <tr>
+                <th>Setting</th>
+                <th>Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th>Minimum Device Savings:</th>
+                <td><?= $this->currency((float)$hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->costThreshold); ?></td>
+            </tr>
+            <tr>
+                <th>Pre-Optimized Monochrome CPP:</th>
+                <td><?= $this->formatCostPerPage($hardwareOptimization->getClient()->getClientSettings()->genericSettings->targetMonochromeCostPerPage); ?></td>
+            </tr>
+            <tr>
+                <th>Pre-Optimized Color CPP:</th>
+                <td><?= $this->formatCostPerPage($hardwareOptimization->getClient()->getClientSettings()->genericSettings->targetColorCostPerPage); ?></td>
+            </tr>
+            <tr>
+                <th>Post-Optimized Monochrome CPP:</th>
+                <td><?= $this->formatCostPerPage($hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->optimizedTargetMonochromeCostPerPage); ?></td>
+            </tr>
+            <tr>
+                <th>Post-Optimized Color CPP:</th>
+                <td><?= $this->formatCostPerPage($hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->optimizedTargetColorCostPerPage); ?></td>
+            </tr>
+            <tr class="<?= ($hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->autoOptimizeFunctionality) ? '' : "text-muted"; ?>">
+                <th>Monochrome to Color Upgrade:</th>
+                <td><?= ($hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->autoOptimizeFunctionality) ? 'Enabled' : 'Disabled'; ?></td>
+            </tr>
+            <tr class="<?= ($hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->autoOptimizeFunctionality) ? '' : "text-muted"; ?>">
+                <th>Black To Color Page Ratio:</th>
+                <td><?= number_format((float)$hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->blackToColorRatio, 2); ?>%</td>
+            </tr>
+            <tr class="<?= ($hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->autoOptimizeFunctionality) ? '' : "text-muted"; ?>">
+                <th>Upgrade Loss Threshold:</th>
+                <td><?= $this->currency((float)$hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->lossThreshold); ?></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-4 col-md-6">
+        <table class='table table-condensed table-hover table-striped'>
+            <thead>
+            <tr>
+                <th></th>
+                <th class="text-right">Current</th>
+                <th class="text-right">Optimized</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th class="cost-per-page monochrome">Weighted Monochrome CPP</th>
+                <td class="cost-per-page monochrome"><?= $this->formatCostPerPage($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage); ?></td>
+                <td class="cost-per-page monochrome <?= $differenceClass($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, $optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, false) ?>" id="monochromeCpp"><?= $this->formatCostPerPage($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage) ?></td>
 
-<!-- Begin target cost per page table-->
-<table class="table">
-    <tbody>
-    <tr>
-        <td>
-            <strong>Target Monochrome CPP
-                : </strong><?php echo $this->formatCostPerPage($hardwareOptimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage); ?>
-        </td>
-        <td>
-            <strong>Target Color CPP
-                : </strong><?php echo $this->formatCostPerPage($hardwareOptimization->getHardwareOptimizationSetting()->targetColorCostPerPage); ?>
-        </td>
-        <td>
-            <strong>Cost Threshold : </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->costThreshold); ?>
-        </td>
-        <td><strong>Total
-                Revenue: </strong><?php echo $this->currency((float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()) ?>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<!-- End target cost per page table -->
+            </tr>
+            <tr>
+                <th class="page-volume monochrome">Monochrome Page Volume</th>
+                <td class="page-volume monochrome"><?= $this->formatPageVolume($optimization->getPageCounts()->getBlackPageCount()->getMonthly()) ?></td>
+                <td class="page-volume monochrome <?= $differenceClass($optimization->getPageCounts()->getBlackPageCount()->getMonthly(), $optimization->getNewPageCounts()->getBlackPageCount()->getMonthly(), false) ?>" id="monochromePageVolume"><?= $this->formatPageVolume($optimization->getNewPageCounts()->getBlackPageCount()->getMonthly()) ?></td>
 
-<table class='table table-condensed' style="width: 100%">
-    <thead>
-    <tr class='header'>
-        <td><strong>Fleet</strong></td>
-        <td><strong>Weighted Monochrome CPP</strong></td>
-        <td><strong>Weighted Color CPP</strong></td>
-        <td><strong>Total Cost</strong></td>
-        <td><strong>Margin $</strong></td>
-        <td><strong>Margin %</strong></td>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td> Current</td>
-        <td><?php echo $this->formatCostPerPage($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage); ?></td>
-        <td><?php echo ($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage > 0) ? $this->formatCostPerPage($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage) : 'N/A'; ?></td>
-        <td><?php echo $this->currency($optimization->calculateDealerMonthlyCost()); ?></td>
-        <td><?php echo $this->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPage()); ?></td>
-        <td><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCost(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2); ?>%</td>
-    </tr>
-    <tr>
-        <td> Optimized</td>
-        <td id="monochromeCpp"><?php echo $this->formatCostPerPage($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage) ?></td>
-        <td id="colorCpp"><?php echo ((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage > 0) ? $this->formatCostPerPage($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage) : 'N/A'; ?></td>
-        <td id="totalCost"><?php echo $this->currency((float)$optimization->calculateDealerMonthlyCostWithReplacements()) ?></td>
-        <td id="marginDollar"><?php echo $this->currency((float)$optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements()) ?></td>
-        <td id="marginPercent"><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) ?>
-            %
-        </td>
-    </tr>
-    </tbody>
-</table>
-<em>The following
-    <span id="numberOfDevicesReplaced"><?php echo number_format($optimization->getNumberOfDevicesWithReplacements()); ?></span> out of <?php echo number_format($optimization->getDevices()->purchasedDeviceInstances->getCount()); ?> eligible devices have been selected for replacement.</em>
+            </tr>
+            <tr>
+                <th class="cost-per-page color">Weighted Color CPP</th>
+                <td class="cost-per-page color"><?= ($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage > 0) ? $this->formatCostPerPage($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage) : 'N/A'; ?></td>
+                <td class="cost-per-page color <?= $differenceClass($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, $optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, false) ?>" id="colorCpp"><?= ((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage > 0) ? $this->formatCostPerPage($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage) : 'N/A'; ?></td>
+
+            </tr>
+            <tr>
+                <th class="page-volume color">Color Page Volume</th>
+                <td class="page-volume color"><?= $this->formatPageVolume($optimization->getPageCounts()->getColorPageCount()->getMonthly()) ?></td>
+                <td class="page-volume color <?= $differenceClass($optimization->getPageCounts()->getColorPageCount()->getMonthly(), $optimization->getNewPageCounts()->getColorPageCount()->getMonthly(), true) ?>" id="colorPageVolume"><?= $this->formatPageVolume($optimization->getNewPageCounts()->getColorPageCount()->getMonthly()) ?></td>
+            </tr>
+            <tr>
+                <th class="cost">Total Cost</th>
+                <td class="cost"><?= $this->currency($optimization->calculateDealerMonthlyCost()); ?></td>
+                <td class="cost <?= $differenceClass($optimization->calculateDealerMonthlyCost(), $optimization->calculateDealerMonthlyCostWithReplacements(), false) ?>" id="totalCost"><?= $this->currency((float)$optimization->calculateDealerMonthlyCostWithReplacements()) ?></td>
+
+            </tr>
+            <tr>
+                <th class="cost">Total Revenue</th>
+                <td class="cost"><?= $this->currency((float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()) ?></td>
+                <td class="cost <?= $differenceClass($optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage(), $optimization->calculateOptimizedDealerMonthlyRevenueUsingTargetCostPerPage(), true) ?>" id="totalRevenue"><?= $this->currency((float)$optimization->calculateOptimizedDealerMonthlyRevenueUsingTargetCostPerPage()) ?></td>
+
+            </tr>
+            <tr>
+                <th class="margin">Margin $</th>
+                <td class="margin"><?= $this->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPage()); ?></td>
+                <td class="margin <?= $differenceClass($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPage(), $optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements(), true) ?>" id="marginDollar"><?= $this->currency((float)$optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements()) ?></td>
+
+            </tr>
+            <tr>
+                <th class="margin">Margin %</th>
+                <td class="margin"><?= number_format(\Tangent\Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCost(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2); ?>%</td>
+                <td class="margin <?= $differenceClass(\Tangent\Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCost(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), \Tangent\Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateOptimizedDealerMonthlyRevenueUsingTargetCostPerPage()), true) ?>" id="marginPercent"><?= number_format(\Tangent\Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateOptimizedDealerMonthlyRevenueUsingTargetCostPerPage()), 2) ?>%</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-4 col-md-6">
+        <table class="table table-condensed table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Action</th>
+                <th class="text-right">Count</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th>Keep</th>
+                <td class="text-right">
+                    <span id="numberOfKeepDevices"><?= number_format(count($devicesGroupedByAction[HardwareOptimizationDeviceInstanceModel::ACTION_KEEP])); ?></span>
+                </td>
+            </tr>
+            <tr>
+                <th>Do Not Repair (Replace when broken)</th>
+                <td class="text-right">
+                    <span id="numberOfDoNotRepairDevices"><?= number_format(count($devicesGroupedByAction[HardwareOptimizationDeviceInstanceModel::ACTION_DNR])); ?></span>
+                </td>
+            </tr>
+            <tr>
+                <th>Retire/Migrate (Low Page Volume)</th>
+                <td class="text-right">
+                    <span id="numberOfRetireDevices"><?= number_format(count($devicesGroupedByAction[HardwareOptimizationDeviceInstanceModel::ACTION_RETIRE])); ?></span>
+                </td>
+            </tr>
+            <tr>
+                <th>Optimized for Cost</th>
+                <td class="text-right">
+                    <span id="numberOfCostOptimizedDevices"><?= number_format(count($devicesGroupedByAction[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE])); ?></span>
+                </td>
+            </tr>
+            <tr>
+                <th>Upgraded to Color</th>
+                <td class="text-right">
+                    <span id="numberOfColorOptimizedDevices"><?= number_format(count($devicesGroupedByAction[HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE])); ?></span>
+                </td>
+            </tr>
+            <tr>
+                <th>Total Devices</th>
+                <th class="text-right"><?= number_format($optimization->getDevices()->purchasedDeviceInstances->getCount()); ?></th>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

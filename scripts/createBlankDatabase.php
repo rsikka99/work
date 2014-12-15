@@ -14,9 +14,9 @@ defined('ASSETS_PATH') || define('ASSETS_PATH', APPLICATION_BASE_PATH . '/assets
 defined('MYSQL_FILES_PATH') || define('MYSQL_FILES_PATH', APPLICATION_BASE_PATH . '/scripts/mysql');
 
 set_include_path(implode(PATH_SEPARATOR, array(
-                                              APPLICATION_BASE_PATH . '/library',
-                                              get_include_path()
-                                         )));
+    APPLICATION_BASE_PATH . '/library',
+    get_include_path()
+)));
 /**
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.
@@ -28,10 +28,10 @@ require 'init_autoloader.php';
 
 // Define some CLI options
 $getopt = new Zend_Console_Getopt(array(
-                                       'withdata|w' => 'Load database with sample data',
-                                       'env|e-s'    => 'Application environment for which to create database (defaults to development)',
-                                       'help|h'     => 'Help -- usage message'
-                                  ));
+    'withdata|w' => 'Load database with sample data',
+    'env|e-s'    => 'Application environment for which to create database (defaults to development)',
+    'help|h'     => 'Help -- usage message'
+));
 try
 {
     $getopt->parse();
@@ -59,13 +59,15 @@ defined('APPLICATION_ENV') || define('APPLICATION_ENV', (null === $env) ? 'devel
 
 // Initialize Zend_Application
 $application = new Zend_Application(APPLICATION_ENV, array(
-                                                          'config' => array(
-                                                              APPLICATION_PATH . '/configs/global.php',
-                                                              APPLICATION_PATH . '/configs/local.php',
-                                                          )));
+    'config' => array(
+        APPLICATION_PATH . '/configs/global.php',
+        APPLICATION_PATH . '/configs/local.php',
+        APPLICATION_BASE_PATH . '/scripts/db_config.php',
+    )));
 
 // Initialize and retrieve DB resource
 $bootstrap = $application->getBootstrap();
+
 $bootstrap->bootstrap('db');
 /* @var $dbAdapter Zend_Db_Adapter_Mysqli */
 $dbAdapter = $bootstrap->getResource('db');
@@ -88,6 +90,7 @@ try
     $conn = $dbAdapter->getConnection();
     if ($conn instanceof mysqli)
     {
+
         $conn->query('DROP DATABASE IF EXISTS `' . $options ['db'] ['params'] ['dbname'] . '`;');
         $conn->query('CREATE DATABASE `' . $options ['db'] ['params'] ['dbname'] . '`;');
 

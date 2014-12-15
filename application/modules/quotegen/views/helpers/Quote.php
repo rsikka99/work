@@ -1,4 +1,6 @@
 <?php
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\QuoteMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
 
 /**
  * Quotegen_View_Helper_Quote
@@ -13,7 +15,7 @@ class Quotegen_View_Helper_Quote extends My_View_Helper_Abstract
     /**
      * Gets a quote model if the url parameter was set.
      *
-     * @return Quotegen_Model_Quote The quote model
+     * @return QuoteModel The quote model
      */
     public function Quote ()
     {
@@ -22,7 +24,7 @@ class Quotegen_View_Helper_Quote extends My_View_Helper_Abstract
             $quoteId = $this->getRequestVariable('quoteId');
             if ($quoteId)
             {
-                $this->_quote = Quotegen_Model_Mapper_Quote::getInstance()->find($quoteId);
+                $this->_quote = QuoteMapper::getInstance()->find($quoteId);
             }
         }
 

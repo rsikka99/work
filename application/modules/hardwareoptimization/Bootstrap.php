@@ -1,4 +1,6 @@
 <?php
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Models\Acl\HardwareOptimizationAclModel;
 
 /**
  * Class Hardwareoptimization_Bootstrap
@@ -30,16 +32,24 @@ class Hardwareoptimization_Bootstrap extends Zend_Application_Module_Bootstrap
     }
 
     /**
+     * @return Zend_Loader_Autoloader_Resource
+     */
+    protected function _initServiceAutoloader ()
+    {
+        return $this->getResourceLoader()->addResourceType('Service', 'services', 'Service');
+    }
+
+    /**
      * Adds ACL
      *
-     * @return Application_Model_Acl|mixed
+     * @return \MPSToolbox\Legacy\Models\Acl\AppAclModel|mixed
      */
     protected function _initAddToAcl ()
     {
         $acl = Zend_Registry::get('Zend_Acl');
-        if ($acl instanceof Application_Model_Acl)
+        if ($acl instanceof AppAclModel)
         {
-            Hardwareoptimization_Model_Acl::setupAcl($acl);
+            HardwareOptimizationAclModel::setupAcl($acl);
         }
 
         return $acl;

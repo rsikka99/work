@@ -1,22 +1,24 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageModel;
+
 class Proposalgen_Model_CostPerPageTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Proposalgen_Model_CostPerPage
+     * @var CostPerPageModel
      */
     protected $_costPerPage;
 
     /**
      * @param bool $forceNewObject
      *
-     * @return Proposalgen_Model_CostPerPage
+     * @return CostPerPageModel
      */
     public function getCostPerPage ($forceNewObject = false)
     {
         if (!isset($this->_costPerPage) || $forceNewObject)
         {
-            $this->_costPerPage = new Proposalgen_Model_CostPerPage();
+            $this->_costPerPage = new CostPerPageModel();
         }
 
         return $this->_costPerPage;

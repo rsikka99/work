@@ -1,9 +1,11 @@
 <?php
+use MPSToolbox\Legacy\Modules\Admin\Services\FixTonerService;
+use Tangent\Controller\Action;
 
 /**
  * Class Admin_FixController
  */
-class Admin_FixController extends Tangent_Controller_Action
+class Admin_FixController extends Action
 {
 
     /**
@@ -26,7 +28,7 @@ class Admin_FixController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
-
+        $this->_pageTitle = array('Fix Functions');
     }
 
     /**
@@ -34,9 +36,9 @@ class Admin_FixController extends Tangent_Controller_Action
      */
     public function tonersAction ()
     {
-        $this->view->headTitle('Fix Toners');
-        $fixTonerService = new Admin_Service_Fix_Toner();
-        $form            = $fixTonerService->getForm();
+        $this->_pageTitle = array('Fix Toners');
+        $fixTonerService  = new FixTonerService();
+        $form             = $fixTonerService->getForm();
 
         if ($this->getRequest()->isPost())
         {
@@ -54,13 +56,17 @@ class Admin_FixController extends Tangent_Controller_Action
                     if ($success)
                     {
                         $this->_flashMessenger->addMessage(array("success" => "Processed Toners"));
-                        $this->redirector('toners', null, null);
+                        $this->redirectToRoute('admin.fix-toners');
                     }
                     else
                     {
                         $this->_flashMessenger->addMessage(array("danger" => $fixTonerService->errorMessages));
                     }
                 }
+            }
+            else
+            {
+                $this->redirectToRoute('admin');
             }
         }
 

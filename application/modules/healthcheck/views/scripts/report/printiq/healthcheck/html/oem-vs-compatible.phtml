@@ -1,12 +1,12 @@
 <?php
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
-$graphs = $healthcheckViewModel->getGraphs();
+$graphs               = $healthcheckViewModel->getGraphs();
 ?>
 <div class="pheader">Estimated OEM Toner Costs vs. Compatible Toner Costs</div>
 
-<p>You can save an additional <?php echo $this->currency($healthcheckViewModel->calculateOptimizedTonerOrderSavings()); ?> over the first month and approximately <?php echo $this->currency($healthcheckViewModel->calculateOptimizedTonerOrderSavings() * 12); ?> over 12 months by moving to the suggested products on the analysis below. That is a total savings of <?php echo number_format($healthcheckViewModel->calculateOptimizedTonerOrderSavingPercentage()); ?>% going forward.</p>
-<br/>
+<p>You can save an additional <?= $this->currency($healthcheckViewModel->calculateOptimizedTonerOrderSavings()); ?> over the first month and approximately <?= $this->currency($healthcheckViewModel->calculateOptimizedTonerOrderSavings() * 12); ?> over 12 months by moving to the suggested products on the analysis below. That is a total savings of <?= number_format($healthcheckViewModel->calculateOptimizedTonerOrderSavingPercentage()); ?>% going forward.</p>
+<br />
 <table class="genericTable" id="oemVsCompTable">
     <thead>
     <tr class="shaded">
@@ -26,16 +26,16 @@ $graphs = $healthcheckViewModel->getGraphs();
     foreach ($healthcheckViewModel->getClientTonerOrders() as $clientTonerOrder) :
         ?>
         <tr>
-            <td><?php echo $clientTonerOrder->dealerSku; ?></td>
-            <td><?php echo $clientTonerOrder->oemSku; ?></td>
-            <td class="text-right"><?php echo number_format($clientTonerOrder->quantity); ?></td>
-            <td class="text-right"><?php echo $this->currency($clientTonerOrder->cost); ?></td>
+            <td><?= $clientTonerOrder->dealerSku; ?></td>
+            <td><?= $clientTonerOrder->oemSku; ?></td>
+            <td class="text-right"><?= number_format($clientTonerOrder->quantity); ?></td>
+            <td class="text-right"><?= $this->currency($clientTonerOrder->cost); ?></td>
             <?php if ($clientTonerOrder->replacementTonerId > 0) : ?>
-                <td><?php echo ($clientTonerOrder->getReplacementToner()->getDealerTonerAttribute($healthcheckViewModel->healthcheck->dealerId)) ? $clientTonerOrder->getReplacementToner()->getDealerTonerAttribute($healthcheckViewModel->healthcheck->dealerId)->dealerSku : '-'; ?></td>
-                <td><?php echo $clientTonerOrder->getReplacementToner()->sku; ?></td>
-                <td class="text-right"><?php echo $this->currency($clientTonerOrder->getReplacementTonerCost($healthcheckViewModel->healthcheck->getHealthcheckSettings()->healthcheckMargin)); ?></td>
-                <td class="text-right"><?php echo $this->currency($clientTonerOrder->getReplacementTonerSavings($healthcheckViewModel->healthcheck->getHealthcheckSettings()->healthcheckMargin)); ?></td>
-                <?php $totalNetSavings += $clientTonerOrder->getReplacementTonerSavings($healthcheckViewModel->healthcheck->getHealthcheckSettings()->healthcheckMargin); ?>
+                <td><?= ($clientTonerOrder->getReplacementToner()->getDealerTonerAttribute($healthcheckViewModel->healthcheck->dealerId)) ? $clientTonerOrder->getReplacementToner()->getDealerTonerAttribute($healthcheckViewModel->healthcheck->dealerId)->dealerSku : '-'; ?></td>
+                <td><?= $clientTonerOrder->getReplacementToner()->sku; ?></td>
+                <td class="text-right"><?= $this->currency($clientTonerOrder->getReplacementTonerCost($healthcheckViewModel->healthcheck->getClient()->getClientSettings()->genericSettings->tonerPricingMargin)); ?></td>
+                <td class="text-right"><?= $this->currency($clientTonerOrder->getReplacementTonerSavings($healthcheckViewModel->healthcheck->getClient()->getClientSettings()->genericSettings->tonerPricingMargin)); ?></td>
+                <?php $totalNetSavings += $clientTonerOrder->getReplacementTonerSavings($healthcheckViewModel->healthcheck->getClient()->getClientSettings()->genericSettings->tonerPricingMargin); ?>
             <?php else : ?>
                 <td>-</td>
                 <td>-</td>
@@ -47,7 +47,7 @@ $graphs = $healthcheckViewModel->getGraphs();
     <?php endforeach; ?>
     <tr class="shaded">
         <td colspan="7"></td>
-        <td class="text-right"><?php echo $this->currency($totalNetSavings); ?></td>
+        <td class="text-right"><?= $this->currency($totalNetSavings); ?></td>
     </tr>
     </tbody>
 </table>

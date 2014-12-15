@@ -1,11 +1,13 @@
 <?php
-$quote = $this->Quote();
-/* @var $quote Quotegen_Model_Quote */
-$this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.phtml'));
 
-$this->headScript()->appendScript("$('i').popover();");
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+
+/* @var $quote QuoteModel */
+$quote = $this->Quote();
+
+$this->headScript()->appendScript("require(['jquery', 'bootstrap'], function($) { $('i').popover(); });");
 ?>
-<?php echo $this->render('_partials/quoteHeading.phtml'); ?>
-<div class='well'>
-    <?php echo $this->form; ?>
+<?= $this->render('_partials/quoteHeading.phtml'); ?>
+<div class="container">
+    <?= $this->form ?>
 </div>

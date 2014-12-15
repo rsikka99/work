@@ -1,4 +1,6 @@
 <?php
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Models\Acl\HealthCheckAclModel;
 
 /**
  * Class Healthcheck_Bootstrap
@@ -32,9 +34,9 @@ class Healthcheck_Bootstrap extends Zend_Application_Module_Bootstrap
     protected function _initAddToAcl ()
     {
         $acl = Zend_Registry::get('Zend_Acl');
-        if ($acl instanceof Application_Model_Acl)
+        if ($acl instanceof AppAclModel)
         {
-            Healthcheck_Model_Acl::setupAcl($acl);
+            HealthCheckAclModel::setupAcl($acl);
         }
     }
 

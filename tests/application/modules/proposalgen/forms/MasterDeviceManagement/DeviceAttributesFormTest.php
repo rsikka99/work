@@ -1,14 +1,17 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeviceAttributesForm;
+
 class Proposalgen_Form_MasterDeviceManagement_DeviceAttributesFormTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
+
 {
     /**
-     * @var Proposalgen_Form_MasterDeviceManagement_DeviceAttributes
+     * @var DeviceAttributesForm
      */
     protected $_form;
 
     /**
-     * @return Proposalgen_Form_MasterDeviceManagement_DeviceAttributes
+     * @return DeviceAttributesForm
      */
     public function getForm ()
     {
@@ -42,7 +45,7 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributesFormTest extends T
      */
     public function buildForm ($isAllowed = false)
     {
-        $this->_form = new Proposalgen_Form_MasterDeviceManagement_DeviceAttributes(null, $isAllowed);
+        $this->_form = new DeviceAttributesForm(null, $isAllowed);
     }
 
     /**
@@ -63,37 +66,37 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributesFormTest extends T
     }
 
     /**
-     * Test the form to make sure the fields are all edibable when they have isAllowed
+     * Test the form to make sure the fields are disabled when isAllowed = false
      */
     public function testDisabledFields ()
     {
         $this->buildForm();
-        $this->assertAttributeEquals('disabled', 'disabled', $this->_form->getElement('isCopier'));
-        $this->assertAttributeEquals('disabled', 'disabled', $this->_form->getElement('isDuplex'));
-        $this->assertAttributeEquals('disabled', 'disabled', $this->_form->getElement('isFax'));
-        $this->assertAttributeEquals('disabled', 'disabled', $this->_form->getElement('isCapableOfReportingTonerLevels'));
-        $this->assertAttributeEquals('readonly', 'readonly', $this->_form->getElement('ppmBlack'));
-        $this->assertAttributeEquals('readonly', 'readonly', $this->_form->getElement('ppmColor'));
-        $this->assertAttributeEquals('readonly', 'readonly', $this->_form->getElement('launchDate'));
-        $this->assertAttributeEquals('readonly', 'readonly', $this->_form->getElement('wattsPowerNormal'));
-        $this->assertAttributeEquals('readonly', 'readonly', $this->_form->getElement('wattsPowerIdle'));
+        $this->assertTrue($this->_form->getElement('isCopier')->getAttrib('disabled'));
+        $this->assertTrue($this->_form->getElement('isDuplex')->getAttrib('disabled'));
+        $this->assertTrue($this->_form->getElement('isFax')->getAttrib('disabled'));
+        $this->assertTrue($this->_form->getElement('isCapableOfReportingTonerLevels')->getAttrib('disabled'));
+        $this->assertTrue($this->_form->getElement('ppmBlack')->getAttrib('disabled'));
+        $this->assertTrue($this->_form->getElement('ppmColor')->getAttrib('disabled'));
+        $this->assertTrue($this->_form->getElement('launchDate')->getAttrib('disabled'));
+        $this->assertTrue($this->_form->getElement('wattsPowerNormal')->getAttrib('disabled'));
+        $this->assertTrue($this->_form->getElement('wattsPowerIdle')->getAttrib('disabled'));
     }
 
     /**
-     * Test the form to make sure the fields are all editable when they have isAllowed
+     * Test the form to make sure the fields are all enabled when isAllowed = true
      */
     public function testFieldsAreEditableAsIsAllowed ()
     {
         $this->buildForm(true);
-        $this->assertObjectNotHasAttribute('disabled', $this->_form->getElement('isCopier'));
-        $this->assertObjectNotHasAttribute('disabled', $this->_form->getElement('isDuplex'));
-        $this->assertObjectNotHasAttribute('disabled', $this->_form->getElement('isFax'));
-        $this->assertObjectNotHasAttribute('disabled', $this->_form->getElement('isCapableOfReportingTonerLevels'));
-        $this->assertObjectNotHasAttribute('readonly', $this->_form->getElement('ppmBlack'));
-        $this->assertObjectNotHasAttribute('readonly', $this->_form->getElement('ppmColor'));
-        $this->assertObjectNotHasAttribute('readonly', $this->_form->getElement('launchDate'));
-        $this->assertObjectNotHasAttribute('readonly', $this->_form->getElement('wattsPowerNormal'));
-        $this->assertObjectNotHasAttribute('readonly', $this->_form->getElement('wattsPowerIdle'));
+        $this->assertFalse($this->_form->getElement('isCopier')->getAttrib('disabled'));
+        $this->assertFalse($this->_form->getElement('isDuplex')->getAttrib('disabled'));
+        $this->assertFalse($this->_form->getElement('isFax')->getAttrib('disabled'));
+        $this->assertFalse($this->_form->getElement('isCapableOfReportingTonerLevels')->getAttrib('disabled'));
+        $this->assertFalse($this->_form->getElement('ppmBlack')->getAttrib('disabled'));
+        $this->assertFalse($this->_form->getElement('ppmColor')->getAttrib('disabled'));
+        $this->assertNull($this->_form->getElement('launchDate')->getAttrib('disabled')); // disabled only gets set to true if not allowed to edit - it's never set to false
+        $this->assertFalse($this->_form->getElement('wattsPowerNormal')->getAttrib('disabled'));
+        $this->assertFalse($this->_form->getElement('wattsPowerIdle')->getAttrib('disabled'));
     }
 }
 

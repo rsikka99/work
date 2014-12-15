@@ -1,12 +1,13 @@
 <?php
-/* @var $quote Quotegen_Model_Quote */
+
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+
+/* @var $quote QuoteModel */
 $quote = $this->Quote();
 
-$this->headScript()->appendFile($this->baseUrl('js/quotegen/quote_profitability/index.js'));
-$this->headScript()->appendFile($this->baseUrl('js/quotegen/devicesetup/deviceSetup.js'));
-$this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.phtml'));
+$this->headScript()->appendFile($this->baseUrl('js/app/legacy/quotegen/quote_profitability/ProfitabilityIndex.js'));
 ?>
-<?php echo $this->render('_partials/quoteHeading.phtml'); ?>
-<div class='well'>
-    <?php echo $this->form; ?>
+<?= $this->render('_partials/quoteHeading.phtml'); ?>
+<div class="container">
+    <?= $this->form ?>
 </div>

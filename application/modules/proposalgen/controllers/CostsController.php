@@ -1,9 +1,33 @@
 <?php
+use MPSToolbox\Legacy\Mappers\DealerMapper;
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Models\Acl\ProposalgenAclModel;
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Services\TonerService;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\DbTables\ManufacturerDbTable;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DealerMasterDeviceAttributeMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DealerTonerAttributeMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceTonerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\JitCompatibleMasterDeviceMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DealerMasterDeviceAttributeModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DealerTonerAttributeModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceTonerModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\JitCompatibleMasterDeviceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\Import\DeviceFeaturesImportService;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\Import\DevicePricingImportService;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\Import\TonerPricingImportService;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\Import\TonerMatchupImportService;
+use Tangent\Controller\Action;
+use Tangent\Functions;
 
 /**
  * Class Proposalgen_CostsController
  */
-class Proposalgen_CostsController extends Tangent_Controller_Action
+class Proposalgen_CostsController extends Action
 {
     /**
      * The namespace for our mps application
@@ -63,7 +87,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
      */
     protected function _canApprove ()
     {
-        return $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
+        return $this->view->IsAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, AppAclModel::PRIVILEGE_ADMIN);
     }
 
     /**
@@ -71,20 +95,13 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
      */
     public function bulkdevicepricingAction ()
     {
-        $this->view->headTitle('Bulk Hardware/Pricing Updates');
+        $this->_pageTitle        = array('Bulk Hardware/Pricing Updates');
         $this->view->parts_list  = array();
         $this->view->device_list = array();
         $db                      = Zend_Db_Table::getDefaultAdapter();
 
-        $dealer         = Application_Model_Mapper_Dealer::getInstance()->find($this->_dealerId);
-        $dealerSettings = $dealer->getDealerSettings();
-
-
-        $this->view->default_labor = $dealerSettings->getAssessmentSettings()->laborCostPerPage;
-        $this->view->default_parts = $dealerSettings->getAssessmentSettings()->partsCostPerPage;
-
         // Fill manufacturers drop down
-        $manufacturersTable            = new Proposalgen_Model_DbTable_Manufacturer();
+        $manufacturersTable            = new ManufacturerDbTable();
         $manufacturers                 = $manufacturersTable->fetchAll('isDeleted = false', 'fullName');
         $this->view->manufacturer_list = $manufacturers;
 
@@ -138,21 +155,21 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                 }
                                 else if ($price != '' && $price > 0)
                                 {
-                                    $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner_id, $this->_dealerId);
+                                    $tonerAttribute = DealerTonerAttributeMapper::getInstance()->findTonerAttributeByTonerId($toner_id, $this->_dealerId);
                                     if ($tonerAttribute)
                                     {
                                         $tonerAttribute->cost = $price;
 
-                                        Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($tonerAttribute);
+                                        DealerTonerAttributeMapper::getInstance()->save($tonerAttribute);
                                     }
                                     else
                                     {
 
-                                        $tonerAttribute           = new Proposalgen_Model_Dealer_Toner_Attribute();
+                                        $tonerAttribute           = new DealerTonerAttributeModel();
                                         $tonerAttribute->dealerId = $this->_dealerId;
                                         $tonerAttribute->tonerId  = $toner_id;
                                         $tonerAttribute->cost     = $price;
-                                        Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($tonerAttribute);
+                                        DealerTonerAttributeMapper::getInstance()->insert($tonerAttribute);
 
                                     }
                                 }
@@ -164,22 +181,22 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
 
                                 if ($newSku != '')
                                 {
-                                    $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner_id, $this->_dealerId);
+                                    $tonerAttribute = DealerTonerAttributeMapper::getInstance()->findTonerAttributeByTonerId($toner_id, $this->_dealerId);
                                     if ($tonerAttribute)
                                     {
 
                                         $tonerAttribute->dealerSku = $newSku;
 
-                                        Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($tonerAttribute);
+                                        DealerTonerAttributeMapper::getInstance()->save($tonerAttribute);
                                     }
                                     else
                                     {
 
-                                        $tonerAttribute            = new Proposalgen_Model_Dealer_Toner_Attribute();
+                                        $tonerAttribute            = new DealerTonerAttributeModel();
                                         $tonerAttribute->dealerId  = $this->_dealerId;
                                         $tonerAttribute->tonerId   = $toner_id;
                                         $tonerAttribute->dealerSku = $newSku;
-                                        Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($tonerAttribute);
+                                        DealerTonerAttributeMapper::getInstance()->insert($tonerAttribute);
 
                                     }
                                 }
@@ -218,7 +235,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                     }
                     else
                     {
-                        /* @var $dealerMasterDeviceAttribute Proposalgen_Model_Dealer_Master_Device_Attribute [] */
+                        /* @var $dealerMasterDeviceAttribute DealerMasterDeviceAttributeModel [] */
 
                         $dealerMasterDeviceAttribute = array();
                         $dealerId                    = $this->_dealerId;
@@ -254,7 +271,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                         }
                                         else
                                         {
-                                            $dealerMasterDeviceAttribute[$masterDeviceId]                   = new Proposalgen_Model_Dealer_Master_Device_Attribute();
+                                            $dealerMasterDeviceAttribute[$masterDeviceId]                   = new DealerMasterDeviceAttributeModel();
                                             $dealerMasterDeviceAttribute[$masterDeviceId]->laborCostPerPage = $price;
                                             $dealerMasterDeviceAttribute[$masterDeviceId]->dealerId         = $dealerId;
                                             $dealerMasterDeviceAttribute[$masterDeviceId]->masterDeviceId   = $masterDeviceId;
@@ -287,7 +304,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                         }
                                         else
                                         {
-                                            $dealerMasterDeviceAttribute[$masterDeviceId]                   = new Proposalgen_Model_Dealer_Master_Device_Attribute();
+                                            $dealerMasterDeviceAttribute[$masterDeviceId]                   = new DealerMasterDeviceAttributeModel();
                                             $dealerMasterDeviceAttribute[$masterDeviceId]->partsCostPerPage = $price;
                                             $dealerMasterDeviceAttribute[$masterDeviceId]->dealerId         = $dealerId;
                                             $dealerMasterDeviceAttribute[$masterDeviceId]->masterDeviceId   = $masterDeviceId;
@@ -300,7 +317,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
 
                         foreach ($dealerMasterDeviceAttribute as $key => $value)
                         {
-                            $masterAttribute = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->find(array($key, $this->_dealerId));
+                            $masterAttribute = DealerMasterDeviceAttributeMapper::getInstance()->find(array($key, $this->_dealerId));
                             if ($masterAttribute)
                             {
                                 if (isset($value->laborCostPerPage))
@@ -311,11 +328,11 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                 {
                                     $masterAttribute->partsCostPerPage = $value->partsCostPerPage;
                                 }
-                                Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->save($masterAttribute);
+                                DealerMasterDeviceAttributeMapper::getInstance()->save($masterAttribute);
                             }
                             else
                             {
-                                Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->insert($value);
+                                DealerMasterDeviceAttributeMapper::getInstance()->insert($value);
                             }
                         }
 
@@ -355,8 +372,8 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
             catch (Exception $e)
             {
                 $db->rollback();
-                Tangent_Log::logException($e);
-                $this->_flashMessenger->addMessage(array("error" => "Error: The updates were not saved. Reference #: " . Tangent_Log::getUniqueId()));
+                \Tangent\Logger\Logger::logException($e);
+                $this->_flashMessenger->addMessage(array("error" => "Error: The updates were not saved. Reference #: " . \Tangent\Logger\Logger::getUniqueId()));
             }
         }
     }
@@ -368,7 +385,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
     {
         $db                    = Zend_Db_Table::getDefaultAdapter();
         $errorMessages         = array();
-        $deviceFeaturesService = new Proposalgen_Service_Import_Device_Features();
+        $deviceFeaturesService = new DeviceFeaturesImportService();
 
         $this->view->canApprove = $this->_canApprove();
 
@@ -399,16 +416,16 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     'wattsPowerIdle'     => $validData[$deviceFeaturesService::DEVICE_FEATURES_IDLE_WATTAGE],
                                 );
 
-                                $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($validData['Master Printer ID']);
+                                $masterDevice = MasterDeviceMapper::getInstance()->find($validData['Master Printer ID']);
 
-                                if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
+                                if ($masterDevice instanceof MasterDeviceModel)
                                 {
                                     if ($this->_compareData($dataArray, $masterDevice))
                                     {
-                                        Proposalgen_Model_Mapper_MasterDevice::getInstance()->save($masterDevice);
+                                        MasterDeviceMapper::getInstance()->save($masterDevice);
                                     }
 
-                                    $jitCompatibleMasterDevice                 = new Proposalgen_Model_JitCompatibleMasterDevice();
+                                    $jitCompatibleMasterDevice                 = new JitCompatibleMasterDeviceModel();
                                     $jitCompatibleMasterDevice->dealerId       = $this->_dealerId;
                                     $jitCompatibleMasterDevice->masterDeviceId = $masterDevice->id;
 
@@ -417,12 +434,12 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     {
                                         if ($validData[$deviceFeaturesService::DEVICE_FEATURES_JIT_COMPATIBILITY] === '1')
                                         {
-                                            Proposalgen_Model_Mapper_JitCompatibleMasterDevice::getInstance()->insert($jitCompatibleMasterDevice);
+                                            JitCompatibleMasterDeviceMapper::getInstance()->insert($jitCompatibleMasterDevice);
                                         }
                                     }
                                     else if ($validData[$deviceFeaturesService::DEVICE_FEATURES_JIT_COMPATIBILITY] === '0')
                                     {
-                                        Proposalgen_Model_Mapper_JitCompatibleMasterDevice::getInstance()->delete($jitCompatibleMasterDevice);
+                                        JitCompatibleMasterDeviceMapper::getInstance()->delete($jitCompatibleMasterDevice);
                                     }
                                 }
                             }
@@ -462,7 +479,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
     {
         $db                  = Zend_Db_Table::getDefaultAdapter();
         $errorMessages       = array();
-        $tonerPricingService = new Proposalgen_Service_Import_Toner_Pricing();
+        $tonerPricingService = new TonerPricingImportService();
 
         if ($this->_request->isPost())
         {
@@ -488,25 +505,25 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     'dealerId'  => $this->_dealerId,
                                 );
 
-                                $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($validData ['Toner ID']);
-                                if ($toner instanceof Proposalgen_Model_Toner)
+                                $toner = TonerMapper::getInstance()->find($validData ['Toner ID']);
+                                if ($toner instanceof TonerModel)
                                 {
-                                    $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->find(array($dataArray['tonerId'], $this->_dealerId));
+                                    $tonerAttribute = DealerTonerAttributeMapper::getInstance()->find(array($dataArray['tonerId'], $this->_dealerId));
                                     // Does the toner attribute exists ?
-                                    if ($tonerAttribute instanceof Proposalgen_Model_Dealer_Toner_Attribute)
+                                    if ($tonerAttribute instanceof DealerTonerAttributeModel)
                                     {
                                         // If cost && SKU are empty  or cost = 0 -> delete.
                                         // Delete
                                         if (empty($dataArray['cost']) && empty($dataArray['dealerSku']))
                                         {
                                             // If the attributes are empty after being found, delete them.
-                                            Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->delete($tonerAttribute);
+                                            DealerTonerAttributeMapper::getInstance()->delete($tonerAttribute);
                                         }
                                         else
                                         {
                                             if ($this->_compareData($dataArray, $tonerAttribute))
                                             {
-                                                Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($tonerAttribute);
+                                                DealerTonerAttributeMapper::getInstance()->save($tonerAttribute);
                                             }
                                         }
                                     }
@@ -514,9 +531,9 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     {
                                         if ($dataArray['cost'] > 0 || !empty($dataArray['dealerSku']))
                                         {
-                                            $tonerAttribute = new Proposalgen_Model_Dealer_Toner_Attribute();
+                                            $tonerAttribute = new DealerTonerAttributeModel();
                                             $tonerAttribute->populate($dataArray);
-                                            Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($tonerAttribute);
+                                            DealerTonerAttributeMapper::getInstance()->insert($tonerAttribute);
                                         }
                                     }
                                 }
@@ -559,7 +576,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
     {
         $db             = Zend_Db_Table::getDefaultAdapter();
         $errorMessages  = array();
-        $matchupService = new Proposalgen_Service_Import_Toner_Matchup();
+        $matchupService = new TonerMatchupImportService();
 
         $canApprove             = $this->_canApprove();
         $this->view->canApprove = $canApprove;
@@ -598,11 +615,11 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                          *
                                          * When inserting a new one we need to obfuscate the dealers cost
                                          */
-                                        $toner                 = new Proposalgen_Model_Toner($validData['parsedToners']['comp']);
-                                        $toner->cost           = Proposalgen_Service_Toner::obfuscateTonerCost($toner->cost);
+                                        $toner                 = new TonerModel($validData['parsedToners']['comp']);
+                                        $toner->cost           = TonerService::obfuscateTonerCost($toner->cost);
                                         $toner->isSystemDevice = $canApprove;
                                         $toner->userId         = $this->_userId;
-                                        $tonerId               = Proposalgen_Model_Mapper_Toner::getInstance()->insert($toner);
+                                        $tonerId               = TonerMapper::getInstance()->insert($toner);
                                     }
                                     else
                                     {
@@ -617,15 +634,15 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     /**
                                      * Dealer Toner Attributes
                                      */
-                                    $dealerTonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->find(array($tonerId, $this->_dealerId));
-                                    if ($dealerTonerAttribute instanceof Proposalgen_Model_Dealer_Toner_Attribute)
+                                    $dealerTonerAttribute = DealerTonerAttributeMapper::getInstance()->find(array($tonerId, $this->_dealerId));
+                                    if ($dealerTonerAttribute instanceof DealerTonerAttributeModel)
                                     {
                                         $dealerTonerAttribute->cost = $validData['parsedToners']['comp']['cost'];
-                                        Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($dealerTonerAttribute);
+                                        DealerTonerAttributeMapper::getInstance()->save($dealerTonerAttribute);
                                     }
                                     else
                                     {
-                                        $dealerTonerAttribute           = new Proposalgen_Model_Dealer_Toner_Attribute();
+                                        $dealerTonerAttribute           = new DealerTonerAttributeModel();
                                         $dealerTonerAttribute->tonerId  = $tonerId;
                                         $dealerTonerAttribute->dealerId = $this->_dealerId;
                                         $dealerTonerAttribute->cost     = $validData['parsedToners']['comp']['cost'];
@@ -635,7 +652,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                             $dealerTonerAttribute->dealerSku = $validData['parsedToners']['comp']['dealerSku'];
                                         }
 
-                                        Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($dealerTonerAttribute);
+                                        DealerTonerAttributeMapper::getInstance()->insert($dealerTonerAttribute);
                                     }
 
                                     /**
@@ -647,15 +664,15 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                         /**
                                          * Map our compatible to the same devices that our OEM toner is mapped to.
                                          */
-                                        $existingDeviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchDeviceTonersByTonerId($validData['parsedToners']['oem']['id']);
+                                        $existingDeviceToners = DeviceTonerMapper::getInstance()->fetchDeviceTonersByTonerId($validData['parsedToners']['oem']['id']);
                                         foreach ($existingDeviceToners as $existingDeviceToner)
                                         {
-                                            if (!Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($tonerId, $existingDeviceToner->master_device_id)) instanceof Proposalgen_Model_DeviceToner)
+                                            if (!DeviceTonerMapper::getInstance()->find(array($tonerId, $existingDeviceToner->master_device_id)) instanceof DeviceTonerModel)
                                             {
-                                                $deviceToner                   = new Proposalgen_Model_DeviceToner();
+                                                $deviceToner                   = new DeviceTonerModel();
                                                 $deviceToner->toner_id         = $tonerId;
                                                 $deviceToner->master_device_id = $existingDeviceToner->master_device_id;
-                                                Proposalgen_Model_Mapper_DeviceToner::getInstance()->insert($deviceToner);
+                                                DeviceTonerMapper::getInstance()->insert($deviceToner);
                                             }
                                         }
                                     }
@@ -678,7 +695,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                 catch (Exception $e)
                 {
                     $db->rollback();
-                    Tangent_Log::logException($e);
+                    \Tangent\Logger\Logger::logException($e);
                     $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
                 }
                 $matchupService->closeFiles();
@@ -698,7 +715,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
     {
         $db                   = Zend_Db_Table::getDefaultAdapter();
         $errorMessages        = array();
-        $devicePricingService = new Proposalgen_Service_Import_Device_Pricing();
+        $devicePricingService = new DevicePricingImportService();
 
         if ($this->_request->isPost())
         {
@@ -727,23 +744,23 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                 );
 
                                 // Does the master device exist in our database?
-                                $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
-                                if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
+                                $masterDevice = MasterDeviceMapper::getInstance()->find($masterDeviceId);
+                                if ($masterDevice instanceof MasterDeviceModel)
                                 {
                                     // Do we have the master device already in this dealer device table
-                                    $masterDeviceAttribute = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->find(array($masterDeviceId, $this->_dealerId));
-                                    if ($masterDeviceAttribute instanceof Proposalgen_Model_Dealer_Master_Device_Attribute)
+                                    $masterDeviceAttribute = DealerMasterDeviceAttributeMapper::getInstance()->find(array($masterDeviceId, $this->_dealerId));
+                                    if ($masterDeviceAttribute instanceof DealerMasterDeviceAttributeModel)
                                     {
                                         // If we have a master device attribute and the row is empty, delete the row
                                         if (empty($dataArray['laborCostPerPage']) && empty($dataArray['partsCostPerPage']))
                                         {
-                                            Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->delete($masterDeviceAttribute);
+                                            DealerMasterDeviceAttributeMapper::getInstance()->delete($masterDeviceAttribute);
                                         }
                                         else
                                         {
                                             if ($this->_compareData($dataArray, $masterDeviceAttribute))
                                             {
-                                                Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->save($masterDeviceAttribute);
+                                                DealerMasterDeviceAttributeMapper::getInstance()->save($masterDeviceAttribute);
                                             }
                                         }
                                     }
@@ -751,9 +768,9 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     {
                                         if ($dataArray['laborCostPerPage'] > 0 || $dataArray['partsCostPerPage'] > 0)
                                         {
-                                            $masterDeviceAttribute = new Proposalgen_Model_Dealer_Master_Device_Attribute();
+                                            $masterDeviceAttribute = new DealerMasterDeviceAttributeModel();
                                             $masterDeviceAttribute->populate($dataArray);
-                                            Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->insert($masterDeviceAttribute);
+                                            DealerMasterDeviceAttributeMapper::getInstance()->insert($masterDeviceAttribute);
                                         }
                                     }
                                 }
@@ -785,7 +802,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
             }
         }
         $this->view->canApprove    = $this->_canApprove();
-        $this->view->manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
+        $this->view->manufacturers = ManufacturerMapper::getInstance()->fetchAll();
         $this->view->errorMessages = $errorMessages;
     }
 
@@ -839,29 +856,29 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
             {
                 $manufacturerId       = $this->_getParam('manufacturer', false);
                 $filename             = "system_printer_pricing_" . date('m_d_Y') . ".csv";
-                $devicePricingService = new Proposalgen_Service_Import_Device_Pricing();
+                $devicePricingService = new DevicePricingImportService();
                 $fieldTitles          = $devicePricingService->csvHeaders;
-                $fieldList            = Proposalgen_Model_Mapper_MasterDevice::getInstance()->getPrinterPricingForExport($manufacturerId, $this->_dealerId);
+                $fieldList            = MasterDeviceMapper::getInstance()->getPrinterPricingForExport($manufacturerId, $this->_dealerId);
             }
             else if ($importType == 'features')
             {
                 $filename             = "system_printer_features_" . date('m_d_Y') . ".csv";
-                $deviceFeatureService = new Proposalgen_Service_Import_Device_Features();
+                $deviceFeatureService = new DeviceFeaturesImportService();
                 $fieldTitles          = $deviceFeatureService->csvHeaders;
-                $fieldList            = Proposalgen_Model_Mapper_MasterDevice::getInstance()->getPrinterFeaturesForExport($this->_dealerId);
+                $fieldList            = MasterDeviceMapper::getInstance()->getPrinterFeaturesForExport($this->_dealerId);
             }
             else if ($importType == 'toner')
             {
                 $manufacturerId      = $this->_getParam('manufacturer', false);
                 $filename            = "system_toner_pricing_" . date('m_d_Y') . ".csv";
-                $tonerPricingService = new Proposalgen_Service_Import_Toner_Pricing();
+                $tonerPricingService = new TonerPricingImportService();
                 $fieldTitles         = $tonerPricingService->csvHeaders;
-                $fieldList           = Proposalgen_Model_Mapper_Toner::getInstance()->getTonerPricingForExport($manufacturerId, $this->_dealerId);
+                $fieldList           = TonerMapper::getInstance()->getTonerPricingForExport($manufacturerId, $this->_dealerId);
             }
             else if ($importType == "matchup")
             {
                 $filename            = "system_toner_matchup.csv";
-                $tonerMatchupService = new Proposalgen_Service_Import_Toner_Matchup();
+                $tonerMatchupService = new TonerMatchupImportService();
                 $fieldTitles         = $tonerMatchupService->csvHeaders;
                 $fieldList           = array();
             }
@@ -877,7 +894,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
             $newFieldList .= "\n";
         }
 
-        Tangent_Functions::setHeadersForDownload($filename);
+        Functions::setHeadersForDownload($filename);
 
         $this->view->fieldTitles = implode(",", $fieldTitles);
         $this->view->fieldList   = $newFieldList;

@@ -1,58 +1,53 @@
 <?php
+use MPSToolbox\Legacy\Entities\RmsUploadEntity;
+use MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentNavigationForm;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceInstanceMasterDeviceMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MapDeviceInstanceMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceInstanceMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\RmsUploadMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\RmsUploadRowMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\RmsExcludedRowMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceMasterDeviceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\FleetStepsModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MapDeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsUploadModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsExcludedRowModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUploadService;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\AddDeviceForm;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper;
+use Tangent\Controller\Action;
+use Tangent\Service\JQGrid;
 
 /**
  * Class Proposalgen_FleetController
  */
-class Proposalgen_FleetController extends Tangent_Controller_Action
+class Proposalgen_FleetController extends Action
 {
     /**
-     * @var int
-     */
-    protected $_selectedClientId;
-
-    /**
-     * The namespace for our MPS application
-     *
-     * @var Zend_Session_Namespace
-     */
-    protected $_mpsSession;
-
-    /**
-     * @var int
-     */
-    protected $_userId;
-
-    /**
-     * Our identity that is stored in the session
-     *
-     * @var stdClass
-     */
-    protected $_identity;
-
-    /**
-     * @var Proposalgen_Model_Fleet_Steps
+     * @var FleetStepsModel
      */
     protected $_navigation;
 
     public function init ()
     {
-        /* Initialize action controller here */
-        $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
-        $this->_identity   = Zend_Auth::getInstance()->getIdentity();
-        $this->_userId     = $this->_identity->id;
-        $this->_navigation = Proposalgen_Model_Fleet_Steps::getInstance();
-        if (isset($this->_mpsSession->selectedClientId))
-        {
-            $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);
+        $this->_navigation = FleetStepsModel::getInstance();
 
-            // Make sure the selected client is ours!
-            if ($client && $client->dealerId == $this->_identity->dealerId)
-            {
-                $this->_selectedClientId       = $this->_mpsSession->selectedClientId;
-                $this->view->selectedClientId  = $this->_selectedClientId;
-                $this->_navigation->clientName = $client->companyName;
-            }
+        if (!$this->getSelectedClient() instanceof \MPSToolbox\Legacy\Entities\ClientEntity)
+        {
+            $this->_flashMessenger->addMessage(array(
+                "danger" => "A client is not selected."
+            ));
+
+            $this->redirectToRoute('app.dashboard');
         }
+
+        $this->_navigation->clientName = $this->getSelectedClient()->companyName;
     }
 
     /**
@@ -60,33 +55,34 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
-        $this->view->headTitle('RMS Upload');
-        $this->view->headTitle('Upload');
-        $time        = -microtime(true);
-        $rmsUploadId = $this->_getParam('rmsUploadId', false);
-        $this->_navigation->setActiveStep(Proposalgen_Model_Fleet_Steps::STEP_FLEET_UPLOAD);
+        $this->_pageTitle = array('Upload', 'RMS Upload');
+        $time             = -microtime(true);
+        $rmsUploadId      = $this->_getParam('rmsUploadId', false);
+
+
+        $this->_navigation->setActiveStep(FleetStepsModel::STEP_FLEET_UPLOAD);
         $rmsUpload = null;
         if ($rmsUploadId > 0)
         {
-            $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($rmsUploadId);
+            $rmsUpload = RmsUploadMapper::getInstance()->find($rmsUploadId);
         }
 
-        if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload)
+        if ($rmsUpload instanceof RmsUploadModel)
         {
-            $this->_navigation->updateAccessibleSteps(Proposalgen_Model_Fleet_Steps::STEP_FLEET_SUMMARY);
+            $this->_navigation->updateAccessibleSteps(FleetStepsModel::STEP_FLEET_SUMMARY);
         }
         else
         {
-            $this->_navigation->updateAccessibleSteps(Proposalgen_Model_Fleet_Steps::STEP_FLEET_UPLOAD);
+            $this->_navigation->updateAccessibleSteps(FleetStepsModel::STEP_FLEET_UPLOAD);
         }
 
-        $uploadService = new Proposalgen_Service_Rms_Upload($this->_userId, $this->_selectedClientId, $rmsUpload);
+        $uploadService = new RmsUploadService($this->getIdentity()->id, $this->getIdentity()->dealerId, $this->getSelectedClient()->id, $rmsUpload);
 
         $form = $uploadService->getForm();
 
-        if (isset($this->_mpsSession->lastSelectedRmsProviderId))
+        if (isset($this->getMpsSession()->lastSelectedRmsProviderId))
         {
-            $form->getElement('rmsProviderId')->setValue($this->_mpsSession->lastSelectedRmsProviderId);
+            $form->getElement('rmsProviderId')->setValue($this->getMpsSession()->lastSelectedRmsProviderId);
         }
 
         if ($this->getRequest()->isPost())
@@ -95,26 +91,26 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
             if (isset($values ["goBack"]))
             {
                 // Bring the user back to the home page
-                $this->redirector("index", "index", "index");
+                $this->redirectToRoute('app.dashboard');
             }
-            else if (isset($values ["performUpload"]) && !($rmsUpload instanceof Proposalgen_Model_Rms_Upload))
+            else if (isset($values ["performUpload"]) && !($rmsUpload instanceof RmsUploadModel))
             {
-                $this->_mpsSession->lastSelectedRmsProviderId = $values['rmsProviderId'];
+                $this->getMpsSession()->lastSelectedRmsProviderId = $values['rmsProviderId'];
 
                 /*
                  * Handle Upload
                  */
                 if ($form->isValid($values))
                 {
-                    $success = $uploadService->processUpload($values, $this->_identity->dealerId);
+                    $success = $uploadService->processUpload($values, $this->getIdentity()->dealerId);
 
                     /**
                      * Log how much time it took
                      */
                     $time += microtime(true);
-                    $filename = $uploadService->rmsUpload->fileName;
+                    $filename = $uploadService->getFileName();
 
-                    Tangent_Log::debug("It took {$time} seconds to process the CSV upload ({$filename}). ");
+                    \Tangent\Logger\Logger::debug("It took {$time} seconds to process the CSV upload ({$filename}). ");
 
                     if ($success)
                     {
@@ -122,7 +118,9 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         $validDevices   = number_format($uploadService->rmsUpload->validRowCount);
                         $invalidDevices = number_format($uploadService->rmsUpload->invalidRowCount);
                         $this->_flashMessenger->addMessage(array("success" => "Processed {$validDevices} valid devices and {$invalidDevices} invalid devices in {$timeElapsed} seconds."));
-                        $this->redirector(null, null, null, array("rmsUploadId" => $uploadService->rmsUpload->id));
+
+                        $this->getMpsSession()->selectedRmsUploadId = $uploadService->rmsUpload->id;
+                        $this->redirectToRoute(null, array("rmsUploadId" => $uploadService->rmsUpload->id));
                     }
                     else
                     {
@@ -131,10 +129,14 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                     }
 
                 }
+                else
+                {
+                    $this->_flashMessenger->addMessage(array("danger" => 'Please fix the errors below.'));
+                }
             }
             else if (isset($values ["saveAndContinue"]))
             {
-                $this->redirector('mapping', null, null, array("rmsUploadId" => $uploadService->rmsUpload->id));
+                $this->redirectToRoute('rms-upload.mapping', array("rmsUploadId" => $uploadService->rmsUpload->id));
             }
         }
 
@@ -142,17 +144,16 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
         $this->view->rmsUpload = $uploadService->rmsUpload;
 
-        $navigationButtons          = ($uploadService->rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
-        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
+        $navigationButtons          = ($uploadService->rmsUpload instanceof RmsUploadModel) ? AssessmentNavigationForm::BUTTONS_BACK_NEXT : AssessmentNavigationForm::BUTTONS_BACK;
+        $this->view->navigationForm = new AssessmentNavigationForm($navigationButtons);
 
     }
 
     public function rmsUploadListAction ()
     {
-        $this->view->headTitle('RMS Upload');
-        $clientId     = $this->_mpsSession->selectedClientId;
-        $jqGrid       = new Tangent_Service_JQGrid();
-        $uploadMapper = Proposalgen_Model_Mapper_Rms_Upload::getInstance();
+        $clientId     = $this->getMpsSession()->selectedClientId;
+        $jqGrid       = new JQGrid();
+        $uploadMapper = RmsUploadMapper::getInstance();
         /*
          * Grab the incoming parameters
          */
@@ -164,7 +165,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
         );
 
         // Set up validation arrays
-        $blankModel  = new Proposalgen_Model_Rms_Upload();
+        $blankModel  = new RmsUploadModel();
         $sortColumns = array_keys($blankModel->toArray());
 
         $jqGrid->parseJQGridPagingRequest($jqGridParameters);
@@ -220,22 +221,21 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
      */
     public function mappingAction ()
     {
-        $this->view->headTitle('RMS Upload');
-        $this->view->headTitle('Map Devices');
-        $this->_navigation->setActiveStep(Proposalgen_Model_Fleet_Steps::STEP_FLEET_MAPPING);
-        $this->_navigation->updateAccessibleSteps(Proposalgen_Model_Fleet_Steps::STEP_FLEET_SUMMARY);
+        $this->_pageTitle = array('Map Devices', 'RMS Upload',);
+        $this->_navigation->setActiveStep(FleetStepsModel::STEP_FLEET_MAPPING);
+        $this->_navigation->updateAccessibleSteps(FleetStepsModel::STEP_FLEET_SUMMARY);
 
         $rmsUploadId = $this->_getParam('rmsUploadId', false);
 
         $rmsUpload = null;
         if ($rmsUploadId > 0)
         {
-            $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($rmsUploadId);
+            $rmsUpload = RmsUploadMapper::getInstance()->find($rmsUploadId);
         }
 
-        if (!$rmsUpload instanceof Proposalgen_Model_Rms_Upload)
+        if (!$rmsUpload instanceof RmsUploadModel)
         {
-            $this->redirector("index");
+            $this->redirectToRoute('rms-upload.upload-file');
         }
 
         $this->view->rmsUpload = $rmsUpload;
@@ -245,16 +245,16 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
             $postData = $this->getRequest()->getPost();
             if (isset($postData['saveAndContinue']))
             {
-                $this->redirector('summary', null, null, array("rmsUploadId" => $rmsUploadId));
+                $this->redirectToRoute('rms-upload.summary', array("rmsUploadId" => $rmsUploadId));
             }
             else if (isset($postData['goBack']))
             {
                 // Call the base controller to send us to the next logical step in the proposal.
-                $this->redirector('index', null, null, array("rmsUploadId" => $rmsUploadId));
+                $this->redirectToRoute('rms-upload.upload-file', array("rmsUploadId" => $rmsUploadId));
             }
         }
 
-        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
+        $this->view->navigationForm = new AssessmentNavigationForm(AssessmentNavigationForm::BUTTONS_BACK_NEXT);
     }
 
     /**
@@ -266,8 +266,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
         if ($rmsUploadId > 0)
         {
-            $jqGrid                  = new Tangent_Service_JQGrid();
-            $mapDeviceInstanceMapper = Proposalgen_Model_Mapper_Map_Device_Instance::getInstance();
+            $jqGrid                  = new JQGrid();
+            $mapDeviceInstanceMapper = MapDeviceInstanceMapper::getInstance();
 
             /*
              * Grab the incoming parameters
@@ -280,7 +280,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
             );
 
             // Set up validation arrays
-            $blankModel  = new Proposalgen_Model_Map_Device_Instance();
+            $blankModel  = new MapDeviceInstanceModel();
             $sortColumns = array_keys($blankModel->toArray());
 
             $jqGrid->parseJQGridPagingRequest($jqGridParameters);
@@ -332,8 +332,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
         if ($rmsUploadId > 0)
         {
-            $jqGrid            = new Tangent_Service_JQGrid();
-            $excludedRowMapper = Proposalgen_Model_Mapper_Rms_Excluded_Row::getInstance();
+            $jqGrid            = new JQGrid();
+            $excludedRowMapper = RmsExcludedRowMapper::getInstance();
 
             /*
              * Grab the incoming parameters
@@ -346,7 +346,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
             );
 
             // Set up validation arrays
-            $blankModel  = new Proposalgen_Model_Rms_Excluded_Row();
+            $blankModel  = new RmsExcludedRowModel();
             $sortColumns = array_keys($blankModel->toArray());
 
             $jqGrid->parseJQGridPagingRequest($jqGridParameters);
@@ -405,17 +405,17 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
         $targetDeviceInstanceId           = $this->_getParam('deviceInstanceId', false);
         $masterDeviceId                   = $this->_getParam('masterDeviceId', false);
         $errorMessage                     = null;
-        $deviceInstanceMasterDeviceMapper = Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance();
-        $deviceInstanceMapper             = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+        $deviceInstanceMasterDeviceMapper = DeviceInstanceMasterDeviceMapper::getInstance();
+        $deviceInstanceMapper             = DeviceInstanceMapper::getInstance();
         $successMessage                   = "Device mapped successfully";
 
         if ($targetDeviceInstanceId !== false && $masterDeviceId !== false)
         {
-            $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
-            if ($masterDevice instanceof Proposalgen_Model_MasterDevice || $masterDeviceId == 0)
+            $masterDevice = MasterDeviceMapper::getInstance()->find($masterDeviceId);
+            if ($masterDevice instanceof MasterDeviceModel || $masterDeviceId == 0)
             {
                 $targetDeviceInstance = $deviceInstanceMapper->find($targetDeviceInstanceId);
-                if ($targetDeviceInstance instanceof Proposalgen_Model_DeviceInstance)
+                if ($targetDeviceInstance instanceof DeviceInstanceModel)
                 {
                     $deviceInstances = array();
                     if (strlen($targetDeviceInstance->getRmsUploadRow()->rmsModelId) > 0)
@@ -448,20 +448,20 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                             {
 
                                 $deviceInstanceMasterDevice = $deviceInstance->getDeviceInstanceMasterDevice();
-                                if ($deviceInstanceMasterDevice instanceof Proposalgen_Model_Device_Instance_Master_Device)
+                                if ($deviceInstanceMasterDevice instanceof DeviceInstanceMasterDeviceModel)
                                 {
                                     $deviceInstanceMasterDevice->masterDeviceId = $masterDeviceId;
                                     $deviceInstanceMasterDeviceMapper->save($deviceInstanceMasterDevice);
                                 }
                                 else
                                 {
-                                    $deviceInstanceMasterDevice                   = new Proposalgen_Model_Device_Instance_Master_Device();
+                                    $deviceInstanceMasterDevice                   = new DeviceInstanceMasterDeviceModel();
                                     $deviceInstanceMasterDevice->deviceInstanceId = $deviceInstance->id;
                                     $deviceInstanceMasterDevice->masterDeviceId   = $masterDeviceId;
                                     $deviceInstanceMasterDeviceMapper->insert($deviceInstanceMasterDevice);
                                 }
 
-                                $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($this->_identity->dealerId);
+                                $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($this->getIdentity()->dealerId);
                                 $deviceInstanceMapper->save($deviceInstance);
                             }
                         }
@@ -471,7 +471,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                     catch (Exception $e)
                     {
                         $db->rollBack();
-                        Tangent_Log::logException($e);
+                        \Tangent\Logger\Logger::logException($e);
                         $errorMessage = "An error occurred while mapping";
                     }
                 }
@@ -507,27 +507,26 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
      */
     public function summaryAction ()
     {
-        $this->view->headTitle('RMS Upload');
-        $this->view->headTitle('Summary');
-        $rmsUploadId = $this->_getParam('rmsUploadId', false);
-        $this->_navigation->setActiveStep(Proposalgen_Model_Fleet_Steps::STEP_FLEET_SUMMARY);
-        $this->_navigation->updateAccessibleSteps(Proposalgen_Model_Fleet_Steps::STEP_FLEET_SUMMARY);
+        $this->_pageTitle = array('Device Summary', 'RMS Upload');
+        $rmsUploadId      = $this->_getParam('rmsUploadId', false);
+        $this->_navigation->setActiveStep(FleetStepsModel::STEP_FLEET_SUMMARY);
+        $this->_navigation->updateAccessibleSteps(FleetStepsModel::STEP_FLEET_SUMMARY);
         $rmsUpload = null;
         if ($rmsUploadId > 0)
         {
-            $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($rmsUploadId);
+            $rmsUpload = RmsUploadMapper::getInstance()->find($rmsUploadId);
         }
 
-        if (!$rmsUpload instanceof Proposalgen_Model_Rms_Upload)
+        if (!$rmsUpload instanceof RmsUploadModel)
         {
-            $this->redirector("index");
+            $this->redirectToRoute('rms-upload.upload-file');
         }
 
         $this->view->rmsUpload = $rmsUpload;
 
-        if (!$rmsUpload instanceof Proposalgen_Model_Rms_Upload)
+        if (!$rmsUpload instanceof RmsUploadModel)
         {
-            $this->redirector("index");
+            $this->redirectToRoute('rms-upload.upload-file');
         }
 
         if ($this->getRequest()->isPost())
@@ -536,15 +535,15 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
             if (isset($postData['saveAndContinue']))
             {
                 // FIXME: Should this have a magic way of going to a report?
-                $this->redirector('index', 'index', 'index');
+                $this->redirectToRoute('app.dashboard'); // goes to dashboard (same as original mps)
             }
             else if (isset($postData['goBack']))
             {
-                $this->redirector('mapping', null, null, array("rmsUploadId" => $rmsUploadId));
+                $this->redirectToRoute('rms-upload.mapping', array("rmsUploadId" => $rmsUploadId));
             }
         }
 
-        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_ALL);
+        $this->view->navigationForm = new AssessmentNavigationForm(AssessmentNavigationForm::BUTTONS_ALL);
     }
 
     /**
@@ -556,8 +555,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
         if ($rmsUploadId > 0)
         {
-            $jqGrid               = new Tangent_Service_JQGrid();
-            $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+            $jqGrid               = new JQGrid();
+            $deviceInstanceMapper = DeviceInstanceMapper::getInstance();
 
             /*
              * Grab the incoming parameters
@@ -606,12 +605,12 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         "ampv"                     => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()),
                         "reportsTonerLevels"       => $deviceInstance->isCapableOfReportingTonerLevels ? "Yes" : "No",
                         "isLeased"                 => $deviceInstance->isLeased,
-                        "validToners"              => ($deviceInstance->hasValidToners($this->_identity->dealerId, $this->_selectedClientId)),
+                        "validToners"              => ($deviceInstance->hasValidToners($this->getIdentity()->dealerId, $this->getSelectedClient()->id)),
                     );
 
                     $row["deviceName"] = $deviceInstance->getRmsUploadRow()->manufacturer . " " . $deviceInstance->getRmsUploadRow()->modelName . "<br>" . $deviceInstance->ipAddress . "; " . $deviceInstance->serialNumber;
 
-                    if ($deviceInstance->getMasterDevice() instanceof Proposalgen_Model_MasterDevice)
+                    if ($deviceInstance->getMasterDevice() instanceof MasterDeviceModel)
                     {
                         $row["mappedToDeviceName"]              = $deviceInstance->getMasterDevice()->getManufacturer()->fullname . " " . $deviceInstance->getMasterDevice()->modelName;
                         $row["isCapableOfReportingTonerLevels"] = $deviceInstance->getMasterDevice()->isCapableOfReportingTonerLevels ? "Yes" : "No";
@@ -658,18 +657,18 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
             $deviceInstanceIds             = explode(",", $deviceInstanceIdsAsString);
             $this->view->deviceInstanceIds = $deviceInstanceIds;
 
-            $form = new Proposalgen_Form_Fleet_AddDevice();
+            $form = new AddDeviceForm();
             $form->deviceInstanceIds->setValue($deviceInstanceIdsAsString);
 
-            $rmsUploadRowMapper   = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance();
-            $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+            $rmsUploadRowMapper   = RmsUploadRowMapper::getInstance();
+            $deviceInstanceMapper = DeviceInstanceMapper::getInstance();
             $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceIds[0]);
-            if (!$deviceInstance instanceof Proposalgen_Model_DeviceInstance)
+            if (!$deviceInstance instanceof DeviceInstanceModel)
             {
                 $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the device you wanted to add.'));
 
                 // Send back to the mapping page
-                $this->redirector('mapping', null, null, array('rmsUploadId' => $rmsUploadId));
+                $this->redirectToRoute('rms-upload.mapping', array('rmsUploadId' => $rmsUploadId));
             }
 
             $rmsUploadRow             = $deviceInstance->getRmsUploadRow();
@@ -733,7 +732,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                             $db->commit();
 
                             $this->_flashMessenger->addMessage(array("success" => "Device successfully mapped!"));
-                            $this->redirector("mapping", null, null, array('rmsUploadId' => $rmsUploadId));
+                            $this->redirectToRoute('rms-upload.mapping', array('rmsUploadId' => $rmsUploadId));
                         }
                         catch (Exception $e)
                         {
@@ -741,8 +740,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                              * Error Saving
                              */
                             $db->rollBack();
-                            Tangent_Log::logException($e);
-                            $this->_flashMessenger->addMessage(array("danger" => "There was a system error while saving your device. Please try again. Reference #" . Tangent_Log::getUniqueId()));
+                            \Tangent\Logger\Logger::logException($e);
+                            $this->_flashMessenger->addMessage(array("danger" => "There was a system error while saving your device. Please try again. Reference #" . \Tangent\Logger\Logger::getUniqueId()));
                         }
                     }
                     else
@@ -757,7 +756,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                 {
                     if (isset($postData['cancel']))
                     {
-                        $this->redirector("mapping", null, null, array('rmsUploadId' => $rmsUploadId));
+                        $this->redirectToRoute('rms-upload.mapping', array('rmsUploadId' => $rmsUploadId));
                     }
                 }
             }
@@ -766,7 +765,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
         else
         {
             $this->_flashMessenger->addMessage(array("warning" => "Invalid Device Specified."));
-            $this->redirector("mapping", null, null, array('rmsUploadId' => $rmsUploadId));
+            $this->redirectToRoute('rms-upload.mapping', array('rmsUploadId' => $rmsUploadId));
         }
     }
 
@@ -783,7 +782,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
             $deviceInstanceIdsAsString = $this->_getParam("deviceInstanceIds", false);
 
             $deviceInstanceIds    = explode(",", $deviceInstanceIdsAsString);
-            $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+            $deviceInstanceMapper = DeviceInstanceMapper::getInstance();
 
             $jsonResponse = array("success" => true, "message" => "Unknown Device successfully removed.");
 
@@ -809,9 +808,9 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
             catch (Exception $e)
             {
                 $db->rollBack();
-                Tangent_Log::logException($e);
+                \Tangent\Logger\Logger::logException($e);
                 $this->getResponse()->setHttpResponseCode(500);
-                $jsonResponse = array("error" => true, "message" => "There was an error removing the unknown device. Reference #" . Tangent_Log::getUniqueId());
+                $jsonResponse = array("error" => true, "message" => "There was an error removing the unknown device. Reference #" . \Tangent\Logger\Logger::getUniqueId());
             }
         }
         else
@@ -835,14 +834,14 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
             if ($deviceInstanceId !== false)
             {
-                $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+                $deviceInstanceMapper = DeviceInstanceMapper::getInstance();
                 $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceId);
-                if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
+                if ($deviceInstance instanceof DeviceInstanceModel)
                 {
-                    $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($deviceInstance->rmsUploadId);
+                    $rmsUpload = RmsUploadMapper::getInstance()->find($deviceInstance->rmsUploadId);
                     if ($rmsUpload)
                     {
-                        $includedDeviceInstanceCount = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->getMappedDeviceInstances($rmsUpload->id, null, null, null, null, true, true);
+                        $includedDeviceInstanceCount = DeviceInstanceMapper::getInstance()->getMappedDeviceInstances($rmsUpload->id, null, null, null, null, true, true);
                         if ($includedDeviceInstanceCount > 2 || $isExcluded === false)
                         {
                             if ($rmsUpload->id == $rmsUploadId)
@@ -858,8 +857,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                                 catch (Exception $e)
                                 {
                                     $db->rollBack();
-                                    Tangent_Log::logException($e);
-                                    $errorMessage = "The system encountered an error while trying to exclude the device. Reference #" . Tangent_Log::getUniqueId();
+                                    \Tangent\Logger\Logger::logException($e);
+                                    $errorMessage = "The system encountered an error while trying to exclude the device. Reference #" . \Tangent\Logger\Logger::getUniqueId();
                                 }
                             }
                             else
@@ -924,20 +923,20 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
             if ($deviceInstanceId !== false)
             {
-                $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+                $deviceInstanceMapper = DeviceInstanceMapper::getInstance();
                 $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceId);
-                if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
+                if ($deviceInstance instanceof DeviceInstanceModel)
                 {
-                    $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($deviceInstance->rmsUploadId);
+                    $rmsUpload = RmsUploadMapper::getInstance()->find($deviceInstance->rmsUploadId);
                     if ($rmsUpload)
                     {
-                        $includedDeviceInstanceCount = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->getMappedDeviceInstances($rmsUpload->id, null, null, null, null, true, true);
+                        $includedDeviceInstanceCount = DeviceInstanceMapper::getInstance()->getMappedDeviceInstances($rmsUpload->id, null, null, null, null, true, true);
                         if ($includedDeviceInstanceCount > 2 || $isLeased === false)
                         {
                             if ($rmsUpload->id == $rmsUploadId)
                             {
 
-                                if ($isLeased || $deviceInstance->hasValidToners($this->_identity->dealerId, $this->_selectedClientId))
+                                if ($isLeased || $deviceInstance->hasValidToners($this->getIdentity()->dealerId, $this->getSelectedClient()->id))
                                 {
                                     $db = Zend_Db_Table_Abstract::getDefaultAdapter();
                                     $db->beginTransaction();
@@ -950,8 +949,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                                     catch (Exception $e)
                                     {
                                         $db->rollBack();
-                                        Tangent_Log::logException($e);
-                                        $errorMessage = "The system encountered an error while trying to toggle the leased state of the device. Reference #" . Tangent_Log::getUniqueId();
+                                        \Tangent\Logger\Logger::logException($e);
+                                        $errorMessage = "The system encountered an error while trying to toggle the leased state of the device. Reference #" . \Tangent\Logger\Logger::getUniqueId();
                                     }
                                 }
                                 else
@@ -1021,16 +1020,16 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
             if ($deviceInstanceId !== false)
             {
-                $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+                $deviceInstanceMapper = DeviceInstanceMapper::getInstance();
                 $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceId);
 
-                if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
+                if ($deviceInstance instanceof DeviceInstanceModel)
                 {
-                    $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($deviceInstance->rmsUploadId);
+                    $rmsUpload = RmsUploadMapper::getInstance()->find($deviceInstance->rmsUploadId);
 
                     if ($rmsUpload)
                     {
-                        $includedDeviceInstanceCount = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->getMappedDeviceInstances($rmsUpload->id, null, null, null, null, true, true);
+                        $includedDeviceInstanceCount = DeviceInstanceMapper::getInstance()->getMappedDeviceInstances($rmsUpload->id, null, null, null, null, true, true);
 
                         if ($includedDeviceInstanceCount > 2 || $isManaged === false)
                         {
@@ -1047,8 +1046,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                                 catch (Exception $e)
                                 {
                                     $db->rollBack();
-                                    Tangent_Log::logException($e);
-                                    $errorMessage = "The system encountered an error while trying to toggle the managed state of the device. Reference #" . Tangent_Log::getUniqueId();
+                                    \Tangent\Logger\Logger::logException($e);
+                                    $errorMessage = "The system encountered an error while trying to toggle the managed state of the device. Reference #" . \Tangent\Logger\Logger::getUniqueId();
                                 }
                             }
                             else
@@ -1113,14 +1112,14 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
             if ($deviceInstanceId !== false)
             {
-                $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+                $deviceInstanceMapper = DeviceInstanceMapper::getInstance();
                 $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceId);
-                if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
+                if ($deviceInstance instanceof DeviceInstanceModel)
                 {
-                    $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($deviceInstance->rmsUploadId);
+                    $rmsUpload = RmsUploadMapper::getInstance()->find($deviceInstance->rmsUploadId);
                     if ($rmsUpload)
                     {
-                        $includedDeviceInstanceCount = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->getMappedDeviceInstances($rmsUpload->id, null, null, null, null, true, true);
+                        $includedDeviceInstanceCount = DeviceInstanceMapper::getInstance()->getMappedDeviceInstances($rmsUpload->id, null, null, null, null, true, true);
                         if ($includedDeviceInstanceCount > 2 || $isJitCompatible === false)
                         {
                             if ($rmsUpload->id == $rmsUploadId)
@@ -1136,8 +1135,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                                 catch (Exception $e)
                                 {
                                     $db->rollBack();
-                                    Tangent_Log::logException($e);
-                                    $errorMessage = "The system encountered an error while trying to toggle the " . My_Brand::$jit . " compatibility of the device. Reference #" . Tangent_Log::getUniqueId();
+                                    \Tangent\Logger\Logger::logException($e);
+                                    $errorMessage = "The system encountered an error while trying to toggle the " . My_Brand::$jit . " compatibility of the device. Reference #" . \Tangent\Logger\Logger::getUniqueId();
                                 }
                             }
                             else
@@ -1197,7 +1196,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
         $jsonResponse = array();
         $errorMessage = false;
 
-        $costPerPageSetting = new Proposalgen_Model_CostPerPageSetting();
+        $costPerPageSetting = new CostPerPageSettingModel();
 
         if ($rmsUploadId > 0)
         {
@@ -1211,8 +1210,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                 /*
                  * Devices must exist
                  */
-                $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceId);
-                if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
+                $deviceInstance = DeviceInstanceMapper::getInstance()->find($deviceInstanceId);
+                if ($deviceInstance instanceof DeviceInstanceModel)
                 {
                     /*
                      * Devices must be part of our report
@@ -1235,8 +1234,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         $jsonResponse['masterDevice']['leasedTonerYield']   = number_format($jsonResponse['masterDevice']['leasedTonerYield']);
                         $jsonResponse["masterDevice"]["manufacturer"]       = $deviceInstance->getMasterDevice()->getManufacturer()->toArray();
                         $jsonResponse["masterDevice"]["reportsTonerLevels"] = $deviceInstance->getMasterDevice()->isCapableOfReportingTonerLevels;
-                        $jsonResponse["masterDevice"]["tonerConfigName"]    = $deviceInstance->getMasterDevice()->getTonerConfig()->tonerConfigName;
-                        $jsonResponse["masterDevice"]["compatibleWithJit"]  = $deviceInstance->getMasterDevice()->isJitCompatible($this->_identity->dealerId);
+                        $jsonResponse["masterDevice"]["tonerConfigName"]    = $deviceInstance->getMasterDevice()->getTonerConfig()->name;
+                        $jsonResponse["masterDevice"]["compatibleWithJit"]  = $deviceInstance->getMasterDevice()->isJitCompatible($this->getIdentity()->dealerId);
                         $jsonResponse["masterDevice"]["isColor"]            = $deviceInstance->getMasterDevice()->isColor();
                         $jsonResponse["pageCounts"]                         = array();
                         $jsonResponse["pageCounts"]['monochrome']           = number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly());
@@ -1253,18 +1252,18 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         $jsonResponse["pageCoverage"]['yellow']             = number_format((float)$deviceInstance->pageCoverageYellow, 2) . '%';
                         $jsonResponse["masterDevice"]["toners"]             = [];
 
-                        foreach ($deviceInstance->getMasterDevice()->getToners($this->_identity->dealerId, $this->_selectedClientId) as $tonersByManufacturer)
+                        foreach ($deviceInstance->getMasterDevice()->getToners($this->getIdentity()->dealerId, $this->getSelectedClient()->id) as $tonersByManufacturer)
                         {
                             foreach ($tonersByManufacturer as $tonersByColor)
                             {
-                                /* @var $toner Proposalgen_Model_Toner */
+                                /* @var $toner TonerModel */
                                 foreach ($tonersByColor as $toner)
                                 {
                                     $tonerArray                               = $toner->toArray();
                                     $tonerArray['cost']                       = $this->view->currency((float)$tonerArray['cost']);
                                     $tonerArray['yield']                      = number_format($tonerArray['yield']);
                                     $tonerArray['manufacturer']               = ($toner->getManufacturer()) ? $toner->getManufacturer()->toArray() : "Unknown";
-                                    $tonerArray['tonerColorName']             = Proposalgen_Model_TonerColor::$ColorNames[$toner->tonerColorId];
+                                    $tonerArray['tonerColorName']             = TonerColorModel::$ColorNames[$toner->tonerColorId];
                                     $jsonResponse["masterDevice"]["toners"][] = $tonerArray;
 
                                 }
@@ -1301,12 +1300,51 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
     }
 
     /**
+     * Deletes an RMS Upload
+     */
+    public function deleteAction ()
+    {
+        $rmsUploadId = $this->getParam('rmsUploadId', false);
+        $rmsUpload   = RmsUploadEntity::find($rmsUploadId);
+        if ($rmsUpload instanceof RmsUploadEntity)
+        {
+            $client = $this->getSelectedClient();
+            if ($rmsUpload->clientId != $client->id)
+            {
+                $this->sendJsonError('Invalid RMS Upload ID');
+            }
+            try
+            {
+                if ($rmsUpload->delete())
+                {
+                    $this->sendJson(['message' => 'RMS Upload successfully deleted']);
+                }
+                else
+                {
+                    $this->sendJsonError('An error occurred while deleting this upload');
+                }
+            }
+            catch (Exception $e)
+            {
+                \Tangent\Logger\Logger::logException($e);
+            }
+        }
+        else
+        {
+            $this->sendJsonError('Invalid RMS Upload ID');
+        }
+    }
+
+    /**
      * (non-PHPdoc)
      *
      * @see Zend_Controller_Action::postDispatch()
      */
     public function postDispatch ()
     {
-        $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation));
+        parent::postDispatch();
+
+        $rmsUploadId = $this->_getParam('rmsUploadId', false);
+        $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation, array('rmsUploadId' => $rmsUploadId)));
     }
 }

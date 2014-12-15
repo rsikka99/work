@@ -1,14 +1,17 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\Admin\Forms\DealerForm;
+
 class Default_Form_DealerTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
+
 {
 
     /**
-     * @return Admin_Form_Dealer
+     * @return DealerForm
      */
     public function getForm ()
     {
-        return new Admin_Form_Dealer();
+        return new DealerForm();
     }
 
     /**

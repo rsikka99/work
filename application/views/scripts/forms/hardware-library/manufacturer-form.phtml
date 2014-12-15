@@ -1,0 +1,53 @@
+<?php
+
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\ManufacturerForm;
+
+/* @var $form ManufacturerForm */
+$form = $this->element;
+?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<fieldset>
+    <div class="form-group <?= ($form->getElement('fullname')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('fullname'), array('col-md-3')) ?>
+
+        <div class="col-md-6">
+            <?= $this->RenderFormText($form->getElement('fullname')) ?>
+            <?= $this->RenderFormDescription($form->getElement('fullname')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('fullname')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('displayname')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('displayname'), array('col-md-3')) ?>
+
+        <div class="col-md-6">
+            <?= $this->RenderFormText($form->getElement('displayname')) ?>
+            <?= $this->RenderFormDescription($form->getElement('displayname')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('displayname')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('isDeleted')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <div class="col-md-6 col-md-push-3">
+            <?= $this->RenderFormCheckbox($form->getElement('isDeleted')) ?>
+            <?= $this->RenderFormDescription($form->getElement('isDeleted')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('isDeleted')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('isTonerVendor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <div class="col-md-6 col-md-push-3">
+            <?= $this->RenderFormCheckbox($form->getElement('isTonerVendor')) ?>
+            <?= $this->RenderFormDescription($form->getElement('isTonerVendor')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('isTonerVendor')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <hr>
+    <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+</fieldset>
+<?= $this->RenderFormClose($form) ?>

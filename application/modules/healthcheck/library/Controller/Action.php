@@ -1,4 +1,9 @@
 <?php
+use MPSToolbox\Legacy\Modules\HealthCheck\Mappers\HealthCheckMapper;
+use MPSToolbox\Legacy\Modules\HealthCheck\Models\HealthCheckModel;
+use MPSToolbox\Legacy\Modules\HealthCheck\Models\HealthCheckStepsModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
 
 /**
  * Class Healthcheck_Library_Controller_Action
@@ -6,14 +11,14 @@
 class Healthcheck_Library_Controller_Action extends My_Controller_Report
 {
     /**
-     * @var Healthcheck_Model_Healthcheck
+     * @var HealthCheckModel
      */
     protected $_healthcheck;
 
     /**
      * The navigation steps
      *
-     * @var Healthcheck_Model_Healthcheck_Steps
+     * @var HealthCheckStepsModel
      */
     protected $_navigation;
 
@@ -41,7 +46,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
     /**
      * @var string
      */
-    protected $_firstStepName = Healthcheck_Model_Healthcheck_Steps::STEP_SELECT_UPLOAD;
+    protected $_firstStepName = HealthCheckStepsModel::STEP_FINISHED;
 
     /**
      * Called from the constructor as the final step of initialization
@@ -53,7 +58,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
     {
         parent::init();
 
-        $this->_navigation = Healthcheck_Model_Healthcheck_Steps::getInstance();
+        $this->_navigation = HealthCheckStepsModel::getInstance();
 
         if (!My_Feature::canAccess(My_Feature::HEALTHCHECK))
         {
@@ -61,24 +66,27 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
                 "error" => "You do not have permission to access this."
             ));
 
-            $this->redirector('index', 'index', 'index');
+            $this->redirectToRoute('app.dashboard');
         }
 
-        if (isset($this->_mpsSession->selectedClientId))
+        if (!$this->getSelectedClient() instanceof \MPSToolbox\Legacy\Entities\ClientEntity)
         {
-            $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);
-            if (!$client instanceof Quotegen_Model_Client)
-            {
-                $this->_flashMessenger->addMessage(array(
-                    "error" => "A client is not selected."
-                ));
+            $this->_flashMessenger->addMessage(array(
+                "danger" => "A client is not selected."
+            ));
 
-                $this->redirector('index', 'index', 'index');
-            }
-            else
-            {
-                $this->_navigation->clientName = $client->companyName;
-            }
+            $this->redirectToRoute('app.dashboard');
+        }
+
+        $this->_navigation->clientName = $this->getSelectedClient()->companyName;
+
+        if (!$this->getSelectedUpload() instanceof \MPSToolbox\Legacy\Entities\RmsUploadEntity)
+        {
+            $this->_flashMessenger->addMessage(array(
+                "danger" => "An RMS upload is not selected."
+            ));
+
+            $this->redirectToRoute('app.dashboard');
         }
 
         $this->_fullCachePath     = PUBLIC_PATH . "/cache/reports/healthcheck/" . $this->getHealthcheck()->id;
@@ -104,7 +112,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
         $availableReports["Reports"] = array(
             "pagetitle" => "Select a report...",
             "active"    => false,
-            "url"       => $this->view->baseUrl('/healthcheck/report_index/index')
+            "url"       => $this->view->url(array(), 'healthcheck')
         );
 
         if (My_Feature::canAccess(My_Feature::HEALTHCHECK_PRINTIQ))
@@ -112,7 +120,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
             $availableReports['Printiq_Healthcheck'] = array(
                 "pagetitle" => "Health Check",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/healthcheck/report_printiq_healthcheck/index')
+                "url"       => $this->view->url(array(), 'healthcheck.report-printiq')
             );
         }
         else
@@ -120,7 +128,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
             $availableReports['Healthcheck'] = array(
                 "pagetitle" => "Health Check",
                 "active"    => false,
-                "url"       => $this->view->baseUrl('/healthcheck/report_healthcheck/index')
+                "url"       => $this->view->url(array(), 'healthcheck.report')
             );
         }
         $this->view->availableReports = $availableReports;
@@ -133,14 +141,14 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
      */
     public function initHtmlReport ()
     {
-        $this->view->headScript()->appendFile($this->view->baseUrl('/js/htmlReport.js'));
+        $this->view->headScript()->appendFile($this->view->baseUrl('/js/app/legacy/HtmlReport.js'));
 
         if ($this->getHealthcheck()->id < 1)
         {
             $this->_flashMessenger->addMessage(array("error" => "Please select a report first."));
 
             // Send user to the index
-            $this->redirector('index', 'index', 'index');
+            $this->redirectToRoute('app.dashboard');
         }
 
         $this->view->dealerLogoFile = $this->getDealerLogoFile();
@@ -203,10 +211,12 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
      */
     public function postDispatch ()
     {
-        $stage = ($this->getHealthcheck()->stepName) ? : Healthcheck_Model_Healthcheck_Steps::STEP_SELECT_UPLOAD;
+        $stage = ($this->getHealthcheck()->stepName) ?: HealthCheckStepsModel::STEP_FINISHED;
         $this->_navigation->updateAccessibleSteps($stage);
 
         $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation));
+
+        parent::postDispatch();
     }
 
     /**
@@ -234,7 +244,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
     /**
      * Gets the Healthcheck we're working on
      *
-     * @return Healthcheck_Model_Healthcheck
+     * @return HealthCheckModel
      */
     public function getHealthcheck ()
     {
@@ -242,17 +252,21 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
         {
             if (isset($this->_mpsSession->healthcheckId) && $this->_mpsSession->healthcheckId > 0)
             {
-                $this->_healthcheck = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find($this->_mpsSession->healthcheckId);
+                $this->_healthcheck = HealthCheckMapper::getInstance()->find($this->_mpsSession->healthcheckId);
             }
             else
             {
-                $this->_healthcheck               = new Healthcheck_Model_Healthcheck();
+                $this->_healthcheck               = new HealthCheckModel();
                 $this->_healthcheck->dateCreated  = date('Y-m-d H:i:s');
                 $this->_healthcheck->lastModified = date('Y-m-d H:i:s');
                 $this->_healthcheck->reportDate   = date('Y-m-d H:i:s');
-                $this->_healthcheck->dealerId     = $this->_identity->dealerId;
+                $this->_healthcheck->dealerId     = $this->getIdentity()->dealerId;
                 $this->_healthcheck->name         = "Health Check " . date('Y/m/d');
-                $this->_healthcheck->clientId     = $this->_mpsSession->selectedClientId;
+                $this->_healthcheck->clientId     = $this->getSelectedClient()->id;
+                $this->_healthcheck->rmsUploadId  = $this->getSelectedUpload()->id;
+                $this->_healthcheck->stepName     = $this->_firstStepName;
+
+                $this->_mpsSession->healthcheckId = $this->_healthcheck = HealthCheckMapper::getInstance()->insert($this->_healthcheck);
             }
         }
 
@@ -269,13 +283,12 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
         {
             // Update the last modified date
             $this->_healthcheck->lastModified = date('Y-m-d H:i:s');
-            Healthcheck_Model_Mapper_Healthcheck::getInstance()->save($this->_healthcheck);
+            HealthCheckMapper::getInstance()->save($this->_healthcheck);
         }
         else
         {
-            $this->_healthcheck->healthcheckSettingId = $this->_healthcheck->getHealthcheckSettings()->id;
-            $this->_healthcheck->lastModified         = date('Y-m-d H:i:s');
-            Healthcheck_Model_Mapper_Healthcheck::getInstance()->insert($this->_healthcheck);
+            $this->_healthcheck->lastModified = date('Y-m-d H:i:s');
+            HealthCheckMapper::getInstance()->insert($this->_healthcheck);
             $this->_mpsSession->healthcheckId = $this->_healthcheck->id;
         }
     }

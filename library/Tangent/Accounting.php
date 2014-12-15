@@ -1,6 +1,13 @@
 <?php
 
-class Tangent_Accounting
+namespace Tangent;
+
+/**
+ * Class Accounting
+ *
+ * @package Tangent
+ */
+class Accounting
 {
 
     /**

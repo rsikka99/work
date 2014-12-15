@@ -8,9 +8,9 @@ $graphs = $assessmentViewModel->getGraphs();
 <table cellspacing="0" class="gradesTable">
     <tr>
         <td class="gradeDescription">
-            <p><?php echo $assessmentViewModel->getRanking()->getSuppliesAndServiceLogistics()->RankingText; ?></p>
+            <p><?= $assessmentViewModel->getRanking()->getSuppliesAndServiceLogistics()->RankingText; ?></p>
         </td>
-        <td class="gradeNumber"><?php echo number_format($assessmentViewModel->getRanking()->getSuppliesAndServiceLogistics()->Rank, 1); ?></td>
+        <td class="gradeNumber"><?= number_format($assessmentViewModel->getRanking()->getSuppliesAndServiceLogistics()->Rank, 1); ?></td>
     </tr>
 </table>
 <br />
@@ -20,8 +20,8 @@ $graphs = $assessmentViewModel->getGraphs();
     printers, are difficult to manage because you cannot monitor them with software.</p>
 <br />
 <div class="center">
-    <img src="<?php echo $graphs[1]; ?>" /> <!-- Devices leased/Devices Purchased -->
-    <img src="<?php echo $graphs[2]; ?>" /> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
+    <img src="<?= $graphs[1]; ?>" /> <!-- Devices leased/Devices Purchased -->
+    <img src="<?= $graphs[2]; ?>" /> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
 </div>
 <br />
 <?php
@@ -39,70 +39,70 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
     $inkjetString = "10% to 25%";
 }
 ?>
-<p>Based on your questionnaire, <strong><?php echo $inkjetString; ?> of your printing is done on inkjet devices</strong>. We did not monitor inkjet machines
+<p>Based on your questionnaire, <strong><?= $inkjetString; ?> of your printing is done on inkjet devices</strong>. We did not monitor inkjet machines
     that are not connected to the network, and on average, pages printed to inkjet printers cost three times more than pages printed to laser devices. Without
     being on the network, users also cannot share these devices. There are some instances where desktop printers are appropriate, for instance, if a single user
     requires confidential, high-convenience printing. We can help you consolidate desktop hardware where appropriate, and where desktop printing is required, we
     can help you select network-capable equipment so your desktop printing can be managed with the rest of your office print.</p>
 <br />
 <?php if (count($assessmentViewModel->getExcludedDevices()) > 0) : ?>
-    <p>There are <?php echo count($assessmentViewModel->getExcludedDevices()) ?> devices were not included in the analysis due to lack of data or model information.
-        See the Appendix in the <?php echo $this->brandName ?> Your Solution document for details regarding the excluded device(s).</p>
+    <p>There are <?= count($assessmentViewModel->getExcludedDevices()) ?> devices were not included in the analysis due to lack of data or model information.
+        See the Appendix in the <?= $this->brandName ?> Your Solution document for details regarding the excluded device(s).</p>
 <?php endif; ?>
 <div class="pheader">Efficiency of Break-Fix Service</div>
 <p>Based on your questionnaire responses, we discovered the following:</p>
 <table cellspacing="0" class="bold" style="font-size: 10.5pt; margin: 6pt 0;">
     <tr>
         <td style="width: 470px;">Number of printer repairs per month</td>
-        <td style="width: 175px;" class="right"><?php echo number_format($assessmentViewModel->getNumberOfRepairs()); ?></td>
+        <td style="width: 175px;" class="right"><?= number_format($assessmentViewModel->getNumberOfRepairs()); ?></td>
     </tr>
     <tr>
         <td>Average time between printer breaking down and printer being fixed</td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getAverageTimeBetweenBreakdownAndFix()); ?> day(s)</td>
+        <td class="right"><?= number_format($assessmentViewModel->getAverageTimeBetweenBreakdownAndFix()); ?> day(s)</td>
     </tr>
     <tr>
         <td>Annual downtime resulting from printer breakdowns<br />(Based on an 8 hour work day)</td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getAnnualDowntimeFromBreakdowns(), 0); ?> hour(s)</td>
+        <td class="right"><?= number_format($assessmentViewModel->getAnnualDowntimeFromBreakdowns(), 0); ?> hour(s)</td>
     </tr>
 </table>
 <br />
-<p><?php echo $this->companyName; ?> can provide next-day service for your printer fleet.</p>
+<p><?= $this->companyName; ?> can provide next-day service for your printer fleet.</p>
 <br />
 <div class="pheader">Number of Vendors</div>
 <p>Based on your questionnaire responses, we discovered the following:</p>
 <table cellspacing="0" class="bold" style="font-size: 10.5pt">
     <tr>
         <td style="width: 500px;">Percentage of fleet capable of report toner levels</td>
-        <td style="width: 145px;" class="right"><?php echo number_format($assessmentViewModel->calculatePercentageOfFleetReportingTonerLevels(), 2); ?>%</td>
+        <td style="width: 145px;" class="right"><?= number_format($assessmentViewModel->calculatePercentageOfFleetReportingTonerLevels(), 2); ?>%</td>
     </tr>
     <tr>
         <td>Number of orders for ink and toner executed annually</td>
-        <td class="right"><?php echo $assessmentViewModel->getNumberOfAnnualInkTonerOrders(); ?></td>
+        <td class="right"><?= $assessmentViewModel->getNumberOfAnnualInkTonerOrders(); ?></td>
     </tr>
     <tr>
         <td>Estimated annual cost to execute ink and toner orders</td>
-        <td class="right"><?php echo $this->currency($assessmentViewModel->getCostOfExecutingSuppliesOrders()); ?></td>
+        <td class="right"><?= $this->currency($assessmentViewModel->getCostOfExecutingSuppliesOrders()); ?></td>
     </tr>
 </table>
 <br />
-<p>Time spent dealing with multiple vendors could be better spent focusing on your core business tasks. <?php echo $this->companyName; ?> can bundle your
+<p>Time spent dealing with multiple vendors could be better spent focusing on your core business tasks. <?= $this->companyName; ?> can bundle your
     supplies and service into a single invoice - and if you need new hardware, that can be included too.</p>
 <br />
 <div class="pheader">Number of Printing Device Models and Supply Types</div>
 <p>Out of your
-    <strong><?php echo $assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have
-    <strong><?php echo $assessmentViewModel->getNumberOfUniqueModels(); ?></strong> unique models. Each section of the chart below represents a single model
+    <strong><?= $assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have
+    <strong><?= $assessmentViewModel->getNumberOfUniqueModels(); ?></strong> unique models. Each section of the chart below represents a single model
     type. We estimate that
-    <strong><?php echo count($assessmentViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances()); ?></strong> of your printing devices are leased machines, for
+    <strong><?= count($assessmentViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances()); ?></strong> of your printing devices are leased machines, for
     which supplies are included in your contract. The
-    <strong><?php echo count($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances()); ?></strong> remaining machines
-    consist of <strong><?php echo $assessmentViewModel->getNumberOfUniquePurchasedModels(); ?></strong> different models and use
-    <strong><?php echo $assessmentViewModel->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in
-    inventory, you have an estimated <strong><?php echo $this->currency($assessmentViewModel->getCashHeldInInventory()); ?> in operating cash held in printer
+    <strong><?= count($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances()); ?></strong> remaining machines
+    consist of <strong><?= $assessmentViewModel->getNumberOfUniquePurchasedModels(); ?></strong> different models and use
+    <strong><?= $assessmentViewModel->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in
+    inventory, you have an estimated <strong><?= $this->currency($assessmentViewModel->getCashHeldInInventory()); ?> in operating cash held in printer
         supplies inventory</strong> at any given time.</p>
 <div class="center">
-    <img src="<?php echo $graphs[3]; ?>" /> <!--  Giant pie chart -->
+    <img src="<?= $graphs[3]; ?>" /> <!--  Giant pie chart -->
 </div>
 <p>By using printing devices with supplies in common, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space
-    required. <?php echo $this->companyName; ?> can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and
+    required. <?= $this->companyName; ?> can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and
     emergency supply orders.</p>

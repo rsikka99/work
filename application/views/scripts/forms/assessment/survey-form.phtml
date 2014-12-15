@@ -1,0 +1,190 @@
+<?php
+/* @var $form AssessmentSurveyForm */
+use MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentSurveyForm;
+
+$form = $this->element;
+$this->headScript()->appendFile($this->baseUrl('/js/app/legacy/proposalgen/survey/survey/SurveyForm.js'));
+?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal js-survey-form')) ?>
+<!--    FINANCE SECTION   -->
+<fieldset>
+    <legend id="surveyFinanceSection">Finance</legend>
+
+    <!--    <p>How much did you spend last year on ink and toner for your printer fleet (excluding the cost of leased copiers)?</p>-->
+
+    <div class="form-group <?= ($form->getElement('toner_cost_radio')->hasErrors() || $form->getElement('toner_cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('toner_cost'), array('col-sm-3')) ?>
+
+        <div class="col-sm-6 col-md-4">
+            <?= $this->RenderFormRadio($form->getElement('toner_cost_radio')) ?>
+            <br>
+            <?= $this->RenderFormText($form->getElement('toner_cost'), null, '$') ?>
+            <?= $this->RenderFormElementErrors($form->getElement('toner_cost')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('toner_cost_radio')) ?>
+        </div>
+    </div>
+
+    <br>
+    <!--    <hr>-->
+    <!--    <p>How much did you spend last year on service from outside vendors for your printer fleet, including maintenance kits, parts and labor (excluding the cost of leased copiers)?-->
+    <!--        <small>If you select "I don't know", an average of $200 per printer per year will be used.</small>-->
+    <!--    </p>-->
+
+    <div class="form-group <?= ($form->getElement('labor_cost_radio')->hasErrors() || $form->getElement('toner_cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('labor_cost'), array('col-sm-3')) ?>
+
+        <div class="col-sm-6 col-md-4">
+            <?= $this->RenderFormRadio($form->getElement('labor_cost_radio')) ?>
+            <?= $this->RenderFormText($form->getElement('labor_cost'), null, '$') ?>
+            <?= $this->RenderFormElementErrors($form->getElement('labor_cost')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('labor_cost_radio')) ?>
+        </div>
+    </div>
+
+    <br>
+    <!--    <hr>-->
+    <!--    <p>What is the average cost for you to execute a supplies purchase order, including labor for purchasing and administrative personnel?-->
+    <!--        <small>The average cost is $50 per transaction.</small>-->
+    <!--    </p>-->
+
+    <div class="form-group <?= ($form->getElement('avg_purchase')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('avg_purchase'), array('col-sm-3')) ?>
+
+        <div class="col-sm-6 col-md-4">
+            <?= $this->RenderFormText($form->getElement('avg_purchase'), null, '$') ?>
+            <?= $this->RenderFormElementErrors($form->getElement('avg_purchase')) ?>
+        </div>
+    </div>
+
+    <br>
+    <!--    <hr>-->
+    <!--    <p>What is the average hourly rate for IT personnel involved in managing printing devices?-->
+    <!--        <small>The average rate is $40/hour.</small>-->
+    <!--    </p>-->
+
+    <div class="form-group <?= ($form->getElement('it_hourlyRate')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('it_hourlyRate'), array('col-sm-3')) ?>
+
+        <div class="col-sm-6 col-md-4">
+            <?= $this->RenderFormText($form->getElement('it_hourlyRate'), null, '$') ?>
+            <?= $this->RenderFormElementErrors($form->getElement('it_hourlyRate')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<!--    PURCHASING SECTION   -->
+<fieldset>
+    <legend id="surveyPurchasingSection">Purchasing</legend>
+
+    <!--    <p>How many times per month does your organization order printer supplies?</p>-->
+
+    <div class="form-group <?= ($form->getElement('inkTonerOrderRadio')->hasErrors() || $form->getElement('numb_monthlyOrders')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('inkTonerOrderRadio'), array('col-sm-3')) ?>
+
+        <div class="col-sm-6 col-md-4">
+            <?= $this->RenderFormRadio($form->getElement('inkTonerOrderRadio')) ?>
+            <?= $this->RenderFormText($form->getElement('numb_monthlyOrders'), null, null, 'times') ?>
+            <?= $this->RenderFormElementErrors($form->getElement('numb_monthlyOrders')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('inkTonerOrderRadio')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<!--    IT SECTION   -->
+<fieldset>
+    <legend id="surveyItSection">IT</legend>
+
+    <!--    <p>How many hours per week do IT personnel spend servicing and supporting printers?-->
+    <!--        <small>If you select "I don't know", an average of 15 minutes per week per printer will be used.</small>-->
+    <!--    </p>-->
+
+    <div class="form-group <?= ($form->getElement('itHoursRadio')->hasErrors() || $form->getElement('itHours')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('itHours'), array('col-sm-3')) ?>
+
+        <div class="col-sm-6 col-md-4">
+            <?= $this->RenderFormRadio($form->getElement('itHoursRadio')) ?>
+            <?= $this->RenderFormText($form->getElement('itHours'), null, null, 'hours') ?>
+            <?= $this->RenderFormElementErrors($form->getElement('itHours')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('itHoursRadio')) ?>
+        </div>
+    </div>
+
+    <!--    <hr>-->
+    <!--    <p>How many times per month, on average, does your internal IT staff or an external service company need to be called to repair a broken printer in your fleet?-->
+    <!--        <small>If you select "I don't know", an average of 1 repair per month for every 20 printers will be used.</small>-->
+    <!--    </p>-->
+
+    <div class="form-group <?= ($form->getElement('monthlyBreakdownRadio')->hasErrors() || $form->getElement('monthlyBreakdown')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('monthlyBreakdown'), array('col-sm-3')) ?>
+
+        <div class="col-sm-6 col-md-4">
+            <?= $this->RenderFormRadio($form->getElement('monthlyBreakdownRadio')) ?>
+            <?= $this->RenderFormText($form->getElement('monthlyBreakdown'), null, null, 'breakdowns per month') ?>
+            <?= $this->RenderFormElementErrors($form->getElement('monthlyBreakdown')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('monthlyBreakdown')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<!--    PURCHASING SECTION   -->
+<fieldset>
+    <legend id="surveyUsersSection">Users</legend>
+
+    <!--    <p>Page coverages range from 5% to 10% for monochrome and 15% to 25% for-->
+    <!--        color. Estimate your own average page coverages.</p>-->
+
+    <div class="form-group <?= ($form->getElement('pageCoverage_BW')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('pageCoverage_BW'), array('col-sm-3')) ?>
+
+        <div class="col-sm-6 col-md-4">
+            <?= $this->RenderFormText($form->getElement('pageCoverage_BW'), null, null, '%') ?>
+            <?= $this->RenderFormElementErrors($form->getElement('pageCoverage_BW')) ?>
+        </div>
+    </div>
+
+    <div class="form-group <?= ($form->getElement('pageCoverage_Color')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('pageCoverage_Color'), array('col-sm-3')) ?>
+
+        <div class="col-sm-6 col-md-4">
+            <?= $this->RenderFormText($form->getElement('pageCoverage_Color'), null, null, '%') ?>
+            <?= $this->RenderFormElementErrors($form->getElement('pageCoverage_Color')) ?>
+        </div>
+    </div>
+
+    <br>
+    <!--    <hr>-->
+    <!--    <p>What percent of your print volume is done on inkjet and other desktop printers?</p>-->
+
+    <div class="form-group <?= ($form->getElement('printVolume')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('printVolume'), array('col-sm-3')) ?>
+
+        <div class="col-sm-6 col-md-4">
+            <?= $this->RenderFormRadio($form->getElement('printVolume'), null, '$') ?>
+            <?= $this->RenderFormElementErrors($form->getElement('printVolume')) ?>
+        </div>
+    </div>
+
+    <br>
+    <!--    <hr>-->
+    <!--    <p>How long does it take, on average, for a printer to be fixed after it has broken down?</p>-->
+
+    <div class="form-group <?= ($form->getElement('repairTime')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('repairTime'), array('col-sm-3')) ?>
+
+        <div class="col-sm-6 col-md-4">
+            <?= $this->RenderFormRadio($form->getElement('repairTime'), null, '$') ?>
+            <?= $this->RenderFormElementErrors($form->getElement('repairTime')) ?>
+        </div>
+    </div>
+</fieldset>
+
+<ul class="pager">
+    <li class="previous">
+        <?= $this->RenderFormSubmit($form->getElement('goBack')) ?>
+    </li>
+    <li class="next">
+        <?= $this->RenderFormSubmit($form->getElement('saveAndContinue')) ?>
+    </li>
+</ul>
+<?= $this->RenderFormClose($form); ?>

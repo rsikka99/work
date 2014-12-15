@@ -2,6 +2,7 @@
 /**
  * Assessment - Analysis: Environmental Impact
  */
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
 
 /* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
@@ -28,8 +29,7 @@ $section->addTextBreak();
 $section->addText(sprintf('You are currently using an estimated average of %1$s kWh per month to operate printing devices at an estimated monthly cost of %2$s, assuming a cost of %3$s per kWh.',
     number_format($assessmentViewModel->getAveragePowerUsagePerMonth()), // 1
     $this->currency($assessmentViewModel->getAveragePowerCostPerMonth()), // 2
-    $this->currency($assessmentViewModel->assessment->getAssessmentSettings()->kilowattsPerHour, array('precision' => 4)))); // 3
-
+    $this->currency($assessmentViewModel->assessment->getClient()->getClientSettings()->genericSettings->defaultEnergyCost, array('precision' => 4)))); // 3
 $section->addText('The following lists the devices with the highest average power consumption per month.');
 
 $cellWidths = array(
@@ -45,7 +45,7 @@ $highEnergyTable->addCell($cellWidths [0], $this->styles->tables->highriskdevice
 $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText('Serial No.', 'bold_text', 'nospacing_centeralign');
 $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText('Avg. kWh Consumption Per Month Count', 'bold_text', 'nospacing_centeralign');
 $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText('Avg. Power Cost per Month', 'bold_text', 'nospacing_centeralign');
-/* @var $device Proposalgen_Model_DeviceInstance */
+/* @var $device DeviceInstanceModel */
 $rowCount = 0;
 foreach ($assessmentViewModel->getHighPowerConsumptionDevices() as $device)
 {

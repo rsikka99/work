@@ -2,6 +2,7 @@
 /**
  * Assessment - Analysis: Technology Reliability and User Productivity
  */
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
 
 /* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
@@ -56,7 +57,7 @@ $highRiskDevicesTable->addCell($cellWidths [2], $this->styles->tables->highriskd
 $highRiskDevicesTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText('AMPV', 'bold_text', 'nospacing_centeralign');
 $highRiskDevicesTable->addCell($cellWidths [4], $this->styles->tables->highriskdevices->cell5)->addText('Current Life Page Count', 'bold_text', 'nospacing_centeralign');
 $highRiskDevicesTable->addCell($cellWidths [5], $this->styles->tables->highriskdevices->cell6)->addText('Est. Max Life Page Count', 'bold_text', 'nospacing_centeralign');
-/* @var $device Proposalgen_Model_DeviceInstance */
+/* @var $device DeviceInstanceModel */
 $rowCount = 0;
 foreach ($assessmentViewModel->getHighRiskDevices() as $device)
 {

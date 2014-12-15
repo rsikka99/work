@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\HealthCheck\Models\HealthCheckStepsModel;
 
 /**
  * Class Healthcheck_Report_Printiq_HealthcheckController
@@ -11,14 +12,14 @@ class Healthcheck_Report_Printiq_HealthcheckController extends Healthcheck_Libra
      */
     public function indexAction ()
     {
-        $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED);
+        $this->_navigation->setActiveStep(HealthCheckStepsModel::STEP_FINISHED);
 
         /**
          * If we don't have access to PrintIQ Health Check, switch to normal Health Check
          */
         if (!My_Feature::canAccess(My_Feature::HEALTHCHECK_PRINTIQ))
         {
-            $this->redirector('index', 'report_healthcheck', 'healthcheck');
+            $this->redirectToRoute('healthcheck.report');
         }
 
         $this->initReportList();

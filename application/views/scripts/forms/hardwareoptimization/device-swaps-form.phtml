@@ -1,0 +1,40 @@
+<?php
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Forms\DeviceSwapsForm;
+
+/* @var $form DeviceSwapsForm */
+$form = $this->element;
+?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<div class="clearfix">
+    <fieldset class="col-md-10 col-md-offset-1">
+        <div class="form-group  <?= ($form->getElement('masterDeviceId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('masterDeviceId')) ?>
+            <?= $this->RenderFormText($form->getElement('masterDeviceId')) ?>
+            <?= $this->RenderFormDescription($form->getElement('masterDeviceId')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('masterDeviceId')) ?>
+        </div>
+
+        <div class="form-group <?= ($form->getElement('minimumPageCount')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('minimumPageCount')) ?>
+            <?= $this->RenderFormText($form->getElement('minimumPageCount')) ?>
+            <?= $this->RenderFormDescription($form->getElement('minimumPageCount')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('minimumPageCount')) ?>
+        </div>
+
+        <div class="form-group  <?= ($form->getElement('maximumPageCount')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('maximumPageCount')) ?>
+            <?= $this->RenderFormText($form->getElement('maximumPageCount')) ?>
+            <?= $this->RenderFormDescription($form->getElement('maximumPageCount')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('maximumPageCount')) ?>
+        </div>
+
+        <div class="form-group  <?= ($form->getElement('deviceType')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('deviceType')) ?>
+            <?= $this->RenderFormText($form->getElement('deviceType')) ?>
+            <?= $this->RenderFormDescription($form->getElement('deviceType')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('deviceType')) ?>
+        </div>
+    </fieldset>
+</div>
+<?= $this->RenderFormClose($form) ?>

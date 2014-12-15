@@ -1,4 +1,6 @@
 <?php
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationDealerModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationStepsModel;
 
 /**
  * Class Hardwareoptimization_Report_Dealer_OptimizationController
@@ -7,9 +9,8 @@ class Hardwareoptimization_Report_Dealer_OptimizationController extends Hardware
 {
     public function indexAction ()
     {
-        $this->view->headTitle('Hardware Optimization');
-        $this->view->headTitle('Dealer');
-        $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_FINISHED);
+        $this->_pageTitle = array('Hardware Optimization', 'Dealer');
+        $this->_navigation->setActiveStep(HardwareOptimizationStepsModel::STEP_FINISHED);
 
         $this->initHtmlReport();
         $this->initReportList();
@@ -45,7 +46,7 @@ class Hardwareoptimization_Report_Dealer_OptimizationController extends Hardware
                 throw new Exception("CSV Format not available through this page yet!");
                 break;
             case "docx" :
-                $dealerOptimization         = new Hardwareoptimization_Model_Optimization_Dealer($this->_hardwareOptimization);
+                $dealerOptimization         = new OptimizationDealerModel($this->_hardwareOptimization);
                 $graphs                     = $this->cachePNGImages($dealerOptimization->getGraphs(), true);
                 $this->view->phpword        = new \PhpOffice\PhpWord\PhpWord();
                 $this->view->wordStyles     = $this->getWordStyles();

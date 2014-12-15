@@ -62,10 +62,8 @@
             <accountNumber>accountNumber</accountNumber>
             <companyName>companyName</companyName>
             <employeeCount>#ofemployees</employeeCount>
-            <legalName></legalName>
             <countryCode>1234</countryCode>
             <areaCode>123</areaCode>
-            <exchangeCode></exchangeCode>
             <number>1234</number>
             <extension>1234</extension>
             <addressLine1>myAddress</addressLine1>

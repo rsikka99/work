@@ -1,0 +1,21 @@
+<?php $progressionNav = $this->placeholder('ProgressionNav')->toString(); ?>
+<?php if ($progressionNav) : ?>
+    <!-- Progression Navbar -->
+    <div class="container">
+        <nav class="navbar navbar-default progression-navbar" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#progression-navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand visible-xs" data-toggle="collapse" data-target="#progression-navbar-collapse">Steps Menu</a>
+            </div>
+            <div class="collapse navbar-collapse" id="progression-navbar-collapse">
+                <?php echo $progressionNav; ?>
+            </div>
+        </nav>
+    </div>
+    <!-- /Progression Navbar -->
+<?php endif; ?>

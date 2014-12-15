@@ -4,9 +4,7 @@
         <menu>
             <label>Hardware Optimization</label>
             <class>dropdown</class>
-            <module>hardwareoptimization</module>
-            <controller>index</controller>
-            <action>index</action>
+            <route>hardwareoptimization</route>
             <resource>hardwareoptimization__index__index</resource>
             <order>100</order>
             <visible>0</visible>

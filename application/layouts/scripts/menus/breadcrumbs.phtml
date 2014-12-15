@@ -1,19 +1,19 @@
 <?php
 /* @var $pages Zend_Navigation_Page[] */
 $pages = $this->pages;
+$html  = array();
 if (count($pages) > 0)
 {
-    $html    = array(
-        '<ul class="breadcrumb">'
-    );
-    $html [] = "<li><a href='" . $pages [0]->getHref() . "'>" . $pages [0]->getLabel() . "</a></li>";
+    $html[] = '<ol class="breadcrumb">';
 
-    for ($i = 1; $i < count($pages); $i++)
+    foreach ($pages as $page)
     {
-        $html [] = "<li><span class='divider'>/</span><a href='" . $pages [$i]->getHref() . "'>" . $pages [$i]->getLabel() . "</a></li>";
+        $icon = ($page->get('icon')) ? sprintf('<i class="%s"></i> ', $page->get('icon')) : '';
+
+        $html [] = sprintf('<li><a href="%s">%s%s</a></li>', $page->getHref(), $icon, $page->getLabel());
     }
 
-    $html [] = '</ul>';
+    $html[] = '</ol>';
 
-    echo join(PHP_EOL, $html);
+    echo implode(PHP_EOL, $html);
 }

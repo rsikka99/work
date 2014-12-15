@@ -1,0 +1,32 @@
+<?php
+use MPSToolbox\Legacy\Modules\Admin\Forms\DealerRmsProvidersForm;
+
+/* @var $form DealerRmsProvidersForm */
+$form = $this->element;
+?>
+
+<form class="form-horizontal" method="<?= $form->getMethod() ?>" accept-charset="UTF-8" action="<?= $form->getAction() ?>">
+    <div class="row">
+        <div class="col-sm-12">
+            <fieldset>
+                <legend>Select RMS Providers</legend>
+
+                <div class="form-group <?= ($form->getElement('rmsProviderIds')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('rmsProviderIds'), array('col-md-3')) ?>
+
+                    <div class="col-md-9">
+                        <?= $this->RenderFormCheckbox($form->getElement('rmsProviderIds')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('rmsProviderIds')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('rmsProviderIds')) ?>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <fieldset>
+        <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
+        <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+    </fieldset>
+
+</form>

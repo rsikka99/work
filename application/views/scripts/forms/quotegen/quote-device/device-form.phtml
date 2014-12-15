@@ -1,0 +1,76 @@
+<?php
+
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\DeviceForm;
+
+/* @var $form DeviceForm */
+$form = $this->element;
+?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<fieldset>
+
+    <?php if ($form->getDeviceOptions()): ?>
+        <div class="form-group <?= ($form->getElement('deviceName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('deviceName'), array('col-md-3')) ?>
+
+            <div class="col-md-9">
+                <?= $this->RenderFormText($form->getElement('deviceName')) ?>
+                <?= $this->RenderFormDescription($form->getElement('deviceName')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('deviceName')) ?>
+            </div>
+        </div>
+
+        <div class="form-group <?= ($form->getElement('oemSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('oemSku'), array('col-md-3')) ?>
+
+            <div class="col-md-9">
+                <?= $this->RenderFormText($form->getElement('oemSku')) ?>
+                <?= $this->RenderFormDescription($form->getElement('oemSku')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('oemSku')) ?>
+            </div>
+        </div>
+
+        <?php if (count($form->getDeviceOptionElements()) > 0) : ?>
+            <div class='row'>
+                <div class='span4 offset2'>
+
+                    <table class="table table-bordered table-striped table-condensed">
+                        <tr>
+                            <th>Option</th>
+                            <th style="width: 80px;">Inlcuded Qty</th>
+                            <th style="width: 30px;"></th>
+                        </tr>
+
+                        <?php foreach ($form->getDeviceOptionElements() as $option) : ?>
+                            <tr>
+                                <td><?php echo $option->deviceOptionElement->getLabel(); ?></td>
+                                <td><?php echo $option->deviceOptionElement->renderViewHelper() ?></td>
+                                <td>
+                                    <a href="<?php echo $this->url(array('optionId' => $option->option->getId()), 'quotes.devices.delete-option'); ?>" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
+            </div>
+
+        <?php else : ?>
+            <h4>There are no options currently associated with this device.
+                Please click the add button above to associate options with this
+                device.</h4>
+        <?php endif; ?>
+    <?php else: ?>
+        <div class="col-md-9">
+            <?= $this->RenderFormSelect($form->getElement('masterDeviceId')) ?>
+            <?= $this->RenderFormDescription($form->getElement('masterDeviceId')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('masterDeviceId')) ?>
+        </div>
+    <?php endif; ?>
+</fieldset>
+
+<fieldset>
+    <hr>
+    <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+</fieldset>
+<?= $this->RenderFormClose($form) ?>

@@ -1,0 +1,80 @@
+<?php
+
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\AvailableTonersForm;
+
+/* @var $form AvailableTonersForm */
+$form = $this->element;
+?>
+
+<?= $this->RenderFormOpen($form) ?>
+    <div class="clearfix">
+        <fieldset>
+            <div class="row">
+                <div class="col-md-4 col-md-push-1">
+                    <div class="form-group <?= ($form->getElement('manufacturerId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                        <?= $this->RenderFormLabel($form->getElement('manufacturerId')) ?>
+                        <?= $this->RenderFormText($form->getElement('manufacturerId')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('manufacturerId')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('manufacturerId')) ?>
+                    </div>
+
+                </div>
+                <div class="col-md-4 col-md-push-3">
+                    <div class="form-group <?= ($form->getElement('tonerColorId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                        <?= $this->RenderFormLabel($form->getElement('tonerColorId')) ?>
+                        <?= $this->RenderFormText($form->getElement('tonerColorId')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('tonerColorId')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('tonerColorId')) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-md-push-1">
+                    <div class="form-group <?= ($form->getElement('yield')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                        <?= $this->RenderFormLabel($form->getElement('yield')) ?>
+                        <?= $this->RenderFormText($form->getElement('yield'), array(), null, 'pages') ?>
+                        <?= $this->RenderFormDescription($form->getElement('yield')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('yield')) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-md-push-1">
+                    <div class="form-group <?= ($form->getElement('sku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                        <?= $this->RenderFormLabel($form->getElement('sku')) ?>
+                        <?= $this->RenderFormText($form->getElement('sku')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('sku')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('sku')) ?>
+                    </div>
+
+                    <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                        <?= $this->RenderFormLabel($form->getElement('cost')) ?>
+                        <?= $this->RenderFormText($form->getElement('cost'), array(), '$') ?>
+                        <?= $this->RenderFormDescription($form->getElement('cost')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('cost')) ?>
+                    </div>
+                </div>
+                <div class="col-md-4 col-md-push-3">
+                    <div class="form-group <?= ($form->getElement('dealerSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                        <?= $this->RenderFormLabel($form->getElement('dealerSku')) ?>
+                        <?= $this->RenderFormText($form->getElement('dealerSku')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('dealerSku')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('dealerSku')) ?>
+                    </div>
+
+                    <div class="form-group <?= ($form->getElement('dealerCost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                        <?= $this->RenderFormLabel($form->getElement('dealerCost')) ?>
+                        <?= $this->RenderFormText($form->getElement('dealerCost'), array(), '$') ?>
+                        <?= $this->RenderFormDescription($form->getElement('dealerCost')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('dealerCost')) ?>
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
+    </div>
+    <fieldset>
+        <?= $this->RenderFormHidden($form->getElement('saveAndApproveHdn')) ?>
+        <?= $this->RenderFormHidden($form->getElement('id')) ?>
+    </fieldset>
+<?= $this->RenderFormClose($form) ?>

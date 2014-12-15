@@ -1172,22 +1172,22 @@ class InitialCreate extends AbstractMigration
     PRIMARY KEY (`id`),
     INDEX `hardware_optimization_ibfk_4_idx` (`dealerId` ASC),
     INDEX `hardware_optimization_ibfk_3_idx` (`hardwareOptimizationSettingId` ASC),
-    CONSTRAINT `hardware_optimization_ibfk_1`
+    CONSTRAINT `hardware_optimizations_ibfk_1`
     FOREIGN KEY (`clientId`)
     REFERENCES `clients` (`id`)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `hardware_optimization_ibfk_2`
+    CONSTRAINT `hardware_optimizations_ibfk_2`
     FOREIGN KEY (`rmsUploadId`)
     REFERENCES `rms_uploads` (`id`)
         ON DELETE SET NULL
         ON UPDATE CASCADE,
-    CONSTRAINT `hardware_optimization_ibfk_3`
+    CONSTRAINT `hardware_optimizations_ibfk_3`
     FOREIGN KEY (`hardwareOptimizationSettingId`)
     REFERENCES `hardware_optimization_settings` (`id`)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `hardware_optimization_ibfk_4`
+    CONSTRAINT `hardware_optimizations_ibfk_4`
     FOREIGN KEY (`dealerId`)
     REFERENCES `dealers` (`id`)
         ON DELETE CASCADE
@@ -1311,22 +1311,22 @@ class InitialCreate extends AbstractMigration
     INDEX `health_check_ibfk_2_idx` (`rmsUploadId` ASC),
     INDEX `health_check_ibfk_3_idx` (`dealerId` ASC),
     INDEX `health_check_ibfk_4_idx` (`healthcheckSettingId` ASC),
-    CONSTRAINT `health_check_ibfk_1`
+    CONSTRAINT `healthchecks_ibfk_1`
     FOREIGN KEY (`clientId`)
     REFERENCES `clients` (`id`)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `health_check_ibfk_2`
+    CONSTRAINT `healthchecks_ibfk_2`
     FOREIGN KEY (`rmsUploadId`)
     REFERENCES `rms_uploads` (`id`)
         ON DELETE SET NULL
         ON UPDATE CASCADE,
-    CONSTRAINT `health_check_ibfk_3`
+    CONSTRAINT `healthchecks_ibfk_3`
     FOREIGN KEY (`dealerId`)
     REFERENCES `dealers` (`id`)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `health_check_ibfk_4`
+    CONSTRAINT `healthchecks_ibfk_4`
     FOREIGN KEY (`healthcheckSettingId`)
     REFERENCES `healthcheck_settings` (`id`)
         ON DELETE CASCADE

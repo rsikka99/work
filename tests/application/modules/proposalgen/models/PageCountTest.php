@@ -1,22 +1,24 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\PageCountModel;
+
 class Proposalgen_Model_PageCountTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Proposalgen_Model_PageCount
+     * @var PageCountModel
      */
     protected $_pageCount;
 
     /**
      * @param bool $forceNewObject
      *
-     * @return Proposalgen_Model_PageCount
+     * @return PageCountModel
      */
     public function getPageCount ($forceNewObject = false)
     {
         if (!isset($this->_pageCount) || $forceNewObject)
         {
-            $this->_pageCount = new Proposalgen_Model_PageCount();
+            $this->_pageCount = new PageCountModel();
         }
 
         return $this->_pageCount;
@@ -39,7 +41,7 @@ class Proposalgen_Model_PageCountTest extends PHPUnit_Framework_TestCase
     public function testAddingRecalculates ()
     {
         $pageCount    = $this->getPageCount(true);
-        $newPageCount = new Proposalgen_Model_PageCount();
+        $newPageCount = new PageCountModel();
         $newPageCount->setDaily(100);
         $pageCount->add($newPageCount);
         $this->assertTrue(bccomp($pageCount->getYearly(), 36524.2) === 0);
@@ -51,7 +53,7 @@ class Proposalgen_Model_PageCountTest extends PHPUnit_Framework_TestCase
     {
         $pageCount = $this->getPageCount(true);
         $pageCount->setDaily(300);
-        $newPageCount = new Proposalgen_Model_PageCount();
+        $newPageCount = new PageCountModel();
         $newPageCount->setDaily(100);
         $pageCount->subtract($newPageCount);
         $this->assertTrue(bccomp($pageCount->getYearly(), 73048.4) === 0);

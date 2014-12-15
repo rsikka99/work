@@ -1,0 +1,58 @@
+<?php
+/* @var $form LeasingSchemaTermForm */
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\LeasingSchemaTermForm;
+
+$form                = $this->element;
+$leasingSchemaRanges = $this->leasingSchemaRanges;
+?>
+
+<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<fieldset>
+    <div class="form-group <?= ($form->getElement('term')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('term'), array('col-md-2')) ?>
+        <div class="col-md-2 input-group">
+            <?= $this->RenderFormText($form->getElement('term')) ?>
+            <?= $this->RenderFormDescription($form->getElement('term')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('term')) ?>
+            <span class="input-group-addon">months</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-7 col-md-offset-1 input-group">
+            <table class="table table-stripped table-bordered">
+                <thead>
+                <tr>
+                    <th>Range</th>
+                    <?php foreach ($leasingSchemaRanges as $range): ?>
+                        <th class="text-center"><?php echo $this->currency($range->startRange); ?>
+                            +
+                        </th>
+                    <?php endforeach; ?>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>Rate</th>
+                    <?php foreach ($leasingSchemaRanges as $range): ?>
+                        <td class="center <?= ($form->getElement("rate{$range->id}")->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                            <?= $this->RenderFormText($form->getElement("rate{$range->id}")) ?>
+                            <?= $this->RenderFormDescription($form->getElement("rate{$range->id}")) ?>
+                            <?= $this->RenderFormElementErrors($form->getElement("rate{$range->id}")) ?>
+                        </td>
+                    <?php endforeach; ?>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <hr>
+    <?= ($form->getElement('hdnId')) ?>
+    <?= ($this->formHidden('hdnId')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+</fieldset>
+<?= $this->RenderFormClose($form) ?>

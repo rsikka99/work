@@ -17,7 +17,7 @@ $section->addText("Q: How much did you spend last year on service from outside v
 $section->addText(sprintf('A: %1$s / year',$this->currency($assessmentViewModel->getEstimatedAnnualCostOfService())  ));
 
 $section->addText("Q: What is the average cost for you to execute a supplies purchase order, including labor for purchasing and administrative personnel?", "bold_text");
-$section->addText(sprintf('A: %1$s / order', $this->currency($assessmentViewModel->assessment->getSurvey()->costToExecuteSuppliesOrder)  ));
+$section->addText(sprintf('A: %1$s / order', $this->currency($assessmentViewModel->assessment->getClient()->getSurvey()->costToExecuteSuppliesOrder)  ));
 
 $section->addText("Q: What is the average hourly rate for IT personnel involved in managing printing devices?", "bold_text");
 $section->addText(sprintf('A: %1$s / hour',$this->currency($assessmentViewModel->getAverageITRate())   ));

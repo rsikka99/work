@@ -1,22 +1,24 @@
 <?php
 
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceMeterModel;
+
 class Proposalgen_Model_DeviceInstanceMeterTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Proposalgen_Model_DeviceInstanceMeter
+     * @var DeviceInstanceMeterModel
      */
     protected $_deviceInstanceMeter;
 
     /**
      * @param bool $forceNewObject
      *
-     * @return Proposalgen_Model_DeviceInstanceMeter
+     * @return DeviceInstanceMeterModel
      */
     public function getDeviceInstanceMeter ($forceNewObject = false)
     {
         if (!isset($this->_deviceInstanceMeter) || $forceNewObject)
         {
-            $this->_deviceInstanceMeter = new Proposalgen_Model_DeviceInstanceMeter();
+            $this->_deviceInstanceMeter = new DeviceInstanceMeterModel();
         }
 
         return $this->_deviceInstanceMeter;

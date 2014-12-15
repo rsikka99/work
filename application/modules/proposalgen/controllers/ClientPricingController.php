@@ -1,9 +1,18 @@
 <?php
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Forms\ClientPricingClientTonerForm;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ClientTonerOrderMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\ClientTonerOrderModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\Import\ClientPricingImportService;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper;
+use Tangent\Controller\Action;
+use Tangent\Service\JQGrid;
 
 /**
  * Class Proposalgen_AdminController
  */
-class Proposalgen_ClientPricingController extends Tangent_Controller_Action
+class Proposalgen_ClientPricingController extends Action
 {
     /**
      * @var Zend_Config
@@ -47,7 +56,7 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
 
         if (isset($this->_mpsSession->selectedClientId))
         {
-            $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);
+            $client = ClientMapper::getInstance()->find($this->_mpsSession->selectedClientId);
 
             // Make sure the selected client is ours!
             if ($client && $client->dealerId == Zend_Auth::getInstance()->getIdentity()->dealerId)
@@ -60,7 +69,7 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
 
     public function indexAction ()
     {
-        $this->view->clientTonersForm = new Proposalgen_Form_ClientPricing_ClientToner();
+        $this->view->clientTonersForm = new ClientPricingClientTonerForm();
     }
 
     /**
@@ -68,7 +77,7 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
      */
     public function clientTonersListAction ()
     {
-        $jqGridService    = new Tangent_Service_JQGrid();
+        $jqGridService    = new JQGrid();
         $filter           = $this->_getParam('filter', false);
         $criteria         = $this->_getParam('criteria', false);
         $jqGridParameters = array(
@@ -91,7 +100,7 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
         $jqGridService->setValidSortColumns($sortColumns);
         if ($jqGridService->sortingIsValid())
         {
-            $clientTonerAttributeMapper = Proposalgen_Model_Mapper_Client_Toner_Order::getInstance();
+            $clientTonerAttributeMapper = ClientTonerOrderMapper::getInstance();
 
             $jqGridService->parseJQGridPagingRequest($jqGridParameters);
 
@@ -145,7 +154,7 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
 
         if ($tonerId)
         {
-            $toners = Proposalgen_Model_Mapper_Toner::getInstance()->getCompatibleToners($tonerId, $this->_selectedClientId);
+            $toners = TonerMapper::getInstance()->getCompatibleToners($tonerId, $this->_selectedClientId);
             foreach ($toners as $toner)
             {
                 $replacementData[$toner->id] = $toner->getManufacturer()->displayname . " - " . $toner->sku . " - " . $this->view->formatCostPerPage($toner->calculatedCost / $toner->yield);
@@ -162,16 +171,16 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
         $clientCost         = $this->_getParam('cost', null);
         $replacementTonerId = $this->_getParam('replacementTonerId', null);
 
-        $form = new Proposalgen_Form_ClientPricing_ClientToner();
+        $form = new ClientPricingClientTonerForm();
         if ($form->isValid(array('clientSku' => $clientSku, 'cost' => $clientCost)))
         {
             $db = Zend_Db_Table::getDefaultAdapter();
             $db->beginTransaction();
             try
             {
-                $clientTonerOrderMapper = Proposalgen_Model_Mapper_Client_Toner_Order::getInstance();
+                $clientTonerOrderMapper = ClientTonerOrderMapper::getInstance();
                 $clientTonerOrder       = $clientTonerOrderMapper->find($id);
-                if ($clientTonerOrder instanceof Proposalgen_Model_Client_Toner_Order)
+                if ($clientTonerOrder instanceof ClientTonerOrderModel)
                 {
                     if (empty($clientSku))
                     {
@@ -205,7 +214,7 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
             catch (Exception $e)
             {
                 $db->rollback();
-                Tangent_Log::logException($e);
+                \Tangent\Logger\Logger::logException($e);
                 $this->sendJson(array(
                     'error' => 'failed to save client toner attributes'
                 ));
@@ -241,9 +250,9 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
             try
             {
                 $clientId                   = $this->_selectedClientId;
-                $clientTonerAttributeMapper = Proposalgen_Model_Mapper_Client_Toner_Order::getInstance();
+                $clientTonerAttributeMapper = ClientTonerOrderMapper::getInstance();
                 $clientTonerAttribute       = $clientTonerAttributeMapper->find(array($clientTonerId, $clientId));
-                if ($clientTonerAttribute instanceof Proposalgen_Model_Client_Toner_Order)
+                if ($clientTonerAttribute instanceof ClientTonerOrderModel)
                 {
                     $clientTonerAttributeMapper->delete($clientTonerAttribute);
                     $db->commit();
@@ -251,21 +260,21 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
                 }
                 else
                 {
-                    Tangent_Log::log('User tried to delete client pricing for id:' . $clientTonerId);
-                    $this->sendJsonError('Sorry, we cannot find that SKU. A message has been logged. #' . Tangent_Log::getUniqueId());
+                    \Tangent\Logger\Logger::log('User tried to delete client pricing for id:' . $clientTonerId);
+                    $this->sendJsonError('Sorry, we cannot find that SKU. A message has been logged. #' . \Tangent\Logger\Logger::getUniqueId());
                 }
             }
             catch (Exception $e)
             {
                 $db->rollback();
-                Tangent_Log::logException($e);
-                $this->sendJsonError('Sorry, an error occurred trying to delete that SKU. A message has been logged. #' . Tangent_Log::getUniqueId());
+                \Tangent\Logger\Logger::logException($e);
+                $this->sendJsonError('Sorry, an error occurred trying to delete that SKU. A message has been logged. #' . \Tangent\Logger\Logger::getUniqueId());
             }
         }
         else
         {
-            Tangent_Log::log('User tried to delete client pricing for ID:' . $clientTonerId);
-            $this->sendJsonError('Sorry, for some reason we cannot find that SKU. A message has been logged. #' . Tangent_Log::getUniqueId());
+            \Tangent\Logger\Logger::log('User tried to delete client pricing for ID:' . $clientTonerId);
+            $this->sendJsonError('Sorry, for some reason we cannot find that SKU. A message has been logged. #' . \Tangent\Logger\Logger::getUniqueId());
         }
     }
 
@@ -279,7 +288,7 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
         try
         {
             $clientId                   = $this->_selectedClientId;
-            $clientTonerAttributeMapper = Proposalgen_Model_Mapper_Client_Toner_Order::getInstance();
+            $clientTonerAttributeMapper = ClientTonerOrderMapper::getInstance();
             $clientTonerAttributeMapper->deleteAllForClient($clientId);
             $db->commit();
             $this->sendJson(array('success' => 'successfully deleted all client pricing'));
@@ -287,7 +296,7 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
         catch (Exception $e)
         {
             $db->rollback();
-            Tangent_Log::logException($e);
+            \Tangent\Logger\Logger::logException($e);
             $this->sendJsonError('failed to delete all client toner attribute');
         }
     }
@@ -297,11 +306,10 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
      */
     public function uploadAction ()
     {
-        $this->view->headTitle('Client Pricing');
-        $this->view->headTitle('Upload CSV');
+        $this->_pageTitle = array('Client Pricing', 'Upload CSV');
 
         $db            = Zend_Db_Table::getDefaultAdapter();
-        $uploadService = new Proposalgen_Service_Import_Client_Pricing();
+        $uploadService = new ClientPricingImportService();
         $form          = $uploadService->getForm();
 
         if ($this->_request->isPost())
@@ -309,7 +317,7 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
             $postData = $this->getRequest()->getPost();
             if (isset($postData['goBack']))
             {
-                $this->redirector('index');
+                $this->redirectToRoute('client.pricing');
             }
             else
             {
@@ -355,8 +363,8 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
                                 /**
                                  * Add to the database
                                  */
-                                $clientTonerOrderMapper = Proposalgen_Model_Mapper_Client_Toner_Order::getInstance();
-                                $tonerMapper            = Proposalgen_Model_Mapper_Toner::getInstance();
+                                $clientTonerOrderMapper = ClientTonerOrderMapper::getInstance();
+                                $tonerMapper            = TonerMapper::getInstance();
 
                                 foreach ($data as $oemSku => $pricingData)
                                 {
@@ -365,10 +373,10 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
                                      */
                                     $update           = true;
                                     $clientTonerOrder = $clientTonerOrderMapper->findTonerOrder($this->_selectedClientId, $pricingData['oemSku'], $pricingData['orderNumber']);
-                                    if (!$clientTonerOrder instanceof Proposalgen_Model_Client_Toner_Order)
+                                    if (!$clientTonerOrder instanceof ClientTonerOrderModel)
                                     {
                                         $update                     = false;
-                                        $clientTonerOrder           = new Proposalgen_Model_Client_Toner_Order();
+                                        $clientTonerOrder           = new ClientTonerOrderModel();
                                         $clientTonerOrder->clientId = $this->_selectedClientId;
                                     }
 
@@ -388,12 +396,12 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
                                     /**
                                      * Map the toners
                                      */
-                                    if ($clientTonerOrder->getToner() instanceof Proposalgen_Model_Toner)
+                                    if ($clientTonerOrder->getToner() instanceof TonerModel)
                                     {
                                         if (strcasecmp($clientTonerOrder->getToner()->sku, $clientTonerOrder->oemSku) !== 0)
                                         {
                                             $toner = $tonerMapper->fetchBySku($clientTonerOrder->oemSku);
-                                            if ($toner instanceof Proposalgen_Model_Toner)
+                                            if ($toner instanceof TonerModel)
                                             {
                                                 $clientTonerOrder->tonerId = $toner->id;
                                                 $clientTonerOrder->setToner($toner);
@@ -410,7 +418,7 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
                                             if (!$clientTonerOrder->replacementTonerId > 0)
                                             {
                                                 $replacementToner = $this->findTonerReplacement($clientTonerOrder->getToner());
-                                                if ($replacementToner instanceof Proposalgen_Model_Toner)
+                                                if ($replacementToner instanceof TonerModel)
                                                 {
                                                     $clientTonerOrder->replacementTonerId = $replacementToner->id;
                                                 }
@@ -420,7 +428,7 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
                                     else
                                     {
                                         $toner = $tonerMapper->fetchBySku($oemSku);
-                                        if ($toner instanceof Proposalgen_Model_Toner)
+                                        if ($toner instanceof TonerModel)
                                         {
                                             $clientTonerOrder->tonerId = $toner->id;
                                             $clientTonerOrder->setToner($toner);
@@ -428,7 +436,7 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
                                             if (!$clientTonerOrder->replacementTonerId > 0)
                                             {
                                                 $replacementToner = $this->findTonerReplacement($toner);
-                                                if ($replacementToner instanceof Proposalgen_Model_Toner)
+                                                if ($replacementToner instanceof TonerModel)
                                                 {
                                                     $clientTonerOrder->replacementTonerId = $replacementToner->id;
                                                 }
@@ -452,7 +460,7 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
                                 $this->_flashMessenger->addMessage(array("success" => "Your pricing updates have been applied successfully."));
                                 $db->commit();
 
-                                $this->redirector('index');
+                                $this->redirectToRoute('client.pricing');
                             }
                             else
                             {
@@ -462,8 +470,8 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
                         catch (Exception $e)
                         {
                             $db->rollback();
-                            Tangent_Log::logException($e);
-                            $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again. #" . Tangent_Log::getUniqueId()));
+                            \Tangent\Logger\Logger::logException($e);
+                            $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again. #" . \Tangent\Logger\Logger::getUniqueId()));
                         }
                         $uploadService->closeFiles();
                     }
@@ -480,9 +488,9 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
     /**
      * Finds a suitable compatible replacement for a toner
      *
-     * @param Proposalgen_Model_Toner $originalToner
+     * @param TonerModel $originalToner
      *
-     * @return bool|Proposalgen_Model_Toner
+     * @return bool|TonerModel
      */
     public function findTonerReplacement ($originalToner)
     {

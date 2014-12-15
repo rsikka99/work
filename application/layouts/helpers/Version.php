@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Application_View_Helper_Version
+ * App_View_Helper_Version
  *
  * @author Lee Robert
  *
  */
-class Application_View_Helper_Version extends Zend_View_Helper_Abstract
+class App_View_Helper_Version extends Zend_View_Helper_Abstract
 {
     static $versionString;
 

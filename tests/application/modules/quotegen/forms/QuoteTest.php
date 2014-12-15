@@ -1,4 +1,5 @@
 <?php
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\QuoteForm;
 
 /**
  * Class Quotegen_Form_QuoteTest
@@ -6,11 +7,11 @@
 class Quotegen_Form_QuoteTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
     /**
-     * @return Quotegen_Form_Quote
+     * @return QuoteForm
      */
     public function getForm ()
     {
-        return new Quotegen_Form_Quote();
+        return new QuoteForm();
     }
 
     /**

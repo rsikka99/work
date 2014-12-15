@@ -2,6 +2,7 @@
 /**
  * Healthcheck - Analysis: Environmental Impact
  */
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
 
 /* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
@@ -36,7 +37,7 @@ $imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)-
 
 
 $section->addTitle('Energy Consumption', 2);
-$section->addText(sprintf('You are currently using an estimated average of %1$s kilowatt hours (kWh) per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.', number_format($healthcheckViewModel->getAveragePowerUsagePerMonth()), number_format($healthcheckViewModel->getAveragePowerCostPerMonth()), number_format($healthcheckViewModel->healthcheck->getHealthcheckSettings()->kilowattsPerHour, 2)));
+$section->addText(sprintf('You are currently using an estimated average of %1$s kilowatt hours (kWh) per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.', number_format($healthcheckViewModel->getAveragePowerUsagePerMonth()), number_format($healthcheckViewModel->getAveragePowerCostPerMonth()), number_format($healthcheckViewModel->healthcheck->getClient()->getClientSettings()->genericSettings->defaultEnergyCost, 2)));
 $section->addText('The following lists the devices with the highest average power consumption per month.');
 
 $cellWidths = array(
@@ -47,18 +48,18 @@ $cellWidths = array(
 );
 
 $highEnergyTable = $section->addTable($this->styles->tables->highenergy->tablestyle);
-$highEnergyTable->addRow($this->styles->tables->highriskdevices->rowheight,$this->styles->tables->rowheader);
+$highEnergyTable->addRow($this->styles->tables->highriskdevices->rowheight, $this->styles->tables->rowheader);
 $highEnergyTable->addCell($cellWidths [0], $this->styles->tables->utilization->cellHeader)->addText('High Consumption Devices', 'bold_text', 'nospacing_centeralign');
 $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->utilization->cellHeader)->addText('Serial No.', 'bold_text', 'nospacing_centeralign');
 $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->utilization->cellHeader)->addText('Avg. kWh Consumption Per Month Count', 'bold_text', 'nospacing_centeralign');
 $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('Avg. Power Cost per Month', 'bold_text', 'nospacing_centeralign');
-/* @var $device Proposalgen_Model_DeviceInstance */
+/* @var $device DeviceInstanceModel */
 $rowCount = 0;
 foreach ($healthcheckViewModel->getHighPowerConsumptionDevices() as $device)
 {
-    $highEnergyTable->addRow(300,$this->styles->tables->rowstyle);
+    $highEnergyTable->addRow(300, $this->styles->tables->rowstyle);
     $highEnergyTable->addCell($cellWidths [0], $this->styles->tables->highriskdevices->cell1)->addText($device->getDeviceName(), null, 'nospacing');
-    $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing');
+    $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ?: "Unknown", null, 'nospacing');
     $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(number_format($device->getAverageMonthlyPowerConsumption()) . ' kWh', null, 'nospacing_centeralign');
     $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText($this->currency($device->getAverageMonthlyPowerCost()), null, 'nospacing_centeralign');
     $rowCount++;
@@ -92,21 +93,20 @@ $cellWidths = array(
 );
 
 $scanAndFaxTable = $section->addTable($this->styles->tables->utilization->tablestyle);
-$scanAndFaxTable->addRow(null,$this->styles->tables->rowheader);
+$scanAndFaxTable->addRow(null, $this->styles->tables->rowheader);
 $scanAndFaxTable->addCell($cellWidths [0], $this->styles->tables->utilization->cellHeader)->addText('Device Name', 'bold_text', 'nospacing_centeralign');
 $scanAndFaxTable->addCell($cellWidths [1], $this->styles->tables->utilization->cellHeader)->addText('Serial No.', 'bold_text', 'nospacing_centeralign');
 $scanAndFaxTable->addCell($cellWidths [2], $this->styles->tables->utilization->cellHeader)->addText('Average Monthly Volume', 'bold_text', 'nospacing_centeralign');
 $scanAndFaxTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('Average Monthly Scan Pages', 'bold_text', 'nospacing_centeralign');
 $scanAndFaxTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('Average Monthly Faxed Pages', 'bold_text', 'nospacing_centeralign');
-
+/* @var $device DeviceInstanceModel */
 $ctr = 0;
-/* @var $device Proposalgen_Model_DeviceInstance */
 foreach ($healthcheckViewModel->getFaxAndScanTableDevices() as $device)
 {
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
-    $scanAndFaxTable->addRow($this->styles->tables->utilization->rowheight,$this->styles->tables->rowstyle);
+    $scanAndFaxTable->addRow($this->styles->tables->utilization->rowheight, $this->styles->tables->rowstyle);
     $scanAndFaxTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($deviceName, null, 'nospacing_centeralign');
-    $scanAndFaxTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing_centeralign');
+    $scanAndFaxTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ?: "Unknown", null, 'nospacing_centeralign');
     $scanAndFaxTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_rightalign');
     $scanAndFaxTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(($device->getMasterDevice()->isCopier) ? $this->formatPageVolume($device->getPageCounts()->getScanPageCount()->getMonthly()) : '-', null, 'nospacing_rightalign');
     $scanAndFaxTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(($device->getMasterDevice()->isFax) ? $this->formatPageVolume($device->getPageCounts()->getFaxPageCount()->getMonthly()) : '-', null, 'nospacing_rightalign');
