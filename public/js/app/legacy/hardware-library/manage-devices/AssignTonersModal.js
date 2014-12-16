@@ -133,35 +133,37 @@ define([
         });
 
         $resetFilterButton.on("click", {
-            "$assignTonersGrid": assignTonersModalInstance.$assignTonersGrid
+            "that": assignTonersModalInstance
         }, function (e)
         {
             $filterManufacturer.select2("val", '');
             $filterTonerColor.select2("val", '');
             $filterTonerSku.val('');
-            e.data.$assignTonersGrid.trigger('reloadGrid');
+            e.data.that.$assignTonersGridObject.reloadGrid();
         });
 
         $filterManufacturer.on("change", {
-            "$assignTonersGrid": assignTonersModalInstance.$assignTonersGrid
+            "that": assignTonersModalInstance
         }, function (e)
         {
-            e.data.$assignTonersGrid.trigger('reloadGrid');
+            e.data.that.$assignTonersGridObject.reloadGrid();
         });
 
         $filterTonerColor.on("change", {
-            "$assignTonersGrid": assignTonersModalInstance.$assignTonersGrid
+            "that": assignTonersModalInstance
         }, function (e)
         {
-            e.data.$assignTonersGrid.trigger('reloadGrid');
+            e.data.that.$assignTonersGridObject.reloadGrid();
         });
 
         $filterTonerSku.on("change", {
-            "$assignTonersGrid": assignTonersModalInstance.$assignTonersGrid
+            "that": assignTonersModalInstance
         }, function (e)
         {
-            e.data.$assignTonersGrid.trigger('reloadGrid');
+            e.data.that.$assignTonersGridObject.reloadGrid();
         });
+
+        console.log('Setting up filter toner sku typewatch', $filterTonerSku);
 
         /**
          * Setup type watch on toner sku so that we automatically
@@ -170,6 +172,7 @@ define([
         $filterTonerSku.typeWatch({
             callback     : function (value)
             {
+                console.log('TONER SKU CHANGED');
                 $filterTonerSku.trigger('change');
             },
             wait         : 750,
@@ -188,12 +191,12 @@ define([
         });
 
         $(window).on('show.bs.modal', {
-            "$assignTonersGrid": assignTonersModalInstance.$assignTonersGrid
+            "that": assignTonersModalInstance
         }, function (e)
         {
             if ($(e.target).hasClass('js-assign-toners-modal'))
             {
-                e.data.$assignTonersGrid.trigger('reloadGrid');
+                e.data.that.$assignTonersGridObject.reloadGrid();
             }
         });
 
