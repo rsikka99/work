@@ -105,6 +105,11 @@ class TonerService
         {
             $toner->isSystemDevice = 1;
         }
+        else
+        {
+            $toner->isSystemDevice = 0;
+            $toner->cost = static::obfuscateTonerCost($toner->cost);
+        }
 
         // FIXME lrobert: Change cost to MSRP/Market Price?
         $toner->userId = $this->userId;
