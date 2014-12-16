@@ -27,7 +27,6 @@ class QuoteGeneralForm extends Zend_Form
     public function __construct (QuoteModel $quote, $options = null)
     {
         $this->_quote = $quote;
-        $this->addPrefixPath('My_Form_Element', 'My/Form/Element', 'element');
 
         parent::__construct($options);
     }
@@ -39,42 +38,30 @@ class QuoteGeneralForm extends Zend_Form
 
         $minYear   = (int)date('Y') - 2;
         $maxYear   = $minYear + 4;
-        $quoteDate = $this->createElement('DateTimePicker', 'quoteDate', array(
-            'label'    => 'Quote Date',
-            'filters'  => array('StringTrim', 'StripTags'),
-            'required' => false
-        ));
-        $quoteDate->setJQueryParam('dateFormat', 'yy-mm-dd')
-                  ->setJqueryParam('timeFormat', 'hh:mm')
-                  ->setJQueryParam('changeYear', 'true')
-                  ->setJqueryParam('changeMonth', 'true')
-                  ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
-                  ->addValidator(new My_Validate_DateTime());
-        $this->addElement($quoteDate);
 
-        $this->addElement('text', 'name', array(
+        $this->addElement('text', 'quoteDate', [
+            'label'      => 'Quote Date',
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [new My_Validate_DateTime()],
+            'required'   => false,
+        ]);
+
+        $this->addElement('text', 'name', [
             'label'   => 'Quote Name',
             'value'   => $this->getQuote()->name,
-            'filters' => array('StringTrim', 'StripTags'),
-        ));
+            'filters' => ['StringTrim', 'StripTags'],
+        ]);
 
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'label'     => 'Update',
             'icon'      => 'check',
             'whiteIcon' => true
-        ));
+        ]);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/quotegen/quote/quote-general-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/quotegen/quote/quote-general-form.phtml']]]);
     }
 
     /**

@@ -21,8 +21,8 @@ $form             = $this->element;
     <div class="form-group <?= ($form->getElement('quoteDate')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
         <?= $this->RenderFormLabel($form->getElement('quoteDate'), array('col-md-3')) ?>
 
-        <div class="col-md-4">
-            <?= $this->RenderFormDateTimePicker($form->getElement('quoteDate')) ?>
+        <div class="col-md-8">
+            <?= $this->RenderFormText($form->getElement('quoteDate'), ['js-date-picker'], null, '<i class="fa fa-fw fa-calendar"></i>') ?>
             <?= $this->RenderFormDescription($form->getElement('quoteDate')) ?>
             <?= $this->RenderFormElementErrors($form->getElement('quoteDate')) ?>
         </div>

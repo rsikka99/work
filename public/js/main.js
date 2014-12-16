@@ -1,5 +1,6 @@
 require([
     'jquery',
+    'jquery.ui',
     'bootstrap',
     'bootstrap.switch',
     '/js/app/components/Select2/Country.js'
@@ -63,6 +64,12 @@ require([
             "offColor": "danger",
             "onText"  : "Enabled",
             "offText" : "Disabled"
+        });
+
+        $(".js-date-picker").datepicker({
+            "showOtherMonths"  : true,
+            "selectOtherMonths": true,
+            "dateFormat": 'yy-mm-dd'
         });
 
         $(document).on('click', '.js-delete-confirmation', function (event)
