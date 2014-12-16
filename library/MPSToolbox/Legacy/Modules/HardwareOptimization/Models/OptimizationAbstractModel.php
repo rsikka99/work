@@ -438,6 +438,10 @@ abstract class OptimizationAbstractModel
                     $masterDevices [] = $deviceInstance->getMasterDevice();
                 }
             }
+            else
+            {
+                $masterDevices [] = $deviceInstance->getMasterDevice();
+            }
         }
 
         return $masterDevices;
