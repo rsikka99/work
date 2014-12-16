@@ -192,7 +192,7 @@ define(['jquery', './OptionService', 'bootstrap.modal.manager'], function ($, Op
             that.$modal.modal('hide');
 
             return optionId;
-        }).error(function (data)
+        }, function (data)
         {
             that.setZendFormErrors(data.errorMessages);
         });

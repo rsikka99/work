@@ -236,8 +236,22 @@ class HardwareLibrary_OptionController extends Action
 
         if ($jqGridService->sortingIsValid())
         {
+            $filterOptionSku  = $this->getParam('filterOptionSku', false);
+            $filterOptionText = $this->getParam('filterOptionText', false);
+
             $searchCriteria = null;
             $searchValue    = null;
+
+            if ($filterOptionSku !== false)
+            {
+                $searchCriteria = 'oemSku';
+                $searchValue    = $filterOptionSku;
+            }
+            else if ($filterOptionText !== false)
+            {
+                $searchCriteria = 'name';
+                $searchValue    = $filterOptionText;
+            }
 
             $options = $optionMapper->fetchAllOptionsWithDeviceOptions($masterDeviceId, $dealerId, null, $searchCriteria, $searchValue, 1000, 0);
             $jqGridService->setRecordCount(count($options));

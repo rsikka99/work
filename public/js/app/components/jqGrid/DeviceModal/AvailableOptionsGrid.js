@@ -3,7 +3,14 @@
  *
  * Requires jQuery, jQGrid
  */
-define(['jquery', 'underscore', 'jqgrid', 'bootstrap.modal.manager'], function ($, _)
+define([
+    'jquery',
+    'underscore',
+    'require',
+    'require',
+    'jqgrid',
+    'bootstrap.modal.manager'
+], function ($, _, require)
 {
     var instanceCounter = 0;
     var pluginName = 'availableOptionGrid';
@@ -141,15 +148,18 @@ define(['jquery', 'underscore', 'jqgrid', 'bootstrap.modal.manager'], function (
             buttonicon   : "ui-icon-plus",
             onClickButton: function ()
             {
-                var optionForm = new OptionForm();
-
-                $(optionForm).on('option-form.saved', function (event, optionId)
+                require(['app/legacy/hardware-library/manage-devices/OptionForm'], function (OptionForm)
                 {
-                    that.reloadGrid();
-                    that.$rootElement.trigger('available-options-form.option-form.saved', [optionId]);
-                });
+                    var optionForm = new OptionForm();
 
-                optionForm.show();
+                    $(optionForm).on('option-form.saved', function (event, optionId)
+                    {
+                        that.reloadGrid();
+                        that.$rootElement.trigger('available-options-form.option-form.saved', [optionId]);
+                    });
+
+                    optionForm.show();
+                });
             },
             position     : "last"
         });
@@ -162,32 +172,35 @@ define(['jquery', 'underscore', 'jqgrid', 'bootstrap.modal.manager'], function (
                 buttonicon   : "ui-icon-pencil",
                 onClickButton: function ()
                 {
-                    var rowId = that.$grid.jqGrid('getGridParam', 'selrow');
-                    if (rowId)
+                    require(['app/legacy/hardware-library/manage-devices/OptionForm'], function (OptionForm)
                     {
-                        var rowData = that.$grid.jqGrid('getRowData', rowId);
-                        var optionId = rowData.id;
-                        var optionForm = new OptionForm({
-                                optionId: function ()
-                                {
-                                    return optionId;
-                                }
-                            }
-                        );
-
-                        $(optionForm).on('option-form.saved', function (event, optionId)
+                        var rowId = that.$grid.jqGrid('getGridParam', 'selrow');
+                        if (rowId)
                         {
-                            that.reloadGrid();
+                            var rowData = that.$grid.jqGrid('getRowData', rowId);
+                            var optionId = rowData.id;
+                            var optionForm = new OptionForm({
+                                    optionId: function ()
+                                    {
+                                        return optionId;
+                                    }
+                                }
+                            );
 
-                            that.$rootElement.trigger('available-options-form.option-form.saved', [optionId]);
-                        });
+                            $(optionForm).on('option-form.saved', function (event, optionId)
+                            {
+                                that.reloadGrid();
 
-                        optionForm.show();
-                    }
-                    else
-                    {
-                        $("#alertMessageModal").modal().show()
-                    }
+                                that.$rootElement.trigger('available-options-form.option-form.saved', [optionId]);
+                            });
+
+                            optionForm.show();
+                        }
+                        else
+                        {
+                            $("#alertMessageModal").modal().show()
+                        }
+                    });
                 },
                 position     : "last"
             }
@@ -202,34 +215,40 @@ define(['jquery', 'underscore', 'jqgrid', 'bootstrap.modal.manager'], function (
             buttonicon   : "ui-icon-trash",
             onClickButton: function ()
             {
-                var rowId = that.$grid.jqGrid('getGridParam', 'selrow');
-                if (rowId)
+                require([
+                    'app/legacy/hardware-library/manage-devices/OptionService',
+                    'app/legacy/hardware-library/manage-devices/ConfirmationDialog'
+                ], function (OptionService, ConfirmationDialog)
                 {
-                    var rowData = that.$grid.jqGrid('getRowData', rowId);
-
-                    var confirmationDialog = new ConfirmationDialog({
-                        title  : 'Delete Option?',
-                        message: 'Are you sure you want to delete the option?'
-                    });
-
-                    $(confirmationDialog).on('confirmation-dialog.confirmed', function ()
+                    var rowId = that.$grid.jqGrid('getGridParam', 'selrow');
+                    if (rowId)
                     {
-                        OptionService.deleteOption(rowData.id).then(function ()
-                        {
-                            that.reloadGrid();
-                        }, function ()
-                        {
-                            // TODO lrobert: need better message here
-                            alert('Error deleting option');
-                        });
-                    });
+                        var rowData = that.$grid.jqGrid('getRowData', rowId);
 
-                    confirmationDialog.show();
-                }
-                else
-                {
-                    $("#alertMessageModal").modal().show()
-                }
+                        var confirmationDialog = new ConfirmationDialog({
+                            title  : 'Delete Option?',
+                            message: 'Are you sure you want to delete the option?'
+                        });
+
+                        $(confirmationDialog).on('confirmation-dialog.confirmed', function ()
+                        {
+                            OptionService.deleteOption(rowData.id).then(function ()
+                            {
+                                that.reloadGrid();
+                            }, function ()
+                            {
+                                // TODO lrobert: need better message here
+                                alert('Error deleting option');
+                            });
+                        });
+
+                        confirmationDialog.show();
+                    }
+                    else
+                    {
+                        $("#alertMessageModal").modal().show()
+                    }
+                });
             },
             position     : "last"
         });
@@ -245,7 +264,6 @@ define(['jquery', 'underscore', 'jqgrid', 'bootstrap.modal.manager'], function (
      */
     Plugin.prototype.reloadGrid = function ()
     {
-        debugger;
         this.$grid.trigger('reloadGrid');
 
         return this;
