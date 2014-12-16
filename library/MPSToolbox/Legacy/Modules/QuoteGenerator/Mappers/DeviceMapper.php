@@ -259,7 +259,7 @@ class DeviceMapper extends My_Model_Mapper_Abstract
      */
     public function fetchQuoteDeviceListForDealer ($dealerId)
     {
-        $devices = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+        $devices = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId), null, 200);
 
         return $devices;
     }
