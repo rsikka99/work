@@ -46,7 +46,7 @@ class Preferences_DealerController extends Action
             }
             else if (isset($postData['cancel']))
             {
-                $this->redirectToRoute('app.dashboard');
+                $this->redirectToRoute('company');
             }
         }
         else

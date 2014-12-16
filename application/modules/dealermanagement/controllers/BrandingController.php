@@ -59,7 +59,7 @@ class Dealermanagement_BrandingController extends Action
             $postData = $this->getRequest()->getPost();
             if (isset($postData['cancel']))
             {
-                $this->redirectToRoute('admin');
+                $this->redirectToRoute('company');
             }
             else
             {

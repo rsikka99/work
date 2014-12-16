@@ -241,40 +241,28 @@ class UserForm extends Twitter_Bootstrap_Form_Horizontal
             'label' => 'Require Password Change On Next Login'
         ));
 
-        //setup cancel button
-        $submit = $this->createElement('submit', 'cancel', array(
-            'ignore' => true,
-            'label'  => 'Cancel'
-        ));
-        //setup submit button
-        $cancel = $this->createElement('submit', 'submit', array(
-            'ignore'     => true,
-            'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY,
-            'label'      => 'Save'
-        ));
+        /**
+         * Setup Cancel Button
+         */
+        $this->addElement('submit', 'cancel', [
+            'ignore'         => true,
+            'label'          => 'Cancel',
+            'formnovalidate' => 'true',
+        ]);
 
-        $this->addDisplayGroup(array(
-            $cancel,
-            $submit
-        ), 'actions', array(
-            'disableLoadDefaultDecorators' => true,
-            'decorators'                   => array(
-                'Actions'
-            ),
-            'class'                        => 'form-actions-center'
-        ));
+        /**
+         * Setup Save Button
+         */
+        $this->addElement('submit', 'submit', [
+            'ignore' => true,
+            'label'  => 'Save',
+
+        ]);
     }
 
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/dealermanagement/user-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/dealermanagement/user-form.phtml']]]);
     }
 }
