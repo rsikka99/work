@@ -46,7 +46,7 @@ require([
                     }
                 });
 
-                $(createDeviceModal).on('DeviceModal.saved', function (masterDeviceId)
+                $(createDeviceModal).on('DeviceModal.saved', function (event, masterDeviceId)
                 {
                     deviceMappingGridInstance.mapDevice({
                         "masterDeviceId"  : masterDeviceId,
