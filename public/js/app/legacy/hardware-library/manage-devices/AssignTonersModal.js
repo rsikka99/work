@@ -410,17 +410,8 @@ define([
 
                 $(tonerForm).on('toner-form.saved', function (event, tonerId)
                 {
-                    TonerService.assignTonerToDevice(tonerId, assignTonersModalInstance.deviceModalInstance.deviceId).then(function ()
-                    {
-                        assignTonersModalInstance.deviceModalInstance.deviceModalInstance.$assignedTonersGrid.addToner(tonerId);
-                    }, function ()
-                    {
-                        alert("There was an error automatically assigning the toner to your device. Please find and assign it manually.")
-                    }).finally(function ()
-                    {
-                        assignTonersModalInstance.deviceModalInstance.reloadTonersGrids();
-                    });
-
+                    assignTonersModalInstance.deviceModalInstance.deviceModalInstance.$assignedTonersGrid.addToner(tonerId);
+                    assignTonersModalInstance.deviceModalInstance.reloadTonersGrids();
                 });
 
                 tonerForm.show();

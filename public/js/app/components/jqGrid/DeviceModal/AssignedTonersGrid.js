@@ -226,14 +226,8 @@ define([
 
                     $(tonerForm).on('toner-form.saved', function (event, tonerId)
                     {
-                        TonerService.assignTonerToDevice(tonerId, that.deviceId()).then(function ()
-                        {
-                            that.addToner(tonerId);
-                            that.reloadGrid();
-                        }, function ()
-                        {
-                            alert("There was an error automatically assigning the toner to your device. Please find and assign it manually.")
-                        });
+                        that.addToner(tonerId);
+                        that.reloadGrid();
                     });
 
                     tonerForm.show();
