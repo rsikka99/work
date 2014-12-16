@@ -163,8 +163,6 @@ define([
             e.data.that.$assignTonersGridObject.reloadGrid();
         });
 
-        console.log('Setting up filter toner sku typewatch', $filterTonerSku);
-
         /**
          * Setup type watch on toner sku so that we automatically
          * filter when someone types in a sku.
@@ -172,7 +170,6 @@ define([
         $filterTonerSku.typeWatch({
             callback     : function (value)
             {
-                console.log('TONER SKU CHANGED');
                 $filterTonerSku.trigger('change');
             },
             wait         : 750,

@@ -226,7 +226,6 @@ define([
 
         this.$grid.on('click', '.js-assign-toner', [this], function ()
         {
-            console.log(this);
             var $this = $(this);
             that.$rootElement.trigger('DeviceModal.assign-toner', [$this.data('toner-id'), $this]);
         });

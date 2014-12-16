@@ -111,8 +111,6 @@ define([
 
         $modal.on('DeviceModal.assign-toner', function (event, tonerId, $element)
         {
-            console.log(tonerId);
-            console.log($element);
             deviceModalInstance.assignToner(tonerId);
             $element.removeClass('btn-success js-assign-toner').addClass('btn-danger js-unassign-toner').text('Unassign');
         });
