@@ -521,7 +521,9 @@ class OptimizationCustomerModel extends OptimizationAbstractModel
 
             $uniqueSupplyTypes = $this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances()));
             $highest           = $this->getMaximumSupplyCount($this->getUniquePurchasedMasterDevices($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances()));
-            $diamond           = count($uniqueSupplyTypes) / $highest;
+            $graphMaximum      = $highest + $highest * .15;
+            $graphMaximum      = ($graphMaximum > 0) ? $graphMaximum : 1;
+            $diamond           = count($uniqueSupplyTypes) / $graphMaximum;
 
             $targetUniqueness = $highest * 0.15;
             $barGraph         = new gchart\gStackedBarChart(600, 160);
@@ -551,16 +553,16 @@ class OptimizationCustomerModel extends OptimizationAbstractModel
                 "Your supply uniqueness"
             ));
             //Ticksize is used to scale the number of ticks on the x axis to never go above 21
-            $tickSize = (int)($highest / 20 + 1);
-            $barGraph->addAxisRange(0, 0, $highest, $tickSize);
-            $barGraph->setDataRange(0, $highest);
+            $tickSize = (int)($graphMaximum / 20 + 1);
+            $barGraph->addAxisRange(0, 0, $graphMaximum, $tickSize);
+            $barGraph->setDataRange(0, $graphMaximum);
             $barGraph->setBarScale(40, 5);
             $barGraph->setLegendPosition("t");
 
             $dotProperties = '@d,' . str_replace('#', '', $dealerBranding->graphCurrentSituationColor) . ',0,.5:' . number_format($diamond, 7) . ',30|';
             $dotProperties .= '@t' . count($uniqueSupplyTypes) . ',000000,0,-1:' . number_format($diamond - 0.012, 7) . ',10';
             $barGraph->setProperty('chm', $dotProperties);
-            $barGraph->setProperty('chxs', '0N*sz0*');
+            $barGraph->setProperty('chxs', $numberValueMarker);
             $this->_graphs [] = $barGraph->getUrl();
 
             /**
