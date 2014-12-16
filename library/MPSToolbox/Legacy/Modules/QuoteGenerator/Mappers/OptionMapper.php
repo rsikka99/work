@@ -475,7 +475,14 @@ class OptionMapper extends My_Model_Mapper_Abstract
         $db = $dbTable->getAdapter();
         $masterDeviceId = $db->quote($masterDeviceId);
         $deviceOptionMapper = DeviceOptionMapper::getInstance();
-        $columns            = array('id', 'name', 'description', 'dealerSku', 'oemSku', 'cost', 'CASE WHEN NOT ISNULL(do.masterDeviceId) THEN 1 ELSE 0 END AS assigned');
+        $columns            = array(
+            'id',
+            'name',
+            'description',
+            'dealerSku',
+            'oemSku', 'cost',
+            'assigned' => new \Zend_Db_Expr('CASE WHEN NOT ISNULL(do.masterDeviceId) THEN 1 ELSE 0 END'),
+        );
 
         $select = $dbTable->select()
                           ->from(["o" => $this->getTableName()], $columns)
@@ -500,7 +507,10 @@ class OptionMapper extends My_Model_Mapper_Abstract
             $select->where("{$filterByColumn} LIKE '%{$filterValue}%'");
         }
         $select->order($sortColumn);
-        $query = $dbTable->getAdapter()->query($select);
+
+        $select->setIntegrityCheck(false);
+
+        $query = $db->query($select);
 
         $results = $query->fetchAll();
 
