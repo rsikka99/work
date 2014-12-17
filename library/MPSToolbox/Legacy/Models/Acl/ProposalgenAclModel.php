@@ -29,7 +29,7 @@ class ProposalgenAclModel
     const RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE     = "proposalgen__admin__saveandapprove";
 
     const RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING = "proposalgen__costs__bulkdevicepricing";
-    const RESOURCE_PROPOSALGEN_COSTS_EXPORTPRICING     = "proposalgen__costs__exportpricing";
+    const RESOURCE_PROPOSALGEN_COSTS_EXPORTPRICING     = "proposalgen__costs__export-pricing";
 
     const RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERPRICING   = "proposalgen__costs__bulk-file-toner-pricing";
     const RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERMATCHUP   = "proposalgen__costs__bulk-file-toner-matchup";

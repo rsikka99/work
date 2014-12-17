@@ -840,13 +840,13 @@ class Proposalgen_CostsController extends Action
      *
      * @throws Exception
      */
-    public function exportpricingAction ()
+    public function exportPricingAction ()
     {
         $this->_helper->layout->disableLayout();
 
         $importType   = $this->_getParam('type', false);
         $fieldTitles  = array();
-        $fieldList    = array();
+        $fieldRows    = array();
         $filename     = "";
         $newFieldList = "";
 
@@ -858,14 +858,14 @@ class Proposalgen_CostsController extends Action
                 $filename             = "system_printer_pricing_" . date('m_d_Y') . ".csv";
                 $devicePricingService = new DevicePricingImportService();
                 $fieldTitles          = $devicePricingService->csvHeaders;
-                $fieldList            = MasterDeviceMapper::getInstance()->getPrinterPricingForExport($manufacturerId, $this->_dealerId);
+                $fieldRows            = MasterDeviceMapper::getInstance()->getPrinterPricingForExport($manufacturerId, $this->_dealerId);
             }
             else if ($importType == 'features')
             {
                 $filename             = "system_printer_features_" . date('m_d_Y') . ".csv";
                 $deviceFeatureService = new DeviceFeaturesImportService();
                 $fieldTitles          = $deviceFeatureService->csvHeaders;
-                $fieldList            = MasterDeviceMapper::getInstance()->getPrinterFeaturesForExport($this->_dealerId);
+                $fieldRows            = MasterDeviceMapper::getInstance()->getPrinterFeaturesForExport($this->_dealerId);
             }
             else if ($importType == 'toner')
             {
@@ -873,14 +873,14 @@ class Proposalgen_CostsController extends Action
                 $filename            = "system_toner_pricing_" . date('m_d_Y') . ".csv";
                 $tonerPricingService = new TonerPricingImportService();
                 $fieldTitles         = $tonerPricingService->csvHeaders;
-                $fieldList           = TonerMapper::getInstance()->getTonerPricingForExport($manufacturerId, $this->_dealerId);
+                $fieldRows           = TonerMapper::getInstance()->getTonerPricingForExport($manufacturerId, $this->_dealerId);
             }
             else if ($importType == "matchup")
             {
                 $filename            = "system_toner_matchup.csv";
                 $tonerMatchupService = new TonerMatchupImportService();
                 $fieldTitles         = $tonerMatchupService->csvHeaders;
-                $fieldList           = array();
+                $fieldRows           = array();
             }
         }
         catch (Exception $e)
@@ -888,15 +888,9 @@ class Proposalgen_CostsController extends Action
             throw new Exception("CSV File could not be opened/written for export.", 0, $e);
         }
 
-        foreach ($fieldList as $row)
-        {
-            $newFieldList .= implode(",", $row);
-            $newFieldList .= "\n";
-        }
+        Functions::setHeadersForDownload($filename, 'text/csv');
 
-        Functions::setHeadersForDownload($filename);
-
-        $this->view->fieldTitles = implode(",", $fieldTitles);
-        $this->view->fieldList   = $newFieldList;
+        $this->view->fieldTitles = $fieldTitles;
+        $this->view->fieldRows   = $fieldRows;
     }
 }

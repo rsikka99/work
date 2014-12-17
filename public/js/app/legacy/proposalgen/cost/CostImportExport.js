@@ -6,6 +6,34 @@ require(['jquery', 'select2', 'app/components/Select2/Manufacturer'], function (
         'placeholder': 'Export By Manufacturer'
     });
 
+    var $importLink = $('#importLink');
+    var $exportLink = $('#exportLink');
+
+    $importLink.on('click', function (event)
+    {
+        event.preventDefault();
+
+        /**
+         * Submit the import form
+         */
+        $(this).closest('form').submit();
+    });
+
+    $exportLink.on('click', function (event)
+    {
+        event.preventDefault();
+
+        // Do we have a manufacturer element
+        if ($manufacturerSelect.length > 0 && $manufacturerSelect.val())
+        {
+            document.location.href = "export-pricing?type=" + $(this).data('type') + "&manufacturer=" + $manufacturerSelect.val();
+        }
+        else
+        {
+            document.location.href = "export-pricing?type=" + $(this).data().type;
+        }
+    });
+
     function do_action(action)
     {
         if (action == 'import')
@@ -19,11 +47,11 @@ require(['jquery', 'select2', 'app/components/Select2/Manufacturer'], function (
             // Do we have a manufacturer element
             if (manufacturerElement.length > 0)
             {
-                document.location.href = "exportpricing?type=" + $("#exportLink").data().type + "&manufacturer=" + manufacturerElement.val()
+                document.location.href = "export-pricing?type=" + $("#exportLink").data().type + "&manufacturer=" + manufacturerElement.val()
             }
             else
             {
-                document.location.href = "exportpricing?type=" + $("#exportLink").data().type;
+                document.location.href = "export-pricing?type=" + $("#exportLink").data().type;
             }
         }
         else if (action == 'cancel')

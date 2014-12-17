@@ -1,0 +1,12 @@
+<?php
+// Write our CSV
+$output = fopen('php://output', 'w');
+
+fputcsv($output, $this->fieldTitles);
+
+foreach ($this->fieldRows as $row)
+{
+    fputcsv($output, $row);
+}
+
+fclose($output);

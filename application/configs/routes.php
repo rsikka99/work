@@ -332,6 +332,7 @@ $r->addRoute('hardware-library.options.option-list', new R('hardware-library/opt
  */
 //@formatter:off
 $r->addRoute('hardware-library.bulk-hardware-pricing-updates',                           new R('hardware-library/bulk-hardware-pricing-updates', array('module' => 'proposalgen', 'controller' => 'costs', 'action' => 'bulkdevicepricing')));
+$r->addRoute('hardware-library.bulk-hardware-pricing-updates.export-pricing',            new R('hardware-library/export-pricing',                array('module' => 'proposalgen', 'controller' => 'costs', 'action' => 'export-pricing')));
 $r->addRoute('hardware-library.bulk-hardware-pricing-updates.bulk-file-device-pricing',  new R('hardware-library/bulk-file-device-pricing',      array('module' => 'proposalgen', 'controller' => 'costs', 'action' => 'bulk-file-device-pricing')));
 $r->addRoute('hardware-library.bulk-hardware-pricing-updates.bulk-file-device-features', new R('hardware-library/bulk-file-device-features',     array('module' => 'proposalgen', 'controller' => 'costs', 'action' => 'bulk-file-device-features')));
 $r->addRoute('hardware-library.bulk-hardware-pricing-updates.bulk-file-toner-pricing',   new R('hardware-library/bulk-file-toner-pricing',       array('module' => 'proposalgen', 'controller' => 'costs', 'action' => 'bulk-file-toner-pricing')));
