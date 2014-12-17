@@ -204,8 +204,7 @@ define([
                 },
                 position     : "last"
             }
-        )
-        ;
+        );
 
         /**
          * Delete button

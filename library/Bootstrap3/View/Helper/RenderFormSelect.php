@@ -10,6 +10,21 @@ namespace Bootstrap3\View\Helper;
  */
 class RenderFormSelect extends RenderFormAbstract
 {
+    protected function sortArrayByArray (array $array, array $orderArray)
+    {
+        $ordered = array();
+        foreach ($orderArray as $key)
+        {
+            if (array_key_exists($key, $array))
+            {
+                $ordered[$key] = $array[$key];
+                unset($array[$key]);
+            }
+        }
+
+        return $ordered + $array;
+    }
+
     /**
      * @param \Zend_Form_Element $element
      *
@@ -62,9 +77,18 @@ class RenderFormSelect extends RenderFormAbstract
 
             if ($element instanceof \Zend_Form_Element_Multiselect)
             {
-                foreach ($element->getMultiOptions() as $value => $option)
+                $value = (is_array($element->getValue())) ? $element->getValue() : false;
+
+                $orderedValues = $element->getMultiOptions();
+                if ($value !== false)
                 {
-                    $selected = (is_array($element->getValue()) && in_array($value, $element->getValue())) ? 'selected' : '';
+                    // FIXME lrobert: Don't force this behaviour. It's only needed in cases where order matters
+                    $orderedValues = $this->sortArrayByArray($orderedValues, $value);
+                }
+
+                foreach ($orderedValues as $value => $option)
+                {
+                    $selected = ($value !== false && in_array($value, $element->getValue())) ? 'selected' : '';
 
                     $html[] = sprintf('<option value="%1$s" %2$s>%3$s</option>', $value, $selected, $option);
                 }
