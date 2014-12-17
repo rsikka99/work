@@ -18,8 +18,10 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerVendorRankingSetMode
  * @property float defaultMonochromeCoverage
  * @property float defaultColorCoverage
  * @property float adminCostPerPage
- * @property float defaultLaborCostPerPage
- * @property float defaultPartsCostPerPage
+ * @property float defaultMonochromeLaborCostPerPage
+ * @property float defaultMonochromePartsCostPerPage
+ * @property float defaultColorLaborCostPerPage
+ * @property float defaultColorPartsCostPerPage
  * @property int   monochromeTonerVendorRankingSetId
  * @property int   colorTonerVendorRankingSetId
  */
@@ -118,7 +120,7 @@ class FleetSettingsEntity extends EloquentModel
      *
      * @return float
      */
-    public function getDefaultLaborCostPerPageAttribute ($value)
+    public function getDefaultMonochromeLaborCostPerPageAttribute ($value)
     {
         return ($value !== null) ? floatval($value) : null;
     }
@@ -130,7 +132,31 @@ class FleetSettingsEntity extends EloquentModel
      *
      * @return float
      */
-    public function getDefaultPartsCostPerPageAttribute ($value)
+    public function getDefaultMonochromePartsCostPerPageAttribute ($value)
+    {
+        return ($value !== null) ? floatval($value) : null;
+    }
+
+    /**
+     * Accessor to remove trailing 0's on decimals
+     *
+     * @param $value
+     *
+     * @return float
+     */
+    public function getDefaultColorLaborCostPerPageAttribute ($value)
+    {
+        return ($value !== null) ? floatval($value) : null;
+    }
+
+    /**
+     * Accessor to remove trailing 0's on decimals
+     *
+     * @param $value
+     *
+     * @return float
+     */
+    public function getDefaultColorPartsCostPerPageAttribute ($value)
     {
         return ($value !== null) ? floatval($value) : null;
     }

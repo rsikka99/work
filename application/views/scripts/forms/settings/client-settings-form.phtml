@@ -136,21 +136,39 @@ $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
                     </div>
                 </div>
 
-                <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedDefaultLaborCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultLaborCostPerPage'), array('col-md-6')) ?>
+                <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedDefaultMonochromeLaborCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultMonochromeLaborCostPerPage'), array('col-md-6')) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultLaborCostPerPage'), array(), '$') ?>
-                        <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedDefaultLaborCostPerPage')) ?>
+                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultMonochromeLaborCostPerPage'), array(), '$') ?>
+                        <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedDefaultMonochromeLaborCostPerPage')) ?>
                     </div>
                 </div>
 
-                <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedDefaultPartsCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultPartsCostPerPage'), array('col-md-6')) ?>
+                <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedDefaultMonochromePartsCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultMonochromePartsCostPerPage'), array('col-md-6')) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultPartsCostPerPage'), array(), '$') ?>
-                        <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedDefaultPartsCostPerPage')) ?>
+                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultMonochromePartsCostPerPage'), array(), '$') ?>
+                        <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedDefaultMonochromePartsCostPerPage')) ?>
+                    </div>
+                </div>
+
+                <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedDefaultColorLaborCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultColorLaborCostPerPage'), array('col-md-6')) ?>
+
+                    <div class="col-md-6">
+                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultColorLaborCostPerPage'), array(), '$') ?>
+                        <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedDefaultColorLaborCostPerPage')) ?>
+                    </div>
+                </div>
+
+                <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedDefaultColorPartsCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultColorPartsCostPerPage'), array('col-md-6')) ?>
+
+                    <div class="col-md-6">
+                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultColorPartsCostPerPage'), array(), '$') ?>
+                        <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedDefaultColorPartsCostPerPage')) ?>
                     </div>
                 </div>
             </fieldset>

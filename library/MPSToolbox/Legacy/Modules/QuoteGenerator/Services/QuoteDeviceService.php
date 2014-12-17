@@ -159,8 +159,10 @@ class QuoteDeviceService
     {
         $oemCostPerPageSetting                         = new CostPerPageSettingModel();
         $oemCostPerPageSetting->adminCostPerPage       = 0;
-        $oemCostPerPageSetting->laborCostPerPage       = 0;
-        $oemCostPerPageSetting->partsCostPerPage       = 0;
+        $oemCostPerPageSetting->monochromeLaborCostPerPage       = 0;
+        $oemCostPerPageSetting->monochromePartsCostPerPage       = 0;
+        $oemCostPerPageSetting->colorLaborCostPerPage  = 0;
+        $oemCostPerPageSetting->colorPartsCostPerPage  = 0;
         $oemCostPerPageSetting->pageCoverageMonochrome = ($this->getQuote()->pageCoverageMonochrome) ? $this->getQuote()->pageCoverageMonochrome : self::DEFAULT_PAGE_COVERAGE_MONOCHROME;
         $oemCostPerPageSetting->pageCoverageColor      = ($this->getQuote()->pageCoverageColor) ? $this->getQuote()->pageCoverageColor : self::DEFAULT_PAGE_COVERAGE_COLOR;
         $oemCostPerPageSetting->monochromeTonerRankSet = $this->getQuote()->getDealerMonochromeRankSet();

@@ -157,8 +157,8 @@ class OptimizationViewModel
             $clientSettings = $this->_optimization->getClient()->getClientSettings();
             $this->_devices = new DevicesViewModel(
                 $this->_optimization->rmsUploadId,
-                $clientSettings->currentFleetSettings->defaultLaborCostPerPage,
-                $clientSettings->currentFleetSettings->defaultPartsCostPerPage,
+                $clientSettings->currentFleetSettings->defaultMonochromeLaborCostPerPage,
+                $clientSettings->currentFleetSettings->defaultMonochromePartsCostPerPage,
                 $clientSettings->currentFleetSettings->adminCostPerPage
             );
         }
@@ -200,8 +200,10 @@ class OptimizationViewModel
             $this->_costPerPageSettingForDealer->adminCostPerPage       = $clientSettings->proposedFleetSettings->adminCostPerPage;
             $this->_costPerPageSettingForDealer->pageCoverageMonochrome = $clientSettings->proposedFleetSettings->defaultMonochromeCoverage;
             $this->_costPerPageSettingForDealer->pageCoverageColor      = $clientSettings->proposedFleetSettings->defaultColorCoverage;
-            $this->_costPerPageSettingForDealer->laborCostPerPage       = $clientSettings->proposedFleetSettings->defaultLaborCostPerPage;
-            $this->_costPerPageSettingForDealer->partsCostPerPage       = $clientSettings->proposedFleetSettings->defaultPartsCostPerPage;
+            $this->_costPerPageSettingForDealer->monochromeLaborCostPerPage       = $clientSettings->proposedFleetSettings->defaultMonochromeLaborCostPerPage;
+            $this->_costPerPageSettingForDealer->monochromePartsCostPerPage       = $clientSettings->proposedFleetSettings->defaultMonochromePartsCostPerPage;
+            $this->_costPerPageSettingForDealer->colorLaborCostPerPage  = $clientSettings->proposedFleetSettings->defaultColorLaborCostPerPage;
+            $this->_costPerPageSettingForDealer->colorPartsCostPerPage  = $clientSettings->proposedFleetSettings->defaultColorPartsCostPerPage;
 
             $this->_costPerPageSettingForDealer->monochromeTonerRankSet = $clientSettings->proposedFleetSettings->getMonochromeRankSet();
             $this->_costPerPageSettingForDealer->colorTonerRankSet      = $clientSettings->proposedFleetSettings->getColorRankSet();
@@ -227,8 +229,10 @@ class OptimizationViewModel
             $this->_costPerPageSettingForReplacements->adminCostPerPage       = $clientSettings->proposedFleetSettings->adminCostPerPage;
             $this->_costPerPageSettingForReplacements->pageCoverageMonochrome = $clientSettings->proposedFleetSettings->defaultMonochromeCoverage;
             $this->_costPerPageSettingForReplacements->pageCoverageColor      = $clientSettings->proposedFleetSettings->defaultColorCoverage;
-            $this->_costPerPageSettingForReplacements->laborCostPerPage       = $clientSettings->proposedFleetSettings->defaultLaborCostPerPage;
-            $this->_costPerPageSettingForReplacements->partsCostPerPage       = $clientSettings->proposedFleetSettings->defaultPartsCostPerPage;
+            $this->_costPerPageSettingForReplacements->monochromeLaborCostPerPage       = $clientSettings->proposedFleetSettings->defaultMonochromeLaborCostPerPage;
+            $this->_costPerPageSettingForReplacements->monochromePartsCostPerPage       = $clientSettings->proposedFleetSettings->defaultMonochromePartsCostPerPage;
+            $this->_costPerPageSettingForReplacements->colorLaborCostPerPage  = $clientSettings->proposedFleetSettings->defaultColorLaborCostPerPage;
+            $this->_costPerPageSettingForReplacements->colorPartsCostPerPage  = $clientSettings->proposedFleetSettings->defaultColorPartsCostPerPage;
             $this->_costPerPageSettingForReplacements->monochromeTonerRankSet = $clientSettings->optimizationSettings->getMonochromeRankSet();
             $this->_costPerPageSettingForReplacements->colorTonerRankSet      = $clientSettings->optimizationSettings->getColorRankSet();
             $this->_costPerPageSettingForReplacements->useDevicePageCoverages = $clientSettings->proposedFleetSettings->useDevicePageCoverages;

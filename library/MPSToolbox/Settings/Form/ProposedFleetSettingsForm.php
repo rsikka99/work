@@ -58,15 +58,27 @@ class ProposedFleetSettingsForm extends \Zend_Form
             'required'    => true,
         ));
 
-        $this->addElement('text', 'proposedDefaultLaborCostPerPage', array(
-            'label'       => 'Labor CPP',
-            'description' => 'The default labor cost per page to apply to devices.',
+        $this->addElement('text', 'proposedDefaultMonochromeLaborCostPerPage', array(
+            'label'       => 'Monochrome Labor CPP',
+            'description' => 'The default labor cost per page to apply to monochrome devices.',
             'required'    => true,
         ));
 
-        $this->addElement('text', 'proposedDefaultPartsCostPerPage', array(
-            'label'       => 'Parts CPP',
-            'description' => 'The default parts cost per page to apply to devices.',
+        $this->addElement('text', 'proposedDefaultMonochromePartsCostPerPage', array(
+            'label'       => 'Monochrome Parts CPP',
+            'description' => 'The default parts cost per page to apply to monochrome devices.',
+            'required'    => true,
+        ));
+
+        $this->addElement('text', 'proposedDefaultColorLaborCostPerPage', array(
+            'label'       => 'Color Labor CPP',
+            'description' => 'The default labor cost per page to apply to color devices.',
+            'required'    => true,
+        ));
+
+        $this->addElement('text', 'proposedDefaultColorPartsCostPerPage', array(
+            'label'       => 'Color Parts CPP',
+            'description' => 'The default parts cost per page to apply to color devices.',
             'required'    => true,
         ));
 
@@ -106,14 +118,16 @@ class ProposedFleetSettingsForm extends \Zend_Form
         if ($fleetSettings instanceof FleetSettingsEntity)
         {
             $fleetSettings = array(
-                'proposedUseDevicePageCoverages'  => $fleetSettings->useDevicePageCoverages,
-                'proposedPageCoverageMono'        => $fleetSettings->defaultMonochromeCoverage,
-                'proposedPageCoverageColor'       => $fleetSettings->defaultColorCoverage,
-                'proposedDefaultAdminCostPerPage' => $fleetSettings->adminCostPerPage,
-                'proposedDefaultLaborCostPerPage' => $fleetSettings->defaultLaborCostPerPage,
-                'proposedDefaultPartsCostPerPage' => $fleetSettings->defaultPartsCostPerPage,
-                'proposedMonochromeRankSetArray'  => $fleetSettings->getMonochromeRankSet()->getRanksAsArray(),
-                'proposedColorRankSetArray'       => $fleetSettings->getColorRankSet()->getRanksAsArray(),
+                'proposedUseDevicePageCoverages'            => $fleetSettings->useDevicePageCoverages,
+                'proposedPageCoverageMono'                  => $fleetSettings->defaultMonochromeCoverage,
+                'proposedPageCoverageColor'                 => $fleetSettings->defaultColorCoverage,
+                'proposedDefaultAdminCostPerPage'           => $fleetSettings->adminCostPerPage,
+                'proposedDefaultMonochromeLaborCostPerPage' => $fleetSettings->defaultMonochromeLaborCostPerPage,
+                'proposedDefaultMonochromePartsCostPerPage' => $fleetSettings->defaultMonochromePartsCostPerPage,
+                'proposedDefaultColorLaborCostPerPage'      => $fleetSettings->defaultColorLaborCostPerPage,
+                'proposedDefaultColorPartsCostPerPage'      => $fleetSettings->defaultColorPartsCostPerPage,
+                'proposedMonochromeRankSetArray'            => $fleetSettings->getMonochromeRankSet()->getRanksAsArray(),
+                'proposedColorRankSetArray'                 => $fleetSettings->getColorRankSet()->getRanksAsArray(),
             );
         }
 
@@ -137,12 +151,14 @@ class ProposedFleetSettingsForm extends \Zend_Form
             $model = new FleetSettingsEntity();
         }
 
-        $model->useDevicePageCoverages    = $this->getValue('proposedUseDevicePageCoverages');
-        $model->defaultMonochromeCoverage = $this->getValue('proposedPageCoverageMono');
-        $model->defaultColorCoverage      = $this->getValue('proposedPageCoverageColor');
-        $model->adminCostPerPage          = $this->getValue('proposedDefaultAdminCostPerPage');
-        $model->defaultLaborCostPerPage   = $this->getValue('proposedDefaultLaborCostPerPage');
-        $model->defaultPartsCostPerPage   = $this->getValue('proposedDefaultPartsCostPerPage');
+        $model->useDevicePageCoverages            = $this->getValue('proposedUseDevicePageCoverages');
+        $model->defaultMonochromeCoverage         = $this->getValue('proposedPageCoverageMono');
+        $model->defaultColorCoverage              = $this->getValue('proposedPageCoverageColor');
+        $model->adminCostPerPage                  = $this->getValue('proposedDefaultAdminCostPerPage');
+        $model->defaultMonochromeLaborCostPerPage = $this->getValue('proposedDefaultMonochromeLaborCostPerPage');
+        $model->defaultMonochromePartsCostPerPage = $this->getValue('proposedDefaultMonochromePartsCostPerPage');
+        $model->defaultColorLaborCostPerPage      = $this->getValue('proposedDefaultColorLaborCostPerPage');
+        $model->defaultColorPartsCostPerPage      = $this->getValue('proposedDefaultColorPartsCostPerPage');
 
         return $model;
     }

@@ -238,20 +238,24 @@ class UserSettingsService
         foreach (array($currentFleetSetting, $proposedFleetSetting) as $fleetSetting)
         {
             /* @var $fleetSetting FleetSettingsEntity */
-            $fleetSetting->useDevicePageCoverages    = false;
-            $fleetSetting->defaultMonochromeCoverage = 6;
-            $fleetSetting->defaultColorCoverage      = 24;
-            $fleetSetting->adminCostPerPage          = 0.0005;
-            $fleetSetting->defaultLaborCostPerPage   = 0.0015;
-            $fleetSetting->defaultPartsCostPerPage   = 0.0015;
+            $fleetSetting->useDevicePageCoverages            = false;
+            $fleetSetting->defaultMonochromeCoverage         = 6;
+            $fleetSetting->defaultColorCoverage              = 24;
+            $fleetSetting->adminCostPerPage                  = 0.0005;
+            $fleetSetting->defaultMonochromeLaborCostPerPage = 0.0015;
+            $fleetSetting->defaultMonochromePartsCostPerPage = 0.0015;
+            $fleetSetting->defaultColorLaborCostPerPage      = 0.0015;
+            $fleetSetting->defaultColorPartsCostPerPage      = 0.0015;
             $fleetSetting->getMonochromeRankSet();
             $fleetSetting->getColorRankSet();
         }
 
-        $currentFleetSetting->defaultLaborCostPerPage = 0;
-        $currentFleetSetting->defaultPartsCostPerPage = 0;
-        $currentFleetSetting->adminCostPerPage        = 0;
-        $currentFleetSetting->useDevicePageCoverages  = true;
+        $currentFleetSetting->defaultMonochromeLaborCostPerPage = 0;
+        $currentFleetSetting->defaultMonochromePartsCostPerPage = 0;
+        $currentFleetSetting->defaultColorLaborCostPerPage      = 0;
+        $currentFleetSetting->defaultColorPartsCostPerPage      = 0;
+        $currentFleetSetting->adminCostPerPage                  = 0;
+        $currentFleetSetting->useDevicePageCoverages            = true;
 
         $genericSettings                              = new GenericSettingsEntity();
         $genericSettings->defaultEnergyCost           = 0.11;

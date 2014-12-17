@@ -65,8 +65,8 @@ class Healthcheck_ViewModel_Abstract
         {
             $this->_devices = new Healthcheck_ViewModel_Devices(
                 $this->healthcheck->rmsUploadId,
-                $this->healthcheck->getClient()->getClientSettings()->currentFleetSettings->defaultLaborCostPerPage,
-                $this->healthcheck->getClient()->getClientSettings()->currentFleetSettings->defaultPartsCostPerPage,
+                $this->healthcheck->getClient()->getClientSettings()->currentFleetSettings->defaultMonochromeLaborCostPerPage,
+                $this->healthcheck->getClient()->getClientSettings()->currentFleetSettings->defaultMonochromePartsCostPerPage,
                 $this->healthcheck->getClient()->getClientSettings()->currentFleetSettings->adminCostPerPage
             );
         }

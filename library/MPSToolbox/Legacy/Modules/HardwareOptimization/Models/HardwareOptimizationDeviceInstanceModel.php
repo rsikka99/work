@@ -190,8 +190,8 @@ class HardwareOptimizationDeviceInstanceModel extends My_Model_Abstract
         {
             $this->_masterDevice = MasterDeviceMapper::getInstance()->findForReports($this->masterDeviceId,
                 $this->getHardwareOptimization()->dealerId,
-                $this->getHardwareOptimization()->getClient()->getClientSettings()->proposedFleetSettings->defaultLaborCostPerPage,
-                $this->getHardwareOptimization()->getClient()->getClientSettings()->proposedFleetSettings->defaultPartsCostPerPage);
+                $this->getHardwareOptimization()->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromeLaborCostPerPage,
+                $this->getHardwareOptimization()->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromePartsCostPerPage);
         }
 
         return $this->_masterDevice;

@@ -27,8 +27,10 @@ class Proposalgen_Model_MasterDeviceTest extends PHPUnit_Framework_TestCase
         {
             $this->_costPerPageSetting                         = new CostPerPageSettingModel();
             $this->_costPerPageSetting->adminCostPerPage       = 0.05;
-            $this->_costPerPageSetting->laborCostPerPage       = 0.06;
-            $this->_costPerPageSetting->partsCostPerPage       = 0.07;
+            $this->_costPerPageSetting->monochromeLaborCostPerPage       = 0.06;
+            $this->_costPerPageSetting->monochromePartsCostPerPage       = 0.07;
+            $this->_costPerPageSetting->colorLaborCostPerPage  = 0.06;
+            $this->_costPerPageSetting->colorPartsCostPerPage  = 0.07;
             $this->_costPerPageSetting->pageCoverageMonochrome = 4;
             $this->_costPerPageSetting->pageCoverageColor      = 18;
         }

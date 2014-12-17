@@ -4,6 +4,7 @@ namespace MPSToolbox\Legacy\Modules\ProposalGenerator\Models;
 
 use ArrayObject;
 use My_Model_Abstract;
+use Tangent\Accounting;
 
 /**
  * Class DeviceCostPerPageModel
@@ -146,8 +147,17 @@ class DeviceCostPerPageModel extends My_Model_Abstract
             {
                 if ($costPerPage->monochromeCostPerPage > 0)
                 {
-                    $partsCostPerPage = ($this->partsCostPerPage !== null) ? $this->partsCostPerPage : $this->costPerPageSetting->partsCostPerPage;
-                    $laborCostPerPage = ($this->laborCostPerPage !== null) ? $this->laborCostPerPage : $this->costPerPageSetting->laborCostPerPage;
+                    if ($costPerPage->colorCostPerPage > 0)
+                    {
+                        $partsCostPerPage = ($this->partsCostPerPage !== null) ? $this->partsCostPerPage : $this->costPerPageSetting->colorPartsCostPerPage;
+                        $laborCostPerPage = ($this->laborCostPerPage !== null) ? $this->laborCostPerPage : $this->costPerPageSetting->colorLaborCostPerPage;
+                    }
+                    else
+                    {
+                        $partsCostPerPage = ($this->partsCostPerPage !== null) ? $this->partsCostPerPage : $this->costPerPageSetting->monochromePartsCostPerPage;
+                        $laborCostPerPage = ($this->laborCostPerPage !== null) ? $this->laborCostPerPage : $this->costPerPageSetting->monochromeLaborCostPerPage;
+                    }
+
 
                     $costPerPage->monochromeCostPerPage += $laborCostPerPage + $partsCostPerPage + $this->costPerPageSetting->adminCostPerPage;
 
@@ -190,8 +200,8 @@ class DeviceCostPerPageModel extends My_Model_Abstract
 
                 if (!$toner->isUsingCustomerPricing)
                 {
-                    $tonerCostPerPage->monochromeCostPerPage = \Tangent\Accounting::applyMargin($tonerCostPerPage->monochromeCostPerPage, $this->costPerPageSetting->pricingMargin);
-                    $tonerCostPerPage->colorCostPerPage      = \Tangent\Accounting::applyMargin($tonerCostPerPage->colorCostPerPage, $this->costPerPageSetting->pricingMargin);
+                    $tonerCostPerPage->monochromeCostPerPage = Accounting::applyMargin($tonerCostPerPage->monochromeCostPerPage, $this->costPerPageSetting->pricingMargin);
+                    $tonerCostPerPage->colorCostPerPage      = Accounting::applyMargin($tonerCostPerPage->colorCostPerPage, $this->costPerPageSetting->pricingMargin);
                 }
 
                 $costPerPage->add($tonerCostPerPage);

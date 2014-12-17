@@ -303,8 +303,8 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
         $hardwareOptimizationId = $db->quote($hardwareOptimizationId, 'INTEGER');
 
         $hardwareOptimization                      = HardwareOptimizationMapper::getInstance()->find($hardwareOptimizationId);
-        MasterDeviceModel::$ReportLaborCostPerPage = $hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultLaborCostPerPage;
-        MasterDeviceModel::$ReportPartsCostPerPage = $hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultPartsCostPerPage;
+        MasterDeviceModel::$ReportLaborCostPerPage = $hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromeLaborCostPerPage;
+        MasterDeviceModel::$ReportPartsCostPerPage = $hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromePartsCostPerPage;
 
         $deviceInstanceMapper             = DeviceInstanceMapper::getInstance();
         $deviceInstanceMasterDeviceMapper = DeviceInstanceMasterDeviceMapper::getInstance();

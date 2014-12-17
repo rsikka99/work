@@ -63,15 +63,19 @@ class ClientSettingsRepository
             $fleetSetting->defaultMonochromeCoverage         = 6;
             $fleetSetting->defaultColorCoverage              = 24;
             $fleetSetting->adminCostPerPage                  = 0.0005;
-            $fleetSetting->defaultLaborCostPerPage           = 0.0015;
-            $fleetSetting->defaultPartsCostPerPage           = 0.0015;
+            $fleetSetting->defaultMonochromeLaborCostPerPage = 0.0015;
+            $fleetSetting->defaultMonochromePartsCostPerPage = 0.0015;
+            $fleetSetting->defaultColorLaborCostPerPage      = 0.0015;
+            $fleetSetting->defaultColorPartsCostPerPage      = 0.0015;
             $fleetSetting->monochromeTonerVendorRankingSetId = 1;
             $fleetSetting->colorTonerVendorRankingSetId      = 1;
         }
 
-        $currentFleetSetting->defaultLaborCostPerPage = 0;
-        $currentFleetSetting->defaultPartsCostPerPage = 0;
-        $currentFleetSetting->adminCostPerPage        = 0;
+        $currentFleetSetting->defaultMonochromeLaborCostPerPage = 0;
+        $currentFleetSetting->defaultMonochromePartsCostPerPage = 0;
+        $currentFleetSetting->defaultColorLaborCostPerPage      = 0;
+        $currentFleetSetting->defaultColorPartsCostPerPage      = 0;
+        $currentFleetSetting->adminCostPerPage                  = 0;
 
         $currentFleetSetting->useDevicePageCoverages = true;
 

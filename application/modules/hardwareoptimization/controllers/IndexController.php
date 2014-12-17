@@ -228,8 +228,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->costThreshold,
                 $optimization->getCostPerPageSettingForDealer(),
                 $optimization->getCostPerPageSettingForReplacements(),
-                $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultLaborCostPerPage,
-                $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultPartsCostPerPage
+                $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromeLaborCostPerPage,
+                $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromePartsCostPerPage
             );
 
 
@@ -250,8 +250,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->costThreshold,
                 $optimization->getCostPerPageSettingForDealer(),
                 $optimization->getCostPerPageSettingForReplacements(),
-                $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultLaborCostPerPage,
-                $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultPartsCostPerPage,
+                $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromeLaborCostPerPage,
+                $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromePartsCostPerPage,
                 $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->blackToColorRatio
             );
 
@@ -349,8 +349,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
      */
     public function getDeviceByDeviceInstanceIdAction ()
     {
-        MasterDeviceModel::$ReportLaborCostPerPage = $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultLaborCostPerPage;
-        MasterDeviceModel::$ReportPartsCostPerPage = $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultPartsCostPerPage;
+        MasterDeviceModel::$ReportLaborCostPerPage = $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromeLaborCostPerPage;
+        MasterDeviceModel::$ReportPartsCostPerPage = $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromePartsCostPerPage;
 
         $optimization                  = $this->getOptimizationViewModel();
         $costPerPageSetting            = $optimization->getCostPerPageSettingForDealer();
@@ -426,8 +426,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $deviceInstanceReasonElement = null;
 
         // Setup the master device labor and parts cost per page
-        MasterDeviceModel::$ReportLaborCostPerPage = $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultLaborCostPerPage;
-        MasterDeviceModel::$ReportPartsCostPerPage = $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultPartsCostPerPage;
+        MasterDeviceModel::$ReportLaborCostPerPage = $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromeLaborCostPerPage;
+        MasterDeviceModel::$ReportPartsCostPerPage = $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromePartsCostPerPage;
 
         /**
          * Require a device instance
@@ -482,8 +482,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                  */
                 $replacementMasterDevice = MasterDeviceMapper::getInstance()->findForReports($replacementDeviceId,
                     $this->_identity->dealerId,
-                    $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultLaborCostPerPage,
-                    $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultPartsCostPerPage
+                    $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromeLaborCostPerPage,
+                    $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromePartsCostPerPage
                 );
 
 

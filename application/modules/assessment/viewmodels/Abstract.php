@@ -71,8 +71,8 @@ class Assessment_ViewModel_Abstract
             $clientSettings = $this->assessment->getClient()->getClientSettings();
             $this->_devices = new Assessment_ViewModel_Devices(
                 $this->assessment->rmsUploadId,
-                $clientSettings->currentFleetSettings->defaultLaborCostPerPage,
-                $clientSettings->currentFleetSettings->defaultPartsCostPerPage,
+                $clientSettings->currentFleetSettings->defaultMonochromeLaborCostPerPage,
+                $clientSettings->currentFleetSettings->defaultMonochromePartsCostPerPage,
                 $clientSettings->currentFleetSettings->adminCostPerPage
             );
         }
@@ -99,9 +99,9 @@ class Assessment_ViewModel_Abstract
 
             $this->_costPerPageSettingForCustomer->monochromeTonerRankSet = $clientSettings->currentFleetSettings->getMonochromeRankSet();
             $this->_costPerPageSettingForCustomer->colorTonerRankSet      = $clientSettings->currentFleetSettings->getColorRankSet();
-            
+
             $this->_costPerPageSettingForCustomer->useCustomerCostPerPageForManagedDevices = true;
-            
+
             $this->_costPerPageSettingForCustomer->useDevicePageCoverages = $clientSettings->currentFleetSettings->useDevicePageCoverages;
             $this->_costPerPageSettingForCustomer->pricingMargin          = $clientSettings->genericSettings->tonerPricingMargin;
         }
@@ -124,8 +124,10 @@ class Assessment_ViewModel_Abstract
             $this->_costPerPageSettingForDealer->adminCostPerPage       = $clientSettings->proposedFleetSettings->adminCostPerPage;
             $this->_costPerPageSettingForDealer->pageCoverageMonochrome = $clientSettings->proposedFleetSettings->defaultMonochromeCoverage;
             $this->_costPerPageSettingForDealer->pageCoverageColor      = $clientSettings->proposedFleetSettings->defaultColorCoverage;
-            $this->_costPerPageSettingForDealer->partsCostPerPage       = $clientSettings->proposedFleetSettings->defaultPartsCostPerPage;
-            $this->_costPerPageSettingForDealer->laborCostPerPage       = $clientSettings->proposedFleetSettings->defaultLaborCostPerPage;
+            $this->_costPerPageSettingForDealer->monochromeLaborCostPerPage       = $clientSettings->proposedFleetSettings->defaultMonochromeLaborCostPerPage;
+            $this->_costPerPageSettingForDealer->monochromePartsCostPerPage       = $clientSettings->proposedFleetSettings->defaultMonochromePartsCostPerPage;
+            $this->_costPerPageSettingForDealer->colorLaborCostPerPage  = $clientSettings->proposedFleetSettings->defaultColorLaborCostPerPage;
+            $this->_costPerPageSettingForDealer->colorPartsCostPerPage  = $clientSettings->proposedFleetSettings->defaultColorPartsCostPerPage;
 
             $this->_costPerPageSettingForDealer->monochromeTonerRankSet = $clientSettings->proposedFleetSettings->getMonochromeRankSet();
             $this->_costPerPageSettingForDealer->colorTonerRankSet      = $clientSettings->proposedFleetSettings->getColorRankSet();

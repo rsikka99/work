@@ -26,14 +26,29 @@ class CostPerPageSettingModel extends My_Model_Abstract
      *
      * @var float
      */
-    public $laborCostPerPage = 0;
+    public $monochromeLaborCostPerPage = 0;
 
     /**
      * The default service cost per page
      *
      * @var float
      */
-    public $partsCostPerPage = 0;
+    public $monochromePartsCostPerPage = 0;
+
+    /**
+     * The default service cost per page
+     *
+     * @var float
+     */
+    public $colorLaborCostPerPage = 0;
+
+    /**
+     * The default service cost per page
+     *
+     * @var float
+     */
+    public $colorPartsCostPerPage = 0;
+
     /**
      * The monochrome page coverage
      *
@@ -155,6 +170,26 @@ class CostPerPageSettingModel extends My_Model_Abstract
             $this->adminCostPerPage = $params->adminCostPerPage;
         }
 
+        if (isset($params->monochromeLaborCostPerPage) && !is_null($params->monochromeLaborCostPerPage))
+        {
+            $this->monochromeLaborCostPerPage = $params->monochromeLaborCostPerPage;
+        }
+
+        if (isset($params->monochromePartsCostPerPage) && !is_null($params->monochromePartsCostPerPage))
+        {
+            $this->monochromePartsCostPerPage = $params->monochromePartsCostPerPage;
+        }
+
+        if (isset($params->colorLaborCostPerPage) && !is_null($params->colorLaborCostPerPage))
+        {
+            $this->colorLaborCostPerPage = $params->colorLaborCostPerPage;
+        }
+
+        if (isset($params->colorPartsCostPerPage) && !is_null($params->colorPartsCostPerPage))
+        {
+            $this->colorPartsCostPerPage = $params->colorPartsCostPerPage;
+        }
+
         if (isset($params->pageCoverageMonochrome) && !is_null($params->pageCoverageMonochrome))
         {
             $this->pageCoverageMonochrome = $params->pageCoverageMonochrome;
@@ -213,8 +248,10 @@ class CostPerPageSettingModel extends My_Model_Abstract
     {
         return array(
             "adminCostPerPage"              => $this->adminCostPerPage,
-            "partsCostPerPage"              => $this->partsCostPerPage,
-            "laborCostPerPage"              => $this->laborCostPerPage,
+            "monochromePartsCostPerPage"    => $this->monochromePartsCostPerPage,
+            "monochromeLaborCostPerPage"    => $this->monochromeLaborCostPerPage,
+            "colorPartsCostPerPage"         => $this->colorPartsCostPerPage,
+            "colorLaborCostPerPage"         => $this->colorLaborCostPerPage,
             "pageCoverageMonochrome"        => $this->pageCoverageMonochrome,
             "pageCoverageColor"             => $this->pageCoverageColor,
             "monochromeTonerRankSet"        => $this->monochromeTonerRankSet,
@@ -242,8 +279,10 @@ class CostPerPageSettingModel extends My_Model_Abstract
                . "_{$this->clientId}"
                . "_{$this->dealerId}"
                . "_{$this->adminCostPerPage}"
-               . "_{$this->partsCostPerPage}"
-               . "_{$this->laborCostPerPage}"
+               . "_{$this->monochromePartsCostPerPage}"
+               . "_{$this->monochromeLaborCostPerPage}"
+               . "_{$this->colorPartsCostPerPage}"
+               . "_{$this->colorLaborCostPerPage}"
                . "_{$this->pageCoverageMonochrome}"
                . "_{$this->pageCoverageColor}"
                . "_{$this->useDevicePageCoverages}"
