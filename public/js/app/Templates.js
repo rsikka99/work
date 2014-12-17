@@ -5,19 +5,19 @@ define(['underscore'], function (_)
     Templates.jqGrid = {
         tonerCost : _.template('<%- dealerCost %><br><%- systemCost %>'),
         tonerSku  : _.template('<%- dealerSku %><br><%- systemSku %>'),
-        tonerColor: _.template('<img class="<%- classes %>" src="<%- source %>" alt="<%- colorName %>"><br><%- colorName %>')
+        tonerColor: _.template('<i class="fa fa-fw fa-2x <%- classes %>" title="<%- colorName %>"></i><br><small><%- colorName %></small>')
     };
 
     Templates.data = {
         tonerColors: [
             //@formatter:off
             { },
-            { name: 'Black',   image: '/img/tonercolors/Black.png',   class: 'toner-color-black'   },
-            { name: 'Cyan',    image: '/img/tonercolors/Cyan.png',    class: 'toner-color-cyan'    },
-            { name: 'Magenta', image: '/img/tonercolors/Magenta.png', class: 'toner-color-magenta' },
-            { name: 'Yellow',  image: '/img/tonercolors/Yellow.png',  class: 'toner-color-yellow'  },
-            { name: '3 Color', image: '/img/tonercolors/3color.png',  class: 'toner-color-3color'  },
-            { name: '4 Color', image: '/img/tonercolors/4color.png',  class: 'toner-color-4color'  }
+            { name: 'Black',   class: 'fa-toner-color-black'       },
+            { name: 'Cyan',    class: 'fa-toner-color-cyan'        },
+            { name: 'Magenta', class: 'fa-toner-color-magenta'     },
+            { name: 'Yellow',  class: 'fa-toner-color-yellow'      },
+            { name: '3 Color', class: 'fa-toner-color-three-color' },
+            { name: '4 Color', class: 'fa-toner-color-four-color'  }
             //@formatter:on
         ]
     };

@@ -373,7 +373,6 @@ define([
                         var tonerColorId = parseInt(currentRow.tonerColorId);
                         currentRow.tonerColorIdModified = Template.jqGrid.tonerColor({
                             "classes"  : Template.data.tonerColors[tonerColorId].class,
-                            "source"   : Template.data.tonerColors[tonerColorId].image,
                             "colorName": Template.data.tonerColors[tonerColorId].name
                         });
                         grid.setRowData(currentRowId, currentRow);

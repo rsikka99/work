@@ -115,12 +115,12 @@ require([
 { width: 55,  name: 'manufacturerId',             index: 'manufacturerId',             label: 'ManufacturerId',                     hidden: true },
 { width: 120, name: 'dealerCost',                 index: 'dealerCost',                 label: 'dealerCost',                         hidden: true },
 { width: 120, name: 'systemCost',                 index: 'systemCost',                 label: 'systemCost',                         hidden: true },
-{ width: 70,  name: 'tonerColorIdModified',       index: 'tonerColorId',               label: 'Color',                                                 sortable: true },
+{ width: 70,  name: 'tonerColorIdModified',       index: 'tonerColorId',               label: 'Color',                                 align: 'center', sortable: true },
 { width: 120, name: 'skuModified',                index: 'dealerSku',                  label: '(' + dealerSkuName + ')<br/>OEM SKU' },
-{ width: 213, name: 'manufacturer',               index: 'manufacturer',               label: 'Manufacturer',                                          sortable: true },
+{ width: 213, name: 'manufacturer',               index: 'manufacturer',               label: 'Manufacturer',                                           sortable: true },
 { width: 300, name: 'device_list',                index: 'device_list',                label: 'Machine Compatibility' },
-{ width: 60,  name: 'yield',                      index: 'yield',                      label: 'Yield',                                 align: 'right', sortable: true },
-{ width: 100, name: 'costModified',               index: 'dealerCost',                 label: 'Cost<br/>(System Cost)',                align: 'right', sortable: true }
+{ width: 60,  name: 'yield',                      index: 'yield',                      label: 'Yield',                                 align: 'right',  sortable: true },
+{ width: 100, name: 'costModified',               index: 'dealerCost',                 label: 'Cost<br/>(System Cost)',                align: 'right',  sortable: true }
 //@formatter:on
                 ],
                 gridComplete: function ()
@@ -176,7 +176,6 @@ require([
                         var tonerColorId = parseInt(currentRow.tonerColorId);
                         currentRow.tonerColorIdModified = Template.jqGrid.tonerColor({
                             "classes"  : Template.data.tonerColors[tonerColorId].class,
-                            "source"   : Template.data.tonerColors[tonerColorId].image,
                             "colorName": Template.data.tonerColors[tonerColorId].name
                         });
                         grid.setRowData(currentRowId, currentRow);

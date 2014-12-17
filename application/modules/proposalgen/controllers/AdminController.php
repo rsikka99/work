@@ -466,7 +466,7 @@ class Proposalgen_AdminController extends Action
                 $start  = $limit * $page - $limit;
                 $select = $db->select();
                 $select->from(array(
-                        't' => 'toners'), array('id AS toners_id', 'sku', 'yield', 'cost')
+                    't' => 'toners'), array('id AS toners_id', 'sku', 'yield', 'cost')
                 );
                 $select->joinLeft(array(
                     'tc' => 'toner_colors'
@@ -913,7 +913,7 @@ class Proposalgen_AdminController extends Action
                 'yield AS toner_yield',
                 'cost AS toner_price',
                 '(null) AS is_added',
-                'GROUP_CONCAT(CONCAT(mdm.fullname," ",md.modelName) SEPARATOR "; ") AS device_list'
+                'device_list' => new Zend_Db_Expr("GROUP_CONCAT(CONCAT(mdm.fullname, ' ', md.modelName) SEPARATOR '; ')")
             );
         }
         $formData = new stdClass();
@@ -956,7 +956,7 @@ class Proposalgen_AdminController extends Action
 
             if ($where_compatible)
             {
-                $select->where("CONCAT(mdm.fullname,' ',md.modelName) LIKE '%" . $where_compatible . "%'");
+                $select->where("CONCAT(mdm.fullname, ' ', md.modelName) LIKE '%" . $where_compatible . "%'");
             }
 
             $select->group('t.id');
