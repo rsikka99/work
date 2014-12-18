@@ -14,4 +14,6 @@ define(function ()
         costPerPage  : '$0.0000',
         currency     : '$,0.00'
     };
+
+    return Settings;
 });

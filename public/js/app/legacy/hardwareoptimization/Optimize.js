@@ -1,4 +1,13 @@
-require(['jquery', 'jqgrid', 'select2', 'bootstrap', 'bootstrap.modal.manager'], function ($)
+require([
+    'jquery',
+    'app/Utility',
+    'app/Settings',
+    'numeral',
+    'jqgrid',
+    'select2',
+    'bootstrap',
+    'bootstrap.modal.manager'
+], function ($, Utility, Settings, numeral)
 {
     $(function ()
     {
@@ -105,7 +114,7 @@ require(['jquery', 'jqgrid', 'select2', 'bootstrap', 'bootstrap.modal.manager'],
             onCellSelect: function (rowid, iCol, cellcontent, e)
             {
                 var grid = $(this);
-                var nameColumn = getColumnSrcIndexByName(grid, 'info');
+                var nameColumn = Utility.getColumnSrcIndexByName(grid, 'info');
 
                 if (iCol == nameColumn)
                 {
@@ -419,7 +428,7 @@ require(['jquery', 'jqgrid', 'select2', 'bootstrap', 'bootstrap.modal.manager'],
                             var summaryTableElements = [$monochromeCpp, $monochromePageVolume, $colorCpp, $colorPageVolume, $totalCost, $totalRevenue, $marginDollar, $marginPercent];
                             clearSummaryTableClasses(summaryTableElements);
 
-                            var costDeltaColumnIndex = getColumnSrcIndexByName($replacementDeviceTable, 'costDelta');
+                            var costDeltaColumnIndex = Utility.getColumnSrcIndexByName($replacementDeviceTable, 'costDelta');
                             var costDeltaTr = $replacementDeviceTable[0].rows.namedItem(rowId);
                             var costDeltaTd = costDeltaTr.cells[costDeltaColumnIndex];
                             $(costDeltaTd).removeClass("positiveCostDelta negativeCostDelta");
@@ -440,36 +449,36 @@ require(['jquery', 'jqgrid', 'select2', 'bootstrap', 'bootstrap.modal.manager'],
                             $replacementDeviceTable.setCell(rowId, 'costDelta', data.costDelta, costDeltaClass);
 
                             // Update the calculation
-                            $monochromeCpp.html(numeral(data.summary.optimized.monochromeCpp).format(format.costPerPage));
+                            $monochromeCpp.html(numeral(data.summary.optimized.monochromeCpp).format(Settings.format.costPerPage));
                             $monochromeCpp.addClass(differenceClass(data.summary.current.monochromeCpp, data.summary.optimized.monochromeCpp, false));
 
-                            $monochromePageVolume.html(numeral(data.summary.optimized.monochromePageVolume).format(format.pageVolume));
+                            $monochromePageVolume.html(numeral(data.summary.optimized.monochromePageVolume).format(Settings.format.pageVolume));
                             $monochromePageVolume.addClass(differenceClass(data.summary.current.monochromePageVolume, data.summary.optimized.monochromePageVolume, false));
 
-                            $colorCpp.html(numeral(data.summary.optimized.colorCpp).format(format.costPerPage));
+                            $colorCpp.html(numeral(data.summary.optimized.colorCpp).format(Settings.format.costPerPage));
                             $colorCpp.addClass(differenceClass(data.summary.current.colorCpp, data.summary.optimized.colorCpp, false));
 
-                            $colorPageVolume.html(numeral(data.summary.optimized.colorPageVolume).format(format.pageVolume));
+                            $colorPageVolume.html(numeral(data.summary.optimized.colorPageVolume).format(Settings.format.pageVolume));
                             $colorPageVolume.addClass(differenceClass(data.summary.current.colorPageVolume, data.summary.optimized.colorPageVolume, true));
 
-                            $totalCost.html(numeral(data.summary.optimized.totalCost).format(format.currency));
+                            $totalCost.html(numeral(data.summary.optimized.totalCost).format(Settings.format.currency));
                             $totalCost.addClass(differenceClass(data.summary.current.totalCost, data.summary.optimized.totalCost, false));
 
-                            $totalRevenue.html(numeral(data.summary.optimized.totalRevenue).format(format.currency));
+                            $totalRevenue.html(numeral(data.summary.optimized.totalRevenue).format(Settings.format.currency));
                             $totalRevenue.addClass(differenceClass(data.summary.current.totalRevenue, data.summary.optimized.totalRevenue, true));
 
-                            $marginDollar.html(numeral(data.summary.optimized.marginDollar).format(format.currency));
+                            $marginDollar.html(numeral(data.summary.optimized.marginDollar).format(Settings.format.currency));
                             $marginDollar.addClass(differenceClass(data.summary.current.marginDollar, data.summary.optimized.marginDollar, true));
 
-                            $marginPercent.html(numeral(data.summary.optimized.marginPercent).format(format.marginPercent));
+                            $marginPercent.html(numeral(data.summary.optimized.marginPercent).format(Settings.format.marginPercent));
                             $marginPercent.addClass(differenceClass(data.summary.current.marginPercent, data.summary.optimized.marginPercent, true));
 
-                            $numberOfCostOptimizedDevices.html(numeral(data.deviceActionCount.replace).format(format.number));
-                            $numberOfColorOptimizedDevices.html(numeral(data.deviceActionCount.upgrade).format(format.number));
-                            $numberOfRetireDevices.html(numeral(data.deviceActionCount.retire).format(format.number));
-                            $numberOfDoNotRepairDevices.html(numeral(data.deviceActionCount.dnr).format(format.number));
-                            $numberOfKeepDevices.html(numeral(data.deviceActionCount.keep).format(format.number));
-                            $numberOfDevices.html(numeral(data.deviceActionCount.total).format(format.number));
+                            $numberOfCostOptimizedDevices.html(numeral(data.deviceActionCount.replace).format(Settings.format.number));
+                            $numberOfColorOptimizedDevices.html(numeral(data.deviceActionCount.upgrade).format(Settings.format.number));
+                            $numberOfRetireDevices.html(numeral(data.deviceActionCount.retire).format(Settings.format.number));
+                            $numberOfDoNotRepairDevices.html(numeral(data.deviceActionCount.dnr).format(Settings.format.number));
+                            $numberOfKeepDevices.html(numeral(data.deviceActionCount.keep).format(Settings.format.number));
+                            $numberOfDevices.html(numeral(data.deviceActionCount.total).format(Settings.format.number));
                         }
                         catch (e)
                         {
