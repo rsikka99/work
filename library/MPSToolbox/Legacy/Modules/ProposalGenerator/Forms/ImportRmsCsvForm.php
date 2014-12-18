@@ -81,8 +81,9 @@ class ImportRmsCsvForm extends Zend_Form
         ));
 
         $this->addElement('submit', 'goBack', array(
-            'label'  => '<i class="fa fa-fw fa-arrow-left"></i> Go Back',
-            'ignore' => true,
+            'label'          => '<i class="fa fa-fw fa-arrow-left"></i> Go Back',
+            'ignore'         => true,
+            'formnovalidate' => true,
         ));
     }
 
@@ -109,13 +110,6 @@ class ImportRmsCsvForm extends Zend_Form
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/fleet/upload-rms-csv.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/fleet/upload-rms-csv.phtml']]]);
     }
 }
