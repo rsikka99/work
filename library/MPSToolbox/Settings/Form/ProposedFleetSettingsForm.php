@@ -59,25 +59,25 @@ class ProposedFleetSettingsForm extends \Zend_Form
         ));
 
         $this->addElement('text', 'proposedDefaultMonochromeLaborCostPerPage', array(
-            'label'       => 'Monochrome Labor CPP',
+            'label'       => 'Monochrome Device Labor CPP',
             'description' => 'The default labor cost per page to apply to monochrome devices.',
             'required'    => true,
         ));
 
         $this->addElement('text', 'proposedDefaultMonochromePartsCostPerPage', array(
-            'label'       => 'Monochrome Parts CPP',
+            'label'       => 'Monochrome Device Parts CPP',
             'description' => 'The default parts cost per page to apply to monochrome devices.',
             'required'    => true,
         ));
 
         $this->addElement('text', 'proposedDefaultColorLaborCostPerPage', array(
-            'label'       => 'Color Labor CPP',
+            'label'       => 'Color Device Labor CPP',
             'description' => 'The default labor cost per page to apply to color devices.',
             'required'    => true,
         ));
 
         $this->addElement('text', 'proposedDefaultColorPartsCostPerPage', array(
-            'label'       => 'Color Parts CPP',
+            'label'       => 'Color Device Parts CPP',
             'description' => 'The default parts cost per page to apply to color devices.',
             'required'    => true,
         ));
