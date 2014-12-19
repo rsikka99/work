@@ -76,6 +76,6 @@
 <?= $this->headScript(); ?>
 <?= ($this->App()->useAnalytics && APPLICATION_ENV == 'production') ? $this->partial('google-analytics.phtml') : ""; ?>
 <?= ($this->App()->useChatTab && APPLICATION_ENV == 'production') ? $this->partial('zopim-chat.phtml') : ""; ?>
-<?= ($this->App()->useFeedbackTab && APPLICATION_ENV == 'production') ? $this->partial('zendesk-support.phtml') : ""; ?>
+<?= ($this->App()->useFeedbackTab && APPLICATION_ENV != 'production') ? $this->partial('zendesk-support.phtml') : ""; ?>
 </body>
 </html>
