@@ -36,6 +36,7 @@ require([
          * Enable dropdown menus
          */
         $('.dropdown-toggle').dropdown();
+
         $('.js-tooltip').tooltip({
             "html": true
         });

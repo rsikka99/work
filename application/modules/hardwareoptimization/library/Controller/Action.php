@@ -231,6 +231,7 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
                 $this->_hardwareOptimization->rmsUploadId  = $this->getSelectedUpload()->id;
 
                 HardwareOptimizationMapper::getInstance()->insert($this->_hardwareOptimization);
+                $this->getMpsSession()->hardwareOptimizationId = $this->_hardwareOptimization->id;
             }
         }
 
