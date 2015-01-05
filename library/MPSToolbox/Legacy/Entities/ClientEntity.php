@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
  * @property int               employeeCount
  *
  * @property RmsUploadEntity[] rmsUploads
+ * @property DealerEntity      dealer
  */
 class ClientEntity extends EloquentModel
 {
@@ -38,5 +39,13 @@ class ClientEntity extends EloquentModel
     public function rmsUploads ()
     {
         return $this->hasMany('\MPSToolbox\Legacy\Entities\RmsUploadEntity', 'clientId', 'id')->orderBy('uploadDate', 'desc');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function dealer ()
+    {
+        return $this->belongsTo('\MPSToolbox\Legacy\Entities\DealerEntity', 'dealerId', 'id');
     }
 }

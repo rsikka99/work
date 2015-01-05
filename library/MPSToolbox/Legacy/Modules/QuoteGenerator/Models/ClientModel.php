@@ -3,9 +3,11 @@
 namespace MPSToolbox\Legacy\Modules\QuoteGenerator\Models;
 
 use ArrayObject;
+use MPSToolbox\Legacy\Entities\DealerEntity;
 use MPSToolbox\Legacy\Entities\SurveyEntity;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\AddressMapper;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ContactMapper;
+use MPSToolbox\Legacy\Repositories\DealerRepository;
 use MPSToolbox\Settings\Entities\ClientSettingsEntity;
 use MPSToolbox\Settings\Service\ClientSettingsService;
 use My_Model_Abstract;
@@ -50,6 +52,11 @@ class ClientModel extends My_Model_Abstract
      * @var ClientSettingsEntity
      */
     protected $clientSettings;
+
+    /**
+     * @var DealerEntity
+     */
+    protected $dealer;
 
     /**
      * @var SurveyEntity
@@ -147,6 +154,21 @@ class ClientModel extends My_Model_Abstract
         }
 
         return $this->clientSettings;
+    }
+
+    /**
+     * Gets the dealer
+     *
+     * @return DealerEntity
+     */
+    public function getDealer ()
+    {
+        if (!isset($this->dealer))
+        {
+            $this->dealer = DealerRepository::find($this->dealerId);
+        }
+
+        return $this->dealer;
     }
 
     /**

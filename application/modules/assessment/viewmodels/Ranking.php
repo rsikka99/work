@@ -258,7 +258,7 @@ class Assessment_ViewModel_Ranking
 
             $rankingText = sprintf('%1$s Under this program we estimate that %2$s can save you up to $%3$s annually.',
                 $this->getOverallRankingText($totalRanking, "expense"),
-                $this->proposal->assessment->getClient()->companyName,
+                $this->proposal->assessment->getClient()->getDealer()->dealerName,
                 number_format($this->proposal->getPrintIQSavings(), 2)
             );
 
