@@ -61,6 +61,7 @@ $r->addRoute('rms-upload.excluded-list',              new R('rms-uploads/exclude
 //@formatter:off
 $r->addRoute('app.dashboard',                     new R('/',                                            array('module' => 'default', 'controller' => 'index', 'action' => 'index'             )));
 $r->addRoute('app.dashboard.change-client',       new R('/clients/change',                              array('module' => 'default', 'controller' => 'index', 'action' => 'change-client'     )));
+$r->addRoute('app.dashboard.new-client',          new R('/clients/new',                                 array('module' => 'default', 'controller' => 'index', 'action' => 'create-client'    )));
 $r->addRoute('app.dashboard.change-upload',       new R('/rms-uploads/change',                          array('module' => 'default', 'controller' => 'index', 'action' => 'change-upload'     )));
 $r->addRoute('app.dashboard.delete-rms-upload',   new R('/rms-uploads/delete/:rmsUploadId',             array('module' => 'default', 'controller' => 'index', 'action' => 'delete-rms-upload' )));
 $r->addRoute('app.dashboard.select-client',       new R('/select-client',                               array('module' => 'default', 'controller' => 'index', 'action' => 'select-client'     )));

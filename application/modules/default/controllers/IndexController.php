@@ -557,7 +557,7 @@ class Default_IndexController extends Action
             $values = $this->getRequest()->getPost();
             if (isset($values ['Cancel']))
             {
-                $this->redirectToRoute('company.clients');
+                $this->redirectToRoute('app.dashboard');
             }
 
             // Create Client
@@ -586,7 +586,7 @@ class Default_IndexController extends Action
                 $this->getMpsSession()->selectedClientId = $clientId;
 
                 // Redirect with client id so that the client is preselected
-                $this->redirectToRoute('company.clients');
+                $this->redirectToRoute('app.dashboard');
             }
         }
 
