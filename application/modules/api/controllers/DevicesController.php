@@ -48,7 +48,7 @@ class Api_DevicesController extends Action
 
             if ($page > 1)
             {
-                $query->offset($pageLimit * $page);
+                $query->offset($pageLimit * ($page - 1));
             }
 
             $this->sendJson([
@@ -85,7 +85,7 @@ class Api_DevicesController extends Action
         ));
 
         $gridRequest  = new \Tangent\Grid\Request\JqGridRequest($postData, $columnFactory);
-        $gridResponse = new \Tangent\Grid\Response\JqGridResponse();
+        $gridResponse = new \Tangent\Grid\Response\JqGridResponse($gridRequest);
 
         $masterDeviceMapper = MasterDeviceMapper::getInstance();
         $dataAdapter        = new \MPSToolbox\Grid\DataAdapter\MasterDeviceDataAdapter($masterDeviceMapper, $filterCanSell);

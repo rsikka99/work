@@ -41,6 +41,11 @@ class DataTableRequest implements RequestInterface
     protected $columnFactory;
 
     /**
+     * @var int
+     */
+    protected $requestIdentifier;
+
+    /**
      * @param array         $data
      * @param ColumnFactory $columnFactory
      * @param int           $page
@@ -142,5 +147,32 @@ class DataTableRequest implements RequestInterface
         }
 
 
+        /**
+         * Draw
+         */
+        if (isset($data->draw) && !is_null($data->draw))
+        {
+            $this->setRequestIdentifier($data->draw);
+        }
+    }
+
+    /**
+     * Getter for requestIdentifier
+     *
+     * @return int
+     */
+    public function getRequestIdentifier ()
+    {
+        return $this->requestIdentifier;
+    }
+
+    /**
+     * Setter for requestIdentifier
+     *
+     * @param int $requestIdentifier
+     */
+    public function setRequestIdentifier ($requestIdentifier)
+    {
+        $this->requestIdentifier = (int)$requestIdentifier;
     }
 }

@@ -57,7 +57,7 @@ class Quotegen_DevicesetupController extends Action
         ));
 
         $gridRequest        = new \Tangent\Grid\Request\JqGridRequest($postData, $columnFactory);
-        $gridResponse       = new \Tangent\Grid\Response\JqGridResponse();
+        $gridResponse       = new \Tangent\Grid\Response\JqGridResponse($gridRequest);
         $masterDeviceMapper = MasterDeviceMapper::getInstance();
         $dataAdapter        = new \MPSToolbox\Grid\DataAdapter\MasterDeviceDataAdapter($masterDeviceMapper, $filterCanSell);
 

@@ -16,9 +16,10 @@ class Api_ClientController extends Action
      */
     public function indexAction ()
     {
-        $clientId     = $this->getParam('clientId', false);
-        $dealerId     = $this->getIdentity()->dealerId;
-        $userId       = $this->getIdentity()->id;
+        $clientId  = $this->getParam('clientId', false);
+        $requester = trim($this->getParam('requester', ''));
+        $dealerId  = $this->getIdentity()->dealerId;
+        $userId    = $this->getIdentity()->id;
 
         if ($clientId !== false)
         {
@@ -36,7 +37,7 @@ class Api_ClientController extends Action
             }
         }
 
-        if ("gridview")
+        if (strcasecmp($requester, "dataTables") === 0)
         {
             $searchParams = $this->_getParam('search', null);
 
@@ -71,22 +72,6 @@ class Api_ClientController extends Action
             $gridService = new \Tangent\Grid\Grid($gridRequest, $gridResponse, $dataAdapter);
             $this->sendJson($gridService->getGridResponseAsArray());
         }
-
-        if ($clientId !== false)
-        {
-
-            $clientId = $this->getParam('clientId', false);
-            $client   = ClientEntity::where('dealerId', '=', $dealerId)->where('id', '=', $clientId)->first();
-            if ($client instanceof ClientEntity)
-            {
-                $this->sendJson($client->toArray());
-            }
-            else
-            {
-                $this->getResponse()->setHttpResponseCode(404);
-                $this->sendJson(['message' => 'A client with that id could not be found']);
-            }
-        }
         else
         {
             $searchTerm = $this->getParam('q', false);
@@ -106,7 +91,7 @@ class Api_ClientController extends Action
 
             if ($page > 1)
             {
-                $query->offset($pageLimit * $page);
+                $query->offset($pageLimit * ($page - 1));
             }
 
             $this->sendJson([

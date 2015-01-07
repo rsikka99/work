@@ -43,12 +43,7 @@ abstract class AbstractResponse implements ResponseInterface
      */
     protected $errorMessage;
 
-    /**
-     * @var string
-     */
-    protected $requestIdentifier = 0;
-
-    public function __construct(RequestInterface $request)
+    public function __construct (RequestInterface $request)
     {
         $this->request = $request;
     }
@@ -279,30 +274,4 @@ abstract class AbstractResponse implements ResponseInterface
             return 0;
         }
     }
-
-    /**
-     * Getter for requestIdentifier
-     *
-     * @return string
-     */
-    public function getRequestIdentifier ()
-    {
-        return $this->requestIdentifier;
-    }
-
-    /**
-     * Sets the request identifier
-     *
-     * @param mixed $identifier
-     *
-     * @return $this
-     */
-    public function setRequestIdentifier ($identifier)
-    {
-        $this->requestIdentifier = $identifier;
-
-        return $this;
-    }
-
-
 }

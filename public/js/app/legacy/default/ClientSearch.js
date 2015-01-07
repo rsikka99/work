@@ -65,7 +65,10 @@ require([
                 ]
             },
             "ajax"      : {
-                "url": "/api/v1/clients"
+                "url": "/api/v1/clients",
+                "data": {
+                    "requester": "dataTables"
+                }
             },
             "columns"   : [
                 {"data": "companyName"},
