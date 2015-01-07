@@ -93,14 +93,7 @@ abstract class AbstractResponse implements ResponseInterface
      */
     public function setData ($data)
     {
-        if (is_array($data))
-        {
-            $this->data = $data;
-        }
-        else
-        {
-            throw new \InvalidArgumentException('$data must be an array!');
-        }
+        $this->data = $data;
 
         return $this;
     }
