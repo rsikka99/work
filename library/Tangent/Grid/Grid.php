@@ -89,7 +89,7 @@ class Grid
     {
         $this->response->setTotalRecords($this->dataAdapter->countWithoutFilter());
         $this->response->setTotalFilteredRecords($this->dataAdapter->count());
-        $this->response->setData($this->dataAdapter->fetchAll());
+        $this->response->setData($this->dataAdapter->fetchAll()->toArray());
 
         return $this->response->getResponseForGrid();
     }

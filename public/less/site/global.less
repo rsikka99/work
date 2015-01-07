@@ -3,8 +3,8 @@ html {
 }
 
 body {
-    padding-bottom   : 75px;
-    background-color : #05192a;
+    padding-top    : 45px;
+    padding-bottom : 68px;
 }
 
 #meat {
@@ -31,8 +31,8 @@ body {
     background : #000000;
     .opacity(0.9);
     position   : absolute;
-    top        : 0px;
-    left       : 0px;
+    top        : 0;
+    left       : 0;
     min-width  : 100%;
     min-height : 100%;
     z-index    : 49;
@@ -70,14 +70,25 @@ body {
     padding-bottom : 25px;
 
     @media (min-width : @screen-md-min) {
-        min-height    : 700px;
+        min-height : 700px;
     }
 }
 
-#page-footer {
-    min-height  : 200px;
-    color       : #aaa;
-    padding-top : 20px;
+.page-footer {
+    background-color : #05192a;
+    height           : 68px;
+}
+
+.page-copyright-background {
+    background-color : #05192a;
+    height           : 34px;
+    width            : 100%;
+    position         : fixed;
+    bottom           : 0;
+    left             : 0;
+    opacity          : 0.85;
+    color            : #aaa;
+    padding-top      : 5px;
     a {
         color : #aaa;
     }
@@ -92,4 +103,16 @@ body {
             color            : #fff;
         }
     }
+}
+
+.page-copyright {
+    height      : 34px;
+    padding-top : 5px;
+    width       : 100%;
+    position    : fixed;
+    bottom      : 0;
+    left        : 0;
+    font-size   : 9px;
+    .text-muted;
+    text-align  : center;
 }

@@ -2,6 +2,7 @@
 
 namespace Tangent\Grid\DataAdapter;
 
+use Tangent\Grid\Filter\AbstractFilter;
 use Tangent\Grid\Order\Column;
 
 /**
@@ -16,11 +17,11 @@ interface DataAdapterInterface
     /**
      * Adds a filter
      *
-     * @param $filter
+     * @param AbstractFilter $filter
      *
      * @return $this
      */
-    public function addFilter ($filter);
+    public function addFilter (AbstractFilter $filter);
 
     /**
      * Adds an order by

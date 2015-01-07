@@ -67,7 +67,7 @@ class TonerDataAdapter implements DataAdapterInterface
      *
      * @return $this
      */
-    public function addFilter ($filter)
+    public function addFilter (AbstractFilter $filter)
     {
         $this->filters[] = $filter;
     }

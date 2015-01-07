@@ -4,6 +4,7 @@ namespace Tangent\Grid\Response;
 
 use Tangent\Grid\Order\Column;
 use Tangent\Grid\Order\ColumnFactory;
+use Tangent\Grid\Request\RequestInterface;
 
 /**
  * Class AbstractResponse
@@ -46,6 +47,11 @@ abstract class AbstractResponse implements ResponseInterface
      * @var string
      */
     protected $requestIdentifier = 0;
+
+    public function __construct(RequestInterface $request)
+    {
+        $this->request = $request;
+    }
 
     /**
      * Returns an array that can be JSONified and sent back to the client
@@ -273,4 +279,30 @@ abstract class AbstractResponse implements ResponseInterface
             return 0;
         }
     }
+
+    /**
+     * Getter for requestIdentifier
+     *
+     * @return string
+     */
+    public function getRequestIdentifier ()
+    {
+        return $this->requestIdentifier;
+    }
+
+    /**
+     * Sets the request identifier
+     *
+     * @param mixed $identifier
+     *
+     * @return $this
+     */
+    public function setRequestIdentifier ($identifier)
+    {
+        $this->requestIdentifier = $identifier;
+
+        return $this;
+    }
+
+
 }

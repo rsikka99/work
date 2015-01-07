@@ -20,7 +20,6 @@ $r->addRoute('auth.login.reset-password',  new R('login/reset-password',  array(
 // ***** Home Menu Routes *********************************************************************************************************************************** //
 
 
-
 /**
  * Client Routes
  */
@@ -264,6 +263,11 @@ $r->addRoute('api.manufacturers.delete', new R('api/v1/manufacturers/:manufactur
 $r->addRoute('api.manufacturers.save',   new R('api/v1/manufacturers/:manufacturerId/save',   array('module' => 'api', 'controller' => 'manufacturers', 'action' => 'update')));
 
 
+//@formatter:on
+
+// API for clients
+//@formatter:off
+$r->addRoute('api.clients',           new R('api/v1/clients/:clientId', array('module' => 'api', 'controller' => 'client', 'action' => 'index', 'clientId' => false)));
 //@formatter:on
 
 // API for countries

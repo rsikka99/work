@@ -45,28 +45,11 @@
 <!-- End of main container -->
 
 <!-- Footer -->
-<footer id="page-footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3 col-sm-6">
-                <p>Need help? Have a question? Contact us at <?= sprintf('<a href="mailto:%1$s?subject=Support Request">%1$s</a>', $this->App()->supportEmail) ?>.</p>
-            </div>
-            <div class="col-md-3 col-sm-6"></div>
-            <div class="col-md-3 col-sm-6"></div>
-            <div class="col-md-3 col-sm-6" id="footerLinks">
-                <?= $this->Footermenu('nav nav-pills'); ?>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-sm-12">
-                <p class="text-right">Copyright <?= $this->App()->copyright; ?> &copy; <?= date("Y"); ?>. All Rights Reserved.</p>
-            </div>
-        </div>
-        <!-- /Footer -->
-    </div>
-</footer>
 
+<div class="page-copyright-background"></div>
+<div class="page-copyright">
+    Copyright <?= $this->App()->copyright; ?> &copy; <?= date("Y"); ?>. All Rights Reserved.
+</div>
 <?= $this->partial('partials/php-errors.phtml', array('exceptions' => $this->exceptions, 'request' => $this->request)) ?>
 
 <script type="text/javascript">
@@ -76,6 +59,6 @@
 <?= $this->headScript(); ?>
 <?= ($this->App()->useAnalytics && APPLICATION_ENV == 'production') ? $this->partial('google-analytics.phtml') : ""; ?>
 <?= ($this->App()->useChatTab && APPLICATION_ENV == 'production') ? $this->partial('zopim-chat.phtml') : ""; ?>
-<?= ($this->App()->useFeedbackTab && APPLICATION_ENV == 'production') ? $this->partial('zendesk-support.phtml') : ""; ?>
+<?= ($this->App()->useFeedbackTab) ? $this->partial('zendesk-support.phtml') : ""; ?>
 </body>
 </html>

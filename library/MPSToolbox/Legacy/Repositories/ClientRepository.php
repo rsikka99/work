@@ -24,6 +24,37 @@ class ClientRepository
     }
 
     /**
+     * Gets the query for clients that belong to a dealer
+     *
+     * @param int $dealerId
+     *
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public static function forDealer ($dealerId)
+    {
+        return ClientEntity::where('dealerId', '=', $dealerId);
+    }
+
+    /**
+     * Gets the query for clients that belong to a dealer with the last seen date for a specific user id
+     *
+     * @param int $dealerId
+     * @param int $userId
+     *
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public static function forDealerWithLastSeen ($dealerId, $userId)
+    {
+        $query = static::forDealer($dealerId);
+
+        return $query->leftJoin('user_viewed_clients AS uvc', function ($join) use ($userId)
+        {
+            $join->on('uvc.clientId', '=', 'clients.id')
+                 ->where('uvc.userId', '=', $userId);
+        });
+    }
+
+    /**
      * Finds a client by id
      *
      * @param int $clientId

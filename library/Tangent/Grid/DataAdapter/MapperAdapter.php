@@ -1,6 +1,8 @@
 <?php
 
 namespace Tangent\Grid\DataAdapter;
+use Tangent\Grid\Filter\AbstractFilter;
+use Tangent\Grid\Order\Column;
 
 /**
  * Interface MapperAdapter
@@ -32,11 +34,11 @@ class MapperAdapter implements DataAdapterInterface
     /**
      * Adds a filter
      *
-     * @param $filter
+     * @param AbstractFilter $filter
      *
      * @return $this
      */
-    public function addFilter ($filter)
+    public function addFilter (AbstractFilter $filter)
     {
         // TODO: Implement addFilter() method.
         throw new \BadMethodCallException('Method not implemented yet.');
@@ -45,11 +47,11 @@ class MapperAdapter implements DataAdapterInterface
     /**
      * Adds an order by
      *
-     * @param $orderBy
+     * @param Column $orderBy
      *
      * @return $this
      */
-    public function addOrderBy ($orderBy)
+    public function addOrderBy (Column $orderBy)
     {
         // TODO: Implement addOrderBy() method.
         throw new \BadMethodCallException('Method not implemented yet.');

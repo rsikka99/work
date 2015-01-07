@@ -1,64 +1,26 @@
 <div class="container">
-    <div class="row">
-        <div class="col-lg-4">
-            <!-- Recently viewed clients -->
-            <div class="panel panel-primary">
-                <div class="panel-heading">Recently Viewed Clients</div>
-                <div class="panel-body">
-                    <?php /* @var $user \MPSToolbox\Legacy\Entities\UserEntity */ ?>
-                    <?php $user = \MPSToolbox\Legacy\Entities\UserEntity::with('recentlyViewedClients')->find($this->userId); ?>
-                    <?php if (count($user->recentlyViewedClients) > 0) : ?>
-                        <form method="POST">
-                            <table class="table table-condensed table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Date Viewed</th>
-                                    <th>Name</th>
-                                    <th style="width: 80px;"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php foreach ($user->recentlyViewedClients as $client) : ?>
-                                    <tr class="<?= (isset($this->selectedClientId) && $client->id == $this->selectedClientId) ? "info" : ""; ?>">
-                                        <td>
-                                            <i class="fa fa-fw fa-clock-o js-tooltip btn-link" title="<?= $client->pivot->dateViewed ?>"></i> <?= \Carbon\Carbon::parse($client->pivot->dateViewed)->diffForHumans(); ?>
-                                        </td>
-                                        <td><?= mb_strimwidth($client->companyName, 0, 20, '...') ?></td>
-                                        <td>
-                                            <button class="btn btn-primary btn-xs btn-block" name="selectClient" value="<?= $client->id; ?>">Select</button>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </form>
-                    <?php else : ?>
-                        <p>You haven't viewed any clients in the last month.</p>
-                    <?php endif; ?>
-                </div>
-            </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+        <a class="btn btn-success btn-xs pull-right" href="/clients/create-new"><i class="fa fa-fw fa-plus-circle"></i> Create new</a>
+            Client List
         </div>
-        <div class="col-lg-8">
-
-            <!-- Search for client -->
-            <div class="panel panel-primary">
-                <div class="panel-heading">Search for client
-                </div>
-                <div class="panel-body">
-                    <div class="btn-group pull-right btn-group-xs">
-                        <a class="btn btn-primary" title="View Client List" href="<?= $this->url(array(), 'clients'); ?>"><i class="glyphicon glyphicon-list"></i>
-                            List</a>
-                        <a class="btn btn-success" href="<?= $this->url(array(), 'clients.create-clients-dashboard') ?>"><i class="glyphicon glyphicon-plus"></i>
-                            New</a>
-                    </div>
-                </div>
-                <div class="panel-body">
-                    <form id="searchForClientForm" method="POST">
-                        <input type="text" id="searchClientByName" placeholder="Enter name to search..." data-link="<?= $this->url(array("action" => "search-for-client", "controller" => "index", "module" => "default")); ?>" autocomplete="off" class="form-control">
-                        <input type="hidden" name="selectClient" id="hiddenSelectClientId" />
-                    </form>
-                </div>
-            </div>
+        <div class="panel-body">
+            <form method="POST">
+                <div class="table-responsive">
+                    <table id="js-select-client-table" class="table table-bordered table-condensed responsive js-select-client-table">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Employees</th>
+                            <th>Last Viewed</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+            </form>
         </div>
     </div>
+</div>
 </div>
