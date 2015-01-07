@@ -163,8 +163,10 @@ $form = $this->element;
 
             <fieldset>
                 <hr>
-                <?= $this->RenderFormSubmit($form->getElement('Save'), array('btn', 'btn-primary')) ?>
-                <?= $this->RenderFormSubmit($form->getElement('Cancel'), array('btn', 'btn-default')) ?>
+                <ul class="pager">
+                    <li><?= $this->RenderFormSubmit($form->getElement('Save'), array('btn', 'btn-primary')) ?></li>
+                    <li><?= $this->RenderFormSubmit($form->getElement('Cancel'), array('btn', 'btn-default')) ?></li>
+                </ul>
             </fieldset>
         </div>
     </div>

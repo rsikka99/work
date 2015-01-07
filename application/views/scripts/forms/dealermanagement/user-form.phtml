@@ -5,13 +5,13 @@ use MPSToolbox\Legacy\Modules\DealerManagement\Forms\UserForm;
 $form = $this->element;
 ?>
 
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
 <fieldset>
     <legend>User Details</legend>
     <div class="form-group <?= ($form->getElement('firstname')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('firstname'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('firstname'), ['col-sm-4']) ?>
 
-        <div class="col-sm-6 col-md-5 col-lg-4">
+        <div class="col-sm-8">
             <?= $this->RenderFormText($form->getElement('firstname')) ?>
             <?= $this->RenderFormDescription($form->getElement('firstname')) ?>
             <?= $this->RenderFormElementErrors($form->getElement('firstname')) ?>
@@ -19,9 +19,9 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('lastname')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('lastname'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('lastname'), ['col-sm-4']) ?>
 
-        <div class="col-sm-6 col-md-5 col-lg-4">
+        <div class="col-sm-8">
             <?= $this->RenderFormText($form->getElement('lastname')) ?>
             <?= $this->RenderFormDescription($form->getElement('lastname')) ?>
             <?= $this->RenderFormElementErrors($form->getElement('lastname')) ?>
@@ -29,9 +29,9 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('email')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('email'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('email'), ['col-sm-4']) ?>
 
-        <div class="col-sm-6 col-md-5 col-lg-4">
+        <div class="col-sm-8">
             <?= $this->RenderFormText($form->getElement('email')) ?>
             <?= $this->RenderFormDescription($form->getElement('email')) ?>
             <?= $this->RenderFormElementErrors($form->getElement('email')) ?>
@@ -40,9 +40,9 @@ $form = $this->element;
 
     <?php if ($form->getElement('userRoles') instanceof Zend_Form_Element) : ?>
         <div class="form-group <?= ($form->getElement('userRoles')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('userRoles'), array('col-sm-3')) ?>
+            <?= $this->RenderFormLabel($form->getElement('userRoles'), ['col-sm-4']) ?>
 
-            <div class="col-sm-6 col-md-5 col-lg-4">
+            <div class="col-sm-8">
                 <?= $this->RenderFormCheckbox($form->getElement('userRoles')) ?>
                 <?= $this->RenderFormDescription($form->getElement('userRoles')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('userRoles')) ?>
@@ -52,9 +52,9 @@ $form = $this->element;
 
     <?php if ($form->getElement('dealerId') instanceof Zend_Form_Element) : ?>
         <div class="form-group <?= ($form->getElement('dealerId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('dealerId'), array('col-sm-3')) ?>
+            <?= $this->RenderFormLabel($form->getElement('dealerId'), ['col-sm-4']) ?>
 
-            <div class="col-sm-6 col-md-5 col-lg-4">
+            <div class="col-sm-8">
                 <?= $this->RenderFormSelect($form->getElement('dealerId')) ?>
                 <?= $this->RenderFormDescription($form->getElement('dealerId')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('dealerId')) ?>
@@ -68,9 +68,9 @@ $form = $this->element;
     <legend>Authentication</legend>
     <?php if ($form->getElement('loginAttempts') instanceof Zend_Form_Element) : ?>
         <div class="form-group <?= ($form->getElement('loginAttempts')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('loginAttempts'), array('col-sm-3')) ?>
+            <?= $this->RenderFormLabel($form->getElement('loginAttempts'), ['col-sm-4']) ?>
 
-            <div class="col-sm-6 col-md-5 col-lg-4">
+            <div class="col-sm-8">
                 <?= $this->RenderFormText($form->getElement('loginAttempts')) ?>
                 <?= $this->RenderFormDescription($form->getElement('loginAttempts')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('loginAttempts')) ?>
@@ -81,7 +81,7 @@ $form = $this->element;
     <?php if ($form->getElement('resetLoginAttempts') instanceof Zend_Form_Element) : ?>
         <div class="form-group <?= ($form->getElement('resetLoginAttempts')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
 
-            <div class="col-sm-6 col-md-5 col-lg-4 col-sm-offset-3">
+            <div class="col-sm-8 col-sm-offset-4">
                 <?= $this->RenderFormCheckbox($form->getElement('resetLoginAttempts')) ?>
                 <?= $this->RenderFormDescription($form->getElement('resetLoginAttempts')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('resetLoginAttempts')) ?>
@@ -91,9 +91,9 @@ $form = $this->element;
 
     <?php if ($form->getElement('frozenUntil') instanceof Zend_Form_Element) : ?>
         <div class="form-group <?= ($form->getElement('frozenUntil')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('frozenUntil'), array('col-sm-3')) ?>
+            <?= $this->RenderFormLabel($form->getElement('frozenUntil'), ['col-sm-4']) ?>
 
-            <div class="col-sm-6 col-md-5 col-lg-4">
+            <div class="col-sm-8">
                 <?= $this->RenderFormDateTimePicker($form->getElement('frozenUntil')) ?>
                 <?= $this->RenderFormDescription($form->getElement('frozenUntil')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('frozenUntil')) ?>
@@ -104,7 +104,7 @@ $form = $this->element;
     <?php if ($form->getElement('locked') instanceof Zend_Form_Element) : ?>
         <div class="form-group <?= ($form->getElement('locked')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
 
-            <div class="col-sm-6 col-md-5 col-lg-4 col-sm-offset-3">
+            <div class="col-sm-8 col-sm-offset-4">
                 <?= $this->RenderFormCheckbox($form->getElement('locked')) ?>
                 <?= $this->RenderFormDescription($form->getElement('locked')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('locked')) ?>
@@ -115,7 +115,7 @@ $form = $this->element;
     <?php if ($form->getElement('reset_password') instanceof Zend_Form_Element) : ?>
         <div class="form-group <?= ($form->getElement('reset_password')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
 
-            <div class="col-sm-6 col-md-5 col-lg-4 col-sm-offset-3">
+            <div class="col-sm-8 col-sm-offset-4">
                 <?= $this->RenderFormCheckbox($form->getElement('reset_password')) ?>
                 <?= $this->RenderFormDescription($form->getElement('reset_password')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('reset_password')) ?>
@@ -125,9 +125,9 @@ $form = $this->element;
 
     <?php if ($form->getElement('password') instanceof Zend_Form_Element) : ?>
         <div class="form-group <?= ($form->getElement('password')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('password'), array('col-sm-3')) ?>
+            <?= $this->RenderFormLabel($form->getElement('password'), ['col-sm-4']) ?>
 
-            <div class="col-sm-6 col-md-5 col-lg-4">
+            <div class="col-sm-8">
                 <?= $this->RenderFormPassword($form->getElement('password')) ?>
                 <?= $this->RenderFormDescription($form->getElement('password')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('password')) ?>
@@ -137,9 +137,9 @@ $form = $this->element;
 
     <?php if ($form->getElement('password_confirm') instanceof Zend_Form_Element) : ?>
         <div class="form-group <?= ($form->getElement('password_confirm')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('password_confirm'), array('col-sm-3')) ?>
+            <?= $this->RenderFormLabel($form->getElement('password_confirm'), ['col-sm-4']) ?>
 
-            <div class="col-sm-6 col-md-5 col-lg-4">
+            <div class="col-sm-8">
                 <?= $this->RenderFormPassword($form->getElement('password_confirm')) ?>
                 <?= $this->RenderFormDescription($form->getElement('password_confirm')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('password_confirm')) ?>
@@ -150,7 +150,7 @@ $form = $this->element;
     <?php if ($form->getElement('send_email') instanceof Zend_Form_Element) : ?>
         <div class="form-group <?= ($form->getElement('send_email')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
 
-            <div class="col-sm-6 col-sm-offset-3 col-md-5 col-lg-4">
+            <div class="col-sm-6 col-sm-offset-4">
                 <?= $this->RenderFormCheckbox($form->getElement('send_email')) ?>
                 <?= $this->RenderFormDescription($form->getElement('send_email')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('send_email')) ?>
@@ -161,7 +161,7 @@ $form = $this->element;
     <?php if ($form->getElement('resetPasswordOnNextLogin') instanceof Zend_Form_Element) : ?>
         <div class="form-group <?= ($form->getElement('resetPasswordOnNextLogin')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
 
-            <div class="col-sm-6 col-md-5 col-lg-4 col-sm-offset-3">
+            <div class="col-sm-8 col-sm-offset-4">
                 <?= $this->RenderFormCheckbox($form->getElement('resetPasswordOnNextLogin')) ?>
                 <?= $this->RenderFormDescription($form->getElement('resetPasswordOnNextLogin')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('resetPasswordOnNextLogin')) ?>
@@ -172,7 +172,11 @@ $form = $this->element;
 
 <fieldset>
     <hr>
-    <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
-    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+    <div class="form-group">
+        <div class="col-sm-8 col-sm-offset-4">
+            <?= $this->RenderFormSubmit($form->getElement('submit'), ['btn', 'btn-primary']) ?>
+            <?= $this->RenderFormSubmit($form->getElement('cancel'), ['btn', 'btn-default']) ?>
+        </div>
+    </div>
 </fieldset>
 <?= $this->RenderFormClose($form) ?>
