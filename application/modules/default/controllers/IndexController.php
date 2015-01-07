@@ -112,6 +112,7 @@ class Default_IndexController extends Action
         $uploadService = new RmsUploadService($this->getIdentity()->id, $this->getIdentity()->dealerId, $this->getSelectedClient()->id);
 
         $form = $uploadService->getForm();
+        $form->removeElement('goBack');
 
         $form->setAction($this->view->url([], 'rms-upload.upload-file'));
 

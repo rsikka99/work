@@ -25,11 +25,15 @@ $form = $this->element;
     </fieldset>
 
     <ul class="pager">
-        <li class="next">
-            <?= $this->RenderFormSubmit($form->getElement('performUpload'), array('btn', 'btn-primary')) ?>
-        </li>
-        <li class="previous">
-            <?= $this->RenderFormSubmit($form->getElement('goBack'), array('btn', 'btn-default')) ?>
-        </li>
+        <?php if ($form->getElement('performUpload') instanceof Zend_Form_Element) : ?>
+            <li class="next">
+                <?= $this->RenderFormSubmit($form->getElement('performUpload'), array('btn', 'btn-primary')) ?>
+            </li>
+        <?php endif ?>
+        <?php if ($form->getElement('goBack') instanceof Zend_Form_Element) : ?>
+            <li class="previous">
+                <?= $this->RenderFormSubmit($form->getElement('goBack'), array('btn', 'btn-default')) ?>
+            </li>
+        <?php endif ?>
     </ul>
 <?= $this->RenderFormClose($form) ?>
