@@ -1,6 +1,7 @@
 <?php
 
 use MPSToolbox\Legacy\Entities\CountryEntity;
+use MPSToolbox\Legacy\Repositories\CountryRepository;
 use Tangent\Controller\Action;
 
 /**
@@ -30,7 +31,7 @@ class Api_CountryController extends Action
             $pageLimit  = $this->getParam('page_limit', 10);
             $page       = $this->getParam('page', 1);
 
-            $query = CountryEntity::orderBy('name')->limit($pageLimit);
+            $query = CountryRepository::getQuery();
 
 
             if (strlen($searchTerm) > 0)
@@ -42,12 +43,12 @@ class Api_CountryController extends Action
 
             if ($page > 1)
             {
-                $query->offset($pageLimit * $page);
+                $query->skip($pageLimit * ($page - 1));
             }
 
             $this->sendJson([
                 'total'     => $count,
-                'countries' => $query->get()->toArray(),
+                'countries' => $query->limit($pageLimit)->get()->toArray(),
             ]);
         }
     }
