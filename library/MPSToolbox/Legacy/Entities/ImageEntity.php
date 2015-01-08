@@ -20,5 +20,5 @@ class ImageEntity extends EloquentModel
      * @var string
      */
     protected $table      = 'images';
-    protected $timestamps = false;
+    public $timestamps = false;
 }

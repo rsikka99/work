@@ -25,7 +25,7 @@ class DealerEntity extends EloquentModel
      * @var string
      */
     protected $table      = 'dealers';
-    protected $timestamps = false;
+    public $timestamps = false;
 
     /**
      * Additional date fields that should be mutated
