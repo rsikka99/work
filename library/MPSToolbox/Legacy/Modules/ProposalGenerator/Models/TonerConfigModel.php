@@ -76,7 +76,7 @@ class TonerConfigModel extends My_Model_Abstract
     {
         $tonerColors = array();
         // Get the colors, default to black as a last resort
-        switch ($tonerConfigId)
+        switch ((int)$tonerConfigId)
         {
 
             case self::BLACK_ONLY :

@@ -959,7 +959,6 @@ class MasterDeviceModel extends My_Model_Abstract
                 }
             }
 
-            $tonerList       = implode(',', $tonerList);
             $tonerValidation = $masterDeviceService->validateToners($tonerList, $this->tonerConfigId, $this->manufacturerId);
 
             $this->_hasValidToners[$cacheKey] = ($tonerValidation === true);
