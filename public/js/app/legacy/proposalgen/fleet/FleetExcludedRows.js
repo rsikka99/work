@@ -32,7 +32,7 @@ require(['jquery', 'jqgrid'], function ($)
                         rmsUploadId: rmsUploadId
                     },
                     rowNum      : 10,
-                    rowList     : [5, 10, 20, 30, 100, 250],
+                    "rowList"   : [10, 15, 25, 50, 100],
                     scrollOffset: 0,
                     colModel    : [
 //@formatter:off

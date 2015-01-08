@@ -61,8 +61,8 @@ require([
             shrinkToFit : false,
             jsonReader  : {repeatitems: false},
             caption     : "Purchased Devices",
+            "rowList"   : [10, 15, 25, 50, 100],
             rowNum      : 25,
-            rowList     : [25, 50, 100],
             pager       : '#replacementDevicePager',
             loadui      : "block",
             gridComplete: function ()

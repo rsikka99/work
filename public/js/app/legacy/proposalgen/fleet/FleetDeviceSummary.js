@@ -47,7 +47,7 @@ require(['jquery', 'jqgrid', 'jquery.ui'], function ($)
                     autowidth   : true,
                     height      : 'auto',
                     rowNum      : 15,
-                    rowList     : [15, 30, 50, 100],
+                    "rowList"   : [10, 15, 25, 50, 100],
                     pager       : '#rms-upload-device-summary-grid-pager',
                     gridComplete: function ()
                     {

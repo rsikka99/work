@@ -11,7 +11,7 @@ require(['jquery', 'jqgrid'], function ($)
             height    : 'auto',
             jsonReader: {repeatitems: false},
             pager     : '#selectRmsUploadGridPager',
-            rowList   : [15, 30, 50, 100],
+            "rowList" : [10, 15, 25, 50, 100],
             rowNum    : 15,
             sortorder : 'asc',
             sortname  : 'validRowCount',

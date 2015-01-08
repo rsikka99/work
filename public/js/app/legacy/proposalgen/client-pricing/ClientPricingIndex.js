@@ -43,8 +43,8 @@ require(['jquery'], function ($)
                     }
                 },
                 height      : 'auto',
-                rowNum      : 30,
-                rowList     : [15, 30, 50, 100, 500],
+                rowNum      : 25,
+                "rowList"   : [10, 15, 25, 50, 100],
                 pager       : '#clientToners_Pager',
                 gridComplete: function ()
                 {

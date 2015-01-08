@@ -87,8 +87,8 @@ require([
                 height      : 'auto',
                 jsonReader  : {repeatitems: false},
                 pager       : '#toners-grid-pager',
+                "rowList"   : [10, 15, 25, 50, 100],
                 rowNum      : 10,
-                rowList     : [10, 20, 30, 50],
                 toppager    : true,
                 postData    : {
                     filterManufacturerId: function ()

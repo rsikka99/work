@@ -9,8 +9,8 @@ require(['jquery', 'jqgrid', 'select2'], function ($)
         datatype  : 'json',
         jsonReader: {repeatitems: false},
         height    : 'auto',
-        rowNum    : 20,
-        rowList   : [20, 30, 50, 100, 500],
+        rowNum    : 25,
+        "rowList" : [10, 15, 25, 50, 100, 250, 500],
         pager     : '#eventLogPager',
         postData  : {
             email: function ()

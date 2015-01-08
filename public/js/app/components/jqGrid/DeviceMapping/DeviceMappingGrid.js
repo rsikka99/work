@@ -67,7 +67,7 @@ define([
             "jsonReader"  : {repeatitems: false},
             "pager"       : this.pagerId,
             "rowNum"      : 15,
-            "rowList"     : [15, 30, 50, 100, 250],
+            "rowList"     : [10, 15, 25, 50, 100],
             "sortorder"   : 'desc',
             "sortname"    : 'deviceCount',
             "postData"    : postData,

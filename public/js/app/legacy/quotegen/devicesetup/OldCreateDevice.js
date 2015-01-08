@@ -42,11 +42,9 @@ require(['jquery', 'jqgrid'], function ($)
             ],
             width       : 940,
             height      : 500,
+            "rowList"   : [10, 15, 25, 50, 100],
             rowNum      : 15,
-            jsonReader  : {
-                repeatitems: false
-            },
-            rowList     : [15, 35, 50],
+            jsonReader  : {repeatitems: false},
             pager       : '#availableTonersPager',
             gridComplete: function ()
             {

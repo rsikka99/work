@@ -290,12 +290,10 @@ require(['jquery', 'jqgrid'], function ($)
             ],
             height      : 'auto',
             width       : 940,
-            rowNum      : 10,
-            jsonReader  : {
-                repeatitems: false
-            },
+            jsonReader  : { repeatitems: false},
             multiselect : true,
-            rowList     : [10, 20, 30],
+            "rowList"   : [10, 15, 25, 50, 100],
+            rowNum      : 10,
             pager       : '#devices_pager',
             onPaging    : function ()
             {
@@ -461,7 +459,7 @@ require(['jquery', 'jqgrid'], function ($)
                 repeatitems: false
             },
             rowNum      : 10,
-            rowList     : [10, 20, 30],
+            "rowList"   : [10, 15, 25, 50, 100],
             pager       : '#toners_pager',
             onPaging    : function ()
             {

@@ -11,8 +11,8 @@ require(['jquery', 'jqgrid', 'select2', 'bootstrap', 'bootstrap.modal.manager'],
         $deviceSwapsTable.jqGrid({
             url      : TMTW_BASEURL + 'hardwareoptimization/deviceswaps/device-swap-list',
             datatype : 'json',
-            rowNum   : 30,
-            rowList  : [10, 20, 30],
+            "rowList"   : [10, 15, 25, 50, 100],
+            rowNum   : 25,
             height   : 'auto',
             sortname : 'minimumPageCount',
             sortorder: 'asc',
@@ -60,8 +60,8 @@ require(['jquery', 'jqgrid', 'select2', 'bootstrap', 'bootstrap.modal.manager'],
     $deviceReasonTable.jqGrid({
         url         : TMTW_BASEURL + 'hardwareoptimization/deviceswaps/device-reason-list',
         datatype    : 'json',
-        rowNum      : 30,
-        rowList     : [10, 20, 30],
+        "rowList"   : [10, 15, 25, 50, 100],
+        rowNum      : 25,
         colModel    : [
 //@formatter:off
 { width: 30,  label: 'ID',                 name: 'id',               index: 'id',               sortable: false, hidden: true                  },
@@ -73,9 +73,9 @@ require(['jquery', 'jqgrid', 'select2', 'bootstrap', 'bootstrap.modal.manager'],
 { width: 85,  label: 'Action',             name: 'action',           index: 'action',           sortable: false, align: 'center', title: false }
 //@formatter:on
         ],
-        viewrecords : true,
-        jsonReader  : {repeatitems: false},
-        caption     : "Device Swap Reason",
+        viewrecords: true,
+        jsonReader: {repeatitems: false},
+        caption: "Device Swap Reason",
         gridComplete: function ()
         {
             // Get the grid object (cache in variable)

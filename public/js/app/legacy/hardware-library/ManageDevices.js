@@ -40,7 +40,8 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
                 }
             });
 
-            $(createDeviceModal).on('DeviceModal.saved', function() {
+            $(createDeviceModal).on('DeviceModal.saved', function ()
+            {
                 $deviceListGrid.trigger("reloadGrid");
             });
 
@@ -70,7 +71,8 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
                 }
             });
 
-            $(editDeviceModal).on('DeviceModal.saved', function() {
+            $(editDeviceModal).on('DeviceModal.saved', function ()
+            {
                 $deviceListGrid.trigger("reloadGrid");
             });
 
@@ -134,7 +136,6 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
         },
 
         height      : 'auto',
-        rowNum      : 15,
         mtype       : "POST",
         postData    : {
             filterCanSell    : function ()
@@ -158,7 +159,8 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
 
             }
         },
-        rowList     : [15, 30, 50, 100],
+        "rowList"   : [10, 15, 25, 50, 100],
+        rowNum      : 15,
         pager       : '#devicesGridPager',
         gridComplete: function ()
         {

@@ -248,7 +248,7 @@ define([
                 jsonReader  : {repeatitems: false},
                 pager       : '#assign-toners-grid-pager',
                 rowNum      : 10,
-                rowList     : [10, 20, 30, 50],
+                "rowList"   : [10, 15, 25, 50, 100],
                 toppager    : true,
                 postData    : {
                     filterManufacturerId: function ()

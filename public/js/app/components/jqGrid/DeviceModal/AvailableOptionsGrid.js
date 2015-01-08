@@ -76,7 +76,7 @@ define([
             "jsonReader"  : {repeatitems: false},
             "height"      : 'auto',
             "rowNum"      : 15,
-            "rowList"     : [15, 30, 50, 100],
+            "rowList"     : [10, 15, 25, 50, 100],
             "pager"       : this.pagerId,
             "toppager"    : true,
             "postData"    : postData,
