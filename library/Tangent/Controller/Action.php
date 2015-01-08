@@ -132,6 +132,16 @@ class Action extends \Zend_Controller_Action
     }
 
     /**
+     * Checks to see if we're logged in
+     *
+     * @return bool
+     */
+    public function isLoggedIn ()
+    {
+        return Zend_Auth::getInstance()->hasIdentity();
+    }
+
+    /**
      * Gets the identity of the currently logged in user
      *
      * @return stdClass

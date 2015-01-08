@@ -47,8 +47,8 @@
                 </footermenu>
                 <forgotpassword>
                     <label>Forgot Password</label>
-                    <route>auth.login.forgot-password</route>
-                    <resource>default__auth__forgotpassword</resource>
+                    <route>auth.forgot-password</route>
+                    <resource>default__auth__forgot-password</resource>
                     <visible>0</visible>
                 </forgotpassword>
                 <rmsUpload>

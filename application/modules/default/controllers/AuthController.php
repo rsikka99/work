@@ -9,6 +9,7 @@ use MPSToolbox\Legacy\Models\UserSessionModel;
 use MPSToolbox\Legacy\Models\EventLogTypeModel;
 use MPSToolbox\Legacy\Models\UserModel;
 use MPSToolbox\Legacy\Modules\DDefault\Forms\ChangePasswordForm;
+use MPSToolbox\Legacy\Modules\DDefault\Forms\ForgotPasswordForm;
 use MPSToolbox\Legacy\Modules\DDefault\Forms\LoginForm;
 use MPSToolbox\Legacy\Modules\DDefault\Forms\ResetPasswordForm;
 use Tangent\Controller\Action;
@@ -195,70 +196,100 @@ class Default_AuthController extends Action
      */
     public function doLogout ()
     {
-        $auth     = Zend_Auth::getInstance();
-        $identity = $auth->getIdentity();
-        $userId   = $identity->id;
-        // Destroy only information that is part of a user being logged in.
-        Zend_Auth::getInstance()->clearIdentity();
-        Zend_Session::namespaceUnset('mps-tools');
-        UserEventLogMapper::getInstance()->createUserEventLog($userId, EventLogTypeModel::LOGOUT);
+        if ($this->isLoggedIn())
+        {
+            $userId = $this->getIdentity()->id;
+
+
+            // Destroy only information that is part of a user being logged in.
+            Zend_Auth::getInstance()->clearIdentity();
+
+            Zend_Session::namespaceUnset('mps-tools');
+
+            if ($userId)
+            {
+                try
+                {
+                    UserEventLogMapper::getInstance()->createUserEventLog($userId, EventLogTypeModel::LOGOUT);
+                }
+                catch (Exception $e)
+                {
+                    // Do Nothing
+                }
+            }
+        }
     }
 
     /**
      * Handles when users forget their password
      */
-    public function forgotpasswordAction ()
+    public function forgotPasswordAction ()
     {
-        $this->_pageTitle = 'Forgot Password';
+        $this->_pageTitle = ['Forgot Password'];
 
-        // check if this page has been posted to
-        $request = $this->getRequest();
-        $email   = $request->getParam('email', false);
-        if ($email !== false)
+        $this->view->layout()->setLayout('auth');
+
+        $form                           = new ForgotPasswordForm();
+        $this->view->forgotPasswordForm = $form;
+
+        if ($this->getRequest()->isPost())
         {
-            // Find user by email
-            $user = UserMapper::getInstance()->fetchUserByEmail($email);
-
-            if ($user)
+            $postData = $this->getRequest()->getPost();
+            if (isset($postData['cancel']))
             {
-                $db = Zend_Db_Table::getDefaultAdapter();
-
-                $db->beginTransaction();
-                try
+                $this->redirectToRoute('auth.login');
+            }
+            else
+            {
+                if ($form->isValid($postData))
                 {
-                    UserPasswordResetRequestMapper::getInstance()->deleteByUserId($user->id);
-                    $time                                = date("Y-m-d H:i:s");
-                    $passwordResetRequest                = new UserPasswordResetRequestModel();
-                    $passwordResetRequest->dateRequested = $time;
-                    $passwordResetRequest->ipAddress     = $_SERVER ['REMOTE_ADDR'];
-                    $passwordResetRequest->resetVerified = false;
-                    $passwordResetRequest->userId        = $user->id;
-                    $passwordResetRequest->resetUsed     = false;
-                    // Create a unique hash for the reset token
-                    // Random number + user id + unique id
-                    $passwordResetRequest->resetToken = uniqid($this->getRandom(0, 12800) . $user->id, true);
+                    $formData = $form->getValues();
 
-                    UserPasswordResetRequestMapper::getInstance()->insert($passwordResetRequest);
-                    $db->commit();
-                    UserEventLogMapper::getInstance()->createUserEventLog($user->id, EventLogTypeModel::FORGOT_PASSWORD_SEND);
-                    $this->sendForgotPasswordEmail($user, $passwordResetRequest->resetToken);
-                }
-                catch (Exception $e)
-                {
-                    $db->rollback();
-                    \Tangent\Logger\Logger::logException($e);
+                    // Find user by email
+                    $user = UserMapper::getInstance()->fetchUserByEmail($formData['email']);
+
+                    if ($user instanceof UserModel)
+                    {
+                        $db = Zend_Db_Table::getDefaultAdapter();
+
+                        $db->beginTransaction();
+                        $requestCreated = false;
+                        try
+                        {
+                            UserPasswordResetRequestMapper::getInstance()->deleteByUserId($user->id);
+                            $time                                = date("Y-m-d H:i:s");
+                            $passwordResetRequest                = new UserPasswordResetRequestModel();
+                            $passwordResetRequest->dateRequested = $time;
+                            $passwordResetRequest->ipAddress     = $_SERVER ['REMOTE_ADDR'];
+                            $passwordResetRequest->resetVerified = false;
+                            $passwordResetRequest->userId        = $user->id;
+                            $passwordResetRequest->resetUsed     = false;
+                            // Create a unique hash for the reset token
+                            // Random number + user id + unique id
+                            $passwordResetRequest->resetToken = uniqid($this->getRandom(0, 12800) . $user->id, true);
+
+                            UserPasswordResetRequestMapper::getInstance()->insert($passwordResetRequest);
+                            $db->commit();
+                            $requestCreated = true;
+                            UserEventLogMapper::getInstance()->createUserEventLog($user->id, EventLogTypeModel::FORGOT_PASSWORD_SEND);
+                            $this->sendForgotPasswordEmail($user, $passwordResetRequest->resetToken);
+                        }
+                        catch (Exception $e)
+                        {
+                            if (!$requestCreated)
+                            {
+                                $db->rollback();
+                            }
+                            \Tangent\Logger\Logger::logException($e);
+                        }
+                    }
+
+                    $this->_flashMessenger->addMessage(['success' => "Instructions have been sent to your email address."]);
+
+                    $this->redirectToRoute('auth.login');
                 }
             }
-
-            $this->_flashMessenger->addMessage(array('success' => "A verification email will be sent out if an account exists with this email"));
         }
-        else
-        {
-            $this->_flashMessenger->addMessage(array('danger' => 'A email is required to use forgot password'));
-        }
-
-        $this->redirectToRoute('auth.login');
-
     }
 
     /**
@@ -374,80 +405,61 @@ class Default_AuthController extends Action
      * This function takes care of verifying the users reset token and
      * providing them with a form to reset their password.
      */
-    function resetpasswordAction ()
+    function forgotPasswordResetAction ()
     {
+        $this->_pageTitle = ['Reset Password'];
+
         $this->view->layout()->setLayout('auth');
-        $this->_pageTitle = 'Reset Password';
+
+        // Make sure we're logged out before resetting
         $this->doLogout();
-        $form = new ResetPasswordForm();
-        // Step 1. Get the reset id
-        $request = $this->getRequest();
-        $values  = $request->getPost();
-        //IF Cancel IS NOT SELECTED
-        if (!isset($values ['cancel']))
+
+        $verificationToken       = $this->getParam('verify', false);
+        $this->view->reset_token = $verificationToken;
+        $passwordRequest         = $this->verifyPasswordReset($verificationToken);
+        if ($passwordRequest === false)
         {
-            if ($this->_getParam("verify"))
-            {
-                $verification            = $this->_getParam("verify");
-                $this->view->reset_token = $verification;
-                // Get the password reset object
-                $passwordRequest = $this->verifyPasswordReset($verification);
-                if ($passwordRequest !== false)
-                {
-                    if (!$passwordRequest->resetVerified)
-                    {
-                        $passwordRequest->resetVerified = true;
-                        UserPasswordResetRequestMapper::getInstance()->save($passwordRequest);
-                    }
-                    if ($request->isPost())
-                    {
-                        $request = $this->getRequest();
-                        $values  = $request->getPost();
-                        if ($form->isValid($values))
-                        {
-                            $filter   = new Zend_Filter_StripTags();
-                            $password = $filter->filter($this->_request->getParam('password'));
-                            $confirm  = $filter->filter($this->_request->getParam('password_confirm'));
-
-                            if (!empty($password) && strcmp($password, $confirm) === 0)
-                            {
-                                $passwordRequest->resetUsed = true;
-                                UserPasswordResetRequestMapper::getInstance()->save($passwordRequest);
-                                $user           = UserMapper::getInstance()->find($passwordRequest->userId);
-                                $user->password = (UserModel::cryptPassword($this->_request->getParam('password')));
-
-                                UserMapper::getInstance()->save($user);
-                                UserPasswordResetRequestMapper::getInstance()->deleteByUserId($user->id);
-                                UserEventLogMapper::getInstance()->createUserEventLog($user->id, EventLogTypeModel::FORGOT_PASSWORD_CHANGED);
-
-                                $this->_flashMessenger->addMessage(array(
-                                    "success" => 'Password has been updated'
-                                ));
-
-                                $this->redirectToRoute('app.dashboard');
-
-                            }
-                        }
-                    }
-                    $this->view->form = $form;
-                }
-                else
-                {
-                    $this->view->errors = "<h3>Link Expired</h3>";
-                }
-
-            }
-            else
-            {
-                $this->redirectToRoute('app.dashboard');
-            }
-
-        }
-        else
-        {
+            $this->_flashMessenger->addMessage(['warning' => 'Your reset token is either expired or invalid. Please use the forgot password link to generate a new token.']);
             $this->redirectToRoute('app.dashboard');
         }
 
+        if (!$passwordRequest->resetVerified)
+        {
+            $passwordRequest->resetVerified = true;
+            UserPasswordResetRequestMapper::getInstance()->save($passwordRequest);
+        }
+
+        $form = new ResetPasswordForm();
+        if ($this->getRequest()->isPost())
+        {
+            // Step 1. Get the reset id
+            $postData = $this->getRequest()->getPost();
+            if (isset($postData ['cancel']))
+            {
+                $this->redirectToRoute('app.dashboard');
+            }
+            else
+            {
+                if ($form->isValid($postData))
+                {
+                    $formValues = $form->getValues();
+
+                    $passwordRequest->resetUsed = true;
+                    UserPasswordResetRequestMapper::getInstance()->save($passwordRequest);
+                    $user           = UserMapper::getInstance()->find($passwordRequest->userId);
+                    $user->password = (UserModel::cryptPassword($formValues['password']));
+
+                    UserMapper::getInstance()->save($user);
+                    UserPasswordResetRequestMapper::getInstance()->deleteByUserId($user->id);
+                    UserEventLogMapper::getInstance()->createUserEventLog($user->id, EventLogTypeModel::FORGOT_PASSWORD_CHANGED);
+
+                    $this->_flashMessenger->addMessage(["success" => 'Password has been updated. You can now log in using your new password.']);
+
+                    $this->redirectToRoute('app.dashboard');
+                }
+            }
+        }
+        $this->view->form = $form;
     }
 
     /**
@@ -533,12 +545,12 @@ class Default_AuthController extends Action
         $mail->setFrom($email->username, 'Forgot Password');
         $mail->addTo($user->email, $user->firstname . ' ' . $user->lastname);
         $mail->setSubject('Password Reset Request');
-        $link = $this->view->serverUrl($this->view->url(array(
+        $link = $this->view->serverUrl($this->view->url([
             'action'     => 'resetpassword',
             'controller' => 'auth',
             'module'     => 'default',
             'verify'     => $token
-        )));
+        ], 'auth.forgot-password.reset'));
 
 
         $body = "<body>";

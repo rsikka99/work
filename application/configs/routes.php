@@ -7,13 +7,14 @@ use \Zend_Controller_Router_Route as R;
  * Auth Routes
  */
 //@formatter:off
-$r->addRoute('auth.login',                 new R('login',                 array('module' => 'default', 'controller' => 'auth', 'action' => 'login')));
-$r->addRoute('auth.logout',                new R('logout',                array('module' => 'default', 'controller' => 'auth', 'action' => 'logout')));
-$r->addRoute('auth.login.forgot-password', new R('login/forgot-password', array('module' => 'default', 'controller' => 'auth', 'action' => 'forgotpassword')));
-$r->addRoute('auth.login.change-password', new R('login/change-password', array('module' => 'default', 'controller' => 'auth', 'action' => 'changepassword')));
+$r->addRoute('auth.login',                       new R('login',                         ['module' => 'default', 'controller' => 'auth', 'action' => 'login'                  ]));
+$r->addRoute('auth.logout',                      new R('logout',                        ['module' => 'default', 'controller' => 'auth', 'action' => 'logout'                 ]));
+$r->addRoute('auth.forgot-password',             new R('forgot-password',               ['module' => 'default', 'controller' => 'auth', 'action' => 'forgot-password'        ]));
+$r->addRoute('auth.forgot-password.reset',       new R('forgot-password/reset/:verify', ['module' => 'default', 'controller' => 'auth', 'action' => 'forgot-password-reset'  ]));
+$r->addRoute('auth.login.change-password',       new R('login/change-password',         ['module' => 'default', 'controller' => 'auth', 'action' => 'changepassword'         ]));
 
 // TODO kmccully: dns error in User controller line 474
-$r->addRoute('auth.login.reset-password',  new R('login/reset-password',  array('module' => 'default', 'controller' => 'auth', 'action' => 'resetpassword')));
+$r->addRoute('auth.login.reset-password',  new R('login/reset-password',  array('module' => 'default', 'controller' => 'auth', 'action' => 'reset-password')));
 //@formatter:on
 
 
@@ -71,6 +72,7 @@ $r->addRoute('app.dashboard.delete-optimization', new R('/delete-optimization/:h
 $r->addRoute('app.dashboard.delete-healthcheck',  new R('/delete-healthcheck/:healthcheckId',           array('module' => 'default', 'controller' => 'index', 'action' => 'delete-report'     )));
 $r->addRoute('app.dashboard.delete-quote',        new R('/delete-quote/:quoteId',                       array('module' => 'default', 'controller' => 'index', 'action' => 'delete-report'     )));
 $r->addRoute('app.dashboard.no-clients',          new R('/first-client',                                array('module' => 'default', 'controller' => 'index', 'action' => 'no-clients'        )));
+$r->addRoute('app.dashboard.no-uploads',          new R('/first-upload',                                array('module' => 'default', 'controller' => 'index', 'action' => 'no-uploads'        )));
 $r->addRoute('app.dashboard.no-uploads',          new R('/first-upload',                                array('module' => 'default', 'controller' => 'index', 'action' => 'no-uploads'        )));
 //@formatter:on
 
