@@ -578,7 +578,7 @@ class Proposalgen_FleetController extends Action
 
             if ($jqGrid->sortingIsValid())
             {
-                $jqGrid->setRecordCount($deviceInstanceMapper->getMappedDeviceInstances($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true));
+                $jqGrid->setRecordCount($deviceInstanceMapper->getMappedDeviceInstances($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true, true));
 
                 // Validate current page number since we don't want to be out of bounds
                 if ($jqGrid->getCurrentPage() < 1)
@@ -592,7 +592,7 @@ class Proposalgen_FleetController extends Action
 
                 // Return a small subset of the results based on the jqGrid parameters
                 $startRecord     = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
-                $deviceInstances = $deviceInstanceMapper->getMappedDeviceInstances($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
+                $deviceInstances = $deviceInstanceMapper->getMappedDeviceInstances($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord, false, true);
 
                 $rows = array();
                 foreach ($deviceInstances as $deviceInstance)
