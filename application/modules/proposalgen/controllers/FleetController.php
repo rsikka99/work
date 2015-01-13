@@ -462,6 +462,7 @@ class Proposalgen_FleetController extends Action
                                 }
 
                                 $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($this->getIdentity()->dealerId);
+                                $deviceInstance->isLeased                 = ($masterDevice->isLeased) ? true : $deviceInstance->isLeased;
                                 $deviceInstanceMapper->save($deviceInstance);
                             }
                         }
