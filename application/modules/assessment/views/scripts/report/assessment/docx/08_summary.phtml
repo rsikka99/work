@@ -1,4 +1,6 @@
 <?php
+use PHPOffice\PHPWord\Shared\String;
+
 /**
  * Assessment - 3 Smart Steps to Success with Managed Print
  */
@@ -13,7 +15,7 @@ $section->addPageBreak();
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 
-$section->addTitle("3 Smart Steps to Success with Managed Print", 1);
+$section->addTitle('3 Smart Steps to Success with Managed Print', 1);
 
 if ($this->App()->theme == 'printiq')
 {
@@ -21,19 +23,19 @@ if ($this->App()->theme == 'printiq')
     of business for 25 years. Our full service MPS program was designed to manage and support your printing environment, based on your unique office printing needs.', $this->companyName));
 }
 
-$section->addText(sprintf('The %1$s MPS program empowers you to:', $this->companyName));
+$section->addText(String::toUTF8(sprintf('The %1$s MPS program empowers you to:'), $this->companyName));
 
-$section->addListItem("Accurately identify printing costs");
-$section->addListItem("Control expenses and budget for future needs");
-$section->addListItem("Increase your working capital by reducing supplies inventory");
-$section->addListItem("Free IT from print related issues");
-$section->addListItem("Choose to keep your existing assets or obtain new hardware from a choice of manufacturers");
+$section->addListItem('Accurately identify printing costs');
+$section->addListItem('Control expenses and budget for future needs');
+$section->addListItem('Increase your working capital by reducing supplies inventory');
+$section->addListItem('Free IT from print related issues');
+$section->addListItem('Choose to keep your existing assets or obtain new hardware from a choice of manufacturers');
 if ($this->App()->theme == 'printiq')
 {
-    $section->addListItem("Leverage Copy & Print Depot in our 1,100+ stores nationwide for a Total Print Solution");
+    $section->addListItem('Leverage Copy & Print Depot in our 1,100+ stores nationwide for a Total Print Solution');
 }
-$section->addListItem("Improve productivity and user satisfaction");
-$section->addListItem("Foster your eco-smart objectives");
+$section->addListItem('Improve productivity and user satisfaction');
+$section->addListItem('Foster your eco-smart objectives');
 
 $section->addTitle('Step 1: Assess', 2);
 $section->addText(sprintf('This complimentary %1$s will help us determine what your needs are for office print. By combining data collected from your printing devices with questionnaire responses, we can determine what is working and what isn\'t in your office print environment. From this information, we can build a managed print solution that meets your business needs.', My_Brand::getDealerBranding()->assessmentTitle));
@@ -44,7 +46,7 @@ $tr->addText('Increase Hardware Efficiency: ', 'bold_text');
 $tr->addText('Whether you choose to maintain your existing printer fleet or refresh inefficient devices, your managed print program delivers benefits that meet your specific needs. We will make sure your printing equipment meets your needs and help you optimize the placement of your equipment to make sure you are getting the most out of your assets.');
 
 $tr = $section->addTextRun();
-$tr->addText('Just-in-Time Supplies & Efficient Service: ', 'bold_text');
+$tr->addText(String::toUTF8(htmlspecialchars('Just-in-Time Supplies & Efficient Service: ')), 'bold_text');
 $tr->addText('Our just-in-time supplies fulfillment and 4-hour response repair service will get you the supplies and service you need, when you need it. By remotely monitoring your printers, we can help you minimize downtime and reduce the amount of working capital held in supplies inventory. Next-day service is available for all printers under a managed print contract so your IT staff will be free from handling printer-related issues.');
 
 $tr = $section->addTextRun();

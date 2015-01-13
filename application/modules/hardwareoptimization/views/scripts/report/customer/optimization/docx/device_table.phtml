@@ -49,7 +49,7 @@ if (count($deviceInstances) > 0)
         }
         else
         {
-            $table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText('Replacement Device & Reason', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+            $table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText(htmlspecialchars('Replacement Device & Reason'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
         }
 
     }

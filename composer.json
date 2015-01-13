@@ -19,7 +19,7 @@
     "robmorgan/phinx"             : "0.3.8",
     "nesbot/Carbon"               : "1.7.x",
     "michelf/php-markdown"        : "1.4.*",
-    "phpoffice/phpword"           : "dev-develop#f25833c60d554b4ca73985cd28c721fe3348b154",
+    "phpoffice/phpword"           : "0.12.0",
     "yzalis/identicon"            : "1.1.*",
     "lrobert/gravatar"            : "0.1.*",
     "rediska/rediska"             : "0.5.10"

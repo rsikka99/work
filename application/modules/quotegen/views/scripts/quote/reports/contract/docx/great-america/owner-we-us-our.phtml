@@ -23,5 +23,5 @@ $footerTable->addCell($tableSpan ['span1'], $cellStyle->bottomAlign)->addText(''
 $footerTable->addRow();
 $footerTable->addCell($tableSpan ['span1'], $cellStyle->topBorder)->addText('OWNER', $fontStyle->label, $paragraphStyle->noSpacingCentered);
 $footerTable->addCell($tableSpan ['span3'], $cellStyle->topBorder)->addText('SIGNATURE', $fontStyle->label, $paragraphStyle->noSpacingCentered);
-$footerTable->addCell($tableSpan ['span3'], $cellStyle->topBorder)->addText('PRINT NAME & TITLE', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$footerTable->addCell($tableSpan ['span3'], $cellStyle->topBorder)->addText(htmlspecialchars('PRINT NAME & TITLE'), $fontStyle->label, $paragraphStyle->noSpacingCentered);
 $footerTable->addCell($tableSpan ['span1'], $cellStyle->topBorder)->addText('DATE', $fontStyle->label, $paragraphStyle->noSpacingCentered);

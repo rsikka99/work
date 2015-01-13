@@ -48,7 +48,7 @@ $leaseDetailsTable->addCell($tableSpan ['span1'], array_merge($cellStyle->rightB
 
 $leaseDetailsTable->addCell($tableSpan ['span2'], array_merge($cellStyle->bottomAlign, $cellStyle->span2))->addText(" ", null, $paragraphStyle->noSpacing);
 $leaseDetailsTable->addCell($tableSpan ['span1'], $cellStyle->bottomAlign)->addText("B&W ONLY DEVICE(S)", $fontStyle->label, $paragraphStyle->noSpacingCentered);
-$leaseDetailsTable->addCell($tableSpan ['span1'], array_merge($cellStyle->rightBorder, $cellStyle->bottomAlign))->addText("B&W AND COLOR DEVICE(S)", $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$leaseDetailsTable->addCell($tableSpan ['span1'], array_merge($cellStyle->rightBorder, $cellStyle->bottomAlign))->addText(htmlspecialchars('B&W AND COLOR DEVICE(S)'), $fontStyle->label, $paragraphStyle->noSpacingCentered);
 
 // Row #3
 $leaseDetailsTable->addRow();

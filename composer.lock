@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "47a375797dde3739deb0fed85950cadd",
+    "hash": "8dd8ac196d45005982040b857d294c44",
     "packages": [
         {
             "name": "gchartphp/gchartphp",
@@ -490,16 +490,16 @@
         },
         {
             "name": "phpoffice/phpword",
-            "version": "dev-develop",
+            "version": "0.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PHPWord.git",
-                "reference": "f25833c60d554b4ca73985cd28c721fe3348b154"
+                "reference": "3f136501b3dfea94766a704e17782c8a942a7b9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PHPWord/zipball/f8ee23049587e407c51d6f83337be885ea560e31",
-                "reference": "f25833c60d554b4ca73985cd28c721fe3348b154",
+                "url": "https://api.github.com/repos/PHPOffice/PHPWord/zipball/3f136501b3dfea94766a704e17782c8a942a7b9b",
+                "reference": "3f136501b3dfea94766a704e17782c8a942a7b9b",
                 "shasum": ""
             },
             "require": {
@@ -582,7 +582,7 @@
                 "word",
                 "writer"
             ],
-            "time": "2014-08-04 09:17:05"
+            "time": "2015-01-03 09:42:48"
         },
         {
             "name": "rediska/rediska",
@@ -1515,9 +1515,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "phpoffice/phpword": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "platform": {
         "php": ">5.5.0"

@@ -34,7 +34,7 @@ $deviceTable->addCell(null, array_merge($cellStyle->invertBackground, $cellStyle
  * Schedule Table - Header Row
  */
 $deviceTable->addRow(300);
-$deviceTable->addCell($tableSpan ['span3'], array_merge($cellStyle->bottomAlign, $cellStyle->rightBorder))->addText('Make, Model Number & Included Accessories', $fontStyle->label, $paragraphStyle->noSpacingLeft);
+$deviceTable->addCell($tableSpan ['span3'], array_merge($cellStyle->bottomAlign, $cellStyle->rightBorder))->addText(htmlspecialchars('Make, Model Number & Included Accessories'), $fontStyle->label, $paragraphStyle->noSpacingLeft);
 $deviceTable->addCell($tableSpan ['span1'], array_merge($cellStyle->bottomAlign, $cellStyle->rightBorder))->addText('Serial Number', $fontStyle->label, $paragraphStyle->noSpacingLeft);
 $deviceTable->addCell($tableSpan ['span2'], array_merge($cellStyle->bottomAlign, $cellStyle->rightBorder))->addText('Address', $fontStyle->label, $paragraphStyle->noSpacingLeft);
 $deviceTable->addCell($tableSpan ['span2'], array_merge($cellStyle->bottomAlign, $cellStyle->rightBorder))->addText('Description', $fontStyle->label, $paragraphStyle->noSpacingLeft);
