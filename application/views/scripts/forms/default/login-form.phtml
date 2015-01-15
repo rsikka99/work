@@ -8,12 +8,12 @@ $form = $this->element;
 <?= $this->RenderFormOpen($form) ?>
 <fieldset>
     <div class="form-group <?= ($form->getElement('email')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormEmail($form->getElement('email')) ?>
+        <?= $this->RenderFormEmail($form->getElement('email'), ['input-lg']) ?>
         <?= $this->RenderFormElementErrors($form->getElement('email')) ?>
     </div>
 
     <div class="form-group <?= ($form->getElement('password')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormPassword($form->getElement('password')) ?>
+        <?= $this->RenderFormPassword($form->getElement('password'), ['input-lg']) ?>
         <?= $this->RenderFormElementErrors($form->getElement('password')) ?>
     </div>
     <hr>
