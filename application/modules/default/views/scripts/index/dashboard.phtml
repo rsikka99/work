@@ -35,8 +35,9 @@ $rmsUpload = $this->rmsUpload;
 
             <p>
                 <a href="<?= $this->url(['rmsUploadId' => $rmsUpload->id], 'rms-upload') ?>" title="Edit Upload"><i class="fa fa-fw fa-pencil"></i>
-                    <code><i class="fa fa-fw fa-file-text"></i> <?= $rmsUpload->fileName ?></code></a> uploaded
-                <i class="fa fa-fw fa-clock-o js-tooltip btn-link" title="<?= $rmsUpload->uploadDate ?>"></i> <?= $rmsUpload->uploadDate->diffForHumans() ?>
+                    <code><i class="fa fa-fw fa-file-text"></i> <?= $rmsUpload->fileName ?>
+                    </code></a> uploaded
+                <i class="fa fa-fw fa-clock-o js-tooltip btn-link" title="<?= $rmsUpload->uploadDate->format('F j, Y h:i:s A') ?>"></i> <?= $rmsUpload->uploadDate->diffForHumans() ?>
                 <small>(<a class="" href="<?= $this->url([], 'app.dashboard.change-upload') ?>">Change</a>)
                 </small>
             </p>
