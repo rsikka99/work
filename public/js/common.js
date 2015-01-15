@@ -41,7 +41,7 @@ requirejs.config({
             'deps'   : ['jquery', 'underscore'],
             'exports': 'Backbone'
         },
-        'bootstrap'              : ['jquery'],
+        'bootstrap'              : ['jquery', 'jquery.ui'],
         'bootstrap.modal'        : ['bootstrap'],
         'bootstrap.modal.manager': ['bootstrap', 'bootstrap.modal'],
         'bootstrap.switch'       : ['bootstrap'],
@@ -57,7 +57,17 @@ requirejs.config({
         'jquery'                 : {
             'exports': 'jQuery'
         },
-        'jquery.ui'              : ['jquery'],
+        'jquery.ui'              : {
+            'deps': ['jquery'],
+            'init': function ($)
+            {
+                // handle jQuery plugin naming conflict between jQuery UI and Bootstrap
+                $.widget.bridge('uibutton', $.ui.button);
+                $.widget.bridge('uitooltip', $.ui.tooltip);
+
+                return this;
+            }
+        },
         'select2'                : ['jquery']
     }
 });
