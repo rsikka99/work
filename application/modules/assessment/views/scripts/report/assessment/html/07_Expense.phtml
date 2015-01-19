@@ -105,7 +105,7 @@ $assessmentViewModel = $this->assessmentViewModel;
         <td style="width: 80px;" class="right">&nbsp;</td>
     </tr>
     <tr>
-        <td>Annual cost of ink and toner<br /><em>Based on data collected by <?= $this->companyName; ?>.</em></td>
+        <td>Annual cost of ink and toner<br /><em>Based on data collected by <?= $this->companyName; ?>.<br>On the questionnaire you answered: <?= ($assessmentViewModel->assessment->getClient()->getSurvey()->costOfInkAndToner) ? $this->currency($assessmentViewModel->assessment->getClient()->getSurvey()->costOfInkAndToner) : "I don't know" ?>.</em></td>
         <td class="right">
             <?= $this->currency($assessmentViewModel->getCostOfInkAndToner($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></td>
     </tr>

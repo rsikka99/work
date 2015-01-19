@@ -101,6 +101,7 @@ $suppliesTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $cell = $suppliesTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1);
 $cell->addText('Annual cost of ink and toner', null, 'nospacing');
 $cell->addText(sprintf('Based on data collected by %1$s.', $this->companyName), 'small_italic_text', 'nospacing');
+$cell->addText(sprintf('On the questionnaire you answered: %1$s.', ($assessmentViewModel->assessment->getClient()->getSurvey()->costOfInkAndToner) ? $this->currency($assessmentViewModel->assessment->getClient()->getSurvey()->costOfInkAndToner) : "I don't know"), 'small_italic_text', 'nospacing');
 $suppliesTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->getCostOfInkAndToner($assessmentViewModel->getCostPerPageSettingForCustomer())), null, 'nospacing_rightalign');
 
 $suppliesTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
