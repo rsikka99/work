@@ -56,14 +56,7 @@ $graphs               = $healthcheckViewModel->getGraphs();
                 <td>
                     <div style="width: 160px; padding: 0;"><?= $deviceName; ?></div>
                 </td>
-                <td class="center"><?php if ($deviceInstance->serialNumber)
-                    {
-                        echo $deviceInstance->serialNumber;
-                    }
-                    else
-                    {
-                        echo 'Unknown';
-                    } ?></td>
+                <td class="center"><?= ($deviceInstance->serialNumber) ? $deviceInstance->serialNumber : 'Unknown' ?></td>
                 <td class="center"><?= number_format($deviceInstance->getAverageMonthlyPowerConsumption()); ?> kWh</td>
                 <td class="center"><?= $this->currency($deviceInstance->getAverageMonthlyPowerCost(), 2); ?></td>
             </tr>
@@ -89,6 +82,6 @@ else
 </p>
 <p>The following charts show how many of your printing devices have duplex printing and scanning capabilities:</p>
 <div class="center">
-    <img src="<?= $graphs['faxCapableBar']; ?>" style="width: 270px; height: 175px;" />
+    <img src="<?= $graphs[13]; ?>" style="width: 270px; height: 175px;" />
     <img src="<?= $graphs[14]; ?>" style="width: 270px; height: 175px;" />
 </div>

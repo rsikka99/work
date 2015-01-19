@@ -24,8 +24,7 @@ $section->addTitle('Forest and Water Consumption', 2);
 $section->addText(sprintf('Did you know that it takes one average-sized tree to produce %2$s pages of standard 20lb office paper? Paper production also uses a tremendous amount of water and other solvents to produce traditional white copy paper. Based on your annual page volume we estimate the following tree and water requirements are needed to produce documents for %1$s:', $healthcheckViewModel->healthcheck->getClient()->companyName, number_format(Healthcheck_ViewModel_Healthcheck::PAGES_PER_TREE)));
 
 $cellWidths  = array(
-    350,
-    1500
+    350,1500
 );
 $imageWidth  = 100;
 $imageHeight = 170;
@@ -86,5 +85,5 @@ $section->addText('The following charts show how many of your printing devices h
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs ['faxCapableBar']);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs [13]);
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs [14]);
