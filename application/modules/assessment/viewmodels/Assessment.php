@@ -2740,7 +2740,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         {
             if ($this->getGrossMarginTotalMonthlyRevenue()->Combined > 0)
             {
-                $this->GrossMarginOverallMargin = $this->getGrossMarginMonthlyProfit() / $this->getGrossMarginTotalMonthlyRevenue()->Combined * 100;
+
+                $this->GrossMarginOverallMargin = \Tangent\Accounting::reverseEngineerMargin($this->getGrossMarginTotalMonthlyCost($costPerPageSetting)->Combined, $this->getGrossMarginTotalMonthlyRevenue()->Combined);
             }
             else
             {
@@ -2789,7 +2790,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
             if ($this->getMPSBlackAndWhiteCPP() > 0)
             {
-                $this->GrossMarginBlackAndWhiteMargin = ($this->getMPSBlackAndWhiteCPP() - $this->getGrossMarginWeightedCPP($costPerPageSetting)->BlackAndWhite) / $this->getMPSBlackAndWhiteCPP() * 100;
+                $this->GrossMarginBlackAndWhiteMargin = \Tangent\Accounting::reverseEngineerMargin($this->getGrossMarginWeightedCPP($costPerPageSetting)->BlackAndWhite, $this->getMPSBlackAndWhiteCPP());
+
             }
         }
 
@@ -2809,7 +2811,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
             if ($this->getMPSColorCPP() > 0)
             {
-                $this->GrossMarginColorMargin = ($this->getMPSColorCPP() - $this->getGrossMarginWeightedCPP($costPerPageSetting)->Color) / $this->getMPSColorCPP() * 100;
+                $this->GrossMarginColorMargin = Tangent\Accounting::reverseEngineerMargin($this->getGrossMarginWeightedCPP($costPerPageSetting)->Color, $this->getMPSColorCPP());
             }
         }
 
