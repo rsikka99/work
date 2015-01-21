@@ -541,6 +541,13 @@ class MasterDeviceModel extends My_Model_Abstract
     {
         if (!isset($this->_hasValidMonoGrossMarginToners))
         {
+            $this->_hasValidMonoGrossMarginToners = [];
+        }
+
+        $cacheKey = $costPerPageSetting->createCacheKey();
+
+        if (!isset($this->_hasValidMonoGrossMarginToners[$cacheKey]))
+        {
             $usesAllValidToners      = true;
             $toners                  = $this->getCheapestTonerSetByVendor($costPerPageSetting);
             $oemRank                 = new TonerVendorRankingModel();
@@ -562,10 +569,10 @@ class MasterDeviceModel extends My_Model_Abstract
             }
 
 
-            $this->_hasValidMonoGrossMarginToners = $usesAllValidToners;
+            $this->_hasValidMonoGrossMarginToners[$cacheKey] = $usesAllValidToners;
         }
 
-        return $this->_hasValidMonoGrossMarginToners;
+        return $this->_hasValidMonoGrossMarginToners[$cacheKey];
     }
 
     /**
@@ -588,6 +595,13 @@ class MasterDeviceModel extends My_Model_Abstract
     public function getHasValidColorGrossMarginToners ($costPerPageSetting)
     {
         if (!isset($this->_hasValidColorGrossMarginToners))
+        {
+            $this->_hasValidColorGrossMarginToners = [];
+        }
+
+        $cacheKey = $costPerPageSetting->createCacheKey();
+
+        if (!isset($this->_hasValidColorGrossMarginToners[$cacheKey]))
         {
             $usesAllValidToners           = true;
             $toners                       = $this->getCheapestTonerSetByVendor($costPerPageSetting);
@@ -613,10 +627,10 @@ class MasterDeviceModel extends My_Model_Abstract
                 }
             }
 
-            $this->_hasValidColorGrossMarginToners = $usesAllValidToners;
+            $this->_hasValidColorGrossMarginToners[$cacheKey] = $usesAllValidToners;
         }
 
-        return $this->_hasValidColorGrossMarginToners;
+        return $this->_hasValidColorGrossMarginToners[$cacheKey];
     }
 
     /**
