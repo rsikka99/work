@@ -42,309 +42,314 @@ $properties->setModified(time());
 $properties->setSubject('Demo Report');
 $properties->setKeywords('demo, assessment, report');
 
-$titlepageSection = $phpword->addSection(array(
+$titlepageSection = $phpword->addSection([
     'orientation'  => null,
     'marginLeft'   => 720,
     'marginRight'  => 720,
     'marginTop'    => 720,
     'marginBottom' => 720
-));
+]);
 $section          = $phpword->addSection();
 
 // Render our style defaults?
 $this->render("{$commonPartsBasePath}/styles.phtml");
 
-
-$phpword->addParagraphStyle('titleStyle1', array(
+$phpword->addParagraphStyle('titleStyle1', [
     'align'      => 'center',
     'spaceAfter' => 100,
     'bgColor'    => '004990'
-));
-$phpword->addParagraphStyle('titleStyle2', array(
+]);
+
+$phpword->addParagraphStyle('titleStyle2', [
     'spaceAfter'  => 100,
     'spaceBefore' => 100,
-    'shading'     => array(
+    'shading'     => [
         'fill' => '4C4C4C',
-    ),
+    ],
     'align'       => 'center',
-));
-$phpword->addParagraphStyle('titleStyle3', array(
+]);
+
+$phpword->addParagraphStyle('titleStyle3', [
     'spaceAfter' => 200,
-    'tabs'       => array(
+    'tabs'       => [
         new \PhpOffice\PhpWord\Style\Tab('left', 350)
-    ),
-    'shading'    => array(
+    ],
+    'shading'    => [
         'fill' => '7F7F7F',
-    )
-));
-$phpword->addFontStyle('titlepage_title', array(
+    ]
+]);
+$phpword->addFontStyle('titlepage_title', [
     'size'  => 24,
     'bold'  => true,
     'color' => 'FFFFFF'
-));
+]);
 
-$phpword->addFontStyle('titlepage_subtitle', array(
+$phpword->addFontStyle('titlepage_subtitle', [
     'size'  => 16,
     'bold'  => true,
     'color' => 'FFFFFF'
-));
+]);
 
-$phpword->addFontStyle('titlepage_address', array(
+$phpword->addFontStyle('titlepage_address', [
     'size'  => 12,
     'color' => 'FFFFFF'
-));
-$phpword->addParagraphStyle('titlepageHeaderParagraph', array(
+]);
+
+$phpword->addParagraphStyle('titlepageHeaderParagraph', [
     'spaceAfter' => 200
-));
-$phpword->addParagraphStyle('titlepageHeader1', array(
+]);
+
+$phpword->addParagraphStyle('titlepageHeader1', [
     'spaceAfter' => 0,
 
-));
+]);
+
 /**
  * Paragraph styles
  */
-$phpword->addParagraphStyle('titlepageHeaderParagraph', array(
+$phpword->addParagraphStyle('titlepageHeaderParagraph', [
     'spaceAfter' => 200
-));
+]);
 
-$phpword->addParagraphStyle('nospacing', array(
+$phpword->addParagraphStyle('nospacing', [
     'spaceBefore' => 0,
     'spaceAfter'  => 0
-));
+]);
 
-$phpword->addParagraphStyle('nospacing_rightalign', array(
+$phpword->addParagraphStyle('nospacing_rightalign', [
     'align'       => 'right',
     'spaceBefore' => 0,
     'spaceAfter'  => 0
-));
+]);
 
-$phpword->addParagraphStyle('nospacing_centeralign', array(
+$phpword->addParagraphStyle('nospacing_centeralign', [
     'align'       => 'center',
     'spaceBefore' => 0,
     'spaceAfter'  => 0
-));
+]);
 
-$phpword->addParagraphStyle('rightalign', array(
+$phpword->addParagraphStyle('rightalign', [
     'align' => 'right'
-));
+]);
 
-$phpword->addParagraphStyle('gradeParagraph', array(
+$phpword->addParagraphStyle('gradeParagraph', [
     'align'       => 'center',
     'spaceBefore' => 0,
     'spaceAfter'  => 0
-));
+]);
 
-$phpword->addParagraphStyle('savingsParagraph', array(
+$phpword->addParagraphStyle('savingsParagraph', [
     'align'       => 'center',
     'spaceBefore' => 0,
     'spaceAfter'  => 0
-));
+]);
 
 /**
  * Font Styles
  */
-$phpword->addFontStyle('titlepageHeaderFont', array(
+$phpword->addFontStyle('titlepageHeaderFont', [
     'bold' => true,
     'size' => 16
-));
+]);
 
-$phpword->addFontStyle('bold_text', array(
+$phpword->addFontStyle('bold_text', [
     'bold' => true
-));
+]);
 
-$phpword->addFontStyle('bold_red_text', array(
+$phpword->addFontStyle('bold_red_text', [
     'bold'  => true,
     'color' => 'F00001'
-));
+]);
 
-$phpword->addFontStyle('gradeFont', array(
+$phpword->addFontStyle('gradeFont', [
     'bold' => true,
     'size' => 18
-));
+]);
 
-$phpword->addFontStyle('gradeTitleFont', array(
+$phpword->addFontStyle('gradeTitleFont', [
     'bold' => true,
     'size' => 12
-));
+]);
 
-$phpword->addFontStyle('savingsFont', array(
+$phpword->addFontStyle('savingsFont', [
     'bold' => true,
     'size' => 11
-));
+]);
 
-$phpword->addFontStyle('savingsAmountFont', array(
+$phpword->addFontStyle('savingsAmountFont', [
     'color' => $this->docStyles->brandBaseColor,
     'bold'  => true,
     'size'  => 11
-));
+]);
 
-$phpword->addFontStyle('small_italic_text', array(
+$phpword->addFontStyle('small_italic_text', [
     'color'  => '333333',
     'italic' => true,
     'size'   => 9
-));
+]);
 
 /**
  * Header/Title Styles
  */
 // H1 Style
-$phpword->addTitleStyle(1, array(
+$phpword->addTitleStyle(1, [
     'size'  => 15,
     'color' => My_Brand::getDealerBranding()->h1FontColor,
     'bold'  => true
-), array(
-    'shading' => array(
+], [
+    'shading' => [
         'fill' => My_Brand::getDealerBranding()->h1BackgroundColor,
-    ),
-));
+    ],
+]);
 
 // H2 Style #5881BC
-$phpword->addTitleStyle(2, array(
+$phpword->addTitleStyle(2, [
     'size'   => 12,
     'color'  => My_Brand::getDealerBranding()->h2FontColor,
     'bold'   => true,
     'italic' => true
-), array(
+], array(
     'shading' => array(
         'fill' => My_Brand::getDealerBranding()->h2BackgroundColor,
     ),
 ));
+
 // H3 Style #5881BC
-$phpword->addTitleStyle(3, array(
+$phpword->addTitleStyle(3, [
     'size'  => 10,
     'color' => 'FF0000',
     'bold'  => true
-), array(
+], array(
     'spaceBefore' => 100,
     'spaceAfter'  => 100
 ));
 
 // H3 Style #5881BC
-$phpword->addFontStyle('heading3', array(
+$phpword->addFontStyle('heading3', [
     'size'  => 10,
     'color' => 'FF0000',
     'bold'  => true
-));
+]);
 
 /**
  * True costs table styles
  */
-$trueCostsTable = (object)array(
-    "tablestyle" => array(
+$trueCostsTable = (object)[
+    "tablestyle" => [
         'cellMarginTop'     => 90,
         'cellMarginRight'   => 50,
         'cellMarginBottom'  => 90,
         'cellMarginLeft'    => 50,
         'borderBottomSize'  => 1,
         'borderBottomColor' => 'BFBFBF',
-    ),
+    ],
     "col1Width"  => 2347.38,
     "col2Width"  => 3764.88,
     "col3Width"  => 4042.71,
-    "header"     => (object)array(
+    "header"     => (object)[
         "rowheight" => null,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
+        "cell1"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
+            ],
             "fontStyle"      => 'bold_text',
             "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
+        ],
+        "cell2"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
+            ],
             "fontStyle"      => 'bold_text',
             "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
+        ],
+        "cell3"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
+            ],
             "fontStyle"      => 'bold_text',
             "paragraphStyle" => 'nospacing_centeralign'
-        )
-    ),
-    "body"       => (object)array(
+        ]
+    ],
+    "body"       => (object)[
         "rowheight" => null,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
+        "cell1"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'bold' => true
-            ),
+            ],
             "paragraphStyle" => 'nospacing'
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
+        ],
+        "cell2"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
+            ],
             "fontStyle"      => null,
             "paragraphStyle" => 'nospacing'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
+        ],
+        "cell3"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
+            ],
             "fontStyle"      => null,
             "paragraphStyle" => 'nospacing'
-        )
-    )
-);
+        ]
+    ]
+];
 
-$leaseQuoteTable = (object)array(
-    "tablestyle"   => array(
+$leaseQuoteTable = (object)[
+    "tablestyle"          => [
         'cellMarginTop'     => 25,
         'cellMarginRight'   => 100,
         'cellMarginBottom'  => 25,
         'cellMarginLeft'    => 100,
         'borderBottomSize'  => 1,
         'borderBottomColor' => 'BFBFBF',
-    ),
-    "col1Width"    => 2257,
-    "col2Width"    => 1986,
-    "col3Width"    => 3702,
-    "col4Width"    => 1083,
-    "span123Width" => 7945,
-    "span23Width"  => 5688,
-    "header"       => (object)array(
+    ],
+    "col1Width"           => 2257,
+    "col2Width"           => 1986,
+    "col3Width"           => 3702,
+    "col4Width"           => 1083,
+    "span123Width"        => 7945,
+    "span23Width"         => 5688,
+    "header"              => (object)[
         "rowheight" => null,
-        "rowStyle"  => array(
+        "rowStyle"  => [
             'tblHeader' => true,
-        ),
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
+        ],
+        "cell1"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
@@ -352,20 +357,20 @@ $leaseQuoteTable = (object)array(
                 "bgColor"          => $this->docStyles->brandBaseColor,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'color' => 'FFFFFF',
                 'bold'  => true,
                 'name'  => 'Calibri',
                 'size'  => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "paragraphStyle" => [
                 'nospacing'  => true,
                 'spaceAfter' => 0
-            )
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
+            ]
+        ],
+        "cell2"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
@@ -373,20 +378,20 @@ $leaseQuoteTable = (object)array(
                 "bgColor"          => $this->docStyles->brandBaseColor,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'color' => 'FFFFFF',
                 'bold'  => true,
                 'name'  => 'Calibri',
                 'size'  => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "paragraphStyle" => [
                 'nospacing'  => true,
                 'spaceAfter' => 0
-            )
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
+            ]
+        ],
+        "cell3"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
@@ -394,20 +399,20 @@ $leaseQuoteTable = (object)array(
                 "bgColor"          => $this->docStyles->brandBaseColor,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'color' => 'FFFFFF',
                 'bold'  => true,
                 'name'  => 'Calibri',
                 'size'  => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "paragraphStyle" => [
                 'nospacing'  => true,
                 'spaceAfter' => 0
-            )
-        ),
-        "cell4"     => (object)array(
-            "cellStyle"      => array(
+            ]
+        ],
+        "cell4"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
@@ -415,156 +420,162 @@ $leaseQuoteTable = (object)array(
                 "bgColor"          => $this->docStyles->brandBaseColor,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'color' => 'FFFFFF',
                 'bold'  => true,
                 'name'  => 'Calibri',
                 'size'  => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "paragraphStyle" => [
                 'nospacing'  => true,
                 'spaceAfter' => 0
-            )
-        )
-    ),
-    "device"       => (object)array(
+            ]
+        ]
+    ],
+    "signatureTableStyle" => [
+        'cellMarginTop'    => 25,
+        'cellMarginRight'  => 100,
+        'cellMarginBottom' => 25,
+        'cellMarginLeft'   => 100,
+    ],
+    "device"              => (object)[
         "rowheight" => null,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
+        "cell1"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => null,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'bold' => true,
                 'name' => 'Calibri',
                 'size' => 11
-            ),
+            ],
             "paragraphStyle" => 'nospacing'
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
+        ],
+        "cell2"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => null,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'name' => 'Calibri',
                 'size' => 11
-            ),
+            ],
             "paragraphStyle" => 'nospacing'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
+        ],
+        "cell3"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => null,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'name' => 'Calibri',
                 'size' => 11
-            ),
+            ],
             "paragraphStyle" => 'nospacing'
-        ),
-        "cell4"     => (object)array(
-            "cellStyle"      => array(
+        ],
+        "cell4"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => null,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'name' => 'Calibri',
                 'size' => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "paragraphStyle" => [
                 'nospacing' => true,
                 'align'     => 'right'
-            )
-        )
-    ),
-    "option"       => (object)array(
+            ]
+        ]
+    ],
+    "option"              => (object)[
         "rowheight" => 75,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
+        "cell1"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => null,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => null,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'name' => 'Calibri',
                 'size' => 11
-            ),
+            ],
             "paragraphStyle" => 'nospacing'
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
+        ],
+        "cell2"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => null,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => null,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'name' => 'Calibri',
                 'size' => 11
-            ),
+            ],
             "paragraphStyle" => 'nospacing'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
+        ],
+        "cell3"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => null,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => null,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'name' => 'Calibri',
                 'size' => 11
-            ),
+            ],
             "paragraphStyle" => 'nospacing'
-        ),
-        "cell4"     => (object)array(
-            "cellStyle"      => array(
+        ],
+        "cell4"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => null,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => null,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'name' => 'Calibri',
                 'size' => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "paragraphStyle" => [
                 'nospacing' => true,
                 'align'     => 'right'
-            )
-        )
-    ),
-    "subtotal"     => (object)array(
+            ]
+        ]
+    ],
+    "subtotal"            => (object)[
         "rowheight" => 500,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
+        "cell1"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
@@ -572,15 +583,15 @@ $leaseQuoteTable = (object)array(
                 "bgColor"          => 'D9D9D9',
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'name' => 'Calibri',
                 'size' => 11
-            ),
+            ],
             "paragraphStyle" => 'nospacing'
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
+        ],
+        "cell2"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
@@ -589,8 +600,8 @@ $leaseQuoteTable = (object)array(
                 "valign"           => 'center',
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "cell2Span3"     => array(
+            ],
+            "cell2Span3"     => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
@@ -600,20 +611,24 @@ $leaseQuoteTable = (object)array(
                 "borderColor"      => 'BFBFBF',
                 "gridSpan"         => 3,
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'bold' => true,
                 'name' => 'Calibri',
                 'size' => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "smallFontStyle"      => [
+                'name' => 'Calibri',
+                'size' => 10
+            ],
+            "paragraphStyle" => [
                 'nospacing'  => true,
                 'align'      => 'right',
                 'spaceAfter' => 0
-            )
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
+            ]
+        ],
+        "cell3"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
@@ -622,64 +637,64 @@ $leaseQuoteTable = (object)array(
                 "valign"           => 'center',
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'bold' => true,
                 'name' => 'Calibri',
                 'size' => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "paragraphStyle" => [
                 'nospacing'  => true,
                 'align'      => 'right',
                 'spaceAfter' => 0
-            )
-        )
-    ),
-    "cpp"          => (object)array(
+            ]
+        ]
+    ],
+    "cpp"                 => (object)[
         "rowheight" => 500,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
+        "cell1"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'name' => 'Calibri',
                 'size' => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "paragraphStyle" => [
                 'nospacing'  => true,
                 'align'      => 'right',
                 'spaceAfter' => 0
-            )
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
+            ]
+        ],
+        "cell2"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
                 "valign"           => 'center',
                 "borderColor"      => 'BFBFBF',
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'name' => 'Calibri',
                 'size' => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "paragraphStyle" => [
                 'nospacing'  => true,
                 'align'      => 'right',
                 'spaceAfter' => 0
-            )
-        )
-    ),
-    'monthlyTotal' => (object)array(
+            ]
+        ]
+    ],
+    'monthlyTotal'        => (object)[
         "rowheight" => 500,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
+        "cell1"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
@@ -688,19 +703,19 @@ $leaseQuoteTable = (object)array(
                 "bgColor"          => 'D9D9D9',
                 "align"            => 'right',
                 "valign"           => 'center',
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 "bold" => true,
                 'name' => 'Calibri',
                 'size' => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "paragraphStyle" => [
                 "align"      => 'right',
                 'spaceAfter' => 0
-            )
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
+            ]
+        ],
+        "cell2"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
@@ -709,41 +724,41 @@ $leaseQuoteTable = (object)array(
                 "borderColor"      => 'BFBFBF',
                 "bgColor"          => 'D9D9D9',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 "bold" => true,
                 'name' => 'Calibri',
                 'size' => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "paragraphStyle" => [
                 'nospacing'  => true,
                 'align'      => 'right',
                 'spaceAfter' => 0
-            )
-        )
-    ),
-    "pages"        => (object)array(
+            ]
+        ]
+    ],
+    "pages"               => (object)[
         "rowheight" => 500,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
+        "cell1"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'name' => 'Calibri',
                 'size' => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "paragraphStyle" => [
                 'nospacing'  => true,
                 'spaceAfter' => 0
-            )
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
+            ]
+        ],
+        "cell2"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
@@ -751,55 +766,93 @@ $leaseQuoteTable = (object)array(
                 "valign"           => 'center',
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'name' => 'Calibri',
                 'size' => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "paragraphStyle" => [
                 'nospacing'  => true,
                 'spaceAfter' => 0
-            )
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
+            ]
+        ],
+        "cell3"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'name' => 'Calibri',
                 'size' => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "paragraphStyle" => [
                 'nospacing'  => true,
                 'spaceAfter' => 0
-            )
-        ),
-        "cell4"     => (object)array(
-            "cellStyle"      => array(
+            ]
+        ],
+        "cell4"     => (object)[
+            "cellStyle"      => [
                 "borderTopSize"    => 1,
                 "borderRightSize"  => 1,
                 "borderBottomSize" => 1,
                 "borderLeftSize"   => 1,
                 "borderColor"      => 'BFBFBF',
                 "valign"           => "center",
-            ),
-            "fontStyle"      => array(
+            ],
+            "fontStyle"      => [
                 'name' => 'Calibri',
                 'size' => 11
-            ),
-            "paragraphStyle" => array(
+            ],
+            "paragraphStyle" => [
                 'nospacing'  => true,
                 'align'      => 'right',
                 'spaceAfter' => 0
-            )
-        )
-    )
-);
+            ]
+        ]
+    ],
+    "signature"           => (object)[
+        "rowheight" => 500,
+        "cell1"     => (object)[
+            "cellStyle"      => [
+                "borderTopSize" => 1,
+                'valign'        => 'center',
+            ],
+            "fontStyle"      => [
+                'name' => 'Calibri',
+                'size' => 11,
+            ],
+            "paragraphStyle" => [
+                'nospacing'  => true,
+                'align'      => 'center',
+                'spaceAfter' => 0
+            ]
+        ],
+        "cell2"     => (object)[
+            "cellStyle"       => [
+                'valign' => 'bottom',
+            ],
+            "fontStyle"       => [
+                'name' => 'Calibri',
+                'size' => 11,
+                'bold' => true,
+            ],
+            "paragraphStyle"  => [
+                'nospacing'  => true,
+                'align'      => 'center',
+                'spaceAfter' => 0
+            ],
+            "paragraphStyle2" => [
+                'nospacing'  => true,
+                'align'      => 'left',
+                'spaceAfter' => 0
+            ]
+        ]
+    ]
+];
 
 /**
  * Setup some styles to be used across the report
@@ -828,9 +881,10 @@ $data = array(
 
 // Actual document pages
 $this->partial("{$commonPartsBasePath}/docx/titlepage.phtml", $titledata);
-$this->partial("{$commonPartsBasePath}/01_prependDocuments.phtml", $data);
+//$this->partial("{$commonPartsBasePath}/01_prependDocuments.phtml", $data);
 $this->partial("{$basePath}/leasedquote.phtml", $data);
-$this->partial("{$commonPartsBasePath}/02_appendDocuments.phtml", $data);
+$this->partial("{$basePath}/signatures.phtml", $data);
+//$this->partial("{$commonPartsBasePath}/02_appendDocuments.phtml", $data);
 
 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpword, 'Word2007');
 

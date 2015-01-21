@@ -13,7 +13,6 @@ $this->render("{$commonPartsBasePath}/styles.phtml");
 
 /* @var $section \PhpOffice\PhpWord\Element\Section */
 $section = $this->section;
-$section->addPageBreak();
 $section->addTitle($this->translate($this->docStrings->quoteHeader), 1);
 $section->addText('Below is a quote for the requested hardware:');
 
@@ -79,7 +78,9 @@ foreach ($this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
 
         // Show subtotal line
         $table->addRow($tcStyle->subtotal->rowheight);
-        $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cell2Span3)->addText($this->translate('Subtotal for group ' . $quoteDeviceGroup->name), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
+        $subtotalCell = $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cell2Span3);
+        $subtotalCell->addText($this->translate('Subtotal for group ' . $quoteDeviceGroup->name), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
+        $subtotalCell->addText($this->translate(htmlspecialchars('Includes service & supplies')), $tcStyle->subtotal->cell2->smallFontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
         $table->addCell($tcStyle->cell4Width, $tcStyle->subtotal->cell3->cellStyle)->addText($this->currency($quoteDeviceGroup->calculateMonthlyLeasePrice()), $tcStyle->subtotal->cell3->fontStyle, $tcStyle->subtotal->cell3->paragraphStyle);
 
         $groupCount++;
