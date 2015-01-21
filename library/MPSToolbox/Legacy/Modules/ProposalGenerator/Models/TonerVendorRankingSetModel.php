@@ -62,7 +62,32 @@ class TonerVendorRankingSetModel extends My_Model_Abstract
     {
         if (!isset($this->_ranksAsArray))
         {
-            $this->_ranksAsArray = TonerVendorRankingMapper::getInstance()->fetchAllByRankingSetIdAsArray($this->id);
+            if ($this->id)
+            {
+                $this->_ranksAsArray = TonerVendorRankingMapper::getInstance()->fetchAllByRankingSetIdAsArray($this->id);
+            }
+            else
+            {
+                if ($this->_rankings)
+                {
+                    $sortedRankings = [];
+                    foreach ($this->_rankings as $ranking)
+                    {
+                        $sortedRankings[$ranking->rank] = $ranking->manufacturerId;
+                    }
+
+                    usort($sortedRankings, function ($rankingA, $rankingB)
+                    {
+                        return ($rankingA->rank > $rankingB->rank);
+                    });
+
+                    $this->_ranksAsArray = $sortedRankings;
+                }
+                else
+                {
+                    $this->_ranksAsArray = [];
+                }
+            }
         }
 
         return $this->_ranksAsArray;
@@ -86,6 +111,7 @@ class TonerVendorRankingSetModel extends My_Model_Abstract
      */
     public function setRankings ($rankings)
     {
-        $this->_rankings     = $rankings;
+        $this->_rankings = $rankings;
+        unset($this->_ranksAsArray);
     }
 }
