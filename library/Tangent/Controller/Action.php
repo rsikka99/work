@@ -150,15 +150,7 @@ class Action extends \Zend_Controller_Action
     {
         if (!isset($this->mpsSession))
         {
-            if (Zend_Session::namespaceIsset('mps-tools'))
-            {
-                $this->mpsSession = new Zend_Session_Namespace('mps-tools');
-            }
-            else
-            {
-                // TODO: Initialize the session
-                $this->mpsSession = new Zend_Session_Namespace('mps-tools');
-            }
+            $this->mpsSession = $this->view->MpsSession();
         }
 
         return $this->mpsSession;
@@ -175,27 +167,7 @@ class Action extends \Zend_Controller_Action
         {
             if ($this->getMpsSession()->selectedClientId > 0)
             {
-                $client = ClientRepository::find($this->getMpsSession()->selectedClientId);
-                if ($client instanceof ClientEntity && (int)$client->dealerId === (int)$this->getIdentity()->dealerId)
-                {
-                    $this->selectedClient = $client;
-
-                    // Show that we've looked at the client recently
-                    $userViewedClient = UserViewedClientMapper::getInstance()->find(array($this->getIdentity()->id, $client->id));
-                    if ($userViewedClient instanceof UserViewedClientModel)
-                    {
-                        $userViewedClient->dateViewed = new Zend_Db_Expr("NOW()");
-                        UserViewedClientMapper::getInstance()->save($userViewedClient);
-                    }
-                    else
-                    {
-                        $userViewedClient             = new UserViewedClientModel();
-                        $userViewedClient->clientId   = $client->id;
-                        $userViewedClient->userId     = $this->getIdentity()->id;
-                        $userViewedClient->dateViewed = new Zend_Db_Expr("NOW()");
-                        UserViewedClientMapper::getInstance()->insert($userViewedClient);
-                    }
-                }
+                $this->selectedClient = $this->view->SelectedClient();
             }
         }
 
@@ -213,15 +185,7 @@ class Action extends \Zend_Controller_Action
         {
             if ($this->getMpsSession()->selectedRmsUploadId > 0)
             {
-                $selectedClient = $this->getSelectedClient();
-                if ($selectedClient instanceof ClientEntity)
-                {
-                    $rmsUpload = RmsUploadRepository::find($this->getMpsSession()->selectedRmsUploadId);
-                    if ($rmsUpload instanceof RmsUploadEntity && $rmsUpload->clientId == $selectedClient->id)
-                    {
-                        $this->selectedRmsUpload = $rmsUpload;
-                    }
-                }
+                $this->selectedRmsUpload = $this->view->SelectedRmsUpload();
             }
         }
 

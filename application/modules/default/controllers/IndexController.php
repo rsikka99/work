@@ -50,19 +50,7 @@ class Default_IndexController extends Action
 
         if ($client instanceof ClientEntity)
         {
-            if (RmsUploadRepository::countForClient($client->id) < 1)
-            {
-                $this->redirectToRoute('app.dashboard.no-uploads');
-            }
-
-            $rmsUpload = $this->getSelectedUpload();
-            if (!$rmsUpload instanceof RmsUploadEntity)
-            {
-                $this->redirectToRoute('app.dashboard.select-upload');
-            }
-
-            $this->view->client    = $client;
-            $this->view->rmsUpload = $rmsUpload;
+            $this->view->client = $client;
 
             // If everything is good to go we can bring them to the dashboard
             $this->showDashboard();
@@ -154,6 +142,10 @@ class Default_IndexController extends Action
         {
             $this->view->availableRmsUploads = $rmsUploads;
         }
+        else
+        {
+            $this->redirectToRoute('app.dashboard.no-uploads');
+        }
     }
 
     /**
@@ -176,7 +168,7 @@ class Default_IndexController extends Action
         $mpsSession = $this->getMpsSession();
         unset($mpsSession->selectedRmsUploadId);
 
-        $this->redirectToRoute('app.dashboard');
+        $this->redirectToRoute('app.dashboard.select-upload');
     }
 
     /**
@@ -293,7 +285,7 @@ class Default_IndexController extends Action
             }
         }
 
-        $this->redirectToRoute('app.dashboard');
+        $this->redirectToRoute('app.dashboard.select-upload');
     }
 
     /**
@@ -310,18 +302,24 @@ class Default_IndexController extends Action
         $availableHardwareOptimizations = array();
         $rmsUploads                     = array();
 
+        $hasUpload = $this->getSelectedUpload() instanceof RmsUploadEntity;
+
         if ($this->getSelectedClient()->id > 0)
         {
-            $availableReports               = AssessmentMapper::getInstance()->fetchAllAssessmentsForClient($this->getSelectedClient()->id, $this->getSelectedUpload()->id);
-            $availableQuotes                = QuoteMapper::getInstance()->fetchAllForClient($this->getSelectedClient()->id);
-            $availableHealthchecks          = HealthCheckMapper::getInstance()->fetchAllHealthchecksForClient($this->getSelectedClient()->id, $this->getSelectedUpload()->id);
-            $availableHardwareOptimizations = HardwareOptimizationMapper::getInstance()->fetchAllForClient($this->getSelectedClient()->id, $this->getSelectedUpload()->id);
+            // Quotes don't require an rms upload
+            $availableQuotes             = QuoteMapper::getInstance()->fetchAllForClient($this->getSelectedClient()->id);
+            $this->view->availableQuotes = $availableQuotes;
 
+            if ($hasUpload)
+            {
+                $availableReports               = AssessmentMapper::getInstance()->fetchAllAssessmentsForClient($this->getSelectedClient()->id, $this->getSelectedUpload()->id);
+                $availableHealthchecks          = HealthCheckMapper::getInstance()->fetchAllHealthchecksForClient($this->getSelectedClient()->id, $this->getSelectedUpload()->id);
+                $availableHardwareOptimizations = HardwareOptimizationMapper::getInstance()->fetchAllForClient($this->getSelectedClient()->id, $this->getSelectedUpload()->id);
 
-            $this->view->availableAssessments           = $availableReports;
-            $this->view->availableQuotes                = $availableQuotes;
-            $this->view->availableHealthchecks          = $availableHealthchecks;
-            $this->view->availableHardwareOptimizations = $availableHardwareOptimizations;
+                $this->view->availableAssessments           = $availableReports;
+                $this->view->availableHealthchecks          = $availableHealthchecks;
+                $this->view->availableHardwareOptimizations = $availableHardwareOptimizations;
+            }
         }
 
         if ($this->getRequest()->isPost())
