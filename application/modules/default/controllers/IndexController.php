@@ -52,6 +52,15 @@ class Default_IndexController extends Action
         {
             $this->view->client = $client;
 
+            if (!$this->getSelectedUpload() instanceof RmsUploadEntity)
+            {
+                if (RmsUploadRepository::countForClient($client->id) == 1)
+                {
+                    $rmsUpload                                  = RmsUploadRepository::fetchForClient($client->id)->first();
+                    $this->getMpsSession()->selectedRmsUploadId = $rmsUpload->id;
+                }
+            }
+
             // If everything is good to go we can bring them to the dashboard
             $this->showDashboard();
         }
@@ -737,6 +746,25 @@ class Default_IndexController extends Action
 
 
             $this->getMpsSession()->selectedClientId = $clientId;
+
+            if (!$this->getSelectedUpload() instanceof RmsUploadEntity)
+            {
+                $uploadCount = RmsUploadRepository::countForClient($clientId);
+
+                if ($uploadCount > 1)
+                {
+                    $this->redirectToRoute('app.dashboard.select-upload');
+                }
+                else if ($uploadCount == 1)
+                {
+                    $rmsUpload                                  = RmsUploadRepository::fetchForClient($clientId)->first();
+                    $this->getMpsSession()->selectedRmsUploadId = $rmsUpload->id;
+                }
+                else
+                {
+                    $this->redirectToRoute('app.dashboard');
+                }
+            }
 
             // Reload the page
             $this->redirectToRoute('app.dashboard');

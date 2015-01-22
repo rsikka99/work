@@ -6,7 +6,8 @@ use MPSToolbox\Legacy\Entities\RmsUploadEntity;
 <div class="container">
     <div class="row">
         <div class="col-sm-10">
-            <p class="lead">Please select an upload to use. You can also upload a new file here as well.</p>
+            <p class="lead">Please select an upload to use or upload a new one.</p>
+            <p>You can also <a href="<?= $this->url([], 'app.dashboard') ?>">skip to the <i class="fa fa-fw fa-dashboard"></i> dashboard</a> if you are only interested in hardware quotes.</p>
         </div>
         <div class="col-sm-2">
             <a class="btn btn-primary" href="<?= $this->url(array(), 'rms-upload.upload-file') ?>" title="Upload New">

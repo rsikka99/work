@@ -1,6 +1,8 @@
 <?php
 namespace MPSToolbox\Legacy\Repositories;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 use MPSToolbox\Legacy\Entities\RmsUploadEntity;
 
 /**
@@ -33,5 +35,15 @@ class RmsUploadRepository
     public static function find ($rmsUploadId)
     {
         return RmsUploadEntity::find($rmsUploadId);
+    }
+
+    /**
+     * @param $clientId
+     *
+     * @return Builder|Model
+     */
+    public static function fetchForClient ($clientId)
+    {
+        return RmsUploadEntity::where('clientId', '=', $clientId);
     }
 }
