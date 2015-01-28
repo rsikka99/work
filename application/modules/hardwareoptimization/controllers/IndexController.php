@@ -493,6 +493,9 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 if ($costDelta < $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->costThreshold)
                 {
                     $hardwareOptimizationDeviceInstance->action = HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE;
+
+                    $costDelta = $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer()) -
+                                 $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForReplacements(), $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->blackToColorRatio);
                 }
 
 
@@ -624,7 +627,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $jqGridService->parseJQGridPagingRequest($jqGridServiceParameters);
 
         // We are not sorting in this function call - default sorting is monthly cost which will be handled by uSort
-        $jqGridService->setRecordCount($hardwareoptimizationMapper->fetchAllForHardwareOptimization($this->_hardwareOptimization->id, null, null, null, null, true));
+        $jqGridService->setRecordCount($hardwareoptimizationMapper->fetchAllForHardwareOptimization($this->_hardwareOptimization->id, null, null, null, null, null, true));
 
         // Validate current page number since we don't want to be out of bounds
         if ($jqGridService->getCurrentPage() < 1)
@@ -645,7 +648,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         }
 
         // Array of devices
-        $rows = $hardwareoptimizationMapper->fetchAllForHardwareOptimization($this->_hardwareOptimization->id, $this->getOptimizationViewModel()->getCostPerPageSettingForDealer(), $this->getOptimizationViewModel()->getCostPerPageSettingForReplacements(), $jqGridService->getRecordsPerPage(), $startRecord);
+        $rows = $hardwareoptimizationMapper->fetchAllForHardwareOptimization($this->_hardwareOptimization->id, $this->getOptimizationViewModel()->getCostPerPageSettingForDealer(), $this->getOptimizationViewModel()->getCostPerPageSettingForReplacements(), $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings, $jqGridService->getRecordsPerPage(), $startRecord);
 
         /* @var $deviceInstances DeviceInstanceModel [] */
         $deviceInstances = $rows['deviceInstances'];

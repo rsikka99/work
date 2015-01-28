@@ -12,6 +12,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
+use MPSToolbox\Settings\Entities\OptimizationSettingsEntity;
 use My_Model_Mapper_Abstract;
 use Zend_Db_Expr;
 use Zend_Db_Table;
@@ -288,16 +289,17 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param int                     $hardwareOptimizationId
-     * @param CostPerPageSettingModel $costPerPageSetting
-     * @param CostPerPageSettingModel $replacementCostPerPageSetting
-     * @param int                     $limit
-     * @param int                     $offset
-     * @param bool                    $justCount
+     * @param int                        $hardwareOptimizationId
+     * @param CostPerPageSettingModel    $costPerPageSetting
+     * @param CostPerPageSettingModel    $replacementCostPerPageSetting
+     * @param OptimizationSettingsEntity $optimizationSettings
+     * @param int                        $limit
+     * @param int                        $offset
+     * @param bool                       $justCount
      *
      * @return array|int
      */
-    public function fetchAllForHardwareOptimization ($hardwareOptimizationId, $costPerPageSetting, $replacementCostPerPageSetting, $limit, $offset = 0, $justCount = false)
+    public function fetchAllForHardwareOptimization ($hardwareOptimizationId, $costPerPageSetting, $replacementCostPerPageSetting, $optimizationSettings, $limit, $offset = 0, $justCount = false)
     {
         $db                     = $this->getDbTable()->getAdapter();
         $hardwareOptimizationId = $db->quote($hardwareOptimizationId, 'INTEGER');
@@ -389,9 +391,16 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
                 // We want the two arrays to be in parallel since we need to pass and array of devices to the form to generate the select elements
                 $deviceInstance                     = DeviceInstanceMapper::getInstance()->find($devices['jsonData'][$i]['deviceInstanceId']);
                 $hardwareOptimizationDeviceInstance = $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimizationId);
+
+                $ratio = 0;
                 if ($hardwareOptimizationDeviceInstance->action === HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE || $hardwareOptimizationDeviceInstance->action === HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE)
                 {
                     $replacementDevice = $hardwareOptimizationDeviceInstance->getMasterDevice();
+
+                    if ($hardwareOptimizationDeviceInstance->action === HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE)
+                    {
+                        $ratio = $optimizationSettings->blackToColorRatio;
+                    }
                 }
 
                 $returnDevices['deviceInstances'][] = $deviceInstance;
@@ -401,7 +410,10 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
                 $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting);
 
 
-                $costDelta                = ($replacementDevice instanceof MasterDeviceModel) ? $deviceInstanceMonthlyCost - $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, $replacementDevice) : 0;
+                $replacementDeviceMonthlyCost = $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, $replacementDevice, $ratio);
+
+
+                $costDelta                = ($replacementDevice instanceof MasterDeviceModel) ? $deviceInstanceMonthlyCost - $replacementDeviceMonthlyCost : 0;
                 $jsonData['monoAmpv']     = $pageCount->getBlackPageCount()->getMonthly();
                 $jsonData['colorAmpv']    = $pageCount->getColorPageCount()->getMonthly();
                 $jsonData['rawMonoCpp']   = $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage;
