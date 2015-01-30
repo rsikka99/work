@@ -79,6 +79,10 @@ $devicesGroupedByAction = $optimization->getDevicesGroupedByAction();
                 <th>Upgrade Loss Threshold:</th>
                 <td><?= $this->currency((float)$hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->lossThreshold); ?></td>
             </tr>
+            <tr class="<?= ($hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->autoOptimizeFunctionality) ? '' : "text-muted"; ?>">
+                <th>Minimum Page Count:</th>
+                <td><?= number_format((float)$hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->minimumPageCount); ?></td>
+            </tr>
             </tbody>
         </table>
     </div>

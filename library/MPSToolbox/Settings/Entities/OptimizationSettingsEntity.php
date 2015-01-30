@@ -22,6 +22,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerVendorRankingSetMode
  * @property float blackToColorRatio
  * @property int   monochromeTonerVendorRankingSetId
  * @property int   colorTonerVendorRankingSetId
+ * @property int   minimumPageCount
  */
 class OptimizationSettingsEntity extends EloquentModel
 {

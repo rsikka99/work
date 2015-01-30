@@ -1250,7 +1250,7 @@ class DeviceInstanceModel extends My_Model_Abstract
              *
              * - Must also match ONE of the following:
              *      - Not capable of reporting toner levels
-             *      - Over it's max life usage
+             *      - Over its max life usage
              *      - Over X years old
              */
             else if (

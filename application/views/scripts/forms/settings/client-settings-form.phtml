@@ -370,6 +370,15 @@ $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
                                 <?= $this->RenderFormElementErrors($optimizationSettingsForm->getElement('blackToColorRatio')) ?>
                             </div>
                         </div>
+
+                        <div class="form-group <?= ($optimizationSettingsForm->getElement('minimumPageCount')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                            <?= $this->RenderFormLabel($optimizationSettingsForm->getElement('minimumPageCount'), array('col-md-6')) ?>
+
+                            <div class="col-md-6">
+                                <?= $this->RenderFormText($optimizationSettingsForm->getElement('minimumPageCount'), array(), null, null) ?>
+                                <?= $this->RenderFormElementErrors($optimizationSettingsForm->getElement('minimumPageCount')) ?>
+                            </div>
+
                     </fieldset>
                 </div>
             </div>

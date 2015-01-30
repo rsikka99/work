@@ -80,6 +80,11 @@ class OptimizationFunctionalityDeviceReplacementModel implements OptimizationDev
     protected $_blackToColorRatio;
 
     /**
+     * @var int
+     */
+    protected $_minimumPageCount;
+
+    /**
      * @param DeviceSwapModel[][]     $replacementDevices
      * @param int                     $dealerId
      * @param float                   $lossThreshold
@@ -89,8 +94,9 @@ class OptimizationFunctionalityDeviceReplacementModel implements OptimizationDev
      * @param float                   $reportLaborCpp
      * @param float                   $reportPartsCpp
      * @param int                     $blackToColorRatio
+     * @param int                     $minimumPageCount
      */
-    public function __construct ($replacementDevices, $dealerId, $lossThreshold, $costSavingsThreshold, $dealerCppSetting, $replacementsCppSetting, $reportLaborCpp, $reportPartsCpp, $blackToColorRatio = null)
+    public function __construct ($replacementDevices, $dealerId, $lossThreshold, $costSavingsThreshold, $dealerCppSetting, $replacementsCppSetting, $reportLaborCpp, $reportPartsCpp, $blackToColorRatio = null, $minimumPageCount)
     {
         if (isset($replacementDevices['black']))
         {
@@ -117,6 +123,7 @@ class OptimizationFunctionalityDeviceReplacementModel implements OptimizationDev
         $this->_dealerId                           = $dealerId;
         $this->_costSavingsThreshold               = $costSavingsThreshold;
         $this->_blackToColorRatio                  = $blackToColorRatio;
+        $this->_minimumPageCount                   = $minimumPageCount;
         $this->_reportPartsCostPerPage             = $reportPartsCpp;
         $this->_reportLaborCostPerPage             = $reportLaborCpp;
         MasterDeviceModel::$ReportLaborCostPerPage = $reportLaborCpp;
@@ -135,31 +142,39 @@ class OptimizationFunctionalityDeviceReplacementModel implements OptimizationDev
      */
     public function findReplacement ($deviceInstance)
     {
-        $suggestedDevice = null;
-
         /**
-         * We don't try to upgrade to color if the action is retire or do not repair.
+         * We don't try to upgrade to color if the action is retire or do not repair
          */
-        if ($deviceInstance->getAction($this->_costPerPageSetting) != DeviceInstanceModel::ACTION_RETIRE &&
-            $deviceInstance->getAction($this->_costPerPageSetting) != DeviceInstanceModel::ACTION_REPLACE
+        if (
+            $deviceInstance->getAction($this->_costPerPageSetting) == DeviceInstanceModel::ACTION_RETIRE
+            || $deviceInstance->getAction($this->_costPerPageSetting) == DeviceInstanceModel::ACTION_REPLACE
         )
         {
-            if (!$deviceInstance->getMasterDevice()->isColor())
-            {
-                if ($deviceInstance->getMasterDevice()->isMfp())
-                {
-                    // Replace with color mfp devices
-                    $suggestedDevice = $this->_findReplacement($deviceInstance, $this->_colorMfpReplacementDevices);
-                }
-                else
-                {
-                    // Replace with color devices or color mfp devices
-                    $suggestedDevice = $this->_findReplacement($deviceInstance, $this->_colorReplacementDevices);
-                }
-            }
+            return null;
         }
 
-        return $suggestedDevice;
+        /**
+         * Will never be checking a color device
+         */
+        if ($deviceInstance->getMasterDevice()->isColor())
+        {
+            return null;
+        }
+
+        /**
+         * Does the device print enough pages to warrant a replacement?
+         */
+        if ($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() < $this->_minimumPageCount)
+        {
+            return null;
+        }
+
+        /**
+         * Figure out which replacement device set to use and see if we get a match!
+         */
+        $replacementDeviceSet = ($deviceInstance->getMasterDevice()->isMfp()) ? $this->_colorMfpReplacementDevices : $this->_colorReplacementDevices;
+
+        return $this->_findReplacement($deviceInstance, $replacementDeviceSet);
     }
 
     /**

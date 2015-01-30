@@ -65,6 +65,12 @@ class OptimizationSettingsForm extends \Zend_Form
             'required'    => true,
         ));
 
+        $this->addElement('text', 'minimumPageCount', array(
+            'label'       => 'Minimum Monthly Page Count',
+            'description' => "The minimum page count a device must be printing in order to be considered for upgrade.",
+            'required'    => true,
+        ));
+
         $this->addElement('multiselect', 'deviceSwapMonochromeRankSetArray', array(
             'label'        => 'Monochrome Toner Vendors',
             'description'  => 'Devices will search for toners in order of selection from top to bottom with OEM being always being used last.',
@@ -105,6 +111,7 @@ class OptimizationSettingsForm extends \Zend_Form
                 'optimizedTargetColorCostPerPage'      => $optimizationSettings->optimizedTargetColorCostPerPage,
                 'costThreshold'                        => $optimizationSettings->costThreshold,
                 'lossThreshold'                        => $optimizationSettings->lossThreshold,
+                'minimumPageCount'                     => $optimizationSettings->minimumPageCount,
                 'autoOptimizeFunctionality'            => $optimizationSettings->autoOptimizeFunctionality,
                 'blackToColorRatio'                    => $optimizationSettings->blackToColorRatio,
                 'deviceSwapMonochromeRankSetArray'     => $optimizationSettings->getMonochromeRankSet()->getRanksAsArray(),
@@ -136,6 +143,7 @@ class OptimizationSettingsForm extends \Zend_Form
         $model->optimizedTargetColorCostPerPage      = $this->getValue('optimizedTargetColorCostPerPage');
         $model->costThreshold                        = $this->getValue('costThreshold');
         $model->lossThreshold                        = $this->getValue('lossThreshold');
+        $model->minimumPageCount                     = $this->getValue('minimumPageCount');
         $model->autoOptimizeFunctionality            = $this->getValue('autoOptimizeFunctionality');
         $model->blackToColorRatio                    = $this->getValue('blackToColorRatio');
 

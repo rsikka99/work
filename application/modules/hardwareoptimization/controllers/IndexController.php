@@ -252,7 +252,9 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 $optimization->getCostPerPageSettingForReplacements(),
                 $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromeLaborCostPerPage,
                 $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromePartsCostPerPage,
-                $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->blackToColorRatio
+                $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->blackToColorRatio,
+                $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->minimumPageCount
+
             );
 
             foreach ($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
