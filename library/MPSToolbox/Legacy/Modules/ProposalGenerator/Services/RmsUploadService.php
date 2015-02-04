@@ -155,6 +155,10 @@ class RmsUploadService
                     $uploadProviderId = RmsProviderModel::RMS_PROVIDER_PRINT_TRACKER;
                     $uploadCsvService = new PrintTrackerUploadService();
                     break;
+                case RmsProviderModel::RMS_PROVIDER_LEXMARK:
+                    $uploadProviderId = RmsProviderModel::RMS_PROVIDER_PRINT_TRACKER;
+                    $uploadCsvService = new PrintTrackerUploadService();
+                    break;
                 default :
                     $uploadCsvService    = null;
                     $uploadProviderId    = null;
