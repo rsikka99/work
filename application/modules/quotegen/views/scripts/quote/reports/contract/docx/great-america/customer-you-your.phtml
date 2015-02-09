@@ -14,16 +14,16 @@ $paragraphStyle = $this->paragraphStyle;
 
 $customerTable = $section->addTable($this->tableStyle->standard);
 $customerTable->addRow(300);
-$customerTable->addCell($tableSpan ['span8'], $cellStyle->invertBackground)->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$customerTable->addCell($tableSpan ['span8'], $cellStyle->invertBackground)->addText(htmlspecialchars($contractTemplateSection->getContractSectionName()), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
 
 $customerTable->addRow(200);
 $textRun = $customerTable->addCell($tableSpan ['span8'])->addTextRun($paragraphStyle->noSpacing);
 
 $textRun->addText(" FULL LEGAL NAME: ", $fontStyle->label);
-$textRun->addText(" {$this->company->name}", $fontStyle->bold);
+$textRun->addText(htmlspecialchars(" {$this->company->name}"), $fontStyle->bold);
 
 $customerTable->addRow(200);
 $textRun = $customerTable->addCell($tableSpan ['span8'], $cellStyle->topBorder)->addTextRun($paragraphStyle->noSpacing);
 
 $textRun->addText(" ADDRESS: ", $fontStyle->label);
-$textRun->addText(" {$this->company->address}", $fontStyle->bold);
+$textRun->addText(htmlspecialchars(" {$this->company->address}"), $fontStyle->bold);

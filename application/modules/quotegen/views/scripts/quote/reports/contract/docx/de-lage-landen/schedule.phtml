@@ -28,7 +28,7 @@ $deviceTable->getStyle()->setBorderLeftSize(1);
 $deviceTable->getStyle()->setBorderRightSize(1);
 
 $deviceTable->addRow(300);
-$deviceTable->addCell(null, array_merge($cellStyle->invertBackground, $cellStyle->span4))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$deviceTable->addCell(null, array_merge($cellStyle->invertBackground, $cellStyle->span4))->addText(htmlspecialchars($contractTemplateSection->getContractSectionName()), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
 
 /**
  * Schedule Table - Header Row
@@ -48,11 +48,11 @@ foreach ($quote->getQuoteDevices() as $quoteDevice)
     {
         $deviceTable->addRow(600);
         $deviceDetailsCell = $deviceTable->addCell($tableSpan ['span3'], array_merge($cellStyle->topBorder, $cellStyle->rightBorder));
-        $deviceDetailsCell->addText($quoteDevice->name, $fontStyle->bold, $paragraphStyle->noSpacing);
+        $deviceDetailsCell->addText(htmlspecialchars($quoteDevice->name), $fontStyle->bold, $paragraphStyle->noSpacing);
 
         foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption)
         {
-            $deviceDetailsCell->addText('    - ' . $quoteDeviceOption->quantity . ' x ' . $quoteDeviceOption->name, $fontStyle->finePrint, $paragraphStyle->noSpacing);
+            $deviceDetailsCell->addText('    - ' . htmlspecialchars($quoteDeviceOption->quantity) . ' x ' . htmlspecialchars($quoteDeviceOption->name), $fontStyle->finePrint, $paragraphStyle->noSpacing);
         }
 
         $deviceTable->addCell($tableSpan ['span1'], array_merge($cellStyle->rightBorder, $cellStyle->topBorder))->addText(' ', null, $paragraphStyle->noSpacing);

@@ -15,7 +15,7 @@ $guarantyTable->getStyle()->setBorderBottomSize(1)->setBorderLeftSize(1)->setBor
 $guarantyTable->getStyle()->setCellMargin(50);
 
 $guarantyTable->addRow(300);
-$guarantyTable->addCell($tableSpan['span8'], array_merge($cellStyle->span3, $cellStyle->invertBackground))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$guarantyTable->addCell($tableSpan['span8'], array_merge($cellStyle->span3, $cellStyle->invertBackground))->addText(htmlspecialchars($contractTemplateSection->getContractSectionName()), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
 
 $guarantyHtml = new DOMDocument(5);
 $guarantyHtml->loadHTML($contractTemplateSection->getContractSectionText());
@@ -36,11 +36,11 @@ foreach ($guarantyHtml->getElementsByTagName('p') as $paragraphNode)
 
         if ($node->tagName == 'b')
         {
-            $textRun->addText($node->textContent, $fontStyle->boldFinePrint);
+            $textRun->addText(htmlspecialchars($node->textContent), $fontStyle->boldFinePrint);
         }
         else
         {
-            $textRun->addText($node->textContent, $fontStyle->finePrint);
+            $textRun->addText(htmlspecialchars($node->textContent), $fontStyle->finePrint);
         }
     }
 }

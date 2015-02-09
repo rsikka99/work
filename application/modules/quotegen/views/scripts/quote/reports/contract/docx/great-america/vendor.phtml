@@ -13,4 +13,4 @@ $paragraphStyle = $this->paragraphStyle;
 
 $vendorTable = $section->addTable($this->tableStyle->standard);
 $vendorTable->addRow();
-$vendorTable->addCell($tableSpan ['span8'], $cellStyle->invertBackground)->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$vendorTable->addCell($tableSpan ['span8'], $cellStyle->invertBackground)->addText(htmlspecialchars($contractTemplateSection->getContractSectionName()), $fontStyle->invertBackground, $paragraphStyle->noSpacing);

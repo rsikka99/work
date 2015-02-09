@@ -20,19 +20,19 @@ $termDetailsTable->getStyle()->setBorderLeftSize(1);
 
 
 $termDetailsTable->addRow();
-$termDetailsTable->addCell($tableSpan ['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span8))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$termDetailsTable->addCell($tableSpan ['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span8))->addText(htmlspecialchars($contractTemplateSection->getContractSectionName()), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
 $termDetailsTable->addRow();
 
 /**
  * Term & Payment
  */
 $termAndPaymentCell = $termDetailsTable->addCell($tableSpan ['span3'], $cellStyle->span3);
-$termAndPaymentCell->addText('TERM IN MONTHS      : ' . $this->leaseDetails->termInMonths . ' Months', $fontStyle->label, $paragraphStyle->noSpacing);
+$termAndPaymentCell->addText('TERM IN MONTHS      : ' . htmlspecialchars($this->leaseDetails->termInMonths) . ' Months', $fontStyle->label, $paragraphStyle->noSpacing);
 
 $termAndPaymentTextRun = $termAndPaymentCell->addTextRun($paragraphStyle->noSpacing);
 $termAndPaymentTextRun->addText('MONTHLY FIXED CHARGE: ', $fontStyle->label);
-$termAndPaymentTextRun->addText("{$this->leaseDetails->monthlyCharge}", array_merge($fontStyle->label, $fontStyle->underline, $fontStyle->bold));
-$termAndPaymentTextRun->addText("**");
+$termAndPaymentTextRun->addText(htmlspecialchars($this->leaseDetails->monthlyCharge), array_merge($fontStyle->label, $fontStyle->underline, $fontStyle->bold));
+$termAndPaymentTextRun->addText('**');
 
 $termAndPaymentCell->addText('SEE ATTACHED EQUIPMENT LIST [ ]', $fontStyle->label, $paragraphStyle->noSpacing);
 
@@ -40,7 +40,7 @@ $termAndPaymentCell->addText('SEE ATTACHED EQUIPMENT LIST [ ]', $fontStyle->labe
  * Security Deposit
  */
 $securityDepositCell = $termDetailsTable->addCell($tableSpan ['span2'], $cellStyle->span2);
-$securityDepositCell->addText('SECURITY DEPOSIT ' . $this->leaseDetails->securityDeposit, $fontStyle->label, $paragraphStyle->noSpacing);
+$securityDepositCell->addText('SECURITY DEPOSIT ' . htmlspecialchars($this->leaseDetails->securityDeposit), $fontStyle->label, $paragraphStyle->noSpacing);
 
 /**
  * Purchase Option Cell

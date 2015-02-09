@@ -16,7 +16,7 @@ $lesseeSignatureTable->getStyle()->setBorderBottomSize(1)->setBorderLeftSize(1)-
 $lesseeSignatureTable->getStyle()->setCellMargin(50);
 
 $lesseeSignatureTable->addRow(300);
-$lesseeSignatureTable->addCell($tableSpan['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span6))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$lesseeSignatureTable->addCell($tableSpan['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span6))->addText(htmlspecialchars($contractTemplateSection->getContractSectionName()), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
 
 $lesseeSignatureTable->addRow(300);
 $lesseeSignatureTable->addCell($tableSpan['span6'], $cellStyle->span2)->addText('You agree that this is a non-cancelable lease. The Equipment is: ', $fontStyle->boldFinePrint);

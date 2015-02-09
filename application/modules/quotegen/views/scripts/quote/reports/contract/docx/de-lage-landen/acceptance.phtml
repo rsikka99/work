@@ -16,7 +16,7 @@ $acceptanceTable->getStyle()->setBorderBottomSize(1)->setBorderLeftSize(1)->setB
 $acceptanceTable->getStyle()->setCellMargin(50);
 
 $acceptanceTable->addRow(300);
-$acceptanceTable->addCell($tableSpan ['span8'], array_merge($this->cellStyle->invertBackground, $this->cellStyle->span2))->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $noSpacing);
+$acceptanceTable->addCell($tableSpan ['span8'], array_merge($this->cellStyle->invertBackground, $this->cellStyle->span2))->addText(htmlspecialchars($contractTemplateSection->getContractSectionName()), $this->fontStyle->invertBackground, $noSpacing);
 
 $acceptanceTable->addRow(300);
 $textRun = $acceptanceTable->addCell($tableSpan ['span8'], $this->cellStyle->span2)->addTextRun($noSpacing);

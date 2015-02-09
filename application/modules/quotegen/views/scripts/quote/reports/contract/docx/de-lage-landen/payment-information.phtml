@@ -16,7 +16,7 @@ $paymentInfoTable->getStyle()->setBorderBottomSize(1)->setBorderRightSize(1)->se
 $paymentInfoTable->getStyle()->setCellMargin(50);
 
 $paymentInfoTable->addRow(300);
-$paymentInfoTable->addCell($tableSpan['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span7))->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$paymentInfoTable->addCell($tableSpan['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span7))->addText(htmlspecialchars($contractTemplateSection->getContractSectionName()), $this->fontStyle->invertBackground, $paragraphStyle->noSpacing);
 
 $paymentInfoTable->addRow(300);
 $paymentInfoTable->addCell($tableSpan['span2'], $cellStyle->rightBorder)->addText('Number of Lease Payments', $fontStyle->label, $paragraphStyle->noSpacingLeft);
