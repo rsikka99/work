@@ -17,7 +17,25 @@ use My_Model_Abstract;
  */
 class TonerModel extends My_Model_Abstract
 {
-    const MANUFACTURER_ASSUMED_COVERAGE = 0.05;
+
+    /**
+     * The monochrome coverage used to calculate the yield of the cartridge.
+     *
+     * This comes from ISO/IEC 19752 (5% coverage when testing)
+     */
+    const MANUFACTURER_ASSUMED_MONO_COVERAGE              = 0.05;
+
+    /**
+     * ISO/IEC 19752 tests for yield have a mixture of images and text that
+     * roughly equals 5% for each color (CYMK) resulting in a total of 20%
+     */
+    const MANUFACTURER_ASSUMED_COLOR_SINGLE_COVERAGE               = 0.05;
+
+    /**
+     * In the case of a three color combined cartridge, we should be using 15%
+     * as the base coverage since all three colors are in the same cartridge.
+     */
+    const MANUFACTURER_ASSUMED_COLOR_THREE_COLOR_COMBINED_COVERAGE = 0.15;
 
     // Database fields
     /**
@@ -296,6 +314,7 @@ class TonerModel extends My_Model_Abstract
         if (!array_key_exists($cacheKey, $this->_cachedCostPerPage))
         {
             $costPerPage = new CostPerPageModel();
+
             /*
              * Cost per page is calculated by dividing the price by the yield. When providing new coverage we need to
              * divide the manufacturers coverage by our coverage in order to arrive at the right number.
@@ -306,19 +325,19 @@ class TonerModel extends My_Model_Abstract
             switch ($this->tonerColorId)
             {
                 case TonerColorModel::BLACK :
-                    $monochromeCostPerPage = $this->calculatedCost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / $monochromeCoverage));
+                    $monochromeCostPerPage = $this->calculatedCost / ($this->yield * (self::MANUFACTURER_ASSUMED_MONO_COVERAGE / $monochromeCoverage));
                     break;
                 case TonerColorModel::CYAN :
                 case TonerColorModel::MAGENTA :
                 case TonerColorModel::YELLOW :
-                    $colorCostPerPage = $this->calculatedCost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / ($colorCoverage / 4)));
+                    $colorCostPerPage = $this->calculatedCost / ($this->yield * (self::MANUFACTURER_ASSUMED_COLOR_SINGLE_COVERAGE / ($colorCoverage / 4)));
                     break;
                 case TonerColorModel::THREE_COLOR :
-                    $colorCostPerPage = $this->calculatedCost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / ($colorCoverage / 4 * 3)));
+                    $colorCostPerPage = $this->calculatedCost / ($this->yield * (self::MANUFACTURER_ASSUMED_COLOR_THREE_COLOR_COMBINED_COVERAGE / ($colorCoverage / 4 * 3)));
                     break;
                 case TonerColorModel::FOUR_COLOR :
-                    $monochromeCostPerPage = $this->calculatedCost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / $monochromeCoverage));
-                    $colorCostPerPage      = $this->calculatedCost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / $colorCoverage));
+                    $monochromeCostPerPage = $this->calculatedCost / ($this->yield * (self::MANUFACTURER_ASSUMED_MONO_COVERAGE / $monochromeCoverage));
+                    $colorCostPerPage      = $this->calculatedCost / ($this->yield * (self::MANUFACTURER_ASSUMED_COLOR_THREE_COLOR_COMBINED_COVERAGE / ($colorCoverage / 4 * 3)));
                     break;
             }
 
