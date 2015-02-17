@@ -64,7 +64,7 @@ class Admin_DealerController extends Action
             $this->redirectToRoute('admin.dealers');
         }
 
-        $this->_pageTitle = array($dealer->dealerName, 'Dealers', 'System');
+        $this->_pageTitle = array('Dealers', 'System');
 
         $this->view->dealer = $dealer;
     }
@@ -391,7 +391,6 @@ class Admin_DealerController extends Action
                         // Save the dealer with the id to the database
                         $dealerId = DealerMapper::getInstance()->insert($dealer);
 
-                        $newDeviceSwapReasonArray = array();
                         // Copy the systems default reason for the dealers system default reason
                         foreach (DeviceSwapReasonMapper::getInstance()->fetchAllReasonByDealerId(1) as $deviceSwapReason)
                         {

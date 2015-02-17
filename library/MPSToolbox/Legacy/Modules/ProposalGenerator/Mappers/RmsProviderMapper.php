@@ -246,13 +246,7 @@ class RmsProviderMapper extends My_Model_Mapper_Abstract
         return $object->id;
     }
 
-    /**
-     * Returns all the toner vendor manufacturer for use in dropdown
-     *
-     * @param null $dealerId
-     *
-     * @return array
-     */
+
     public function fetchAllForDealerDropdown ($dealerId = null)
     {
         $dropDown = array();
@@ -269,6 +263,24 @@ class RmsProviderMapper extends My_Model_Mapper_Abstract
         }
 
         return $dropDown;
+    }
+
+    /**
+     * Returns all the toner vendor manufacturer for a dealer
+     *
+     * @param null $dealerId
+     *
+     * @return RmsProviderModel[]
+     */
+    public function fetchAllForDealer ($dealerId)
+    {
+        $rmsProviders = [];
+        foreach (DealerRmsProviderMapper::getInstance()->fetchAllForDealer($dealerId) as $dealerRmsProvider)
+        {
+            $rmsProviders[] = $this->find($dealerRmsProvider->rmsProviderId);
+        }
+
+        return $rmsProviders;
     }
 
 

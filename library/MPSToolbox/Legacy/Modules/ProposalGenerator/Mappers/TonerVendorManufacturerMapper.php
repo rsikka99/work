@@ -234,6 +234,25 @@ class TonerVendorManufacturerMapper extends My_Model_Mapper_Abstract
     }
 
     /**
+     * Fetches all the toner vendors for a dealer
+     *
+     * @param $dealerId
+     *
+     * @return TonerVendorManufacturerModel[]
+     */
+    public function fetchAllForDealer ($dealerId)
+    {
+        $tonerVendorManufacturers = [];
+
+        foreach (DealerTonerVendorMapper::getInstance()->fetchAllForDealer($dealerId) as $dealerTonerVendor)
+        {
+            $tonerVendorManufacturers[] = $this->find($dealerTonerVendor->manufacturerId);
+        }
+
+        return $tonerVendorManufacturers;
+    }
+
+    /**
      * Returns all the toner vendor manufacturer for use in dropdown
      *
      * @param null $dealerId
