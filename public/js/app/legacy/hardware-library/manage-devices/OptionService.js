@@ -1,4 +1,7 @@
-define(['jquery'], function ($)
+define([
+    'jquery',
+    'bluebird'
+], function ($, Promise)
 {
     'use strict';
     var OptionService = function ()
@@ -57,7 +60,7 @@ define(['jquery'], function ($)
                 url      : OptionService.urls.deleteOption,
                 type     : "post",
                 dataType : "json",
-                data     : {optionId: optionId},
+                data     : { optionId: optionId },
                 'success': function (data)
                 {
                     resolve(data.optionId);
