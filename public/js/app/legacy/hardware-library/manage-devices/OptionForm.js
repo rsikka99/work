@@ -194,7 +194,14 @@ define(['jquery', './OptionService', 'bootstrap.modal.manager'], function ($, Op
             return optionId;
         }, function (data)
         {
-            that.setZendFormErrors(data.errorMessages);
+            if (data.hasOwnProperty('errorMessages'))
+            {
+                that.setZendFormErrors(data.errorMessages);
+            }
+            else
+            {
+                alert('An unexpected error happened. Please let support know how to reproduce this issue.');
+            }
         });
     };
 

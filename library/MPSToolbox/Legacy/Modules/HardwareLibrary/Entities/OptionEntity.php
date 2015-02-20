@@ -36,4 +36,16 @@ class OptionEntity extends EloquentModel
     {
         return $this->belongsTo('\MPSToolbox\Legacy\Entities\DealerEntity', 'dealerId', 'id');
     }
+
+    /**
+     * @param Builder $query
+     * @param int     $id
+     * @param int     $dealerId
+     *
+     * @return Builder
+     */
+    public function scopeOptionForDealer ($query, $id, $dealerId)
+    {
+        return $query->whereId($id)->where('dealerId', '=', $dealerId);
+    }
 }

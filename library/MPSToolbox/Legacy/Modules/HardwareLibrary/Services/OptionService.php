@@ -74,7 +74,7 @@ class OptionService
      */
     public function find ($optionId)
     {
-        return OptionEntity::where('dealerId', '=', $this->dealerId)->where('id', '=', $optionId)->first();
+        return OptionEntity::optionForDealer($optionId, $this->dealerId)->first();
     }
 
     /**
@@ -89,10 +89,15 @@ class OptionService
      */
     public function update ($optionId, $data)
     {
-        $optionEntity = OptionEntity::find($optionId);
+        $optionEntity = OptionEntity::optionForDealer($optionId, $this->dealerId)->first();
 
         if ($optionEntity instanceof OptionEntity && $optionEntity->dealerId == $this->dealerId)
         {
+            if (array_key_exists('id', $data))
+            {
+                unset($data['id']);
+            }
+
             $optionEntity->fill($data);
 
             if ($optionEntity->isDirty())
