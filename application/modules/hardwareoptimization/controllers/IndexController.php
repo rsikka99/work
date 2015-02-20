@@ -488,18 +488,18 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                     $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromePartsCostPerPage
                 );
 
-
                 $costDelta = $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer()) -
                              $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForReplacements(), $replacementMasterDevice);
 
                 if ($costDelta < $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->costThreshold)
                 {
-                    $hardwareOptimizationDeviceInstance->action = HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE;
-
-                    $costDelta = $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer()) -
-                                 $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForReplacements(), $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->blackToColorRatio);
+                    if ($replacementMasterDevice->isColor() && !$deviceInstance->getMasterDevice()->isColor())
+                    {
+                        $hardwareOptimizationDeviceInstance->action = HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE;
+                        $costDelta = $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer()) -
+                                     $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForReplacements(), $replacementMasterDevice, $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->blackToColorRatio);
+                    }
                 }
-
 
                 /**
                  * Update the reason to match the default
@@ -548,6 +548,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 $deviceInstanceReasonElement = $form->getElement("deviceInstanceReason_" . $deviceInstanceId);
             }
         }
+
 
         /**
          * Save the data
