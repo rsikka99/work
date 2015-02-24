@@ -141,8 +141,7 @@ class UserForm extends Twitter_Bootstrap_Form_Horizontal
             ));
 
             $this->addElement('checkbox', 'resetLoginAttempts', array(
-                'label'    => 'Reset Login Attempts',
-                'required' => true
+                'label'    => 'Reset Login Attempts'
             ));
 
             $minYear = (int)date('Y') - 2;
@@ -174,8 +173,7 @@ class UserForm extends Twitter_Bootstrap_Form_Horizontal
             ));
 
             $this->addElement('checkbox', 'reset_password', array(
-                'label'    => 'Reset Password',
-                'required' => true
+                'label'    => 'Reset Password'
             ));
         }
 
