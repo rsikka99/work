@@ -51,7 +51,11 @@ class Admin_OnboardingController extends Action
                     {
                         $this->_flashMessenger->addMessage(array('warning' => 'COMP File: ' . $message));
                     }
-
+                    // Were we successful in uploading the file?
+                    if (count($oemMessages) == 0 && count($compMessages) == 0)
+                    {
+                        $this->_flashMessenger->addMessage(array('success' => "Files uploaded successfully!"));
+                    }
                 }
             }
         }

@@ -13,6 +13,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
 use Zend_Filter_Input;
 use Zend_Filter_StringTrim;
+use Zend_Db_Table;
 
 /**
  * Class OnboardingCompatibleService
