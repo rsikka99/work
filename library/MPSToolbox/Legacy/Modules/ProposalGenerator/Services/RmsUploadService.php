@@ -82,7 +82,7 @@ class RmsUploadService
     /**
      * @var array
      */
-    public $invalidRows = array();
+    public $invalidRows = [];
 
 
     /**
@@ -239,7 +239,7 @@ class RmsUploadService
                             /**
                              * @var DeviceInstanceModel[]
                              */
-                            $deviceInstances = array();
+                            $deviceInstances = [];
 
                             foreach ($uploadCsvService->validCsvLines as $line)
                             {
@@ -253,7 +253,7 @@ class RmsUploadService
                                  */
                                 if (strlen($line->rmsModelId) > 0)
                                 {
-                                    $rmsDevice = $rmsDeviceMapper->find(array($uploadProviderId, $line->rmsModelId));
+                                    $rmsDevice = $rmsDeviceMapper->find([$uploadProviderId, $line->rmsModelId]);
                                     if ($rmsDevice instanceof RmsDeviceModel)
                                     {
                                         if ($rmsDevice->isGeneric)
@@ -551,7 +551,7 @@ class RmsUploadService
     {
         if (!isset($this->_form))
         {
-            $this->_form = new ImportRmsCsvForm($this->_dealerId, array('csv'), "1B", "8MB");
+            $this->_form = new ImportRmsCsvForm($this->_dealerId, ['csv'], "1B", "8MB");
         }
 
         return $this->_form;

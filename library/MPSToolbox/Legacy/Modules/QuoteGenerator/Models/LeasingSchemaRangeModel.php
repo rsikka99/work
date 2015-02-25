@@ -67,11 +67,11 @@ class LeasingSchemaRangeModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"              => $this->id,
             "leasingSchemaId" => $this->leasingSchemaId,
             "startRange"      => $this->startRange,
-        );
+        ];
     }
 
     /**

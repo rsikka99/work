@@ -16,64 +16,57 @@ class ManufacturerForm extends Zend_Form
         // Set the method for the display form to POST
         $this->setMethod('POST');
 
-        $this->addElement('text', 'fullname', array(
+        $this->addElement('text', 'fullname', [
             'label'      => 'Full Name:',
             'required'   => true,
-            'filters'    => array('StringTrim', 'StripTags'),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(1, 255),
-                )
-            )
-        ));
+                    'options'   => [1, 255],
+                ],
+            ],
+        ]);
 
-        $this->addElement('text', 'displayname', array(
+        $this->addElement('text', 'displayname', [
             'label'      => 'Display Name:',
             'required'   => false,
-            'filters'    => array('StringTrim', 'StripTags'),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(1, 255),
-                )
-            )
-        ));
+                    'options'   => [1, 255],
+                ],
+            ],
+        ]);
 
-        $this->addElement('checkbox', 'isDeleted', array(
+        $this->addElement('checkbox', 'isDeleted', [
             'label'   => 'Deleted',
-            'filters' => array('Boolean'),
-        ));
+            'filters' => ['Boolean'],
+        ]);
 
-        $this->addElement('checkbox', 'isTonerVendor', array(
+        $this->addElement('checkbox', 'isTonerVendor', [
             'label'   => 'Is Toner Vendor',
-            'filters' => array('Boolean'),
-        ));
+            'filters' => ['Boolean'],
+        ]);
 
         // Add the submit button
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'ignore' => true,
             'label'  => 'Save'
-        ));
+        ]);
 
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'ignore'          => true,
             'formnovalidate ' => true,
             'label'           => 'Cancel'
-        ));
+        ]);
 
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/hardware-library/manufacturer-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/hardware-library/manufacturer-form.phtml']]]);
     }
 }

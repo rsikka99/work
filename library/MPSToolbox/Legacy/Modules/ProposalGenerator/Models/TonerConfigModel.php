@@ -16,12 +16,12 @@ class TonerConfigModel extends My_Model_Abstract
     const THREE_COLOR_SEPARATED = 2;
     const THREE_COLOR_COMBINED  = 3;
     const FOUR_COLOR_COMBINED   = 4;
-    static $TonerConfigNames = array(
+    static $TonerConfigNames = [
         self::BLACK_ONLY            => "Black Only",
         self::THREE_COLOR_SEPARATED => "3 Color Separated",
         self::THREE_COLOR_COMBINED  => "3 Color Combined",
-        self::FOUR_COLOR_COMBINED   => "4 Color Combined"
-    );
+        self::FOUR_COLOR_COMBINED   => "4 Color Combined",
+    ];
 
     /**
      * @var int
@@ -59,10 +59,10 @@ class TonerConfigModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             'id'   => $this->id,
             'name' => $this->name,
-        );
+        ];
     }
 
     /**
@@ -74,7 +74,7 @@ class TonerConfigModel extends My_Model_Abstract
      */
     public static function getRequiredTonersForTonerConfig ($tonerConfigId)
     {
-        $tonerColors = array();
+        $tonerColors = [];
         // Get the colors, default to black as a last resort
         switch ((int)$tonerConfigId)
         {

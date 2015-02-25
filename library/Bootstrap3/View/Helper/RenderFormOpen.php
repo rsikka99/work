@@ -20,14 +20,14 @@ class RenderFormOpen extends RenderFormAbstract
      *
      * @return string
      */
-    public function RenderFormOpen (\Zend_Form $form, $formClasses = array())
+    public function RenderFormOpen (\Zend_Form $form, $formClasses = [])
     {
-        $html = array();
+        $html = [];
         if ($form instanceof \Zend_Form)
         {
             if (!is_array($formClasses))
             {
-                $formClasses = array($formClasses);
+                $formClasses = [$formClasses];
             }
 
             /**
@@ -47,7 +47,7 @@ class RenderFormOpen extends RenderFormAbstract
                 }
                 else
                 {
-                    $attributes['class'] = array_merge(array($attributes['class']), $formClasses);
+                    $attributes['class'] = array_merge([$attributes['class']], $formClasses);
                 }
             }
 

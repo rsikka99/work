@@ -59,10 +59,10 @@ class LeasedQuoteModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "quoteId" => $this->quoteId,
             "rate"    => $this->rate,
             "term"    => $this->term,
-        );
+        ];
     }
 }

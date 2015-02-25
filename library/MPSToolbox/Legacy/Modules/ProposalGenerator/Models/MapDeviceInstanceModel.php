@@ -180,7 +180,7 @@ class MapDeviceInstanceModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "rmsProviderId"      => $this->rmsProviderId,
             "rmsUploadRowId"     => $this->rmsUploadRowId,
             "rmsModelId"         => $this->rmsModelId,
@@ -196,6 +196,6 @@ class MapDeviceInstanceModel extends My_Model_Abstract
             "mappedModelName"    => $this->mappedModelName,
             "deviceCount"        => $this->deviceCount,
             "deviceInstanceId"   => $this->deviceInstanceId,
-        );
+        ];
     }
 }

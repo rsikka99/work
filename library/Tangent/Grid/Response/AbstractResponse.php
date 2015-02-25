@@ -16,7 +16,7 @@ abstract class AbstractResponse implements ResponseInterface
     /**
      * @var array
      */
-    protected $data = array();
+    protected $data = [];
 
     /**
      * @var int
@@ -55,7 +55,7 @@ abstract class AbstractResponse implements ResponseInterface
      */
     public function getResponseForGrid ()
     {
-        $response = array(
+        $response = [
             'currentPage'          => $this->getCurrentPage(),
             'data'                 => $this->data,
             'recordsPerPage'       => $this->recordsPerPage,
@@ -63,7 +63,7 @@ abstract class AbstractResponse implements ResponseInterface
             'totalPages'           => $this->getTotalPages(),
             'totalFilteredRecords' => $this->totalFilteredRecords,
             'totalFilteredPages'   => $this->getTotalFilteredPages(),
-        );
+        ];
 
         if (isset($this->errorMessage) && strlen($this->errorMessage) > 0)
         {

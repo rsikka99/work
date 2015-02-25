@@ -78,9 +78,9 @@ class DealerBrandingMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_dealerId} = ?" => $primaryKey,
-        ));
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -189,7 +189,7 @@ class DealerBrandingMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new DealerBrandingModel($row->toArray());
@@ -212,9 +212,9 @@ class DealerBrandingMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_dealerId} = ?" => $id,
-        );
+        ];
     }
 
     /**

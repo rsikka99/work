@@ -14,7 +14,7 @@ class Admin_OnboardingController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Onboarding');
+        $this->_pageTitle = ['Onboarding'];
 
         $dealerId       = $this->getRequest()->getUserParam('dealerId', false);
         $onboardingForm = new OnboardingForm($dealerId);
@@ -27,7 +27,7 @@ class Admin_OnboardingController extends Action
 
                 if ($dealerId > 0)
                 {
-                    $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                    $this->redirectToRoute('admin.dealers.view', ['id' => $dealerId]);
                 }
                 else
                 {
@@ -42,19 +42,19 @@ class Admin_OnboardingController extends Action
 
                     foreach ($oemMessages as $message)
                     {
-                        $this->_flashMessenger->addMessage(array('warning' => 'OEM File: ' . $message));
+                        $this->_flashMessenger->addMessage(['warning' => 'OEM File: ' . $message]);
                     }
 
                     $compMessages = $this->_processCompPricing($onboardingForm);
 
                     foreach ($compMessages as $message)
                     {
-                        $this->_flashMessenger->addMessage(array('warning' => 'COMP File: ' . $message));
+                        $this->_flashMessenger->addMessage(['warning' => 'COMP File: ' . $message]);
                     }
                     // Were we successful in uploading the file?
                     if (count($oemMessages) == 0 && count($compMessages) == 0)
                     {
-                        $this->_flashMessenger->addMessage(array('success' => "Files uploaded successfully!"));
+                        $this->_flashMessenger->addMessage(['success' => "Files uploaded successfully!"]);
                     }
                 }
             }
@@ -72,7 +72,7 @@ class Admin_OnboardingController extends Action
      */
     protected function _processOemPricing ($form)
     {
-        $messages   = array();
+        $messages   = [];
         $oemPricing = $form->getOemPricingElement();
         if ($oemPricing->isUploaded())
         {
@@ -97,7 +97,7 @@ class Admin_OnboardingController extends Action
      */
     protected function _processCompPricing ($form)
     {
-        $messages    = array();
+        $messages    = [];
         $compPricing = $form->getCompPricingElement();
         if ($compPricing->isUploaded())
         {

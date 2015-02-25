@@ -5,7 +5,7 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\OptionModel;
 ?>
 <div class="container">
     <div class="clearfix">
-        <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url(array(), 'quotes.options.create') ?>">
+        <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url([], 'quotes.options.create') ?>">
             <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
     </div>
     <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
@@ -31,7 +31,7 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\OptionModel;
                     <td><?= $option->oemSku; ?></td>
                     <td><?= $option->dealerSku; ?></td>
                     <?php if (count($option->getCategories()) > 0) : ?>
-                        <?php $categoryNames = array(); ?>
+                        <?php $categoryNames = []; ?>
                         <td>
                             <?php foreach ($option->getCategories() as $category) : ?>
                                 <?php $categoryNames [] = $category->name; ?>
@@ -43,8 +43,8 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\OptionModel;
                     <?php endif; ?>
                     <td>
                         <div class="btn-group btn-group-justified btn-group-xs">
-                            <a class="btn btn-warning" title="Edit" href="<?= $this->url(array('id' => $option->id), 'quotes.options.edit'); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                            <a class="btn btn-danger" title="Delete" href="<?= $this->url(array('id' => $option->id), 'quotes.options.delete'); ?>"><i class="glyphicon glyphicon-trash"></i></a>
+                            <a class="btn btn-warning" title="Edit" href="<?= $this->url(['id' => $option->id], 'quotes.options.edit'); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
+                            <a class="btn btn-danger" title="Delete" href="<?= $this->url(['id' => $option->id], 'quotes.options.delete'); ?>"><i class="glyphicon glyphicon-trash"></i></a>
                         </div>
                     </td>
                 </tr>

@@ -16,7 +16,7 @@ class RenderFormAbstract extends \Zend_View_Helper_Abstract
      */
     public function RenderFormAbstract ()
     {
-        $html   = array();
+        $html   = [];
         $html[] = sprintf('<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> Cannot use "%1$s" directly.</div>', get_class($this));
 
         return implode('', $html);
@@ -60,9 +60,9 @@ class RenderFormAbstract extends \Zend_View_Helper_Abstract
      *
      * @return string
      */
-    protected function serializeAttributes ($attributes, $excludedKeys = array())
+    protected function serializeAttributes ($attributes, $excludedKeys = [])
     {
-        $serializedAttributes = array();
+        $serializedAttributes = [];
 
         foreach ($attributes as $attrName => $attrValue)
         {

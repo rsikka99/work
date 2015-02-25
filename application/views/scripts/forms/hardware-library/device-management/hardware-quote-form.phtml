@@ -6,21 +6,21 @@ use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareQuo
 $form = $this->element;
 ?>
 
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
 <div class="clearfix">
     <fieldset class="col-md-10 col-md-offset-1">
         <div class="form-group <?= ($form->getElement('isSelling')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('isSelling'), array('col-md-4')) ?>
+            <?= $this->RenderFormLabel($form->getElement('isSelling'), ['col-md-4']) ?>
 
             <div class="col-md-6">
-                <?= $this->RenderFormBootstrapSwitch($form->getElement('isSelling'), array('js-yes-no-switch')) ?>
+                <?= $this->RenderFormBootstrapSwitch($form->getElement('isSelling'), ['js-yes-no-switch']) ?>
                 <?= $this->RenderFormDescription($form->getElement('isSelling')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('isSelling')) ?>
             </div>
         </div>
 
         <div class="form-group <?= ($form->getElement('oemSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('oemSku'), array('col-md-4')) ?>
+            <?= $this->RenderFormLabel($form->getElement('oemSku'), ['col-md-4']) ?>
 
             <div class="col-md-6">
                 <?= $this->RenderFormText($form->getElement('oemSku')) ?>
@@ -30,7 +30,7 @@ $form = $this->element;
         </div>
 
         <div class="form-group <?= ($form->getElement('dealerSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('dealerSku'), array('col-md-4')) ?>
+            <?= $this->RenderFormLabel($form->getElement('dealerSku'), ['col-md-4']) ?>
 
             <div class="col-md-6">
                 <?= $this->RenderFormText($form->getElement('dealerSku')) ?>
@@ -40,7 +40,7 @@ $form = $this->element;
         </div>
 
         <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('cost'), array('col-md-4')) ?>
+            <?= $this->RenderFormLabel($form->getElement('cost'), ['col-md-4']) ?>
 
             <div class="col-md-6">
                 <?= $this->RenderFormText($form->getElement('cost')) ?>
@@ -50,7 +50,7 @@ $form = $this->element;
         </div>
 
         <div class="form-group <?= ($form->getElement('description')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('description'), array('col-md-4')) ?>
+            <?= $this->RenderFormLabel($form->getElement('description'), ['col-md-4']) ?>
 
             <div class="col-md-6">
                 <?= $this->RenderFormTextArea($form->getElement('description')) ?>

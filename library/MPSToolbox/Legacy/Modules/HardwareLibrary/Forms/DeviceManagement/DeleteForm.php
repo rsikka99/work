@@ -22,29 +22,22 @@ class DeleteForm extends Zend_Form
 
     public function init ()
     {
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'label'        => 'Cancel',
-            'data-dismiss' => 'modal'
-        ));
+            'data-dismiss' => 'modal',
+        ]);
 
-        $this->addElement('submit', 'delete', array(
+        $this->addElement('submit', 'delete', [
             'label'        => 'Delete',
-            'data-dismiss' => 'modal'
-        ));
-        $this->addElement('hidden', 'deleteId', array());
-        $this->addElement('hidden', 'deleteColorId', array());
-        $this->addElement('hidden', 'deleteFormName', array());
+            'data-dismiss' => 'modal',
+        ]);
+        $this->addElement('hidden', 'deleteId', []);
+        $this->addElement('hidden', 'deleteColorId', []);
+        $this->addElement('hidden', 'deleteFormName', []);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/hardware-library/device-management/delete-form.phtml',
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/hardware-library/device-management/delete-form.phtml',]]]);
     }
 }

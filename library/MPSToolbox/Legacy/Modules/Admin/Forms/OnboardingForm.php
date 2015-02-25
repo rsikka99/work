@@ -35,7 +35,7 @@ class OnboardingForm extends Zend_Form
         $this->setMethod('POST');
 
         $firstDealerId = null;
-        $dealers       = array();
+        $dealers       = [];
         foreach (DealerMapper::getInstance()->fetchAll() as $dealer)
         {
             // Use this to grab the first id in the leasing schema dropdown
@@ -48,50 +48,43 @@ class OnboardingForm extends Zend_Form
 
         if ($dealers)
         {
-            $this->addElement('Select', 'dealerId', array(
+            $this->addElement('Select', 'dealerId', [
                 'label'        => 'Dealer:',
                 'class'        => 'input-medium',
                 'multiOptions' => $dealers,
                 'required'     => true,
                 'value'        => ($this->_defaultDealerId > 0) ? $this->_defaultDealerId : $firstDealerId,
-            ));
+            ]);
         }
 
 
-        $this->addElement('File', 'oemPricing', array(
+        $this->addElement('File', 'oemPricing', [
             'label' => 'OEM Pricing',
-        ));
+        ]);
 
-        $this->addElement('File', 'compPricing', array(
+        $this->addElement('File', 'compPricing', [
             'label' => 'Compatible Pricing',
-        ));
+        ]);
 
 
         /**
          * Form Actions
          */
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'ignore' => true,
             'label'  => 'Cancel'
-        ));
+        ]);
 
-        $this->addElement('submit', 'upload', array(
+        $this->addElement('submit', 'upload', [
             'ignore' => true,
             'label'  => 'Upload',
-        ));
+        ]);
 
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/admin/onboarding-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/admin/onboarding-form.phtml']]]);
     }
 
     /**

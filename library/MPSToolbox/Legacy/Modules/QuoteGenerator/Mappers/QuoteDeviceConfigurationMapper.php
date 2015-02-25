@@ -50,9 +50,9 @@ class QuoteDeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function countByDeviceId ($deviceConfigurationId)
     {
-        return $this->count(array(
-            'deviceConfigurationId = ?' => $deviceConfigurationId
-        ));
+        return $this->count([
+            'deviceConfigurationId = ?' => $deviceConfigurationId,
+        ]);
     }
 
     /**
@@ -99,10 +99,10 @@ class QuoteDeviceConfigurationMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_quoteDeviceId} = ?"  => $primaryKey [0],
-            "{$this->col_masterDeviceId} = ?" => $primaryKey [1]
-        ));
+            "{$this->col_masterDeviceId} = ?" => $primaryKey [1],
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -123,17 +123,17 @@ class QuoteDeviceConfigurationMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof QuoteDeviceConfigurationModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_quoteDeviceId} = ?"  => $object->quoteDeviceId,
-                "{$this->col_masterDeviceId} = ?" => $object->masterDeviceId
-            );
+                "{$this->col_masterDeviceId} = ?" => $object->masterDeviceId,
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_quoteDeviceId} = ?"  => $object [0],
-                "{$this->col_masterDeviceId} = ?" => $object [1]
-            );
+                "{$this->col_masterDeviceId} = ?" => $object [1],
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -150,9 +150,9 @@ class QuoteDeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function deleteQuoteDeviceConfigurationById ($deviceConfigurationId)
     {
-        return $this->getDbTable()->delete(array(
-            'deviceConfigurationId = ?' => $deviceConfigurationId
-        ));
+        return $this->getDbTable()->delete([
+            'deviceConfigurationId = ?' => $deviceConfigurationId,
+        ]);
     }
 
     /**
@@ -197,9 +197,9 @@ class QuoteDeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function findByDeviceId ($id)
     {
-        return $this->fetch(array(
-            "{$this->col_masterDeviceId} = ?" => $id
-        ));
+        return $this->fetch([
+            "{$this->col_masterDeviceId} = ?" => $id,
+        ]);
     }
 
     /**
@@ -212,9 +212,9 @@ class QuoteDeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function findByQuoteDeviceId ($id)
     {
-        return $this->fetch(array(
-            "{$this->col_quoteDeviceId} = ?" => $id
-        ));
+        return $this->fetch([
+            "{$this->col_quoteDeviceId} = ?" => $id,
+        ]);
     }
 
     /**
@@ -262,7 +262,7 @@ class QuoteDeviceConfigurationMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new QuoteDeviceConfigurationModel($row->toArray());
@@ -285,10 +285,10 @@ class QuoteDeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_quoteDeviceId} = ?"  => $id [0],
-            "{$this->col_masterDeviceId} = ?" => $id [1]
-        );
+            "{$this->col_masterDeviceId} = ?" => $id [1],
+        ];
     }
 
     /**
@@ -298,10 +298,10 @@ class QuoteDeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
+        return [
             $object->quoteDeviceId,
-            $object->masterDeviceId
-        );
+            $object->masterDeviceId,
+        ];
     }
 }
 

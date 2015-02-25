@@ -60,10 +60,10 @@ class UserViewedClientModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "userId"     => $this->userId,
             "clientId"   => $this->clientId,
             "dateViewed" => $this->dateViewed,
-        );
+        ];
     }
 }

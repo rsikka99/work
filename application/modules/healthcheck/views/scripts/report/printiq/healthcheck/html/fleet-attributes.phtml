@@ -258,7 +258,7 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         if ($deviceInstance->isLeased)
         {
             echo ' shaded';
-        }?>">
+        } ?>">
             <td><?= $deviceName ?>
                 <br /> <?= (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
                 <br /> <?= $deviceInstance->ipAddress; ?></td>

@@ -18,63 +18,51 @@ class LoginForm extends Zend_Form
         $this->setMethod('POST');
 
         // Add an email element
-        $this->addElement('text', 'email', array(
+        $this->addElement('text', 'email', [
             'label'         => 'Email:',
             'placeholder'   => 'Email Address',
             'required'      => true,
-            'filters'       => array(
-                'StringTrim',
-                'StripTags',
-            ),
-            'validators'    => array(
-                array(
+            'filters'       => ['StringTrim', 'StripTags'],
+            'validators'    => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(
+                    'options'   => [
                         'min' => 4,
                         'max' => 255,
-                    ),
-                ),
-                array('validator' => 'EmailAddress',),
-            ),
-            'errorMessages' => array('Invalid email address'),
-        ));
+                    ],
+                ],
+                ['validator' => 'EmailAddress',],
+            ],
+            'errorMessages' => ['Invalid email address'],
+        ]);
 
         // Add the password element
-        $this->addElement('password', 'password', array(
+        $this->addElement('password', 'password', [
             'label'       => 'Password:',
             'placeholder' => 'Password',
             'required'    => true,
-            'filters'     => array(
-                'StringTrim',
-            ),
-            'validators'  => array(
-                array(
+            'filters'     => ['StringTrim'],
+            'validators'  => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(
+                    'options'   => [
                         'min' => 1,
                         'max' => 255,
-                    ),
-                ),
-            ),
-        ));
+                    ],
+                ],
+            ],
+        ]);
 
-        $this->addElement('submit', 'login', array(
+        $this->addElement('submit', 'login', [
             'label'          => 'Sign In',
             'ignore'         => true,
             'class'          => 'btn btn-success btn-lg btn-block',
             'formnovalidate' => true,
-        ));
+        ]);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/default/login-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/default/login-form.phtml']]]);
     }
 }

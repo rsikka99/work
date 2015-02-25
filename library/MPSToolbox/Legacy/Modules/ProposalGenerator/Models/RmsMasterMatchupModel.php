@@ -60,10 +60,10 @@ class RmsMasterMatchupModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "rmsProviderId"  => $this->rmsProviderId,
             "rmsModelId"     => $this->rmsModelId,
             "masterDeviceId" => $this->masterDeviceId,
-        );
+        ];
     }
 }

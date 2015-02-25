@@ -21,7 +21,7 @@ class My_Paginator_MapperAdapter implements Zend_Paginator_Adapter_Interface
      *
      * @var array<My_Model_Abstract>
      */
-    protected $_objects = array();
+    protected $_objects = [];
 
     public function __construct (My_Model_Mapper_Abstract $mapper, $where = null)
     {

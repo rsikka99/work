@@ -11,7 +11,7 @@ use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
         <div class="row">
             <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\AdminAclModel::RESOURCE_ADMIN_CLIENT_INDEX)) : ?>
                 <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'admin.clients'); ?>">
+                    <a class="btn btn-default btn-block" href="<?= $this->url([], 'admin.clients'); ?>">
                         <i class="fa fa-star fa-4x"></i>
                         <br /><br />
                         System Client <br />Management<br /></a>
@@ -20,7 +20,7 @@ use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
 
             <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\AdminAclModel::RESOURCE_ADMIN_DEALER_INDEX)) : ?>
                 <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'admin.dealers'); ?>">
+                    <a class="btn btn-default btn-block" href="<?= $this->url([], 'admin.dealers'); ?>">
                         <i class="fa fa-briefcase fa-4x"></i>
                         <br /><br />
                         System Dealer <br />Management<br /></a>
@@ -29,7 +29,7 @@ use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
 
             <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\AdminAclModel::RESOURCE_ADMIN_USER_INDEX)) : ?>
                 <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'admin.users'); ?>">
+                    <a class="btn btn-default btn-block" href="<?= $this->url([], 'admin.users'); ?>">
                         <i class="fa fa-group fa-4x"></i>
                         <br /><br />
                         System User <br />Management<br /></a>
@@ -38,7 +38,7 @@ use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
 
             <?php if ($this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_MANAGEMATCHUPS)) : ?>
                 <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'hardware-library.managematchups'); ?>">
+                    <a class="btn btn-default btn-block" href="<?= $this->url([], 'hardware-library.managematchups'); ?>">
                         <i class="fa fa-bar-chart-o fa-4x"></i>
                         <br /><br />
                         Manage Master <br />Matchups<br /></a>
@@ -46,7 +46,7 @@ use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
             <?php endif; ?>
             <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\AdminAclModel::RESOURCE_ADMIN_ONBOARDING_INDEX)) : ?>
                 <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'admin.dealer-on-boarding'); ?>">
+                    <a class="btn btn-default btn-block" href="<?= $this->url([], 'admin.dealer-on-boarding'); ?>">
                         <i class="fa fa-cloud-upload fa-4x"></i><br /><br />
                         Dealer
                         <br>
@@ -64,7 +64,7 @@ use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
         <div class="row">
             <?php if ($this->isAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX)) : ?>
                 <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'hardware-library.all-devices'); ?>">
+                    <a class="btn btn-default btn-block" href="<?= $this->url([], 'hardware-library.all-devices'); ?>">
                         <i class="fa fa-print fa-4x"></i>
                         <br /><br />
                         All Devices<br /><br /> </a>
@@ -73,7 +73,7 @@ use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
 
             <?php if ($this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING)) : ?>
                 <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'hardware-library.bulk-hardware-pricing-updates'); ?>">
+                    <a class="btn btn-default btn-block" href="<?= $this->url([], 'hardware-library.bulk-hardware-pricing-updates'); ?>">
                         <i class="fa fa-cloud-upload fa-4x"></i>
                         <br /><br />
                         Bulk Hardware / <br />Pricing Updates <br /> </a>
@@ -82,7 +82,7 @@ use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
 
             <?php if ($this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS)) : ?>
                 <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'hardware-library.device-swaps'); ?>">
+                    <a class="btn btn-default btn-block" href="<?= $this->url([], 'hardware-library.device-swaps'); ?>">
                         <i class="fa fa-print fa-4x"></i>
                         <br /><br />
                         Manage Device <br /> Swaps <br /> </a>
@@ -100,7 +100,7 @@ use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
         <div class="row">
             <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX)) : ?>
                 <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.clients'); ?>">
+                    <a class="btn btn-default btn-block" href="<?= $this->url([], 'company.clients'); ?>">
                         <i class="fa fa-star fa-4x"></i>
                         <br /><br />
                         Clients<br /><br /></a>
@@ -108,7 +108,7 @@ use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
             <?php endif; ?>
             <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD)) : ?>
                 <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.leasing-schema'); ?>">
+                    <a class="btn btn-default btn-block" href="<?= $this->url([], 'company.leasing-schema'); ?>">
                         <i class="fa fa-money fa-4x"></i>
                         <br /><br />
                         Lease Rates<br /><br /></a>
@@ -116,7 +116,7 @@ use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
             <?php endif; ?>
             <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD)) : ?>
                 <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.users'); ?>">
+                    <a class="btn btn-default btn-block" href="<?= $this->url([], 'company.users'); ?>">
                         <i class="fa fa-group fa-4x"></i>
                         <br /><br />
                         Users<br /><br /></a>
@@ -124,7 +124,7 @@ use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
             <?php endif; ?>
             <?php if ($this->isAllowed(\MPSToolbox\Legacy\Models\Acl\DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_BRANDING_WILDCARD)) : ?>
                 <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-                    <a class="btn btn-block btn-default" href="<?= $this->url(array(), 'company.branding'); ?>">
+                    <a class="btn btn-block btn-default" href="<?= $this->url([], 'company.branding'); ?>">
                         <i class="fa fa-wrench fa-4x"></i>
                         <br /><br />
                         Branding<br /><br /></a>
@@ -132,7 +132,7 @@ use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
             <?php endif; ?>
             <?php if ($this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_MANUFACTURER_CREATE)) : ?>
                 <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-                    <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'hardware-library.manufacturers'); ?>">
+                    <a class="btn btn-default btn-block" href="<?= $this->url([], 'hardware-library.manufacturers'); ?>">
                         <i class="fa fa-print fa-4x"></i>
                         <br /><br />
                         Manufacturers<br /><br /></a>

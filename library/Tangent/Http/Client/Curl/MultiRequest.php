@@ -36,7 +36,7 @@ class MultiRequest
      *
      * @var Array
      */
-    protected $_curlOptions = array(CURLOPT_RETURNTRANSFER => true);
+    protected $_curlOptions = [CURLOPT_RETURNTRANSFER => true];
 
     /**
      * Content fetched from cURL handle.
@@ -65,7 +65,7 @@ class MultiRequest
      *
      * @var Array
      */
-    protected $_info = array();
+    protected $_info = [];
 
     /**
      * Error Message from cURL Handle.

@@ -35,27 +35,24 @@ class LeasingSchemaForm extends Zend_Form
         // Set the method for the display form to POST
         $this->setMethod('POST');
 
-        $this->addElement('text', 'name', array(
+        $this->addElement('text', 'name', [
             'label'      => 'Name:',
             'required'   => true,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(1, 255)
-                )
-            )
-        ));
+                    'options'   => [1, 255]
+                ],
+            ],
+        ]);
 
         $dealerSelect = null;
         $isAdmin      = $this->getView()->IsAllowed(AdminAclModel::RESOURCE_ADMIN_LEASINGSCHEMA_WILDCARD, AppAclModel::PRIVILEGE_ADMIN);
         if ($isAdmin && $this->_dealerManagement == false)
         {
             $firstDealerId = null;
-            $dealers       = array();
+            $dealers       = [];
             foreach (DealerMapper::getInstance()->fetchAll() as $dealer)
             {
                 // Use this to grab the first id in the leasing schema dropdown
@@ -67,39 +64,33 @@ class LeasingSchemaForm extends Zend_Form
             }
             if ($dealers)
             {
-                $this->addElement('select', 'dealerId', array(
+                $this->addElement('select', 'dealerId', [
                     'label'        => 'Dealer:',
                     'class'        => 'input-medium',
                     'multiOptions' => $dealers,
                     'required'     => true,
-                    'value'        => $firstDealerId));
+                    'value'        => $firstDealerId,
+                ]);
             }
         }
 
         // Add the submit button
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'ignore' => true,
             'label'  => 'Save'
-        ));
+        ]);
 
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'ignore'         => true,
             'label'          => 'Cancel',
             'formnovalidate' => true,
-        ));
+        ]);
 
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/admin/leasing-schema-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/admin/leasing-schema-form.phtml']]]);
     }
 }

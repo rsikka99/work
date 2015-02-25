@@ -114,7 +114,7 @@ class ManufacturerService extends BaseService
      */
     public function searchForManufacturer ($searchTerm)
     {
-        $results = array();
+        $results = [];
 
         if ($searchTerm !== false)
         {

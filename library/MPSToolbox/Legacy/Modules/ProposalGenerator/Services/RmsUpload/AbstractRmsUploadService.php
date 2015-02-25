@@ -61,7 +61,7 @@ abstract class AbstractRmsUploadService
      *
      * @var array
      */
-    protected $_requiredHeaders = array(
+    protected $_requiredHeaders = [
         'rmsVendorName'          => false,
         'rmsReportVersion'       => false,
         'rmsModelId'             => false,
@@ -140,14 +140,14 @@ abstract class AbstractRmsUploadService
         'managementProgram'      => false,
         'rmsDeviceId'            => false,
         'location'               => false,
-    );
+    ];
 
     /**
      * A list of fields that are present in the CSV file
      *
      * @var array
      */
-    protected $_fieldsPresent = array();
+    protected $_fieldsPresent = [];
 
     /**
      * Column mapping for CSV -> Upload Row.
@@ -155,42 +155,42 @@ abstract class AbstractRmsUploadService
      *
      * @var array
      */
-    protected $_columnMapping = array();
+    protected $_columnMapping = [];
 
     /**
      * Valid CSV lines
      *
      * @var UploadLineModel[]
      */
-    public $csvLines = array();
+    public $csvLines = [];
 
     /**
      * Valid CSV lines
      *
      * @var UploadLineModel[]
      */
-    public $validCsvLines = array();
+    public $validCsvLines = [];
 
     /**
      * Invalid CSV lines
      *
      * @var UploadLineModel[]
      */
-    public $invalidCsvLines = array();
+    public $invalidCsvLines = [];
 
     /**
      * Raw CSV header
      *
      * @var array
      */
-    protected $_csvHeaders = array();
+    protected $_csvHeaders = [];
 
     /**
      * Mapped CSV header
      *
      * @var array
      */
-    protected $_mappedHeaders = array();
+    protected $_mappedHeaders = [];
 
     /**
      * The constructor for this object.
@@ -198,90 +198,90 @@ abstract class AbstractRmsUploadService
      */
     public function __construct ()
     {
-        $filters            = array(
-            'rmsModelId'     => array(
+        $filters            = [
+            'rmsModelId'     => [
                 'StringTrim',
-            ),
-            'isManaged'      => array(
+            ],
+            'isManaged'      => [
                 'StringTrim',
-                array(
+                [
                     'filter'  => 'Callback',
-                    'options' => array(
+                    'options' => [
                         'callback' => function ($value)
                         {
                             return (strcasecmp($value, "Managed") === 0);
                         },
-                    ),
-                ),
+                    ],
+                ],
                 'Int',
-            ),
-            'isColor'        => array(
+            ],
+            'isColor'        => [
                 'StringTrim',
-                array(
+                [
                     'filter'  => 'Boolean',
-                    'options' => array(
+                    'options' => [
                         'type' => Zend_Filter_Boolean::ALL
-                    )
-                ),
+                    ]
+                ],
                 'Int'
-            ),
-            'isCopier'       => array(
+            ],
+            'isCopier'       => [
                 'StringTrim',
-                array(
+                [
                     'filter'  => 'Boolean',
-                    'options' => array(
+                    'options' => [
                         'type' => Zend_Filter_Boolean::ALL
-                    )
-                ),
+                    ]
+                ],
                 'Int'
-            ),
-            'isFax'          => array(
+            ],
+            'isFax'          => [
                 'StringTrim',
-                array(
+                [
                     'filter'  => 'Boolean',
-                    'options' => array(
+                    'options' => [
                         'type' => Zend_Filter_Boolean::ALL
-                    )
-                ),
+                    ]
+                ],
                 'Int'
-            ),
-            'isA3'           => array(
+            ],
+            'isA3'           => [
                 'StringTrim',
-                array(
+                [
                     'filter'  => 'Boolean',
-                    'options' => array(
+                    'options' => [
                         'type' => Zend_Filter_Boolean::ALL
-                    )
-                ),
+                    ]
+                ],
                 'Int'
-            ),
-            'isDuplex'       => array(
+            ],
+            'isDuplex'       => [
                 'StringTrim',
-                array(
+                [
                     'filter'  => 'Boolean',
-                    'options' => array(
+                    'options' => [
                         'type' => Zend_Filter_Boolean::ALL
-                    )
-                ),
+                    ]
+                ],
                 'Int'
-            ),
-            'ppmBlack'       => array(
+            ],
+            'ppmBlack'       => [
                 'StringTrim',
                 'Int'
-            ),
-            'ppmColor'       => array(
+            ],
+            'ppmColor'       => [
                 'StringTrim',
                 'Int'
-            ),
-            'wattsOperating' => array(
+            ],
+            'wattsOperating' => [
                 'StringTrim',
                 'Int'
-            ),
-            'wattsIdle'      => array(
+            ],
+            'wattsIdle'      => [
                 'StringTrim',
                 'Int'
-            )
-        );
+            ]
+        ];
         $this->_inputFilter = new Zend_Filter_Input($filters, array());
 
         // If we haven't set a filter for the data, use this one
@@ -301,10 +301,10 @@ abstract class AbstractRmsUploadService
         if (file_exists($filename))
         {
             // Reset arrays
-            $this->csvLines        = array();
-            $this->validCsvLines   = array();
-            $this->invalidCsvLines = array();
-            $this->_csvHeaders     = array();
+            $this->csvLines        = [];
+            $this->validCsvLines   = [];
+            $this->invalidCsvLines = [];
+            $this->_csvHeaders     = [];
 
             $fileLines = file($filename, FILE_IGNORE_NEW_LINES);
             $lineCount = count($fileLines) - 1 - $this->_linesToTrim;
@@ -330,7 +330,7 @@ abstract class AbstractRmsUploadService
             /*
              * Pop off the first line since they are headers
              */
-            $this->_csvHeaders = array();
+            $this->_csvHeaders = [];
 
             foreach (str_getcsv(array_shift($fileLines), $this->csv_delimiter, $this->csv_delimiter, $this->csv_escape) as $header)
             {
@@ -419,7 +419,7 @@ abstract class AbstractRmsUploadService
      */
     public function validateHeaders ($csvHeaders)
     {
-        $requiredHeadersMissing = array();
+        $requiredHeadersMissing = [];
         // Loop through our standard headers
         foreach ($this->_requiredHeaders as $fieldName => $isRequired)
         {
@@ -432,7 +432,7 @@ abstract class AbstractRmsUploadService
 
         if (count($requiredHeadersMissing) > 0)
         {
-            $vendorHeadings = array();
+            $vendorHeadings = [];
             foreach ($requiredHeadersMissing as $header)
             {
                 $vendorHeadings[] = array_search($header, $this->_columnMapping);

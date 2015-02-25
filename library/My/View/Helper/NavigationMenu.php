@@ -10,10 +10,10 @@ class My_View_Helper_NavigationMenu extends Zend_View_Helper_Abstract
      *
      * @return string
      */
-    public function NavigationMenu ($navigation = null, $parameters = array())
+    public function NavigationMenu ($navigation = null, $parameters = [])
     {
         $steps = $navigation->steps;
-        $html  = array();
+        $html  = [];
         if ($steps !== null)
         {
             $html [] = '<ul class="nav navbar-nav" id="navigationMenu">';

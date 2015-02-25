@@ -70,10 +70,10 @@ class QuoteDeviceConfigurationOptionMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
+        return [
             $object->quoteDeviceOptionId,
-            $object->optionId
-        );
+            $object->optionId,
+        ];
     }
 
     /**
@@ -96,9 +96,9 @@ class QuoteDeviceConfigurationOptionMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
-            "{$this->col_quoteDeviceOptionId} = ?" => $primaryKey
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, [
+            "{$this->col_quoteDeviceOptionId} = ?" => $primaryKey,
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -119,15 +119,15 @@ class QuoteDeviceConfigurationOptionMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof QuoteDeviceConfigurationOptionModel)
         {
-            $whereClause = array(
-                "{$this->col_quoteDeviceOptionId} = ?" => $object->quoteDeviceOptionId
-            );
+            $whereClause = [
+                "{$this->col_quoteDeviceOptionId} = ?" => $object->quoteDeviceOptionId,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_quoteDeviceOptionId} = ?" => $object
-            );
+            $whereClause = [
+                "{$this->col_quoteDeviceOptionId} = ?" => $object,
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -212,7 +212,7 @@ class QuoteDeviceConfigurationOptionMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new QuoteDeviceConfigurationOptionModel($row->toArray());
@@ -235,9 +235,9 @@ class QuoteDeviceConfigurationOptionMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_quoteDeviceOptionId} = ?" => $id
-        );
+        return [
+            "{$this->col_quoteDeviceOptionId} = ?" => $id,
+        ];
     }
 
     /**
@@ -249,9 +249,9 @@ class QuoteDeviceConfigurationOptionMapper extends My_Model_Mapper_Abstract
      */
     public function findByQuoteDeviceOptionId ($quoteDeviceOptionId)
     {
-        return $this->fetch(array(
-            "{$this->col_quoteDeviceOptionId} = ?" => $quoteDeviceOptionId
-        ));
+        return $this->fetch([
+            "{$this->col_quoteDeviceOptionId} = ?" => $quoteDeviceOptionId,
+        ]);
     }
 }
 

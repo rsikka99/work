@@ -12,10 +12,10 @@ use Zend_Db_Table_Abstract;
 class DeviceDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'devices';
-    protected $_primary = array(
+    protected $_primary = [
         'masterDeviceId',
-        'dealerId'
-    );
+        'dealerId',
+    ];
 
     /**
      * This function allows for searching by a device name, manufacturer, or SKU

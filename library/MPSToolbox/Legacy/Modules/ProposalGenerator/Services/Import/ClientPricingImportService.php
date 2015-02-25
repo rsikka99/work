@@ -31,11 +31,11 @@ class ClientPricingImportService
     const CSV_HEADER_PRODUCT_DEPARTMENT    = 'Depot Product Dept';
     const CSV_HEADER_DATE_RECONCILED       = 'Reconciled';
 
-    public static $unitMultipliers = array(
-        'EA' => 1
-    );
+    public static $unitMultipliers = [
+        'EA' => 1,
+    ];
 
-    public $csvHeaders = array(
+    public $csvHeaders = [
         self::CSV_HEADER_TOTALS,
         self::CSV_HEADER_CUSTOMER_NUMBER,
         self::CSV_HEADER_CUSTOMER_NAME,
@@ -53,7 +53,7 @@ class ClientPricingImportService
         self::CSV_HEADER_CURRENCY,
         self::CSV_HEADER_PRODUCT_DEPARTMENT,
         self::CSV_HEADER_DATE_RECONCILED,
-    );
+    ];
 
     /**
      * Zend Filter that will filter and validate input data
@@ -77,7 +77,7 @@ class ClientPricingImportService
      *
      * @var array
      */
-    public $importHeaders = array();
+    public $importHeaders = [];
 
     /**
      * @var resource
@@ -87,47 +87,47 @@ class ClientPricingImportService
     public function __construct ()
     {
         $this->_inputFilter = new Zend_Filter_Input(
-            array(
-                '*'                              => array(
+            [
+                '*'                              => [
                     'StripTags',
                     'StringTrim',
-                ),
-                self::CSV_HEADER_DATE_RECONCILED => array(
+                ],
+                self::CSV_HEADER_DATE_RECONCILED => [
                     'StripTags',
                     'StringTrim',
-                    array('PregReplace', '/-/', '/'),
-                ),
-            ),
-            array(
-                '*'                                 => array(
+                    ['PregReplace', '/-/', '/'],
+                ],
+            ],
+            [
+                '*'                                 => [
                     'allowEmpty' => true,
-                ),
-                self::CSV_HEADER_DATE_SHIPPED       => array(
-                    'allowEmpty' => true,
-                    new My_Validate_DateTime(My_Validate_DateTime::FORMAT_DATE_AMERICAN),
-                ),
-                self::CSV_HEADER_DATE_ORDERED       => array(
+                ],
+                self::CSV_HEADER_DATE_SHIPPED       => [
                     'allowEmpty' => true,
                     new My_Validate_DateTime(My_Validate_DateTime::FORMAT_DATE_AMERICAN),
-                ),
-                self::CSV_HEADER_DATE_RECONCILED    => array(
+                ],
+                self::CSV_HEADER_DATE_ORDERED       => [
                     'allowEmpty' => true,
                     new My_Validate_DateTime(My_Validate_DateTime::FORMAT_DATE_AMERICAN),
-                ),
-                self::CSV_HEADER_UNIT_MEASUREMENT   => array(
-                    array('InArray', array('EA')),
-                ),
-                self::CSV_HEADER_QUANTITY           => array(
+                ],
+                self::CSV_HEADER_DATE_RECONCILED    => [
+                    'allowEmpty' => true,
+                    new My_Validate_DateTime(My_Validate_DateTime::FORMAT_DATE_AMERICAN),
+                ],
+                self::CSV_HEADER_UNIT_MEASUREMENT   => [
+                    ['InArray', ['EA']],
+                ],
+                self::CSV_HEADER_QUANTITY           => [
                     'Int',
-                    array('GreaterThan', 0),
-                ),
-                self::CSV_HEADER_UNIT_PRICE         => array(
+                    ['GreaterThan', 0],
+                ],
+                self::CSV_HEADER_UNIT_PRICE         => [
                     'Float',
-                ),
-                self::CSV_HEADER_PRODUCT_DEPARTMENT => array(
-                    array('InArray', array('65')),
-                ),
-            )
+                ],
+                self::CSV_HEADER_PRODUCT_DEPARTMENT => [
+                    ['InArray', ['65']],
+                ],
+            ]
         );
     }
 
@@ -197,7 +197,7 @@ class ClientPricingImportService
         {
             $this->_inputFilter->setData($data);
 
-            return $this->_inputFilter->isValid() ? $this->_inputFilter->getEscaped() : array("error" => array("invalid" => $this->_inputFilter->getInvalid()));
+            return $this->_inputFilter->isValid() ? $this->_inputFilter->getEscaped() : ["error" => ["invalid" => $this->_inputFilter->getInvalid()]];
         }
         catch (Zend_Filter_Exception $e)
         {

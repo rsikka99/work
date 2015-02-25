@@ -7,7 +7,7 @@ $form     = $this->element;
 $quote    = $form->getQuote();
 $isLeased = $quote->isLeased();
 ?>
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
     <div class="table-responsive">
         <table class="table table-condensed table-striped table-bordered">
             <tr>
@@ -37,12 +37,12 @@ $isLeased = $quote->isLeased();
                         <td class="cost"><?= $this->currency($quoteDevice->calculatePackageCost()); ?></td>
 
                         <td class="<?= ($form->getElement("packageMarkup_{$quoteDevice->id}")->hasErrors()) ?: '' ?>">
-                            <?= $this->RenderFormText($form->getElement("packageMarkup_{$quoteDevice->id}"), array(), '$') ?>
+                            <?= $this->RenderFormText($form->getElement("packageMarkup_{$quoteDevice->id}"), [], '$') ?>
                             <?= $this->RenderFormElementErrors($form->getElement("packageMarkup_{$quoteDevice->id}")) ?>
                         </td>
 
                         <td class="margin <?= ($form->getElement("margin_{$quoteDevice->id}")->hasErrors()) ?: '' ?>">
-                            <?= $this->RenderFormText($form->getElement("margin_{$quoteDevice->id}"), array(), null, '%') ?>
+                            <?= $this->RenderFormText($form->getElement("margin_{$quoteDevice->id}"), [], null, '%') ?>
                             <?= $this->RenderFormElementErrors($form->getElement("margin_{$quoteDevice->id}")) ?>
                         </td>
 
@@ -50,7 +50,7 @@ $isLeased = $quote->isLeased();
 
                         <?php if ($isLeased) : ?>
                             <td class="residual <?= ($form->getElement("residual_{$quoteDevice->id}")->hasErrors()) ?: '' ?>">
-                                <?= $this->RenderFormText($form->getElement("residual_{$quoteDevice->id}"), array(), '$') ?>
+                                <?= $this->RenderFormText($form->getElement("residual_{$quoteDevice->id}"), [], '$') ?>
                                 <?= $this->RenderFormElementErrors($form->getElement("residual_{$quoteDevice->id}")) ?>
                             </td>
                         <?php endif; ?>

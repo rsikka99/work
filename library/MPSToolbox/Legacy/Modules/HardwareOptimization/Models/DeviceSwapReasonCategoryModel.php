@@ -16,11 +16,11 @@ class DeviceSwapReasonCategoryModel extends My_Model_Abstract
     const HAS_REPLACEMENT               = 2;
     const HAS_FUNCTIONALITY_REPLACEMENT = 3;
 
-    static $categoryNames = array(
+    static $categoryNames = [
         self::HAS_REPLACEMENT               => "Replaced for cost savings",
         self::FLAGGED                       => "Flagged devices",
         self::HAS_FUNCTIONALITY_REPLACEMENT => "Replaced for color upgrade",
-    );
+    ];
 
     /**
      * @var int
@@ -56,9 +56,9 @@ class DeviceSwapReasonCategoryModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "masterDeviceId" => $this->id,
             "name"           => $this->name,
-        );
+        ];
     }
 }

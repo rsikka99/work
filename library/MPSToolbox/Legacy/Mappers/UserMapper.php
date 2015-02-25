@@ -85,9 +85,9 @@ class UserMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_id} = ?" => $primaryKey
-        ));
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -108,15 +108,15 @@ class UserMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof UserModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_id} = ?" => $object->id
-            );
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_id} = ?" => $object
-            );
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -213,7 +213,7 @@ class UserMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 150, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new UserModel($row->toArray());
@@ -232,7 +232,7 @@ class UserMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllExceptRoot ()
     {
-        return $this->fetchAll(array("{$this->col_id} != 1"));
+        return $this->fetchAll(["{$this->col_id} != 1"]);
     }
 
     /**
@@ -244,9 +244,9 @@ class UserMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_id} = ?" => $id
-        );
+        ];
     }
 
     /**
@@ -258,9 +258,9 @@ class UserMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereUsername ($email)
     {
-        return array(
+        return [
             "{$this->col_email} = ?" => $email
-        );
+        ];
     }
 
     /**
@@ -272,9 +272,9 @@ class UserMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereDealerId ($dealerId)
     {
-        return array(
+        return [
             "dealerId = ?" => $dealerId
-        );
+        ];
     }
 
     /**
@@ -302,7 +302,7 @@ class UserMapper extends My_Model_Mapper_Abstract
         }
         else
         {
-            $users = $this->fetchAll(array("{$this->col_id} != ?" => 1));
+            $users = $this->fetchAll(["{$this->col_id} != ?" => 1]);
         }
 
         return $users;
@@ -317,7 +317,7 @@ class UserMapper extends My_Model_Mapper_Abstract
      */
     public function fetchUserListForDealer ($dealerId)
     {
-        return $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId), "{$this->col_lastSeen} DESC");
+        return $this->fetchAll(["{$this->col_dealerId} = ?" => $dealerId], "{$this->col_lastSeen} DESC");
 
     }
 
@@ -330,7 +330,7 @@ class UserMapper extends My_Model_Mapper_Abstract
      */
     public function fetchUserByEmail ($email)
     {
-        return $this->fetch(array("{$this->col_email} = ?" => $email));
+        return $this->fetch(["{$this->col_email} = ?" => $email]);
     }
 
     /**
@@ -342,7 +342,7 @@ class UserMapper extends My_Model_Mapper_Abstract
      */
     public function searchByEmail ($emailName)
     {
-        $results = $this->fetchAll(array("{$this->col_email} LIKE ?" => "%{$emailName}%"));
+        $results = $this->fetchAll(["{$this->col_email} LIKE ?" => "%{$emailName}%"]);
 
         return $results;
     }

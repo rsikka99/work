@@ -15,7 +15,7 @@ class ImportLeaseCsvForm extends Zend_Form
     /**
      * @var array
      */
-    protected $_validFileExtensions = array();
+    protected $_validFileExtensions = [];
     protected $_minFileSize;
     protected $_maxFileSize;
 
@@ -39,37 +39,30 @@ class ImportLeaseCsvForm extends Zend_Form
         // Set the method for the display form to POST
         $this->setMethod('POST');
 
-        $this->addElement('file', 'uploadFile', array(
+        $this->addElement('file', 'uploadFile', [
             'label'       => 'Choose a file to upload',
             'destination' => $this->getView()->App()->uploadPath,
             'required'    => true,
-            'validators'  => array(
-                'Extension' => array('extension' => 'csv'),
-                'Count'     => array('count' => 1),
-                'File_Size' => array('min' => $this->_minFileSize, 'max' => $this->_maxFileSize)
-            )
-        ));
+            'validators'  => [
+                'Extension' => ['extension' => 'csv'],
+                'Count'     => ['count' => 1],
+                'File_Size' => ['min' => $this->_minFileSize, 'max' => $this->_maxFileSize],
+            ],
+        ]);
 
-        $this->addElement('submit', 'performUpload', array(
+        $this->addElement('submit', 'performUpload', [
             'label' => 'Upload File',
-        ));
+        ]);
 
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'label'          => 'Cancel',
             'formnovalidate' => true,
-        ));
+        ]);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/dealermanagement/import-lease-csv-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/dealermanagement/import-lease-csv-form.phtml']]]);
     }
 
 

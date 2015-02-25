@@ -15,7 +15,7 @@ $optimization = $this->optimization;
 $dealerOptimization = $this->dealerOptimization;
 
 /* @var $excessDeviceInstances DeviceInstanceModel[] */
-$excessDeviceInstances = (isset($this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE]) ? $this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE] : array());
+$excessDeviceInstances = (isset($this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE]) ? $this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE] : []);
 
 /* @var $graphs array */
 $graphs = $this->graphs;

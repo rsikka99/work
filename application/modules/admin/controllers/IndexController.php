@@ -15,7 +15,7 @@ class Admin_IndexController extends Action
     public function indexAction ()
     {
         // action body
-        $this->_pageTitle = array('Administration');
+        $this->_pageTitle = ['Administration'];
     }
 }
 

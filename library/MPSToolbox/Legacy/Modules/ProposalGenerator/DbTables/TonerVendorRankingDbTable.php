@@ -12,5 +12,5 @@ use Zend_Db_Table_Abstract;
 class TonerVendorRankingDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = "toner_vendor_rankings";
-    protected $_primary = array("tonerVendorRankingSetId", "manufacturerId");
+    protected $_primary = ["tonerVendorRankingSetId", "manufacturerId"];
 }

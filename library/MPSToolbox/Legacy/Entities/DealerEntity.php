@@ -32,8 +32,8 @@ class DealerEntity extends EloquentModel
      *
      * @var array
      */
-    protected $dates = array(
+    protected $dates = [
         'dateCreated',
-    );
+    ];
 
 }

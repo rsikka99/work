@@ -190,7 +190,7 @@ class RmsMasterMatchupMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new RmsMasterMatchupModel($row->toArray());
@@ -213,10 +213,10 @@ class RmsMasterMatchupMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_rmsProviderId} = ?" => $id[0],
-            "{$this->col_rmsModelId} = ?"    => $id[1]
-        );
+            "{$this->col_rmsModelId} = ?"    => $id[1],
+        ];
     }
 
     /**
@@ -226,6 +226,6 @@ class RmsMasterMatchupMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array($object->rmsProviderId, $object->rmsModelId);
+        return [$object->rmsProviderId, $object->rmsModelId];
     }
 }

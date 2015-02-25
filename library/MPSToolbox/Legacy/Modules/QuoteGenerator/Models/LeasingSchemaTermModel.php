@@ -67,11 +67,11 @@ class LeasingSchemaTermModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"              => $this->id,
             "leasingSchemaId" => $this->leasingSchemaId,
             "months"          => $this->months,
-        );
+        ];
     }
 
     /**

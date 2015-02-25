@@ -14,10 +14,10 @@ class PrintFleetVersionTwoUploadService extends AbstractRmsUploadService
      *
      * @var string
      */
-    protected $_incomingDateFormat = array(
+    protected $_incomingDateFormat = [
         "m/d/Y h:i:s A",
         "m/d/Y G:i",
-    );
+    ];
 
     /**
      * Column mapping for CSV -> Upload Row.
@@ -25,7 +25,7 @@ class PrintFleetVersionTwoUploadService extends AbstractRmsUploadService
      *
      * @var array
      */
-    protected $_columnMapping = array(
+    protected $_columnMapping = [
         'printermodelid'       => 'rmsModelId',
         'managementstatus'     => 'isManaged',
         'startdate'            => 'monitorStartDate',
@@ -90,5 +90,5 @@ class PrintFleetVersionTwoUploadService extends AbstractRmsUploadService
         'magenta coverage'     => 'pageCoverageMagenta',
         'yellow coverage'      => 'pageCoverageYellow',
         'location'             => 'location',
-    );
+    ];
 }

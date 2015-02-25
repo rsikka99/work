@@ -33,7 +33,7 @@ class Hardwareoptimization_DeviceswapsController extends Action
 
     public function indexAction ()
     {
-        $this->_pageTitle = array('Device Swaps');
+        $this->_pageTitle = ['Device Swaps'];
         $form             = new DeviceSwapsForm();
         $deviceSwapForm   = new DeviceSwapReasonsForm();
 
@@ -46,19 +46,19 @@ class Hardwareoptimization_DeviceswapsController extends Action
 
     public function deviceSwapListAction ()
     {
-        $jsonArray        = array();
+        $jsonArray        = [];
         $jqGridService    = new JQGrid();
         $deviceSwapMapper = DeviceSwapMapper::getInstance();
 
         /*
          * Grab the incoming parameters
          */
-        $jqGridServiceParameters = array(
+        $jqGridServiceParameters = [
             'sidx' => $this->_getParam('sidx', 'minimumPageCount'),
             'sord' => $this->_getParam('sord', 'asc'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10)
-        );
+        ];
 
         $jqGridService->setSortColumn('minimumPageCount');
         $jqGridService->setSortDirection('asc');
@@ -71,7 +71,7 @@ class Hardwareoptimization_DeviceswapsController extends Action
 
         $jqGridService->setValidSortColumns($sortColumns);
 
-        $groupColumns   = array();
+        $groupColumns   = [];
         $groupColumns[] = "deviceType";
         $jqGridService->setValidGroupByColumns($groupColumns);
 
@@ -102,7 +102,7 @@ class Hardwareoptimization_DeviceswapsController extends Action
                 $startRecord = 0;
             }
 
-            $sortOrder = array();
+            $sortOrder = [];
 
             if ($jqGridService->hasGrouping())
             {
@@ -123,9 +123,9 @@ class Hardwareoptimization_DeviceswapsController extends Action
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array(
+            $this->sendJson([
                 'error' => sprintf('Sort index "%s" or Group index "%s" is not a valid.', $jqGridService->getSortColumn(), $jqGridService->getGroupByColumn())
-            ));
+            ]);
         }
 
         $json = json_encode($jsonArray);
@@ -134,19 +134,19 @@ class Hardwareoptimization_DeviceswapsController extends Action
 
     public function deviceReasonListAction ()
     {
-        $jsonArray              = array();
+        $jsonArray              = [];
         $jqGridService          = new JQGrid();
         $deviceSwapReasonMapper = DeviceSwapReasonMapper::getInstance();
 
         /*
          * Grab the incoming parameters
          */
-        $jqGridServiceParameters = array(
+        $jqGridServiceParameters = [
             'sidx' => $this->_getParam('sidx', 'reason'),
             'sord' => $this->_getParam('sord', 'desc'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10)
-        );
+        ];
 
         // Set up validation arrays
         $blankModel  = new DeviceSwapReasonModel();
@@ -178,7 +178,7 @@ class Hardwareoptimization_DeviceswapsController extends Action
                 $startRecord = 0;
             }
 
-            $sortOrder = array();
+            $sortOrder = [];
 
             if ($jqGridService->hasGrouping())
             {
@@ -199,9 +199,9 @@ class Hardwareoptimization_DeviceswapsController extends Action
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array(
+            $this->sendJson([
                 'error' => 'Sorting parameters are invalid'
-            ));
+            ]);
         }
 
         $json = json_encode($jsonArray);
@@ -210,11 +210,11 @@ class Hardwareoptimization_DeviceswapsController extends Action
 
     public function updateDeviceAction ()
     {
-        $postData = array(
+        $postData = [
             "maximumPageCount" => $this->getParam("maximumPageCount"),
             "minimumPageCount" => $this->getParam("minimumPageCount"),
             "masterDeviceId"   => $this->getParam("masterDeviceId"),
-        );
+        ];
 
         $form = new DeviceSwapsForm();
         if ($form->isValid($postData))
@@ -228,7 +228,7 @@ class Hardwareoptimization_DeviceswapsController extends Action
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $json = array();
+            $json = [];
             foreach ($form->getMessages() as $errorElement)
             {
                 foreach ($errorElement as $errorName => $elementErrorMessage)
@@ -236,7 +236,7 @@ class Hardwareoptimization_DeviceswapsController extends Action
                     $json[] = $elementErrorMessage;
                 }
             }
-            $deviceSwap = array("error" => $json);
+            $deviceSwap = ["error" => $json];
             $this->sendJson($deviceSwap);
         }
 
@@ -245,12 +245,12 @@ class Hardwareoptimization_DeviceswapsController extends Action
     public function updateDeviceReasonAction ()
     {
         $form     = new DeviceSwapReasonsForm();
-        $postData = array(
+        $postData = [
             "id"             => $this->getParam('deviceSwapReasonId'),
             "isDefault"      => $this->getParam('isDefault'),
             "reason"         => $this->getParam('reason'),
             "reasonCategory" => $this->getParam('reasonCategory'),
-        );
+        ];
 
         if ($form->isValid($postData))
         {
@@ -281,7 +281,7 @@ class Hardwareoptimization_DeviceswapsController extends Action
                         DeviceSwapReasonMapper::getInstance()->insert($reason);
                     }
 
-                    $reasonDefault = DeviceSwapReasonDefaultMapper::getInstance()->find(array($reasonCategory->id, $this->_identity->dealerId));
+                    $reasonDefault = DeviceSwapReasonDefaultMapper::getInstance()->find([$reasonCategory->id, $this->_identity->dealerId]);
 
                     if ($reasonDefault->deviceSwapReasonId === $reason->id)
                     {
@@ -319,7 +319,7 @@ class Hardwareoptimization_DeviceswapsController extends Action
 
                 $db->commit();
 
-                $this->sendJson(array('success' => true, 'message' => 'Device swap reason saved.'));
+                $this->sendJson(['success' => true, 'message' => 'Device swap reason saved.']);
             }
             catch (Exception $e)
             {
@@ -330,25 +330,25 @@ class Hardwareoptimization_DeviceswapsController extends Action
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array(
+            $this->sendJson([
                 'message'       => 'Validation error',
                 'errorMessages' => $form->getMessages(),
-            ));
+            ]);
         }
     }
 
     public function deleteDeviceAction ()
     {
         $masterDeviceId = $this->_getParam("deviceInstanceId");
-        $rowsDeleted    = DeviceSwapMapper::getInstance()->delete(array($masterDeviceId, $this->_identity->dealerId));
+        $rowsDeleted    = DeviceSwapMapper::getInstance()->delete([$masterDeviceId, $this->_identity->dealerId]);
 
         if ($rowsDeleted > 0)
         {
-            $json = array("rowsDeleted" => $rowsDeleted);
+            $json = ["rowsDeleted" => $rowsDeleted];
         }
         else
         {
-            $json = array("error" => "Error deleting device swap.");
+            $json = ["error" => "Error deleting device swap."];
         }
 
         $this->sendJson($json);
@@ -375,7 +375,7 @@ class Hardwareoptimization_DeviceswapsController extends Action
             if (count($reasonsByCategory) > 1)
             {
                 // Delete the reason and assign it a new default
-                $rowsAffected = $swapDefaultMapper->delete(array($reason->deviceSwapReasonCategoryId, $this->_identity->dealerId));
+                $rowsAffected = $swapDefaultMapper->delete([$reason->deviceSwapReasonCategoryId, $this->_identity->dealerId]);
                 if ($rowsAffected > 0)
                 {
                     $swapMapper->delete($reason->id);
@@ -405,6 +405,6 @@ class Hardwareoptimization_DeviceswapsController extends Action
             DeviceSwapReasonMapper::getInstance()->delete($reasonId);
         }
 
-        $this->sendJson(array("Successfully delete device swap reason."));
+        $this->sendJson(["Successfully delete device swap reason."]);
     }
 }

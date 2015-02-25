@@ -12,9 +12,9 @@ use Zend_Db_Table_Abstract;
 class DealerMasterDeviceAttributeDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'dealer_master_device_attributes';
-    protected $_primary = array(
+    protected $_primary = [
         'masterDeviceId',
-        'dealerId'
-    );
+        'dealerId',
+    ];
 
 }

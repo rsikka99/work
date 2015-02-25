@@ -22,15 +22,15 @@ class QuoteNavigationForm extends Zend_Form
     const BUTTONS_SAVE      = 6;
     const BUTTONS_NEXT      = 7;
 
-    static $validButtonModes = array(
+    static $validButtonModes = [
         self::BUTTONS_ALL,
         self::BUTTONS_SAVE_NEXT,
         self::BUTTONS_BACK_NEXT,
         self::BUTTONS_BACK_SAVE,
         self::BUTTONS_BACK,
         self::BUTTONS_SAVE,
-        self::BUTTONS_NEXT
-    );
+        self::BUTTONS_NEXT,
+    ];
 
     /**
      * The button mode
@@ -84,7 +84,7 @@ class QuoteNavigationForm extends Zend_Form
         $goBackButton = false;
         $nextButton   = false;
         $saveButton   = false;
-        $addedButtons = array();
+        $addedButtons = [];
 
         switch ($buttonMode)
         {
@@ -119,51 +119,42 @@ class QuoteNavigationForm extends Zend_Form
         // Go Back
         if ($goBackButton)
         {
-            $form->addElement('submit', 'goBack', array(
+            $form->addElement('submit', 'goBack', [
                 'label' => '<i class="fa fa-fw fa-arrow-left"></i>  Go Back',
                 'class' => 'btn btn-default',
-            ));
+            ]);
             $addedButtons [] = 'goBack';
         }
 
         // Save Button
         if ($saveButton)
         {
-            $form->addElement('submit', 'save', array(
+            $form->addElement('submit', 'save', [
                 'label' => '<i class="fa fa-fw fa-check"></i> Save',
                 'class' => 'btn btn-success',
-            ));
+            ]);
             $addedButtons [] = 'save';
         }
 
         // Next (Save & Continue) Button
         if ($nextButton)
         {
-            $form->addElement('submit', 'saveAndContinue', array(
+            $form->addElement('submit', 'saveAndContinue', [
                 'label' => 'Save & Continue <i class="fa fa-fw fa-arrow-right"></i>',
                 'class' => 'btn btn-primary',
-            ));
+            ]);
             $addedButtons [] = 'saveAndContinue';
         }
 
         // Add the buttons the the form actions
-        $form->addDisplayGroup($addedButtons, 'actions', array(
+        $form->addDisplayGroup($addedButtons, 'actions', [
             'disableLoadDefaultDecorators' => true,
-            'decorators'                   => array(
-                'Actions'
-            )
-        ));
+            'decorators'                   => ['Actions'],
+        ]);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/quotegen/navigation-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/quotegen/navigation-form.phtml']]]);
     }
 }

@@ -17,7 +17,7 @@ class HardwareLibrary_ManufacturerController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Hardware Library', 'Manufacturers');
+        $this->_pageTitle = ['Hardware Library', 'Manufacturers'];
         // Display all of the manufacturers
         $mapper    = ManufacturerMapper::getInstance();
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
@@ -40,7 +40,7 @@ class HardwareLibrary_ManufacturerController extends Action
      */
     public function createAction ()
     {
-        $this->_pageTitle    = array('Hardware Quote Devices', 'Create Manufacturer');
+        $this->_pageTitle    = ['Hardware Quote Devices', 'Create Manufacturer'];
         $form                = new ManufacturerForm();
         $manufacturerService = new ManufacturerService();
 
@@ -68,15 +68,15 @@ class HardwareLibrary_ManufacturerController extends Action
                             {
                                 foreach ($manufacturerService->getErrors() as $error)
                                 {
-                                    $this->_flashMessenger->addMessage(array(
+                                    $this->_flashMessenger->addMessage([
                                         'danger' => $error,
-                                    ));
+                                    ]);
                                 }
                             }
                             else
                             {
-                                $this->_flashMessenger->addMessage(array('success' => sprintf("Manufacturer %s was added successfully.", $this->view->escape($manufacturer->fullname)),
-                                ));
+                                $this->_flashMessenger->addMessage(['success' => sprintf("Manufacturer %s was added successfully.", $this->view->escape($manufacturer->fullname)),
+                                ]);
                                 $form->reset();
                             }
                         }
@@ -87,16 +87,16 @@ class HardwareLibrary_ManufacturerController extends Action
                             {
                                 // Duplicate column
                                 case 1062 :
-                                    $this->_flashMessenger->addMessage(array('danger' => 'Manufacturer already exists.'));
+                                    $this->_flashMessenger->addMessage(['danger' => 'Manufacturer already exists.']);
                                     break;
                                 default :
-                                    $this->_flashMessenger->addMessage(array('danger' => 'Error saving to database.  Please try again.'));
+                                    $this->_flashMessenger->addMessage(['danger' => 'Error saving to database.  Please try again.']);
                                     break;
                             }
                         }
                         catch (Exception $e)
                         {
-                            $this->_flashMessenger->addMessage(array('danger' => 'There was an error processing this request.  Please try again.'));
+                            $this->_flashMessenger->addMessage(['danger' => 'There was an error processing this request.  Please try again.']);
                         }
                     }
                 }
@@ -123,7 +123,7 @@ class HardwareLibrary_ManufacturerController extends Action
      */
     public function editAction ()
     {
-        $this->_pageTitle = array('Hardware Quote Devices', 'Edit Manufacturer');
+        $this->_pageTitle = ['Hardware Quote Devices', 'Edit Manufacturer'];
 
         /**
          * Grab the manufacturer
@@ -131,7 +131,7 @@ class HardwareLibrary_ManufacturerController extends Action
         $manufacturerId = $this->_getParam('id', false);
         if (!$manufacturerId)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a manufacturer to edit first.'));
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a manufacturer to edit first.']);
             $this->redirectToRoute('hardware-library.manufacturers');
         }
 
@@ -141,16 +141,16 @@ class HardwareLibrary_ManufacturerController extends Action
         // If the manufacturer doesn't exist, send them back t the view all manufacturers page
         if (!$manufacturer)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'There was an error selecting the manufacturer to edit.'
-            ));
+            ]);
             $this->redirectToRoute('hardware-library.manufacturers');
         }
 
         // Create a new form with the mode and roles set
         $form = new ManufacturerForm();
 
-        $form->populate(array_merge(array('isTonerVendor' => $manufacturer->isTonerVendor()), $manufacturer->toArray()));
+        $form->populate(array_merge(['isTonerVendor' => $manufacturer->isTonerVendor()], $manufacturer->toArray()));
 
         // Make sure we are posting data
         if ($this->getRequest()->isPost())
@@ -181,12 +181,12 @@ class HardwareLibrary_ManufacturerController extends Action
                         {
                             foreach ($manufacturerService->getErrors() as $errorMessage)
                             {
-                                $this->_flashMessenger->addMessage(array('error' => $errorMessage));
+                                $this->_flashMessenger->addMessage(['error' => $errorMessage]);
                             }
                         }
                         else
                         {
-                            $this->_flashMessenger->addMessage(array('success' => sprintf("Manufacturer %s was updated successfully.", $this->view->escape($manufacturer->fullname))));
+                            $this->_flashMessenger->addMessage(['success' => sprintf("Manufacturer %s was updated successfully.", $this->view->escape($manufacturer->fullname))]);
                         }
                         $db->commit();
 
@@ -199,7 +199,7 @@ class HardwareLibrary_ManufacturerController extends Action
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => 'Please correct the errors below'));
+                    $this->_flashMessenger->addMessage(['danger' => 'Please correct the errors below']);
                 }
             }
         }
@@ -211,12 +211,12 @@ class HardwareLibrary_ManufacturerController extends Action
      */
     public function deleteAction ()
     {
-        $this->_pageTitle = array('Hardware Quote Devices', 'Delete Manufacturer');
+        $this->_pageTitle = ['Hardware Quote Devices', 'Delete Manufacturer'];
         $manufacturerId   = $this->_getParam('id', false);
 
         if (!$manufacturerId)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a manufacturer to delete first.'));
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a manufacturer to delete first.']);
             $this->redirectToRoute('hardware-library.manufacturers');
         }
 
@@ -225,7 +225,7 @@ class HardwareLibrary_ManufacturerController extends Action
         $manufacturer = ManufacturerMapper::getInstance()->find($manufacturerId);
         if (!$manufacturerId)
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the manufacturer to delete.'));
+            $this->_flashMessenger->addMessage(['danger' => 'There was an error selecting the manufacturer to delete.']);
             $this->redirectToRoute('hardware-library.manufacturers');
         }
 
@@ -255,11 +255,11 @@ class HardwareLibrary_ManufacturerController extends Action
                     {
                         $db->rollBack();
                         \Tangent\Logger\Logger::logException($e);
-                        $this->_flashMessenger->addMessage(array('error' => sprintf("Manufacturer %s failed to delete.", $this->view->escape($manufacturer->fullname))));
+                        $this->_flashMessenger->addMessage(['error' => sprintf("Manufacturer %s failed to delete.", $this->view->escape($manufacturer->fullname))]);
                         $this->redirectToRoute('hardware-library.manufacturers');
                     }
 
-                    $this->_flashMessenger->addMessage(array('success' => sprintf("Manufacturer %s was deleted successfully.", $this->view->escape($manufacturer->fullname))));
+                    $this->_flashMessenger->addMessage(['success' => sprintf("Manufacturer %s was deleted successfully.", $this->view->escape($manufacturer->fullname))]);
 
                     $this->redirectToRoute('hardware-library.manufacturers');
                 }

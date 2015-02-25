@@ -100,9 +100,9 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
-            "{$this->col_id} = ?" => $primaryKey
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, [
+            "{$this->col_id} = ?" => $primaryKey,
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -123,15 +123,15 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof HardwareOptimizationModel)
         {
-            $whereClause = array(
-                "{$this->col_id} = ?" => $object->id
-            );
+            $whereClause = [
+                "{$this->col_id} = ?" => $object->id,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_id} = ?" => $object
-            );
+            $whereClause = [
+                "{$this->col_id} = ?" => $object,
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -216,7 +216,7 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new HardwareOptimizationModel($row->toArray());
@@ -239,9 +239,9 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_id} = ?" => $id
-        );
+        return [
+            "{$this->col_id} = ?" => $id,
+        ];
     }
 
     /**
@@ -251,7 +251,7 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
      */
     public function findHardwareOptimizationByClientId ($clientId)
     {
-        return $this->fetch(array("{$this->col_clientId} = ? " => $clientId));
+        return $this->fetch(["{$this->col_clientId} = ? " => $clientId]);
     }
 
     /**
@@ -319,11 +319,11 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
 
             $selectStatement = new Zend_Db_Expr("COUNT(*)");
             $select          = $db->select();
-            $select->from(array($this->getTableName()), $selectStatement)
-                   ->join(array("di" => $deviceInstanceMapper->getTableName()), "{$this->getTableName()}.{$this->col_rmsUploadId} = di.{$deviceInstanceMapper->col_rmsUploadId}")
-                   ->join(array("dimd" => $deviceInstanceMasterDeviceMapper->getTableName()), "dimd.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
-                   ->join(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
-                   ->join(array("dim" => $deviceInstanceMeterMapper->getTableName()), "dim.{$deviceInstanceMeterMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
+            $select->from([$this->getTableName()], $selectStatement)
+                   ->join(["di" => $deviceInstanceMapper->getTableName()], "{$this->getTableName()}.{$this->col_rmsUploadId} = di.{$deviceInstanceMapper->col_rmsUploadId}")
+                   ->join(["dimd" => $deviceInstanceMasterDeviceMapper->getTableName()], "dimd.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
+                   ->join(["md" => $masterDeviceMapper->getTableName()], "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
+                   ->join(["dim" => $deviceInstanceMeterMapper->getTableName()], "dim.{$deviceInstanceMeterMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
                    ->where("{$this->getTableName()}.$this->col_id = ?", $hardwareOptimizationId)
                    ->where("md.isLeased = ?", 0)
                    ->where("di.isExcluded = ?", 0)
@@ -343,12 +343,12 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
             $db     = Zend_Db_Table::getDefaultAdapter();
             $select = $db->select();
             // Get all the devices, we will limit and offset them once they are sorted by cost.
-            $select->from(array($this->getTableName()), $selectStatement)
-                   ->join(array("di" => $deviceInstanceMapper->getTableName()), "{$this->getTableName()}.{$this->col_rmsUploadId} = di.{$deviceInstanceMapper->col_rmsUploadId}")
-                   ->join(array("dimd" => $deviceInstanceMasterDeviceMapper->getTableName()), "dimd.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
-                   ->join(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
-                   ->join(array("m" => $manufacturerMapper->getTableName()), "m.{$manufacturerMapper->col_id} = md.{$masterDeviceMapper->col_manufacturerId}")
-                   ->join(array("dim" => $deviceInstanceMeterMapper->getTableName()), "dim.{$deviceInstanceMeterMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
+            $select->from([$this->getTableName()], $selectStatement)
+                   ->join(["di" => $deviceInstanceMapper->getTableName()], "{$this->getTableName()}.{$this->col_rmsUploadId} = di.{$deviceInstanceMapper->col_rmsUploadId}")
+                   ->join(["dimd" => $deviceInstanceMasterDeviceMapper->getTableName()], "dimd.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
+                   ->join(["md" => $masterDeviceMapper->getTableName()], "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
+                   ->join(["m" => $manufacturerMapper->getTableName()], "m.{$manufacturerMapper->col_id} = md.{$masterDeviceMapper->col_manufacturerId}")
+                   ->join(["dim" => $deviceInstanceMeterMapper->getTableName()], "dim.{$deviceInstanceMeterMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
                    ->where("{$this->getTableName()}.$this->col_id = ?", $hardwareOptimizationId)
                    ->where("md.isLeased = ?", 0)
                    ->where("di.isExcluded = ?", 0)
@@ -356,18 +356,18 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
 
             $query = $db->query($select);
 
-            $devices = array();
+            $devices = [];
             foreach ($query->fetchAll() as $row)
             {
                 $deviceInstance            = DeviceInstanceMapper::getInstance()->find($row['deviceInstanceId']);
                 $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting);
 
-                $rowJson               = array(
+                $rowJson               = [
                     'deviceInstanceId' => $row['deviceInstanceId'],
                     'isColor'          => $row['isColor'],
                     'device'           => $row['device'],
                     'rawMonthlyCost'   => $deviceInstanceMonthlyCost,
-                );
+                ];
                 $devices['jsonData'][] = $rowJson;
             }
 
@@ -379,7 +379,7 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
             });
 
             // Limit and offset devices
-            $returnDevices = array();
+            $returnDevices = [];
             $maximum       = count($devices['jsonData']);
             for ($i = $offset; $i < $limit + $offset; $i++)
             {

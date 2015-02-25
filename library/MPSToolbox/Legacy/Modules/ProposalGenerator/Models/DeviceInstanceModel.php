@@ -47,11 +47,11 @@ class DeviceInstanceModel extends My_Model_Abstract
      *
      * @var array
      */
-    static $RUNNING_HOUR_ARRAY = array(
+    static $RUNNING_HOUR_ARRAY = [
         500 => 8,
         100 => 4,
-        0   => 2
-    );
+        0   => 2,
+    ];
 
     /**
      * The cost of electricity
@@ -374,7 +374,7 @@ class DeviceInstanceModel extends My_Model_Abstract
     /**
      * @var TonerModel[]
      */
-    static $uniqueTonerArray = array();
+    static $uniqueTonerArray = [];
 
     /**
      * @param array $params An array of data to populate the model with
@@ -497,7 +497,7 @@ class DeviceInstanceModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"                       => $this->id,
             "rmsUploadId"              => $this->rmsUploadId,
             "rmsUploadRowId"           => $this->rmsUploadRowId,
@@ -519,7 +519,7 @@ class DeviceInstanceModel extends My_Model_Abstract
             "rawDeviceName"            => $this->rawDeviceName,
             "compatibleWithJitProgram" => $this->compatibleWithJitProgram,
             "location"                 => $this->location,
-        );
+        ];
     }
 
     /**
@@ -903,7 +903,7 @@ class DeviceInstanceModel extends My_Model_Abstract
         // Make sure our array is initialized
         if (!isset($this->_cachedMonthlyBlackAndWhiteCost))
         {
-            $this->_cachedMonthlyBlackAndWhiteCost = array();
+            $this->_cachedMonthlyBlackAndWhiteCost = [];
         }
         $cacheKey = $costPerPageSetting->createCacheKey() . '_device_instance' . $this->id;
         if (!array_key_exists($cacheKey, $this->_cachedMonthlyBlackAndWhiteCost))
@@ -1116,12 +1116,12 @@ class DeviceInstanceModel extends My_Model_Abstract
     {
         if (!isset($this->_hardwareOptimizationDeviceInstances))
         {
-            $this->_hardwareOptimizationDeviceInstances = array();
+            $this->_hardwareOptimizationDeviceInstances = [];
         }
 
         if ($hardwareOptimizationId > 0 && !array_key_exists($hardwareOptimizationId, $this->_hardwareOptimizationDeviceInstances))
         {
-            $hardwareOptimizationDeviceInstance = HardwareOptimizationDeviceInstanceMapper::getInstance()->find(array($this->id, $hardwareOptimizationId));
+            $hardwareOptimizationDeviceInstance = HardwareOptimizationDeviceInstanceMapper::getInstance()->find([$this->id, $hardwareOptimizationId]);
             if (!$hardwareOptimizationDeviceInstance instanceof HardwareOptimizationDeviceInstanceModel)
             {
                 $hardwareOptimizationDeviceInstance                         = new HardwareOptimizationDeviceInstanceModel();
@@ -1156,7 +1156,7 @@ class DeviceInstanceModel extends My_Model_Abstract
     {
         if (!isset($this->_hardwareOptimizationDeviceInstances))
         {
-            $this->_hardwareOptimizationDeviceInstances = array();
+            $this->_hardwareOptimizationDeviceInstances = [];
         }
 
         $this->_hardwareOptimizationDeviceInstances[$hardwareOptimizationDeviceInstance->hardwareOptimizationId] = $hardwareOptimizationDeviceInstance;
@@ -1192,7 +1192,7 @@ class DeviceInstanceModel extends My_Model_Abstract
     {
         if (!isset($this->_replacementMasterDevice))
         {
-            $this->_replacementMasterDevice = array();
+            $this->_replacementMasterDevice = [];
         }
 
         if (!array_key_exists($hardwareOptimizationId, $this->_replacementMasterDevice))
@@ -1280,7 +1280,7 @@ class DeviceInstanceModel extends My_Model_Abstract
     {
         if (!isset($this->_reason))
         {
-            $deviceSwapReasonId = DeviceInstanceDeviceSwapReasonMapper::getInstance()->find(array($hardwareoptimizationId, $this->id))->deviceSwapReasonId;
+            $deviceSwapReasonId = DeviceInstanceDeviceSwapReasonMapper::getInstance()->find([$hardwareoptimizationId, $this->id])->deviceSwapReasonId;
             $this->_reason      = DeviceSwapReasonMapper::getInstance()->find($deviceSwapReasonId);
         }
 
@@ -1299,7 +1299,7 @@ class DeviceInstanceModel extends My_Model_Abstract
         // Make sure our array is initialized
         if (!isset($this->_cachedPageCounts))
         {
-            $this->_cachedPageCounts = array();
+            $this->_cachedPageCounts = [];
         }
 
         $cacheKey = "{$blackToColorRatio}";
@@ -1380,7 +1380,7 @@ class DeviceInstanceModel extends My_Model_Abstract
          */
         if (!isset($this->_cachedDeviceCostPerPage))
         {
-            $this->_cachedDeviceCostPerPage = array();
+            $this->_cachedDeviceCostPerPage = [];
         }
 
         // If master device isn't passed, get the master device
@@ -1434,7 +1434,7 @@ class DeviceInstanceModel extends My_Model_Abstract
             else
             {
                 // Create fake instance
-                $deviceCostPerPage            = new DeviceCostPerPageModel(array(), $costPerPageSetting);
+                $deviceCostPerPage            = new DeviceCostPerPageModel([], $costPerPageSetting);
                 $deviceCostPerPage->isManaged = $this->isManaged;
             }
 

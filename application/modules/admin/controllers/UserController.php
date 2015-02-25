@@ -33,7 +33,7 @@ class Admin_UserController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('System', 'Users', 'User Management');
+        $this->_pageTitle = ['System', 'Users', 'User Management'];
         // Fetch all the users
         $userMapper = new UserMapper();
         $users      = $userMapper->fetchUserList($this->_currentUserIsRoot);
@@ -47,7 +47,7 @@ class Admin_UserController extends Action
      */
     public function createAction ()
     {
-        $this->_pageTitle = array('Users', 'Create User');
+        $this->_pageTitle = ['Users', 'Create User'];
 
         $dealerId = $this->getRequest()->getUserParam('id', false);
 
@@ -79,7 +79,7 @@ class Admin_UserController extends Action
 
                             if (!isset($values["userRoles"]))
                             {
-                                $values['userRoles'] = array();
+                                $values['userRoles'] = [];
                             }
 
                             // Save changes to the user roles
@@ -88,9 +88,7 @@ class Admin_UserController extends Action
                                 $userRole         = new UserRoleModel();
                                 $userRole->userId = $userId;
                                 $userRoleMapper   = new UserRoleMapper();
-                                $userRoles        = $userRoleMapper->fetchAll(array(
-                                    'userId = ?' => $userId
-                                ));
+                                $userRoles        = $userRoleMapper->fetchAll(['userId = ?' => $userId]);
                                 // Loop through our new roles
                                 foreach ($values ["userRoles"] as $roleId)
                                 {
@@ -112,15 +110,15 @@ class Admin_UserController extends Action
                                         $userRoleMapper->insert($userRole);
                                     }
                                 }
-                                $this->_flashMessenger->addMessage(array(
+                                $this->_flashMessenger->addMessage([
                                     'success' => "User '" . $this->view->escape($values ["email"]) . "' saved successfully."
-                                ));
+                                ]);
 
                                 // Reset the form after everything is saved successfully
                                 $form->reset();
 
                                 // Select the same dealer so we can keep creating users easier
-                                $form->populate(array('dealerId' => $values['dealerId']));
+                                $form->populate(['dealerId' => $values['dealerId']]);
                             }
                             $db->commit();
 
@@ -137,14 +135,14 @@ class Admin_UserController extends Action
                             {
                                 // Duplicate column
                                 case 1062 :
-                                    $this->_flashMessenger->addMessage(array(
+                                    $this->_flashMessenger->addMessage([
                                         'danger' => 'Username already exists.'
-                                    ));
+                                    ]);
                                     break;
                                 default :
-                                    $this->_flashMessenger->addMessage(array(
+                                    $this->_flashMessenger->addMessage([
                                         'danger' => 'Error saving to database.  Please try again.'
-                                    ));
+                                    ]);
                                     break;
                             }
 
@@ -154,24 +152,24 @@ class Admin_UserController extends Action
                         {
                             $db->rollBack();
                             \Tangent\Logger\Logger::logException($e);
-                            $this->_flashMessenger->addMessage(array(
+                            $this->_flashMessenger->addMessage([
                                 'danger' => 'There was an error processing this request.  Please try again.'
-                            ));
+                            ]);
                             $form->populate($request->getPost());
                         }
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'danger' => "This dealer has reached its maxiumum user licenses of {$dealer->userLicenses}"
-                        ));
+                        ]);
                     }
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'danger' => 'Please correct the errors below'
-                    ));
+                    ]);
                     $form->populate($request->getPost());
                 }
             }
@@ -179,7 +177,7 @@ class Admin_UserController extends Action
             {
                 if ($dealerId !== false)
                 {
-                    $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                    $this->redirectToRoute('admin.dealers.view', ['id' => $dealerId]);
                 }
                 else
                 {
@@ -197,20 +195,20 @@ class Admin_UserController extends Action
      */
     public function deleteAction ()
     {
-        $this->_pageTitle = array('Users', 'Delete User');
+        $this->_pageTitle = ['Users', 'Delete User'];
         $userId           = $this->getRequest()->getUserParam('id', false);
         $dealerId         = $this->getRequest()->getUserParam('dealerId', false);
 
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a user to delete first.']);
             $this->redirectToRoute('admin.users');
         }
 
         if ($userId === '1')
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'Insufficient Privilege: You cannot delete the root user.'));
+            $this->_flashMessenger->addMessage(['danger' => 'Insufficient Privilege: You cannot delete the root user.']);
             $this->redirectToRoute('admin.users');
         }
 
@@ -220,7 +218,7 @@ class Admin_UserController extends Action
         // If the user doesn't exist, send them back t the view all users page
         if (!$user)
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the user to delete.'));
+            $this->_flashMessenger->addMessage(['danger' => 'There was an error selecting the user to delete.']);
             $this->redirectToRoute('admin.users');
         }
 
@@ -239,16 +237,16 @@ class Admin_UserController extends Action
                 if ($form->isValid($values))
                 {
                     $mapper->delete($user);
-                    $this->_flashMessenger->addMessage(array('success' => "User deleted."));
+                    $this->_flashMessenger->addMessage(['success' => "User deleted."]);
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => 'There was an error while deleting the user'));
+                    $this->_flashMessenger->addMessage(['danger' => 'There was an error while deleting the user']);
                 }
 
                 if ($dealerId !== false)
                 {
-                    $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                    $this->redirectToRoute('admin.dealers.view', ['id' => $dealerId]);
                 }
                 else
                 {
@@ -259,7 +257,7 @@ class Admin_UserController extends Action
             {
                 if ($dealerId !== false)
                 {
-                    $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                    $this->redirectToRoute('admin.dealers.view', ['id' => $dealerId]);
                 }
                 else
                 {
@@ -276,17 +274,17 @@ class Admin_UserController extends Action
      */
     public function editAction ()
     {
-        $this->_pageTitle = array('Users', 'Edit User');
+        $this->_pageTitle = ['Users', 'Edit User'];
         $userId           = $this->getRequest()->getUserParam('id', false);
         $dealerId         = $this->getRequest()->getUserParam('dealerId', false);
 
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a user to delete first.']);
             if ($dealerId !== false)
             {
-                $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                $this->redirectToRoute('admin.dealers.view', ['id' => $dealerId]);
             }
             else
             {
@@ -296,10 +294,10 @@ class Admin_UserController extends Action
 
         if ($userId == '1' && !$this->_currentUserIsRoot)
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'Insufficient Privilege: You cannot edit the root user.'));
+            $this->_flashMessenger->addMessage(['danger' => 'Insufficient Privilege: You cannot edit the root user.']);
             if ($dealerId !== false)
             {
-                $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                $this->redirectToRoute('admin.dealers.view', ['id' => $dealerId]);
             }
             else
             {
@@ -316,10 +314,10 @@ class Admin_UserController extends Action
         $roles      = $roleMapper->fetchAll();
 
         $userRoleMapper = new UserRoleMapper();
-        $userRoles      = $userRoleMapper->fetchAll(array('userId = ?' => $userId));
+        $userRoles      = $userRoleMapper->fetchAll(['userId = ?' => $userId]);
 
         // We need to get the current users roles
-        $currentUserRoles = array();
+        $currentUserRoles = [];
         foreach ($userRoles as $userRole)
         {
             $currentUserRoles [] = $userRole->roleId;
@@ -328,10 +326,10 @@ class Admin_UserController extends Action
         // If the user doesn't exist, send them back to the view all users page
         if (!$user)
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the user to delete.'));
+            $this->_flashMessenger->addMessage(['danger' => 'There was an error selecting the user to delete.']);
             if ($dealerId !== false)
             {
-                $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                $this->redirectToRoute('admin.dealers.view', ['id' => $dealerId]);
             }
             else
             {
@@ -431,7 +429,7 @@ class Admin_UserController extends Action
 
                         if (!isset($formValues['userRoles']))
                         {
-                            $formValues['userRoles'] = array();
+                            $formValues['userRoles'] = [];
                         }
                         // Save changes to the user roles
                         $userRole         = new UserRoleModel();
@@ -482,9 +480,9 @@ class Admin_UserController extends Action
                             }
                         }
 
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'success' => "User '" . $this->view->escape($formValues ["email"]) . "' saved successfully."
-                        ));
+                        ]);
                     }
                     else
                     {
@@ -493,9 +491,9 @@ class Admin_UserController extends Action
                 }
                 catch (InvalidArgumentException $e)
                 {
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'danger' => $e->getMessage()
-                    ));
+                    ]);
                 }
             }
             else
@@ -503,7 +501,7 @@ class Admin_UserController extends Action
                 // User has cancelled. We could do a redirect here if we wanted.
                 if ($dealerId !== false)
                 {
-                    $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                    $this->redirectToRoute('admin.dealers.view', ['id' => $dealerId]);
                 }
                 else
                 {
@@ -518,15 +516,15 @@ class Admin_UserController extends Action
 
     public function profileAction ()
     {
-        $this->_pageTitle = array('Profile', 'Users');
+        $this->_pageTitle = ['Profile', 'Users'];
 
         $userId = Zend_Auth::getInstance()->getIdentity()->id;
 
         if (!$userId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'warning' => 'Please select a user to delete first.'
-            ));
+            ]);
             $this->redirectToRoute('admin.users');
         }
 
@@ -565,25 +563,25 @@ class Admin_UserController extends Action
                             $user->populate($values);
                             $userMapper->save($user, $userId);
 
-                            $this->_flashMessenger->addMessage(array(
+                            $this->_flashMessenger->addMessage([
                                 'success' => "Your profile has been updated successfully."
-                            ));
+                            ]);
                         }
                         else
                         {
                             $form->getElement('email')->addError("Email already exists");
-                            $this->_flashMessenger->addMessage(array(
+                            $this->_flashMessenger->addMessage([
                                 'warning' => "Your profile was not updated successfully please try again."
-                            ));
+                            ]);
                         }
                     }
                 }
                     // If anything goes wrong show error message
                 catch (Exception $e)
                 {
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'warning' => "Your profile was not updated successfully please try again."
-                    ));
+                    ]);
                 }
             }
             else

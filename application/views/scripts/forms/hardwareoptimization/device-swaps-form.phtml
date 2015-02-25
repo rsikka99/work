@@ -5,7 +5,7 @@ use MPSToolbox\Legacy\Modules\HardwareOptimization\Forms\DeviceSwapsForm;
 $form = $this->element;
 ?>
 
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
 <div class="clearfix">
     <fieldset class="col-md-10 col-md-offset-1">
         <div class="form-group  <?= ($form->getElement('masterDeviceId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">

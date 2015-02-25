@@ -14,9 +14,7 @@ class Assessment_Report_FleetattributesController extends Assessment_Library_Con
     {
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_FLEET_ATTRIBUTES))
         {
-            $this->_flashMessenger->addMessage(array(
-                "error" => "You do not have permission to access this."
-            ));
+            $this->_flashMessenger->addMessage(["error" => "You do not have permission to access this."]);
 
             $this->redirectToRoute('assessment');
         }
@@ -26,16 +24,16 @@ class Assessment_Report_FleetattributesController extends Assessment_Library_Con
 
     public function indexAction ()
     {
-        $this->_pageTitle = array('Assessment', 'Fleet Attributes');
+        $this->_pageTitle = ['Assessment', 'Fleet Attributes'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
 
         $this->view->availableReports['FleetAttributes']['active'] = true;
-        $this->view->formats                                       = array(
+        $this->view->formats                                       = [
             "/assessment/report_fleetattributes/generate/format/excel" => $this->_excelFormat,
-        );
+        ];
 
         try
         {
@@ -55,7 +53,7 @@ class Assessment_Report_FleetattributesController extends Assessment_Library_Con
      */
     public function generateAction ()
     {
-        $this->_pageTitle = array('Generate Fleet Attributes');
+        $this->_pageTitle = ['Generate Fleet Attributes'];
         $format           = $this->_getParam("format", "excel");
 
         switch ($format)
@@ -101,7 +99,7 @@ class Assessment_Report_FleetattributesController extends Assessment_Library_Con
             throw new Exception("Could not generate Fleet Attributes excel report.");
         }
 
-        $fleetAttributesData = array();
+        $fleetAttributesData = [];
         $deviceCounter       = 0;
         $dealerId            = Zend_Auth::getInstance()->getIdentity()->dealerId;
 

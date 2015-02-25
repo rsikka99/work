@@ -84,9 +84,9 @@ class ClientTonerOrderMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_id} = ?" => $primaryKey,
-        ));
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -107,15 +107,15 @@ class ClientTonerOrderMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof ClientTonerOrderModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_id} = ?" => $object->id,
-            );
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_id} = ?" => $object,
-            );
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -200,7 +200,7 @@ class ClientTonerOrderMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
 
         foreach ($resultSet as $row)
         {
@@ -224,9 +224,9 @@ class ClientTonerOrderMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_id} = ?" => $id,
-        );
+        ];
     }
 
     /**
@@ -237,7 +237,7 @@ class ClientTonerOrderMapper extends My_Model_Mapper_Abstract
      */
     public function findTonerAttributeByTonerId ($tonerId, $clientId)
     {
-        return $this->fetch(array("{$this->col_tonerId} = ?" => $tonerId, "{$this->col_clientId} =  ?" => $clientId));
+        return $this->fetch(["{$this->col_tonerId} = ?" => $tonerId, "{$this->col_clientId} =  ?" => $clientId]);
     }
 
     /**
@@ -267,7 +267,7 @@ class ClientTonerOrderMapper extends My_Model_Mapper_Abstract
     public function jqgridFetchAllForClient ($clientId, $dealerId, $order = null, $count = 25, $offset = 0, $filter = null, $criteria = null, $justCount = false)
     {
         $db       = $this->getDbTable()->getAdapter();
-        $bindData = array();
+        $bindData = [];
 
         if ($justCount)
         {
@@ -398,7 +398,7 @@ FROM client_toner_orders
     public function fetchAllForClient ($clientId, $dealerId, $order = null, $count = 25, $offset = 0, $filter = null, $criteria = null, $justCount = false)
     {
         $clientTonerOrderArray = $this->jqgridFetchAllForClient($clientId, $dealerId, $order, $count, $offset, $filter, $criteria, $justCount);
-        $clientTonerOrders     = array();
+        $clientTonerOrders     = [];
         foreach ($clientTonerOrderArray as $clientTonerOrderData)
         {
             // Get the item from the cache and return it if we find it.
@@ -426,7 +426,7 @@ FROM client_toner_orders
      */
     public function deleteAllForClient ($clientId)
     {
-        return $this->getDbTable()->delete(array("{$this->col_clientId} = ?" => $clientId));
+        return $this->getDbTable()->delete(["{$this->col_clientId} = ?" => $clientId]);
     }
 
     /**
@@ -440,6 +440,6 @@ FROM client_toner_orders
      */
     public function findTonerOrder ($clientId, $oemSku, $orderNumber)
     {
-        return $this->fetch(array("{$this->col_clientId} = ?" => $clientId, "{$this->col_oemSku} = ?" => $oemSku, "{$this->col_orderNumber} =  ?" => $orderNumber));
+        return $this->fetch(["{$this->col_clientId} = ?" => $clientId, "{$this->col_oemSku} = ?" => $oemSku, "{$this->col_orderNumber} =  ?" => $orderNumber]);
     }
 }

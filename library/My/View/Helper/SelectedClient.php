@@ -28,7 +28,7 @@ class My_View_Helper_SelectedClient extends Zend_View_Helper_Abstract
                     $this->selectedClient = $client;
 
                     // Show that we've looked at the client recently
-                    $userViewedClient = UserViewedClientMapper::getInstance()->find(array($this->view->Identity()->id, $client->id));
+                    $userViewedClient = UserViewedClientMapper::getInstance()->find([$this->view->Identity()->id, $client->id]);
                     if ($userViewedClient instanceof UserViewedClientModel)
                     {
                         $userViewedClient->dateViewed = new Zend_Db_Expr("NOW()");

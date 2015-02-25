@@ -85,10 +85,10 @@ class DeviceMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_masterDeviceId} = ?" => $primaryKey[0],
-            "{$this->col_dealerId} = ?"       => $primaryKey[1]
-        ));
+            "{$this->col_dealerId} = ?"       => $primaryKey[1],
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -109,18 +109,18 @@ class DeviceMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof DeviceModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_masterDeviceId} = ?" => $object->masterDeviceId,
                 "{$this->col_dealerId} = ?"       => $object->dealerId,
 
-            );
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_masterDeviceId} = ?" => $object[0],
                 "{$this->col_dealerId} = ?"       => $object[1],
-            );
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -206,7 +206,7 @@ class DeviceMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new DeviceModel($row->toArray());
@@ -231,10 +231,10 @@ class DeviceMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_masterDeviceId} = ?" => $id [0],
             "{$this->col_dealerId} = ?"       => $id [1],
-        );
+        ];
     }
 
     /**
@@ -244,10 +244,10 @@ class DeviceMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
+        return [
             (int)$object->masterDeviceId,
-            (int)$object->dealerId
-        );
+            (int)$object->dealerId,
+        ];
     }
 
     /**
@@ -259,7 +259,7 @@ class DeviceMapper extends My_Model_Mapper_Abstract
      */
     public function fetchQuoteDeviceListForDealer ($dealerId)
     {
-        $devices = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId), null, 200);
+        $devices = $this->fetchAll(["{$this->col_dealerId} = ?" => $dealerId], null, 200);
 
         return $devices;
     }
@@ -281,25 +281,19 @@ class DeviceMapper extends My_Model_Mapper_Abstract
 
         $db     = Zend_Db_Table::getDefaultAdapter();
         $select = $db->select();
-        $select->from(array($this->getTableName()), $caseStatement)
+        $select->from([$this->getTableName()], $caseStatement)
                ->joinLeft(
-                   array(
-                       "md" => $masterDeviceMapper->getTableName()
-                   ),
+                   ["md" => $masterDeviceMapper->getTableName()],
                    "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}",
-                   array(
-                       "{$masterDeviceMapper->col_id}"
-                   )
+                   ["{$masterDeviceMapper->col_id}"]
                )
                ->joinLeft(
-                   array(
-                       "m" => $manufacturerMapper->getTableName()
-                   ),
+                   ["m" => $manufacturerMapper->getTableName()],
                    "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}",
-                   array(
+                   [
                        $manufacturerMapper->col_fullName,
                        "device_name" => new Zend_Db_Expr("CONCAT({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")
-                   )
+                   ]
                )
                ->where("CONCAT({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName}) LIKE ? AND m.isDeleted = 0")
                ->limit($returnLimit)

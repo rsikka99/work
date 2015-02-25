@@ -9,14 +9,14 @@ class Hardwareoptimization_Report_Customer_OptimizationController extends Hardwa
 {
     public function indexAction ()
     {
-        $this->_pageTitle = array('Hardware Optimization', 'Customer');
+        $this->_pageTitle = ['Hardware Optimization', 'Customer'];
         $this->_navigation->setActiveStep(HardwareOptimizationStepsModel::STEP_FINISHED);
         $this->initHtmlReport();
         $this->initReportList();
 
-        $this->view->formats = array(
+        $this->view->formats = [
             "/hardwareoptimization/report_customer_optimization/generate/format/docx" => $this->_wordFormat
-        );
+        ];
 
         try
         {

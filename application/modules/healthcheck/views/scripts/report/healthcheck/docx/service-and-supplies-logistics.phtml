@@ -34,7 +34,7 @@ $section->addText(sprintf('Out of your %1$s networked printing devices, you have
 
 $imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['UniqueDevicesGraph'], array('align' => 'center'));
+$imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['UniqueDevicesGraph'], ['align' => 'center']);
 
 
 //HERE IS NEW TABLE
@@ -45,39 +45,39 @@ $amountOfRows      = ceil(count($uniqueDeviceArray) / 2);
 //FirstHalf is whether we are writing to the left side of the table or the right side.
 $firstColumn  = true;
 $colorCounter = 0;
-$tableData    = array();
+$tableData    = [];
 $counter      = 0;
 
 foreach ($uniqueDeviceArray as $modelName => $deviceCount)
 {
     if ($counter < $amountOfRows)
     {
-        $tableData[$counter]["column1"] = array(
+        $tableData[$counter]["column1"] = [
             "color"   => Healthcheck_ViewModel_Healthcheck::$COLOR_ARRAY[$counter],
             "name"    => $modelName . " (" . $deviceCount . ")",
             "percent" => number_format(($deviceCount / $totalAmount) * 100, 1) . "%",
-        );
+        ];
     }
     else
     {
-        $tableData[$counter - $amountOfRows]["column2"] = array(
+        $tableData[$counter - $amountOfRows]["column2"] = [
             "color"   => Healthcheck_ViewModel_Healthcheck::$COLOR_ARRAY[$counter],
             "name"    => $modelName . " (" . $deviceCount . ")",
             "percent" => number_format(($deviceCount / $totalAmount) * 100, 1) . "%",
-        );
+        ];
 
     }
     $counter++;
 }
 
-$cellWidths = array(
+$cellWidths = [
     500,
     3300,
     400,
     500,
     3300,
     400
-);
+];
 
 $uniqueDevicesTable = $section->addTable($this->styles->tables->uniqueDevices->tablestyle);
 foreach ($tableData as $row)
@@ -86,7 +86,7 @@ foreach ($tableData as $row)
     if (array_key_exists("column1", $row))
     {
         $cellStyle = $this->styles->tables->uniqueDevices->firstCell;
-        $cellStyle = array_merge($cellStyle, array("bgColor" => $row["column1"]["color"]));
+        $cellStyle = array_merge($cellStyle, ["bgColor" => $row["column1"]["color"]]);
         $uniqueDevicesTable->addCell($cellWidths [0], $cellStyle);
         $uniqueDevicesTable->addCell($cellWidths [1], $this->styles->tables->uniqueDevices->middleCell)->addText($this->translate($row["column1"]["name"], null, null));
         $uniqueDevicesTable->addCell($cellWidths [2], $this->styles->tables->uniqueDevices->middleCell)->addText($row["column1"]["percent"]);
@@ -101,7 +101,7 @@ foreach ($tableData as $row)
     if (array_key_exists("column2", $row))
     {
         $cellStyle = $this->styles->tables->uniqueDevices->middleCell;
-        $cellStyle = array_merge($cellStyle, array("bgColor" => $row["column2"]["color"]));
+        $cellStyle = array_merge($cellStyle, ["bgColor" => $row["column2"]["color"]]);
         $uniqueDevicesTable->addCell($cellWidths [3], $cellStyle);
         $uniqueDevicesTable->addCell($cellWidths [4], $this->styles->tables->uniqueDevices->middleCell)->addText($this->translate($row["column2"]["name"], null, null));
         $uniqueDevicesTable->addCell($cellWidths [5], $this->styles->tables->uniqueDevices->lastCell)->addText($row["column2"]["percent"]);
@@ -128,7 +128,7 @@ $section->addText(sprintf('Out of your %1$s networked printing devices, you have
 );
 $imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['PercentPerDeviceBrand'], array('align' => 'center'));
+$imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['PercentPerDeviceBrand'], ['align' => 'center']);
 
 $section->addTitle(sprintf('Number of Printing Devices Compatible with %1$s', My_Brand::getDealerBranding()->mpsProgramName), 2);
 
@@ -149,7 +149,7 @@ $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle)
 $imageTable->addRow();
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs['ManagedVsNotJitVsJitDevices']);
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs['PagesPrintedManagedVsJitVsCompVsLeased']);
-$cellWidths = array(
+$cellWidths = [
     1528,
     1800
-);
+];

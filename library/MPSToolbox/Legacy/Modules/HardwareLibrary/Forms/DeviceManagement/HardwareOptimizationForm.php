@@ -22,64 +22,56 @@ class HardwareOptimizationForm extends Zend_Form
         $this->setMethod('post');
         $this->setAttrib('id', 'hardwareOptimization');
 
-        $this->addElement('checkbox', 'isDeviceSwap', array(
+        $this->addElement('checkbox', 'isDeviceSwap', [
             'label'      => 'Is a device swap',
-            'validators' => array(
+            'validators' => [
                 'int',
-                array(
+                [
                     'validator' => 'Between',
-                    'options'   => array('min' => 0, 'max' => 1)),
-            ),
-        ));
+                    'options'   => ['min' => 0, 'max' => 1]],
+            ],
+        ]);
         /*
          * Parts Cost Per Page
          */
-        $this->addElement('text', 'minimumPageCount', array(
+        $this->addElement('text', 'minimumPageCount', [
             'label'      => 'Minimum Page Count',
             'maxlength'  => 8,
             'allowEmpty' => false,
-            'filters'    => array('StringTrim', 'StripTags'),
-        ));
+            'filters'    => ['StringTrim', 'StripTags'],
+        ]);
 
         /*
         * Labor Cost Per Page
         */
-        $this->addElement('text', 'maximumPageCount', array(
+        $this->addElement('text', 'maximumPageCount', [
             'label'      => 'Maximum Page Count',
             'maxlength'  => 8,
             'allowEmpty' => false,
-            'filters'    => array('StringTrim', 'StripTags'),
-            'validators' => array(
-                new FieldDependsOnValue('isDeviceSwap', '1', array(
-                        new Zend_Validate_NotEmpty(),
-                        new Zend_Validate_Int(),
-                        new Zend_Validate_Between(array('min' => 1, 'max' => 9223372036854775807)),
-                    )
-                )
-            ),
-        ));
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                new FieldDependsOnValue('isDeviceSwap', '1', [
+                    new Zend_Validate_NotEmpty(),
+                    new Zend_Validate_Int(),
+                    new Zend_Validate_Between(['min' => 1, 'max' => 9223372036854775807]),
+                ]),
+            ],
+        ]);
 
 
         /**
          * Add "depends" validator on minimum page count
          */
-        $this->getElement('minimumPageCount')->addValidators(array(new FieldDependsOnValue('isDeviceSwap', '1', array(
+        $this->getElement('minimumPageCount')->addValidators([new FieldDependsOnValue('isDeviceSwap', '1', [
             new Zend_Validate_NotEmpty(),
             new Zend_Validate_Int(),
-            new Zend_Validate_Between(array('min' => 0, 'max' => 9223372036854775807)),
+            new Zend_Validate_Between(['min' => 0, 'max' => 9223372036854775807]),
             new LessThanFormValue($this->getElement('maximumPageCount')->getName()),
-        ))));
+        ])]);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/hardware-library/device-management/hardware-optimization-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/hardware-library/device-management/hardware-optimization-form.phtml']]]);
     }
 }

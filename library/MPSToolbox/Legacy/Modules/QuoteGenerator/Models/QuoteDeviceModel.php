@@ -209,7 +209,7 @@ class QuoteDeviceModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"                    => $this->id,
             "quoteId"               => $this->quoteId,
             "margin"                => $this->margin,
@@ -223,7 +223,7 @@ class QuoteDeviceModel extends My_Model_Abstract
             "packageCost"           => $this->packageCost,
             "packageMarkup"         => $this->packageMarkup,
             "tonerConfigId"         => $this->tonerConfigId,
-        );
+        ];
     }
 
     /**
@@ -239,7 +239,7 @@ class QuoteDeviceModel extends My_Model_Abstract
             $quoteDeviceConfiguration = QuoteDeviceConfigurationMapper::getInstance()->findByQuoteDeviceId($this->id);
             if ($quoteDeviceConfiguration)
             {
-                $this->_device = DeviceMapper::getInstance()->find(array($quoteDeviceConfiguration->masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
+                $this->_device = DeviceMapper::getInstance()->find([$quoteDeviceConfiguration->masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId]);
             }
         }
 
@@ -573,7 +573,7 @@ class QuoteDeviceModel extends My_Model_Abstract
          */
         if ($costPerPageColor > 0)
         {
-            $deviceAttributes = DealerMasterDeviceAttributeMapper::getInstance()->find(array($this->getDevice()->masterDeviceId, $this->getDevice()->dealerId));
+            $deviceAttributes = DealerMasterDeviceAttributeMapper::getInstance()->find([$this->getDevice()->masterDeviceId, $this->getDevice()->dealerId]);
             if ($deviceAttributes instanceof DealerMasterDeviceAttributeModel)
             {
                 $costPerPageColor += $this->getQuote()->adminCostPerPage + $deviceAttributes->laborCostPerPage + $deviceAttributes->partsCostPerPage;
@@ -602,7 +602,7 @@ class QuoteDeviceModel extends My_Model_Abstract
          */
         if ($costPerPageMonochrome > 0)
         {
-            $deviceAttributes = DealerMasterDeviceAttributeMapper::getInstance()->find(array($this->getDevice()->masterDeviceId, $this->getDevice()->dealerId));
+            $deviceAttributes = DealerMasterDeviceAttributeMapper::getInstance()->find([$this->getDevice()->masterDeviceId, $this->getDevice()->dealerId]);
             if ($deviceAttributes instanceof DealerMasterDeviceAttributeModel)
             {
                 $costPerPageMonochrome += $this->getQuote()->adminCostPerPage + $deviceAttributes->laborCostPerPage + $deviceAttributes->partsCostPerPage;

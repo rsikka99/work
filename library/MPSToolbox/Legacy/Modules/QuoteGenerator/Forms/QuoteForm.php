@@ -31,8 +31,8 @@ class QuoteForm extends Twitter_Bootstrap_Form_Horizontal
         // Set the method for the display form to POST
         $this->setMethod('POST');
 
-        $clientList          = array();
-        $clientListValidator = array();
+        $clientList          = [];
+        $clientListValidator = [];
 
         foreach (ClientMapper::getInstance()->fetchAll() as $client)
         {
@@ -43,35 +43,25 @@ class QuoteForm extends Twitter_Bootstrap_Form_Horizontal
         $clients = $this->createElement('select', 'clientId');
         $clients->setLabel('Select Client:');
         $clients->addMultiOptions($clientList);
-        $clients->addValidator('InArray', false, array(
-            $clientListValidator
-        ));
+        $clients->addValidator('InArray', false, [
+            $clientListValidator,
+        ]);
         $this->addElement($clients);
 
-        $this->addElement('radio', 'quoteType', array(
+        $this->addElement('radio', 'quoteType', [
             'label'        => 'Type Of Quote:',
-            'filters'      => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'multiOptions' => array(
+            'filters'      => ['StringTrim', 'StripTags'],
+            'multiOptions' => [
                 'purchased' => 'Purchased',
-                'leased'    => 'Leased'
-            ),
-            'required'     => true
-        ));
+                'leased'    => 'Leased',
+            ],
+            'required'     => true,
+        ]);
 
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'index/form/quote.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'index/form/quote.phtml']]]);
     }
 }

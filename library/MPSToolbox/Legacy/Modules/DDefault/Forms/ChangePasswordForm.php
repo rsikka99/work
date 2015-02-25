@@ -19,77 +19,68 @@ class ChangePasswordForm extends Zend_Form
         $this->setMethod('POST');
 
         // Add the password element
-        $this->addElement('password', 'current_password', array(
+        $this->addElement('password', 'current_password', [
             'label'      => 'Current Password:',
             'required'   => true,
-            'filters'    => array('StringTrim'),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(6, 255)
-                )
-            )
-        ));
+                    'options'   => [6, 255]
+                ],
+            ],
+        ]);
 
-        $this->addElement('password', 'password', array(
-                'label'      => 'New Password:',
-                'required'   => true,
-                'filters'    => array('StringTrim'),
-                'validators' => array(
-                    array(
-                        'validator' => 'StringLength',
-                        'options'   => array(6, 80)
-                    )
-                )
-            )
-        );
-        $this->addElement('password', 'password_confirm', array(
+        $this->addElement('password', 'password', [
+            'label'      => 'New Password:',
+            'required'   => true,
+            'filters'    => ['StringTrim'],
+            'validators' => [
+                [
+                    'validator' => 'StringLength',
+                    'options'   => [6, 80]
+                ],
+            ],
+        ]);
+
+        $this->addElement('password', 'password_confirm', [
             'label'         => 'Confirm New Password:',
             'required'      => true,
-            'filters'       => array(
-                'StringTrim'
-            ),
-            'validators'    => array(
-                array(
+            'filters'       => ['StringTrim'],
+            'validators'    => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(6, 255)
-                ),
-                array(
+                    'options'   => [6, 255]
+                ],
+                [
                     'validator' => 'Identical',
-                    'options'   => array(
+                    'options'   => [
                         'token' => 'password'
-                    )
-                )
-            ),
-            'errorMessages' => array(
+                    ]
+                ],
+            ],
+            'errorMessages' => [
                 'Identical' => 'Passwords must match.'
-            )
-        ));
+            ],
+        ]);
 
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'ignore' => true,
-            'label'  => 'Save'
-        ));
+            'label'  => 'Save',
+        ]);
 
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'ignore'         => true,
             'label'          => 'Cancel',
             'formnovalidate' => true,
-        ));
+        ]);
 
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/default/change-password-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/default/change-password-form.phtml']]]);
     }
 
 }

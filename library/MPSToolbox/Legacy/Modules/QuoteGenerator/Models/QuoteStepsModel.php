@@ -22,28 +22,28 @@ class QuoteStepsModel extends My_Navigation_Abstract
      *
      * @var array
      */
-    private static $stepNames = array(
-        self::STEP_ADD_HARDWARE  => array(
+    private static $stepNames = [
+        self::STEP_ADD_HARDWARE  => [
             'name'  => 'Add Hardware',
-            'route' => 'quotes.add-hardware'
-        ),
-        self::STEP_GROUP_DEVICES => array(
+            'route' => 'quotes.add-hardware',
+        ],
+        self::STEP_GROUP_DEVICES => [
             'name'  => 'Group Devices',
-            'route' => 'quotes.group-devices'
-        ),
-        self::STEP_ADD_PAGES     => array(
+            'route' => 'quotes.group-devices',
+        ],
+        self::STEP_ADD_PAGES     => [
             'name'  => 'Pages',
-            'route' => 'quotes.manage-pages'
-        ),
-        self::STEP_FINANCING     => array(
+            'route' => 'quotes.manage-pages',
+        ],
+        self::STEP_FINANCING     => [
             'name'  => 'Hardware Financing',
-            'route' => 'quotes.hardware-financing'
-        ),
-        self::STEP_FINISHED      => array(
+            'route' => 'quotes.hardware-financing',
+        ],
+        self::STEP_FINISHED      => [
             'name'  => 'Reports',
-            'route' => 'quotes.reports'
-        ),
-    );
+            'route' => 'quotes.reports',
+        ],
+    ];
 
     /**
      * @var QuoteStepsModel

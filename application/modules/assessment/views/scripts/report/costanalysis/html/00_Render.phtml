@@ -5,17 +5,20 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel;
 $assessmentViewModel = $this->assessmentViewModel;
 
 $customerCostPerPageSetting = $assessmentViewModel->getCostPerPageSettingForCustomer();
-$deviceInstances = $assessmentViewModel->getMonthlyHighCostPurchasedDevice($customerCostPerPageSetting);
+$deviceInstances            = $assessmentViewModel->getMonthlyHighCostPurchasedDevice($customerCostPerPageSetting);
 ?>
 
 <div class="container landscape cost-analysis" id="htmlReportContainer">
-    <h2 class="reportTitle"><?= My_Brand::getDealerBranding()->customerCostAnalysisTitle ?></h2><br />
+    <h2 class="reportTitle"><?= My_Brand::getDealerBranding()->customerCostAnalysisTitle ?></h2>
+    <br />
 
     <p><strong>Average Monochrome CPP:</strong>
-        <?= $this->formatCostPerPage($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage); ?></p>
+        <?= $this->formatCostPerPage($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage); ?>
+    </p>
 
     <p><strong>Average Color CPP:</strong>
-        <?= $this->formatCostPerPage($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->colorCostPerPage); ?></p>
+        <?= $this->formatCostPerPage($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->colorCostPerPage); ?>
+    </p>
 
     <table class="mainTable">
         <tr>

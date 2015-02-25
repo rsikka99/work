@@ -19,14 +19,14 @@ class RenderFormEmail extends RenderFormAbstract
      *
      * @return string
      */
-    public function RenderFormEmail (\Zend_Form_Element $element, $elementClasses = array(), $prependAddOn = '', $appendAddOn = '')
+    public function RenderFormEmail (\Zend_Form_Element $element, $elementClasses = [], $prependAddOn = '', $appendAddOn = '')
     {
-        $html = array();
+        $html = [];
         if ($element instanceof \Zend_Form_Element_Text)
         {
             if (!is_array($elementClasses))
             {
-                $elementClasses = array($elementClasses);
+                $elementClasses = [$elementClasses];
             }
             array_unshift($elementClasses, 'form-control');
 
@@ -45,7 +45,7 @@ class RenderFormEmail extends RenderFormAbstract
              *  Prep attributes
              */
             $attributes['class']  = $this->processClasses($attributes, $elementClasses);
-            $serializedAttributes = $this->serializeAttributes($attributes, array('options'));
+            $serializedAttributes = $this->serializeAttributes($attributes, ['options']);
             $element->setAttribs($attributes);
 
             $hasAddOns = (strlen($prependAddOn) > 0 || strlen($appendAddOn) > 0);

@@ -15,9 +15,9 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
     {
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_JIT_SUPPLY_AND_TONER_SKU_REPORT))
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "error" => "You do not have permission to access this."
-            ));
+            ]);
 
             $this->redirectToRoute('assessment');
         }
@@ -27,16 +27,16 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
 
     public function indexAction ()
     {
-        $this->_pageTitle = array('Assessment', 'Toner');
+        $this->_pageTitle = ['Assessment', 'Toner'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
 
         $this->view->availableReports['JITSupplyAndTonerSku']['active'] = true;
-        $this->view->formats                                            = array(
+        $this->view->formats                                            = [
             "/assessment/report_toners/generate/format/csv" => $this->_csvFormat,
-        );
+        ];
 
         try
         {
@@ -105,14 +105,14 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
         }
 
         // Define our field titles
-        $fieldTitlesLvl1 = array('', '', '', 'Customer Preferred', '', '', '', '', '', '', '', '', '', '', '', 'Dealer Preferred',
-                                 '', '', '', '', '', '', '', '', '', '', '', '', '');
+        $fieldTitlesLvl1 = ['', '', '', 'Customer Preferred', '', '', '', '', '', '', '', '', '', '', '', 'Dealer Preferred',
+                            '', '', '', '', '', '', '', '', '', '', '', '', ''];
 
-        $fieldTitlesLvl2 = array('Device Name', 'IP Address', 'Serial Number', 'Black SKU', 'Black Cost', 'Cyan SKU',
-                                 'Cyan Cost', 'Magenta SKU', 'Magenta Cost', 'Yellow SKU', 'Yellow Cost', '3Color SKU',
-                                 '3Color Cost', '4Color SKU', '4Color Cost', 'Black SKU', 'Black Cost', 'Cyan SKU',
-                                 'Cyan Cost', 'Magenta SKU', 'Magenta Cost', 'Yellow SKU', 'Yellow Cost', '3Color SKU',
-                                 '3Color Cost', '4Color SKU', '4Color Cost');
+        $fieldTitlesLvl2 = ['Device Name', 'IP Address', 'Serial Number', 'Black SKU', 'Black Cost', 'Cyan SKU',
+                            'Cyan Cost', 'Magenta SKU', 'Magenta Cost', 'Yellow SKU', 'Yellow Cost', '3Color SKU',
+                            '3Color Cost', '4Color SKU', '4Color Cost', 'Black SKU', 'Black Cost', 'Cyan SKU',
+                            'Cyan Cost', 'Magenta SKU', 'Magenta Cost', 'Yellow SKU', 'Yellow Cost', '3Color SKU',
+                            '3Color Cost', '4Color SKU', '4Color Cost'];
 
         try
         {
@@ -126,7 +126,7 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
                 $compatibleToners = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($dealerCostPerPageSetting);
 
                 // Create an array of purchased devices (this will be the dynamic CSV body)
-                $fieldList    = array();
+                $fieldList    = [];
                 $fieldList [] = $deviceInstance->getDeviceName();
                 $fieldList [] = $deviceInstance->ipAddress;
                 $fieldList [] = $deviceInstance->serialNumber;
@@ -158,14 +158,14 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
             }
 
             // Define our field titles for the excluded devices section
-            $excluded_titles = array("Device Name,IP Address,Serial,Exclusion Reason");
+            $excluded_titles = ["Device Name,IP Address,Serial,Exclusion Reason"];
 
             $excluded_values = "";
             try
             {
                 foreach ($assessmentViewModel->getExcludedDevices() as $deviceInstance)
                 {
-                    $row    = array();
+                    $row    = [];
                     $row [] = $deviceInstance->getDeviceName();
                     $row [] = ($deviceInstance->ipAddress) ? $deviceInstance->ipAddress : "Unknown IP";
                     $row [] = (strlen($deviceInstance->serialNumber) > 0) ? $deviceInstance->serialNumber : "Unknown";

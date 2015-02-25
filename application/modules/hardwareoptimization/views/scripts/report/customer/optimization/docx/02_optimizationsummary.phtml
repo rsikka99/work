@@ -11,9 +11,9 @@ $section->addTitle('Current Fleet Statistics', 2);
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs [0], array('align' => 'center'));
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs [1], array('align' => 'center'));
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell3)->addImage($graphs [2], array('align' => 'center'));
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs [0], ['align' => 'center']);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs [1], ['align' => 'center']);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell3)->addImage($graphs [2], ['align' => 'center']);
 
 $section->addTitle('Optimization Summary', 2);
 

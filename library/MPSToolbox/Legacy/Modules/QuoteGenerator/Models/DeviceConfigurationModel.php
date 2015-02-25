@@ -94,13 +94,13 @@ class DeviceConfigurationModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"             => $this->id,
             "dealerId"       => $this->dealerId,
             "masterDeviceId" => $this->masterDeviceId,
             "name"           => $this->name,
             "description"    => $this->description,
-        );
+        ];
     }
 
     /**
@@ -112,7 +112,7 @@ class DeviceConfigurationModel extends My_Model_Abstract
     {
         if (!isset($this->_device))
         {
-            $this->_device = DeviceMapper::getInstance()->find(array($this->masterDeviceId, $this->dealerId));
+            $this->_device = DeviceMapper::getInstance()->find([$this->masterDeviceId, $this->dealerId]);
         }
 
         return $this->_device;

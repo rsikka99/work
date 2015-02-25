@@ -82,9 +82,9 @@ class LeasingSchemaMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
-            "{$this->col_id} = ?" => $primaryKey
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, [
+            "{$this->col_id} = ?" => $primaryKey,
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -104,15 +104,15 @@ class LeasingSchemaMapper extends My_Model_Mapper_Abstract
     {
         if ($leasingSchema instanceof LeasingSchemaModel)
         {
-            $whereClause = array(
-                "{$this->col_id} = ?" => $leasingSchema->id
-            );
+            $whereClause = [
+                "{$this->col_id} = ?" => $leasingSchema->id,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_id} = ?" => $leasingSchema
-            );
+            $whereClause = [
+                "{$this->col_id} = ?" => $leasingSchema,
+            ];
         }
 
         $result = $this->getDbTable()->delete($whereClause);
@@ -189,7 +189,7 @@ class LeasingSchemaMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new LeasingSchemaModel($row->toArray());
@@ -212,9 +212,9 @@ class LeasingSchemaMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_id} = ?" => $id
-        );
+        return [
+            "{$this->col_id} = ?" => $id,
+        ];
     }
 
     /**
@@ -226,9 +226,9 @@ class LeasingSchemaMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereDealerId ($dealerId)
     {
-        return array(
-            "{$this->col_dealerId} = ?" => $dealerId
-        );
+        return [
+            "{$this->col_dealerId} = ?" => $dealerId,
+        ];
     }
 
     /**

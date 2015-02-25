@@ -30,7 +30,7 @@ class RmsUploadEntity extends EloquentModel
 
     public function getDates ()
     {
-        return array('uploadDate');
+        return ['uploadDate'];
     }
 
     /**

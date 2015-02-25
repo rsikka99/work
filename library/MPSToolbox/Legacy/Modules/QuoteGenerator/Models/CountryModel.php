@@ -120,7 +120,7 @@ class CountryModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "country_id"      => $this->country_id,
             "name"            => $this->name,
             "iso_alpha2"      => $this->iso_alpha2,
@@ -130,7 +130,6 @@ class CountryModel extends My_Model_Abstract
             "currency_name"   => $this->currency_name,
             "currency_symbol" => $this->currency_symbol,
             "flag"            => $this->flag,
-        );
+        ];
     }
-
 }

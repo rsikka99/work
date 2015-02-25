@@ -60,88 +60,88 @@ class DeviceAttributesForm extends Zend_Form
         $this->setMethod('post');
         $this->setAttrib('id', 'deviceAttributes');
 
-        $this->addElement('checkbox', 'isCopier', array(
+        $this->addElement('checkbox', 'isCopier', [
             'label'    => 'Can Copy/Scan',
             'disabled' => (!$this->_isAllowedToEditFields) ? true : false,
-        ));
+        ]);
 
 
-        $this->addElement('checkbox', 'isDuplex', array(
+        $this->addElement('checkbox', 'isDuplex', [
             'label'    => 'Can Duplex',
             'disabled' => (!$this->_isAllowedToEditFields) ? true : false,
-        ));
+        ]);
 
-        $this->addElement('checkbox', 'isFax', array(
+        $this->addElement('checkbox', 'isFax', [
             'label'    => 'Can Fax',
             'disabled' => (!$this->_isAllowedToEditFields) ? true : false,
-        ));
+        ]);
 
 
-        $this->addElement('checkbox', 'isCapableOfReportingTonerLevels', array(
+        $this->addElement('checkbox', 'isCapableOfReportingTonerLevels', [
             'label'    => 'Capable of Reporting Toner Levels',
             'disabled' => (!$this->_isAllowedToEditFields) ? true : false,
-        ));
+        ]);
 
-        $this->addElement('checkbox', 'isA3', array(
+        $this->addElement('checkbox', 'isA3', [
             'label'    => 'Can Print A3',
             'disabled' => (!$this->_isAllowedToEditFields) ? true : false,
-        ));
+        ]);
 
-        $this->addElement('checkbox', 'jitCompatibleMasterDevice', array(
+        $this->addElement('checkbox', 'jitCompatibleMasterDevice', [
             'label' => My_Brand::$jit . ' Compatible',
-        ));
+        ]);
 
         /*
          * Print Speed Monochrome
          */
-        $this->addElement('text', 'ppmBlack', array(
+        $this->addElement('text', 'ppmBlack', [
             'label'      => 'Print Speed Mono',
             'disabled'   => (!$this->_isAllowedToEditFields) ? true : false,
             'maxlength'  => 8,
             'allowEmpty' => true,
-            'filters'    => array('StringTrim', 'StripTags'),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 'Int',
-                array(
+                [
                     'validator' => 'Between',
-                    'options'   => array('min' => 1, 'max' => 1000)
-                )
-            )
-        ));
+                    'options'   => ['min' => 1, 'max' => 1000],
+                ],
+            ],
+        ]);
 
         /*
          * Print Speed Color
          */
-        $this->addElement('text', 'ppmColor', array(
+        $this->addElement('text', 'ppmColor', [
             'label'      => 'Print Speed Color',
             'id'         => 'ppmColor',
             'disabled'   => (!$this->_isAllowedToEditFields) ? true : false,
             'maxlength'  => 8,
             'allowEmpty' => true,
-            'filters'    => array('StringTrim', 'StripTags'),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 'Int',
-                array(
+                [
                     'validator' => 'Between',
-                    'options'   => array('min' => 1, 'max' => 1000)
-                )
-            )
-        ));
+                    'options'   => ['min' => 1, 'max' => 1000],
+                ],
+            ],
+        ]);
 
         /*
         * Launch Date
         */
         $minYear           = 1950;
         $maxYear           = ((int)date('Y')) + 2;
-        $launchDateElement = $this->createElement('DatePicker', 'launchDate', array(
+        $launchDateElement = $this->createElement('DatePicker', 'launchDate', [
             'label'      => 'Launch Date',
-            'decorators' => array('UiWidgetElement'),
+            'decorators' => ['UiWidgetElement'],
             'required'   => ($this->_isAllowedToEditFields) ? true : false,
-            'filters'    => array('StringTrim', 'StripTags'),
-            'validators' => array(
-                new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/')
-            ),
-        ));
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'),
+            ],
+        ]);
 
 
         $launchDateElement->setJQueryParam('dateFormat', 'yy-mm-dd')
@@ -159,66 +159,55 @@ class DeviceAttributesForm extends Zend_Form
         /*
          * Operating Wattage
          */
-        $this->addElement('text', 'wattsPowerNormal', array(
+        $this->addElement('text', 'wattsPowerNormal', [
             'label'      => 'Operating Wattage',
             'id'         => 'wattsPowerNormal',
             'maxlength'  => 8,
             'disabled'   => (!$this->_isAllowedToEditFields) ? true : false,
             'allowEmpty' => !$this->_isAllowedToEditFields,
             'required'   => $this->_isAllowedToEditFields,
-            'filters'    => array('StringTrim', 'StripTags'),
-        ));
+            'filters'    => ['StringTrim', 'StripTags'],
+        ]);
 
         if ($this->_isAllowedToEditFields)
         {
-            $this->getElement('wattsPowerNormal')->addValidators(
-                array(
-                    'float',
-                    array(
-                        'validator' => 'Between',
-                        'options'   => array('min' => 1, 'max' => 10000)
-                    )
-                )
-            );
+            $this->getElement('wattsPowerNormal')->addValidators([
+                'float',
+                [
+                    'validator' => 'Between',
+                    'options'   => ['min' => 1, 'max' => 10000]
+                ],
+            ]);
         }
 
         /*
          * Idle/Sleep Wattage
          */
-        $this->addElement('text', 'wattsPowerIdle', array(
+        $this->addElement('text', 'wattsPowerIdle', [
             'label'      => 'Idle/Sleep Wattage',
             'id'         => 'wattsPowerIdle',
             'disabled'   => (!$this->_isAllowedToEditFields) ? true : false,
             'maxlength'  => 8,
             'allowEmpty' => false,
             'required'   => $this->_isAllowedToEditFields,
-            'filters'    => array('StringTrim', 'StripTags'),
-        ));
+            'filters'    => ['StringTrim', 'StripTags'],
+        ]);
 
         if ($this->_isAllowedToEditFields)
         {
 
-            $this->getElement('wattsPowerIdle')->addValidators(
-                array(
-                    'float',
-                    array(
-                        'validator' => 'Between',
-                        'options'   => array('min' => 1, 'max' => 10000)
-                    )
-                )
-            );
+            $this->getElement('wattsPowerIdle')->addValidators([
+                'float',
+                [
+                    'validator' => 'Between',
+                    'options'   => ['min' => 1, 'max' => 10000],
+                ],
+            ]);
         }
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/hardware-library/device-management/device-attributes-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/hardware-library/device-management/device-attributes-form.phtml']]]);
     }
 }

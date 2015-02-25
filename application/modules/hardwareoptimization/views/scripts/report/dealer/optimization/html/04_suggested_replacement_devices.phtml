@@ -15,7 +15,7 @@ $optimization = $this->optimization;
 $dealerOptimization = $this->dealerOptimization;
 
 /* @var $suggestedDeviceInstances DeviceInstanceModel[] */
-$suggestedDeviceInstances = (isset($this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE]) ? $this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE] : array());
+$suggestedDeviceInstances = (isset($this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE]) ? $this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE] : []);
 
 
 /* @var $graphs array */
@@ -61,7 +61,7 @@ $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
             $replacementDevice             = $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getMasterDevice();
             $replacementCostPerPageSetting = $optimization->getCostPerPageSettingForReplacements();
             ?>
-            <tr class="<?= $this->cycle(array("rowOne", "rowTwo"))->next(); ?>">
+            <tr class="<?= $this->cycle(["rowOne", "rowTwo"])->next(); ?>">
                 <td class="device-name"><?= '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>'; ?></td>
                 <td class="serial-number"><?= $deviceInstance->serialNumber . '<br/>' . $deviceInstance->ipAddress . '</em>'; ?></td>
                 <td class="cost-per-page"><?= $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage); ?></td>

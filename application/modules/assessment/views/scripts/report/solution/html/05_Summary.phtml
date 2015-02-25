@@ -1,8 +1,8 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$this->brandName = My_Brand::getDealerBranding()->mpsProgramName;
-$this->companyName = My_Brand::getDealerBranding()->shortDealerName;
+$this->brandName     = My_Brand::getDealerBranding()->mpsProgramName;
+$this->companyName   = My_Brand::getDealerBranding()->shortDealerName;
 ?>
 <div class="h1">Let <?= $this->companyName; ?> Take Care of Your Business Print</div>
 <p>With <?= $this->companyName; ?> as your single point of contact for your office printing needs, your business will be taken
@@ -100,5 +100,7 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
     your specific business needs.</p>
 
 <p>Let us take care of your print so you can get back to business.</p>
-<p id="copyright">&copy; 2011 <?= $this->companyName; ?>, Inc. All Rights Reserved. <br />
-    The <?= $this->companyName; ?> name and logo are the registered trademarks of The Office Club, Inc.</p>
+<p id="copyright">&copy; 2011 <?= $this->companyName; ?>, Inc. All Rights Reserved.
+    <br />
+    The <?= $this->companyName; ?> name and logo are the registered trademarks of The Office Club, Inc.
+</p>

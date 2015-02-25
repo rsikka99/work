@@ -24,7 +24,7 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Quote', 'Hardware Financing');
+        $this->_pageTitle = ['Quote', 'Hardware Financing'];
 
         $selectedLeasingSchemaId = $this->_getParam('leasingSchemaId', null);
         $form                    = new QuoteProfitabilityForm($this->_quote, $selectedLeasingSchemaId);
@@ -36,9 +36,9 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
 
             if (isset($values ['goBack']))
             {
-                $this->redirectToRoute('quotes.manage-pages', array(
+                $this->redirectToRoute('quotes.manage-pages', [
                     'quoteId' => $this->_quoteId
-                ));
+                ]);
             }
             else
             {
@@ -135,30 +135,30 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                         if ($changesMade)
                         {
                             $this->saveQuote();
-                            $this->_flashMessenger->addMessage(array(
+                            $this->_flashMessenger->addMessage([
                                 'success' => 'Changes saved successfully.'
-                            ));
+                            ]);
                         }
 
                         if (!$changesMade && isset($values ['save']))
                         {
-                            $this->_flashMessenger->addMessage(array(
+                            $this->_flashMessenger->addMessage([
                                 'info' => 'There were no changes to save.'
-                            ));
+                            ]);
                         }
 
                         if (isset($values ['saveAndContinue']))
                         {
                             $this->updateQuoteStepName();
                             $this->saveQuote();
-                            $this->redirectToRoute('quotes.reports', array('quoteId' => $this->_quoteId));
+                            $this->redirectToRoute('quotes.reports', ['quoteId' => $this->_quoteId]);
                         }
                         else
                         {
                             // Refresh the page
-                            $this->redirectToRoute(null, array(
+                            $this->redirectToRoute(null, [
                                 'quoteId' => $this->_quoteId
-                            ));
+                            ]);
                         }
                     }
                     catch (Exception $e)
@@ -171,16 +171,16 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                 {
                     if (!isset($values['leasingSchemaId']))
                     {
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'danger' => 'Select a Lease Term'
-                        ));
+                        ]);
                     }
                     else
                     {
 
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'danger' => 'Please correct the errors below.'
-                        ));
+                        ]);
                     }
                 }
             }
@@ -214,10 +214,10 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                     $i = 0;
                     foreach ($leasingSchema->getTerms() as $leasingSchemaTerm)
                     {
-                        $formData->$i = array(
+                        $formData->$i = [
                             $leasingSchemaTerm->id,
                             number_format($leasingSchemaTerm->months) . " months"
-                        );
+                        ];
                         $i++;
                     }
                     $formData->length = $i;
@@ -225,7 +225,7 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
             }
             else
             {
-                $formData = array();
+                $formData = [];
             }
         }
         catch (Exception $e)

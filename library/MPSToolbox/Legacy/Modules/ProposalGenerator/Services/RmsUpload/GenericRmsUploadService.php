@@ -22,7 +22,7 @@ class GenericRmsUploadService extends AbstractRmsUploadService
      *
      * @var array
      */
-    protected $_columnMapping = array(
+    protected $_columnMapping = [
         'printermodelid'         => 'rmsModelId',
         'modelname'              => 'modelName',
         'manufacturer'           => 'manufacturer',
@@ -81,5 +81,5 @@ class GenericRmsUploadService extends AbstractRmsUploadService
         'startdate'              => 'monitorStartDate',
         'enddate'                => 'monitorEndDate',
         'location'               => 'location',
-    );
+    ];
 }

@@ -55,10 +55,10 @@ class DealerSettingModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "dealerId"            => $this->dealerId,
             "surveySettingId"     => $this->surveySettingId,
-        );
+        ];
     }
 
 

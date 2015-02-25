@@ -17,8 +17,8 @@ $form = $this->element;
                 <?= $element->renderLabel(); ?>
                 <div class="controls">
                     <div class="input-prepend input-append">
-                        <span class="add-on">Qty:</span><?= trim($element->renderViewHelper()); // Trim shouldn't need to happen, but the element has a newline rendered with it.   ?>
-                        <a href="<?= $this->url(array('optionId' => $element->getDescription()), 'quotes.device-configurations.delete-option'); ?>" class="add-on btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                        <span class="add-on">Qty:</span><?= trim($element->renderViewHelper()); // Trim shouldn't need to happen, but the element has a newline rendered with it.     ?>
+                        <a href="<?= $this->url(['optionId' => $element->getDescription()], 'quotes.device-configurations.delete-option'); ?>" class="add-on btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
                     </div>
                     <?= $element->renderErrors(); ?>
                 </div>

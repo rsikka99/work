@@ -25,7 +25,7 @@
     <?= $this->layout()->content ?>
 </div>
 
-<?= $this->partial('partials/php-errors.phtml', array('exceptions' => $this->exceptions, 'request' => $this->request)) ?>
+<?= $this->partial('partials/php-errors.phtml', ['exceptions' => $this->exceptions, 'request' => $this->request]) ?>
 
 <script type="text/javascript">
     var TMTW_BASEURL = '<?= $this->serverUrl('/'); ?>';

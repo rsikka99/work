@@ -1,7 +1,7 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$graphs = $assessmentViewModel->getGraphs();
+$graphs              = $assessmentViewModel->getGraphs();
 ?>
 <div class="h1">Analysis: Technology Reliability and User Productivity</div>
 <table cellspacing="0" class="gradesTable">
@@ -14,9 +14,11 @@ $graphs = $assessmentViewModel->getGraphs();
 </table>
 <br />
 <div class="pheader">Age of Printing Devices</div>
-<p>The average age of printing devices in your office is <strong><?= number_format($assessmentViewModel->getAverageAgeOfDevices(), 1); ?></strong>
+<p>The average age of printing devices in your office is
+    <strong><?= number_format($assessmentViewModel->getAverageAgeOfDevices(), 1); ?></strong>
     year(s) old. Printers under 5 years old are the most reliable machines. As printing devices get older, the risk of frequent breakdowns increases. Printers
-    over 8 years old have a high risk of frequent breakdowns and there is a risk that supplies and parts for these machines may be discontinued.</p>
+    over 8 years old have a high risk of frequent breakdowns and there is a risk that supplies and parts for these machines may be discontinued.
+</p>
 <p>The breakdown of the ages of your printing devices is shown below:</p>
 <div class="center">
     <img src="<?= $graphs[9]; ?>" />
@@ -44,7 +46,7 @@ $graphs = $assessmentViewModel->getGraphs();
                 <div class=" left"><?= $deviceInstance->getDeviceName(); ?></div>
             </td>
             <td class="column2">
-                <div class=" center"><?= ($deviceInstance->serialNumber) ? : 'Unknown'; ?></div>
+                <div class=" center"><?= ($deviceInstance->serialNumber) ?: 'Unknown'; ?></div>
             </td>
             <td class="column3">
                 <div class=" center"><?= $deviceInstance->getAge(); ?> years</div>
@@ -66,7 +68,8 @@ $graphs = $assessmentViewModel->getGraphs();
         } endforeach; ?>
     </tbody>
 </table>
-<p><em>Only takes into account devices for which release dates and expected cartridge yields are known. Age is based on the assumption that the device was
+<p>
+    <em>Only takes into account devices for which release dates and expected cartridge yields are known. Age is based on the assumption that the device was
         installed approximately 1 year after the release date.</em></p>
 <br />
 <?= $this->noBreakEnd; ?>

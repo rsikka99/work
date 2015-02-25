@@ -2,9 +2,9 @@
 
 class My_FeatureTest extends PHPUnit_Framework_TestCase
 {
-    protected $validFeatures = array(
+    protected $validFeatures = [
         'my_random_feature',
-    );
+    ];
 
     public function setUp ()
     {
@@ -14,7 +14,7 @@ class My_FeatureTest extends PHPUnit_Framework_TestCase
         $featuresProperty->setAccessible(true);
         $featuresProperty->setValue(null);
 
-        $mockAdapter = $this->getMock('My_Feature_AdapterInterface', array('getFeatures'));
+        $mockAdapter = $this->getMock('My_Feature_AdapterInterface', ['getFeatures']);
         $mockAdapter->expects($this->any())->method('getFeatures')->will($this->returnValue($this->validFeatures));
         My_Feature::setAdapter($mockAdapter);
 
@@ -26,7 +26,7 @@ class My_FeatureTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAdapterCanBeSet ()
     {
-        $testArray     = array('mapperClassName' => 'test');
+        $testArray     = ['mapperClassName' => 'test'];
         $mapperAdapter = new My_Feature_MapperAdapter($testArray);
         My_Feature::setAdapter($mapperAdapter);
         $adapter = null;

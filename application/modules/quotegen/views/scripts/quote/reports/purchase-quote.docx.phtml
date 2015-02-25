@@ -41,191 +41,191 @@ $properties->setModified(time());
 $properties->setSubject('Demo Report');
 $properties->setKeywords('demo, assessment, report');
 
-$titlepageSection = $phpword->addSection(array(
+$titlepageSection = $phpword->addSection([
     'orientation'  => null,
     'marginLeft'   => 720,
     'marginRight'  => 720,
     'marginTop'    => 720,
     'marginBottom' => 720
-));
+]);
 $section          = $phpword->addSection();
 
 $this->render("{$commonPartsBasePath}/styles.phtml");
 
 
-$phpword->addParagraphStyle('titleStyle1', array(
+$phpword->addParagraphStyle('titleStyle1', [
     'align'      => 'center',
     'spaceAfter' => 100,
     'bgColor'    => '004990'
-));
-$phpword->addParagraphStyle('titleStyle2', array(
+]);
+$phpword->addParagraphStyle('titleStyle2', [
     'spaceAfter'  => 100,
     'spaceBefore' => 100,
-    'shading'     => array(
+    'shading'     => [
         'fill' => '4C4C4C',
-    ),
+    ],
     'align'       => 'center',
-));
-$phpword->addParagraphStyle('titleStyle3', array(
+]);
+$phpword->addParagraphStyle('titleStyle3', [
     'spaceAfter' => 200,
-    'tabs'       => array(
+    'tabs'       => [
         new \PhpOffice\PhpWord\Style\Tab('left', 350)
-    ),
-    'shading'    => array(
+    ],
+    'shading'    => [
         'fill' => '7F7F7F',
-    )
-));
-$phpword->addFontStyle('titlepage_title', array(
+    ]
+]);
+$phpword->addFontStyle('titlepage_title', [
     'size'  => 24,
     'bold'  => true,
     'color' => 'FFFFFF'
-));
+]);
 
-$phpword->addFontStyle('titlepage_subtitle', array(
+$phpword->addFontStyle('titlepage_subtitle', [
     'size'  => 16,
     'bold'  => true,
     'color' => 'FFFFFF'
-));
+]);
 
-$phpword->addFontStyle('titlepage_address', array(
+$phpword->addFontStyle('titlepage_address', [
     'size'  => 12,
     'color' => 'FFFFFF'
-));
-$phpword->addParagraphStyle('titlepageHeaderParagraph', array(
+]);
+$phpword->addParagraphStyle('titlepageHeaderParagraph', [
     'spaceAfter' => 200
-));
-$phpword->addParagraphStyle('titlepageHeader1', array(
+]);
+$phpword->addParagraphStyle('titlepageHeader1', [
     'spaceAfter' => 0,
 
-));
+]);
 
 
 /**
  * Paragraph styles
  */
-$phpword->addParagraphStyle('titlepageHeaderParagraph', array(
+$phpword->addParagraphStyle('titlepageHeaderParagraph', [
     'spaceAfter' => 200
-));
+]);
 
-$phpword->addParagraphStyle('nospacing', array(
+$phpword->addParagraphStyle('nospacing', [
     'spaceBefore' => 0,
     'spaceAfter'  => 0
-));
+]);
 
-$phpword->addParagraphStyle('nospacing_rightalign', array(
+$phpword->addParagraphStyle('nospacing_rightalign', [
     'align'       => 'right',
     'spaceBefore' => 0,
     'spaceAfter'  => 0
-));
+]);
 
-$phpword->addParagraphStyle('nospacing_centeralign', array(
+$phpword->addParagraphStyle('nospacing_centeralign', [
     'align'       => 'center',
     'spaceBefore' => 0,
     'spaceAfter'  => 0
-));
+]);
 
-$phpword->addParagraphStyle('rightalign', array(
+$phpword->addParagraphStyle('rightalign', [
     'align' => 'right'
-));
+]);
 
-$phpword->addParagraphStyle('gradeParagraph', array(
+$phpword->addParagraphStyle('gradeParagraph', [
     'align'       => 'center',
     'spaceBefore' => 0,
     'spaceAfter'  => 0
-));
+]);
 
-$phpword->addParagraphStyle('savingsParagraph', array(
+$phpword->addParagraphStyle('savingsParagraph', [
     'align'       => 'center',
     'spaceBefore' => 0,
     'spaceAfter'  => 0
-));
+]);
 
 /**
  * Font Styles
  */
-$phpword->addFontStyle('titlepageHeaderFont', array(
+$phpword->addFontStyle('titlepageHeaderFont', [
     'bold' => true,
     'size' => 16
-));
+]);
 
-$phpword->addFontStyle('bold_text', array(
+$phpword->addFontStyle('bold_text', [
     'bold' => true
-));
+]);
 
-$phpword->addFontStyle('bold_red_text', array(
+$phpword->addFontStyle('bold_red_text', [
     'bold'  => true,
     'color' => 'F00001'
-));
+]);
 
-$phpword->addFontStyle('gradeFont', array(
+$phpword->addFontStyle('gradeFont', [
     'bold' => true,
     'size' => 18
-));
+]);
 
-$phpword->addFontStyle('gradeTitleFont', array(
+$phpword->addFontStyle('gradeTitleFont', [
     'bold' => true,
     'size' => 12
-));
+]);
 
-$phpword->addFontStyle('savingsFont', array(
+$phpword->addFontStyle('savingsFont', [
     'bold' => true,
     'size' => 11
-));
+]);
 
-$phpword->addFontStyle('savingsAmountFont', array(
+$phpword->addFontStyle('savingsAmountFont', [
     'color' => $this->docStyles->brandBaseColor,
     'bold'  => true,
     'size'  => 11
-));
+]);
 
-$phpword->addFontStyle('small_italic_text', array(
+$phpword->addFontStyle('small_italic_text', [
     'color'  => '333333',
     'italic' => true,
     'size'   => 9
-));
+]);
 
 /**
  * Header/Title Styles
  */
 // H1 Style
-$phpword->addTitleStyle(1, array(
+$phpword->addTitleStyle(1, [
     'size'  => 15,
     'color' => My_Brand::getDealerBranding()->h1FontColor,
     'bold'  => true
-), array(
-    'shading' => array(
+], [
+    'shading' => [
         'fill' => My_Brand::getDealerBranding()->h1BackgroundColor,
-    ),
-));
+    ],
+]);
 
 // H2 Style #5881BC
-$phpword->addTitleStyle(2, array(
+$phpword->addTitleStyle(2, [
     'size'   => 12,
     'color'  => My_Brand::getDealerBranding()->h2FontColor,
     'bold'   => true,
     'italic' => true
-), array(
-    'shading' => array(
+], [
+    'shading' => [
         'fill' => My_Brand::getDealerBranding()->h2BackgroundColor,
-    ),
-));
+    ],
+]);
 
 // H3 Style #5881BC
-$phpword->addTitleStyle(3, array(
+$phpword->addTitleStyle(3, [
     'size'  => 10,
     'color' => 'FF0000',
     'bold'  => true
-), array(
+], [
     'spaceBefore' => 100,
     'spaceAfter'  => 100
-));
+]);
 
 // H3 Style #5881BC
-$phpword->addFontStyle('heading3', array(
+$phpword->addFontStyle('heading3', [
     'size'  => 10,
     'color' => 'FF0000',
     'bold'  => true
-));
+]);
 
 /**
  * True costs table styles
@@ -837,27 +837,27 @@ $purchaseQuoteTable = (object)[
 /**
  * Setup some styles to be used across the report
  */
-$styles = (object)array(
-    "tables" => (object)array(
+$styles = (object)[
+    "tables" => (object)[
         "truecosts"  => $trueCostsTable,
         "quoteTable" => $purchaseQuoteTable
-    )
-);
+    ]
+];
 
-$titledata = array(
+$titledata = [
     "phpword"        => $phpword,
     "section"        => $titlepageSection,
     "quote"          => $quote,
     "styles"         => $styles,
     "dealerLogoFile" => $this->dealerLogoFile,
-);
+];
 
-$data = array(
+$data = [
     "phpword" => $phpword,
     "section" => $section,
     "quote"   => $quote,
     "styles"  => $styles,
-);
+];
 
 // Actual document pages
 $this->partial("{$commonPartsBasePath}/docx/titlepage.phtml", $titledata);

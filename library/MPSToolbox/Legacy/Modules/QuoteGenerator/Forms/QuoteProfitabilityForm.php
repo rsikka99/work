@@ -29,7 +29,7 @@ class QuoteProfitabilityForm extends FormWithNavigation
      * @param int             $formButtonMode
      * @param array           $buttons
      */
-    public function __construct ($quote = null, $leasingSchemaId = null, $options = null, $formButtonMode = self::FORM_BUTTON_MODE_NAVIGATION, $buttons = array(self::BUTTONS_ALL))
+    public function __construct ($quote = null, $leasingSchemaId = null, $options = null, $formButtonMode = self::FORM_BUTTON_MODE_NAVIGATION, $buttons = [self::BUTTONS_ALL])
     {
         $this->_leasingSchemaId = $leasingSchemaId;
         $this->_quote           = $quote;
@@ -43,7 +43,7 @@ class QuoteProfitabilityForm extends FormWithNavigation
 
         if ($this->_quote->isLeased())
         {
-            $leasingSchemas  = array();
+            $leasingSchemas  = [];
             $leasingSchemaId = null;
 
             foreach (LeasingSchemaMapper::getInstance()->getSchemasForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId) as $leasingSchema)
@@ -72,15 +72,15 @@ class QuoteProfitabilityForm extends FormWithNavigation
                 $leasingSchemaId = $this->_leasingSchemaId;
             }
 
-            $this->addElement('select', 'leasingSchemaId', array(
+            $this->addElement('select', 'leasingSchemaId', [
                 'label'        => 'Leasing Schema:',
                 'multiOptions' => $leasingSchemas,
                 'required'     => true,
                 'value'        => $leasingSchemaId,
-            ));
+            ]);
 
             $leasingSchema      = LeasingSchemaMapper::getInstance()->find($leasingSchemaId);
-            $leasingSchemaTerms = array();
+            $leasingSchemaTerms = [];
             $firstId            = null;
 
             if ($leasingSchema && $leasingSchemas)
@@ -107,12 +107,12 @@ class QuoteProfitabilityForm extends FormWithNavigation
                 $termId = $this->getQuote()->getLeasingSchemaTerm()->id;
             }
 
-            $this->addElement('select', 'leasingSchemaTermId', array(
+            $this->addElement('select', 'leasingSchemaTermId', [
                 'label'        => 'Lease Term:',
                 'multiOptions' => $leasingSchemaTerms,
                 'required'     => true,
-                'value'        => $termId
-            ));
+                'value'        => $termId,
+            ]);
         }
 
         /**
@@ -127,41 +127,34 @@ class QuoteProfitabilityForm extends FormWithNavigation
                 /**
                  * Package Markup
                  */
-                $this->addElement('text', "packageMarkup_{$quoteDevice->id}", array(
+                $this->addElement('text', "packageMarkup_{$quoteDevice->id}", [
                     'label'      => 'Markup',
                     'required'   => true,
                     'value'      => $quoteDevice->packageMarkup,
-                    'validators' => array(
+                    'validators' => [
                         'Float',
-                        array(
+                        [
                             'validator' => 'Between',
-                            'options'   => array(
-                                'min' => 0,
-                                'max' => 99999
-                            )
-                        )
-                    )
-                ));
+                            'options'   => ['min' => 0, 'max' => 99999],
+                        ],
+                    ],
+                ]);
 
                 /**
                  * Margin
                  */
-                $this->addElement('text', "margin_{$quoteDevice->id}", array(
+                $this->addElement('text', "margin_{$quoteDevice->id}", [
                     'label'      => 'Margin',
                     'required'   => true,
                     'value'      => $quoteDevice->margin,
-                    'validators' => array(
+                    'validators' => [
                         'Float',
-                        array(
+                        [
                             'validator' => 'Between',
-                            'options'   => array(
-                                'min'       => -100,
-                                'max'       => 100,
-                                'inclusive' => false
-                            )
-                        )
-                    )
-                ));
+                            'options'   => ['min' => -100, 'max' => 100, 'inclusive' => false],
+                        ],
+                    ],
+                ]);
 
                 /**
                  * Elements for leased quotes only
@@ -171,22 +164,18 @@ class QuoteProfitabilityForm extends FormWithNavigation
                     /**
                      * Residual
                      */
-                    $this->addElement('text', "residual_{$quoteDevice->id}", array(
+                    $this->addElement('text', "residual_{$quoteDevice->id}", [
                         'label'      => 'Residual',
                         'required'   => true,
                         'value'      => $quoteDevice->buyoutValue,
-                        'validators' => array(
+                        'validators' => [
                             'Float',
-                            array(
+                            [
                                 'validator' => 'Between',
-                                'options'   => array(
-                                    'min'       => 0,
-                                    'max'       => 30000,
-                                    'inclusive' => true
-                                )
-                            )
-                        )
-                    ));
+                                'options'   => ['min' => 0, 'max' => 30000, 'inclusive' => true],
+                            ],
+                        ],
+                    ]);
                 }
             }
         }
@@ -199,15 +188,7 @@ class QuoteProfitabilityForm extends FormWithNavigation
      */
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/quotegen/quote/profitability-form.phtml'
-                )
-            ),
-            'Form'
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/quotegen/quote/profitability-form.phtml']], 'Form']);
     }
 
     /**

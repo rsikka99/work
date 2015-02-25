@@ -28,7 +28,7 @@ $cell = $lessorTable->addCell($tableSpan ['span8'], array_merge($cellStyle->span
 
 foreach ($guarantyHtml->getElementsByTagName('p') as $paragraphNode)
 {
-    $textRun = $cell->addTextRun(array('lineHeight' => 1));
+    $textRun = $cell->addTextRun(['lineHeight' => 1]);
 
     $childNodes = $paragraphNode->childNodes;
     for ($i = 0; $i < $childNodes->length; $i++)

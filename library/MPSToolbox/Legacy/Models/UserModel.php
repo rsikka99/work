@@ -196,7 +196,7 @@ class UserModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             'id'                       => $this->id,
             'password'                 => $this->password,
             'firstname'                => $this->firstname,
@@ -209,7 +209,7 @@ class UserModel extends My_Model_Abstract
             'locked'                   => $this->locked,
             "dealerId"                 => $this->dealerId,
             "lastSeen"                 => $this->lastSeen
-        );
+        ];
     }
 
     /**

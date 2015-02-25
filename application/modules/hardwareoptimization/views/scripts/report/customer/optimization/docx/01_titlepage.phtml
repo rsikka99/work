@@ -9,19 +9,19 @@ $hardwareOptimization = $this->hardwareOptimization;
 
 /* @var $section \PhpOffice\PhpWord\Element\Section */
 $section         = $this->section;
-$titleImageStyle = array(
+$titleImageStyle = [
     'align' => 'center'
-);
+];
 
 // Table to fix the issue of images being different sizes
-$imageTable = $section->addTable(array());
+$imageTable = $section->addTable([]);
 $imageTable->addRow(5760);
-$cell = $imageTable->addCell(15000.8, array(
+$cell = $imageTable->addCell(15000.8, [
     'valign' => 'center'
-));
-$cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, array(
+]);
+$cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, [
     'align' => 'center'
-));
+]);
 
 $section->addTextBreak();
 // Assessment Title

@@ -46,9 +46,9 @@ class DeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function countByDeviceId ($masterDeviceId)
     {
-        return $this->count(array(
-            'masterDeviceId = ?' => $masterDeviceId
-        ));
+        return $this->count([
+            'masterDeviceId = ?' => $masterDeviceId,
+        ]);
     }
 
     /**
@@ -99,9 +99,9 @@ class DeviceConfigurationMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
-            "{$this->col_id} = ?" => $primaryKey
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, [
+            "{$this->col_id} = ?" => $primaryKey,
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -122,15 +122,15 @@ class DeviceConfigurationMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof DeviceConfigurationModel)
         {
-            $whereClause = array(
-                "{$this->col_id} = ?" => $object->id
-            );
+            $whereClause = [
+                "{$this->col_id} = ?" => $object->id,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_id} = ?" => $object
-            );
+            $whereClause = [
+                "{$this->col_id} = ?" => $object,
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -157,9 +157,9 @@ class DeviceConfigurationMapper extends My_Model_Mapper_Abstract
         }
 
         // Delete all device configurations
-        return $this->getDbTable()->delete(array(
-            "masterDeviceId = ?" => $deviceId
-        ));
+        return $this->getDbTable()->delete([
+            "masterDeviceId = ?" => $deviceId,
+        ]);
     }
 
     /**
@@ -239,7 +239,7 @@ class DeviceConfigurationMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new DeviceConfigurationModel($row->toArray());
@@ -262,11 +262,11 @@ class DeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllDeviceConfigurationByDeviceId ($masterDeviceId)
     {
-        $deviceConfigurations = array();
-        $resultSet            = $this->getDbTable()->fetchAll(array(
+        $deviceConfigurations = [];
+        $resultSet            = $this->getDbTable()->fetchAll([
             'masterDeviceId = ?' => $masterDeviceId,
-            'dealerId = ?'       => Zend_Auth::getInstance()->getIdentity()->dealerId
-        ));
+            'dealerId = ?'       => Zend_Auth::getInstance()->getIdentity()->dealerId,
+        ]);
 
         foreach ($resultSet as $row)
         {
@@ -289,13 +289,13 @@ class DeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllDeviceConfigurationByDeviceIdAndDealerId ($masterDeviceId)
     {
-        $deviceConfigurations = array();
+        $deviceConfigurations = [];
 
         if ($masterDeviceId)
         {
-            $resultSet = $this->getDbTable()->fetchAll(array(
-                'masterDeviceId = ?' => $masterDeviceId
-            ));
+            $resultSet = $this->getDbTable()->fetchAll([
+                'masterDeviceId = ?' => $masterDeviceId,
+            ]);
 
             foreach ($resultSet as $row)
             {
@@ -332,9 +332,9 @@ class DeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_id} = ?" => $id
-        );
+        return [
+            "{$this->col_id} = ?" => $id,
+        ];
     }
 
     /**
@@ -356,7 +356,7 @@ class DeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function fetchDeviceConfigurationListForDealer ($dealerId)
     {
-        $devices = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+        $devices = $this->fetchAll(["{$this->col_dealerId} = ?" => $dealerId]);
 
         return $devices;
     }

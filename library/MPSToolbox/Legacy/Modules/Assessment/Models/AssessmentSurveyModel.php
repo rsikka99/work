@@ -155,7 +155,7 @@ class AssessmentSurveyModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "reportId"                      => $this->reportId,
             "costOfInkAndToner"             => $this->costOfInkAndToner,
             "costOfLabor"                   => $this->costOfLabor,
@@ -168,6 +168,6 @@ class AssessmentSurveyModel extends My_Model_Abstract
             "pageCoverageColor"             => $this->pageCoverageColor,
             "percentageOfInkjetPrintVolume" => $this->percentageOfInkjetPrintVolume,
             "averageRepairTime"             => $this->averageRepairTime,
-        );
+        ];
     }
 }

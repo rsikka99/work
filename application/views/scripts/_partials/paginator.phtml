@@ -2,7 +2,7 @@
     <ul class="pager">
         <?php if (isset($this->previous)): ?>
             <li class="previous">
-                <a href="<?php echo $this->url(array('page' => $this->previous)); ?>">Prev</a>
+                <a href="<?php echo $this->url(['page' => $this->previous]); ?>">Prev</a>
             </li>
         <?php else: ?>
             <li class="disabled"><a href="#">Prev</a></li>
@@ -12,7 +12,7 @@
         <?php foreach ($this->pagesInRange as $page): ?>
             <?php if ($page != $this->current): ?>
                 <li>
-                    <a href="<?php echo $this->url(array('page' => $page)); ?>"><?php echo $page; ?></a>
+                    <a href="<?php echo $this->url(['page' => $page]); ?>"><?php echo $page; ?></a>
                 </li>
             <?php else: ?>
                 <li class="active"><a href="#"><?php echo $page; ?></a></li>
@@ -22,7 +22,7 @@
 
         <?php if (isset($this->next)): ?>
             <li class="next">
-                <a href="<?php echo $this->url(array('page' => $this->next)); ?>">Next</a>
+                <a href="<?php echo $this->url(['page' => $this->next]); ?>">Next</a>
             </li>
         <?php else: ?>
             <li class="disabled"><a href="#">Next</a></li>

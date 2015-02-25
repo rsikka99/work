@@ -136,7 +136,7 @@ class AssessmentSurveyService
      */
     protected function createPopulateArray ($assessmentSurvey)
     {
-        $formDataFromAnswers                           = array();
+        $formDataFromAnswers                           = [];
         $formDataFromAnswers ["toner_cost_radio"]      = ($assessmentSurvey->costOfInkAndToner > 0) ? 'exact' : 'guess';
         $formDataFromAnswers ["toner_cost"]            = ($assessmentSurvey->costOfInkAndToner > 0) ? $assessmentSurvey->costOfInkAndToner : null;
         $formDataFromAnswers ["labor_cost_radio"]      = ($assessmentSurvey->costOfLabor !== null) ? 'exact' : 'guess';

@@ -17,14 +17,14 @@ class RenderFormDatePicker extends RenderFormAbstract
      *
      * @return string
      */
-    public function RenderFormDatePicker (\Zend_Form_Element $element, $elementClasses = array())
+    public function RenderFormDatePicker (\Zend_Form_Element $element, $elementClasses = [])
     {
-        $html = array();
+        $html = [];
         if ($element instanceof \ZendX_JQuery_Form_Element_DatePicker)
         {
             if (!is_array($elementClasses))
             {
-                $elementClasses = array($elementClasses);
+                $elementClasses = [$elementClasses];
             }
             array_unshift($elementClasses, 'form-control');
 
@@ -43,7 +43,7 @@ class RenderFormDatePicker extends RenderFormAbstract
              *  Prep attributes
              */
             $attributes['class']  = $this->processClasses($attributes, $elementClasses);
-            $serializedAttributes = $this->serializeAttributes($attributes, array('options'));
+            $serializedAttributes = $this->serializeAttributes($attributes, ['options']);
             $element->setAttribs($attributes);
 
             $html [] = $element->renderUiWidgetElement();

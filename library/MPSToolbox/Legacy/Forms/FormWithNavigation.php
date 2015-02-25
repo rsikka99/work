@@ -21,10 +21,10 @@ class FormWithNavigation extends Zend_Form
     const BUTTONS_BACK          = 4;
     const BUTTONS_CANCEL        = 5;
 
-    static $validFormModes = array(
+    static $validFormModes = [
         self::FORM_BUTTON_MODE_DIALOG     => true,
         self::FORM_BUTTON_MODE_NAVIGATION => true,
-    );
+    ];
 
     /**
      * The type of buttons that will show up on this form
@@ -38,7 +38,7 @@ class FormWithNavigation extends Zend_Form
      *
      * @var array
      */
-    protected $buttons = array();
+    protected $buttons = [];
 
     /**
      *An array of button elements
@@ -52,7 +52,7 @@ class FormWithNavigation extends Zend_Form
      * @param int        $formButtonMode The type of navigation we're going to use
      * @param array      $buttons        The buttons that will be present on the form
      */
-    public function __construct ($options = null, $formButtonMode = self::FORM_BUTTON_MODE_DIALOG, $buttons = array(self::BUTTONS_ALL))
+    public function __construct ($options = null, $formButtonMode = self::FORM_BUTTON_MODE_DIALOG, $buttons = [self::BUTTONS_ALL])
     {
         parent::__construct($options);
 
@@ -80,13 +80,9 @@ class FormWithNavigation extends Zend_Form
                 throw new \InvalidArgumentException('Invalid form mode.');
         }
 
-        $this->addDisplayGroup($this->formActionButtonElements, 'form-actions', array(
-            'decorators' => array(
-                array('ViewScript', array(
-                    'viewScript' => 'forms/form-actions.phtml'
-                )),
-            ),
-        ));
+        $this->addDisplayGroup($this->formActionButtonElements, 'form-actions', [
+            'decorators' => [['ViewScript', ['viewScript' => 'forms/form-actions.phtml']],],
+        ]);
     }
 
     /**
@@ -156,10 +152,10 @@ class FormWithNavigation extends Zend_Form
      */
     protected function addSaveButton ($withIcon = false)
     {
-        $this->formActionButtonElements[] = $this->createElement('submit', 'save', array(
+        $this->formActionButtonElements[] = $this->createElement('submit', 'save', [
             'label'  => ($withIcon) ? '<i class="fa fa-fw fa-check"></i> Save' : 'Save',
             'ignore' => true,
-        ));
+        ]);
     }
 
     /**
@@ -171,11 +167,11 @@ class FormWithNavigation extends Zend_Form
      */
     protected function addCancelButton ($withIcon = false)
     {
-        $this->formActionButtonElements[] = $this->createElement('submit', 'cancel', array(
+        $this->formActionButtonElements[] = $this->createElement('submit', 'cancel', [
             'label'          => ($withIcon) ? '<i class="fa fa-fw fa-remove"></i> Cancel' : 'Cancel',
             'ignore'         => true,
             'formnovalidate' => true,
-        ));
+        ]);
     }
 
     /**
@@ -187,10 +183,10 @@ class FormWithNavigation extends Zend_Form
      */
     protected function addNextButton ($withIcon = false)
     {
-        $this->formActionButtonElements[] = $this->createElement('submit', 'saveAndContinue', array(
+        $this->formActionButtonElements[] = $this->createElement('submit', 'saveAndContinue', [
             'label'  => ($withIcon) ? 'Save & Continue <i class="fa fa-fw fa-arrow-right"></i>' : 'Save & Continue',
             'ignore' => true,
-        ));
+        ]);
     }
 
     /**
@@ -202,11 +198,11 @@ class FormWithNavigation extends Zend_Form
      */
     protected function addPreviousButton ($withIcon = false)
     {
-        $this->formActionButtonElements[] = $this->createElement('submit', 'goBack', array(
+        $this->formActionButtonElements[] = $this->createElement('submit', 'goBack', [
             'label'          => ($withIcon) ? '<i class="fa fa-fw fa-arrow-left"></i> Go Back' : 'Go Back',
             'ignore'         => true,
             'formnovalidate' => true,
-        ));
+        ]);
     }
 
     /**

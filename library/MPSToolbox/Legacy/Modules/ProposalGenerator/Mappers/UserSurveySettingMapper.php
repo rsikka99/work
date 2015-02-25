@@ -70,7 +70,7 @@ class UserSurveySettingMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $where = array();
+        $where = [];
         if (isset($primaryKey ['userId']))
         {
             $where ['userId = ?'] = $primaryKey ['userId'];
@@ -102,7 +102,7 @@ class UserSurveySettingMapper extends My_Model_Mapper_Abstract
             $user_survey_setting = $user_survey_setting->toArray();
         }
 
-        $whereClause = array();
+        $whereClause = [];
         if (isset($user_survey_setting ['userId']))
         {
             $whereClause ['userId = ?'] = $user_survey_setting ['userId'];
@@ -177,7 +177,7 @@ class UserSurveySettingMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $entries [] = new UserSurveySettingModel($row->toArray());
@@ -193,12 +193,12 @@ class UserSurveySettingMapper extends My_Model_Mapper_Abstract
      */
     public function findUserSurveySettingByUserId ($userId)
     {
-        $surveySetting = array();
+        $surveySetting = [];
 
         try
         {
             // Get all rows that with this user id
-            $userSurveySettings = $this->fetchAll(array("{$this->col_userId} = {$userId}"));
+            $userSurveySettings = $this->fetchAll(["{$this->col_userId} = {$userId}"]);
             foreach ($userSurveySettings as $userSurveySetting)
             {
                 $surveySetting [] = $userSurveySetting;
@@ -219,9 +219,9 @@ class UserSurveySettingMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
+        return [
             $object->userId,
-            $object->surveySettingId
-        );
+            $object->surveySettingId,
+        ];
     }
 }

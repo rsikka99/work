@@ -50,7 +50,7 @@
 <div class="page-copyright">
     Copyright <?= $this->App()->copyright; ?> &copy; 2013-<?= date("Y"); ?>. All Rights Reserved.
 </div>
-<?= $this->partial('partials/php-errors.phtml', array('exceptions' => $this->exceptions, 'request' => $this->request)) ?>
+<?= $this->partial('partials/php-errors.phtml', ['exceptions' => $this->exceptions, 'request' => $this->request]) ?>
 
 <script type="text/javascript">
     var TMTW_BASEURL = '<?= $this->serverUrl('/'); ?>';

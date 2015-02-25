@@ -32,17 +32,17 @@ class EloquentAdapter implements DataAdapterInterface
     /**
      * @var AbstractFilter[]
      */
-    protected $filters = array();
+    protected $filters = [];
 
     /**
      * @var Column[]
      */
-    protected $orderBy = array();
+    protected $orderBy = [];
 
     /**
      * @var Column[]
      */
-    protected $defaultOrderBy = array();
+    protected $defaultOrderBy = [];
 
     /**
      * @var int
@@ -60,7 +60,7 @@ class EloquentAdapter implements DataAdapterInterface
      * @param Builder  $query
      * @param Column[] $defaultOrder
      */
-    public function __construct (Builder $query, $defaultOrder = array())
+    public function __construct (Builder $query, $defaultOrder = [])
     {
         $this->originalQuery = $query;
 
@@ -182,7 +182,7 @@ class EloquentAdapter implements DataAdapterInterface
      */
     public function resetOrderBy ()
     {
-        $this->orderBy = array();
+        $this->orderBy = [];
 
         return $this;
     }

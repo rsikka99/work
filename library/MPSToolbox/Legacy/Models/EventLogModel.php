@@ -89,13 +89,13 @@ class EventLogModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             'id'             => $this->id,
             'eventLogTypeId' => $this->eventLogTypeId,
             'timestamp'      => $this->timestamp,
             'message'        => $this->message,
             'ipAddress'      => $this->ipAddress,
-        );
+        ];
     }
 
     public function getAttachedUserId ()

@@ -50,9 +50,9 @@ class OptionCategoryModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "categoryId" => $this->categoryId,
             "optionId"   => $this->optionId,
-        );
+        ];
     }
 }

@@ -46,7 +46,7 @@ devices in your fleet. ");
 // Begin with data rows
     foreach ($retiredDeviceInstances as $deviceInstance)
     {
-        $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
+        $style = ($this->cycle([$tcStyle->body->cell1->odd, $tcStyle->body->cell1->even])->next()->current());
 
         $table->addRow($tcStyle->body->rowheight, $this->styles->tables->tablestyle->rowstyle);
         $cell = $table->addCell($tcStyle->collWidth, $style);

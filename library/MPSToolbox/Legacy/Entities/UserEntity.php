@@ -39,19 +39,19 @@ class UserEntity extends EloquentModel
     /**
      * @var array
      */
-    protected $hidden = array('password');
+    protected $hidden = ['password'];
 
     /**
      * Additional date fields that should be mutated
      *
      * @var array
      */
-    protected $dates = array(
+    protected $dates = [
         'eulaAccepted',
         'frozenUntil',
         'lastSeen',
         'passwordResetRequest',
-    );
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -71,7 +71,7 @@ class UserEntity extends EloquentModel
 
     public function getDates ()
     {
-        return array('dateViewed');
+        return ['dateViewed'];
     }
 
 }

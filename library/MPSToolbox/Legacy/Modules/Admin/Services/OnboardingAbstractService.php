@@ -59,42 +59,42 @@ class OnboardingAbstractService
      *
      * @var array
      */
-    protected $_fieldsPresent = array();
+    protected $_fieldsPresent = [];
 
     /**
      * Valid CSV lines
      *
      * @var UploadLineModel[]
      */
-    public $csvLines = array();
+    public $csvLines = [];
 
     /**
      * Valid CSV lines
      *
      * @var UploadLineModel[]
      */
-    public $validCsvLines = array();
+    public $validCsvLines = [];
 
     /**
      * Invalid CSV lines
      *
      * @var UploadLineModel[]
      */
-    public $invalidCsvLines = array();
+    public $invalidCsvLines = [];
 
     /**
      * Raw CSV header
      *
      * @var array
      */
-    protected $_csvHeaders = array();
+    protected $_csvHeaders = [];
 
     /**
      * Mapped CSV header
      *
      * @var array
      */
-    protected $_mappedHeaders = array();
+    protected $_mappedHeaders = [];
 
 
     /**
@@ -103,14 +103,14 @@ class OnboardingAbstractService
      *
      * @var array
      */
-    protected $_columnMapping = array();
+    protected $_columnMapping = [];
 
     /**
      * The fields that must be present within the CSV format
      *
      * @var array
      */
-    protected $_requiredHeaders = array();
+    protected $_requiredHeaders = [];
 
 
     public function processFile ($filename, $dealerId)
@@ -132,10 +132,10 @@ class OnboardingAbstractService
         if (file_exists($filename))
         {
             // Reset arrays
-            $this->csvLines        = array();
-            $this->validCsvLines   = array();
-            $this->invalidCsvLines = array();
-            $this->_csvHeaders     = array();
+            $this->csvLines        = [];
+            $this->validCsvLines   = [];
+            $this->invalidCsvLines = [];
+            $this->_csvHeaders     = [];
 
             $fileLines = file($filename, FILE_IGNORE_NEW_LINES);
             $lineCount = count($fileLines) - 1 - $this->_linesToTrim;
@@ -156,10 +156,10 @@ class OnboardingAbstractService
             /*
              * Pop off the first line since they are headers and map them accordingly
              */
-            $this->_csvHeaders = array();
+            $this->_csvHeaders = [];
 
 
-            $lowercaseColumnMapping = array();
+            $lowercaseColumnMapping = [];
             foreach ($this->_columnMapping as $csvColumnName => $systemColumnName)
             {
                 $lowercaseColumnMapping[$csvColumnName] = strtolower($csvColumnName);
@@ -250,7 +250,7 @@ class OnboardingAbstractService
      */
     public function validateHeaders ($csvHeaders)
     {
-        $requiredHeadersMissing = array();
+        $requiredHeadersMissing = [];
         // Loop through our standard headers
         foreach ($this->_requiredHeaders as $fieldName => $isRequired)
         {
@@ -263,7 +263,7 @@ class OnboardingAbstractService
 
         if (count($requiredHeadersMissing) > 0)
         {
-            $vendorHeadings = array();
+            $vendorHeadings = [];
             foreach ($requiredHeadersMissing as $header)
             {
                 $vendorHeadings[] = array_search($header, $this->_columnMapping);

@@ -24,7 +24,7 @@ foreach ($contractHtml->getElementsByTagName('p') as $paragraphNode)
 {
     $termsAndConditionsTable->addRow();
     $cell    = $termsAndConditionsTable->addCell($tableSpan ['span8'], null);
-    $textRun = $cell->addTextRun(array_merge($paragraphStyle->noSpacingJustified, array('spacing' => 1.1)));
+    $textRun = $cell->addTextRun(array_merge($paragraphStyle->noSpacingJustified, ['spacing' => 1.1]));
 
     $childNodes = $paragraphNode->childNodes;
     for ($i = 0; $i < $childNodes->length; $i++)

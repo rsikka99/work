@@ -175,7 +175,7 @@ foreach ($assessmentViewModel->getMostExpensiveDevices() as $device)
 {
     $expensiveTable->addRow($this->styles->tables->mostexpensive->rowheight, $this->styles->tables->rowstyle);
     $expensiveTable->addCell($this->styles->tables->mostexpensive->col1Width, $this->styles->tables->mostexpensive->cell1)->addText($device->getDeviceName(), null, 'nospacing');
-    $expensiveTable->addCell($this->styles->tables->mostexpensive->col2Width, $this->styles->tables->mostexpensive->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing');
+    $expensiveTable->addCell($this->styles->tables->mostexpensive->col2Width, $this->styles->tables->mostexpensive->cell2)->addText(($device->serialNumber) ?: "Unknown", null, 'nospacing');
     $expensiveTable->addCell($this->styles->tables->mostexpensive->col3Width, $this->styles->tables->mostexpensive->cell3)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
     $expensiveTable->addCell($this->styles->tables->mostexpensive->col4Width, $this->styles->tables->mostexpensive->cell4)->addText($this->currency($device->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer())
     ), null, 'nospacing_centeralign');

@@ -886,7 +886,7 @@ class UploadLineModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "rmsVendorName"          => $this->rmsVendorName,
             "rmsReportVersion"       => $this->rmsReportVersion,
             "rmsModelId"             => $this->rmsModelId,
@@ -965,7 +965,7 @@ class UploadLineModel extends My_Model_Abstract
             "pageCoverageMagenta"    => $this->pageCoverageMagenta,
             "pageCoverageYellow"     => $this->pageCoverageYellow,
             "location"               => $this->location,
-        );
+        ];
     }
 
     /**
@@ -1173,7 +1173,7 @@ class UploadLineModel extends My_Model_Abstract
         // Convert to array if it's not already
         if (!is_array($formats))
         {
-            $formats = array($formats);
+            $formats = [$formats];
         }
 
         foreach ($formats as $format)

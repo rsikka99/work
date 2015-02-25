@@ -6,8 +6,10 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\QuotePageForm;
 $form  = $this->element;
 $quote = $form->getQuote();
 ?>
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
-<p class="text-right"><i class="fa fa-fw fa-info-circle"></i> Skip this step for a purchased quote or MPS Hardware</p>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
+<p class="text-right">
+    <i class="fa fa-fw fa-info-circle"></i> Skip this step for a purchased quote or MPS Hardware
+</p>
 <div class="accordion" id="accordion2">
     <div class="accordion-group">
         <div class="accordion-heading">
@@ -23,7 +25,7 @@ $quote = $form->getQuote();
                             <div class='span4'>
 
                                 <div class="form-group <?= ($form->getElement('adminCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                                    <?= $this->RenderFormLabel($form->getElement('adminCostPerPage'), array('col-md-3')) ?>
+                                    <?= $this->RenderFormLabel($form->getElement('adminCostPerPage'), ['col-md-3']) ?>
 
                                     <div class="col-md-2">
                                         <?= $this->RenderFormText($form->getElement('adminCostPerPage')) ?>
@@ -33,7 +35,7 @@ $quote = $form->getQuote();
                                 </div>
 
                                 <div class="form-group <?= ($form->getElement('pageCoverageColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                                    <?= $this->RenderFormLabel($form->getElement('pageCoverageColor'), array('col-md-3')) ?>
+                                    <?= $this->RenderFormLabel($form->getElement('pageCoverageColor'), ['col-md-3']) ?>
 
                                     <div class="col-md-2">
                                         <?= $this->RenderFormText($form->getElement('pageCoverageColor')) ?>
@@ -43,7 +45,7 @@ $quote = $form->getQuote();
                                 </div>
 
                                 <div class="form-group <?= ($form->getElement('pageCoverageMonochrome')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                                    <?= $this->RenderFormLabel($form->getElement('pageCoverageMonochrome'), array('col-md-3')) ?>
+                                    <?= $this->RenderFormLabel($form->getElement('pageCoverageMonochrome'), ['col-md-3']) ?>
 
                                     <div class="col-md-2">
                                         <?= $this->RenderFormText($form->getElement('pageCoverageMonochrome')) ?>
@@ -59,7 +61,7 @@ $quote = $form->getQuote();
                                 <h5> Monochrome Toner Preference </h5>
 
                                 <div class="form-group <?= ($form->getElement('dealerMonochromeRankSetArray')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                                    <?= $this->RenderFormLabel($form->getElement('dealerMonochromeRankSetArray'), array('col-md-3')) ?>
+                                    <?= $this->RenderFormLabel($form->getElement('dealerMonochromeRankSetArray'), ['col-md-3']) ?>
 
                                     <div class="col-md-5">
                                         <?= $this->RenderFormSelect($form->getElement('dealerMonochromeRankSetArray')) ?>
@@ -74,7 +76,7 @@ $quote = $form->getQuote();
                                 <p> Color Toner Preference </p>
 
                                 <div class="form-group <?= ($form->getElement('dealerColorRankSetArray')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                                    <?= $this->RenderFormLabel($form->getElement('dealerColorRankSetArray'), array('col-md-3')) ?>
+                                    <?= $this->RenderFormLabel($form->getElement('dealerColorRankSetArray'), ['col-md-3']) ?>
 
                                     <div class="col-md-5">
                                         <?= $this->RenderFormSelect($form->getElement('dealerColorRankSetArray')) ?>

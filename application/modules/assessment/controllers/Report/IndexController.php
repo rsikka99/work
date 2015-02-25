@@ -16,7 +16,7 @@ class Assessment_Report_IndexController extends Assessment_Library_Controller_Ac
     function preDispatch ()
     {
         parent::preDispatch();
-        $this->view->ErrorMessages = array();
+        $this->view->ErrorMessages = [];
     }
 
     function postDispatch ()
@@ -39,7 +39,7 @@ class Assessment_Report_IndexController extends Assessment_Library_Controller_Ac
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Assessment', 'Report');
+        $this->_pageTitle = ['Assessment', 'Report'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         if ($this->getRequest()->isPost())

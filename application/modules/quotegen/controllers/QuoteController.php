@@ -31,9 +31,9 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
 
         if (!$quoteId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'warning' => 'Please select a quote to delete first.'
-            ));
+            ]);
             $this->redirectToRoute('quotes.view-and-print-reports');
         }
 
@@ -42,9 +42,9 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
 
         if (!$quote->id)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'There was an error selecting the quote to delete.'
-            ));
+            ]);
             $this->redirectToRoute('quotes.view-and-print-reports');
         }
 
@@ -64,15 +64,15 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
 
                     $quoteMapper->delete($quote);
 
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'success' => "Quote was deleted successfully."
-                    ));
-                    $this->redirectToRoute('quotes.reports', array('quoteId' => $quote->id));
+                    ]);
+                    $this->redirectToRoute('quotes.reports', ['quoteId' => $quote->id]);
                 }
             }
             else
             {
-                $this->redirectToRoute('quotes.reports', array('quoteId' => $quote->id));
+                $this->redirectToRoute('quotes.reports', ['quoteId' => $quote->id]);
             }
         }
         $this->view->form = $form;

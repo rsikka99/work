@@ -345,22 +345,22 @@ class OptimizationViewModel
         if (!isset($this->highCostPurchasedDevices))
         {
             $deviceArray = $this->getDevices()->purchasedDeviceInstances->getDeviceInstances();
-            $costArray   = array();
+            $costArray   = [];
             /**@var $value DeviceInstanceModel */
             foreach ($deviceArray as $key => $deviceInstance)
             {
-                $costArray[] = array(
+                $costArray[] = [
                     $key,
                     ($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage) +
                     ($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage)
-                );
+                ];
             }
 
-            usort($costArray, array(
+            usort($costArray, [
                 $this,
-                "descendingSortDevicesByColorCost"
-            ));
-            $highCostDevices = array();
+                "descendingSortDevicesByColorCost",
+            ]);
+            $highCostDevices = [];
 
             foreach ($costArray as $costs)
             {
@@ -421,7 +421,7 @@ class OptimizationViewModel
     {
         if (!isset($this->_uniqueDeviceList))
         {
-            $masterDevices = array();
+            $masterDevices = [];
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 if (!in_array($deviceInstance->getMasterDevice(), $masterDevices))
@@ -464,7 +464,7 @@ class OptimizationViewModel
         if (!isset($this->_numberOfUniquePurchasedModels))
         {
             $numberOfModels   = 0;
-            $uniqueModelArray = array();
+            $uniqueModelArray = [];
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 if (!in_array($device->getMasterDevice()->modelName, $uniqueModelArray))
@@ -499,7 +499,7 @@ class OptimizationViewModel
     {
         if (!isset($this->_uniquePurchasedTonerList))
         {
-            $uniqueToners = array();
+            $uniqueToners = [];
             foreach ($this->getUniquePurchasedDeviceList() as $masterDevice)
             {
                 $deviceToners = $masterDevice->getTonersForAssessment($this->getCostPerPageSettingForDealer());
@@ -524,7 +524,7 @@ class OptimizationViewModel
     {
         if (!isset($this->_uniquePurchasedDeviceList))
         {
-            $masterDevices = array();
+            $masterDevices = [];
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 if (!in_array($device->getMasterDevice(), $masterDevices))
@@ -839,7 +839,7 @@ class OptimizationViewModel
     {
         if (!isset($this->_devicesGroupedByAction))
         {
-            $this->_devicesGroupedByAction = array();
+            $this->_devicesGroupedByAction = [];
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $hardwareOptimizationDeviceInstance = $deviceInstance->getHardwareOptimizationDeviceInstance($this->_optimization->id);

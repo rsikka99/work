@@ -12,7 +12,7 @@ $quoteSettingsForm         = $form->getSubForm('quoteSettingsForm');
 $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
 ?>
 
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
     <div class="row">
         <div class="col-sm-12 col-md-6">
             <fieldset>
@@ -22,35 +22,35 @@ $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
                     </small>
                 </legend>
                 <div class="form-group <?= ($currentFleetSettingsForm->getElement('currentUseDevicePageCoverages')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($currentFleetSettingsForm->getElement('currentUseDevicePageCoverages'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($currentFleetSettingsForm->getElement('currentUseDevicePageCoverages'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormBootstrapSwitch($currentFleetSettingsForm->getElement('currentUseDevicePageCoverages'), array('js-yes-no-switch')) ?>
+                        <?= $this->RenderFormBootstrapSwitch($currentFleetSettingsForm->getElement('currentUseDevicePageCoverages'), ['js-yes-no-switch']) ?>
                         <?= $this->RenderFormDescription($currentFleetSettingsForm->getElement('currentUseDevicePageCoverages')) ?>
                         <?= $this->RenderFormElementErrors($currentFleetSettingsForm->getElement('currentUseDevicePageCoverages')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($currentFleetSettingsForm->getElement('currentPageCoverageMono')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($currentFleetSettingsForm->getElement('currentPageCoverageMono'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($currentFleetSettingsForm->getElement('currentPageCoverageMono'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($currentFleetSettingsForm->getElement('currentPageCoverageMono'), array(), null, '%') ?>
+                        <?= $this->RenderFormText($currentFleetSettingsForm->getElement('currentPageCoverageMono'), [], null, '%') ?>
                         <?= $this->RenderFormElementErrors($currentFleetSettingsForm->getElement('currentPageCoverageMono')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($currentFleetSettingsForm->getElement('currentPageCoverageColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($currentFleetSettingsForm->getElement('currentPageCoverageColor'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($currentFleetSettingsForm->getElement('currentPageCoverageColor'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($currentFleetSettingsForm->getElement('currentPageCoverageColor'), array(), null, '%') ?>
+                        <?= $this->RenderFormText($currentFleetSettingsForm->getElement('currentPageCoverageColor'), [], null, '%') ?>
                         <?= $this->RenderFormElementErrors($currentFleetSettingsForm->getElement('currentPageCoverageColor')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($currentFleetSettingsForm->getElement('currentMonochromeRankSetArray')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($currentFleetSettingsForm->getElement('currentMonochromeRankSetArray'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($currentFleetSettingsForm->getElement('currentMonochromeRankSetArray'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
                         <?= $this->RenderFormSelect($currentFleetSettingsForm->getElement('currentMonochromeRankSetArray')) ?>
@@ -60,7 +60,7 @@ $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
                 </div>
 
                 <div class="form-group <?= ($currentFleetSettingsForm->getElement('currentColorRankSetArray')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($currentFleetSettingsForm->getElement('currentColorRankSetArray'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($currentFleetSettingsForm->getElement('currentColorRankSetArray'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
                         <?= $this->RenderFormSelect($currentFleetSettingsForm->getElement('currentColorRankSetArray')) ?>
@@ -80,35 +80,35 @@ $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
                 </legend>
 
                 <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedUseDevicePageCoverages')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedUseDevicePageCoverages'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedUseDevicePageCoverages'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormBootstrapSwitch($proposedFleetSettingsForm->getElement('proposedUseDevicePageCoverages'), array('js-yes-no-switch')) ?>
+                        <?= $this->RenderFormBootstrapSwitch($proposedFleetSettingsForm->getElement('proposedUseDevicePageCoverages'), ['js-yes-no-switch']) ?>
                         <?= $this->RenderFormDescription($proposedFleetSettingsForm->getElement('proposedUseDevicePageCoverages')) ?>
                         <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedUseDevicePageCoverages')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedPageCoverageMono')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedPageCoverageMono'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedPageCoverageMono'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedPageCoverageMono'), array(), null, '%') ?>
+                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedPageCoverageMono'), [], null, '%') ?>
                         <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedPageCoverageMono')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedPageCoverageColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedPageCoverageColor'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedPageCoverageColor'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedPageCoverageColor'), array(), null, '%') ?>
+                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedPageCoverageColor'), [], null, '%') ?>
                         <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedPageCoverageColor')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedMonochromeRankSetArray')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedMonochromeRankSetArray'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedMonochromeRankSetArray'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
                         <?= $this->RenderFormSelect($proposedFleetSettingsForm->getElement('proposedMonochromeRankSetArray')) ?>
@@ -118,7 +118,7 @@ $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
                 </div>
 
                 <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedColorRankSetArray')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedColorRankSetArray'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedColorRankSetArray'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
                         <?= $this->RenderFormSelect($proposedFleetSettingsForm->getElement('proposedColorRankSetArray')) ?>
@@ -128,46 +128,46 @@ $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
                 </div>
 
                 <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedDefaultAdminCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultAdminCostPerPage'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultAdminCostPerPage'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultAdminCostPerPage'), array(), '$') ?>
+                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultAdminCostPerPage'), [], '$') ?>
                         <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedDefaultAdminCostPerPage')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedDefaultMonochromeLaborCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultMonochromeLaborCostPerPage'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultMonochromeLaborCostPerPage'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultMonochromeLaborCostPerPage'), array(), '$') ?>
+                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultMonochromeLaborCostPerPage'), [], '$') ?>
                         <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedDefaultMonochromeLaborCostPerPage')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedDefaultMonochromePartsCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultMonochromePartsCostPerPage'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultMonochromePartsCostPerPage'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultMonochromePartsCostPerPage'), array(), '$') ?>
+                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultMonochromePartsCostPerPage'), [], '$') ?>
                         <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedDefaultMonochromePartsCostPerPage')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedDefaultColorLaborCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultColorLaborCostPerPage'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultColorLaborCostPerPage'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultColorLaborCostPerPage'), array(), '$') ?>
+                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultColorLaborCostPerPage'), [], '$') ?>
                         <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedDefaultColorLaborCostPerPage')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedDefaultColorPartsCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultColorPartsCostPerPage'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedDefaultColorPartsCostPerPage'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultColorPartsCostPerPage'), array(), '$') ?>
+                        <?= $this->RenderFormText($proposedFleetSettingsForm->getElement('proposedDefaultColorPartsCostPerPage'), [], '$') ?>
                         <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedDefaultColorPartsCostPerPage')) ?>
                     </div>
                 </div>
@@ -185,73 +185,73 @@ $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
                 </legend>
 
                 <div class="form-group <?= ($genericSettingsForm->getElement('defaultMonthlyLeasePayment')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('defaultMonthlyLeasePayment'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('defaultMonthlyLeasePayment'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($genericSettingsForm->getElement('defaultMonthlyLeasePayment'), array(), '$') ?>
+                        <?= $this->RenderFormText($genericSettingsForm->getElement('defaultMonthlyLeasePayment'), [], '$') ?>
                         <?= $this->RenderFormElementErrors($genericSettingsForm->getElement('defaultMonthlyLeasePayment')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($genericSettingsForm->getElement('defaultPrinterCost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('defaultPrinterCost'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('defaultPrinterCost'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($genericSettingsForm->getElement('defaultPrinterCost'), array(), '$') ?>
+                        <?= $this->RenderFormText($genericSettingsForm->getElement('defaultPrinterCost'), [], '$') ?>
                         <?= $this->RenderFormElementErrors($genericSettingsForm->getElement('defaultPrinterCost')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($genericSettingsForm->getElement('defaultEnergyCost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('defaultEnergyCost'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('defaultEnergyCost'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($genericSettingsForm->getElement('defaultEnergyCost'), array(), '$') ?>
+                        <?= $this->RenderFormText($genericSettingsForm->getElement('defaultEnergyCost'), [], '$') ?>
                         <?= $this->RenderFormElementErrors($genericSettingsForm->getElement('defaultEnergyCost')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($genericSettingsForm->getElement('leasedMonochromeCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('leasedMonochromeCostPerPage'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('leasedMonochromeCostPerPage'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($genericSettingsForm->getElement('leasedMonochromeCostPerPage'), array(), '$') ?>
+                        <?= $this->RenderFormText($genericSettingsForm->getElement('leasedMonochromeCostPerPage'), [], '$') ?>
                         <?= $this->RenderFormElementErrors($genericSettingsForm->getElement('leasedMonochromeCostPerPage')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($genericSettingsForm->getElement('leasedColorCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('leasedColorCostPerPage'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('leasedColorCostPerPage'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($genericSettingsForm->getElement('leasedColorCostPerPage'), array(), '$') ?>
+                        <?= $this->RenderFormText($genericSettingsForm->getElement('leasedColorCostPerPage'), [], '$') ?>
                         <?= $this->RenderFormElementErrors($genericSettingsForm->getElement('leasedColorCostPerPage')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($genericSettingsForm->getElement('mpsMonochromeCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('mpsMonochromeCostPerPage'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('mpsMonochromeCostPerPage'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($genericSettingsForm->getElement('mpsMonochromeCostPerPage'), array(), '$') ?>
+                        <?= $this->RenderFormText($genericSettingsForm->getElement('mpsMonochromeCostPerPage'), [], '$') ?>
                         <?= $this->RenderFormElementErrors($genericSettingsForm->getElement('mpsMonochromeCostPerPage')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($genericSettingsForm->getElement('mpsColorCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('mpsColorCostPerPage'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('mpsColorCostPerPage'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($genericSettingsForm->getElement('mpsColorCostPerPage'), array(), '$') ?>
+                        <?= $this->RenderFormText($genericSettingsForm->getElement('mpsColorCostPerPage'), [], '$') ?>
                         <?= $this->RenderFormElementErrors($genericSettingsForm->getElement('mpsColorCostPerPage')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($genericSettingsForm->getElement('tonerMargin')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('tonerMargin'), array('col-md-6')) ?>
+                    <?= $this->RenderFormLabel($genericSettingsForm->getElement('tonerMargin'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormText($genericSettingsForm->getElement('tonerMargin'), array(), null, '%') ?>
+                        <?= $this->RenderFormText($genericSettingsForm->getElement('tonerMargin'), [], null, '%') ?>
                         <?= $this->RenderFormElementErrors($genericSettingsForm->getElement('tonerMargin')) ?>
                     </div>
                 </div>
@@ -265,37 +265,37 @@ $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
                         <legend>Target Cost Settings</legend>
 
                         <div class="form-group <?= ($genericSettingsForm->getElement('targetMonochromeCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                            <?= $this->RenderFormLabel($genericSettingsForm->getElement('targetMonochromeCostPerPage'), array('col-md-6')) ?>
+                            <?= $this->RenderFormLabel($genericSettingsForm->getElement('targetMonochromeCostPerPage'), ['col-md-6']) ?>
 
                             <div class="col-md-6">
-                                <?= $this->RenderFormText($genericSettingsForm->getElement('targetMonochromeCostPerPage'), array(), '$') ?>
+                                <?= $this->RenderFormText($genericSettingsForm->getElement('targetMonochromeCostPerPage'), [], '$') ?>
                                 <?= $this->RenderFormElementErrors($genericSettingsForm->getElement('targetMonochromeCostPerPage')) ?>
                             </div>
                         </div>
 
                         <div class="form-group <?= ($genericSettingsForm->getElement('targetColorCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                            <?= $this->RenderFormLabel($genericSettingsForm->getElement('targetColorCostPerPage'), array('col-md-6')) ?>
+                            <?= $this->RenderFormLabel($genericSettingsForm->getElement('targetColorCostPerPage'), ['col-md-6']) ?>
 
                             <div class="col-md-6">
-                                <?= $this->RenderFormText($genericSettingsForm->getElement('targetColorCostPerPage'), array(), '$') ?>
+                                <?= $this->RenderFormText($genericSettingsForm->getElement('targetColorCostPerPage'), [], '$') ?>
                                 <?= $this->RenderFormElementErrors($genericSettingsForm->getElement('targetColorCostPerPage')) ?>
                             </div>
                         </div>
 
                         <div class="form-group <?= ($optimizationSettingsForm->getElement('optimizedTargetMonochromeCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                            <?= $this->RenderFormLabel($optimizationSettingsForm->getElement('optimizedTargetMonochromeCostPerPage'), array('col-md-6')) ?>
+                            <?= $this->RenderFormLabel($optimizationSettingsForm->getElement('optimizedTargetMonochromeCostPerPage'), ['col-md-6']) ?>
 
                             <div class="col-md-6">
-                                <?= $this->RenderFormText($optimizationSettingsForm->getElement('optimizedTargetMonochromeCostPerPage'), array(), '$') ?>
+                                <?= $this->RenderFormText($optimizationSettingsForm->getElement('optimizedTargetMonochromeCostPerPage'), [], '$') ?>
                                 <?= $this->RenderFormElementErrors($optimizationSettingsForm->getElement('optimizedTargetMonochromeCostPerPage')) ?>
                             </div>
                         </div>
 
                         <div class="form-group <?= ($optimizationSettingsForm->getElement('optimizedTargetColorCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                            <?= $this->RenderFormLabel($optimizationSettingsForm->getElement('optimizedTargetColorCostPerPage'), array('col-md-6')) ?>
+                            <?= $this->RenderFormLabel($optimizationSettingsForm->getElement('optimizedTargetColorCostPerPage'), ['col-md-6']) ?>
 
                             <div class="col-md-6">
-                                <?= $this->RenderFormText($optimizationSettingsForm->getElement('optimizedTargetColorCostPerPage'), array(), '$') ?>
+                                <?= $this->RenderFormText($optimizationSettingsForm->getElement('optimizedTargetColorCostPerPage'), [], '$') ?>
                                 <?= $this->RenderFormElementErrors($optimizationSettingsForm->getElement('optimizedTargetColorCostPerPage')) ?>
                             </div>
                         </div>
@@ -306,19 +306,19 @@ $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
                         <legend>Default Hardware Quote Settings</legend>
 
                         <div class="form-group <?= ($quoteSettingsForm->getElement('defaultDeviceMargin')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                            <?= $this->RenderFormLabel($quoteSettingsForm->getElement('defaultDeviceMargin'), array('col-md-6')) ?>
+                            <?= $this->RenderFormLabel($quoteSettingsForm->getElement('defaultDeviceMargin'), ['col-md-6']) ?>
 
                             <div class="col-md-6">
-                                <?= $this->RenderFormText($quoteSettingsForm->getElement('defaultDeviceMargin'), array(), null, '%') ?>
+                                <?= $this->RenderFormText($quoteSettingsForm->getElement('defaultDeviceMargin'), [], null, '%') ?>
                                 <?= $this->RenderFormElementErrors($quoteSettingsForm->getElement('defaultDeviceMargin')) ?>
                             </div>
                         </div>
 
                         <div class="form-group <?= ($quoteSettingsForm->getElement('defaultPageMargin')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                            <?= $this->RenderFormLabel($quoteSettingsForm->getElement('defaultPageMargin'), array('col-md-6')) ?>
+                            <?= $this->RenderFormLabel($quoteSettingsForm->getElement('defaultPageMargin'), ['col-md-6']) ?>
 
                             <div class="col-md-6">
-                                <?= $this->RenderFormText($quoteSettingsForm->getElement('defaultPageMargin'), array(), null, '%') ?>
+                                <?= $this->RenderFormText($quoteSettingsForm->getElement('defaultPageMargin'), [], null, '%') ?>
                                 <?= $this->RenderFormElementErrors($quoteSettingsForm->getElement('defaultPageMargin')) ?>
                             </div>
                         </div>
@@ -329,10 +329,10 @@ $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
                         <legend>Optimization - General Settings</legend>
 
                         <div class="form-group <?= ($optimizationSettingsForm->getElement('costThreshold')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                            <?= $this->RenderFormLabel($optimizationSettingsForm->getElement('costThreshold'), array('col-md-6')) ?>
+                            <?= $this->RenderFormLabel($optimizationSettingsForm->getElement('costThreshold'), ['col-md-6']) ?>
 
                             <div class="col-md-6">
-                                <?= $this->RenderFormText($optimizationSettingsForm->getElement('costThreshold'), array(), '$') ?>
+                                <?= $this->RenderFormText($optimizationSettingsForm->getElement('costThreshold'), [], '$') ?>
                                 <?= $this->RenderFormElementErrors($optimizationSettingsForm->getElement('costThreshold')) ?>
                             </div>
                         </div>
@@ -344,38 +344,38 @@ $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
                         <legend>Optimization - Monochrome to Color Upgrade</legend>
 
                         <div class="form-group <?= ($optimizationSettingsForm->getElement('autoOptimizeFunctionality')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                            <?= $this->RenderFormLabel($optimizationSettingsForm->getElement('autoOptimizeFunctionality'), array('col-md-6')) ?>
+                            <?= $this->RenderFormLabel($optimizationSettingsForm->getElement('autoOptimizeFunctionality'), ['col-md-6']) ?>
 
                             <div class="col-md-6">
-                                <?= $this->RenderFormBootstrapSwitch($optimizationSettingsForm->getElement('autoOptimizeFunctionality'), array('js-enabled-switch')) ?>
+                                <?= $this->RenderFormBootstrapSwitch($optimizationSettingsForm->getElement('autoOptimizeFunctionality'), ['js-enabled-switch']) ?>
                                 <?= $this->RenderFormDescription($optimizationSettingsForm->getElement('autoOptimizeFunctionality')) ?>
                                 <?= $this->RenderFormElementErrors($optimizationSettingsForm->getElement('autoOptimizeFunctionality')) ?>
                             </div>
                         </div>
 
                         <div class="form-group <?= ($optimizationSettingsForm->getElement('lossThreshold')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                            <?= $this->RenderFormLabel($optimizationSettingsForm->getElement('lossThreshold'), array('col-md-6')) ?>
+                            <?= $this->RenderFormLabel($optimizationSettingsForm->getElement('lossThreshold'), ['col-md-6']) ?>
 
                             <div class="col-md-6">
-                                <?= $this->RenderFormText($optimizationSettingsForm->getElement('lossThreshold'), array(), '$') ?>
+                                <?= $this->RenderFormText($optimizationSettingsForm->getElement('lossThreshold'), [], '$') ?>
                                 <?= $this->RenderFormElementErrors($optimizationSettingsForm->getElement('lossThreshold')) ?>
                             </div>
                         </div>
 
                         <div class="form-group <?= ($optimizationSettingsForm->getElement('blackToColorRatio')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                            <?= $this->RenderFormLabel($optimizationSettingsForm->getElement('blackToColorRatio'), array('col-md-6')) ?>
+                            <?= $this->RenderFormLabel($optimizationSettingsForm->getElement('blackToColorRatio'), ['col-md-6']) ?>
 
                             <div class="col-md-6">
-                                <?= $this->RenderFormText($optimizationSettingsForm->getElement('blackToColorRatio'), array(), null, '%') ?>
+                                <?= $this->RenderFormText($optimizationSettingsForm->getElement('blackToColorRatio'), [], null, '%') ?>
                                 <?= $this->RenderFormElementErrors($optimizationSettingsForm->getElement('blackToColorRatio')) ?>
                             </div>
                         </div>
 
                         <div class="form-group <?= ($optimizationSettingsForm->getElement('minimumPageCount')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                            <?= $this->RenderFormLabel($optimizationSettingsForm->getElement('minimumPageCount'), array('col-md-6')) ?>
+                            <?= $this->RenderFormLabel($optimizationSettingsForm->getElement('minimumPageCount'), ['col-md-6']) ?>
 
                             <div class="col-md-6">
-                                <?= $this->RenderFormText($optimizationSettingsForm->getElement('minimumPageCount'), array(), null, null) ?>
+                                <?= $this->RenderFormText($optimizationSettingsForm->getElement('minimumPageCount'), [], null, null) ?>
                                 <?= $this->RenderFormElementErrors($optimizationSettingsForm->getElement('minimumPageCount')) ?>
                             </div>
 

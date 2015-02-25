@@ -31,8 +31,8 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
                     <td><?= $quote->userId; ?></td>
                     <td>
                         <div class="btn-group btn-group-justified btn-group-xs">
-                            <a class="btn btn-warning" title="Edit Quote" href="<?= $this->url(array('quoteId' => $quote->id), 'quotes'); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                            <a class="btn btn-danger" title="Delete Quote" href="<?= $this->url(array('id' => $quote->id), 'quotes.add-hardware.delete'); ?>"><i class="glyphicon glyphicon-trash"></i></a>
+                            <a class="btn btn-warning" title="Edit Quote" href="<?= $this->url(['quoteId' => $quote->id], 'quotes'); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
+                            <a class="btn btn-danger" title="Delete Quote" href="<?= $this->url(['id' => $quote->id], 'quotes.add-hardware.delete'); ?>"><i class="glyphicon glyphicon-trash"></i></a>
                         </div>
                     </td>
                 </tr>

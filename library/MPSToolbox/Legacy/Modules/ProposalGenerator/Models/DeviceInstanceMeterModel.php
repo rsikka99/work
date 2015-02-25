@@ -387,7 +387,7 @@ class DeviceInstanceMeterModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"                     => $this->id,
             "deviceInstanceId"       => $this->deviceInstanceId,
             "startMeterBlack"        => $this->startMeterBlack,
@@ -414,7 +414,7 @@ class DeviceInstanceMeterModel extends My_Model_Abstract
             "endMeterLife"           => $this->endMeterLife,
             "monitorStartDate"       => $this->monitorStartDate,
             "monitorEndDate"         => $this->monitorEndDate,
-        );
+        ];
     }
 
     /**

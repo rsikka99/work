@@ -15,7 +15,7 @@ class ImportClientCostCsvForm extends Twitter_Bootstrap_Form_Horizontal
     /**
      * @var array
      */
-    protected $_validFileExtensions = array();
+    protected $_validFileExtensions = [];
     protected $_minFileSize;
     protected $_maxFileSize;
 
@@ -40,37 +40,35 @@ class ImportClientCostCsvForm extends Twitter_Bootstrap_Form_Horizontal
         // Set the method for the display form to POST
         $this->setMethod('POST');
 
-        $this->addElement('file', 'uploadFile', array(
+        $this->addElement('file', 'uploadFile', [
             'label'       => 'Choose a file to upload',
             'destination' => $this->getView()->App()->uploadPath,
             'required'    => true,
             'accept'      => '.csv',
-            'validators'  => array(
-                'Extension' => array('extension' => 'csv'),
-                'Count'     => array('count' => 1),
-                'File_Size' => array('min' => $this->_minFileSize, 'max' => $this->_maxFileSize)
-            )
-        ));
+            'validators'  => [
+                'Extension' => ['extension' => 'csv'],
+                'Count'     => ['count' => 1],
+                'File_Size' => ['min' => $this->_minFileSize, 'max' => $this->_maxFileSize],
+            ],
+        ]);
 
-        $this->addElement('button', 'performUpload', array(
+        $this->addElement('button', 'performUpload', [
             'label' => 'Upload File',
             'class' => 'btn btn-primary',
             'type'  => 'submit',
-        ));
+        ]);
 
-        $this->addElement('button', 'goBack', array(
+        $this->addElement('button', 'goBack', [
             'label' => 'Go Back',
             'class' => 'btn btn-default',
             'type'  => 'submit',
-        ));
+        ]);
 
         // Add the buttons the the form actions
-        $this->addDisplayGroup(array('performUpload', 'goBack'), 'actions', array(
+        $this->addDisplayGroup(['performUpload', 'goBack'], 'actions', [
             'disableLoadDefaultDecorators' => true,
-            'decorators'                   => array(
-                'Actions'
-            )
-        ));
+            'decorators'                   => ['Actions'],
+        ]);
     }
 
     /**

@@ -93,9 +93,9 @@ class TonerMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
-            "{$this->col_id} = ?" => $primaryKey
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, [
+            "{$this->col_id} = ?" => $primaryKey,
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -116,15 +116,15 @@ class TonerMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof TonerModel)
         {
-            $whereClause = array(
-                "{$this->col_id} = ?" => $object->id
-            );
+            $whereClause = [
+                "{$this->col_id} = ?" => $object->id,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_id} = ?" => $object
-            );
+            $whereClause = [
+                "{$this->col_id} = ?" => $object,
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -143,8 +143,8 @@ class TonerMapper extends My_Model_Mapper_Abstract
     {
         if (is_array($ids))
         {
-            $idsNotCached = array();
-            $toners       = array();
+            $idsNotCached = [];
+            $toners       = [];
             foreach ($ids as $id)
             {
                 $result = $this->getItemFromCache($id);
@@ -245,7 +245,7 @@ class TonerMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new TonerModel($row->toArray());
@@ -268,9 +268,9 @@ class TonerMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_id} = ?" => $id
-        );
+        return [
+            "{$this->col_id} = ?" => $id,
+        ];
     }
 
     /**
@@ -293,7 +293,7 @@ class TonerMapper extends My_Model_Mapper_Abstract
      */
     public function getTonersForDevice ($masterDeviceId)
     {
-        $toners = array();
+        $toners = [];
         try
         {
             $deviceToners = DeviceTonerMapper::getInstance()->getDeviceToners($masterDeviceId);
@@ -331,20 +331,20 @@ class TonerMapper extends My_Model_Mapper_Abstract
         $db = Zend_Db_Table::getDefaultAdapter();
 
         $select = $db->select()
-                     ->from('toners', array('*'))
-                     ->joinLeft('device_toners', 'toner_id = toners.id', array(null))
-                     ->joinLeft('dealer_toner_attributes', "dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = ?", array(
+                     ->from('toners', ['*'])
+                     ->joinLeft('device_toners', 'toner_id = toners.id', [null])
+                     ->joinLeft('dealer_toner_attributes', "dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = ?", [
                          "dealerSku",
-                     ))
-                     ->joinLeft('client_toner_orders', "client_toner_orders.tonerId = toners.id AND client_toner_orders.clientId = ?", array(
+                     ])
+                     ->joinLeft('client_toner_orders', "client_toner_orders.tonerId = toners.id AND client_toner_orders.clientId = ?", [
                          "calculatedCost"         => "COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost)",
                          "isUsingCustomerPricing" => "IF(client_toner_orders.cost IS NOT NULL, TRUE, FALSE)",
                          "isUsingDealerPricing"   => "IF(client_toner_orders.cost IS NULL AND dealer_toner_attributes.cost IS NOT NULL, TRUE, FALSE)",
-                     ))
+                     ])
                      ->where('master_device_id = ?', $masterDeviceId);
 
 
-        $stmt = $db->query($select, array($dealerId, $clientId));
+        $stmt = $db->query($select, [$dealerId, $clientId]);
 
         $result     = $stmt->fetchAll();
         $tonerArray = false;
@@ -397,7 +397,7 @@ WHERE `device_toners`.`master_device_id` = ?';
 
         $query = $db->query($sql);
 
-        $toners = array();
+        $toners = [];
         foreach ($query->fetchAll() as $row)
         {
             $toner = $this->getItemFromCache($row[$this->col_id]);
@@ -769,18 +769,18 @@ WHERE `toners`.`id` IN ({$tonerIdList})
             $toner        = TonerMapper::getInstance()->find($tonerId);
             $tonerColorId = $toner->tonerColorId;
             $select       = $db->select()
-                               ->from('toners', array(
+                               ->from('toners', [
                                    'tonerId'    => 'id',
                                    'systemSku'  => 'sku',
                                    'systemCost' => 'cost',
                                    'deviceName' => 'CONCAT(manufacturers.fullname," ",master_devices.modelName)',
                                    'tonerColorId',
-                                   'yield'
-                               ))
-                               ->joinLeft('device_toners', 'device_toners.toner_id = toners.id', array())
-                               ->joinLeft('master_devices', 'master_devices.id = device_toners.master_device_id', array())
-                               ->joinLeft('manufacturers', 'manufacturers.id = master_devices.manufacturerId', array())
-                               ->joinLeft('dealer_toner_attributes', 'dealer_toner_attributes.tonerId = toners.id', array('dealerSku', 'dealerCost' => 'cost'))
+                                   'yield',
+                               ])
+                               ->joinLeft('device_toners', 'device_toners.toner_id = toners.id', [])
+                               ->joinLeft('master_devices', 'master_devices.id = device_toners.master_device_id', [])
+                               ->joinLeft('manufacturers', 'manufacturers.id = master_devices.manufacturerId', [])
+                               ->joinLeft('dealer_toner_attributes', 'dealer_toner_attributes.tonerId = toners.id', ['dealerSku', 'dealerCost' => 'cost'])
 //                      ->where("toners.{$this->col_id} = ?", $tonerId)
                                ->where("master_devices.id in (SELECT master_device_id from device_toners AS dt where dt.toner_id = {$tonerId})")
                                ->where("toners.{$this->col_tonerColorId} = ?", $tonerColorId)
@@ -817,9 +817,9 @@ WHERE `toners`.`id` IN ({$tonerIdList})
         $colorManufacturerPreference      = $db->quoteInto($colorManufacturerPreference, "STRING");
         $sql                              = "CALL getCheapestTonersForDevice(?,?,?,?,?)";
 
-        $query   = $db->query($sql, array($masterDeviceId, $dealerId, $monochromeManufacturerPreference, $colorManufacturerPreference, $clientId));
+        $query   = $db->query($sql, [$masterDeviceId, $dealerId, $monochromeManufacturerPreference, $colorManufacturerPreference, $clientId]);
         $results = $query->fetchAll();
-        $toners  = array();
+        $toners  = [];
         foreach ($results as $row)
         {
             $toners [$row[$this->col_tonerColorId]] = new TonerModel($row);
@@ -837,7 +837,7 @@ WHERE `toners`.`id` IN ({$tonerIdList})
      */
     public function fetchBySku ($sku)
     {
-        return $this->fetch(array("{$this->col_sku} = ?" => "{$sku}"));
+        return $this->fetch(["{$this->col_sku} = ?" => "{$sku}"]);
     }
 
     /**
@@ -850,10 +850,10 @@ WHERE `toners`.`id` IN ({$tonerIdList})
      */
     public function fetchBySkuAndManufacturer ($sku, $manufacturerId)
     {
-        return $this->fetch(array(
+        return $this->fetch([
             "{$this->col_sku} = ?"            => "{$sku}",
-            "{$this->col_manufacturerId} = ?" => "{$manufacturerId}"
-        ));
+            "{$this->col_manufacturerId} = ?" => "{$manufacturerId}",
+        ]);
     }
 
     /**
@@ -870,30 +870,14 @@ WHERE `toners`.`id` IN ({$tonerIdList})
         $db->beginTransaction();
 
         $select = $db->select()
-                     ->from(array(
-                             't' => 'toners'), array(
-                             'id AS toners_id', 'sku', 'yield', "systemCost" => "cost"
-                         )
-                     )
-                     ->joinLeft(array(
-                         'dt' => 'device_toners'
-                     ), 'dt.toner_id = t.id', array(
-                         'master_device_id'
-                     ))
-                     ->joinLeft(array(
-                         'tm' => 'manufacturers'
-                     ), 'tm.id = t.manufacturerId', array(
-                         'fullname'
-                     ))
-                     ->joinLeft(array(
-                         'tc' => 'toner_colors'
-                     ), 'tc.id = t.tonerColorId', array('name AS toner_color'))
-                     ->joinLeft(array('dta' => 'dealer_toner_attributes'), "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", array('cost', 'dealerSku'))
+                     ->from(['t' => 'toners'], ['toners_id' => 'id', 'sku', 'yield', "systemCost" => "cost"])
+                     ->joinLeft(['dt' => 'device_toners'], 'dt.toner_id = t.id', ['master_device_id'])
+                     ->joinLeft(['tm' => 'manufacturers'], 'tm.id = t.manufacturerId', ['fullname'])
+                     ->joinLeft(['tc' => 'toner_colors'], 'tc.id = t.tonerColorId', ['name AS toner_color'])
+                     ->joinLeft(['dta' => 'dealer_toner_attributes'], "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", ['cost', 'dealerSku'])
                      ->where("t.id > 0")
                      ->group('t.id')
-                     ->order(array(
-                         'tm.fullname'
-                     ));
+                     ->order(['tm.fullname']);
 
         if ($manufacturerId > 0)
         {
@@ -903,10 +887,10 @@ WHERE `toners`.`id` IN ({$tonerIdList})
         $stmt   = $db->query($select);
         $result = $stmt->fetchAll();
 
-        $fieldList = array();
+        $fieldList = [];
         foreach ($result as $value)
         {
-            $fieldList [] = array(
+            $fieldList [] = [
                 $value ['toners_id'],
                 $value ['fullname'],
                 $value ['sku'],
@@ -915,7 +899,7 @@ WHERE `toners`.`id` IN ({$tonerIdList})
                 $value ['systemCost'],
                 $value ['dealerSku'],
                 $value ['cost'],
-            );
+            ];
         }
 
         return $fieldList;
@@ -930,7 +914,7 @@ WHERE `toners`.`id` IN ({$tonerIdList})
      */
     public function getDbNoRecordExistsValidator ($manufacturerId, $tonerModel = null)
     {
-        $noRecordExistsArray          = array();
+        $noRecordExistsArray          = [];
         $noRecordExistsArray['table'] = $this->getTableName();
         $noRecordExistsArray['field'] = $this->col_sku;
 
@@ -1058,7 +1042,7 @@ FROM toners
      */
     public function getCompatibleToners ($tonerId, $clientId = null)
     {
-        $toners = array();
+        $toners = [];
 
         if ($tonerId instanceof TonerModel)
         {
@@ -1089,7 +1073,7 @@ WHERE dt.master_device_id IN (SELECT
                                                                                                        WHERE toners.id = ?)
 GROUP BY dt.toner_id
 ORDER BY cpp ASC';
-            $stmt     = $db->query($sql, array($dealerId, $clientId, $tonerId, $tonerId, $tonerId));
+            $stmt     = $db->query($sql, [$dealerId, $clientId, $tonerId, $tonerId, $tonerId]);
             $result   = $stmt->fetchAll();
 
             foreach ($result as $tonerData)
@@ -1122,7 +1106,7 @@ ORDER BY cpp ASC';
     public function findCompatibleToners ($tonerId, $clientId = null, $dealerId = null)
     {
         $db     = $this->getDbTable()->getDefaultAdapter();
-        $toners = array();
+        $toners = [];
 
         if ($tonerId instanceof TonerModel)
         {
@@ -1171,7 +1155,7 @@ WHERE dt.master_device_id IN
 GROUP BY dt.toner_id
 ORDER BY cpp ASC';
 
-        $result = $db->query($sql, array($dealerId, $clientId, $tonerId, $tonerId, $tonerId))->fetchAll();
+        $result = $db->query($sql, [$dealerId, $clientId, $tonerId, $tonerId, $tonerId])->fetchAll();
         foreach ($result as $tonerData)
         {
             $newTonerId = $tonerData['id'];
@@ -1202,7 +1186,7 @@ ORDER BY cpp ASC';
      */
     public function findOemToners ($tonerId, $clientId = null, $dealerId = null)
     {
-        $toners = array();
+        $toners = [];
 
         if ($tonerId instanceof TonerModel)
         {
@@ -1251,7 +1235,7 @@ WHERE dt.master_device_id IN
 GROUP BY dt.toner_id
 ORDER BY cpp ASC';
 
-        $result = $db->query($sql, array($dealerId, $clientId, $tonerId, $tonerId, $tonerId))->fetchAll();
+        $result = $db->query($sql, [$dealerId, $clientId, $tonerId, $tonerId, $tonerId])->fetchAll();
 
         foreach ($result as $tonerData)
         {

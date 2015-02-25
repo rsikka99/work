@@ -79,9 +79,9 @@ class UserSessionMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_sessionId} = ?" => $primaryKey
-        ));
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -102,15 +102,15 @@ class UserSessionMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof UserSessionModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_sessionId} = ?" => $object->sessionId
-            );
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_sessionId} = ?" => $object
-            );
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -195,7 +195,7 @@ class UserSessionMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new UserSessionModel($row->toArray());
@@ -216,7 +216,7 @@ class UserSessionMapper extends My_Model_Mapper_Abstract
      */
     public function fetchSessionsByUserId ($userId)
     {
-        return $this->fetchAll(array("{$this->col_userId} = ?" => $userId));
+        return $this->fetchAll(["{$this->col_userId} = ?" => $userId]);
     }
 
     /**
@@ -228,9 +228,9 @@ class UserSessionMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_sessionId} = ?" => $id
-        );
+        ];
     }
 
     /**

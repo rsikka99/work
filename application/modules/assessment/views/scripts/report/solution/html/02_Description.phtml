@@ -1,8 +1,8 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$this->brandName = My_Brand::getDealerBranding()->mpsProgramName;
-$this->companyName = My_Brand::getDealerBranding()->shortDealerName;
+$this->brandName     = My_Brand::getDealerBranding()->mpsProgramName;
+$this->companyName   = My_Brand::getDealerBranding()->shortDealerName;
 ?>
 <div class="h1">Your <?= My_Brand::getDealerBranding()->solutionTitle ?></div>
 <p>Based on your <?= My_Brand::getDealerBranding()->assessmentTitle ?>, we have developed a selection of managed print solutions to meet your specific business
@@ -29,7 +29,8 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
                 <li>Meters are collected automatically for accurate invoicing.</li>
             </ul>
         </li>
-        <li><strong>Start receiving just-in-time supplies and proactive maintenance and service</strong>
+        <li>
+            <strong>Start receiving just-in-time supplies and proactive maintenance and service</strong>
             <ul>
                 <li>Just-in-time supplies fulfillment means we will know when you are running low on supplies and will ship you the correct items when you need
                     them.
@@ -37,13 +38,15 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
                 <li>Printer maintenance ensures your hardware stays in the best condition possible and next-day service is available for break-fix issues.</li>
             </ul>
         </li>
-        <li><strong>Consolidate managed print expenses into a single invoice</strong>
+        <li>
+            <strong>Consolidate managed print expenses into a single invoice</strong>
             <ul>
                 <li>Pay a per-page rate that includes supplies and service for existing printer hardware.</li>
                 <li>Pay a flat monthly rate for new printer hardware and related supplies and service.</li>
             </ul>
         </li>
-        <li><strong>Consider migrating new printing hardware to a flat-rate program</strong>
+        <li>
+            <strong>Consider migrating new printing hardware to a flat-rate program</strong>
             <ul>
                 <li>Your printing hardware will no longer be your responsibility to maintain.</li>
                 <li>We will work with you to provide the exact hardware you need, when and where you need it, and eliminate old, expensive and unnecessary

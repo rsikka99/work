@@ -84,10 +84,10 @@ class OptionCategoryMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_categoryId} = ?" => $primaryKey [0],
-            "{$this->col_optionId} = ?"   => $primaryKey [1]
-        ));
+            "{$this->col_optionId} = ?"   => $primaryKey [1],
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -108,17 +108,17 @@ class OptionCategoryMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof OptionCategoryModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_categoryId} = ?" => $object->categoryId,
-                "{$this->col_optionId} = ?"   => $object->optionId
-            );
+                "{$this->col_optionId} = ?"   => $object->optionId,
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_categoryId} = ?" => $object [0],
-                "{$this->col_optionId} = ?"   => $object [1]
-            );
+                "{$this->col_optionId} = ?"   => $object [1],
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -138,15 +138,15 @@ class OptionCategoryMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof OptionModel)
         {
-            $whereClause = array(
-                "{$this->col_optionId} = ?" => $object->id
-            );
+            $whereClause = [
+                "{$this->col_optionId} = ?" => $object->id,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_optionId} = ?" => $object
-            );
+            $whereClause = [
+                "{$this->col_optionId} = ?" => $object,
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -166,15 +166,15 @@ class OptionCategoryMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof CategoryModel)
         {
-            $whereClause = array(
-                "{$this->col_categoryId} = ?" => $object->id
-            );
+            $whereClause = [
+                "{$this->col_categoryId} = ?" => $object->id,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_categoryId} = ?" => $object
-            );
+            $whereClause = [
+                "{$this->col_categoryId} = ?" => $object,
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -261,7 +261,7 @@ class OptionCategoryMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new OptionCategoryModel($row->toArray());
@@ -286,10 +286,10 @@ class OptionCategoryMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_categoryId} = ?" => $id [0],
-            "{$this->col_optionId} = ?"   => $id [1]
-        );
+            "{$this->col_optionId} = ?"   => $id [1],
+        ];
     }
 
     /**
@@ -301,14 +301,14 @@ class OptionCategoryMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllCategoriesForOption ($optionId)
     {
-        $categories = array();
+        $categories = [];
         try
         {
 
             $categoryMapper   = CategoryMapper::getInstance();
-            $optionCategories = $this->fetchAll(array(
+            $optionCategories = $this->fetchAll([
                 "{$this->col_optionId} = ?" => $optionId
-            ));
+            ]);
 
             foreach ($optionCategories as $optionCategory)
             {
@@ -330,10 +330,10 @@ class OptionCategoryMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
+        return [
             $object->categoryId,
-            $object->optionId
-        );
+            $object->optionId,
+        ];
     }
 }
 

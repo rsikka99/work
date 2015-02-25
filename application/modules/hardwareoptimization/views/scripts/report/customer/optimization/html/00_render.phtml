@@ -15,21 +15,21 @@ $customerOptimization = new OptimizationCustomerModel($hardwareOptimization);
 
 $graphs = $customerOptimization->getGraphs();
 
-$titleData = array(
+$titleData = [
     "hardwareOptimization" => $hardwareOptimization,
     "dealerLogoFile"       => $this->dealerLogoFile,
     "companyName"          => My_Brand::getDealerBranding()->shortDealerName,
-);
+];
 
 $profitabilityDevices = new OptimizationCustomerModel($hardwareOptimization);
 
-$data = array(
+$data = [
     "hardwareOptimization" => $hardwareOptimization,
     "optimization"         => $optimization,
     "customerOptimization" => $customerOptimization,
     "graphs"               => $graphs,
     "companyName"          => My_Brand::getDealerBranding()->shortDealerName,
-);
+];
 ?>
 <div class="container-fluid">
     <div class="row">

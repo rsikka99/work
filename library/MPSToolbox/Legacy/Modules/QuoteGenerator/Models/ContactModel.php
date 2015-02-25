@@ -79,13 +79,13 @@ class ContactModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"          => $this->id,
             "clientId"    => $this->clientId,
             "firstName"   => $this->firstName,
             "lastName"    => $this->lastName,
             "phoneNumber" => $this->phoneNumber,
-        );
+        ];
     }
 
     /**

@@ -8,13 +8,13 @@ class Library_Tangent_AccountingTest extends PHPUnit_Framework_TestCase
      */
     public function addMarginData ()
     {
-        return array(
-            array(1, 20, 1.25,),
-            array(4, 99.2, 500,),
-            array(-1, 20, 0,),
-            array(1, -20, 0.8,),
-            array(-1, -20, 0,),
-        );
+        return [
+            [1, 20, 1.25,],
+            [4, 99.2, 500,],
+            [-1, 20, 0,],
+            [1, -20, 0.8,],
+            [-1, -20, 0,],
+        ];
     }
 
     /**
@@ -30,10 +30,10 @@ class Library_Tangent_AccountingTest extends PHPUnit_Framework_TestCase
      */
     public function outOfBoundsMarginData ()
     {
-        return array(
-            array(1, -150,),
-            array(1, 150,),
-        );
+        return [
+            [1, -150,],
+            [1, 150,],
+        ];
     }
 
     /**
@@ -50,12 +50,12 @@ class Library_Tangent_AccountingTest extends PHPUnit_Framework_TestCase
      */
     public function reverseMarginData ()
     {
-        return array(
-            array(1, 1.25, 20,),
-            array(-1, 1.25, 0,),
-            array(1, -1.25, 0,),
-            array(-1, -1.25, 0),
-        );
+        return [
+            [1, 1.25, 20,],
+            [-1, 1.25, 0,],
+            [1, -1.25, 0,],
+            [-1, -1.25, 0],
+        ];
     }
 
     /**

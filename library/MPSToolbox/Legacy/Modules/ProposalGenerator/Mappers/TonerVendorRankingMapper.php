@@ -81,10 +81,10 @@ class TonerVendorRankingMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_tonerVendorRankingSetId} = ?" => $primaryKey[0],
-            "{$this->col_manufacturerId} = ?"          => $primaryKey[1]
-        ));
+            "{$this->col_manufacturerId} = ?"          => $primaryKey[1],
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -105,17 +105,17 @@ class TonerVendorRankingMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof TonerVendorRankingModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_tonerVendorRankingSetId} = ?" => $object->tonerVendorRankingSetId,
-                "{$this->col_manufacturerId} = ?"          => $object->manufacturerId
-            );
+                "{$this->col_manufacturerId} = ?"          => $object->manufacturerId,
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_tonerVendorRankingSetId} = ?" => $object[0],
-                "{$this->col_manufacturerId} = ?"          => $object[1]
-            );
+                "{$this->col_manufacturerId} = ?"          => $object[1],
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -132,9 +132,9 @@ class TonerVendorRankingMapper extends My_Model_Mapper_Abstract
      */
     public function deleteByTonerVendorRankingId ($id)
     {
-        $whereClause = array(
+        $whereClause = [
             "{$this->col_tonerVendorRankingSetId} = ?" => $id,
-        );
+        ];
 
         return $this->getDbTable()->delete($whereClause);
     }
@@ -216,7 +216,7 @@ class TonerVendorRankingMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new TonerVendorRankingModel($row->toArray());
@@ -239,10 +239,10 @@ class TonerVendorRankingMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_tonerVendorRankingSetId} = ?" => $id[0],
-            "{$this->col_manufacturerId} = ?"          => $id[1]
-        );
+            "{$this->col_manufacturerId} = ?"          => $id[1],
+        ];
     }
 
     /**
@@ -252,10 +252,10 @@ class TonerVendorRankingMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
+        return [
             $object->tonerVendorRankingSetId,
-            $object->manufacturerId
-        );
+            $object->manufacturerId,
+        ];
     }
 
     /**
@@ -267,11 +267,11 @@ class TonerVendorRankingMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllByRankingSetIdAsArray ($rankId)
     {
-        $selectedRanks = array();
+        $selectedRanks = [];
 
         if ($rankId !== null)
         {
-            foreach ($this->fetchAll(array("{$this->col_tonerVendorRankingSetId} = ?" => $rankId), "{$this->col_rank} ASC") as $tonerVendorRanking)
+            foreach ($this->fetchAll(["{$this->col_tonerVendorRankingSetId} = ?" => $rankId], "{$this->col_rank} ASC") as $tonerVendorRanking)
             {
                 $selectedRanks[$tonerVendorRanking->rank] = $tonerVendorRanking->manufacturerId;
             }
@@ -287,11 +287,11 @@ class TonerVendorRankingMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllByRankingSetId ($rankId)
     {
-        $selectedRanks = array();
+        $selectedRanks = [];
 
         if ($rankId !== null)
         {
-            $selectedRanks = $this->fetchAll(array("{$this->col_tonerVendorRankingSetId} = ?" => $rankId), "{$this->col_rank} ASC");
+            $selectedRanks = $this->fetchAll(["{$this->col_tonerVendorRankingSetId} = ?" => $rankId], "{$this->col_rank} ASC");
         }
 
         return $selectedRanks;

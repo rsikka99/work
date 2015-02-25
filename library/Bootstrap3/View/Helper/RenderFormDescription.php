@@ -19,7 +19,7 @@ class RenderFormDescription extends RenderFormAbstract
      */
     public function RenderFormDescription (\Zend_Form_Element $element, $class = "help-block")
     {
-        $html = array();
+        $html = [];
         if ($element instanceof \Zend_Form_Element)
         {
             if (strlen($element->getDescription()) > 0)

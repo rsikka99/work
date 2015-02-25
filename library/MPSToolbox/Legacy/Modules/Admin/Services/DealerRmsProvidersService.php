@@ -63,7 +63,7 @@ class DealerRmsProvidersService extends BaseService
 
                 if ($delete)
                 {
-                    $dealerRmsProviderMapper->delete(array((int)$dealerId, $oldRmsProviderId));
+                    $dealerRmsProviderMapper->delete([(int)$dealerId, $oldRmsProviderId]);
                 }
             }
         }
@@ -71,7 +71,7 @@ class DealerRmsProvidersService extends BaseService
         {
             foreach ($currentRmsProviderRmsProviderIds as $oldRmsProviderId)
             {
-                $dealerRmsProviderMapper->delete(array((int)$dealerId, $oldRmsProviderId));
+                $dealerRmsProviderMapper->delete([(int)$dealerId, $oldRmsProviderId]);
             }
         }
     }
@@ -85,7 +85,7 @@ class DealerRmsProvidersService extends BaseService
      */
     public function getDealerRmsProvidersAsArray ($dealerId)
     {
-        $rmsProviderArray = array();
+        $rmsProviderArray = [];
 
         foreach (DealerRmsProviderMapper::getInstance()->fetchAllForDealer($dealerId) as $dealerRmsProvider)
         {

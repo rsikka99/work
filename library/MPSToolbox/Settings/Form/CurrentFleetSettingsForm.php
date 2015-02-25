@@ -39,49 +39,49 @@ class CurrentFleetSettingsForm extends \Zend_Form
         /**
          * Current Fleet Settings
          */
-        $this->addElement('checkbox', 'currentUseDevicePageCoverages', array(
+        $this->addElement('checkbox', 'currentUseDevicePageCoverages', [
             'label'       => 'Use Device Page Coverages',
             'description' => 'Use the actual page coverage value reported by the RMS.',
-        ));
+        ]);
 
-        $this->addElement('text', 'currentPageCoverageMono', array(
+        $this->addElement('text', 'currentPageCoverageMono', [
             'label'       => 'Default Monochrome Coverage',
             'description' => 'Apply this coverage to determine the toner costs of all monochrome pages.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'currentPageCoverageColor', array(
+        $this->addElement('text', 'currentPageCoverageColor', [
             'label'       => 'Default Color Coverage',
             'description' => 'Apply this coverage to determine the toner costs of all color (CMYK) pages.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('multiselect', 'currentMonochromeRankSetArray', array(
+        $this->addElement('multiselect', 'currentMonochromeRankSetArray', [
             'label'        => 'Monochrome Toner Vendors',
             'description'  => 'Which supply vendor(s) is the customer currently using for <strong>monochrome devices</strong>?<br><em>Note: The system always uses OEM as the <strong>last</strong> option. If you leave this blank then it will use <strong>only OEM</strong> supplies.</em>',
             'class'        => 'tonerMultiselect',
             'multiOptions' => $tonerVendors,
-        ));
+        ]);
 
-        $this->addElement('multiselect', 'currentColorRankSetArray', array(
+        $this->addElement('multiselect', 'currentColorRankSetArray', [
             'label'        => 'Color Toner Vendors',
             'description'  => 'Which supply vendor(s) is the customer currently using for <strong>color devices</strong>?<br><em>Note: The system always uses OEM as the <strong>last</strong> option. If you leave this blank then it will use <strong>only OEM</strong> supplies.</em>',
             'class'        => 'tonerMultiselect',
             'multiOptions' => $tonerVendors,
-        ));
+        ]);
 
         /**
          * Form Actions
          */
-        $this->addElement('submit', 'save', array(
+        $this->addElement('submit', 'save', [
             'label' => 'Submit',
             'class' => 'btn btn-primary',
-        ));
+        ]);
 
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'label' => 'Cancel',
-            'class' => 'btn btn-default'
-        ));
+            'class' => 'btn btn-default',
+        ]);
     }
 
     /**
@@ -91,13 +91,13 @@ class CurrentFleetSettingsForm extends \Zend_Form
     {
         if ($fleetSettings instanceof FleetSettingsEntity)
         {
-            $fleetSettings = array(
+            $fleetSettings = [
                 'currentUseDevicePageCoverages' => $fleetSettings->useDevicePageCoverages,
                 'currentPageCoverageMono'       => $fleetSettings->defaultMonochromeCoverage,
                 'currentPageCoverageColor'      => $fleetSettings->defaultColorCoverage,
                 'currentMonochromeRankSetArray' => $fleetSettings->getMonochromeRankSet()->getRanksAsArray(),
                 'currentColorRankSetArray'      => $fleetSettings->getColorRankSet()->getRanksAsArray(),
-            );
+            ];
         }
 
         if ($fleetSettings)
@@ -134,7 +134,7 @@ class CurrentFleetSettingsForm extends \Zend_Form
      */
     public function getMonochromeRanks ()
     {
-        $tonerRanks = array();
+        $tonerRanks = [];
 
         $manufacturerIds = $this->getValue('currentMonochromeRankSetArray');
         if ($manufacturerIds)
@@ -160,7 +160,7 @@ class CurrentFleetSettingsForm extends \Zend_Form
      */
     public function getColorRanks ()
     {
-        $tonerRanks = array();
+        $tonerRanks = [];
 
         $manufacturerIds = $this->getValue('currentColorRankSetArray');
         if ($manufacturerIds)

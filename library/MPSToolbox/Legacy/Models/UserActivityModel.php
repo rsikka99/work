@@ -56,10 +56,10 @@ class UserActivityModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "userId"   => $this->userId,
             "lastSeen" => $this->lastSeen,
             "url"      => $this->url,
-        );
+        ];
     }
 }

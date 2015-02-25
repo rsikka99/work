@@ -29,7 +29,7 @@ class Quotegen_ConfigurationController extends Action
     {
         // Display all of the deviceConfigurations
         $mapper    = DeviceConfigurationMapper::getInstance();
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper, array("dealerId = ?" => Zend_Auth::getInstance()->getIdentity()->dealerId)));
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper, ["dealerId = ?" => Zend_Auth::getInstance()->getIdentity()->dealerId]));
 
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
@@ -52,9 +52,9 @@ class Quotegen_ConfigurationController extends Action
 
         if (!$deviceConfigurationId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'warning' => 'Please select a device configuration to delete first.'
-            ));
+            ]);
             $this->redirectToRoute('quotes.configurations');
         }
 
@@ -63,14 +63,14 @@ class Quotegen_ConfigurationController extends Action
 
         if (!$deviceConfiguration)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'There was an error selecting the device configuration to delete.'
-            ));
+            ]);
 
             if ($page == "configurations")
             {
                 // User has cancelled. Go back to the edit page
-                $this->redirectToRoute('hardware-library.all-devices.configurations', array('id' => $id));
+                $this->redirectToRoute('hardware-library.all-devices.configurations', ['id' => $id]);
             }
             else
             {
@@ -92,14 +92,14 @@ class Quotegen_ConfigurationController extends Action
                 if ($form->isValid($values))
                 {
                     $mapper->delete($deviceConfiguration);
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'success' => "Device configuration \"{$deviceConfiguration->name}\" was deleted successfully."
-                    ));
+                    ]);
 
                     if ($page == "configurations")
                     {
                         // User has cancelled. Go back to the edit page
-                        $this->redirectToRoute('hardware-library.all-devices.configurations', array('id' => $id));
+                        $this->redirectToRoute('hardware-library.all-devices.configurations', ['id' => $id]);
                     }
                     else
                     {
@@ -113,7 +113,7 @@ class Quotegen_ConfigurationController extends Action
                 if ($page == "configurations")
                 {
                     // User has cancelled. Go back to the edit page
-                    $this->redirectToRoute('hardware-library.all-devices.configurations', array('id' => $id));
+                    $this->redirectToRoute('hardware-library.all-devices.configurations', ['id' => $id]);
                 }
                 else
                 {
@@ -138,7 +138,7 @@ class Quotegen_ConfigurationController extends Action
         $form = new ConfigurationForm();
         if (count($form->getElement('masterDeviceId')->getMultiOptions()) < 1)
         {
-            $this->_flashMessenger->addMessage(array("warning" => "There are no available devices to configure."));
+            $this->_flashMessenger->addMessage(["warning" => "There are no available devices to configure."]);
             $this->redirectToRoute('quotes.configurations');
         }
 
@@ -221,12 +221,12 @@ class Quotegen_ConfigurationController extends Action
 
                         }
 
-                        $this->_flashMessenger->addMessage(array('success' => 'Your configuration was successfully created.'));
+                        $this->_flashMessenger->addMessage(['success' => 'Your configuration was successfully created.']);
 
                         if ($page == "configurations")
                         {
                             // User has cancelled. Go back to the edit page
-                            $this->redirectToRoute('hardware-library.all-devices.configurations', array('id' => $masterDeviceId));
+                            $this->redirectToRoute('hardware-library.all-devices.configurations', ['id' => $masterDeviceId]);
                         }
                         else
                         {
@@ -236,12 +236,12 @@ class Quotegen_ConfigurationController extends Action
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array('danger' => 'Please correct the errors below.'));
+                        $this->_flashMessenger->addMessage(['danger' => 'Please correct the errors below.']);
                     }
                 }
                 catch (Exception $e)
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => 'There was an error creating this configuration. Please try again.'));
+                    $this->_flashMessenger->addMessage(['danger' => 'There was an error creating this configuration. Please try again.']);
                     Throw new exception("Critical Company Update Error.", 0, $e);
 
                 }
@@ -252,7 +252,7 @@ class Quotegen_ConfigurationController extends Action
                 if ($page == "configurations")
                 {
                     // User has cancelled. Go back to the edit page
-                    $this->redirectToRoute('quotes.configurations', array('id' => $masterDeviceId));
+                    $this->redirectToRoute('quotes.configurations', ['id' => $masterDeviceId]);
                 }
                 else
                 {
@@ -262,15 +262,15 @@ class Quotegen_ConfigurationController extends Action
             }
         }
         // Add form to page
-        $form->setDecorators(array(
-            array(
+        $form->setDecorators([
+            [
                 'ViewScript',
-                array(
+                [
                     'viewScript'    => 'forms/quotegen/configurations/create-device-configuration-form.phtml',
                     'deviceOptions' => $deviceOptions
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
 
         $this->view->form = $form;
     }
@@ -287,12 +287,12 @@ class Quotegen_ConfigurationController extends Action
         // If they haven't provided an id, send them back to the view all deviceConfiguration page
         if (!$deviceConfigurationId)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a device configuration to edit first.'));
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a device configuration to edit first.']);
 
             if ($page == "configurations")
             {
                 // User has cancelled. Go back to the edit page
-                $this->redirectToRoute('hardware-library.all-devices.configurations', array('id' => $id));
+                $this->redirectToRoute('hardware-library.all-devices.configurations', ['id' => $id]);
             }
             else
             {
@@ -308,12 +308,12 @@ class Quotegen_ConfigurationController extends Action
         // If the deviceConfiguration doesn't exist, send them back to the view all deviceConfigurations page
         if (!$deviceConfiguration)
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the device configuration to edit.'));
+            $this->_flashMessenger->addMessage(['danger' => 'There was an error selecting the device configuration to edit.']);
 
             if ($page == "configurations")
             {
                 // User has cancelled. Go back to the edit page
-                $this->redirectToRoute('hardware-library.all-devices.configurations', array('id' => $id));
+                $this->redirectToRoute('hardware-library.all-devices.configurations', ['id' => $id]);
             }
             else
             {
@@ -324,7 +324,7 @@ class Quotegen_ConfigurationController extends Action
         // If there is a device configuration but it's not with our dealer
         else if ($deviceConfiguration->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'You do not have permission to access this.'));
+            $this->_flashMessenger->addMessage(['danger' => 'You do not have permission to access this.']);
 
             // User has cancelled. Go back to the edit page
             $this->redirectToRoute('quotes.configurations');
@@ -361,7 +361,7 @@ class Quotegen_ConfigurationController extends Action
                 if ($page == "configurations")
                 {
                     // User has cancelled. Go back to the edit page
-                    $this->redirectToRoute('hardware-library.all-devices.configurations', array('id' => $id));
+                    $this->redirectToRoute('hardware-library.all-devices.configurations', ['id' => $id]);
                 }
                 else
                 {
@@ -419,12 +419,12 @@ class Quotegen_ConfigurationController extends Action
                             }
                         }
 
-                        $this->_flashMessenger->addMessage(array('success' => 'Your configuration was successfully updated.'));
+                        $this->_flashMessenger->addMessage(['success' => 'Your configuration was successfully updated.']);
 
                         if ($page == "configurations")
                         {
                             // User has cancelled. Go back to the edit page
-                            $this->redirectToRoute('hardware-library.all-devices.configurations', array('id' => $id));
+                            $this->redirectToRoute('hardware-library.all-devices.configurations', ['id' => $id]);
                         }
                         else
                         {
@@ -434,29 +434,29 @@ class Quotegen_ConfigurationController extends Action
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'danger' => 'Please correct the errors below.'
-                        ));
+                        ]);
                     }
                 }
                 catch (InvalidArgumentException $e)
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => $e->getMessage()));
+                    $this->_flashMessenger->addMessage(['danger' => $e->getMessage()]);
                 }
             }
         }
 
         // Add form to page
-        $form->setDecorators(array(
-            array(
+        $form->setDecorators([
+            [
                 'ViewScript',
-                array(
+                [
                     'viewScript'            => 'forms/quotegen/configurations/edit-device-configuration-form.phtml',
                     'deviceOptions'         => $deviceOptions,
                     'deviceConfigurationId' => $deviceConfigurationId
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
         $this->view->form = $form;
     }
 
@@ -472,12 +472,12 @@ class Quotegen_ConfigurationController extends Action
         $availableOptions = OptionMapper::getInstance()->fetchAll();
         if (count($availableOptions) < 1)
         {
-            $this->_flashMessenger->addMessage(array('info' => "There are no more options to add to this device."));
+            $this->_flashMessenger->addMessage(['info' => "There are no more options to add to this device."]);
 
             if ($page == "configurations")
             {
                 // User has cancelled. Go back to the edit page
-                $this->redirectToRoute('hardware-library.all-devices.configurations', array('id' => $id));
+                $this->redirectToRoute('hardware-library.all-devices.configurations', ['id' => $id]);
             }
             else
             {
@@ -496,7 +496,7 @@ class Quotegen_ConfigurationController extends Action
         // Get selected options for device
         $where               = "deviceConfigurationId = {$configurationId}";
         $selectedOptions     = DeviceConfigurationOptionMapper::getInstance()->fetchAll($where);
-        $selectedOptionsList = array();
+        $selectedOptionsList = [];
         foreach ($selectedOptions as $option)
         {
             $selectedOptionsList [] = $option->optionId;
@@ -538,18 +538,18 @@ class Quotegen_ConfigurationController extends Action
                                 $insertedOptions++;
                             }
 
-                            $this->_flashMessenger->addMessage(array('success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->name}."));
+                            $this->_flashMessenger->addMessage(['success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->name}."]);
                         }
                         catch (Exception $e)
                         {
-                            $this->_flashMessenger->addMessage(array('danger' => "Failed to add options to configuration. Please try again."));
+                            $this->_flashMessenger->addMessage(['danger' => "Failed to add options to configuration. Please try again."]);
                         }
 
 
                         if ($page == "configurations")
                         {
                             // User has cancelled. Go back to the edit page
-                            $this->redirectToRoute('hardware-library.all-devices.configurations', array('id' => $id));
+                            $this->redirectToRoute('hardware-library.all-devices.configurations', ['id' => $id]);
                         }
                         else
                         {
@@ -564,7 +564,7 @@ class Quotegen_ConfigurationController extends Action
                 }
                 catch (InvalidArgumentException $e)
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => $e->getMessage()));
+                    $this->_flashMessenger->addMessage(['danger' => $e->getMessage()]);
                 }
             }
             else
@@ -572,7 +572,7 @@ class Quotegen_ConfigurationController extends Action
                 if ($page == "configurations")
                 {
                     // User has cancelled. Go back to the edit page
-                    $this->redirectToRoute('hardware-library.all-devices.configurations', array('id' => $id));
+                    $this->redirectToRoute('hardware-library.all-devices.configurations', ['id' => $id]);
                 }
                 else
                 {
@@ -599,14 +599,14 @@ class Quotegen_ConfigurationController extends Action
             $deviceConfigurationOption->deviceConfigurationId = $id;
             $deviceConfigurationOption->optionId              = $optionId;
             DeviceConfigurationOptionMapper::getInstance()->delete($deviceConfigurationOption);
-            $this->_flashMessenger->addMessage(array('success' => "Configuration Option deleted successfully."));
+            $this->_flashMessenger->addMessage(['success' => "Configuration Option deleted successfully."]);
         }
         catch (Exception $e)
         {
-            $this->_flashMessenger->addMessage(array('error' => "Could not delete that configuration option."));
+            $this->_flashMessenger->addMessage(['error' => "Could not delete that configuration option."]);
         }
 
-        $this->redirectToRoute('hardware-library.all-devices.edit', array('id' => $id));
+        $this->redirectToRoute('hardware-library.all-devices.edit', ['id' => $id]);
     }
 }
 

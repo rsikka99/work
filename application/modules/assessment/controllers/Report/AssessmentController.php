@@ -14,7 +14,7 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Assessment');
+        $this->_pageTitle = ['Assessment'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
 
@@ -23,9 +23,9 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
 
         $this->view->availableReports['Assessment']['active'] = true;
 
-        $this->view->formats = array(
-            "/assessment/report_assessment/generate/format/docx" => $this->_wordFormat
-        );
+        $this->view->formats = [
+            "/assessment/report_assessment/generate/format/docx" => $this->_wordFormat,
+        ];
 
         $this->view->reportTitle = My_Brand::getDealerBranding()->assessmentTitle;
 

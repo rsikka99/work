@@ -20,12 +20,12 @@ $section->addText(sprintf('You can save an additional %1$s over the first month 
     number_format($healthcheckViewModel->calculateOptimizedTonerOrderSavingPercentage())
 ));
 
-$cellWidths             = array(
+$cellWidths             = [
     4000,
     1805,
     1805,
     1805
-);
+];
 $totalNetSavings        = 0;
 $tonerOrderSavingsTable = $section->addTable($this->styles->tables->utilization->tablestyle);
 $tonerOrderSavingsTable->addRow(null, $this->styles->tables->rowheader);

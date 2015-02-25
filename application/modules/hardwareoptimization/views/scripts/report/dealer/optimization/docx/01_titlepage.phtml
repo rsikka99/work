@@ -10,17 +10,17 @@ $section = $this->section;
 /* @var $hardwareOptimization HardwareOptimizationModel */
 $hardwareOptimization = $this->hardwareOptimization;
 
-$titleImageStyle = array('align' => 'center');
+$titleImageStyle = ['align' => 'center'];
 
-$cellStyle = array('bgColor' => My_Brand::getDealerBranding()->titlePageTitleBackgroundColor, 'width' => 15297);
+$cellStyle = ['bgColor' => My_Brand::getDealerBranding()->titlePageTitleBackgroundColor, 'width' => 15297];
 
 // Table to fix the issue of images being different sizes
 $imageTable = $section->addTable();
 $imageTable->addRow(2500);
-$cell = $imageTable->addCell(15000.8, array('valign' => 'center'));
-$cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, array(
+$cell = $imageTable->addCell(15000.8, ['valign' => 'center']);
+$cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, [
     'align' => 'center'
-));
+]);
 
 
 $section->addTextBreak();

@@ -81,10 +81,10 @@ class DeviceInstanceReplacementMasterDeviceMapper extends My_Model_Mapper_Abstra
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_deviceInstanceId} = ?"       => $primaryKey[0],
-            "{$this->col_hardwareOptimizationId} = ?" => $primaryKey[1]
-        ));
+            "{$this->col_hardwareOptimizationId} = ?" => $primaryKey[1],
+        ]);
         // Save the object into the cache
         $this->saveItemToCache($object);
 
@@ -104,16 +104,16 @@ class DeviceInstanceReplacementMasterDeviceMapper extends My_Model_Mapper_Abstra
     {
         if ($object instanceof DeviceInstanceReplacementMasterDeviceModel)
         {
-            $id          = array($object->deviceInstanceId, $object->hardwareOptimizationId);
+            $id          = [$object->deviceInstanceId, $object->hardwareOptimizationId];
             $whereClause = $this->getPrimaryKeyValueForObject($object);
         }
         else
         {
-            $id          = array($object[0], $object[1]);
-            $whereClause = array(
+            $id          = [$object[0], $object[1]];
+            $whereClause = [
                 "{$this->col_deviceInstanceId} = ?"       => $object[0],
-                "{$this->col_hardwareOptimizationId} = ?" => $object[1]
-            );
+                "{$this->col_hardwareOptimizationId} = ?" => $object[1],
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -198,7 +198,7 @@ class DeviceInstanceReplacementMasterDeviceMapper extends My_Model_Mapper_Abstra
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new DeviceInstanceReplacementMasterDeviceModel($row->toArray());
@@ -221,7 +221,7 @@ class DeviceInstanceReplacementMasterDeviceMapper extends My_Model_Mapper_Abstra
      */
     public function deleteAllDeviceInstanceReplacementsByHardwareOptimizationId ($hardwareOptimizationId)
     {
-        $rowsAffected = $this->getDbTable()->delete(array("{$this->col_hardwareOptimizationId} = ?" => $hardwareOptimizationId));
+        $rowsAffected = $this->getDbTable()->delete(["{$this->col_hardwareOptimizationId} = ?" => $hardwareOptimizationId]);
 
         return $rowsAffected;
     }
@@ -235,10 +235,10 @@ class DeviceInstanceReplacementMasterDeviceMapper extends My_Model_Mapper_Abstra
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_deviceInstanceId} = ?"       => $id[0],
-            "{$this->col_hardwareOptimizationId} = ?" => $id[1]
-        );
+            "{$this->col_hardwareOptimizationId} = ?" => $id[1],
+        ];
     }
 
     /**
@@ -248,7 +248,7 @@ class DeviceInstanceReplacementMasterDeviceMapper extends My_Model_Mapper_Abstra
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array($object->deviceInstanceId, $object->hardwareOptimizationId);
+        return [$object->deviceInstanceId, $object->hardwareOptimizationId];
     }
 
     /**
@@ -267,7 +267,7 @@ class DeviceInstanceReplacementMasterDeviceMapper extends My_Model_Mapper_Abstra
                      ->from("{$this->getTableName()}", new Zend_Db_Expr("DISTINCT {$this->col_masterDeviceId} "))
                      ->where("{$this->col_hardwareOptimizationId} = ?", $hardwareOptimizationId);
 
-        $masterDeviceIds = array();
+        $masterDeviceIds = [];
         foreach ($db->query($select)->fetchAll() as $row)
         {
             $masterDeviceIds [] = $row[$this->col_masterDeviceId];
@@ -286,6 +286,6 @@ class DeviceInstanceReplacementMasterDeviceMapper extends My_Model_Mapper_Abstra
      */
     public function countReplacementDevicesById ($hardwareoptimizationId, $masterDeviceId)
     {
-        return $this->count(array("{$this->col_hardwareOptimizationId} = ?" => $hardwareoptimizationId, "{$this->col_masterDeviceId} = ?" => $masterDeviceId));
+        return $this->count(["{$this->col_hardwareOptimizationId} = ?" => $hardwareoptimizationId, "{$this->col_masterDeviceId} = ?" => $masterDeviceId]);
     }
 }

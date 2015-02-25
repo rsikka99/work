@@ -79,9 +79,9 @@ class TonerVendorManufacturerMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
-            "{$this->col_manufacturerId} = ?" => $primaryKey
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, [
+            "{$this->col_manufacturerId} = ?" => $primaryKey,
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -102,15 +102,15 @@ class TonerVendorManufacturerMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof TonerVendorManufacturerModel)
         {
-            $whereClause = array(
-                "{$this->col_manufacturerId} = ?" => $object->manufacturerId
-            );
+            $whereClause = [
+                "{$this->col_manufacturerId} = ?" => $object->manufacturerId,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_manufacturerId} = ?" => $object
-            );
+            $whereClause = [
+                "{$this->col_manufacturerId} = ?" => $object,
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -195,7 +195,7 @@ class TonerVendorManufacturerMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new TonerVendorManufacturerModel($row->toArray());
@@ -218,9 +218,9 @@ class TonerVendorManufacturerMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_manufacturerId} = ?" => $id
-        );
+        return [
+            "{$this->col_manufacturerId} = ?" => $id,
+        ];
     }
 
     /**
@@ -261,7 +261,7 @@ class TonerVendorManufacturerMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllForDealerDropdown ($dealerId = null)
     {
-        $dropDown = array();
+        $dropDown = [];
 
         if (!$dealerId && Zend_Auth::getInstance()->hasIdentity())
         {
@@ -284,7 +284,7 @@ class TonerVendorManufacturerMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllForDropdown ()
     {
-        $dropDown = array();
+        $dropDown = [];
 
         foreach ($this->fetchAll() as $tonerVendorManufacturer)
         {

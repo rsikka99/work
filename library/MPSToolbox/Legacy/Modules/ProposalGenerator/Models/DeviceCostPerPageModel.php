@@ -104,13 +104,13 @@ class DeviceCostPerPageModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "costPerPageSetting" => $this->costPerPageSetting,
             "toners"             => $this->costPerPageSetting,
             "laborCostPerPage"   => $this->laborCostPerPage,
             "partsCostPerPage"   => $this->partsCostPerPage,
             "isManaged"          => $this->isManaged,
-        );
+        ];
     }
 
     /**
@@ -123,7 +123,7 @@ class DeviceCostPerPageModel extends My_Model_Abstract
         // Make sure our array is initialized
         if (!isset($this->_cachedCostPerPage))
         {
-            $this->_cachedCostPerPage = array();
+            $this->_cachedCostPerPage = [];
         }
 
         $cacheKey = $this->createCacheKey();
@@ -184,7 +184,7 @@ class DeviceCostPerPageModel extends My_Model_Abstract
         // Make sure our array is initialized
         if (!isset($this->_cachedCostOfInkAndTonerPerPage))
         {
-            $this->_cachedCostOfInkAndTonerPerPage = array();
+            $this->_cachedCostOfInkAndTonerPerPage = [];
         }
 
         $cacheKey = $this->createCacheKey();

@@ -550,7 +550,7 @@ class DealerBrandingModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "dealerId"                            => $this->dealerId,
             "dealerName"                          => $this->dealerName,
             "shortDealerName"                     => $this->shortDealerName,
@@ -602,7 +602,7 @@ class DealerBrandingModel extends My_Model_Abstract
             "leaseQuoteTitle"                     => $this->leaseQuoteTitle,
             "purchaseQuoteTitle"                  => $this->purchaseQuoteTitle,
             "solutionTitle"                       => $this->solutionTitle,
-        );
+        ];
     }
 
     /**

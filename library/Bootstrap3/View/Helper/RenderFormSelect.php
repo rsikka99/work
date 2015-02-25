@@ -10,9 +10,15 @@ namespace Bootstrap3\View\Helper;
  */
 class RenderFormSelect extends RenderFormAbstract
 {
+    /**
+     * @param array $array
+     * @param array $orderArray
+     *
+     * @return array
+     */
     protected function sortArrayByArray (array $array, array $orderArray)
     {
-        $ordered = array();
+        $ordered = [];
         foreach ($orderArray as $key)
         {
             if (array_key_exists($key, $array))
@@ -32,15 +38,15 @@ class RenderFormSelect extends RenderFormAbstract
      *
      * @return string
      */
-    public function RenderFormSelect (\Zend_Form_Element $element, $elementClasses = array())
+    public function RenderFormSelect (\Zend_Form_Element $element, $elementClasses = [])
     {
-        $html = array();
+        $html = [];
         if ($element instanceof \Zend_Form_Element_Multi)
         {
 
             if (!is_array($elementClasses))
             {
-                $elementClasses = array($elementClasses);
+                $elementClasses = [$elementClasses];
             }
 
             array_unshift($elementClasses, 'form-control');
@@ -68,7 +74,7 @@ class RenderFormSelect extends RenderFormAbstract
              *  Prep attributes
              */
             $attributes['class']  = $this->processClasses($attributes, $elementClasses);
-            $serializedAttributes = $this->serializeAttributes($attributes, array('options'));
+            $serializedAttributes = $this->serializeAttributes($attributes, ['options']);
             $element->setAttribs($attributes);
 
             $name = ($element instanceof \Zend_Form_Element_Multiselect) ? $element->getName() . '[]' : $element->getName();

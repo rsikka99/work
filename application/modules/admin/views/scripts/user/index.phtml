@@ -4,7 +4,7 @@
         use MPSToolbox\Legacy\Mappers\DealerMapper;
         use MPSToolbox\Legacy\Models\UserModel;
 
-        echo $this->url(array(), 'admin.users.create') ?>">
+        echo $this->url([], 'admin.users.create') ?>">
             <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
     </div>
     <?php if (isset($this->users) && count($this->users) > 0) : ?>
@@ -37,14 +37,14 @@
                             <?php if ($user->id == 1 && $this->identity()->id !== 1) : ?>
                                 <span class="btn btn-warning disabled"><i class="glyphicon glyphicon-pencil"></i></span>
                             <?php else : ?>
-                                <a class="btn btn-warning" title="Edit User" href="<?= $this->url(array('id' => $user->id), 'admin.users.edit') ?>">
+                                <a class="btn btn-warning" title="Edit User" href="<?= $this->url(['id' => $user->id], 'admin.users.edit') ?>">
                                     <i class="glyphicon glyphicon-pencil"></i>
                                 </a>
                                 <?php if ($user->id == 1) : ?>
                                     <span class="btn btn-danger disabled">
                                     <i class="glyphicon glyphicon-trash"></i></span>
                                 <?php else : ?>
-                                    <a class="btn btn-danger" title="Delete User" href="<?= $this->url(array('id' => $user->id), 'admin.users.delete') ?>"><i class="glyphicon glyphicon-trash"></i></a>
+                                    <a class="btn btn-danger" title="Delete User" href="<?= $this->url(['id' => $user->id], 'admin.users.delete') ?>"><i class="glyphicon glyphicon-trash"></i></a>
                                 <?php endif; ?>
                             <?php endif; ?>
                         </div>

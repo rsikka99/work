@@ -157,7 +157,7 @@ class AssessmentModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"                  => $this->id,
             "clientId"            => $this->clientId,
             "dealerId"            => $this->dealerId,
@@ -169,7 +169,7 @@ class AssessmentModel extends My_Model_Abstract
             "reportDate"          => $this->reportDate,
             "devicesModified"     => $this->devicesModified,
             "name"                => $this->name,
-        );
+        ];
     }
 
     /**

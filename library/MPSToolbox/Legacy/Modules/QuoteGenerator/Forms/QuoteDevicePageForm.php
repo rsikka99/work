@@ -17,80 +17,58 @@ class QuoteDevicePageForm extends Zend_Form
         // Set the method for the display form to POST
         $this->setMethod('POST');
 
-        $this->addElement('text', 'costPerPageMonochrome', array(
+        $this->addElement('text', 'costPerPageMonochrome', [
             'label'      => 'CPP Monochrome:',
             'required'   => true,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(
-                        1,
-                        255
-                    )
-                )
-            )
-        ));
+                    'options'   => [1, 255],
+                ],
+            ],
+        ]);
 
-        $this->addElement('text', 'costPerPageColor', array(
+        $this->addElement('text', 'costPerPageColor', [
             'label'      => 'CPP Color:',
             'required'   => true,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(
-                        1,
-                        255
-                    )
-                )
-            )
-        ));
+                    'options'   => [1, 255],
+                ],
+            ],
+        ]);
 
-        $this->addElement('select', 'pageBillingPreference', array(
+        $this->addElement('select', 'pageBillingPreference', [
             'label'    => 'Page Billing Preference:',
             'required' => true,
-            'filters'  => array(
-                'StringTrim',
-                'StripTags'
-            )
-        ));
+            'filters'  => ['StringTrim', 'StripTags'],
+        ]);
 
-        $this->addElement('text', 'margin', array(
+        $this->addElement('text', 'margin', [
             'label'      => 'Margin:',
             'required'   => true,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(
-                        1,
-                        255
-                    )
-                )
-            )
-        ));
+                    'options'   => [1, 255],
+                ],
+            ],
+        ]);
 
         // Add the submit button
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'ignore' => true,
-            'label'  => 'Save'
-        ));
+            'label'  => 'Save',
+        ]);
 
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'ignore' => true,
-            'label'  => 'Cancel'
-        ));
-
+            'label'  => 'Cancel',
+        ]);
     }
 }

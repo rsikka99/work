@@ -17,14 +17,14 @@ class RenderFormFile extends RenderFormAbstract
      *
      * @return string
      */
-    public function RenderFormFile (\Zend_Form_Element $element, $elementClasses = array())
+    public function RenderFormFile (\Zend_Form_Element $element, $elementClasses = [])
     {
-        $html = array();
+        $html = [];
         if ($element instanceof \Zend_Form_Element_File)
         {
             if (!is_array($elementClasses))
             {
-                $elementClasses = array($elementClasses);
+                $elementClasses = [$elementClasses];
             }
 
             if ($element->hasErrors())
@@ -42,7 +42,7 @@ class RenderFormFile extends RenderFormAbstract
              *  Prep attributes
              */
             $attributes['class']  = $this->processClasses($attributes, $elementClasses);
-            $serializedAttributes = $this->serializeAttributes($attributes, array('options'));
+            $serializedAttributes = $this->serializeAttributes($attributes, ['options']);
             $element->setAttribs($attributes);
 
 

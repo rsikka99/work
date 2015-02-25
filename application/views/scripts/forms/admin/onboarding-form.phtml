@@ -5,11 +5,11 @@ use MPSToolbox\Legacy\Modules\Admin\Forms\OnboardingForm;
 $form = $this->element;
 ?>
 
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
 <fieldset>
     <legend>Upload Onboarding Pricing Files</legend>
     <div class="form-group <?= ($form->getElement('dealerId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('dealerId'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('dealerId'), ['col-sm-3']) ?>
         <div class="col-sm-6 col-md-5 col-lg-4">
             <?= $this->RenderFormSelect($form->getElement('dealerId')) ?>
             <?= $this->RenderFormDescription($form->getElement('dealerId')) ?>
@@ -18,7 +18,7 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('oemPricing')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('oemPricing'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('oemPricing'), ['col-sm-3']) ?>
         <div class="col-sm-6 col-md-5 col-lg-4">
             <?= $this->RenderFormFile($form->getElement('oemPricing')) ?>
             <?= $this->RenderFormDescription($form->getElement('oemPricing')) ?>
@@ -27,7 +27,7 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('compPricing')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('compPricing'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('compPricing'), ['col-sm-3']) ?>
         <div class="col-sm-6 col-md-5 col-lg-4">
             <?= $this->RenderFormFile($form->getElement('compPricing')) ?>
             <?= $this->RenderFormDescription($form->getElement('compPricing')) ?>
@@ -38,8 +38,8 @@ $form = $this->element;
 
 <fieldset>
     <hr>
-    <?= $this->RenderFormSubmit($form->getElement('upload'), array('btn', 'btn-primary')) ?>
-    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('upload'), ['btn', 'btn-primary']) ?>
+    <?= $this->RenderFormSubmit($form->getElement('cancel'), ['btn', 'btn-default']) ?>
 </fieldset>
 <?= $this->RenderFormClose($form) ?>
 

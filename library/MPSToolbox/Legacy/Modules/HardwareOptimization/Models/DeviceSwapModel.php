@@ -30,12 +30,12 @@ class DeviceSwapModel extends My_Model_Abstract
      *
      * @var string[]
      */
-    public static $replacementTypes = array(
+    public static $replacementTypes = [
         self::REPLACEMENT_BW        => 'monochrome',
         self::REPLACEMENT_BW_MFP    => 'monochromeMfp',
         self::REPLACEMENT_COLOR     => 'color',
-        self::REPLACEMENT_COLOR_MFP => 'colorMfp'
-    );
+        self::REPLACEMENT_COLOR_MFP => 'colorMfp',
+    ];
 
 
     /**
@@ -104,12 +104,12 @@ class DeviceSwapModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "masterDeviceId"   => $this->masterDeviceId,
             "dealerId"         => $this->dealerId,
             "minimumPageCount" => $this->minimumPageCount,
             "maximumPageCount" => $this->maximumPageCount,
-        );
+        ];
     }
 
     /**
@@ -193,7 +193,7 @@ class DeviceSwapModel extends My_Model_Abstract
 
         $deviceSwapMapper = DeviceSwapMapper::getInstance();
 
-        $deviceSwap = $deviceSwapMapper->find(array($this->masterDeviceId, $this->dealerId));
+        $deviceSwap = $deviceSwapMapper->find([$this->masterDeviceId, $this->dealerId]);
 
         try
         {

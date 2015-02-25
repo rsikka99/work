@@ -75,12 +75,12 @@ class ManufacturerModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"          => $this->id,
             "fullname"    => $this->fullname,
             "displayname" => $this->displayname,
             "isDeleted"   => $this->isDeleted,
-        );
+        ];
     }
 
     public function isTonerVendor ()

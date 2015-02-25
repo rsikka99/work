@@ -49,7 +49,7 @@ $activeSheet->setCellValue("A{$currentRow}", "Total");
 $activeSheet->setCellValue("D{$currentRow}", $this->totalBuybackPrice);
 
 $activeSheet->getStyle("A{$currentRow}")->getFont()->setBold(true);
-$activeSheet->getStyle("D{$currentRow}")->getNumberFormat()->applyFromArray(array('code' => PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE));
+$activeSheet->getStyle("D{$currentRow}")->getNumberFormat()->applyFromArray(['code' => PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE]);
 
 $activeSheet->getColumnDimension('A')->setWidth(30);
 $activeSheet->getColumnDimension('B')->setWidth(20);

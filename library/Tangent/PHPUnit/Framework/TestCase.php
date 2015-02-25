@@ -19,7 +19,7 @@ abstract class Tangent_PHPUnit_Framework_TestCase extends PHPUnit_Framework_Test
         }
 
         $xml  = simplexml_load_file($filename);
-        $data = array();
+        $data = [];
 
         foreach ($xml->testData as $row)
         {

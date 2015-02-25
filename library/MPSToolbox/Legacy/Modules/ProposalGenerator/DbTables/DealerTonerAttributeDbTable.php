@@ -12,9 +12,9 @@ use Zend_Db_Table_Abstract;
 class DealerTonerAttributeDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'dealer_toner_attributes';
-    protected $_primary = array(
+    protected $_primary = [
         'tonerId',
-        'dealerId'
-    );
+        'dealerId',
+    ];
 
 }

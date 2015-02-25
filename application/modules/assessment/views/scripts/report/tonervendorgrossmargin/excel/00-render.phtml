@@ -10,58 +10,58 @@ if (!is_dir($savePath))
     }
 }
 
-$headerFill = array(
+$headerFill = [
     'type'  => PHPExcel_Style_Fill::FILL_SOLID,
-    'color' => array(
+    'color' => [
         'rgb' => 'D8D8D8'
-    )
-);
+    ]
+];
 
-$highestMarginFill = array(
+$highestMarginFill = [
     'type'  => PHPExcel_Style_Fill::FILL_SOLID,
-    'color' => array(
+    'color' => [
         'rgb' => 'C3FFA6'
-    )
-);
+    ]
+];
 
-$notPreferenceFill = array(
+$notPreferenceFill = [
     'type'  => PHPExcel_Style_Fill::FILL_SOLID,
-    'color' => array(
+    'color' => [
         'rgb' => 'F6FF8F'
-    )
-);
+    ]
+];
 
-$styleHeader = array(
+$styleHeader = [
     'fill' => $headerFill,
-    'font' => array(
+    'font' => [
         'bold' => true,
         'size' => '16'
-    )
-);
+    ]
+];
 
-$styleSubHeader = array(
+$styleSubHeader = [
     'fill' => $headerFill,
-    'font' => array(
+    'font' => [
         'bold' => true,
         'size' => '14'
-    )
-);
+    ]
+];
 
-$styleHighestMargin = array(
+$styleHighestMargin = [
     'fill' => $highestMarginFill,
-);
+];
 
-$styleNotPreference = array(
+$styleNotPreference = [
     'fill' => $notPreferenceFill,
-);
+];
 
-$styleNotification = array(
+$styleNotification = [
     'fill' => $notPreferenceFill,
-    'font' => array(
+    'font' => [
         'italic' => true,
         'size'   => '11',
-    )
-);
+    ]
+];
 
 // Create a new PHPExcel Object * New PHPExcel objects will have one attached worksheet by default
 /* @var $objPHPExcel PHPExcel */
@@ -124,7 +124,7 @@ foreach ($this->vendorSeparatedData as $vendorData)
     $currentRow = $activeSheet->getHighestRow() + 1;
     $activeSheet->setCellValue("A{$currentRow}", $vendorName);
     $activeSheet->setCellValue("B{$currentRow}", $vendorOverallMargin / 100);
-    $activeSheet->getStyle("B{$currentRow}")->getNumberFormat()->applyFromArray(array('code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE));
+    $activeSheet->getStyle("B{$currentRow}")->getNumberFormat()->applyFromArray(['code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE]);
     if ($isHighest)
     {
         $activeSheet->getStyle("A{$currentRow}:B{$currentRow}")->applyFromArray($styleHighestMargin);

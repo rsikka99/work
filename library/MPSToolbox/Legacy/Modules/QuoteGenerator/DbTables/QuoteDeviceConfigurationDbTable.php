@@ -12,8 +12,8 @@ use Zend_Db_Table_Abstract;
 class QuoteDeviceConfigurationDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'quote_device_configurations';
-    protected $_primary = array(
+    protected $_primary = [
         'quoteDeviceId',
-        'deviceId'
-    );
+        'deviceId',
+    ];
 }

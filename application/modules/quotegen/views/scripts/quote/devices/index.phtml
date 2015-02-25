@@ -35,7 +35,7 @@ $devices = $this->devices;
             <th>Quantity</th>
             <th>Subtotal</th>
             <th style="width: 130px">
-                <a href="<?= $this->url(array('quoteId' => $quote->id), 'quotes.sync-all-device-configurations'); ?>" title="Sync all configurations with current information." class="btn btn-primary btn-xs btn-block"><i class="glyphicon glyphicon-refresh"></i> Sync All Devices</a>
+                <a href="<?= $this->url(['quoteId' => $quote->id], 'quotes.sync-all-device-configurations'); ?>" title="Sync all configurations with current information." class="btn btn-primary btn-xs btn-block"><i class="glyphicon glyphicon-refresh"></i> Sync All Devices</a>
             </th>
         </tr>
         <?php foreach ($devices as $device) : ?>
@@ -59,20 +59,20 @@ $devices = $this->devices;
 
                             <?php if ($device->getDevice()) : ?>
                                 <li>
-                                    <a href="<?= $this->url(array('id' => $device->id, 'quoteId' => $quote->id), 'quotes.sync-device-configurations'); ?>">
+                                    <a href="<?= $this->url(['id' => $device->id, 'quoteId' => $quote->id], 'quotes.sync-device-configurations'); ?>">
                                         <i class="glyphicon glyphicon-refresh"></i>
                                         Sync Device
                                     </a>
                                 </li>
                             <?php endif; ?>
                             <li>
-                                <a href="<?= $this->url(array('id' => $device->id, 'quoteId' => $quote->id), 'quotes.add-hardware.edit'); ?>">
+                                <a href="<?= $this->url(['id' => $device->id, 'quoteId' => $quote->id], 'quotes.add-hardware.edit'); ?>">
                                     <i class="glyphicon glyphicon-pencil"></i>
                                     Edit Device
                                 </a>
                             </li>
                             <li>
-                                <a href="<?= $this->url(array('id' => $device->id, 'quoteId' => $quote->id), 'quotes.add-hardware.delete'); ?>">
+                                <a href="<?= $this->url(['id' => $device->id, 'quoteId' => $quote->id], 'quotes.add-hardware.delete'); ?>">
                                     <i class="glyphicon glyphicon-trash"></i>
                                     Delete Device
                                 </a>
@@ -82,7 +82,7 @@ $devices = $this->devices;
                                 <li><strong>Use Configuration</strong></li>
                                 <?php foreach ($configurations as $configuration) : ?>
                                     <li>
-                                        <a href="<?= $this->url(array('deviceId' => $device->id, 'configurationId' => $configuration->id), 'quotes.use-configuration'); ?>">
+                                        <a href="<?= $this->url(['deviceId' => $device->id, 'configurationId' => $configuration->id], 'quotes.use-configuration'); ?>">
                                             <?= $configuration->name; ?>
                                         </a>
                                     </li>

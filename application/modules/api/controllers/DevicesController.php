@@ -80,9 +80,9 @@ class Api_DevicesController extends Action
         $filterSearchIndex = $this->_getParam('filterSearchIndex', null);
         $filterSearchValue = $this->_getParam('filterSearchValue', null);
 
-        $columnFactory = new \Tangent\Grid\Order\ColumnFactory(array(
+        $columnFactory = new \Tangent\Grid\Order\ColumnFactory([
             'deviceName', 'oemSku', 'dealerSku', 'isSystemDevice'
-        ));
+        ]);
 
         $gridRequest  = new \Tangent\Grid\Request\JqGridRequest($postData, $columnFactory);
         $gridResponse = new \Tangent\Grid\Response\JqGridResponse($gridRequest);
@@ -93,7 +93,7 @@ class Api_DevicesController extends Action
         /**
          * Setup Filters
          */
-        $filterCriteriaValidator = new Zend_Validate_InArray(array('haystack' => array('deviceName', 'oemSku', 'dealerSku')));
+        $filterCriteriaValidator = new Zend_Validate_InArray(['haystack' => ['deviceName', 'oemSku', 'dealerSku']]);
 
 
         if ($filterSearchIndex !== null && $filterSearchValue !== null && $filterCriteriaValidator->isValid($filterSearchIndex))
@@ -126,10 +126,10 @@ class Api_DevicesController extends Action
 
             if ($result)
             {
-                $this->sendJson(array(
+                $this->sendJson([
                     'message' => 'Master device saved successfully',
                     'success' => true,
-                ));
+                ]);
             }
             else
             {
@@ -145,7 +145,7 @@ class Api_DevicesController extends Action
      */
     public function deleteAction ()
     {
-        $this->sendJson(array('message' => 'This is action is not implemented yet.'));
+        $this->sendJson(['message' => 'This is action is not implemented yet.']);
     }
 
     /**
@@ -153,7 +153,7 @@ class Api_DevicesController extends Action
      */
     public function saveAction ()
     {
-        $this->sendJson(array('message' => 'This is action is not implemented yet.'));
+        $this->sendJson(['message' => 'This is action is not implemented yet.']);
     }
 
     /**
@@ -163,7 +163,7 @@ class Api_DevicesController extends Action
     {
         $masterDeviceId = $this->getParam('deviceId', false);
 
-        $masterDevice = MasterDeviceEntity::with(array(
+        $masterDevice = MasterDeviceEntity::with([
             'Manufacturer',
             'TonerConfiguration',
             'Toners',
@@ -173,7 +173,7 @@ class Api_DevicesController extends Action
             {
                 $query->where('dealerId', '=', Zend_Auth::getInstance()->getIdentity()->dealerId);
             },
-        ))->find($masterDeviceId);
+        ])->find($masterDeviceId);
 
         if (!$masterDevice)
         {
@@ -187,17 +187,17 @@ class Api_DevicesController extends Action
     {
         $masterDeviceId = $this->getParam('deviceId', false);
 
-        $masterDevice = MasterDeviceEntity::with(array(
+        $masterDevice = MasterDeviceEntity::with([
             'Toners',
             'Toners.Manufacturer',
             'Toners.TonerColor',
-        ))->find($masterDeviceId);
+        ])->find($masterDeviceId);
 
         if (!$masterDevice)
         {
             $this->sendJsonError('A device with that ID does not exist.');
         }
 
-        $this->sendJson(array('data' => $masterDevice->toners));
+        $this->sendJson(['data' => $masterDevice->toners]);
     }
 }

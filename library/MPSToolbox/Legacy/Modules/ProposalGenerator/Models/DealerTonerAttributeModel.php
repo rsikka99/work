@@ -68,11 +68,11 @@ class DealerTonerAttributeModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "tonerId"   => $this->tonerId,
             "dealerId"  => $this->dealerId,
             "cost"      => $this->cost,
             "dealerSku" => $this->dealerSku,
-        );
+        ];
     }
 }

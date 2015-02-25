@@ -37,7 +37,7 @@ class OnboardingCompatibleService extends OnboardingAbstractService
      *
      * @var array
      */
-    protected $_columnMapping = array(
+    protected $_columnMapping = [
         'Manufacturer'                 => self::COLUMN_TONER_MANUFACTURER,
         'Manufacturer Sku'             => self::COLUMN_TONER_SKU,
         'Dealer Sku'                   => self::COLUMN_TONER_DEALER_SKU,
@@ -46,14 +46,14 @@ class OnboardingCompatibleService extends OnboardingAbstractService
         'Yield'                        => self::COLUMN_TONER_YIELD,
         'Compatible With Sku'          => self::COLUMN_TONER_COMPATIBLE_WITH_SKU,
         'Compatible With Manufacturer' => self::COLUMN_TONER_COMPATIBLE_WITH_MANUFACTURER,
-    );
+    ];
 
     /**
      * The fields that must be present within the CSV format
      *
      * @var array
      */
-    protected $_requiredHeaders = array(
+    protected $_requiredHeaders = [
         self::COLUMN_TONER_MANUFACTURER                 => true,
         self::COLUMN_TONER_SKU                          => true,
         self::COLUMN_TONER_DEALER_SKU                   => true,
@@ -62,7 +62,7 @@ class OnboardingCompatibleService extends OnboardingAbstractService
         self::COLUMN_TONER_YIELD                        => false,
         self::COLUMN_TONER_COMPATIBLE_WITH_SKU          => true,
         self::COLUMN_TONER_COMPATIBLE_WITH_MANUFACTURER => true,
-    );
+    ];
 
 
     /**
@@ -71,21 +71,21 @@ class OnboardingCompatibleService extends OnboardingAbstractService
      */
     public function __construct ()
     {
-        $filters = array(
-            '*'                            => array(
+        $filters = [
+            '*'                            => [
                 'StringTrim',
-            ),
-            self::COLUMN_TONER_DEALER_COST => array(
-                'StringTrim',
-                'Float',
-            ),
-            self::COLUMN_TONER_YIELD       => array(
+            ],
+            self::COLUMN_TONER_DEALER_COST => [
                 'StringTrim',
                 'Float',
-            ),
-        );
+            ],
+            self::COLUMN_TONER_YIELD       => [
+                'StringTrim',
+                'Float',
+            ],
+        ];
 
-        $this->_inputFilter = new Zend_Filter_Input($filters, array());
+        $this->_inputFilter = new Zend_Filter_Input($filters, []);
 
         // If we haven't set a filter for the data, use this one
         $this->_inputFilter->setDefaultEscapeFilter(new Zend_Filter_StringTrim());
@@ -103,13 +103,13 @@ class OnboardingCompatibleService extends OnboardingAbstractService
     {
         $csvLines = $this->getCsvContents($filename);
 
-        $messages = array();
+        $messages = [];
 
         if (is_array($csvLines) && count($csvLines) > 0)
         {
             $dealerTonerAttributeMapper = DealerTonerAttributeMapper::getInstance();
             $deviceTonerMapper          = DeviceTonerMapper::getInstance();
-            $manufacturers              = array();
+            $manufacturers              = [];
             $manufacturerMapper         = ManufacturerMapper::getInstance();
             $tonerColors                = TonerColorModel::$ColorNames;
             $tonerMapper                = TonerMapper::getInstance();
@@ -275,7 +275,7 @@ class OnboardingCompatibleService extends OnboardingAbstractService
                                 $existingDeviceToners = $deviceTonerMapper->fetchDeviceTonersByTonerId($oemToner->id);
                                 foreach ($existingDeviceToners as $existingDeviceToner)
                                 {
-                                    if (!$deviceTonerMapper::getInstance()->find(array($compatibleToner->id, $existingDeviceToner->master_device_id)) instanceof DeviceTonerModel)
+                                    if (!$deviceTonerMapper::getInstance()->find([$compatibleToner->id, $existingDeviceToner->master_device_id]) instanceof DeviceTonerModel)
                                     {
                                         $deviceToner                   = new DeviceTonerModel();
                                         $deviceToner->toner_id         = $compatibleToner->id;

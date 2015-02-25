@@ -65,18 +65,18 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
 
         if (!My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION))
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "error" => "You do not have permission to access this."
-            ));
+            ]);
 
             $this->redirectToRoute('hardwareoptimization');
         }
 
         if (!$this->getSelectedClient() instanceof \MPSToolbox\Legacy\Entities\ClientEntity)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "danger" => "A client is not selected."
-            ));
+            ]);
 
             $this->redirectToRoute('app.dashboard');
         }
@@ -85,9 +85,9 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
 
         if (!$this->getSelectedUpload() instanceof \MPSToolbox\Legacy\Entities\RmsUploadEntity)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "danger" => "An RMS upload is not selected."
-            ));
+            ]);
 
             $this->redirectToRoute('app.dashboard');
         }
@@ -118,23 +118,23 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
     public function initReportList ()
     {
         // This is a list of reports that we can view.
-        $this->view->availableReports = array(
-            "Reports"              => array(
+        $this->view->availableReports = [
+            "Reports"              => [
                 "pagetitle" => "Select a report...",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/hardwareoptimization/report-index')
-            ),
-            "CustomerOptimization" => array(
+            ],
+            "CustomerOptimization" => [
                 "pagetitle" => "Customer Optimization",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/hardwareoptimization/report-customer-optimization')
-            ),
-            "DealerOptimization"   => array(
+            ],
+            "DealerOptimization"   => [
                 "pagetitle" => "Dealer Optimization",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/hardwareoptimization/report-dealer-optimization')
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -148,7 +148,7 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
 
         if ($this->getHardwareOptimization()->id < 1)
         {
-            $this->_flashMessenger->addMessage(array("error" => "Please select a report first."));
+            $this->_flashMessenger->addMessage(["error" => "Please select a report first."]);
 
             // Send user to the index
             $this->redirectToRoute('hardwareoptimization');

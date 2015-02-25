@@ -119,21 +119,21 @@ abstract class OptimizationAbstractModel
      *
      * @var array
      */
-    public $deviceAges = array();
+    public $deviceAges = [];
 
     /**
      * Stores count of devices based on age ranking
      *
      * @var array
      */
-    public $deviceAgesOptimized = array();
+    public $deviceAgesOptimized = [];
 
     /**
      * Stores the count of devices based on categories required
      *
      * @var array
      */
-    public $deviceCategories = array();
+    public $deviceCategories = [];
 
     /**
      * What a client should have for average supplies
@@ -168,23 +168,23 @@ abstract class OptimizationAbstractModel
      *
      * @var array
      */
-    public static $ageRanks = array(
+    public static $ageRanks = [
         8 => "8+ Years",
         4 => "4-8 Years",
         2 => "2-4 Years",
         0 => "0-2 Years",
-    );
+    ];
     /**
      * The ages that are shown inside the age graph inside the customer facing report.
      *
      * @var array
      */
-    public static $ageRankTable = array(
+    public static $ageRankTable = [
         8 => 8,
         4 => 4,
         2 => 2,
         0 => 0,
-    );
+    ];
 
     /**
      * Constructor
@@ -197,11 +197,11 @@ abstract class OptimizationAbstractModel
         $this->_hardwareOptimization = $hardwareOptimization;
 
         // Set up the arrays of devices to be produced
-        $retiredDevices                      = array();
-        $replacedDevices                     = array();
-        $keepDevices                         = array();
-        $excessDevices                       = array();
-        $flaggedDevices                      = array();
+        $retiredDevices                      = [];
+        $replacedDevices                     = [];
+        $keepDevices                         = [];
+        $excessDevices                       = [];
+        $flaggedDevices                      = [];
         $actionKeep                          = 0;
         $actionReplace                       = 0;
         $actionRetire                        = 0;
@@ -378,7 +378,7 @@ abstract class OptimizationAbstractModel
      */
     protected function getUniquePurchasedMasterDevices ($devices)
     {
-        $masterDeviceList = array();
+        $masterDeviceList = [];
         if (reset($devices) instanceof DeviceInstanceModel)
         {
             foreach ($devices as $deviceInstance)
@@ -407,7 +407,7 @@ abstract class OptimizationAbstractModel
         }
         else
         {
-            $masterDeviceList = array();
+            $masterDeviceList = [];
         }
 
         return $masterDeviceList;
@@ -420,7 +420,7 @@ abstract class OptimizationAbstractModel
      */
     protected function getAllMasterDevicesWithReplacements ()
     {
-        $masterDevices = array();
+        $masterDevices = [];
         /* @var $deviceInstance DeviceInstanceModel */
         foreach ($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
         {
@@ -458,7 +458,7 @@ abstract class OptimizationAbstractModel
      */
     protected function getUniqueTonerList ($masterDevices)
     {
-        $uniqueTonerList = array();
+        $uniqueTonerList = [];
 
         if (count($masterDevices) > 0)
         {

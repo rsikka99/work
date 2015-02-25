@@ -133,7 +133,7 @@ class OptionService
          */
         if ($quoteDevice instanceof QuoteDeviceModel && $option instanceof OptionModel)
         {
-            $deviceOption = $deviceOptionMapper->find(array($option->id, $quoteDevice->id));
+            $deviceOption = $deviceOptionMapper->find([$option->id, $quoteDevice->id]);
             if (!$deviceOption instanceof DeviceOptionModel)
             {
                 $deviceOption                 = new DeviceOptionModel();
@@ -170,7 +170,7 @@ class OptionService
      */
     public function getOptions ($optionIds)
     {
-        $options = array();
+        $options = [];
 
         $optionEntities = OptionEntity::find($optionIds);
         if ($optionEntities instanceof OptionEntity)

@@ -25,7 +25,7 @@ class PrintTrackerUploadService extends AbstractRmsUploadService
      *
      * @var array
      */
-    protected $_columnMapping = array(
+    protected $_columnMapping = [
         'rmsvendorname'        => 'rmsVendorName',
         'rmsreportversion'     => 'rmsReportVersion',
         'clientname'           => 'clientName',
@@ -72,5 +72,5 @@ class PrintTrackerUploadService extends AbstractRmsUploadService
         'monitorenddate'       => 'monitorEndDate',
         'lastseendate'         => 'lastSeenDate',
         'location'             => 'location',
-    );
+    ];
 }

@@ -15,28 +15,21 @@ class HardwareOptimizationQuoteForm extends Zend_Form
     {
         $this->setMethod('post');
 
-        $this->addElement("submit", "purchasedQuote", array(
+        $this->addElement("submit", "purchasedQuote", [
             "label" => "Export Purchased Quote",
             "class" => "btn btn-primary",
             'title' => "Exports replaced devices into a purchased quote.",
-        ));
+        ]);
 
-        $this->addElement("submit", "leasedQuote", array(
+        $this->addElement("submit", "leasedQuote", [
             "label" => "Export Leased Quote",
             "class" => "btn btn-primary",
             'title' => "Exports replaced devices into a leased quote.",
-        ));
+        ]);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/hardwareoptimization/hardwareoptimization-quote-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/hardwareoptimization/hardwareoptimization-quote-form.phtml']]]);
     }
 }

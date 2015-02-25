@@ -44,7 +44,7 @@ if (count($flaggedDeviceInstances) > 0)
 // Begin with data rows
     foreach ($flaggedDeviceInstances as $deviceInstance)
     {
-        $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
+        $style = ($this->cycle([$tcStyle->body->cell1->odd, $tcStyle->body->cell1->even])->next()->current());
 
         $table->addRow($tcStyle->body->rowheight, $this->styles->tables->tablestyle->rowstyle);
         $cell = $table->addCell($tcStyle->collWidth, $style);

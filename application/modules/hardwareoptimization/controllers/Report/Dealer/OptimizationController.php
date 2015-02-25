@@ -9,16 +9,16 @@ class Hardwareoptimization_Report_Dealer_OptimizationController extends Hardware
 {
     public function indexAction ()
     {
-        $this->_pageTitle = array('Hardware Optimization', 'Dealer');
+        $this->_pageTitle = ['Hardware Optimization', 'Dealer'];
         $this->_navigation->setActiveStep(HardwareOptimizationStepsModel::STEP_FINISHED);
 
         $this->initHtmlReport();
         $this->initReportList();
 
 
-        $this->view->formats = array(
+        $this->view->formats = [
             "/hardwareoptimization/report_dealer_optimization/generate/format/docx" => $this->_wordFormat
-        );
+        ];
 
         try
         {

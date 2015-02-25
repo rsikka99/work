@@ -62,15 +62,15 @@ $manufacturers = $this->manufacturers;
     <div class="tabbable"> <!-- Only required for left/right tabs -->
         <ul class="nav nav-tabs">
             <li>
-                <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.edit', true); ?>">Details</a>
+                <a href="<?= $this->url(['id' => $id], 'hardware-library.all-devices.edit', true); ?>">Details</a>
             </li>
             <li class="active"><a href="#tab2" data-toggle="tab">Toners</a></li>
             <?php if ($this->quotegendevice) : ?>
                 <li>
-                    <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.options', true); ?>">Available
+                    <a href="<?= $this->url(['id' => $id], 'hardware-library.all-devices.options', true); ?>">Available
                         Options</a></li>
                 <li>
-                    <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.configurations', true); ?>">Hardware
+                    <a href="<?= $this->url(['id' => $id], 'hardware-library.all-devices.configurations', true); ?>">Hardware
                         Configurations</a></li>
             <?php endif; ?>
         </ul>
@@ -152,7 +152,7 @@ $manufacturers = $this->manufacturers;
                     <?php endif; ?>
                 </div>
                 <div style="text-align: center;">
-                    <a class="btn btn-default" title="Done" href="<?= $this->url(array(), 'hardware-library.all-devices', true); ?>">Done</a>
+                    <a class="btn btn-default" title="Done" href="<?= $this->url([], 'hardware-library.all-devices', true); ?>">Done</a>
                 </div>
             </form>
         </div>

@@ -116,7 +116,7 @@ class RmsUploadModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"              => $this->id,
             "clientId"        => $this->clientId,
             "rmsProviderId"   => $this->rmsProviderId,
@@ -124,7 +124,7 @@ class RmsUploadModel extends My_Model_Abstract
             "validRowCount"   => $this->validRowCount,
             "invalidRowCount" => $this->invalidRowCount,
             "uploadDate"      => $this->uploadDate,
-        );
+        ];
     }
 
     /**

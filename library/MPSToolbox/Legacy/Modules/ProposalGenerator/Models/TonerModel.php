@@ -195,7 +195,7 @@ class TonerModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"             => $this->id,
             "userId"         => $this->userId,
             "isSystemDevice" => $this->isSystemDevice,
@@ -204,7 +204,7 @@ class TonerModel extends My_Model_Abstract
             "yield"          => $this->yield,
             "manufacturerId" => $this->manufacturerId,
             "tonerColorId"   => $this->tonerColorId,
-        );
+        ];
     }
 
 
@@ -267,12 +267,12 @@ class TonerModel extends My_Model_Abstract
     {
         if (!isset($this->_dealerTonerAttribute))
         {
-            $this->_dealerTonerAttribute = array();
+            $this->_dealerTonerAttribute = [];
         }
 
         if (!isset($this->_dealerTonerAttribute[$dealerId]))
         {
-            $this->_dealerTonerAttribute[$dealerId] = DealerTonerAttributeMapper::getInstance()->find(array($this->id, $dealerId));
+            $this->_dealerTonerAttribute[$dealerId] = DealerTonerAttributeMapper::getInstance()->find([$this->id, $dealerId]);
         }
 
         return $this->_dealerTonerAttribute[$dealerId];
@@ -303,7 +303,7 @@ class TonerModel extends My_Model_Abstract
         // Make sure our array is initialized
         if (!isset($this->_cachedCostPerPage))
         {
-            $this->_cachedCostPerPage = array();
+            $this->_cachedCostPerPage = [];
         }
 
         // Turn coverage into a decimal
@@ -380,7 +380,7 @@ class TonerModel extends My_Model_Abstract
         {
             if ($this->isCompatible())
             {
-                $this->_compatibleToners = array();
+                $this->_compatibleToners = [];
             }
             else
             {
@@ -409,7 +409,7 @@ class TonerModel extends My_Model_Abstract
             }
             else
             {
-                $this->_oemToners = array();
+                $this->_oemToners = [];
             }
         }
 

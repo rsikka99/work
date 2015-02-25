@@ -6,7 +6,7 @@ $form = $this->element;
 <?= $this->RenderFormOpen($form) ?>
     <fieldset>
         <div class="form-group <?= ($form->getElement('rmsProviderId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('rmsProviderId'), array('class' => 'col-md-4')) ?>
+            <?= $this->RenderFormLabel($form->getElement('rmsProviderId'), ['class' => 'col-md-4']) ?>
             <div class="col-md-8">
                 <?= $this->RenderFormSelect($form->getElement('rmsProviderId')) ?>
                 <?= $this->RenderFormDescription($form->getElement('rmsProviderId')) ?>
@@ -15,7 +15,7 @@ $form = $this->element;
         </div>
 
         <div class="form-group <?= ($form->getElement('uploadFile')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('uploadFile'), array('class' => 'col-md-4')) ?>
+            <?= $this->RenderFormLabel($form->getElement('uploadFile'), ['class' => 'col-md-4']) ?>
             <div class="col-md-8">
                 <?= $this->RenderFormFile($form->getElement('uploadFile')) ?>
                 <?= $this->RenderFormDescription($form->getElement('uploadFile')) ?>
@@ -27,12 +27,12 @@ $form = $this->element;
     <ul class="pager">
         <?php if ($form->getElement('performUpload') instanceof Zend_Form_Element) : ?>
             <li class="next">
-                <?= $this->RenderFormSubmit($form->getElement('performUpload'), array('btn', 'btn-primary')) ?>
+                <?= $this->RenderFormSubmit($form->getElement('performUpload'), ['btn', 'btn-primary']) ?>
             </li>
         <?php endif ?>
         <?php if ($form->getElement('goBack') instanceof Zend_Form_Element) : ?>
             <li class="previous">
-                <?= $this->RenderFormSubmit($form->getElement('goBack'), array('btn', 'btn-default')) ?>
+                <?= $this->RenderFormSubmit($form->getElement('goBack'), ['btn', 'btn-default']) ?>
             </li>
         <?php endif ?>
     </ul>

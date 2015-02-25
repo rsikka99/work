@@ -22,23 +22,23 @@ class DealerRmsProvidersForm extends Zend_Form
          * Compatible Toner Vendor RmsProvider List
          */
         $rmsProviderRmsProviders = RmsProviderMapper::getInstance()->fetchAllForDropdown();
-        $this->addElement('multiCheckbox', 'rmsProviderIds', array(
+        $this->addElement('multiCheckbox', 'rmsProviderIds', [
             'label'        => 'Compatible Vendors',
             'multiOptions' => $rmsProviderRmsProviders,
-        ));
+        ]);
 
         /**
          * Form Actions
          */
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'label'  => 'Save',
             'ignore' => true,
-        ));
+        ]);
 
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'label'  => 'Cancel',
             'ignore' => true,
-        ));
+        ]);
 
 
     }
@@ -48,14 +48,7 @@ class DealerRmsProvidersForm extends Zend_Form
      */
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/admin/dealer-rms-providers-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/admin/dealer-rms-providers-form.phtml']]]);
 
         return $this;
     }

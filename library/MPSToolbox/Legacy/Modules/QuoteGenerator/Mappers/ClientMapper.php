@@ -87,9 +87,9 @@ class ClientMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
-            "{$this->col_id}  = ?" => $primaryKey
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, [
+            "{$this->col_id}  = ?" => $primaryKey,
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -110,15 +110,15 @@ class ClientMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof ClientModel)
         {
-            $whereClause = array(
-                "{$this->col_id}  = ?" => $object->id
-            );
+            $whereClause = [
+                "{$this->col_id}  = ?" => $object->id,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_id}  = ?" => $object
-            );
+            $whereClause = [
+                "{$this->col_id}  = ?" => $object,
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -208,7 +208,7 @@ class ClientMapper extends My_Model_Mapper_Abstract
         }
 
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new ClientModel($row->toArray());
@@ -231,9 +231,9 @@ class ClientMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_id}  = ?" => $id
-        );
+        return [
+            "{$this->col_id}  = ?" => $id,
+        ];
     }
 
     /**
@@ -257,9 +257,9 @@ class ClientMapper extends My_Model_Mapper_Abstract
     {
         $searchTerm = trim($searchTerm, "%");
 
-        return $this->fetchAll(array(
-            "{$this->col_companyName} LIKE ?" => "%{$searchTerm}%"
-        ));
+        return $this->fetchAll([
+            "{$this->col_companyName} LIKE ?" => "%{$searchTerm}%",
+        ]);
     }
 
     /**
@@ -275,10 +275,10 @@ class ClientMapper extends My_Model_Mapper_Abstract
     {
         $searchTerm = trim($searchTerm, "%");
 
-        return $this->fetchAll(array(
+        return $this->fetchAll([
             "{$this->col_companyName} LIKE ?" => "%{$searchTerm}%",
-            "{$this->col_dealerId} = ?"       => $dealerId
-        ));
+            "{$this->col_dealerId} = ?"       => $dealerId,
+        ]);
     }
 
     /**
@@ -290,7 +290,7 @@ class ClientMapper extends My_Model_Mapper_Abstract
      */
     public function fetchClientListForDealer ($dealerId)
     {
-        $users = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+        $users = $this->fetchAll(["{$this->col_dealerId} = ?" => $dealerId]);
 
         return $users;
     }
@@ -318,7 +318,7 @@ class ClientMapper extends My_Model_Mapper_Abstract
 
         $resultSet = $db->fetchAll($select);
 
-        $entries = array();
+        $entries = [];
         foreach ($resultSet as $row)
         {
             $object = new ClientModel($row);

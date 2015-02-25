@@ -86,10 +86,10 @@ class AvailableTonersForm extends Zend_Form
         /**
          * Toner Color
          */
-        $tonerColorValidator = new \Zend_Validate_Db_RecordExists(array(
+        $tonerColorValidator = new \Zend_Validate_Db_RecordExists([
             'table' => 'toner_colors',
             'field' => 'id',
-        ));
+        ]);
 
         $tonerColorValidator->setMessage("Invalid toner color selected", \Zend_Validate_Db_Abstract::ERROR_NO_RECORD_FOUND);
 

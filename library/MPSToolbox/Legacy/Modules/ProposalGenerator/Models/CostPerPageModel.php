@@ -53,10 +53,10 @@ class CostPerPageModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "monochromeCostPerPage" => $this->monochromeCostPerPage,
             "colorCostPerPage"      => $this->colorCostPerPage,
-        );
+        ];
     }
 
     /**

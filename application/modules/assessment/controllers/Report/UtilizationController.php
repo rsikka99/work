@@ -14,9 +14,9 @@ class Assessment_Report_UtilizationController extends Assessment_Library_Control
     {
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_UTILIZATION))
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "error" => "You do not have permission to access this."
-            ));
+            ]);
 
             $this->redirectToRoute('assessment');
         }
@@ -26,16 +26,16 @@ class Assessment_Report_UtilizationController extends Assessment_Library_Control
 
     public function indexAction ()
     {
-        $this->_pageTitle = array('Assessment', 'Utilization');
+        $this->_pageTitle = ['Assessment', 'Utilization'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
 
         $this->view->availableReports['Utilization']['active'] = true;
-        $this->view->formats                                   = array(
+        $this->view->formats                                   = [
             "/assessment/report_utilization/generate/format/excel" => $this->_excelFormat,
-        );
+        ];
 
         try
         {
@@ -55,7 +55,7 @@ class Assessment_Report_UtilizationController extends Assessment_Library_Control
      */
     public function generateAction ()
     {
-        $this->_pageTitle = array('Generate Utilization Report');
+        $this->_pageTitle = ['Generate Utilization Report'];
         $format           = $this->_getParam("format", "excel");
 
         switch ($format)
@@ -101,7 +101,7 @@ class Assessment_Report_UtilizationController extends Assessment_Library_Control
             throw new Exception("Could not generate Utilization excel report.");
         }
 
-        $utilizationData = array();
+        $utilizationData = [];
         $deviceCounter   = 0;
 
         /**

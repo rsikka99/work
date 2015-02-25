@@ -142,9 +142,9 @@ class MapDeviceInstanceMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_rmsUploadId} = ?" => $id
-        );
+        return [
+            "{$this->col_rmsUploadId} = ?" => $id,
+        ];
     }
 
     /**
@@ -226,7 +226,7 @@ WHERE device_instances.rmsUploadId = {$rmsUploadId}
              * Parse our order
              */
 
-            $order = array();
+            $order = [];
             if ($sortColumn != $this->col_modelName && $sortColumn != $this->col_manufacturer)
             {
                 $order[] = "{$sortColumn} {$sortDirection}";
@@ -292,7 +292,7 @@ WHERE device_instances.rmsUploadId = ?
 
             $query = $db->query($sql);
 
-            $mapDeviceInstances = array();
+            $mapDeviceInstances = [];
 
             foreach ($query->fetchAll() as $row)
             {

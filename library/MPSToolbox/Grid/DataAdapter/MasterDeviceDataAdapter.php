@@ -22,17 +22,17 @@ class MasterDeviceDataAdapter implements DataAdapterInterface
     /**
      * @var AbstractFilter[]
      */
-    protected $filters = array();
+    protected $filters = [];
 
     /**
      * @var Column[]
      */
-    protected $orderBy = array();
+    protected $orderBy = [];
 
     /**
      * @var Column[]
      */
-    protected $defaultOrderBy = array();
+    protected $defaultOrderBy = [];
 
     protected $startRecord = 0;
     protected $limit       = 10;
@@ -44,7 +44,7 @@ class MasterDeviceDataAdapter implements DataAdapterInterface
      * @param bool               $onlyQuoteDevices
      * @param array              $defaultOrder
      */
-    public function __construct (MasterDeviceMapper $mapper, $onlyQuoteDevices, $defaultOrder = array())
+    public function __construct (MasterDeviceMapper $mapper, $onlyQuoteDevices, $defaultOrder = [])
     {
         $this->mapper           = $mapper;
         $this->onlyQuoteDevices = $onlyQuoteDevices;
@@ -105,7 +105,7 @@ class MasterDeviceDataAdapter implements DataAdapterInterface
      */
     public function resetOrderBy ()
     {
-        $this->orderBy = array();
+        $this->orderBy = [];
 
         return $this;
     }
@@ -127,7 +127,7 @@ class MasterDeviceDataAdapter implements DataAdapterInterface
      */
     public function count ()
     {
-        return $this->mapper->getCanSellMasterDevices($this->getOrderBy(), array(), null, null, $this->onlyQuoteDevices, true);
+        return $this->mapper->getCanSellMasterDevices($this->getOrderBy(), [], null, null, $this->onlyQuoteDevices, true);
     }
 
     /**

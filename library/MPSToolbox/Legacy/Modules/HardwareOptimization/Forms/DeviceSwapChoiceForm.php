@@ -121,13 +121,13 @@ class DeviceSwapChoiceForm extends Zend_Form
              */
             $hardwareOptimizationDeviceInstance = $deviceInstance->getHardwareOptimizationDeviceInstance($this->_hardwareOptimizationId);
 
-            $replacementDeviceOptions = array(
-                "Actions:" => array(
+            $replacementDeviceOptions = [
+                "Actions:" => [
                     HardwareOptimizationDeviceInstanceModel::ACTION_KEEP   => HardwareOptimizationDeviceInstanceModel::ACTION_KEEP,
                     HardwareOptimizationDeviceInstanceModel::ACTION_RETIRE => HardwareOptimizationDeviceInstanceModel::ACTION_RETIRE . "/Migrate (Low Page Volume)",
                     HardwareOptimizationDeviceInstanceModel::ACTION_DNR    => HardwareOptimizationDeviceInstanceModel::ACTION_DNR . "(Replace when broken)",
-                )
-            );
+                ]
+            ];
 
             /**
              * Only display the replacement option if we have devices available.
@@ -147,15 +147,15 @@ class DeviceSwapChoiceForm extends Zend_Form
                 }
             }
 
-            $this->addElement('select', 'deviceInstance_' . $deviceInstance->id, array(
+            $this->addElement('select', 'deviceInstance_' . $deviceInstance->id, [
                 'label'        => 'Device: ',
-                'attribs'      => array(
+                'attribs'      => [
                     'style'                   => 'width: 100%',
                     'data-device-instance-id' => $deviceInstance->id,
-                ),
+                ],
                 'value'        => ($hardwareOptimizationDeviceInstance->masterDeviceId > 0) ? $hardwareOptimizationDeviceInstance->masterDeviceId : $hardwareOptimizationDeviceInstance->action,
                 'multiOptions' => $replacementDeviceOptions,
-            ));
+            ]);
 
 
             /**
@@ -187,15 +187,15 @@ class DeviceSwapChoiceForm extends Zend_Form
 
             if ($reasons !== false)
             {
-                $this->addElement('select', 'deviceInstanceReason_' . $deviceInstance->id, array(
+                $this->addElement('select', 'deviceInstanceReason_' . $deviceInstance->id, [
                     'label'        => ': ',
-                    'attribs'      => array(
+                    'attribs'      => [
                         'style'                   => 'width: 100%',
                         'data-device-instance-id' => $deviceInstance->id,
-                    ),
+                    ],
                     'multiOptions' => $reasons,
                     'value'        => ($deviceSwapReason->id) ? $deviceSwapReason->id : 0,
-                ));
+                ]);
             }
 
 
@@ -204,15 +204,7 @@ class DeviceSwapChoiceForm extends Zend_Form
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/hardwareoptimization/device-swap-choice-form.phtml',
-                    'devices'    => $this->_devices
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/hardwareoptimization/device-swap-choice-form.phtml', 'devices' => $this->_devices]]]);
     }
 
     /**
@@ -224,7 +216,7 @@ class DeviceSwapChoiceForm extends Zend_Form
      */
     public function getBlackReplacementDevices ($monthlyPageCounts)
     {
-        $deviceArray        = array();
+        $deviceArray        = [];
         $replacementDevices = DeviceSwapMapper::getInstance()->getBlackReplacementDevices($this->_dealerId);
         foreach ($replacementDevices as $replacementDevice)
         {
@@ -249,7 +241,7 @@ class DeviceSwapChoiceForm extends Zend_Form
      */
     public function getBlackMfpReplacementDevices ($monthlyPageCounts)
     {
-        $deviceArray        = array();
+        $deviceArray        = [];
         $replacementDevices = DeviceSwapMapper::getInstance()->getBlackMfpReplacementDevices($this->_dealerId);
         foreach ($replacementDevices as $replacementDevice)
         {
@@ -275,7 +267,7 @@ class DeviceSwapChoiceForm extends Zend_Form
      */
     public function getColorReplacementDevices ($monthlyPageCounts)
     {
-        $deviceArray        = array();
+        $deviceArray        = [];
         $replacementDevices = DeviceSwapMapper::getInstance()->getColorReplacementDevices($this->_dealerId);
         foreach ($replacementDevices as $replacementDevice)
         {
@@ -303,7 +295,7 @@ class DeviceSwapChoiceForm extends Zend_Form
      */
     public function getColorMfpReplacementDevices ($monthlyPageCounts)
     {
-        $deviceArray        = array();
+        $deviceArray        = [];
         $replacementDevices = DeviceSwapMapper::getInstance()->getColorMfpReplacementDevices($this->_dealerId);
         foreach ($replacementDevices as $replacementDevice)
         {
@@ -332,7 +324,7 @@ class DeviceSwapChoiceForm extends Zend_Form
      */
     public function getDeviceSwapsByCategory ($categoryId)
     {
-        $reasonArray = array();
+        $reasonArray = [];
         // Get the default reason
         $defaultReason                                    = DeviceSwapReasonDefaultMapper::getInstance()->findDefaultByDealerId($categoryId, $this->_dealerId);
         $reasonArray [$defaultReason->deviceSwapReasonId] = DeviceSwapReasonMapper::getInstance()->find($defaultReason->deviceSwapReasonId)->reason;

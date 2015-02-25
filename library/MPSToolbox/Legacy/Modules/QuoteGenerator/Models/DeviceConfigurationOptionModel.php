@@ -74,11 +74,11 @@ class DeviceConfigurationOptionModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "deviceConfigurationId" => $this->deviceConfigurationId,
             "optionId"              => $this->optionId,
-            "quantity"              => $this->quantity
-        );
+            "quantity"              => $this->quantity,
+        ];
     }
 
     /**
@@ -133,7 +133,7 @@ class DeviceConfigurationOptionModel extends My_Model_Abstract
 
         $deviceConfigurationOptionMapper = DeviceConfigurationOptionMapper::getInstance();
 
-        $deviceConfigurationOption = $deviceConfigurationOptionMapper->fetch($deviceConfigurationOptionMapper->getWhereId(array($this->deviceConfigurationId, $this->optionId)));
+        $deviceConfigurationOption = $deviceConfigurationOptionMapper->fetch($deviceConfigurationOptionMapper->getWhereId([$this->deviceConfigurationId, $this->optionId]));
         try
         {
             if ($deviceConfigurationOption instanceof DeviceConfigurationOptionModel)

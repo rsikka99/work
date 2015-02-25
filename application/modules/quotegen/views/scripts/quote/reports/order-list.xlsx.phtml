@@ -23,40 +23,40 @@ $quote = $this->Quote();
 /* @var $quote QuoteModel */
 $totalQuantity = 1;
 
-$titles = array(
+$titles = [
     "Item",
     "SKU (OEM)",
     "SKU (DEALER)",
     "Serial Number",
     "Location"
-);
+];
 
-$headerFill = array(
+$headerFill = [
     'type'  => PHPExcel_Style_Fill::FILL_SOLID,
-    'color' => array(
+    'color' => [
         'rgb' => 'D8D8D8'
-    )
-);
+    ]
+];
 
-$boldFont = array(
-    'font' => array(
+$boldFont = [
+    'font' => [
         'bold' => true
-    )
-);
+    ]
+];
 
-$styleHeader   = array(
+$styleHeader   = [
     'fill' => $headerFill,
-    'font' => array(
+    'font' => [
         'bold' => true,
         'size' => '16'
-    )
-);
-$styleFillBold = array(
+    ]
+];
+$styleFillBold = [
     'fill' => $headerFill,
-    'font' => array(
+    'font' => [
         'bold' => true
-    )
-);
+    ]
+];
 
 // Create a new PHPExcel Object * New PHPExcel objects will have one attached worksheet by default
 /* @var $objPHPExcel PHPExcel */
@@ -90,22 +90,22 @@ foreach ($quoteDeviceGroups as $quoteDeviceGroup)
     {
         $quoteDevice = $quoteDeviceGroupDevice->getQuoteDevice();
         // $device builds an array used to output quote device information
-        $device = array(
+        $device = [
             $quoteDevice->name,
             $quoteDevice->oemSku,
             $quoteDevice->dealerSku
-        );
+        ];
 
         // $deviceOptions builds an array of arrays representing quote device options
-        $deviceOptions = array();
+        $deviceOptions = [];
         //var $quoteDeviceOption MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceOptionModel */
         foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption)
         {
-            $deviceOptions [] = array(
+            $deviceOptions [] = [
                 "name"      => $quoteDeviceOption->name,
                 "oemSku"    => $quoteDeviceOption->oemSku,
                 "dealerSku" => $quoteDeviceOption->dealerSku
-            );
+            ];
         }
 
         // Build the data sheet

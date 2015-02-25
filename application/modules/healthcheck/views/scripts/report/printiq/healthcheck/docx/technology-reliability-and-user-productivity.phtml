@@ -55,12 +55,12 @@ $section->addText(sprintf('While analyzing your paper usage we noted that you ha
 $section->addText("The following are A3 designated devices with a low page volume. Going forward we can look at moving from A3 back to A4 to save you money.");
 
 
-$cellWidths = array(
+$cellWidths = [
     2275,
     2275,
     2275,
     2275,
-);
+];
 
 $lowestA3UtilizationTable = $section->addTable($this->styles->tables->utilization->tablestyle);
 $lowestA3UtilizationTable->addRow(null, $this->styles->tables->rowheader);

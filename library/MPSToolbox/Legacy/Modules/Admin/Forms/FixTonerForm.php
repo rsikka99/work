@@ -16,7 +16,7 @@ class FixTonerForm extends Zend_Form
     /**
      * @var array
      */
-    protected $_validFileExtensions = array();
+    protected $_validFileExtensions = [];
     protected $_minFileSize;
     protected $_maxFileSize;
 
@@ -42,53 +42,45 @@ class FixTonerForm extends Zend_Form
         $this->setMethod('POST');
 
         $dealers    = DealerMapper::getInstance()->fetchAll();
-        $dealerList = array(0 => "Select Company...");
+        $dealerList = [0 => "Select Company..."];
         foreach ($dealers as $dealer)
         {
             $dealerList[$dealer->id] = $dealer->dealerName;
         }
 
-        $this->addElement('select', 'dealerId', array(
+        $this->addElement('select', 'dealerId', [
             'label'        => 'Owner Of Dealer SKU',
             'required'     => true,
             'multiOptions' => $dealerList
-        ));
+        ]);
 
-        $this->addElement('file', 'uploadFile', array(
+        $this->addElement('file', 'uploadFile', [
             'label'       => 'Choose a file to upload',
             'destination' => $this->getView()->App()->uploadPath,
             'required'    => true,
             'accept'      => '.csv',
-            'validators'  => array(
-                'Extension' => array('extension' => 'csv'),
-                'Count'     => array('count' => 1),
-                'File_Size' => array('min' => $this->_minFileSize,
-                                     'max' => $this->_maxFileSize)
-            )
-        ));
+            'validators'  => [
+                'Extension' => ['extension' => 'csv'],
+                'Count'     => ['count' => 1],
+                'File_Size' => ['min' => $this->_minFileSize, 'max' => $this->_maxFileSize],
+            ]
+        ]);
 
-        $this->addElement('button', 'performUpload', array(
+        $this->addElement('button', 'performUpload', [
             'label' => 'Upload File',
             'type'  => 'submit',
-        ));
+        ]);
 
-        $this->addElement('button', 'cancel', array(
+        $this->addElement('button', 'cancel', [
             'type'           => 'submit',
             'label'          => 'Cancel',
             'formnovalidate' => true,
-        ));
+        ]);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/admin/fix-toner-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/admin/fix-toner-form.phtml']]]);
     }
 
     /**

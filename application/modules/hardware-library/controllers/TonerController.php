@@ -36,7 +36,7 @@ class HardwareLibrary_TonerController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('All Toners');
+        $this->_pageTitle = ['All Toners'];
     }
 
     /**
@@ -184,7 +184,7 @@ class HardwareLibrary_TonerController extends Action
                 $tonerId = $this->getParam('tonerId', false);
                 if ((int)$tonerId > 0)
                 {
-                    $dealerTonerAttribute = DealerTonerAttributeMapper::getInstance()->find(array($tonerId, $dealerId));
+                    $dealerTonerAttribute = DealerTonerAttributeMapper::getInstance()->find([$tonerId, $dealerId]);
 
                     if (!$dealerTonerAttribute instanceof DealerTonerAttributeModel)
                     {
@@ -261,16 +261,16 @@ class HardwareLibrary_TonerController extends Action
         $filterTonerSku       = $this->_getParam('filterTonerSku', false);
         $filterTonerColorId   = $this->_getParam('filterTonerColorId', false);
 
-        $jqGridParameters = array(
+        $jqGridParameters = [
             'sidx' => $this->_getParam('sidx', 'manufacturer'),
             'sord' => $this->_getParam('sord', 'desc'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10),
-        );
+        ];
 
         $jqGridService = new JQGrid();
 
-        $jqGridService->setValidSortColumns(array(
+        $jqGridService->setValidSortColumns([
             'id',
             'tonerColorId',
             'sku',
@@ -279,7 +279,7 @@ class HardwareLibrary_TonerController extends Action
             'yield',
             'dealerCost',
             'device_list',
-        ));
+        ]);
 
         $jqGridService->parseJQGridPagingRequest($jqGridParameters);
         $tonerMapper = TonerMapper::getInstance();
@@ -313,7 +313,7 @@ class HardwareLibrary_TonerController extends Action
                 $startRecord = 0;
             }
 
-            $sortOrder = array();
+            $sortOrder = [];
 
             if ($jqGridService->hasGrouping())
             {
@@ -346,9 +346,9 @@ class HardwareLibrary_TonerController extends Action
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array(
+            $this->sendJson([
                 'error' => sprintf('Sort index "%s" is not a valid sorting index.', $jqGridService->getSortColumn())
-            ));
+            ]);
         }
     }
 
@@ -357,7 +357,7 @@ class HardwareLibrary_TonerController extends Action
      */
     public function colorsForConfigurationAction ()
     {
-        $tonerColorList       = array();
+        $tonerColorList       = [];
         $tonerConfigurationId = $this->getParam('tonerConfigId', false);
         $tonerColorId         = $this->getParam('tonerColorId', false);
 
@@ -366,10 +366,10 @@ class HardwareLibrary_TonerController extends Action
             $tonerColor = TonerColorMapper::getInstance()->find($tonerColorId);
             if ($tonerColor instanceof TonerColorModel)
             {
-                $this->sendJson(array(
+                $this->sendJson([
                     "id"   => $tonerColor->id,
                     "text" => $tonerColor->name,
-                ));
+                ]);
             }
         }
 
@@ -382,20 +382,20 @@ class HardwareLibrary_TonerController extends Action
 
             foreach (TonerConfigModel::getRequiredTonersForTonerConfig($tonerConfigurationId) as $name => $id)
             {
-                $tonerColorList[] = array(
+                $tonerColorList[] = [
                     "id"   => $id,
                     "text" => $name,
-                );
+                ];
             }
         }
         else
         {
             foreach (TonerColorModel::$ColorNames as $tonerColorId => $tonerColorName)
             {
-                $tonerColorList[] = array(
+                $tonerColorList[] = [
                     "id"   => $tonerColorId,
                     "text" => $tonerColorName,
-                );
+                ];
             }
         }
 

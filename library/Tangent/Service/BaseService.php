@@ -4,7 +4,7 @@ namespace Tangent\Service;
 
 abstract class BaseService
 {
-    protected $_errorMessages = array();
+    protected $_errorMessages = [];
 
     /**
      * Whether or not the service has errors

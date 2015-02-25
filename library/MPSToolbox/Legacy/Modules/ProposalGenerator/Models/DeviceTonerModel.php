@@ -81,12 +81,12 @@ class DeviceTonerModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "toner_id"         => $this->toner_id,
             "userId"           => $this->userId,
             "master_device_id" => $this->master_device_id,
             "isSystemDevice"   => $this->isSystemDevice,
-        );
+        ];
     }
 
     /**

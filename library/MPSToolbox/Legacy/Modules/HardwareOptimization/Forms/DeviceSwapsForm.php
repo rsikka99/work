@@ -17,93 +17,70 @@ class DeviceSwapsForm extends Zend_Form
         $this->setMethod("POST");
         $this->setAttrib('id', 'deviceSwap');
 
-        $this->addElement("text", "masterDeviceId", array(
-                "id"       => 'masterDeviceId',
-                "required" => true,
-                "label"    => "Device Name",
-                "class"    => "input-xlarge",
-                "filters"  => array(
-                    'StringTrim',
-                    'StripTags'
-                ),
-            )
-        );
+        $this->addElement("text", "masterDeviceId", [
+            "id"       => 'masterDeviceId',
+            "required" => true,
+            "label"    => "Device Name",
+            "class"    => "input-xlarge",
+            "filters"  => ['StringTrim', 'StripTags'],
+        ]);
 
-        $maxPageCountElement = $this->createElement("text", "maximumPageCount", array(
-                "id"         => 'maximumPageCount',
-                "required"   => true,
-                "label"      => "Max Page Volume",
-                "class"      => "span4",
-                "filters"    => array(
-                    'StringTrim',
-                    'StripTags'
-                ),
-                "validators" => array(
-                    array(
-                        'validator' => 'Between',
-                        'options'   => array(
-                            'min'       => 0,
-                            'max'       => PHP_INT_MAX,
-                            'inclusive' => true
-                        )
-                    ),
-                    'Int'
-                ),
-            )
-        );
+        $maxPageCountElement = $this->createElement("text", "maximumPageCount", [
+            "id"         => 'maximumPageCount',
+            "required"   => true,
+            "label"      => "Max Page Volume",
+            "class"      => "span4",
+            "filters"    => ['StringTrim', 'StripTags'],
+            "validators" => [
+                [
+                    'validator' => 'Between',
+                    'options'   => [
+                        'min'       => 0,
+                        'max'       => PHP_INT_MAX,
+                        'inclusive' => true
+                    ]
+                ],
+                'Int'
+            ],
+        ]);
 
-        $minPageCountElement = $this->createElement("text", "minimumPageCount", array(
-                "id"         => 'minimumPageCount',
-                "required"   => true,
-                "label"      => "Min Page Volume",
-                "class"      => "span4",
-                "filters"    => array(
-                    'StringTrim',
-                    'StripTags'
-                ),
-                "validators" => array(
-                    array(
-                        'validator' => 'Between',
-                        'options'   => array(
-                            'min'       => 0,
-                            'max'       => PHP_INT_MAX,
-                            'inclusive' => true
-                        )
-                    ),
-                    'Int',
-                ),
-            )
-        );
+        $minPageCountElement = $this->createElement("text", "minimumPageCount", [
+            "id"         => 'minimumPageCount',
+            "required"   => true,
+            "label"      => "Min Page Volume",
+            "class"      => "span4",
+            "filters"    => ['StringTrim', 'StripTags'],
+            "validators" => [
+                [
+                    'validator' => 'Between',
+                    'options'   => [
+                        'min'       => 0,
+                        'max'       => PHP_INT_MAX,
+                        'inclusive' => true
+                    ],
+                ],
+                'Int',
+            ],
+        ]);
 
-        $this->addElement("text", "deviceType", array(
-                "id"      => 'deviceType',
-                "label"   => "Device Type",
-                "class"   => "span4",
-                "filters" => array(
-                    'StringTrim',
-                    'StripTags'
-                ),
-                'attribs' => array('disabled' => 'disabled'),
-            )
-        );
+        $this->addElement("text", "deviceType", [
+            "id"      => 'deviceType',
+            "label"   => "Device Type",
+            "class"   => "span4",
+            "filters" => ['StringTrim', 'StripTags'],
+            'attribs' => ['disabled' => 'disabled'],
+        ]);
 
 
         $this->addElement($maxPageCountElement);
         $minPageCountElement->addValidator(new LessThanFormValue($maxPageCountElement->getName()));
         $this->addElement($minPageCountElement);
 
-        $this->addDisplayGroup(array($minPageCountElement, $maxPageCountElement), 'devicesSwaps');
+        $this->addDisplayGroup([$minPageCountElement, $maxPageCountElement], 'devicesSwaps');
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/hardwareoptimization/device-swaps-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/hardwareoptimization/device-swaps-form.phtml']]]);
     }
 }

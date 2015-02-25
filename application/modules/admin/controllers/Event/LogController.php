@@ -16,7 +16,7 @@ class Admin_Event_LogController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Event Log');
+        $this->_pageTitle = ['Event Log'];
         $postData         = $this->getRequest()->getPost();
 
         if ($this->getRequest()->isPost())
@@ -24,20 +24,20 @@ class Admin_Event_LogController extends Action
             if (isset($postData['clearAllLogs']))
             {
 //                MPSToolbox\Legacy\Mappers\EventLogMapper::getInstance()->deleteAllEventLogs();
-                $this->_flashMessenger->addMessage(array('error' => 'Clearing disabled due to the lack of a confirmation dialog.'));
+                $this->_flashMessenger->addMessage(['error' => 'Clearing disabled due to the lack of a confirmation dialog.']);
                 $this->redirectToRoute('admin.event-log');
             }
         }
 
         $users  = UserMapper::getInstance()->fetchAll();
-        $emails = array();
+        $emails = [];
         foreach ($users as $user)
         {
             $emails[] = $user->email;
         }
 
         $eventLogTypes = EventLogTypeMapper::getInstance()->fetchAll();
-        $types         = array();
+        $types         = [];
         foreach ($eventLogTypes as $eventLogType)
         {
             $types[$eventLogType->id] = $eventLogType->name;
@@ -57,18 +57,18 @@ class Admin_Event_LogController extends Action
         $email         = $this->_getParam('email', false);
         $type          = $this->_getParam('type', false);
 
-        $jqGridParameters = array(
+        $jqGridParameters = [
             'sidx' => $this->_getParam('sidx', 'timestamp'),
             'sord' => $this->_getParam('sord', 'desc'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 20),
-        );
-        $sortColumns      = array(
+        ];
+        $sortColumns      = [
             'email',
             'type',
             'description',
             'timestamp',
-        );
+        ];
 
         $jqGridService->setValidSortColumns($sortColumns);
         $jqGridService->parseJQGridPagingRequest($jqGridParameters);
@@ -99,7 +99,7 @@ class Admin_Event_LogController extends Action
                     $startRecord = 0;
                 }
 
-                $sortOrder = array();
+                $sortOrder = [];
                 if ($jqGridService->hasColumns())
                 {
                     $sortOrder[] = $jqGridService->getSortColumn() . ' ' . $jqGridService->getSortDirection();
@@ -119,9 +119,7 @@ class Admin_Event_LogController extends Action
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array(
-                'error' => 'Sorting parameters are invalid'
-            ));
+            $this->sendJson(['error' => 'Sorting parameters are invalid']);
         }
     }
 
@@ -131,16 +129,16 @@ class Admin_Event_LogController extends Action
     public function searchForEmailAction ()
     {
         $searchTerm = $this->getParam('emailName', false);
-        $results    = array();
+        $results    = [];
 
         if ($searchTerm !== false)
         {
             foreach (UserMapper::getInstance()->searchByEmail($searchTerm) as $user)
             {
-                $results[] = array(
+                $results[] = [
                     "id"   => $user->email,
                     "text" => $user->email
-                );
+                ];
             }
         }
 

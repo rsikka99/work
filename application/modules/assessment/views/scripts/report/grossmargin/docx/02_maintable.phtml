@@ -71,7 +71,7 @@ foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDevice
     $blackToner                = null;
     $colorToner                = null;
     $toners                    = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($assessmentViewModel->getCostPerPageSettingForDealer());
-    $tonerSkus                 = array();
+    $tonerSkus                 = [];
     foreach ($toners as $toner)
     {
         $dealerTonerAttribute = DealerTonerAttributeMapper::getInstance()->findTonerAttributeByTonerId($toner->id, $dealerId);

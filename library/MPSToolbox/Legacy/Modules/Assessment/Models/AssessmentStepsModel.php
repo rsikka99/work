@@ -21,20 +21,20 @@ class AssessmentStepsModel extends My_Navigation_Abstract
      *
      * @var array
      */
-    private static $stepNames = array(
-        self::STEP_SURVEY       => array(
+    private static $stepNames = [
+        self::STEP_SURVEY       => [
             'name'  => 'Survey',
             'route' => 'assessment.survey'
-        ),
-        self::STEP_SETTINGS     => array(
+        ],
+        self::STEP_SETTINGS     => [
             'name'  => 'Settings',
             'route' => 'assessment.settings'
-        ),
-        self::STEP_FINISHED     => array(
+        ],
+        self::STEP_FINISHED     => [
             'name'  => 'Reports',
             'route' => 'assessment.report-index'
-        )
-    );
+        ]
+    ];
 
     /**
      * @var AssessmentStepsModel

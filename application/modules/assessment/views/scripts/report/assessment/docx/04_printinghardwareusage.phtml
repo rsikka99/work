@@ -45,12 +45,12 @@ $section->addText('Underused printing devices can be consolidated or retired to 
 
 $section->addPageBreak();
 
-$cellWidths             = array(
+$cellWidths             = [
     3611,
     1805,
     1805,
     1805
-);
+];
 $lowestUtilizationTable = $section->addTable($this->styles->tables->utilization->tablestyle);
 $lowestUtilizationTable->addRow(null, $this->styles->tables->rowheader);
 $lowestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText('Lowest Utilization', 'bold_text', 'nospacing_centeralign');
@@ -62,7 +62,7 @@ foreach ($assessmentViewModel->getLeastUsedDevices() as $device)
 {
     $lowestUtilizationTable->addRow($this->styles->tables->utilization->rowheight, $this->styles->tables->rowstyle);
     $lowestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($device->getDeviceName(), null, 'nospacing');
-    $lowestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing');
+    $lowestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ?: "Unknown", null, 'nospacing');
     $lowestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
     $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->formatPageVolume($device->getMasterDevice()->maximumRecommendedMonthlyPageVolume), null, 'nospacing_centeralign');
 }
@@ -82,7 +82,7 @@ foreach ($assessmentViewModel->getMostUsedDevices() as $device)
 {
     $highestUtilizationTable->addRow($this->styles->tables->utilization->rowheight, $this->styles->tables->rowstyle);
     $highestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($device->getDeviceName(), null, 'nospacing');
-    $highestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing');
+    $highestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ?: "Unknown", null, 'nospacing');
     $highestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
     $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->formatPageVolume($device->getMasterDevice()->maximumRecommendedMonthlyPageVolume), null, 'nospacing_centeralign');
 }

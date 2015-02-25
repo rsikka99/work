@@ -27,10 +27,10 @@ class Healthcheck_Report_Printiq_HealthcheckController extends Healthcheck_Libra
 
         $this->view->availableReports['Printiq_Healthcheck']['active'] = true;
 
-        $this->view->formats = array(
+        $this->view->formats = [
             "/healthcheck/report_printiq_healthcheck/generate/format/excel" => $this->_excelFormat,
             "/healthcheck/report_printiq_healthcheck/generate/format/docx"  => $this->_wordFormat,
-        );
+        ];
 
         $this->view->reportTitle = My_Brand::getDealerBranding()->healthCheckTitle;
 

@@ -93,9 +93,9 @@ class AssessmentMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_id} = ?" => $primaryKey
-        ));
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -116,15 +116,15 @@ class AssessmentMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof AssessmentModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_id} = ?" => $object->id
-            );
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_id} = ?" => $object
-            );
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -209,7 +209,7 @@ class AssessmentMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new AssessmentModel($row->toArray());
@@ -232,10 +232,10 @@ class AssessmentMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllUnfinishedAssessmentsForClient ($clientId)
     {
-        return $this->fetchAll(array(
+        return $this->fetchAll([
             "{$this->col_clientId} = ?"  => $clientId,
             "{$this->col_stepName} <> ?" => AssessmentStepsModel::STEP_FINISHED
-        ));
+        ]);
     }
 
     /**
@@ -247,10 +247,10 @@ class AssessmentMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllFinishedAssessmentsForClient ($clientId)
     {
-        return $this->fetchAll(array(
+        return $this->fetchAll([
             "{$this->col_clientId} = ?" => $clientId,
             "{$this->col_stepName} = ?" => AssessmentStepsModel::STEP_FINISHED
-        ));
+        ]);
     }
 
     /**
@@ -278,7 +278,7 @@ class AssessmentMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array("{$this->col_id} = ?" => $id);
+        return ["{$this->col_id} = ?" => $id];
     }
 
     /**

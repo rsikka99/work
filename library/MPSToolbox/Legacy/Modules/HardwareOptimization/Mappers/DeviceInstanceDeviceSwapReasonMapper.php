@@ -81,10 +81,10 @@ class DeviceInstanceDeviceSwapReasonMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_hardwareOptimizationId} = ?" => $primaryKey[0],
-            "{$this->col_deviceInstanceId} = ?"       => $primaryKey[1]
-        ));
+            "{$this->col_deviceInstanceId} = ?"       => $primaryKey[1],
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -105,17 +105,17 @@ class DeviceInstanceDeviceSwapReasonMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof DeviceInstanceDeviceSwapReasonModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_hardwareOptimizationId} = ?" => $object->hardwareOptimizationId,
-                "{$this->col_deviceInstanceId} = ?"       => $object->deviceInstanceId
-            );
+                "{$this->col_deviceInstanceId} = ?"       => $object->deviceInstanceId,
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_hardwareOptimizationId} = ?" => $object[0],
-                "{$this->col_deviceInstanceId} = ?"       => $object[1]
-            );
+                "{$this->col_deviceInstanceId} = ?"       => $object[1],
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -200,7 +200,7 @@ class DeviceInstanceDeviceSwapReasonMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new DeviceInstanceDeviceSwapReasonModel($row->toArray());
@@ -223,10 +223,10 @@ class DeviceInstanceDeviceSwapReasonMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_hardwareOptimizationId} = ?" => $id[0],
-            "{$this->col_deviceInstanceId} = ?"       => $id[1]
-        );
+            "{$this->col_deviceInstanceId} = ?"       => $id[1],
+        ];
     }
 
     /**
@@ -236,10 +236,10 @@ class DeviceInstanceDeviceSwapReasonMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
+        return [
             $object->hardwareOptimizationId,
             $object->deviceInstanceId
-        );
+        ];
     }
 
     /**

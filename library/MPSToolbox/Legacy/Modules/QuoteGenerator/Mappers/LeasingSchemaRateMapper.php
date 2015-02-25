@@ -77,10 +77,10 @@ class LeasingSchemaRateMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_leasingSchemaTermId} = ?"  => $primaryKey [0],
-            "{$this->col_leasingSchemaRangeId} = ?" => $primaryKey [1]
-        ));
+            "{$this->col_leasingSchemaRangeId} = ?" => $primaryKey [1],
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -102,17 +102,17 @@ class LeasingSchemaRateMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof LeasingSchemaRateModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_leasingSchemaTermId} = ?"  => $object->leasingSchemaTermId,
-                "{$this->col_leasingSchemaRangeId} = ?" => $object->leasingSchemaRangeId
-            );
+                "{$this->col_leasingSchemaRangeId} = ?" => $object->leasingSchemaRangeId,
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_leasingSchemaTermId} = ?"  => $object [0],
-                "{$this->col_leasingSchemaRangeId} = ?" => $object [1]
-            );
+                "{$this->col_leasingSchemaRangeId} = ?" => $object [1],
+            ];
         }
 
         $result = $this->getDbTable()->delete($whereClause);
@@ -193,7 +193,7 @@ class LeasingSchemaRateMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new LeasingSchemaRateModel($row->toArray());
@@ -219,10 +219,10 @@ class LeasingSchemaRateMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_leasingSchemaTermId} = ?"  => $id [0],
-            "{$this->col_leasingSchemaRangeId} = ?" => $id [1]
-        );
+            "{$this->col_leasingSchemaRangeId} = ?" => $id [1],
+        ];
     }
 
     /**
@@ -235,7 +235,7 @@ class LeasingSchemaRateMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllForLeasingSchema ($leasingSchemaId)
     {
-        $rates = array();
+        $rates = [];
 
         // Get the table names for convieniece
         $termTableName   = LeasingSchemaTermMapper::getInstance()->getTableName();
@@ -245,15 +245,12 @@ class LeasingSchemaRateMapper extends My_Model_Mapper_Abstract
 
         // Create a select statement
         $select = LeasingSchemaMapper::getInstance()->getDbTable()->select(true);
-        $select->joinRight(array(
-            'terms' => $termTableName
-        ), "terms.leasingSchemaId = {$schemaTableName}.id");
-        $select->join(array(
-            'rates' => $rateTableName
-        ), "terms.id = rates.leasingSchemaTermId");
-        $select->joinRight(array(
-            'ranges' => $rangeTableName
-        ), "ranges.id = rates.leasingSchemaRangeId");
+
+        $select->joinRight(['terms' => $termTableName], "terms.leasingSchemaId = {$schemaTableName}.id");
+
+        $select->join(['rates' => $rateTableName], "terms.id = rates.leasingSchemaTermId");
+
+        $select->joinRight(['ranges' => $rangeTableName], "ranges.id = rates.leasingSchemaRangeId");
 
         $select->where("{$schemaTableName}.id = ?", $leasingSchemaId);
         $select->setIntegrityCheck(false);
@@ -286,10 +283,10 @@ class LeasingSchemaRateMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
+        return [
             $object->leasingSchemaTermId,
-            $object->leasingSchemaRangeId
-        );
+            $object->leasingSchemaRangeId,
+        ];
     }
 }
 

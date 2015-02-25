@@ -6,10 +6,10 @@ $form               = $this->element;
 $leasingSchemaTerms = $this->leasingSchemaTerms;
 ?>
 
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
 <fieldset>
     <div class="form-group <?= ($form->getElement('range')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('range'), array('col-md-2')) ?>
+        <?= $this->RenderFormLabel($form->getElement('range'), ['col-md-2']) ?>
         <div class="col-md-2 input-group">
             <span class="input-group-addon">$</span>
             <?= $this->RenderFormText($form->getElement('range')) ?>
@@ -51,7 +51,7 @@ $leasingSchemaTerms = $this->leasingSchemaTerms;
     <hr>
     <?= ($form->getElement('hdnId')) ?>
     <?= ($this->formHidden('hdnId')) ?>
-    <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
-    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('submit'), ['btn', 'btn-primary']) ?>
+    <?= $this->RenderFormSubmit($form->getElement('cancel'), ['btn', 'btn-default']) ?>
 </fieldset>
 <?= $this->RenderFormClose($form) ?>

@@ -6,426 +6,426 @@ use MPSToolbox\Legacy\Modules\DealerManagement\Forms\DealerBrandingForm;
 
 $form = $this->element;
 ?>
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
-<fieldset>
-    <legend>Text Variables</legend>
-    <div class="form-group <?= ($form->getElement('dealerName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('dealerName'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('dealerName')) ?>
-            <?= $this->RenderFormDescription($form->getElement('dealerName')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('dealerName')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
+    <fieldset>
+        <legend>Text Variables</legend>
+        <div class="form-group <?= ($form->getElement('dealerName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('dealerName'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-4">
+                <?= $this->RenderFormText($form->getElement('dealerName')) ?>
+                <?= $this->RenderFormDescription($form->getElement('dealerName')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('dealerName')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('shortDealerName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('shortDealerName'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('shortDealerName')) ?>
-            <?= $this->RenderFormDescription($form->getElement('shortDealerName')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('shortDealerName')) ?>
+        <div class="form-group <?= ($form->getElement('shortDealerName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('shortDealerName'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-4">
+                <?= $this->RenderFormText($form->getElement('shortDealerName')) ?>
+                <?= $this->RenderFormDescription($form->getElement('shortDealerName')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('shortDealerName')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('mpsProgramName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('mpsProgramName'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('mpsProgramName')) ?>
-            <?= $this->RenderFormDescription($form->getElement('mpsProgramName')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('mpsProgramName')) ?>
+        <div class="form-group <?= ($form->getElement('mpsProgramName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('mpsProgramName'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-4">
+                <?= $this->RenderFormText($form->getElement('mpsProgramName')) ?>
+                <?= $this->RenderFormDescription($form->getElement('mpsProgramName')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('mpsProgramName')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('shortMpsProgramName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('shortMpsProgramName'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('shortMpsProgramName')) ?>
-            <?= $this->RenderFormDescription($form->getElement('shortMpsProgramName')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('shortMpsProgramName')) ?>
+        <div class="form-group <?= ($form->getElement('shortMpsProgramName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('shortMpsProgramName'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-4">
+                <?= $this->RenderFormText($form->getElement('shortMpsProgramName')) ?>
+                <?= $this->RenderFormDescription($form->getElement('shortMpsProgramName')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('shortMpsProgramName')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('jitProgramName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('jitProgramName'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('jitProgramName')) ?>
-            <?= $this->RenderFormDescription($form->getElement('jitProgramName')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('jitProgramName')) ?>
+        <div class="form-group <?= ($form->getElement('jitProgramName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('jitProgramName'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-4">
+                <?= $this->RenderFormText($form->getElement('jitProgramName')) ?>
+                <?= $this->RenderFormDescription($form->getElement('jitProgramName')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('jitProgramName')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('shortJitProgramName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('shortJitProgramName'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('shortJitProgramName')) ?>
-            <?= $this->RenderFormDescription($form->getElement('shortJitProgramName')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('shortJitProgramName')) ?>
+        <div class="form-group <?= ($form->getElement('shortJitProgramName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('shortJitProgramName'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-4">
+                <?= $this->RenderFormText($form->getElement('shortJitProgramName')) ?>
+                <?= $this->RenderFormDescription($form->getElement('shortJitProgramName')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('shortJitProgramName')) ?>
+            </div>
         </div>
-    </div>
-</fieldset>
-<fieldset>
-    <legend>Report Titles</legend>
-    <div class="form-group <?= ($form->getElement('assessmentTitle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('assessmentTitle'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('assessmentTitle')) ?>
-            <?= $this->RenderFormDescription($form->getElement('assessmentTitle')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('assessmentTitle')) ?>
+    </fieldset>
+    <fieldset>
+        <legend>Report Titles</legend>
+        <div class="form-group <?= ($form->getElement('assessmentTitle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('assessmentTitle'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-4">
+                <?= $this->RenderFormText($form->getElement('assessmentTitle')) ?>
+                <?= $this->RenderFormDescription($form->getElement('assessmentTitle')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('assessmentTitle')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('customerCostAnalysisTitle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('customerCostAnalysisTitle'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('customerCostAnalysisTitle')) ?>
-            <?= $this->RenderFormDescription($form->getElement('customerCostAnalysisTitle')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('customerCostAnalysisTitle')) ?>
+        <div class="form-group <?= ($form->getElement('customerCostAnalysisTitle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('customerCostAnalysisTitle'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-4">
+                <?= $this->RenderFormText($form->getElement('customerCostAnalysisTitle')) ?>
+                <?= $this->RenderFormDescription($form->getElement('customerCostAnalysisTitle')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('customerCostAnalysisTitle')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('customerOptimizationTitle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('customerOptimizationTitle'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('customerOptimizationTitle')) ?>
-            <?= $this->RenderFormDescription($form->getElement('customerOptimizationTitle')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('customerOptimizationTitle')) ?>
+        <div class="form-group <?= ($form->getElement('customerOptimizationTitle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('customerOptimizationTitle'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-4">
+                <?= $this->RenderFormText($form->getElement('customerOptimizationTitle')) ?>
+                <?= $this->RenderFormDescription($form->getElement('customerOptimizationTitle')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('customerOptimizationTitle')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('healthCheckTitle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('healthCheckTitle'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('healthCheckTitle')) ?>
-            <?= $this->RenderFormDescription($form->getElement('healthCheckTitle')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('healthCheckTitle')) ?>
+        <div class="form-group <?= ($form->getElement('healthCheckTitle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('healthCheckTitle'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-4">
+                <?= $this->RenderFormText($form->getElement('healthCheckTitle')) ?>
+                <?= $this->RenderFormDescription($form->getElement('healthCheckTitle')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('healthCheckTitle')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('leaseQuoteTitle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('leaseQuoteTitle'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('leaseQuoteTitle')) ?>
-            <?= $this->RenderFormDescription($form->getElement('leaseQuoteTitle')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('leaseQuoteTitle')) ?>
+        <div class="form-group <?= ($form->getElement('leaseQuoteTitle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('leaseQuoteTitle'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-4">
+                <?= $this->RenderFormText($form->getElement('leaseQuoteTitle')) ?>
+                <?= $this->RenderFormDescription($form->getElement('leaseQuoteTitle')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('leaseQuoteTitle')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('purchaseQuoteTitle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('purchaseQuoteTitle'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('purchaseQuoteTitle')) ?>
-            <?= $this->RenderFormDescription($form->getElement('purchaseQuoteTitle')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('purchaseQuoteTitle')) ?>
+        <div class="form-group <?= ($form->getElement('purchaseQuoteTitle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('purchaseQuoteTitle'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-4">
+                <?= $this->RenderFormText($form->getElement('purchaseQuoteTitle')) ?>
+                <?= $this->RenderFormDescription($form->getElement('purchaseQuoteTitle')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('purchaseQuoteTitle')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('solutionTitle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('solutionTitle'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('solutionTitle')) ?>
-            <?= $this->RenderFormDescription($form->getElement('solutionTitle')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('solutionTitle')) ?>
+        <div class="form-group <?= ($form->getElement('solutionTitle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('solutionTitle'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-4">
+                <?= $this->RenderFormText($form->getElement('solutionTitle')) ?>
+                <?= $this->RenderFormDescription($form->getElement('solutionTitle')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('solutionTitle')) ?>
+            </div>
         </div>
-    </div>
-</fieldset>
-<fieldset>
-    <legend>Generic Report Colors</legend>
-    <div class="form-group <?= ($form->getElement('titlePageTitleFontColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('titlePageTitleFontColor'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-3">
-            <?= $this->RenderFormText($form->getElement('titlePageTitleFontColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('titlePageTitleFontColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('titlePageTitleFontColor')) ?>
+    </fieldset>
+    <fieldset>
+        <legend>Generic Report Colors</legend>
+        <div class="form-group <?= ($form->getElement('titlePageTitleFontColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('titlePageTitleFontColor'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-3">
+                <?= $this->RenderFormText($form->getElement('titlePageTitleFontColor')) ?>
+                <?= $this->RenderFormDescription($form->getElement('titlePageTitleFontColor')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('titlePageTitleFontColor')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('titlePageTitleBackgroundColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('titlePageTitleBackgroundColor'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-3">
-            <?= $this->RenderFormText($form->getElement('titlePageTitleBackgroundColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('titlePageTitleBackgroundColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('titlePageTitleBackgroundColor')) ?>
+        <div class="form-group <?= ($form->getElement('titlePageTitleBackgroundColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('titlePageTitleBackgroundColor'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-3">
+                <?= $this->RenderFormText($form->getElement('titlePageTitleBackgroundColor')) ?>
+                <?= $this->RenderFormDescription($form->getElement('titlePageTitleBackgroundColor')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('titlePageTitleBackgroundColor')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('titlePageInformationFontColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('titlePageInformationFontColor'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-3">
-            <?= $this->RenderFormText($form->getElement('titlePageInformationFontColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('titlePageInformationFontColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('titlePageInformationFontColor')) ?>
+        <div class="form-group <?= ($form->getElement('titlePageInformationFontColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('titlePageInformationFontColor'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-3">
+                <?= $this->RenderFormText($form->getElement('titlePageInformationFontColor')) ?>
+                <?= $this->RenderFormDescription($form->getElement('titlePageInformationFontColor')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('titlePageInformationFontColor')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('titlePageInformationBackgroundColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('titlePageInformationBackgroundColor'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-3">
-            <?= $this->RenderFormText($form->getElement('titlePageInformationBackgroundColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('titlePageInformationBackgroundColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('titlePageInformationBackgroundColor')) ?>
+        <div class="form-group <?= ($form->getElement('titlePageInformationBackgroundColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('titlePageInformationBackgroundColor'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-3">
+                <?= $this->RenderFormText($form->getElement('titlePageInformationBackgroundColor')) ?>
+                <?= $this->RenderFormDescription($form->getElement('titlePageInformationBackgroundColor')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('titlePageInformationBackgroundColor')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('h1FontColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('h1FontColor'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-3">
-            <?= $this->RenderFormText($form->getElement('h1FontColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('h1FontColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('h1FontColor')) ?>
+        <div class="form-group <?= ($form->getElement('h1FontColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('h1FontColor'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-3">
+                <?= $this->RenderFormText($form->getElement('h1FontColor')) ?>
+                <?= $this->RenderFormDescription($form->getElement('h1FontColor')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('h1FontColor')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('h1BackgroundColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('h1BackgroundColor'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-3">
-            <?= $this->RenderFormText($form->getElement('h1BackgroundColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('h1BackgroundColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('h1BackgroundColor')) ?>
+        <div class="form-group <?= ($form->getElement('h1BackgroundColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('h1BackgroundColor'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-3">
+                <?= $this->RenderFormText($form->getElement('h1BackgroundColor')) ?>
+                <?= $this->RenderFormDescription($form->getElement('h1BackgroundColor')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('h1BackgroundColor')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('h2FontColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('h2FontColor'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-3">
-            <?= $this->RenderFormText($form->getElement('h2FontColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('h2FontColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('h2FontColor')) ?>
+        <div class="form-group <?= ($form->getElement('h2FontColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('h2FontColor'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-3">
+                <?= $this->RenderFormText($form->getElement('h2FontColor')) ?>
+                <?= $this->RenderFormDescription($form->getElement('h2FontColor')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('h2FontColor')) ?>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('h2BackgroundColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('h2BackgroundColor'), array('col-sm-3')) ?>
-        <div class="col-sm-6 col-md-5 col-lg-3">
-            <?= $this->RenderFormText($form->getElement('h2BackgroundColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('h2BackgroundColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('h2BackgroundColor')) ?>
+        <div class="form-group <?= ($form->getElement('h2BackgroundColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('h2BackgroundColor'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-3">
+                <?= $this->RenderFormText($form->getElement('h2BackgroundColor')) ?>
+                <?= $this->RenderFormDescription($form->getElement('h2BackgroundColor')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('h2BackgroundColor')) ?>
+            </div>
         </div>
-    </div>
-</fieldset>
-<fieldset>
-<legend>Graph Colors</legend>
-<div class="col-sm-12 col-md-6 col-lg-6">
-    <div class="form-group <?= ($form->getElement('graphCustomerColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphCustomerColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphCustomerColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphCustomerColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphCustomerColor')) ?>
+    </fieldset>
+    <fieldset>
+        <legend>Graph Colors</legend>
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group <?= ($form->getElement('graphCustomerColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphCustomerColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphCustomerColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphCustomerColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphCustomerColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphDealerColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphDealerColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphDealerColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphDealerColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphDealerColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphPositiveColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphPositiveColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphPositiveColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphPositiveColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphPositiveColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphNegativeColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphNegativeColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphNegativeColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphNegativeColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphNegativeColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphCompatibleDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphCompatibleDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphCompatibleDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphCompatibleDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphCompatibleDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphNotCompatibleDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphNotCompatibleDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphNotCompatibleDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphNotCompatibleDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphNotCompatibleDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphMonoDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphMonoDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphMonoDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphMonoDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphMonoDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphColorDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphColorDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphColorDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphColorDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphColorDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphCopyCapableDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphCopyCapableDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphCopyCapableDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphCopyCapableDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphCopyCapableDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphDuplexCapableDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphDuplexCapableDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphDuplexCapableDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphDuplexCapableDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphDuplexCapableDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphFaxCapableDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphFaxCapableDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphFaxCapableDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphFaxCapableDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphFaxCapableDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphPurchasedDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphPurchasedDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphPurchasedDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphPurchasedDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphPurchasedDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphLeasedDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphLeasedDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphLeasedDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphLeasedDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphLeasedDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphExcludedDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphExcludedDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphExcludedDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphExcludedDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphExcludedDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphIndustryAverageColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphIndustryAverageColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphIndustryAverageColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphIndustryAverageColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphIndustryAverageColor')) ?>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphDealerColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphDealerColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphDealerColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphDealerColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphDealerColor')) ?>
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group <?= ($form->getElement('graphKeepDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphKeepDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphKeepDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphKeepDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphKeepDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphReplacedDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphReplacedDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphReplacedDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphReplacedDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphReplacedDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphDoNotRepairDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphDoNotRepairDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphDoNotRepairDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphDoNotRepairDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphDoNotRepairDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphRetireDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphRetireDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphRetireDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphRetireDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphRetireDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphManagedDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphManagedDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphManagedDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphManagedDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphManagedDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphManageableDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphManageableDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphManageableDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphManageableDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphManageableDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphFutureReviewDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphFutureReviewDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphFutureReviewDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphFutureReviewDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphFutureReviewDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphJitCompatibleDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphJitCompatibleDeviceColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphJitCompatibleDeviceColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphJitCompatibleDeviceColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphJitCompatibleDeviceColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphCurrentSituationColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphCurrentSituationColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphCurrentSituationColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphCurrentSituationColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphCurrentSituationColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphNewSituationColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphNewSituationColor'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphNewSituationColor')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphNewSituationColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphNewSituationColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphAgeOfDevices1')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphAgeOfDevices1'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphAgeOfDevices1')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphNewSituationColor')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphNewSituationColor')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphAgeOfDevices2')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphAgeOfDevices2'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphAgeOfDevices2')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphAgeOfDevices2')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphAgeOfDevices2')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphAgeOfDevices3')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphAgeOfDevices3'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphAgeOfDevices3')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphAgeOfDevices3')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphAgeOfDevices3')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('graphAgeOfDevices4')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('graphAgeOfDevices4'), ['col-sm-3 col-md-8 col-lg-8']) ?>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <?= $this->RenderFormText($form->getElement('graphAgeOfDevices4')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('graphAgeOfDevices4')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('graphAgeOfDevices4')) ?>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphPositiveColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphPositiveColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphPositiveColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphPositiveColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphPositiveColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphNegativeColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphNegativeColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphNegativeColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphNegativeColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphNegativeColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphCompatibleDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphCompatibleDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphCompatibleDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphCompatibleDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphCompatibleDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphNotCompatibleDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphNotCompatibleDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphNotCompatibleDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphNotCompatibleDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphNotCompatibleDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphMonoDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphMonoDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphMonoDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphMonoDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphMonoDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphColorDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphColorDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphColorDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphColorDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphColorDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphCopyCapableDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphCopyCapableDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphCopyCapableDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphCopyCapableDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphCopyCapableDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphDuplexCapableDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphDuplexCapableDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphDuplexCapableDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphDuplexCapableDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphDuplexCapableDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphFaxCapableDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphFaxCapableDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphFaxCapableDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphFaxCapableDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphFaxCapableDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphPurchasedDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphPurchasedDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphPurchasedDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphPurchasedDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphPurchasedDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphLeasedDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphLeasedDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphLeasedDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphLeasedDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphLeasedDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphExcludedDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphExcludedDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphExcludedDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphExcludedDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphExcludedDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphIndustryAverageColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphIndustryAverageColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphIndustryAverageColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphIndustryAverageColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphIndustryAverageColor')) ?>
-        </div>
-    </div>
-</div>
-<div class="col-sm-12 col-md-6 col-lg-6">
-    <div class="form-group <?= ($form->getElement('graphKeepDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphKeepDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphKeepDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphKeepDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphKeepDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphReplacedDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphReplacedDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphReplacedDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphReplacedDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphReplacedDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphDoNotRepairDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphDoNotRepairDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphDoNotRepairDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphDoNotRepairDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphDoNotRepairDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphRetireDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphRetireDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphRetireDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphRetireDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphRetireDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphManagedDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphManagedDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphManagedDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphManagedDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphManagedDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphManageableDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphManageableDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphManageableDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphManageableDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphManageableDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphFutureReviewDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphFutureReviewDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphFutureReviewDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphFutureReviewDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphFutureReviewDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphJitCompatibleDeviceColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphJitCompatibleDeviceColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphJitCompatibleDeviceColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphJitCompatibleDeviceColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphJitCompatibleDeviceColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphCurrentSituationColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphCurrentSituationColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphCurrentSituationColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphCurrentSituationColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphCurrentSituationColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphNewSituationColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphNewSituationColor'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphNewSituationColor')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphNewSituationColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphNewSituationColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphAgeOfDevices1')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphAgeOfDevices1'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphAgeOfDevices1')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphNewSituationColor')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphNewSituationColor')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphAgeOfDevices2')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphAgeOfDevices2'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphAgeOfDevices2')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphAgeOfDevices2')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphAgeOfDevices2')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphAgeOfDevices3')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphAgeOfDevices3'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphAgeOfDevices3')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphAgeOfDevices3')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphAgeOfDevices3')) ?>
-        </div>
-    </div>
-    <div class="form-group <?= ($form->getElement('graphAgeOfDevices4')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('graphAgeOfDevices4'), array('col-sm-3 col-md-8 col-lg-8')) ?>
-        <div class="col-sm-6 col-md-4 col-lg-4">
-            <?= $this->RenderFormText($form->getElement('graphAgeOfDevices4')) ?>
-            <?= $this->RenderFormDescription($form->getElement('graphAgeOfDevices4')) ?>
-            <?= $this->RenderFormElementErrors($form->getElement('graphAgeOfDevices4')) ?>
-        </div>
-    </div>
-</div>
-</fieldset>
-<fieldset>
-    <hr>
-    <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
-    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
-</fieldset>
+    </fieldset>
+    <fieldset>
+        <hr>
+        <?= $this->RenderFormSubmit($form->getElement('submit'), ['btn', 'btn-primary']) ?>
+        <?= $this->RenderFormSubmit($form->getElement('cancel'), ['btn', 'btn-default']) ?>
+    </fieldset>
 <?= $this->RenderFormClose($form) ?>

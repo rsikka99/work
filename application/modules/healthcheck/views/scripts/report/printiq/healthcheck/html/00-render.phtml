@@ -5,8 +5,8 @@ $healthcheckViewModel = $this->healthcheckViewModel;
 ?>
 <div class="container health-check" id="htmlReportContainer">
     <?php
-    $this->reportName = My_Brand::getDealerBranding()->shortDealerName;
-    $this->jitName = My_Brand::getDealerBranding()->shortJitProgramName;
+    $this->reportName  = My_Brand::getDealerBranding()->shortDealerName;
+    $this->jitName     = My_Brand::getDealerBranding()->shortJitProgramName;
     $this->jitFullName = My_Brand::getDealerBranding()->jitProgramName;
 
     echo $this->render('report/printiq/healthcheck/html/title-page.phtml');

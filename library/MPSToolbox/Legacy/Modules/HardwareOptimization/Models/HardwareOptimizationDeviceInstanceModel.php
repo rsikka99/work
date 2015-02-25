@@ -112,13 +112,13 @@ class HardwareOptimizationDeviceInstanceModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "deviceInstanceId"       => $this->deviceInstanceId,
             "hardwareOptimizationId" => $this->hardwareOptimizationId,
             "action"                 => $this->action,
             "masterDeviceId"         => $this->masterDeviceId,
             "deviceSwapReasonId"     => $this->deviceSwapReasonId,
-        );
+        ];
     }
 
     /**

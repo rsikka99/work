@@ -38,7 +38,7 @@ class MasterMatchupMappingService extends AbstractDeviceMappingService
         $rmsProviderId  = $deviceInstance->getRmsUploadRow()->rmsProviderId;
         $rmsModelId     = $deviceInstance->getRmsUploadRow()->rmsModelId;
 
-        $rmsMasterMatchup = $this->_rmsMasterMatchupMapper->find(array($rmsProviderId, $rmsModelId));
+        $rmsMasterMatchup = $this->_rmsMasterMatchupMapper->find([$rmsProviderId, $rmsModelId]);
         if ($rmsMasterMatchup)
         {
             $masterDeviceId = $rmsMasterMatchup->masterDeviceId;

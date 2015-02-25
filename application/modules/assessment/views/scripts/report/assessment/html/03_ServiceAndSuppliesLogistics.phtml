@@ -1,7 +1,7 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$graphs = $assessmentViewModel->getGraphs();
+$graphs              = $assessmentViewModel->getGraphs();
 ?>
 <div class="h1">Analysis: Service and Supplies Logistics</div>
 <br />
@@ -39,11 +39,13 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
     $inkjetString = "10% to 25%";
 }
 ?>
-<p>Based on your questionnaire, <strong><?= $inkjetString; ?> of your printing is done on inkjet devices</strong>. We did not monitor inkjet machines
+<p>Based on your questionnaire,
+    <strong><?= $inkjetString; ?> of your printing is done on inkjet devices</strong>. We did not monitor inkjet machines
     that are not connected to the network, and on average, pages printed to inkjet printers cost three times more than pages printed to laser devices. Without
     being on the network, users also cannot share these devices. There are some instances where desktop printers are appropriate, for instance, if a single user
     requires confidential, high-convenience printing. We can help you consolidate desktop hardware where appropriate, and where desktop printing is required, we
-    can help you select network-capable equipment so your desktop printing can be managed with the rest of your office print.</p>
+    can help you select network-capable equipment so your desktop printing can be managed with the rest of your office print.
+</p>
 <br />
 <?php if (count($assessmentViewModel->getExcludedDevices()) > 0) : ?>
     <p>There are <?= count($assessmentViewModel->getExcludedDevices()) ?> devices were not included in the analysis due to lack of data or model information.
@@ -61,7 +63,8 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
         <td class="right"><?= number_format($assessmentViewModel->getAverageTimeBetweenBreakdownAndFix()); ?> day(s)</td>
     </tr>
     <tr>
-        <td>Annual downtime resulting from printer breakdowns<br />(Based on an 8 hour work day)</td>
+        <td>Annual downtime resulting from printer breakdowns<br />(Based on an 8 hour work day)
+        </td>
         <td class="right"><?= number_format($assessmentViewModel->getAnnualDowntimeFromBreakdowns(), 0); ?> hour(s)</td>
     </tr>
 </table>
@@ -96,9 +99,11 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
     <strong><?= count($assessmentViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances()); ?></strong> of your printing devices are leased machines, for
     which supplies are included in your contract. The
     <strong><?= count($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances()); ?></strong> remaining machines
-    consist of <strong><?= $assessmentViewModel->getNumberOfUniquePurchasedModels(); ?></strong> different models and use
+    consist of
+    <strong><?= $assessmentViewModel->getNumberOfUniquePurchasedModels(); ?></strong> different models and use
     <strong><?= $assessmentViewModel->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in
-    inventory, you have an estimated <strong><?= $this->currency($assessmentViewModel->getCashHeldInInventory()); ?> in operating cash held in printer
+    inventory, you have an estimated
+    <strong><?= $this->currency($assessmentViewModel->getCashHeldInInventory()); ?> in operating cash held in printer
         supplies inventory</strong> at any given time.</p>
 <div class="center">
     <img src="<?= $graphs[3]; ?>" /> <!--  Giant pie chart -->

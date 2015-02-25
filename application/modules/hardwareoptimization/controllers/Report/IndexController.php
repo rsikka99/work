@@ -14,7 +14,7 @@ class Hardwareoptimization_Report_IndexController extends Hardwareoptimization_L
 {
     public function indexAction ()
     {
-        $this->_pageTitle = array('Hardware Optimization', 'Report');
+        $this->_pageTitle = ['Hardware Optimization', 'Report'];
         $this->_navigation->setActiveStep(HardwareOptimizationStepsModel::STEP_FINISHED);
         $this->initReportList();
 
@@ -66,7 +66,7 @@ class Hardwareoptimization_Report_IndexController extends Hardwareoptimization_L
                     }
 
                     $db->commit();
-                    $this->redirectToRoute('quotes', array('quoteId' => $quoteId));
+                    $this->redirectToRoute('quotes', ['quoteId' => $quoteId]);
                 }
                 else
                 {
@@ -78,7 +78,7 @@ class Hardwareoptimization_Report_IndexController extends Hardwareoptimization_L
                 $db->rollBack();
 
                 \Tangent\Logger\Logger::logException($e);
-                $this->_flashMessenger->addMessage(array("danger" => "Error creating quote from device list.  If problem persists please contact system administrator"));
+                $this->_flashMessenger->addMessage(["danger" => "Error creating quote from device list.  If problem persists please contact system administrator"]);
             }
         }
         $this->view->form = $form;

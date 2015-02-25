@@ -7,13 +7,13 @@ class My_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
     const SEPARATOR = "__";
     const WILDCARD  = "%";
 
-    protected static $UnrestrictedPages = array(
-        'default' => array(
-            'error' => array(
-                '%'
-            )
-        )
-    );
+    protected static $UnrestrictedPages = [
+        'default' => [
+            'error' => [
+                '%',
+            ],
+        ],
+    ];
 
     public function preDispatch (Zend_Controller_Request_Abstract $request)
     {
@@ -58,11 +58,11 @@ class My_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 
                     // Redirect to the login page
                     $r = new Zend_Controller_Action_Helper_Redirector();
-                    $r->gotoRoute(array(), 'auth.login');
+                    $r->gotoRoute([], 'auth.login');
                     break;
                 default :
                     // Set up the error handler
-                    $error            = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+                    $error            = new ArrayObject([], ArrayObject::ARRAY_AS_PROPS);
                     $error->type      = Zend_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER;
                     $error->request   = clone ($request);
                     $error->exception = $e;

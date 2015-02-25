@@ -13,7 +13,7 @@ class Default_ErrorController extends Action
 
     public function errorAction ()
     {
-        $this->_pageTitle = array('Error');
+        $this->_pageTitle = ['Error'];
         $errors           = $this->_getParam('error_handler');
 
 
@@ -83,7 +83,7 @@ class Default_ErrorController extends Action
          */
         $uid             = uniqid();
         $this->view->uid = $uid;
-        $exceptions      = array();
+        $exceptions      = [];
 
         /* @var $ex \Exception */
         $ex = $errors->exception;
@@ -132,7 +132,7 @@ class Default_ErrorController extends Action
      */
     public function getFormattedExceptions ($exceptions)
     {
-        $exceptionList = array();
+        $exceptionList = [];
         foreach ($exceptions as $exception)
         {
             $exceptionModel          = new stdClass();
@@ -161,10 +161,10 @@ class Default_ErrorController extends Action
 
         if ($this->getRequest()->isXmlHttpRequest())
         {
-            $response = array(
+            $response = [
                 'message' => 'An application error occurred.',
                 'uid'     => $this->view->uid,
-            );
+            ];
 
             if (isset($this->view->exceptions) && APPLICATION_ENV != 'production')
             {
@@ -186,9 +186,9 @@ class Default_ErrorController extends Action
         $this->getResponse()->setHttpResponseCode(403);
         if ($this->getRequest()->isXmlHttpRequest())
         {
-            $response = array(
+            $response = [
                 'message' => '403. Not Authorized.',
-            );
+            ];
 
             if (isset($this->view->exceptions) && APPLICATION_ENV != 'production')
             {
@@ -210,9 +210,9 @@ class Default_ErrorController extends Action
         $this->getResponse()->setHttpResponseCode(404);
         if ($this->getRequest()->isXmlHttpRequest())
         {
-            $response = array(
+            $response = [
                 'message' => '404 Page Not Found.',
-            );
+            ];
 
             if (APPLICATION_ENV != 'production')
             {

@@ -12,7 +12,7 @@ class Default_InfoController extends Action
      */
     public function eulaAction ()
     {
-        $this->_pageTitle = array('End User License Agreement');
+        $this->_pageTitle = ['End User License Agreement'];
         $file             = APPLICATION_PATH . "/../data/info/eula.txt";
         $text             = 'Not Available';
 
@@ -29,7 +29,7 @@ class Default_InfoController extends Action
      */
     public function aboutAction ()
     {
-        $this->_pageTitle = array('About ' . $this->view->App()->title);
+        $this->_pageTitle = ['About ' . $this->view->App()->title];
         // These things could be moved into a view helper....
         $this->view->buildinfo       = $this->getBuildInfo()->build;
         $this->view->changelog       = $this->getChangelog();

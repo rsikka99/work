@@ -89,9 +89,9 @@ class DeviceInstanceMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
-            "{$this->col_id} = ?" => $primaryKey
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, [
+            "{$this->col_id} = ?" => $primaryKey,
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -112,15 +112,15 @@ class DeviceInstanceMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof DeviceInstanceModel)
         {
-            $whereClause = array(
-                "{$this->col_id} = ?" => $object->id
-            );
+            $whereClause = [
+                "{$this->col_id} = ?" => $object->id,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_id} = ?" => $object
-            );
+            $whereClause = [
+                "{$this->col_id} = ?" => $object,
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -205,7 +205,7 @@ class DeviceInstanceMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new DeviceInstanceModel($row->toArray());
@@ -228,9 +228,9 @@ class DeviceInstanceMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_id} = ?" => $id
-        );
+        return [
+            "{$this->col_id} = ?" => $id,
+        ];
     }
 
     /**
@@ -252,7 +252,7 @@ class DeviceInstanceMapper extends My_Model_Mapper_Abstract
      */
     public function countRowsForRmsUpload ($rmsUploadId)
     {
-        return $this->count(array("{$this->col_rmsUploadId} = ?" => $rmsUploadId));
+        return $this->count(["{$this->col_rmsUploadId} = ?" => $rmsUploadId]);
     }
 
     /**
@@ -264,7 +264,7 @@ class DeviceInstanceMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllForRmsUpload ($rmsUploadId)
     {
-        return $this->fetchAll(array("{$this->col_rmsUploadId} = ?" => $rmsUploadId), null, DeviceInstanceMapper::MAX_DEVICE_INSTANCES);
+        return $this->fetchAll(["{$this->col_rmsUploadId} = ?" => $rmsUploadId], null, DeviceInstanceMapper::MAX_DEVICE_INSTANCES);
     }
 
     /**
@@ -282,8 +282,8 @@ class DeviceInstanceMapper extends My_Model_Mapper_Abstract
         $rmsUploadRowMapper = RmsUploadRowMapper::getInstance();
 
         $select = $dbTable->select()
-                          ->from(array("di" => $this->getTableName()))
-                          ->join(array("rum" => $rmsUploadRowMapper->getTableName()), "rum.{$rmsUploadRowMapper->col_id} = di.{$this->col_rmsUploadRowId}", array())
+                          ->from(["di" => $this->getTableName()])
+                          ->join(["rum" => $rmsUploadRowMapper->getTableName()], "rum.{$rmsUploadRowMapper->col_id} = di.{$this->col_rmsUploadRowId}", [])
                           ->where("di.{$this->col_rmsUploadId} = ?", $rmsUploadId)
                           ->where("rum.{$rmsUploadRowMapper->col_rmsProviderId} = ?", $rmsProviderId)
                           ->where("rum.{$rmsUploadRowMapper->col_rmsModelId} = ?", $rmsModelId);
@@ -292,7 +292,7 @@ class DeviceInstanceMapper extends My_Model_Mapper_Abstract
 
         $results = $query->fetchAll();
 
-        $deviceInstances = array();
+        $deviceInstances = [];
         foreach ($results as $result)
         {
             $object = new DeviceInstanceModel($result);
@@ -329,9 +329,9 @@ class DeviceInstanceMapper extends My_Model_Mapper_Abstract
         /*
          * Setup our where clause
          */
-        $whereClause = array(
-            "{$this->col_rmsUploadId} = ?" => $rmsUploadId
-        );
+        $whereClause = [
+            "{$this->col_rmsUploadId} = ?" => $rmsUploadId,
+        ];
 
 
         // If we're just counting we only need to return the count
@@ -344,9 +344,9 @@ class DeviceInstanceMapper extends My_Model_Mapper_Abstract
             /*
              * Parse our order
              */
-            $order = array(
+            $order = [
                 "{$sortColumn} {$sortDirection}"
-            );
+            ];
 
             /*
              * Parse our Limit
@@ -382,18 +382,18 @@ class DeviceInstanceMapper extends My_Model_Mapper_Abstract
         $columns = null;
         if ($justCount)
         {
-            $columns = array("count" => "COUNT(*)");
+            $columns = ["count" => "COUNT(*)"];
         }
         else
         {
-            $columns = array("di.*");
+            $columns = ["di.*"];
         }
 
-        $select = $dbTable->select()->from(array("di" => $deviceInstanceTableName), $columns)
+        $select = $dbTable->select()->from(["di" => $deviceInstanceTableName], $columns)
                           ->distinct(true)
-                          ->joinLeft(array("di_md" => $deviceInstanceMasterDeviceMapper->getTableName()), "di_md.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$this->col_id}", array())
-                          ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}", array())
-                          ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array())
+                          ->joinLeft(["di_md" => $deviceInstanceMasterDeviceMapper->getTableName()], "di_md.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$this->col_id}", [])
+                          ->joinLeft(["md" => $masterDeviceMapper->getTableName()], "md.{$masterDeviceMapper->col_id} = di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}", [])
+                          ->joinLeft(["m" => $manufacturerMapper->getTableName()], "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", [])
                           ->where("di.{$this->col_rmsUploadId} = ?", $rmsUploadId)
                           ->where("di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId} IS NOT NULL OR di.{$this->col_useUserData} = 1");
 
@@ -430,7 +430,7 @@ class DeviceInstanceMapper extends My_Model_Mapper_Abstract
 
             $results = $query->fetchAll();
 
-            $deviceInstances = array();
+            $deviceInstances = [];
             foreach ($results as $result)
             {
                 $object = new DeviceInstanceModel($result);

@@ -6,162 +6,292 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
 
 ?>
 <div class="modal-dialog">
-<div class="modal-content">
-<div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h1 class="modal-title text-center">Device Management</h1>
-</div>
-<div class="modal-body">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h1 class="modal-title text-center">Device Management</h1>
+        </div>
+        <div class="modal-body">
 
 
-    <div id="alertMessage"></div>
-    <!-- Device Details -->
-    <form class="form-horizontal">
-        <div class="form-group">
-            <label class="control-label col-md-2" for="manufacturerId">Manufacturer</label>
+            <div id="alertMessage"></div>
+            <!-- Device Details -->
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="manufacturerId">Manufacturer</label>
 
-            <div class="col-md-6">
-                <input class="form-control" type="text" id="manufacturerId" name="manufacturerId" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?> value="<?= $this->manufacturerId ?>">
+                    <div class="col-md-6">
+                        <input class="form-control" type="text" id="manufacturerId" name="manufacturerId" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?> value="<?= $this->manufacturerId ?>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="modelName">Model Name</label>
+
+                    <div class="col-md-6">
+                        <input class="form-control" type="text" id="modelName" value="<?= $this->modelName; ?>" name="modelName" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <?php $first = true; ?>
+
+                        <?php if ($this->suppliesAndService) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#suppliesAndServiceTab" id="suppliesAndServiceTopTab" data-toggle="tab">Supplies &amp; Service</a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($this->deviceAttributes) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#deviceAttributesTab" id="deviceAttributesTopTab" data-toggle="tab">Attributes</a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($this->hardwareQuote) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#hardwareQuoteTab" id="hardwareQuoteTopTab" data-toggle="tab">Quote Attributes</a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($this->hardwareOptimization) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#hardwareOptimizationTab" id="hardwareOptimizationTopTab" data-toggle="tab">Swap Attributes</a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($this->availableOptions) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#availableOptionsTab" id="availableOptionsTopTab" data-toggle="tab">Options</a>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php if (false && $this->hardwareConfigurations) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#hardwareConfigurationsTab" id="hardwareConfigurationsTopTab" data-toggle="tab">Favorite Configurations</a>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="modelName">Model Name</label>
+        </nav>
+        <div class="modal-body">
 
-            <div class="col-md-6">
-                <input class="form-control" type="text" id="modelName" value="<?= $this->modelName; ?>" name="modelName" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
-            </div>
-        </div>
-    </form>
-</div>
-<nav class="navbar navbar-default" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
+            <!-- End Of Device Details -->
+
+
+            <div class="tab-content">
                 <?php $first = true; ?>
 
                 <?php if ($this->suppliesAndService) : ?>
-                    <li <?= ($first) ? 'class="active"' : '' ?>>
+                    <div class="tab-pane <?= ($first) ? ' active ' : '' ?>" id="suppliesAndServiceTab">
                         <?php $first = ($first) ? false : $first ?>
-                        <a href="#suppliesAndServiceTab" id="suppliesAndServiceTopTab" data-toggle="tab">Supplies &amp; Service</a>
-                    </li>
-                <?php endif; ?>
-                <?php if ($this->deviceAttributes) : ?>
-                    <li <?= ($first) ? 'class="active"' : '' ?>>
-                        <?php $first = ($first) ? false : $first ?>
-                        <a href="#deviceAttributesTab" id="deviceAttributesTopTab" data-toggle="tab">Attributes</a>
-                    </li>
-                <?php endif; ?>
-                <?php if ($this->hardwareQuote) : ?>
-                    <li <?= ($first) ? 'class="active"' : '' ?>>
-                        <?php $first = ($first) ? false : $first ?>
-                        <a href="#hardwareQuoteTab" id="hardwareQuoteTopTab" data-toggle="tab">Quote Attributes</a>
-                    </li>
-                <?php endif; ?>
-                <?php if ($this->hardwareOptimization) : ?>
-                    <li <?= ($first) ? 'class="active"' : '' ?>>
-                        <?php $first = ($first) ? false : $first ?>
-                        <a href="#hardwareOptimizationTab" id="hardwareOptimizationTopTab" data-toggle="tab">Swap Attributes</a>
-                    </li>
-                <?php endif; ?>
-                <?php if ($this->availableOptions) : ?>
-                    <li <?= ($first) ? 'class="active"' : '' ?>>
-                        <?php $first = ($first) ? false : $first ?>
-                        <a href="#availableOptionsTab" id="availableOptionsTopTab" data-toggle="tab">Options</a>
-                    </li>
-                <?php endif; ?>
+                        <?= $this->suppliesAndService; ?>
 
-                <?php if (false && $this->hardwareConfigurations) : ?>
-                    <li <?= ($first) ? 'class="active"' : '' ?>>
-                        <?php $first = ($first) ? false : $first ?>
-                        <a href="#hardwareConfigurationsTab" id="hardwareConfigurationsTopTab" data-toggle="tab">Favorite Configurations</a>
-                    </li>
-                <?php endif; ?>
-            </ul>
-        </div>
-    </div>
-</nav>
-<div class="modal-body">
+                        <div class="clearfix">
+                            <h3>
+                                Assigned Toners
+                                <?php if ($this->isAllowed || $this->IsAllowed(HardwareLibraryAclModel::RESOURCE_HARDWARE_LIBRARY_QUOTEINDEX_INDEX, AppAclModel::PRIVILEGE_VIEW)) : ?>
+                                    <button type="button" class="btn btn-success btn-xs pull-right js-assign-toners-button">
+                                        <i class="fa fa-fw fa-plus-circle"></i> Assign Toners
+                                    </button>
+                                <?php endif; ?>
+                            </h3>
+                        </div>
 
-<!-- End Of Device Details -->
+                        <div class="form-group">
+                            <div>
+                                <input name="assignedTonersMistakes" type="hidden" value="undefined">
+                            </div>
+                        </div>
+
+                        <div class="js-assigned-toners-grid"></div>
 
 
-<div class="tab-content">
-<?php $first = true; ?>
+                        <div class="modal fade assign-toners-modal js-assign-toners-modal" id="assign-toners-modal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
 
-<?php if ($this->suppliesAndService) : ?>
-    <div class="tab-pane <?= ($first) ? ' active ' : '' ?>" id="suppliesAndServiceTab">
-        <?php $first = ($first) ? false : $first ?>
-        <?= $this->suppliesAndService; ?>
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h2 class="modal-title text-center">Available Toners</h2>
+                                    </div>
 
-        <div class="clearfix">
-            <h3>
-                Assigned Toners
-                <?php if ($this->isAllowed || $this->IsAllowed(HardwareLibraryAclModel::RESOURCE_HARDWARE_LIBRARY_QUOTEINDEX_INDEX, AppAclModel::PRIVILEGE_VIEW)) : ?>
-                    <button type="button" class="btn btn-success btn-xs pull-right js-assign-toners-button">
-                        <i class="fa fa-fw fa-plus-circle"></i> Assign Toners
-                    </button>
-                <?php endif; ?>
-            </h3>
-        </div>
+                                    <div class="modal-body">
+                                        <form class="form-horizontal">
+                                            <fieldset>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 col-md-3 col-sm-4" for="toner-manufacturer-filter">Manufacturer</label>
 
-        <div class="form-group">
-            <div>
-                <input name="assignedTonersMistakes" type="hidden" value="undefined">
-            </div>
-        </div>
+                                                    <div class="col-lg-10 col-md-9 col-sm-8">
+                                                        <input class="form-control js-filter-manufacturer" id="assign-toners-manufacturer-filter" name="assign-toners-manufacturer-filter" type="text" title="Select Manufacturer" />
+                                                    </div>
+                                                </div>
 
-        <div class="js-assigned-toners-grid"></div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 col-md-3 col-sm-4" for="assign-toners-filter-sku">VPN/SKU</label>
+
+                                                    <div class="col-lg-10 col-md-9 col-sm-8">
+                                                        <input class="form-control js-filter-toner-sku" id="assign-toners-filter-sku" name="assign-toners-filter-sku" type="text" title="Filter SKU" placeholder="Any VPN/SKU" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 col-md-3 col-sm-4" for="assign-toners-filter-color">Toner Color</label>
+
+                                                    <div class="col-lg-10 col-md-9 col-sm-8">
+                                                        <input class="form-control js-filter-toner-color" id="assign-toners-filter-color" name="assign-toners-filter-color" type="text" title="Toner Color">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-lg-10 col-lg-push-2 col-md-9 col-md-push-3 col-sm-8 col-sm-push-4">
+                                                        <button class="btn btn-xs btn-default js-reset-filter" id="assign-toners-reset-filter" type="reset">
+                                                            <i class="fa fa-fw fa-times"></i> Reset
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+
+                                        <hr>
+
+                                        <div class="js-assign-toners-grid"></div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <input type="button" class="btn btn-default" value="Close" data-dismiss='modal' />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal masterDeviceModal" id="replacementTonersModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="aTitle"></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h3 class="text-center">Affected Devices</h3>
+
+                                        <div class="form-horizontal">
+                                            <span id="affectedDevicesText"></span>
+                                            <table id="affectedReplacementToners"></table>
+                                            <div id="affectedReplacementToners_Pager"></div>
+                                            <h3 id="selectReplacementText" class="text-center"></h3>
+
+                                            <div id="replacementToners_criteria_container">
+                                                Manufacturer:
+                                                <input id="replacementTonersSelectManufacturer" type="text" name="replacementTonersSelectManufacturer" class="input-large" title="Replacement Toner Select Manufacturer" />
+                                                <input type="button" value="Reset" class="btn btn-xs btn-default" id='replacementTonersClearManSearch' />
+                                                Filter:
+                                                <select id="replacementTonersFilter" name="filterList" class="input-large" title="Replacement Toner Search Filter">
+                                                    <option value="dealerSku"><?= My_Brand::$dealerSku; ?></option>
+                                                    <option value="sku">OEM SKU</option>
+                                                </select>
+                                                <input type="text" id="replacementTonersCriteria" class="input-medium" title="Replacement Toner Search Text" />
+                                                <input id="replacementTonersSearch" type="button" value="Search" class="btn btn-xs btn-success" />
+                                                <input id="replacementTonersReset" type="button" value="Reset" class="btn btn-xs btn-default" />
+                                            </div>
+                                            <table id="replacementToners"></table>
+                                            <div id="replacementToners_Pager"></div>
+                                            <div>
+                                                <span class="text-center">Apply to all devices using this toner?</span>
+                                                <br />
+
+                                                <div class="switch" data-on-label="Yes" data-off-label="No" data-off="danger" data-on="success">
+                                                    <input type="checkbox" id="replacementTonersApplyToAll" title="Apply replacement toner to all matching devices" />
+                                                </div>
+                                            </div>
+                                            <br />
 
 
-        <div class="modal fade assign-toners-modal js-assign-toners-modal" id="assign-toners-modal">
-            <div class="modal-dialog">
-                <div class="modal-content">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="button" class="btn btn-primary" value="Save" id="replacementTonersFormBtn" onclick="replaceToner();" />
+                                        <input type="button" class="btn btn-default" value="Cancel" data-dismiss='modal' " />
 
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h2 class="modal-title text-center">Available Toners</h2>
+                                        <input type="hidden" id="replacementTonersTotalCount" />
+                                        <input type="hidden" id="replacementTonersDeviceCount" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                <?php endif; ?>
 
-                    <div class="modal-body">
+                <?php if ($this->deviceAttributes) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="deviceAttributesTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->deviceAttributes ?>
+                    </div>
+                <?php endif ?>
+
+                <?php if ($this->hardwareOptimization) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="hardwareOptimizationTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->hardwareOptimization ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($this->hardwareQuote) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="hardwareQuoteTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->hardwareQuote ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($this->availableOptions) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="availableOptionsTab">
+                        <?php $first = ($first) ? false : $first ?>
+
                         <form class="form-horizontal">
                             <fieldset>
-                                <div class="form-group">
-                                    <label class="control-label col-lg-2 col-md-3 col-sm-4" for="toner-manufacturer-filter">Manufacturer</label>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-2 col-md-3 col-sm-4" for="assign-options-filter-sku">VPN/SKU</label>
 
-                                    <div class="col-lg-10 col-md-9 col-sm-8">
-                                        <input class="form-control js-filter-manufacturer" id="assign-toners-manufacturer-filter" name="assign-toners-manufacturer-filter" type="text" title="Select Manufacturer" />
+                                            <div class="col-lg-10 col-md-9 col-sm-8">
+                                                <input class="form-control js-filter-options-sku" id="assign-options-filter-sku" name="assign-options-filter-sku" type="text" title="Filter SKU" placeholder="Any VPN/SKU" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="col-md-4">
 
-                                <div class="form-group">
-                                    <label class="control-label col-lg-2 col-md-3 col-sm-4" for="assign-toners-filter-sku">VPN/SKU</label>
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-2 col-md-3 col-sm-4" for="assign-options-filter-text">Name/Description</label>
 
-                                    <div class="col-lg-10 col-md-9 col-sm-8">
-                                        <input class="form-control js-filter-toner-sku" id="assign-toners-filter-sku" name="assign-toners-filter-sku" type="text" title="Filter SKU" placeholder="Any VPN/SKU" />
+                                            <div class="col-lg-10 col-md-9 col-sm-8">
+                                                <input class="form-control js-filter-options-text" id="assign-options-filter-text" name="assign-options-filter-text" type="text" title="Filter Name/Description" placeholder="Text to find in the name or description" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="control-label col-lg-2 col-md-3 col-sm-4" for="assign-toners-filter-color">Toner Color</label>
-
-                                    <div class="col-lg-10 col-md-9 col-sm-8">
-                                        <input class="form-control js-filter-toner-color" id="assign-toners-filter-color" name="assign-toners-filter-color" type="text" title="Toner Color">
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="col-lg-10 col-lg-push-2 col-md-9 col-md-push-3 col-sm-8 col-sm-push-4">
-                                        <button class="btn btn-xs btn-default js-reset-filter" id="assign-toners-reset-filter" type="reset">
-                                            <i class="fa fa-fw fa-times"></i> Reset
-                                        </button>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class="col-lg-10 col-lg-push-2 col-md-9 col-md-push-3 col-sm-8 col-sm-push-4">
+                                                <button class="btn btn-xs btn-default js-reset-filter" type="reset">
+                                                    <i class="fa fa-fw fa-times"></i> Reset
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </fieldset>
@@ -169,208 +299,80 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
 
                         <hr>
 
-                        <div class="js-assign-toners-grid"></div>
+                        <!-- Available Options Table -->
+                        <div class="js-available-options-grid"></div>
+
                     </div>
+                <?php endif; ?>
 
-                    <div class="modal-footer">
-                        <input type="button" class="btn btn-default" value="Close" data-dismiss='modal' />
-                    </div>
+                <?php if (false && $this->hardwareConfigurations) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="hardwareConfigurationsTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <table id="hardwareConfigurations"></table>
+                        <div id="hardwareConfigurations_Pager"></div>
+                        <div class="modal fade" id="hardwareConfigurationsModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <a class="close" data-dismiss="modal">&times;</a>
 
-                </div>
-            </div>
-        </div>
-
-        <div class="modal masterDeviceModal" id="replacementTonersModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="aTitle"></h4>
-                    </div>
-                    <div class="modal-body">
-                        <h3 class="text-center">Affected Devices</h3>
-
-                        <div class="form-horizontal">
-                            <span id="affectedDevicesText"></span>
-                            <table id="affectedReplacementToners"></table>
-                            <div id="affectedReplacementToners_Pager"></div>
-                            <h3 id="selectReplacementText" class="text-center"></h3>
-
-                            <div id="replacementToners_criteria_container">
-                                Manufacturer:
-                                <input id="replacementTonersSelectManufacturer" type="text" name="replacementTonersSelectManufacturer" class="input-large" title="Replacement Toner Select Manufacturer" />
-                                <input type="button" value="Reset" class="btn btn-xs btn-default" id='replacementTonersClearManSearch' />
-                                Filter:
-                                <select id="replacementTonersFilter" name="filterList" class="input-large" title="Replacement Toner Search Filter">
-                                    <option value="dealerSku"><?= My_Brand::$dealerSku; ?></option>
-                                    <option value="sku">OEM SKU</option>
-                                </select>
-                                <input type="text" id="replacementTonersCriteria" class="input-medium" title="Replacement Toner Search Text" />
-                                <input id="replacementTonersSearch" type="button" value="Search" class="btn btn-xs btn-success" />
-                                <input id="replacementTonersReset" type="button" value="Reset" class="btn btn-xs btn-default" />
-                            </div>
-                            <table id="replacementToners"></table>
-                            <div id="replacementToners_Pager"></div>
-                            <div>
-                                <span class="text-center">Apply to all devices using this toner?</span>
-                                <br />
-
-                                <div class="switch" data-on-label="Yes" data-off-label="No" data-off="danger" data-on="success">
-                                    <input type="checkbox" id="replacementTonersApplyToAll" title="Apply replacement toner to all matching devices" />
+                                        <h3>
+                                            <span id="hardwareConfigurationsTitle"></span>
+                                        </h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-horizontal">
+                                            <form id="hardwareConfigurationsForm" class="form-horizontal form-center-actions">
+                                            </form>
+                                            <div class="modal-footer">
+                                                <input type="button" class="btn btn-primary" value="Save" id="hardwareConfigurationFormBtn" onclick="createOrEdit('hardwareConfigurationsForm');" />
+                                                <input type="button" class="btn btn-default" value="Cancel" data-dismiss='modal' />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <br />
-
-
+                        </div>
+                        <div class="modal fade" id="deleteModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Confirm Delete Configuration</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to delete this configuration?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form id="deleteForm" class="form-horizontal form-center-actions">
+                                            <?= $this->delete ?>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <input type="button" class="btn btn-primary" value="Save" id="replacementTonersFormBtn" onclick="replaceToner();" />
-                        <input type="button" class="btn btn-default" value="Cancel" data-dismiss='modal' " />
+                <?php endif; ?>
 
-                        <input type="hidden" id="replacementTonersTotalCount" />
-                        <input type="hidden" id="replacementTonersDeviceCount" />
-                    </div>
+
+                <div id="loadingDiv" class="modal" data-backdrop="static" data-keyboard="false">
+                    <div class="spinner64"></div>
                 </div>
             </div>
         </div>
-    </div>
-<?php endif; ?>
-
-<?php if ($this->deviceAttributes) : ?>
-    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="deviceAttributesTab">
-        <?php $first = ($first) ? false : $first ?>
-        <?= $this->deviceAttributes ?>
-    </div>
-<?php endif ?>
-
-<?php if ($this->hardwareOptimization) : ?>
-    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="hardwareOptimizationTab">
-        <?php $first = ($first) ? false : $first ?>
-        <?= $this->hardwareOptimization ?>
-    </div>
-<?php endif; ?>
-
-<?php if ($this->hardwareQuote) : ?>
-    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="hardwareQuoteTab">
-        <?php $first = ($first) ? false : $first ?>
-        <?= $this->hardwareQuote ?>
-    </div>
-<?php endif; ?>
-
-<?php if ($this->availableOptions) : ?>
-    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="availableOptionsTab">
-        <?php $first = ($first) ? false : $first ?>
-
-        <form class="form-horizontal">
-            <fieldset>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label class="control-label col-lg-2 col-md-3 col-sm-4" for="assign-options-filter-sku">VPN/SKU</label>
-
-                            <div class="col-lg-10 col-md-9 col-sm-8">
-                                <input class="form-control js-filter-options-sku" id="assign-options-filter-sku" name="assign-options-filter-sku" type="text" title="Filter SKU" placeholder="Any VPN/SKU" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-
-                        <div class="form-group">
-                            <label class="control-label col-lg-2 col-md-3 col-sm-4" for="assign-options-filter-text">Name/Description</label>
-
-                            <div class="col-lg-10 col-md-9 col-sm-8">
-                                <input class="form-control js-filter-options-text" id="assign-options-filter-text" name="assign-options-filter-text" type="text" title="Filter Name/Description" placeholder="Text to find in the name or description" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <div class="col-lg-10 col-lg-push-2 col-md-9 col-md-push-3 col-sm-8 col-sm-push-4">
-                                <button class="btn btn-xs btn-default js-reset-filter" type="reset">
-                                    <i class="fa fa-fw fa-times"></i> Reset
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
-
-        <hr>
-
-        <!-- Available Options Table -->
-        <div class="js-available-options-grid"></div>
-
-    </div>
-<?php endif; ?>
-
-<?php if (false && $this->hardwareConfigurations) : ?>
-    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="hardwareConfigurationsTab">
-        <?php $first = ($first) ? false : $first ?>
-        <table id="hardwareConfigurations"></table>
-        <div id="hardwareConfigurations_Pager"></div>
-        <div class="modal fade" id="hardwareConfigurationsModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <a class="close" data-dismiss="modal">&times;</a>
-
-                        <h3><span id="hardwareConfigurationsTitle"></span></h3>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-horizontal">
-                            <form id="hardwareConfigurationsForm" class="form-horizontal form-center-actions">
-                            </form>
-                            <div class="modal-footer">
-                                <input type="button" class="btn btn-primary" value="Save" id="hardwareConfigurationFormBtn" onclick="createOrEdit('hardwareConfigurationsForm');" />
-                                <input type="button" class="btn btn-default" value="Cancel" data-dismiss='modal' />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="deleteModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Confirm Delete Configuration</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete this configuration?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <form id="deleteForm" class="form-horizontal form-center-actions">
-                            <?= $this->delete ?>
-                        </form>
-                    </div>
-                </div>
-            </div>
+        <div class="modal-footer">
+            <ul class="pager">
+                <li class="next">
+                    <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+                    <span class="divider-vertical"></span>
+                    <button class="btn btn-primary js-save-device-modal" type="button">Save</button>
+                    <?php if ($this->isMasterDeviceAdministrator && $this->masterDevice instanceof MasterDeviceModel && $this->masterDevice->isSystemDevice == 0) : ?>
+                        <span class="divider-vertical"></span>
+                        <button class="btn btn-success js-save-and-approve-device-modal" type="button">Save and Approve</button>
+                    <?php endif; ?>
+                </li>
+            </ul>
         </div>
     </div>
-<?php endif; ?>
-
-
-<div id="loadingDiv" class="modal" data-backdrop="static" data-keyboard="false">
-    <div class="spinner64"></div>
-</div>
-</div>
-</div>
-<div class="modal-footer">
-    <ul class="pager">
-        <li class="next">
-            <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
-            <span class="divider-vertical"></span>
-            <button class="btn btn-primary js-save-device-modal" type="button">Save</button>
-            <?php if ($this->isMasterDeviceAdministrator && $this->masterDevice instanceof MasterDeviceModel && $this->masterDevice->isSystemDevice == 0) : ?>
-                <span class="divider-vertical"></span>
-                <button class="btn btn-success js-save-and-approve-device-modal" type="button">Save and Approve</button>
-            <?php endif; ?>
-        </li>
-    </ul>
-</div>
-</div>
 </div>
 
 <div class="modal fade" id="alertMessageModal">

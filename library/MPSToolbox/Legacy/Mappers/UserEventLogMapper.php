@@ -84,9 +84,9 @@ class UserEventLogMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->$col_eventLogId} = ?" => $primaryKey
-        ));
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -107,15 +107,15 @@ class UserEventLogMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof UserEventLogModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->$col_eventLogId} = ?" => $object->id
-            );
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->$col_eventLogId} = ?" => $object
-            );
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -200,7 +200,7 @@ class UserEventLogMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 150, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new UserEventLogModel($row->toArray());
@@ -223,9 +223,9 @@ class UserEventLogMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->$col_eventLogId} = ?" => $id
-        );
+        ];
     }
 
 

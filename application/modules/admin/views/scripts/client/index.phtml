@@ -6,7 +6,7 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
 ?>
 <div class="container">
     <div class="clearfix">
-        <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url(array(), 'admin.clients.create') ?>">
+        <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url([], 'admin.clients.create') ?>">
             <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
     </div>
     <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
@@ -31,10 +31,10 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
                     <td><?= $this->escape(DealerMapper::getInstance()->find($client->dealerId)->dealerName); ?></td>
                     <td>
                         <div class="btn-group btn-group-justified">
-                            <a class="btn btn-xs btn-warning" title="Edit" href="<?= $this->url(array('id' => $client->id), 'admin.clients.edit'); ?>">
+                            <a class="btn btn-xs btn-warning" title="Edit" href="<?= $this->url(['id' => $client->id], 'admin.clients.edit'); ?>">
                                 <i class="glyphicon glyphicon-pencil"></i>
                             </a>
-                            <a class="btn btn-xs btn-danger" title="Delete" href="<?= $this->url(array('id' => $client->id), 'admin.clients.delete'); ?>">
+                            <a class="btn btn-xs btn-danger" title="Delete" href="<?= $this->url(['id' => $client->id], 'admin.clients.delete'); ?>">
                                 <i class="glyphicon glyphicon-trash"></i>
                             </a>
                         </div>

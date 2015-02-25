@@ -111,10 +111,10 @@ class DeviceSwapMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_masterDeviceId} = ?" => $primaryKey[0],
             "{$this->col_dealerId} = ?"       => $primaryKey[1]
-        ));
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -135,17 +135,17 @@ class DeviceSwapMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof DeviceSwapModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_masterDeviceId} = ?" => $object->masterDeviceId,
-                "{$this->col_dealerId} = ?"       => $object->dealerId
-            );
+                "{$this->col_dealerId} = ?"       => $object->dealerId,
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_masterDeviceId} = ?" => $object[0],
-                "{$this->col_dealerId} = ?"       => $object[1]
-            );
+                "{$this->col_dealerId} = ?"       => $object[1],
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -230,7 +230,7 @@ class DeviceSwapMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new DeviceSwapModel($row->toArray());
@@ -253,10 +253,10 @@ class DeviceSwapMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_masterDeviceId} = ?" => $id[0],
-            "{$this->col_dealerId} = ?"       => $id[1]
-        );
+            "{$this->col_dealerId} = ?"       => $id[1],
+        ];
     }
 
     /**
@@ -266,10 +266,10 @@ class DeviceSwapMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
+        return [
             $object->masterDeviceId,
-            $object->dealerId
-        );
+            $object->dealerId,
+        ];
     }
 
     /**
@@ -318,16 +318,16 @@ class DeviceSwapMapper extends My_Model_Mapper_Abstract
 
             $db     = Zend_Db_Table::getDefaultAdapter();
             $select = $db->select();
-            $select->from(array($this->getTableName()), $caseStatement)
-                   ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
-                   ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")))
+            $select->from([$this->getTableName()], $caseStatement)
+                   ->joinLeft(["md" => $masterDeviceMapper->getTableName()], "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", ["{$masterDeviceMapper->col_id}"])
+                   ->joinLeft(["m" => $manufacturerMapper->getTableName()], "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", [$manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")])
                    ->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId)
                    ->limit($returnLimit, $offset)
                    ->order($sortOrder);
 
             $query = $db->query($select);
 
-            $deviceSwaps = array();
+            $deviceSwaps = [];
             foreach ($query->fetchAll() as $row)
             {
                 $masterDevice         = MasterDeviceMapper::getInstance()->find($row['id']);
@@ -490,14 +490,14 @@ class DeviceSwapMapper extends My_Model_Mapper_Abstract
 
             $db     = Zend_Db_Table::getDefaultAdapter();
             $select = $db->select();
-            $select->from(array($this->getTableName()), $caseStatement)
-                   ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
+            $select->from([$this->getTableName()], $caseStatement)
+                   ->joinLeft(["md" => $masterDeviceMapper->getTableName()], "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", ["{$masterDeviceMapper->col_id}"])
                    ->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId)
                    ->order($order);
 
             $query = $db->query($select);
 
-            $deviceSwaps = array();
+            $deviceSwaps = [];
             foreach ($query->fetchAll() as $row)
             {
                 $deviceSwap = new DeviceSwapModel();

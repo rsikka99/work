@@ -112,11 +112,11 @@ class ClientForm extends Zend_Form
         /**
          * Contact Phone Number
          */
-        $this->addElement('text', 'phoneNumber', array(
+        $this->addElement('text', 'phoneNumber', [
             'label'       => 'Phone Number',
             'placeholder' => '111-222-3333',
             'filters'     => ['StringTrim'],
-        ));
+        ]);
 
         /**
          * Address Line 1
@@ -166,7 +166,7 @@ class ClientForm extends Zend_Form
         /**
          * Country
          */
-        $this->addElement('text', 'countryId', array(
+        $this->addElement('text', 'countryId', [
             'label'      => 'Country',
             'required'   => true,
             'validators' => [
@@ -175,30 +175,23 @@ class ClientForm extends Zend_Form
                     'options'   => ['table' => 'countries', 'field' => 'country_id'],
                 ]
             ],
-        ));
+        ]);
 
 
-        $this->addElement('submit', 'Cancel', array(
+        $this->addElement('submit', 'Cancel', [
             'ignore'          => true,
             'formnovalidate ' => true,
             'label'           => 'Cancel',
-        ));
+        ]);
 
-        $this->addElement('submit', 'Save', array(
+        $this->addElement('submit', 'Save', [
             'ignore' => true,
             'label'  => 'Save',
-        ));
+        ]);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/admin/client-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/admin/client-form.phtml']]]);
     }
 }

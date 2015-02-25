@@ -20,67 +20,58 @@ class DealerForm extends Zend_Form
         $this->setMethod('POST');
         $this->setAttrib('accept-charset', 'UTF-8');
 
-        $this->addElement('text', 'dealerName', array(
+        $this->addElement('text', 'dealerName', [
             'required'    => true,
             'label'       => 'Dealer Name',
             'description' => 'The name of the dealership',
-            'filters'     => array(
-                'StringTrim',
-                'StripTags',
-            ),
-            'validators'  => array(
-                array(
+            'filters'     => ['StringTrim', 'StripTags'],
+            'validators'  => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array('min' => 2, 'max' => 255),
-                ),
-            ),
-        ));
+                    'options'   => ['min' => 2, 'max' => 255],
+                ],
+            ],
+        ]);
 
-        $this->addElement('text', 'userLicenses', array(
+        $this->addElement('text', 'userLicenses', [
             'required'    => true,
             'label'       => '# of user licenses',
             'description' => 'The number of users a dealer can create. The dealer administrator counts towards these licenses',
-            'filters'     => array(
-                'StringTrim',
-                'StripTags',
-            ),
-            'validators'  => array(
-                array(
+            'filters'     => ['StringTrim', 'StripTags'],
+            'validators'  => [
+                [
                     'validator' => 'Between',
-                    'options'   => array('min' => 1, 'max' => 1000),
-                ),
-            ),
-        ));
+                    'options'   => ['min' => 1, 'max' => 1000],
+                ],
+            ],
+        ]);
 
         /**
          * File element. Can only upload a single file. Max size is 16mb.
          */
-        $this->addElement('file', 'dealerLogoImage', array(
+        $this->addElement('file', 'dealerLogoImage', [
             'label'       => 'Dealer Logo',
             'description' => 'An image to use for customer facing output. 595px by 300px max. Must be jpg or png.',
-            'filters'     => array(
-                'StringTrim',
-                'StripTags',
-            ),
-            'validators'  => array(
-                array(
+            'filters'     => ['StringTrim', 'StripTags'],
+            'validators'  => [
+                [
                     'validator' => 'Count',
-                    'options'   => array('count' => 1),
-                ),
-                array(
+                    'options'   => ['count' => 1],
+                ],
+                [
                     'validator' => 'Size',
-                    'options'   => array('size' => 16777216),
-                ),
-                array(
+                    'options'   => ['size' => 16777216],
+                ],
+                [
                     'validator' => 'Extension',
-                    'options'   => array('extension' => 'jpg,png'),
-                ),
-            ),
-        ));
+                    'options'   => ['extension' => 'jpg,png'],
+                ],
+            ],
+        ]);
 
         $featuresList = FeatureMapper::getInstance()->fetchAllAsStringArray();
         /* @var $dealerFeatures Zend_Form_Element_Multi */
-        $dealerFeatures = $this->createElement('multiCheckbox', 'dealerFeatures', array('label' => 'Features:'));
+        $dealerFeatures = $this->createElement('multiCheckbox', 'dealerFeatures', ['label' => 'Features:']);
         if (count($featuresList) > 0)
         {
             // This removes the br that is put in between each element
@@ -93,34 +84,28 @@ class DealerForm extends Zend_Form
         }
 
         // Add the submit button
-        $submit = $this->createElement('submit', 'submit', array(
+        $submit = $this->createElement('submit', 'submit', [
             'ignore' => true,
             'label'  => 'Save'
-        ));
+        ]);
+
         // Add the submit button
-        $cancel = $this->createElement('submit', 'cancel', array(
+        $cancel = $this->createElement('submit', 'cancel', [
             'ignore'         => true,
             'label'          => 'Cancel',
             'formnovalidate' => true,
-        ));
-        $this->addDisplayGroup(array($submit, $cancel), 'actions', array(
+        ]);
+        $this->addDisplayGroup([$submit, $cancel], 'actions', [
             'disableLoadDefaultDecorators' => true,
-            'decorators'                   => array('Actions'),
+            'decorators'                   => ['Actions'],
             'class'                        => 'form-actions-center'
-        ));
+        ]);
 
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/admin/dealer-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/admin/dealer-form.phtml']]]);
     }
 
     /**

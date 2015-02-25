@@ -15,7 +15,7 @@ $optimization = $this->optimization;
 $dealerOptimization = $this->dealerOptimization;
 
 /* @var $flaggedDeviceInstances DeviceInstanceModel[] */
-$flaggedDeviceInstances = (isset($this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_DNR]) ? $this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_DNR] : array());
+$flaggedDeviceInstances = (isset($this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_DNR]) ? $this->deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_DNR] : []);
 
 /* @var $graphs array */
 $graphs = $this->graphs;

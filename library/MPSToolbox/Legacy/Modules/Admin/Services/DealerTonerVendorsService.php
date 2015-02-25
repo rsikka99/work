@@ -62,7 +62,7 @@ class DealerTonerVendorsService extends \Tangent\Service\BaseService
 
                 if ($delete)
                 {
-                    $dealerTonerVendorMapper->delete(array((int)$dealerId, $oldManufacturerId));
+                    $dealerTonerVendorMapper->delete([(int)$dealerId, $oldManufacturerId]);
                 }
             }
         }
@@ -70,7 +70,7 @@ class DealerTonerVendorsService extends \Tangent\Service\BaseService
         {
             foreach ($currentTonerVendorManufacturerIds as $oldManufacturerId)
             {
-                $dealerTonerVendorMapper->delete(array((int)$dealerId, $oldManufacturerId));
+                $dealerTonerVendorMapper->delete([(int)$dealerId, $oldManufacturerId]);
             }
         }
     }
@@ -84,7 +84,7 @@ class DealerTonerVendorsService extends \Tangent\Service\BaseService
      */
     public function getDealerTonerVendorsAsArray ($dealerId)
     {
-        $tonerVendorArray = array();
+        $tonerVendorArray = [];
 
         foreach (DealerTonerVendorMapper::getInstance()->fetchAllForDealer($dealerId) as $dealerTonerVendor)
         {

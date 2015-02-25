@@ -25,7 +25,7 @@ $sheetCounter = 0;
 $activeSheet  = $objPHPExcel->getActiveSheet();
 $objPHPExcel->setActiveSheetIndex(0);
 $activeSheet->setTitle("Fleet Attributes");
-        $cellStyle = $activeSheet->getStyleByColumnAndRow($fieldTitleCounter, 1)->getFont()->setBold(true);
+$cellStyle = $activeSheet->getStyleByColumnAndRow($fieldTitleCounter, 1)->getFont()->setBold(true);
 
 /**
  * Titles
@@ -131,7 +131,7 @@ foreach ($this->fleetAttributesData as $deviceData)
     $activeSheet->getStyle("D{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
     $activeSheet->getStyle("E{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
     $activeSheet->getStyle("F{$currentRow}")->getNumberFormat()->setFormatCode('#,##0');
-    $activeSheet->getStyle("G{$currentRow}")->getNumberFormat()->applyFromArray(array('code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+    $activeSheet->getStyle("G{$currentRow}")->getNumberFormat()->applyFromArray(['code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00]);
     $activeSheet->getStyle("H{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
     $activeSheet->getStyle("I{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
     $activeSheet->getStyle("J{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);

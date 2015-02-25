@@ -11,7 +11,7 @@ namespace Tangent\Format;
  */
 class NumberToWord
 {
-    public $numberNameArray = array(
+    public $numberNameArray = [
         "Hundred",
         "Thousand",
         "Million",
@@ -83,7 +83,7 @@ class NumberToWord
         "Octingentillion",
         "Nongentillion",
         "Millinillion",
-    );
+    ];
 
     /**
      *  Convert a number to a word representation

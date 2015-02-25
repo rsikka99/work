@@ -8,7 +8,7 @@ use MPSToolbox\Legacy\Models\Acl\PreferencesAclModel;
     <div class="row">
         <?php if ($this->isAllowed(DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_BRANDING_WILDCARD)) : ?>
             <div class="col-sm-3 col-md-2 col-lg-2">
-                <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.branding'); ?>">
+                <a class="btn btn-default btn-block" href="<?= $this->url([], 'company.branding'); ?>">
                     <i class="fa fa-wrench fa-4x fa-fw"></i>
                     <br />
                     <br />
@@ -20,7 +20,7 @@ use MPSToolbox\Legacy\Models\Acl\PreferencesAclModel;
         <?php endif; ?>
         <?php if ($this->isAllowed(DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD)) : ?>
             <div class="col-sm-3 col-md-2 col-lg-2">
-                <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.clients'); ?>">
+                <a class="btn btn-default btn-block" href="<?= $this->url([], 'company.clients'); ?>">
                     <i class="fa fa-star fa-4x fa-fw"></i>
                     <br />
                     <br />
@@ -32,7 +32,7 @@ use MPSToolbox\Legacy\Models\Acl\PreferencesAclModel;
         <?php endif; ?>
         <?php if ($this->isAllowed(DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD)) : ?>
             <div class="col-sm-3 col-md-2 col-lg-2">
-                <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.leasing-schema'); ?>">
+                <a class="btn btn-default btn-block" href="<?= $this->url([], 'company.leasing-schema'); ?>">
                     <i class="fa fa-money fa-4x fa-fw"></i>
                     <br />
                     <br />
@@ -45,7 +45,7 @@ use MPSToolbox\Legacy\Models\Acl\PreferencesAclModel;
 
         <?php if ($this->isAllowed(PreferencesAclModel::RESOURCE_PREFERENCES_DEALER_WILDCARD)) : ?>
             <div class="col-sm-3 col-md-2 col-lg-2">
-                <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.report-settings'); ?>">
+                <a class="btn btn-default btn-block" href="<?= $this->url([], 'company.report-settings'); ?>">
                     <i class="fa fa-cog fa-4x fa-fw"></i>
                     <br />
                     <br />
@@ -58,7 +58,7 @@ use MPSToolbox\Legacy\Models\Acl\PreferencesAclModel;
 
         <?php if ($this->isAllowed(DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD)) : ?>
             <div class="col-sm-3 col-md-2 col-lg-2">
-                <a class="btn btn-default btn-block" href="<?= $this->url(array(), 'company.users'); ?>">
+                <a class="btn btn-default btn-block" href="<?= $this->url([], 'company.users'); ?>">
                     <i class="fa fa-group fa-4x fa-fw"></i>
                     <br />
                     <br />

@@ -12,15 +12,15 @@ $section = $this->section;
 $client  = $quote->getClient();
 
 // Table to fix the issue of images being different sizes
-$imageTable = $section->addTable(array());
+$imageTable = $section->addTable([]);
 $imageTable->addRow(5760);
-$cell = $imageTable->addCell(9028.8, array(
+$cell = $imageTable->addCell(9028.8, [
     'valign' => 'center'
-));
+]);
 
-$cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, array(
+$cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, [
     'align' => 'center'
-));
+]);
 
 /**
  * Main title

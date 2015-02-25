@@ -31,7 +31,7 @@ class DeviceForm extends Zend_Form
      *
      * @var array
      */
-    protected $_deviceOptionElements = array();
+    protected $_deviceOptionElements = [];
 
     /**
      * Options for the devices
@@ -65,23 +65,17 @@ class DeviceForm extends Zend_Form
 
             $this->addElement($deviceName);
 
-            $this->addElement('text', 'oemSku', array(
+            $this->addElement('text', 'oemSku', [
                 'label'      => 'OEM SKU:',
                 'required'   => true,
-                'filters'    => array(
-                    'StringTrim',
-                    'StripTags'
-                ),
-                'validators' => array(
-                    array(
+                'filters'    => ['StringTrim', 'StripTags'],
+                'validators' => [
+                    [
                         'validator' => 'StringLength',
-                        'options'   => array(
-                            1,
-                            255
-                        )
-                    )
-                )
-            ));
+                        'options'   => [1, 255],
+                    ],
+                ],
+            ]);
 
             /* @var $deviceOption DeviceOptionModel */
             foreach ($device->getDeviceOptions() as $deviceOption)
@@ -94,11 +88,11 @@ class DeviceForm extends Zend_Form
                 {
                     $deviceOption->includedQuantity = 0;
                 }
-                $optionElement = $this->createElement('text', "option-{$deviceOption->getOption()->id}", array(
+                $optionElement = $this->createElement('text', "option-{$deviceOption->getOption()->id}", [
                     'label' => $deviceOption->getOption()->name,
                     'value' => $deviceOption->includedQuantity,
-                    'class' => 'span1'
-                ));
+                    'class' => 'span1',
+                ]);
 
                 // Add the elements to the table
                 $this->addElement($optionElement);
@@ -113,44 +107,36 @@ class DeviceForm extends Zend_Form
         }
         else
         {
-            $masterDeviceList = array();
+            $masterDeviceList = [];
             /* @var $masterDevice MasterDeviceModel */
             foreach (MasterDeviceMapper::getInstance()->fetchAllAvailableMasterDevices() as $masterDevice)
             {
                 $masterDeviceList [$masterDevice->id] = $masterDevice->getFullDeviceName();
             }
-            $this->addElement('select', 'masterDeviceId', array(
+            $this->addElement('select', 'masterDeviceId', [
                 'label'        => 'Master Device',
-                'multiOptions' => $masterDeviceList
-            ));
+                'multiOptions' => $masterDeviceList,
+            ]);
         }
 
 
         // Add the submit button
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'ignore' => true,
-            'label'  => 'Save'
-        ));
+            'label'  => 'Save',
+        ]);
 
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'ignore' => true,
-            'label'  => 'Cancel'
-        ));
+            'label'  => 'Cancel',
+        ]);
 
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript'           => 'forms/quotegen/quote-device/device-form.phtml',
-                    'deviceOptionElements' => $this->getDeviceOptionElements()
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/quotegen/quote-device/device-form.phtml', 'deviceOptionElements' => $this->getDeviceOptionElements()]]]);
     }
 
     /**

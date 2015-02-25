@@ -27,67 +27,67 @@ $totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->g
 
 <?php
 echo $this->partial('report/customer/optimization/html/device_table.phtml',
-    array("title"                    => "Acceptable Devices",
-          "description"              => "The following devices have been deemed productive and we suggest keeping these devices.",
-          "descriptionIfZeroDevices" => "There are no devices deemed productive and that we suggest keeping.",
-          "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_KEEP])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_KEEP] : array(),
-          "showReplacementDevices"   => false,
-          "hardwareOptimization"     => $hardwareOptimization,
-          "totalNumberOfDevices"     => $totalNumberOfDevices,
-          "showReason"               => false,
-          "scrollSpyId"              => "device-appendix-acceptable",
-    )
+    ["title"                    => "Acceptable Devices",
+     "description"              => "The following devices have been deemed productive and we suggest keeping these devices.",
+     "descriptionIfZeroDevices" => "There are no devices deemed productive and that we suggest keeping.",
+     "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_KEEP])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_KEEP] : [],
+     "showReplacementDevices"   => false,
+     "hardwareOptimization"     => $hardwareOptimization,
+     "totalNumberOfDevices"     => $totalNumberOfDevices,
+     "showReason"               => false,
+     "scrollSpyId"              => "device-appendix-acceptable",
+    ]
 );
 
 echo $this->partial('report/customer/optimization/html/device_table.phtml',
-    array("title"                    => "Suggested Replacement Devices",
-          "description"              => "The following devices have been targeted for replacement.",
-          "descriptionIfZeroDevices" => "There are no devices currently targeted for replacement.",
-          "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE] : array(),
-          "showReplacementDevices"   => true,
-          "hardwareOptimization"     => $hardwareOptimization,
-          "totalNumberOfDevices"     => $totalNumberOfDevices,
-          "showReason"               => true,
-          "scrollSpyId"              => "device-appendix-replaced",
-    )
+    ["title"                    => "Suggested Replacement Devices",
+     "description"              => "The following devices have been targeted for replacement.",
+     "descriptionIfZeroDevices" => "There are no devices currently targeted for replacement.",
+     "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE] : [],
+     "showReplacementDevices"   => true,
+     "hardwareOptimization"     => $hardwareOptimization,
+     "totalNumberOfDevices"     => $totalNumberOfDevices,
+     "showReason"               => true,
+     "scrollSpyId"              => "device-appendix-replaced",
+    ]
 );
 
 echo $this->partial('report/customer/optimization/html/device_table.phtml',
-    array("title"                    => "Suggested Upgrades",
-          "description"              => "The following devices have been targeted for upgraded functionality.",
-          "descriptionIfZeroDevices" => "There are no devices currently targeted for upgraded functionality.",
-          "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE] : array(),
-          "showReplacementDevices"   => true,
-          "hardwareOptimization"     => $hardwareOptimization,
-          "totalNumberOfDevices"     => $totalNumberOfDevices,
-          "showReason"               => true,
-          "scrollSpyId"              => "device-appendix-upgraded",
-    )
+    ["title"                    => "Suggested Upgrades",
+     "description"              => "The following devices have been targeted for upgraded functionality.",
+     "descriptionIfZeroDevices" => "There are no devices currently targeted for upgraded functionality.",
+     "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE] : [],
+     "showReplacementDevices"   => true,
+     "hardwareOptimization"     => $hardwareOptimization,
+     "totalNumberOfDevices"     => $totalNumberOfDevices,
+     "showReason"               => true,
+     "scrollSpyId"              => "device-appendix-upgraded",
+    ]
 );
 
 echo $this->partial('report/customer/optimization/html/device_table.phtml',
-    array("title"                    => "Devices Eligible for Retirement and Migration",
-          "description"              => "Devices with both low volume and age of over " . DeviceInstanceModel::RETIREMENT_AGE . " years have been target for retirement. We suggest migrating the page volume into another device.",
-          "descriptionIfZeroDevices" => "There are no devices currently targeted for retirement.",
-          "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_RETIRE])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_RETIRE] : array(),
-          "showReplacementDevices"   => false,
-          "hardwareOptimization"     => $hardwareOptimization,
-          "totalNumberOfDevices"     => $totalNumberOfDevices,
-          "showReason"               => false,
-          "scrollSpyId"              => "device-appendix-retire",
-    )
+    ["title"                    => "Devices Eligible for Retirement and Migration",
+     "description"              => "Devices with both low volume and age of over " . DeviceInstanceModel::RETIREMENT_AGE . " years have been target for retirement. We suggest migrating the page volume into another device.",
+     "descriptionIfZeroDevices" => "There are no devices currently targeted for retirement.",
+     "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_RETIRE])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_RETIRE] : [],
+     "showReplacementDevices"   => false,
+     "hardwareOptimization"     => $hardwareOptimization,
+     "totalNumberOfDevices"     => $totalNumberOfDevices,
+     "showReason"               => false,
+     "scrollSpyId"              => "device-appendix-retire",
+    ]
 );
 
 echo $this->partial('report/customer/optimization/html/device_table.phtml',
-    array("title"                    => "Devices Flagged as Do Not Repair",
-          "description"              => "These devices have been flagged for replacement on breakdown based on operation reliability.",
-          "descriptionIfZeroDevices" => "There are no devices currently flagged for replacement upon breakdown.",
-          "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_DNR])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_DNR] : array(),
-          "showReplacementDevices"   => false,
-          "hardwareOptimization"     => $hardwareOptimization,
-          "totalNumberOfDevices"     => $totalNumberOfDevices,
-          "showReason"               => true,
-          "scrollSpyId"              => "device-appendix-dnr",
-    )
+    ["title"                    => "Devices Flagged as Do Not Repair",
+     "description"              => "These devices have been flagged for replacement on breakdown based on operation reliability.",
+     "descriptionIfZeroDevices" => "There are no devices currently flagged for replacement upon breakdown.",
+     "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_DNR])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_DNR] : [],
+     "showReplacementDevices"   => false,
+     "hardwareOptimization"     => $hardwareOptimization,
+     "totalNumberOfDevices"     => $totalNumberOfDevices,
+     "showReason"               => true,
+     "scrollSpyId"              => "device-appendix-dnr",
+    ]
 );
 ?>

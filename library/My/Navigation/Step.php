@@ -103,7 +103,7 @@ class My_Navigation_Step extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "previousStep" => $this->previousStep,
             "nextStep"     => $this->nextStep,
             "name"         => $this->name,
@@ -111,6 +111,6 @@ class My_Navigation_Step extends My_Model_Abstract
             "active"       => $this->active,
             "canAccess"    => $this->canAccess,
             "enumValue"    => $this->enumValue,
-        );
+        ];
     }
 }

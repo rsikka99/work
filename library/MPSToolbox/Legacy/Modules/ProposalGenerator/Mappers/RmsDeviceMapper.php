@@ -190,7 +190,7 @@ class RmsDeviceMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new RmsDeviceModel($row->toArray());
@@ -213,10 +213,10 @@ class RmsDeviceMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_rmsProviderId} = ?" => $id[0],
-            "{$this->col_rmsModelId} = ?"    => $id[1]
-        );
+            "{$this->col_rmsModelId} = ?"    => $id[1],
+        ];
     }
 
     /**
@@ -226,7 +226,7 @@ class RmsDeviceMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array($object->rmsProviderId, $object->rmsModelId);
+        return [$object->rmsProviderId, $object->rmsModelId];
     }
 
     /**
@@ -259,7 +259,7 @@ class RmsDeviceMapper extends My_Model_Mapper_Abstract
         $masterDevicesTableName     = MasterDeviceMapper::getInstance()->getTableName();
         $manufacturersTableName     = ManufacturerMapper::getInstance()->getTableName();
 
-        $whereClause = array();
+        $whereClause = [];
         if (strcasecmp($filterByColumn, 'printer') === 0 && $filterValue !== null)
         {
             $whereClause ["CONCAT({$rmsDevicesTableName}.manufacturer, \" \", {$rmsDevicesTableName}.modelName) LIKE ?"] = "%{$filterValue}%";
@@ -278,36 +278,36 @@ class RmsDeviceMapper extends My_Model_Mapper_Abstract
          */
         if ($justCount)
         {
-            $rmsDeviceColumns = array(
-                'count' => 'COUNT(*)'
-            );
+            $rmsDeviceColumns = [
+                'count' => 'COUNT(*)',
+            ];
 
             // Make sure we don't select any other columns
-            $rmsProviderColumns      = array();
-            $rmsMasterMatchupColumns = array();
-            $masterDeviceColumns     = array();
-            $manufacturerColumns     = array();
+            $rmsProviderColumns      = [];
+            $rmsMasterMatchupColumns = [];
+            $masterDeviceColumns     = [];
+            $manufacturerColumns     = [];
         }
         else
         {
             // These are all the columns we want to be selecting
-            $rmsDeviceColumns        = array(
+            $rmsDeviceColumns        = [
                 'rmsProviderId',
                 'rmsModelId',
                 'rmsProviderDeviceName' => "CONCAT({$rmsDevicesTableName}.manufacturer, \" \", {$rmsDevicesTableName}.modelName)",
-                'is_mapped'             => "IF({$rmsMasterMatchupsTableName}.masterDeviceId IS NOT NULL, 1, 0)"
-            );
-            $rmsProviderColumns      = array(
-                'rmsProviderName' => 'name'
-            );
-            $rmsMasterMatchupColumns = array();
-            $masterDeviceColumns     = array(
+                'is_mapped'             => "IF({$rmsMasterMatchupsTableName}.masterDeviceId IS NOT NULL, 1, 0)",
+            ];
+            $rmsProviderColumns      = [
+                'rmsProviderName' => 'name',
+            ];
+            $rmsMasterMatchupColumns = [];
+            $masterDeviceColumns     = [
                 'modelName',
-                'masterDeviceId' => 'id'
-            );
-            $manufacturerColumns     = array(
-                'displayname'
-            );
+                'masterDeviceId' => 'id',
+            ];
+            $manufacturerColumns     = [
+                'displayname',
+            ];
         }
 
         /*

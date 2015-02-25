@@ -80,9 +80,9 @@ class DealerSettingMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
-            "{$this->col_dealerId} = ?" => $primaryKey
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, [
+            "{$this->col_dealerId} = ?" => $primaryKey,
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -103,15 +103,15 @@ class DealerSettingMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof DealerSettingModel)
         {
-            $whereClause = array(
-                "{$this->col_dealerId} = ?" => $object->dealerId
-            );
+            $whereClause = [
+                "{$this->col_dealerId} = ?" => $object->dealerId,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_dealerId} = ?" => $object
-            );
+            $whereClause = [
+                "{$this->col_dealerId} = ?" => $object,
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -196,7 +196,7 @@ class DealerSettingMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new DealerSettingModel($row->toArray());
@@ -219,9 +219,9 @@ class DealerSettingMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_dealerId} = ?" => $id
-        );
+        return [
+            "{$this->col_dealerId} = ?" => $id,
+        ];
     }
 
     /**

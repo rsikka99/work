@@ -16,13 +16,13 @@ function getNewSection ($phpWord, &$sections, $sectionName = 'default')
 {
     if (!isset($sections[$sectionName]))
     {
-        $section                = $phpWord->addSection(array(
+        $section                = $phpWord->addSection([
             'orientation'  => null,
             'marginLeft'   => 300,
             'marginRight'  => 300,
             'marginTop'    => 300,
             'marginBottom' => 300
-        ));
+        ]);
         $sections[$sectionName] = $section;
     }
 
@@ -32,7 +32,7 @@ function getNewSection ($phpWord, &$sections, $sectionName = 'default')
 /**
  * @var $sections \PhpOffice\PhpWord\Element\Section[]
  */
-$sections = array();
+$sections = [];
 
 /* @var $contractTemplate ContractTemplateModel */
 $contractTemplate = $this->contractTemplate;
@@ -84,7 +84,7 @@ $this->render("{$basePath}/formattingStyles.phtml");
 
 $contractTemplateSections = $contractTemplate->getContractTemplateSections();
 
-$contractTemplateSectionBySectionId = array();
+$contractTemplateSectionBySectionId = [];
 foreach ($contractTemplateSections as $contractTemplateSection)
 {
     if ($contractTemplateSection->enabled && !isset($contractTemplateSectionBySectionId[$contractTemplateSection->contractSectionId]))
@@ -97,7 +97,7 @@ foreach ($contractTemplateSections as $contractTemplateSection)
  * Render the different sections if they've appeared
  */
 
-$defaultData = array(
+$defaultData = [
     "section"        => $section,
     "tableStyle"     => $this->tableStyle,
     "fontStyle"      => $this->fontStyle,
@@ -107,7 +107,7 @@ $defaultData = array(
     "leaseDetails"   => $this->leaseDetails,
     "company"        => $this->company,
     "quote"          => $this->quote,
-);
+];
 
 /*
  * Great America contract sections

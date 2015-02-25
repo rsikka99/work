@@ -39,23 +39,23 @@ class OptimizationDealerModel extends OptimizationAbstractModel
             $highest  = (count($this->retired) > $highest) ? count($this->retired) : $highest;
             $barGraph = new gchart\gBarChart(375, 250);
             $barGraph->setTitle("Optimization Fleet Summary");
-            $barGraph->setVisibleAxes(array('y'));
-            $colors = array(
+            $barGraph->setVisibleAxes(['y']);
+            $colors = [
                 str_replace('#', '', $dealerBranding->graphKeepDeviceColor),
                 str_replace('#', '', $dealerBranding->graphReplacedDeviceColor),
                 str_replace('#', '', $dealerBranding->graphDoNotRepairDeviceColor),
                 str_replace('#', '', $dealerBranding->graphRetireDeviceColor),
-            );
+            ];
             foreach ($colors as $color)
             {
-                $barGraph->addColors(array($color));
+                $barGraph->addColors([$color]);
             }
-            $barGraph->addDataSet(array(count($this->kept)));
-            $barGraph->addDataSet(array(count($this->replaced)));
-            $barGraph->addDataSet(array(count($this->flagged)));
-            $barGraph->addDataSet(array(count($this->retired)));
+            $barGraph->addDataSet([count($this->kept)]);
+            $barGraph->addDataSet([count($this->replaced)]);
+            $barGraph->addDataSet([count($this->flagged)]);
+            $barGraph->addDataSet([count($this->retired)]);
 
-            $barGraph->setLegend(array("Keep", "Replace", "Do Not Repair (Replace when broken)", "Retire/Migrate (Low Page Volume)"));
+            $barGraph->setLegend(["Keep", "Replace", "Do Not Repair (Replace when broken)", "Retire/Migrate (Low Page Volume)"]);
             $barGraph->setLegendPosition("tv");
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
@@ -73,21 +73,21 @@ class OptimizationDealerModel extends OptimizationAbstractModel
             $highest  = (count($this->leased) > $highest) ? count($this->leased) : $highest;
             $barGraph = new gchart\gBarChart(325, 250);
             $barGraph->setTitle("Other Devices");
-            $barGraph->setVisibleAxes(array('y'));
-            $colors = array(
+            $barGraph->setVisibleAxes(['y']);
+            $colors = [
                 str_replace('#', '', $dealerBranding->graphReplacedDeviceColor),
                 str_replace('#', '', $dealerBranding->graphExcludedDeviceColor),
                 str_replace('#', '', $dealerBranding->graphLeasedDeviceColor),
-            );
+            ];
             foreach ($colors as $color)
             {
-                $barGraph->addColors(array($color));
+                $barGraph->addColors([$color]);
             }
-            $barGraph->addDataSet(array(count($this->excess)));
-            $barGraph->addDataSet(array(count($this->excluded)));
-            $barGraph->addDataSet(array(count($this->leased)));
+            $barGraph->addDataSet([count($this->excess)]);
+            $barGraph->addDataSet([count($this->excluded)]);
+            $barGraph->addDataSet([count($this->leased)]);
 
-            $barGraph->setLegend(array("Excess", "Excluded", "Leased"));
+            $barGraph->setLegend(["Excess", "Excluded", "Leased"]);
             $barGraph->setLegendPosition("t");
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);

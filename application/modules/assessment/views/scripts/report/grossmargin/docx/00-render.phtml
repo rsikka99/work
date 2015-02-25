@@ -21,145 +21,145 @@ $properties->setSubject('MPS Assessment Software');
  */
 
 // This section is landscape with 0.5" margins insead of 1"
-$mainSection = $phpword->addSection(array(
+$mainSection = $phpword->addSection([
     'orientation'  => 'landscape',
     'marginLeft'   => 720,
     'marginRight'  => 720,
     'marginTop'    => 720,
     'marginBottom' => 720
-));
+]);
 
 /**
  * Define Global Paragraph Styles here
  */
 
-$phpword->addParagraphStyle('nospacing', array(
+$phpword->addParagraphStyle('nospacing', [
     'spaceBefore' => 0,
     'spaceAfter'  => 0
-));
+]);
 
-$phpword->addParagraphStyle('nospacing_rightalign', array(
+$phpword->addParagraphStyle('nospacing_rightalign', [
     'align'       => 'right',
     'spaceBefore' => 0,
     'spaceAfter'  => 0
-));
+]);
 
-$phpword->addParagraphStyle('nospacing_centeralign', array(
+$phpword->addParagraphStyle('nospacing_centeralign', [
     'align'       => 'center',
     'spaceBefore' => 0,
     'spaceAfter'  => 0
-));
+]);
 
-$phpword->addParagraphStyle('centeralign', array(
+$phpword->addParagraphStyle('centeralign', [
     'align' => 'right'
-));
+]);
 
-$phpword->addParagraphStyle('rightalign', array(
+$phpword->addParagraphStyle('rightalign', [
     'align' => 'right'
-));
+]);
 
 /**
  * Define Global Font Styles here
  */
 
-$phpword->addFontStyle('table_header', array(
+$phpword->addFontStyle('table_header', [
     'size' => 8,
     'bold' => true
-));
+]);
 
-$phpword->addFontStyle('table_body', array(
+$phpword->addFontStyle('table_body', [
     'size' => 8
-));
+]);
 
-$phpword->addFontStyle('table_footer', array(
+$phpword->addFontStyle('table_footer', [
     'size' => 8,
     'bold' => true,
-));
+]);
 
-$phpword->addFontStyle('bold_text', array(
+$phpword->addFontStyle('bold_text', [
     'bold' => true
-));
+]);
 
-$phpword->addFontStyle('italic_text', array(
+$phpword->addFontStyle('italic_text', [
     'italic' => true
-));
+]);
 
 /**
  * Define Global Heading (Title) Styles here
  */
 
 // H1 Style
-$phpword->addTitleStyle(1, array(
+$phpword->addTitleStyle(1, [
     'size'  => 16,
     'color' => '000000',
     'bold'  => true
-), array(
+], [
     'borderBottomSize' => 1
-));
+]);
 // H2 Style #5881BC
-$phpword->addTitleStyle(2, array(
+$phpword->addTitleStyle(2, [
     'size'  => 14,
     'color' => '000000',
     'bold'  => true
-));
+]);
 // H3 Style #5881BC
-$phpword->addTitleStyle(3, array(
+$phpword->addTitleStyle(3, [
     'size'  => 12,
     'color' => '4F81BD',
     'bold'  => true
-));
+]);
 
 
 /* LANDSCAPE FULL WIDTH TABLE = 16000 twips */
 /* PORTRAIT FULL WIDTH TABLE = 10400 twips */
 
-$settingsTable = (object)array(
-    "tablestyle" => array(
+$settingsTable = (object)[
+    "tablestyle" => [
         'cellMarginTop'    => 50,
         'cellMarginRight'  => 50,
         'cellMarginBottom' => 50,
         'cellMarginLeft'   => 50
-    ),
-    "rowheader"  => array(
+    ],
+    "rowheader"  => [
         'tblHeader' => true,
         'cantSplit' => true,
-    ),
-    "rowstyle"   => array(
+    ],
+    "rowstyle"   => [
         "cantSplit" => true,
-    ),
+    ],
     "col1Width"  => 6000,
     "col2Width"  => 2000,
     "col3Width"  => 2000,
     "col4Width"  => 4000,
-    "row"        => (object)array(
-            "rowheight" => null,
-            "labelcell" => (object)array(
-                    "fontStyle"      => 'bold_text',
-                    "paragraphStyle" => 'nospacing_rightalign'
-                ),
-            "valuecell" => (object)array(
-                    "fontStyle"      => null,
-                    "paragraphStyle" => 'nospacing'
-                )
-        )
-);
+    "row"        => (object)[
+        "rowheight" => null,
+        "labelcell" => (object)[
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_rightalign'
+        ],
+        "valuecell" => (object)[
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing'
+        ]
+    ]
+];
 
-$grossMarginTable = (object)array(
-    "rowheader"    => array(
+$grossMarginTable = (object)[
+    "rowheader"    => [
         'tblHeader' => true,
         'cantSplit' => true,
-    ),
-    "rowstyle"     => array(
+    ],
+    "rowstyle"     => [
         "cantSplit" => true,
-    ),
-    "tablestyle"   => array(
+    ],
+    "tablestyle"   => [
         'cellMarginTop'     => 50,
         'cellMarginRight'   => 200,
         'cellMarginBottom'  => 50,
         'cellMarginright'   => 50,
         'borderBottomSize'  => 10,
         'borderBottomColor' => 'black',
-    ),
+    ],
     "colSpanWidth" => 5000,
     "col1Width"    => 4000,
     "col2Width"    => 1200,
@@ -175,118 +175,118 @@ $grossMarginTable = (object)array(
     "leftalign"    => "nospacing",
     "centeralign"  => "nospacing_centeralign",
     "rightalign"   => "nospacing_rightalign",
-    "header"       => (object)array(
-            "rowheight"       => null,
-            "fontStyle"       => "table_header",
-            "headercelllarge" => array(
-                "borderTopSize"   => 1,
-                "borderRightSize" => 1,
-                "borderLeftSize"  => 1,
-                "bgColor"         => $header_color,
-                "valign"          => "center",
-                "gridSpan"        => 5,
-            ),
-            "headercellsmall" => array(
-                "borderTopSize"   => 1,
-                "borderRightSize" => 1,
-                "borderLeftSize"  => 1,
-                "bgColor"         => $header_color,
-                "valign"          => "center",
-                "gridSpan"        => 2,
-            ),
-            "cell"            => array(
-                "borderTopSize"   => 1,
-                "borderRightSize" => 1,
-                "borderLeftSize"  => 1,
-                "bgColor"         => $header_color,
-                "valign"          => "center",
-            ),
-            "nobottomborder"  => array(
-                "borderTopSize"   => 1,
-                "borderRightSize" => 1,
-                "borderLeftSize"  => 1,
-                "bgColor"         => $header_color,
-                "valign"          => "center"
-            ),
-            "notopborder"     => array(
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "bgColor"          => $header_color,
-                "valign"           => "center",
-            )
-        ),
-    "row"          => (object)array(
-            "rowheight"     => null,
-            "fontStyle"     => 'table_body',
-            "cell"          => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center",
-                "cantSplit"        => true,
-            ),
-            "highlightcell" => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "bgColor"          => $highlight_color,
-                "valign"           => "center"
-            )
-        ),
-    "footer"       => (object)array(
-            "rowheight" => null,
-            "fontStyle" => 'table_footer',
-            "cell"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center",
-            ),
-            "cellSpan3" => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center",
-                "gridSpan"         => 3,
-            ),
-            "cellSpan2" => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center",
-                "gridSpan"         => 2,
-            )
-        )
-);
+    "header"       => (object)[
+        "rowheight"       => null,
+        "fontStyle"       => "table_header",
+        "headercelllarge" => [
+            "borderTopSize"   => 1,
+            "borderRightSize" => 1,
+            "borderLeftSize"  => 1,
+            "bgColor"         => $header_color,
+            "valign"          => "center",
+            "gridSpan"        => 5,
+        ],
+        "headercellsmall" => [
+            "borderTopSize"   => 1,
+            "borderRightSize" => 1,
+            "borderLeftSize"  => 1,
+            "bgColor"         => $header_color,
+            "valign"          => "center",
+            "gridSpan"        => 2,
+        ],
+        "cell"            => [
+            "borderTopSize"   => 1,
+            "borderRightSize" => 1,
+            "borderLeftSize"  => 1,
+            "bgColor"         => $header_color,
+            "valign"          => "center",
+        ],
+        "nobottomborder"  => [
+            "borderTopSize"   => 1,
+            "borderRightSize" => 1,
+            "borderLeftSize"  => 1,
+            "bgColor"         => $header_color,
+            "valign"          => "center"
+        ],
+        "notopborder"     => [
+            "borderRightSize"  => 1,
+            "borderBottomSize" => 1,
+            "borderLeftSize"   => 1,
+            "bgColor"          => $header_color,
+            "valign"           => "center",
+        ]
+    ],
+    "row"          => (object)[
+        "rowheight"     => null,
+        "fontStyle"     => 'table_body',
+        "cell"          => [
+            "borderTopSize"    => 1,
+            "borderRightSize"  => 1,
+            "borderBottomSize" => 1,
+            "borderLeftSize"   => 1,
+            "valign"           => "center",
+            "cantSplit"        => true,
+        ],
+        "highlightcell" => [
+            "borderTopSize"    => 1,
+            "borderRightSize"  => 1,
+            "borderBottomSize" => 1,
+            "borderLeftSize"   => 1,
+            "bgColor"          => $highlight_color,
+            "valign"           => "center"
+        ]
+    ],
+    "footer"       => (object)[
+        "rowheight" => null,
+        "fontStyle" => 'table_footer',
+        "cell"      => [
+            "borderTopSize"    => 1,
+            "borderRightSize"  => 1,
+            "borderBottomSize" => 1,
+            "borderLeftSize"   => 1,
+            "valign"           => "center",
+        ],
+        "cellSpan3" => [
+            "borderTopSize"    => 1,
+            "borderRightSize"  => 1,
+            "borderBottomSize" => 1,
+            "borderLeftSize"   => 1,
+            "valign"           => "center",
+            "gridSpan"         => 3,
+        ],
+        "cellSpan2" => [
+            "borderTopSize"    => 1,
+            "borderRightSize"  => 1,
+            "borderBottomSize" => 1,
+            "borderLeftSize"   => 1,
+            "valign"           => "center",
+            "gridSpan"         => 2,
+        ]
+    ]
+];
 
 /**
  * Here we put all our table styles into an object that gets passed to each of
  * the view scripts
  */
-$styles = (object)array(
-    "tables" => (object)array(
-            "settings"    => $settingsTable,
-            "grossMargin" => $grossMarginTable
-        )
-);
+$styles = (object)[
+    "tables" => (object)[
+        "settings"    => $settingsTable,
+        "grossMargin" => $grossMarginTable
+    ]
+];
 
 /**
  * An array of view variables to pass to the partial scripts
  */
-$data = array(
+$data = [
     "phpword"             => $phpword,
     "assessmentViewModel" => $assessmentViewModel,
     "section"             => $mainSection,
     "styles"              => $styles,
     "brandName"           => My_Brand::getDealerBranding()->mpsProgramName,
     "companyName"         => My_Brand::getDealerBranding()->shortDealerName
-);
+];
 
 /**
  * Render each of the view scripts for different parts of the document

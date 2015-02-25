@@ -68,7 +68,7 @@ considerations made by the dealer.', $this->currency($hardwareOptimization->getC
     foreach ($suggestedDeviceInstances as $deviceInstance)
     {
         $replacementDevice = $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getMasterDevice();
-        $style             = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
+        $style             = ($this->cycle([$tcStyle->body->cell1->odd, $tcStyle->body->cell1->even])->next()->current());
 
         $table->addRow($tcStyle->body->rowheight, $this->styles->tables->tablestyle->rowstyle);
         $cell = $table->addCell($tcStyle->col1Width, $style);

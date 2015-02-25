@@ -47,7 +47,7 @@ class AllSettingsForm extends FormWithNavigation
      * @param int        $formButtonMode
      * @param array      $buttons
      */
-    public function __construct ($options = null, $formButtonMode = FormWithNavigation::FORM_BUTTON_MODE_DIALOG, $buttons = array(FormWithNavigation::BUTTONS_ALL))
+    public function __construct ($options = null, $formButtonMode = FormWithNavigation::FORM_BUTTON_MODE_DIALOG, $buttons = [FormWithNavigation::BUTTONS_ALL])
     {
         parent::__construct($options, $formButtonMode, $buttons);
     }

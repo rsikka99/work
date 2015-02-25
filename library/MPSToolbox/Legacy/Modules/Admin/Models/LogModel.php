@@ -117,14 +117,14 @@ class LogModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"        => $this->getId(),
             "logTypeId" => $this->getLogTypeId(),
             "priority"  => $this->getPriority(),
             "message"   => $this->getMessage(),
             "timestamp" => $this->getTimestamp(),
             "userId"    => $this->getUserId()
-        );
+        ];
     }
 
     /**

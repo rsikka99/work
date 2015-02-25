@@ -120,7 +120,7 @@ class MasterDeviceSearchResultModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "masterDeviceId"             => $this->masterDeviceId,
             "masterDeviceModelName"      => $this->masterDeviceModelName,
             "masterDeviceFullDeviceName" => $this->masterDeviceFullDeviceName,
@@ -130,7 +130,7 @@ class MasterDeviceSearchResultModel extends My_Model_Abstract
             "manufacturerId"             => $this->manufacturerId,
             "manufacturerFullName"       => $this->manufacturerFullName,
             "manufacturerDisplayName"    => $this->manufacturerDisplayName,
-        );
+        ];
     }
 
 }

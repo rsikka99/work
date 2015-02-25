@@ -12,8 +12,8 @@ use Zend_Db_Table_Abstract;
 class OptionCategoryDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'option_categories';
-    protected $_primary = array(
+    protected $_primary = [
         'categoryId',
-        'optionId'
-    );
+        'optionId',
+    ];
 }

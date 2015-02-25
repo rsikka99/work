@@ -82,7 +82,7 @@ class HardwareOptimizationDeviceInstanceMapper extends My_Model_Mapper_Abstract
 
         if ($primaryKey === null)
         {
-            $primaryKey = array($data[$this->col_deviceInstanceId], $data[$this->col_hardwareOptimizationId]);
+            $primaryKey = [$data[$this->col_deviceInstanceId], $data[$this->col_hardwareOptimizationId]];
         }
 
         // Update the row
@@ -196,7 +196,7 @@ class HardwareOptimizationDeviceInstanceMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new HardwareOptimizationDeviceInstanceModel($row->toArray());
@@ -219,10 +219,10 @@ class HardwareOptimizationDeviceInstanceMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_deviceInstanceId} = ?"       => $id[0],
             "{$this->col_hardwareOptimizationId} = ?" => $id[1],
-        );
+        ];
     }
 
     /**
@@ -232,7 +232,7 @@ class HardwareOptimizationDeviceInstanceMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array($object->deviceInstanceId, $object->hardwareOptimizationId);
+        return [$object->deviceInstanceId, $object->hardwareOptimizationId];
     }
 
     /**
@@ -244,13 +244,13 @@ class HardwareOptimizationDeviceInstanceMapper extends My_Model_Mapper_Abstract
      */
     public function resetAllForHardwareOptimization ($hardwareOptimizationId)
     {
-        return $this->getDbTable()->update(array(
+        return $this->getDbTable()->update([
             $this->col_masterDeviceId     => new Zend_Db_Expr("NULL"),
             $this->col_deviceSwapReasonId => new Zend_Db_Expr("NULL"),
             $this->col_action             => HardwareOptimizationDeviceInstanceModel::ACTION_KEEP,
-        ), array(
+        ], [
             "{$this->col_hardwareOptimizationId} = ?" => $hardwareOptimizationId,
-        ));
+        ]);
     }
 
     /**
@@ -264,7 +264,7 @@ class HardwareOptimizationDeviceInstanceMapper extends My_Model_Mapper_Abstract
     {
         $select = $this->getDbTable()
                        ->select(Zend_Db_Table::SELECT_WITH_FROM_PART)
-                       ->columns(array("masterDeviceId", "quantity" => "COUNT(*)"))
+                       ->columns(["masterDeviceId", "quantity" => "COUNT(*)"])
                        ->group("masterDeviceId")
                        ->where("hardwareOptimizationId = ?", $hardwareOptimizationId)
                        ->where("masterDeviceId IS NOT NULL");
@@ -277,19 +277,19 @@ class HardwareOptimizationDeviceInstanceMapper extends My_Model_Mapper_Abstract
     {
         $select = $this->getDbTable()
                        ->select(Zend_Db_Table::SELECT_WITH_FROM_PART)
-                       ->columns(array("action" => "action", "count" => "COUNT(*)"))
+                       ->columns(["action" => "action", "count" => "COUNT(*)"])
                        ->group("action")
                        ->where("hardwareOptimizationId = ?", $hardwareOptimizationId);
 
         $results = $select->query()->fetchAll();
 
-        $counts = array(
+        $counts = [
             HardwareOptimizationDeviceInstanceModel::ACTION_DNR     => 0,
             HardwareOptimizationDeviceInstanceModel::ACTION_KEEP    => 0,
             HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE => 0,
             HardwareOptimizationDeviceInstanceModel::ACTION_RETIRE  => 0,
             HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE => 0,
-        );
+        ];
 
         foreach ($results as $result)
         {

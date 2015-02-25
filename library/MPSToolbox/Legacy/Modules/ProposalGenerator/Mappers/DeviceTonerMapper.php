@@ -77,10 +77,10 @@ class DeviceTonerMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_tonerId} = ?"        => $primaryKey[0],
-            "{$this->col_masterDeviceId} = ?" => $primaryKey[1]
-        ));
+            "{$this->col_masterDeviceId} = ?" => $primaryKey[1],
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -102,18 +102,18 @@ class DeviceTonerMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof DeviceTonerModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_tonerId} = ?"        => $object->toner_id,
                 "{$this->col_masterDeviceId} = ?" => $object->master_device_id,
 
-            );
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_tonerId} = ?"        => $object[0],
                 "{$this->col_masterDeviceId} = ?" => $object[1],
-            );
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -198,7 +198,7 @@ class DeviceTonerMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new DeviceTonerModel($row->toArray());
@@ -221,10 +221,10 @@ class DeviceTonerMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_tonerId} = ?"        => $id[0],
             "{$this->col_masterDeviceId} = ?" => $id[1],
-        );
+        ];
     }
 
     /**
@@ -234,7 +234,7 @@ class DeviceTonerMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array($object->toner_id, $object->master_device_id);
+        return [$object->toner_id, $object->master_device_id];
     }
 
     /**
@@ -246,7 +246,7 @@ class DeviceTonerMapper extends My_Model_Mapper_Abstract
      */
     public function getDeviceToners ($masterDeviceId)
     {
-        return $this->fetchAll(array('master_device_id = ?' => $masterDeviceId));
+        return $this->fetchAll(['master_device_id = ?' => $masterDeviceId]);
     }
 
     /**
@@ -258,7 +258,7 @@ class DeviceTonerMapper extends My_Model_Mapper_Abstract
      */
     public function fetchDeviceTonersByTonerId ($tonerId)
     {
-        return $this->fetchAll(array("{$this->col_tonerId} = ?" => $tonerId));
+        return $this->fetchAll(["{$this->col_tonerId} = ?" => $tonerId]);
     }
 
 }

@@ -45,10 +45,10 @@ class HardwareOptimizationQuoteModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "hardwareOptimizationId" => $this->hardwareOptimizationId,
             "quoteId"                => $this->quoteId,
-        );
+        ];
     }
 
 }

@@ -30,7 +30,7 @@ $form = $this->element;  /* @var $form DeviceForm */
                                 <td><?php echo $option->deviceOptionElement->getLabel(); ?></td>
                                 <td><?php echo $option->deviceOptionElement->renderViewHelper() ?></td>
                                 <td>
-                                    <a href="<?php echo $this->url(array('id' => $option->getId(), 'optionId' => $option->option->getId()), 'quotes.devices.delete-option'); ?>" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                                    <a href="<?php echo $this->url(['id' => $option->getId(), 'optionId' => $option->option->getId()], 'quotes.devices.delete-option'); ?>" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

@@ -20,13 +20,13 @@ class My_View_Helper_FormDateTimePicker extends ZendX_JQuery_View_Helper_UiWidge
      *
      * @return String
      */
-    public function formDateTimePicker ($id, $value = null, array $params = array(), array $attribs = array())
+    public function formDateTimePicker ($id, $value = null, array $params = [], array $attribs = [])
     {
         $attribs = $this->_prepareAttributes($id, $value, $attribs);
 
         $params2 = ZendX_JQuery::encodeJson($params);
 
-        $pr = array();
+        $pr = [];
         foreach ($params as $key => $val)
         {
             $pr[] = '"' . $key . '":' . ZendX_JQuery::encodeJson($val);

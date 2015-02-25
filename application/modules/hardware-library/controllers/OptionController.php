@@ -30,7 +30,7 @@ class HardwareLibrary_OptionController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('All Options');
+        $this->_pageTitle = ['All Options'];
 
         throw new Exception("Action not implemented!");
     }
@@ -210,27 +210,27 @@ class HardwareLibrary_OptionController extends Action
      */
     public function optionListAction ()
     {
-        $jsonArray        = array();
+        $jsonArray        = [];
         $jqGridService    = new JQGrid();
         $optionMapper     = OptionMapper::getInstance();
         $masterDeviceId   = $this->_getParam('masterDeviceId', false);
-        $jqGridParameters = array(
+        $jqGridParameters = [
             'sidx' => $this->_getParam('sidx', 'oemSku'),
             'sord' => $this->_getParam('sord', 'desc'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10),
-        );
+        ];
 
         $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
 
-        $sortColumns = array(
+        $sortColumns = [
             'oemSku',
             'dealerSku',
             'name',
             'option',
             'cost',
             'description',
-        );
+        ];
         $jqGridService->setValidSortColumns($sortColumns);
         $jqGridService->parseJQGridPagingRequest($jqGridParameters);
 
@@ -273,7 +273,7 @@ class HardwareLibrary_OptionController extends Action
                 $startRecord = 0;
             }
 
-            $sortOrder = array();
+            $sortOrder = [];
             if ($jqGridService->hasGrouping())
             {
                 $sortOrder[] = $jqGridService->getGroupByColumn() . ' ' . $jqGridService->getGroupBySortOrder();
@@ -292,9 +292,9 @@ class HardwareLibrary_OptionController extends Action
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array(
+            $this->sendJson([
                 'error' => sprintf('Sort index "%s" is not a valid sorting index.', $jqGridService->getSortColumn())
-            ));
+            ]);
         }
     }
 }

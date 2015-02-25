@@ -79,15 +79,18 @@ $assessmentViewModel = $this->assessmentViewModel;
         <td class="right"><?= $this->currency($assessmentViewModel->getInternalAdminCost()) ?></td>
     </tr>
     <tr>
-        <td>Annual cost of external service<br /><em>Maintenance kits and parts are included</em></td>
+        <td>Annual cost of external service<br /><em>Maintenance kits and parts are included</em>
+        </td>
         <td class="right">Included</td>
     </tr>
     <tr>
-        <td>Annual cost of internal IT supporting printing devices<br /><em>Assume reduction of 50%</em></td>
+        <td>Annual cost of internal IT supporting printing devices<br /><em>Assume reduction of 50%</em>
+        </td>
         <td class="right"><?= $this->currency($assessmentViewModel->getHalfOfAnnualITCost()); ?></td>
     </tr>
     <tr>
-        <td>Annual cost of new hardware purchases<br /><em>Assume no change</em></td>
+        <td>Annual cost of new hardware purchases<br /><em>Assume no change</em>
+        </td>
         <td class="right"><?= $this->currency($assessmentViewModel->getAnnualCostOfHardwarePurchases()); ?></td>
     </tr>
     <tr>

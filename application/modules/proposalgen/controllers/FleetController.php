@@ -40,9 +40,9 @@ class Proposalgen_FleetController extends Action
 
         if (!$this->getSelectedClient() instanceof \MPSToolbox\Legacy\Entities\ClientEntity)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "danger" => "A client is not selected."
-            ));
+            ]);
 
             $this->redirectToRoute('app.dashboard');
         }
@@ -55,7 +55,7 @@ class Proposalgen_FleetController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Upload', 'RMS Upload');
+        $this->_pageTitle = ['Upload', 'RMS Upload'];
         $time             = -microtime(true);
         $rmsUploadId      = $this->_getParam('rmsUploadId', false);
 
@@ -117,26 +117,26 @@ class Proposalgen_FleetController extends Action
                         $timeElapsed    = number_format($time, 4);
                         $validDevices   = number_format($uploadService->rmsUpload->validRowCount);
                         $invalidDevices = number_format($uploadService->rmsUpload->invalidRowCount);
-                        $this->_flashMessenger->addMessage(array("success" => "Processed {$validDevices} valid devices and {$invalidDevices} invalid devices in {$timeElapsed} seconds."));
+                        $this->_flashMessenger->addMessage(["success" => "Processed {$validDevices} valid devices and {$invalidDevices} invalid devices in {$timeElapsed} seconds."]);
 
                         $this->getMpsSession()->selectedRmsUploadId = $uploadService->rmsUpload->id;
-                        $this->redirectToRoute(null, array("rmsUploadId" => $uploadService->rmsUpload->id));
+                        $this->redirectToRoute(null, ["rmsUploadId" => $uploadService->rmsUpload->id]);
                     }
                     else
                     {
                         $this->view->invalidDevices = $uploadService->invalidRows;
-                        $this->_flashMessenger->addMessage(array("danger" => $uploadService->errorMessages));
+                        $this->_flashMessenger->addMessage(["danger" => $uploadService->errorMessages]);
                     }
 
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array("danger" => 'Please fix the errors below.'));
+                    $this->_flashMessenger->addMessage(["danger" => 'Please fix the errors below.']);
                 }
             }
             else if (isset($values ["saveAndContinue"]))
             {
-                $this->redirectToRoute('rms-upload.mapping', array("rmsUploadId" => $uploadService->rmsUpload->id));
+                $this->redirectToRoute('rms-upload.mapping', ["rmsUploadId" => $uploadService->rmsUpload->id]);
             }
         }
 
@@ -157,12 +157,12 @@ class Proposalgen_FleetController extends Action
         /*
          * Grab the incoming parameters
          */
-        $jqGridParameters = array(
+        $jqGridParameters = [
             'sidx' => $this->_getParam('sidx', 'deviceCount'),
             'sord' => $this->_getParam('sord', 'desc'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10)
-        );
+        ];
 
         // Set up validation arrays
         $blankModel  = new RmsUploadModel();
@@ -210,9 +210,9 @@ class Proposalgen_FleetController extends Action
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array(
+            $this->sendJson([
                 'error' => 'Sorting parameters are invalid'
-            ));
+            ]);
         }
     }
 
@@ -221,7 +221,7 @@ class Proposalgen_FleetController extends Action
      */
     public function mappingAction ()
     {
-        $this->_pageTitle = array('Map Devices', 'RMS Upload',);
+        $this->_pageTitle = ['Map Devices', 'RMS Upload',];
         $this->_navigation->setActiveStep(FleetStepsModel::STEP_FLEET_MAPPING);
         $this->_navigation->updateAccessibleSteps(FleetStepsModel::STEP_FLEET_SUMMARY);
 
@@ -245,12 +245,12 @@ class Proposalgen_FleetController extends Action
             $postData = $this->getRequest()->getPost();
             if (isset($postData['saveAndContinue']))
             {
-                $this->redirectToRoute('rms-upload.summary', array("rmsUploadId" => $rmsUploadId));
+                $this->redirectToRoute('rms-upload.summary', ["rmsUploadId" => $rmsUploadId]);
             }
             else if (isset($postData['goBack']))
             {
                 // Call the base controller to send us to the next logical step in the proposal.
-                $this->redirectToRoute('rms-upload.upload-file', array("rmsUploadId" => $rmsUploadId));
+                $this->redirectToRoute('rms-upload.upload-file', ["rmsUploadId" => $rmsUploadId]);
             }
         }
 
@@ -272,12 +272,12 @@ class Proposalgen_FleetController extends Action
             /*
              * Grab the incoming parameters
              */
-            $jqGridParameters = array(
+            $jqGridParameters = [
                 'sidx' => $this->_getParam('sidx', 'deviceCount'),
                 'sord' => $this->_getParam('sord', 'desc'),
                 'page' => $this->_getParam('page', 1),
                 'rows' => $this->_getParam('rows', 10)
-            );
+            ];
 
             // Set up validation arrays
             $blankModel  = new MapDeviceInstanceModel();
@@ -311,15 +311,15 @@ class Proposalgen_FleetController extends Action
             else
             {
                 $this->_response->setHttpResponseCode(500);
-                $this->sendJson(array(
+                $this->sendJson([
                     'error' => 'Sorting parameters are invalid'
-                ));
+                ]);
             }
         }
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array('error' => 'Invalid RMS Upload Id'));
+            $this->sendJson(['error' => 'Invalid RMS Upload Id']);
         }
     }
 
@@ -338,12 +338,12 @@ class Proposalgen_FleetController extends Action
             /*
              * Grab the incoming parameters
              */
-            $jqGridParameters = array(
+            $jqGridParameters = [
                 'sidx' => $this->_getParam('sidx', 'csvLineNumber'),
                 'sord' => $this->_getParam('sord', 'desc'),
                 'page' => $this->_getParam('page', 1),
                 'rows' => $this->_getParam('rows', 10)
-            );
+            ];
 
             // Set up validation arrays
             $blankModel  = new RmsExcludedRowModel();
@@ -384,13 +384,13 @@ class Proposalgen_FleetController extends Action
             else
             {
                 $this->_response->setHttpResponseCode(500);
-                $this->sendJson(array('error' => 'Sorting parameters are invalid'));
+                $this->sendJson(['error' => 'Sorting parameters are invalid']);
             }
         }
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array('error' => 'Invalid RMS Upload Id'));
+            $this->sendJson(['error' => 'Invalid RMS Upload Id']);
         }
     }
 
@@ -417,7 +417,7 @@ class Proposalgen_FleetController extends Action
                 $targetDeviceInstance = $deviceInstanceMapper->find($targetDeviceInstanceId);
                 if ($targetDeviceInstance instanceof DeviceInstanceModel)
                 {
-                    $deviceInstances = array();
+                    $deviceInstances = [];
                     if (strlen($targetDeviceInstance->getRmsUploadRow()->rmsModelId) > 0)
                     {
                         $deviceInstances = $deviceInstanceMapper->fetchAllWithRmsModelId($targetDeviceInstance->rmsUploadId, $targetDeviceInstance->getRmsUploadRow()->rmsProviderId, $targetDeviceInstance->getRmsUploadRow()->rmsModelId);
@@ -434,7 +434,7 @@ class Proposalgen_FleetController extends Action
                         {
                             $successMessage = "Device unmapped successfully";
                             // Delete mapping
-                            $deviceInstanceIds = array();
+                            $deviceInstanceIds = [];
                             foreach ($deviceInstances as $deviceInstance)
                             {
                                 $deviceInstanceIds[] = $deviceInstance->id;
@@ -495,11 +495,11 @@ class Proposalgen_FleetController extends Action
         if ($errorMessage !== null)
         {
             $this->getResponse()->setHttpResponseCode(500);
-            $this->sendJson(array("error" => true, "message" => $errorMessage));
+            $this->sendJson(["error" => true, "message" => $errorMessage]);
         }
         else
         {
-            $this->sendJson(array("success" => true, "message" => $successMessage));
+            $this->sendJson(["success" => true, "message" => $successMessage]);
         }
     }
 
@@ -508,7 +508,7 @@ class Proposalgen_FleetController extends Action
      */
     public function summaryAction ()
     {
-        $this->_pageTitle = array('Device Summary', 'RMS Upload');
+        $this->_pageTitle = ['Device Summary', 'RMS Upload'];
         $rmsUploadId      = $this->_getParam('rmsUploadId', false);
         $this->_navigation->setActiveStep(FleetStepsModel::STEP_FLEET_SUMMARY);
         $this->_navigation->updateAccessibleSteps(FleetStepsModel::STEP_FLEET_SUMMARY);
@@ -540,7 +540,7 @@ class Proposalgen_FleetController extends Action
             }
             else if (isset($postData['goBack']))
             {
-                $this->redirectToRoute('rms-upload.mapping', array("rmsUploadId" => $rmsUploadId));
+                $this->redirectToRoute('rms-upload.mapping', ["rmsUploadId" => $rmsUploadId]);
             }
         }
 
@@ -562,15 +562,15 @@ class Proposalgen_FleetController extends Action
             /*
              * Grab the incoming parameters
              */
-            $jqGridParameters = array(
+            $jqGridParameters = [
                 'sidx' => $this->_getParam('sidx', 'id'),
                 'sord' => $this->_getParam('sord', 'ASC'),
                 'page' => $this->_getParam('page', 1),
                 'rows' => $this->_getParam('rows', 10)
-            );
+            ];
 
             // Set up validation arrays
-            $validSortColumns = array('id');
+            $validSortColumns = ['id'];
             $sortColumns      = array_keys($validSortColumns);
 
             $jqGrid->parseJQGridPagingRequest($jqGridParameters);
@@ -595,10 +595,10 @@ class Proposalgen_FleetController extends Action
                 $startRecord     = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
                 $deviceInstances = $deviceInstanceMapper->getMappedDeviceInstances($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
 
-                $rows = array();
+                $rows = [];
                 foreach ($deviceInstances as $deviceInstance)
                 {
-                    $row = array(
+                    $row = [
                         "id"                       => $deviceInstance->id,
                         "isExcluded"               => $deviceInstance->isExcluded,
                         "isManaged"                => $deviceInstance->isManaged,
@@ -607,7 +607,7 @@ class Proposalgen_FleetController extends Action
                         "reportsTonerLevels"       => $deviceInstance->isCapableOfReportingTonerLevels ? "Yes" : "No",
                         "isLeased"                 => $deviceInstance->isLeased,
                         "validToners"              => ($deviceInstance->hasValidToners($this->getIdentity()->dealerId, $this->getSelectedClient()->id)),
-                    );
+                    ];
 
                     $row["deviceName"] = $deviceInstance->getRmsUploadRow()->manufacturer . " " . $deviceInstance->getRmsUploadRow()->modelName . "<br>" . $deviceInstance->ipAddress . "; " . $deviceInstance->serialNumber;
 
@@ -634,12 +634,12 @@ class Proposalgen_FleetController extends Action
             else
             {
                 $this->_response->setHttpResponseCode(500);
-                $this->sendJson(array('error' => 'Sorting parameters are invalid'));
+                $this->sendJson(['error' => 'Sorting parameters are invalid']);
             }
         }
         else
         {
-            $this->sendJson(array('error' => 'Invalid RMS Upload Id'));
+            $this->sendJson(['error' => 'Invalid RMS Upload Id']);
         }
     }
 
@@ -666,15 +666,15 @@ class Proposalgen_FleetController extends Action
             $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceIds[0]);
             if (!$deviceInstance instanceof DeviceInstanceModel)
             {
-                $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the device you wanted to add.'));
+                $this->_flashMessenger->addMessage(['danger' => 'There was an error selecting the device you wanted to add.']);
 
                 // Send back to the mapping page
-                $this->redirectToRoute('rms-upload.mapping', array('rmsUploadId' => $rmsUploadId));
+                $this->redirectToRoute('rms-upload.mapping', ['rmsUploadId' => $rmsUploadId]);
             }
 
             $rmsUploadRow             = $deviceInstance->getRmsUploadRow();
             $this->view->rmsUploadRow = $rmsUploadRow;
-            $form->populate(array('reportsTonerLevels' => $deviceInstance->isCapableOfReportingTonerLevels));
+            $form->populate(['reportsTonerLevels' => $deviceInstance->isCapableOfReportingTonerLevels]);
             $form->populate($rmsUploadRow->toArray());
 
 
@@ -732,8 +732,8 @@ class Proposalgen_FleetController extends Action
                             }
                             $db->commit();
 
-                            $this->_flashMessenger->addMessage(array("success" => "Device successfully mapped!"));
-                            $this->redirectToRoute('rms-upload.mapping', array('rmsUploadId' => $rmsUploadId));
+                            $this->_flashMessenger->addMessage(["success" => "Device successfully mapped!"]);
+                            $this->redirectToRoute('rms-upload.mapping', ['rmsUploadId' => $rmsUploadId]);
                         }
                         catch (Exception $e)
                         {
@@ -742,7 +742,7 @@ class Proposalgen_FleetController extends Action
                              */
                             $db->rollBack();
                             \Tangent\Logger\Logger::logException($e);
-                            $this->_flashMessenger->addMessage(array("danger" => "There was a system error while saving your device. Please try again. Reference #" . \Tangent\Logger\Logger::getUniqueId()));
+                            $this->_flashMessenger->addMessage(["danger" => "There was a system error while saving your device. Please try again. Reference #" . \Tangent\Logger\Logger::getUniqueId()]);
                         }
                     }
                     else
@@ -750,14 +750,14 @@ class Proposalgen_FleetController extends Action
                         /**
                          * Form is INVALID
                          */
-                        $this->_flashMessenger->addMessage(array("danger" => "Please check the errors below and resubmit your request."));
+                        $this->_flashMessenger->addMessage(["danger" => "Please check the errors below and resubmit your request."]);
                     }
                 }
                 else
                 {
                     if (isset($postData['cancel']))
                     {
-                        $this->redirectToRoute('rms-upload.mapping', array('rmsUploadId' => $rmsUploadId));
+                        $this->redirectToRoute('rms-upload.mapping', ['rmsUploadId' => $rmsUploadId]);
                     }
                 }
             }
@@ -765,8 +765,8 @@ class Proposalgen_FleetController extends Action
         }
         else
         {
-            $this->_flashMessenger->addMessage(array("warning" => "Invalid Device Specified."));
-            $this->redirectToRoute('rms-upload.mapping', array('rmsUploadId' => $rmsUploadId));
+            $this->_flashMessenger->addMessage(["warning" => "Invalid Device Specified."]);
+            $this->redirectToRoute('rms-upload.mapping', ['rmsUploadId' => $rmsUploadId]);
         }
     }
 
@@ -785,7 +785,7 @@ class Proposalgen_FleetController extends Action
             $deviceInstanceIds    = explode(",", $deviceInstanceIdsAsString);
             $deviceInstanceMapper = DeviceInstanceMapper::getInstance();
 
-            $jsonResponse = array("success" => true, "message" => "Unknown Device successfully removed.");
+            $jsonResponse = ["success" => true, "message" => "Unknown Device successfully removed."];
 
             $db->beginTransaction();
             try
@@ -811,12 +811,12 @@ class Proposalgen_FleetController extends Action
                 $db->rollBack();
                 \Tangent\Logger\Logger::logException($e);
                 $this->getResponse()->setHttpResponseCode(500);
-                $jsonResponse = array("error" => true, "message" => "There was an error removing the unknown device. Reference #" . \Tangent\Logger\Logger::getUniqueId());
+                $jsonResponse = ["error" => true, "message" => "There was an error removing the unknown device. Reference #" . \Tangent\Logger\Logger::getUniqueId()];
             }
         }
         else
         {
-            $jsonResponse = array("error" => true, "message" => "No RMS Upload ID provided. Cannot remove the device.");
+            $jsonResponse = ["error" => true, "message" => "No RMS Upload ID provided. Cannot remove the device."];
         }
         $this->sendJson($jsonResponse);
     }
@@ -891,22 +891,22 @@ class Proposalgen_FleetController extends Action
             if ($errorMessage !== false)
             {
                 $this->getResponse()->setHttpResponseCode(500);
-                $this->sendJson(array("error" => true, "message" => $errorMessage));
+                $this->sendJson(["error" => true, "message" => $errorMessage]);
             }
 
             if ($isExcluded)
             {
-                $this->sendJson(array("success" => true, "message" => "Device is now excluded."));
+                $this->sendJson(["success" => true, "message" => "Device is now excluded."]);
             }
             else
             {
-                $this->sendJson(array("success" => true, "message" => "Device is now included. "));
+                $this->sendJson(["success" => true, "message" => "Device is now included. "]);
             }
         }
         else
         {
             $this->getResponse()->setHttpResponseCode(500);
-            $this->sendJson(array("error" => true, "message" => "Invalid RMS Upload Id"));
+            $this->sendJson(["error" => true, "message" => "Invalid RMS Upload Id"]);
         }
     }
 
@@ -988,22 +988,22 @@ class Proposalgen_FleetController extends Action
             if ($errorMessage !== false)
             {
                 $this->getResponse()->setHttpResponseCode(500);
-                $this->sendJson(array("error" => true, "message" => $errorMessage));
+                $this->sendJson(["error" => true, "message" => $errorMessage]);
             }
 
             if ($isLeased)
             {
-                $this->sendJson(array("success" => true, "message" => "Device is now leased."));
+                $this->sendJson(["success" => true, "message" => "Device is now leased."]);
             }
             else
             {
-                $this->sendJson(array("success" => true, "message" => "Device is no longer leased. "));
+                $this->sendJson(["success" => true, "message" => "Device is no longer leased. "]);
             }
         }
         else
         {
             $this->getResponse()->setHttpResponseCode(500);
-            $this->sendJson(array("error" => true, "message" => "Invalid RMS Upload Id"));
+            $this->sendJson(["error" => true, "message" => "Invalid RMS Upload Id"]);
         }
     }
 
@@ -1080,22 +1080,22 @@ class Proposalgen_FleetController extends Action
             if ($errorMessage !== false)
             {
                 $this->getResponse()->setHttpResponseCode(500);
-                $this->sendJson(array("error" => true, "message" => $errorMessage));
+                $this->sendJson(["error" => true, "message" => $errorMessage]);
             }
 
             if ($isManaged)
             {
-                $this->sendJson(array("success" => true, "message" => "Device is now managed."));
+                $this->sendJson(["success" => true, "message" => "Device is now managed."]);
             }
             else
             {
-                $this->sendJson(array("success" => true, "message" => "Device is no longer managed. "));
+                $this->sendJson(["success" => true, "message" => "Device is no longer managed. "]);
             }
         }
         else
         {
             $this->getResponse()->setHttpResponseCode(500);
-            $this->sendJson(array("error" => true, "message" => "Invalid RMS Upload Id"));
+            $this->sendJson(["error" => true, "message" => "Invalid RMS Upload Id"]);
         }
     }
 
@@ -1169,22 +1169,22 @@ class Proposalgen_FleetController extends Action
             if ($errorMessage !== false)
             {
                 $this->getResponse()->setHttpResponseCode(500);
-                $this->sendJson(array("error" => true, "message" => $errorMessage));
+                $this->sendJson(["error" => true, "message" => $errorMessage]);
             }
 
             if ($isJitCompatible)
             {
-                $this->sendJson(array("success" => true, "message" => "Device is now " . My_Brand::$jit . " Compatible."));
+                $this->sendJson(["success" => true, "message" => "Device is now " . My_Brand::$jit . " Compatible."]);
             }
             else
             {
-                $this->sendJson(array("success" => true, "message" => "Device is now no longer " . My_Brand::$jit . " Compatible. "));
+                $this->sendJson(["success" => true, "message" => "Device is now no longer " . My_Brand::$jit . " Compatible. "]);
             }
         }
         else
         {
             $this->getResponse()->setHttpResponseCode(500);
-            $this->sendJson(array("error" => true, "message" => "Invalid RMS Upload Id"));
+            $this->sendJson(["error" => true, "message" => "Invalid RMS Upload Id"]);
         }
     }
 
@@ -1194,7 +1194,7 @@ class Proposalgen_FleetController extends Action
     public function deviceInstanceDetailsAction ()
     {
         $rmsUploadId  = $this->_getParam('rmsUploadId', false);
-        $jsonResponse = array();
+        $jsonResponse = [];
         $errorMessage = false;
 
         $costPerPageSetting = new CostPerPageSettingModel();
@@ -1238,15 +1238,15 @@ class Proposalgen_FleetController extends Action
                         $jsonResponse["masterDevice"]["tonerConfigName"]    = $deviceInstance->getMasterDevice()->getTonerConfig()->name;
                         $jsonResponse["masterDevice"]["compatibleWithJit"]  = $deviceInstance->getMasterDevice()->isJitCompatible($this->getIdentity()->dealerId);
                         $jsonResponse["masterDevice"]["isColor"]            = $deviceInstance->getMasterDevice()->isColor();
-                        $jsonResponse["pageCounts"]                         = array();
+                        $jsonResponse["pageCounts"]                         = [];
                         $jsonResponse["pageCounts"]['monochrome']           = number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly());
                         $jsonResponse["pageCounts"]['color']                = number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly());
                         $jsonResponse["pageCounts"]['a3Combined']           = number_format($deviceInstance->getPageCounts()->getPrintA3CombinedPageCount()->getMonthly());
-                        $jsonResponse["meters"]                             = array();
+                        $jsonResponse["meters"]                             = [];
                         $jsonResponse["meters"]['life']                     = number_format($deviceInstance->getMeter()->endMeterLife);
                         $jsonResponse["meters"]['maxLife']                  = number_format($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount());
                         $jsonResponse["lifeUsage"]                          = number_format($deviceInstance->getLifeUsage() * 100) . '%';
-                        $jsonResponse["pageCoverage"]                       = array();
+                        $jsonResponse["pageCoverage"]                       = [];
                         $jsonResponse["pageCoverage"]['monochrome']         = number_format((float)$deviceInstance->pageCoverageMonochrome, 2) . '%';
                         $jsonResponse["pageCoverage"]['cyan']               = number_format((float)$deviceInstance->pageCoverageCyan, 2) . '%';
                         $jsonResponse["pageCoverage"]['magenta']            = number_format((float)$deviceInstance->pageCoverageMagenta, 2) . '%';
@@ -1293,7 +1293,7 @@ class Proposalgen_FleetController extends Action
 
         if ($errorMessage !== false)
         {
-            $jsonResponse = array("error" => true, "message" => $errorMessage);
+            $jsonResponse = ["error" => true, "message" => $errorMessage];
             $this->getResponse()->setHttpResponseCode(500);
         }
 
@@ -1346,6 +1346,6 @@ class Proposalgen_FleetController extends Action
         parent::postDispatch();
 
         $rmsUploadId = $this->_getParam('rmsUploadId', false);
-        $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation, array('rmsUploadId' => $rmsUploadId)));
+        $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation, ['rmsUploadId' => $rmsUploadId]));
     }
 }

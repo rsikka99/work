@@ -4,8 +4,8 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
 
 $assessmentViewModel = $this->assessmentViewModel;
 $costPerPageSettings = $assessmentViewModel->getCostPerPageSettingForCustomer();
-$reportMargin = $assessmentViewModel->assessment->getClient()->getClientSettings()->genericSettings->tonerPricingMargin;
-$totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allIncludedDeviceInstances));
+$reportMargin        = $assessmentViewModel->assessment->getClient()->getClientSettings()->genericSettings->tonerPricingMargin;
+$totalDeviceCount    = number_format(count($assessmentViewModel->getDevices()->allIncludedDeviceInstances));
 ?>
 <style>
 
@@ -75,8 +75,8 @@ $totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allI
     </thead>
     <tbody>
     <?php
-    $totalBlackPages = 0;
-    $totalColorPages = 0;
+    $totalBlackPages         = 0;
+    $totalColorPages         = 0;
     $totalMonthlyInkAndToner = 0;
     ?>
     <?php foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance) : ?>
@@ -150,8 +150,8 @@ $totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allI
     </thead>
     <tbody>
     <?php
-    $totalBlackPages = 0;
-    $totalColorPages = 0;
+    $totalBlackPages         = 0;
+    $totalColorPages         = 0;
     $totalMonthlyInkAndToner = 0;
     ?>
     <?php foreach ($assessmentViewModel->getDevices()->leasedDeviceInstances as $deviceInstance) : ?>

@@ -80,13 +80,13 @@ class Proposalgen_ClientPricingController extends Action
         $jqGridService    = new JQGrid();
         $filter           = $this->_getParam('filter', false);
         $criteria         = $this->_getParam('criteria', false);
-        $jqGridParameters = array(
+        $jqGridParameters = [
             'sidx' => $this->_getParam('sidx', 'id'),
             'sord' => $this->_getParam('sord', 'desc'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10),
-        );
-        $sortColumns      = array(
+        ];
+        $sortColumns      = [
             'oemSku',
             'dealerSku',
             'clientSku',
@@ -95,7 +95,7 @@ class Proposalgen_ClientPricingController extends Action
             'replacementDealerSku',
             'replacementCost',
             'replacementSavings',
-        );
+        ];
 
         $jqGridService->setValidSortColumns($sortColumns);
         if ($jqGridService->sortingIsValid())
@@ -104,7 +104,7 @@ class Proposalgen_ClientPricingController extends Action
 
             $jqGridService->parseJQGridPagingRequest($jqGridParameters);
 
-            $sortOrder = array();
+            $sortOrder = [];
             if ($jqGridService->hasColumns())
             {
                 $sortOrder[] = $jqGridService->getSortColumn() . ' ' . $jqGridService->getSortDirection();
@@ -138,9 +138,9 @@ class Proposalgen_ClientPricingController extends Action
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array(
+            $this->sendJson([
                 'error' => 'Sorting parameters are invalid'
-            ));
+            ]);
         }
     }
 
@@ -150,7 +150,7 @@ class Proposalgen_ClientPricingController extends Action
     public function clientTonerReplacementsAction ()
     {
         $tonerId         = $this->_getParam('tonerId', false);
-        $replacementData = array();
+        $replacementData = [];
 
         if ($tonerId)
         {
@@ -172,7 +172,7 @@ class Proposalgen_ClientPricingController extends Action
         $replacementTonerId = $this->_getParam('replacementTonerId', null);
 
         $form = new ClientPricingClientTonerForm();
-        if ($form->isValid(array('clientSku' => $clientSku, 'cost' => $clientCost)))
+        if ($form->isValid(['clientSku' => $clientSku, 'cost' => $clientCost]))
         {
             $db = Zend_Db_Table::getDefaultAdapter();
             $db->beginTransaction();
@@ -197,27 +197,27 @@ class Proposalgen_ClientPricingController extends Action
                         $replacementTonerId = new Zend_Db_Expr('NULL');
                     }
 
-                    $clientTonerOrder->populate(array('clientSku' => $clientSku, 'cost' => $clientCost, 'replacementTonerId' => $replacementTonerId));
+                    $clientTonerOrder->populate(['clientSku' => $clientSku, 'cost' => $clientCost, 'replacementTonerId' => $replacementTonerId]);
                     $clientTonerOrderMapper->save($clientTonerOrder);
                     $db->commit();
-                    $this->sendJson(array(
+                    $this->sendJson([
                         'success' => 'Successfully saved client toner attributes'
-                    ));
+                    ]);
                 }
                 else
                 {
-                    $this->sendJson(array(
+                    $this->sendJson([
                         'error' => 'failed to save client toner attributes'
-                    ));
+                    ]);
                 }
             }
             catch (Exception $e)
             {
                 $db->rollback();
                 \Tangent\Logger\Logger::logException($e);
-                $this->sendJson(array(
+                $this->sendJson([
                     'error' => 'failed to save client toner attributes'
-                ));
+                ]);
             }
         }
         else
@@ -251,12 +251,12 @@ class Proposalgen_ClientPricingController extends Action
             {
                 $clientId                   = $this->_selectedClientId;
                 $clientTonerAttributeMapper = ClientTonerOrderMapper::getInstance();
-                $clientTonerAttribute       = $clientTonerAttributeMapper->find(array($clientTonerId, $clientId));
+                $clientTonerAttribute       = $clientTonerAttributeMapper->find([$clientTonerId, $clientId]);
                 if ($clientTonerAttribute instanceof ClientTonerOrderModel)
                 {
                     $clientTonerAttributeMapper->delete($clientTonerAttribute);
                     $db->commit();
-                    $this->sendJson(array('success' => 'Successfully deleted client pricing for that SKU.'));
+                    $this->sendJson(['success' => 'Successfully deleted client pricing for that SKU.']);
                 }
                 else
                 {
@@ -291,7 +291,7 @@ class Proposalgen_ClientPricingController extends Action
             $clientTonerAttributeMapper = ClientTonerOrderMapper::getInstance();
             $clientTonerAttributeMapper->deleteAllForClient($clientId);
             $db->commit();
-            $this->sendJson(array('success' => 'successfully deleted all client pricing'));
+            $this->sendJson(['success' => 'successfully deleted all client pricing']);
         }
         catch (Exception $e)
         {
@@ -306,7 +306,7 @@ class Proposalgen_ClientPricingController extends Action
      */
     public function uploadAction ()
     {
-        $this->_pageTitle = array('Client Pricing', 'Upload CSV');
+        $this->_pageTitle = ['Client Pricing', 'Upload CSV'];
 
         $db            = Zend_Db_Table::getDefaultAdapter();
         $uploadService = new ClientPricingImportService();
@@ -333,7 +333,7 @@ class Proposalgen_ClientPricingController extends Action
                                 /**
                                  * Fetch all the unique data in the csv
                                  */
-                                $data = array();
+                                $data = [];
 
                                 while (($value = fgetcsv($uploadService->importFile)) !== false)
                                 {
@@ -344,7 +344,7 @@ class Proposalgen_ClientPricingController extends Action
 
                                         if (!isset($validData['error']) && !isset($data[$uploadService::CSV_HEADER_OEM_PRODUCT_CODE]))
                                         {
-                                            $data[$validData[$uploadService::CSV_HEADER_OEM_PRODUCT_CODE]] = array(
+                                            $data[$validData[$uploadService::CSV_HEADER_OEM_PRODUCT_CODE]] = [
                                                 'oemSku'         => $validData[$uploadService::CSV_HEADER_OEM_PRODUCT_CODE],
                                                 'dealerSku'      => $validData[$uploadService::CSV_HEADER_DEALER_PRODUCT_CODE],
                                                 'clientSku'      => $validData[$uploadService::CSV_HEADER_CUSTOMER_PRODUCT_CODE],
@@ -354,7 +354,7 @@ class Proposalgen_ClientPricingController extends Action
                                                 'dateShipped'    => $validData[$uploadService::CSV_HEADER_DATE_SHIPPED],
                                                 'dateReconciled' => $validData[$uploadService::CSV_HEADER_DATE_RECONCILED],
                                                 'quantity'       => $validData[$uploadService::CSV_HEADER_QUANTITY],
-                                            );
+                                            ];
                                         }
                                     }
                                 }
@@ -457,27 +457,27 @@ class Proposalgen_ClientPricingController extends Action
                                     }
                                 }
 
-                                $this->_flashMessenger->addMessage(array("success" => "Your pricing updates have been applied successfully."));
+                                $this->_flashMessenger->addMessage(["success" => "Your pricing updates have been applied successfully."]);
                                 $db->commit();
 
                                 $this->redirectToRoute('client.pricing');
                             }
                             else
                             {
-                                $this->_flashMessenger->addMessage(array("error" => "This file headers are in-correct."));
+                                $this->_flashMessenger->addMessage(["error" => "This file headers are in-correct."]);
                             }
                         }
                         catch (Exception $e)
                         {
                             $db->rollback();
                             \Tangent\Logger\Logger::logException($e);
-                            $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again. #" . \Tangent\Logger\Logger::getUniqueId()));
+                            $this->_flashMessenger->addMessage(["error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again. #" . \Tangent\Logger\Logger::getUniqueId()]);
                         }
                         $uploadService->closeFiles();
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+                        $this->_flashMessenger->addMessage(["error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."]);
                     }
                 }
             }

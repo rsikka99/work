@@ -37,9 +37,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
 //        $navigationCache = $cm->getCache('navigation_cache');
 //        $navigationCache->setOption('cache_id_prefix', 'MPST_Navigation_');
-//        $navigationCache->setBackend(new Rediska_Zend_Cache_Backend_Redis(array('rediska' => new Rediska())));
+//        $navigationCache->setBackend(new Rediska_Zend_Cache_Backend_Redis(['rediska' => new Rediska()]));
 //        $defaultCache = $cm->getCache('default');
-//        $defaultCache->setBackend(new Rediska_Zend_Cache_Backend_Redis(array('rediska' => new Rediska())));
+//        $defaultCache->setBackend(new Rediska_Zend_Cache_Backend_Redis(['rediska' => new Rediska()]));
 
 //        echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
 //        var_dump($cm->getCaches());

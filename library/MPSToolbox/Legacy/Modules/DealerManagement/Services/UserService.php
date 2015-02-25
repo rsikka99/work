@@ -79,7 +79,7 @@ class UserService extends BaseService
     protected function _populateForm (UserModel $user)
     {
         $populateData = $user->toArray();
-        $userRoles    = array();
+        $userRoles    = [];
         foreach ($user->getUserRoles() as $userRole)
         {
             $userRoles[] = $userRole->roleId;
@@ -192,7 +192,7 @@ class UserService extends BaseService
 
                 if (!isset($filteredData['userRoles']))
                 {
-                    $filteredData['userRoles'] = array();
+                    $filteredData['userRoles'] = [];
                 }
 
                 $userMapper->save($user);
@@ -306,14 +306,14 @@ class UserService extends BaseService
     {
         $config = Zend_Registry::get('config');
 
-        $emailConfig = array(
+        $emailConfig = [
             'auth'     => 'login',
             'username' => $config->email->username,
             'password' => $config->email->password,
             'ssl'      => $config->email->ssl,
             'port'     => $config->email->port,
             'host'     => $config->email->host
-        );
+        ];
 
         Zend_Mail::setDefaultTransport(new Zend_Mail_Transport_Smtp($emailConfig['host'], $emailConfig));
         Zend_Mail::setDefaultFrom($emailConfig['username'], $config->app->name);

@@ -22,7 +22,7 @@ class FmAuditUploadService extends AbstractRmsUploadService
      *
      * @var array
      */
-    protected $_columnMapping = array(
+    protected $_columnMapping = [
         'printer model id'         => 'rmsModelId',
         'device id'                => 'assetId',
         'start date'               => 'monitorStartDate',
@@ -77,5 +77,5 @@ class FmAuditUploadService extends AbstractRmsUploadService
         'toner level cyan'         => 'tonerLevelCyan',
         'toner level magenta'      => 'tonerLevelMagenta',
         'toner level yellow'       => 'tonerLevelYellow'
-    );
+    ];
 }

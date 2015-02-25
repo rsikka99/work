@@ -112,13 +112,13 @@ class DealerModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"                => $this->id,
             "userLicenses"      => $this->userLicenses,
             "dealerName"        => $this->dealerName,
             "dateCreated"       => $this->dateCreated,
             "dealerLogoImageId" => $this->dealerLogoImageId,
-        );
+        ];
     }
 
 

@@ -12,8 +12,8 @@ use Zend_Db_Table_Abstract;
 class DeviceTonerDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'device_toners';
-    protected $_primary = array(
+    protected $_primary = [
         'toner_id',
-        'master_device_id'
-    );
+        'master_device_id',
+    ];
 }

@@ -6,43 +6,43 @@ use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeviceAttri
 $form = $this->element;
 ?>
 
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
 <div class="clearfix">
     <fieldset class="col-md-10 col-md-offset-1">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group <?= ($form->getElement('isCopier')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('isCopier'), array('col-md-4')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('isCopier'), ['col-md-4']) ?>
 
                     <div class="col-md-8">
-                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isCopier'), array('js-yes-no-switch')) ?>
+                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isCopier'), ['js-yes-no-switch']) ?>
                         <?= $this->RenderFormDescription($form->getElement('isCopier')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('isCopier')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($form->getElement('isDuplex')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('isDuplex'), array('col-md-4')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('isDuplex'), ['col-md-4']) ?>
 
                     <div class="col-md-8">
-                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isDuplex'), array('js-yes-no-switch')) ?>
+                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isDuplex'), ['js-yes-no-switch']) ?>
                         <?= $this->RenderFormDescription($form->getElement('isDuplex')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('isDuplex')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($form->getElement('isFax')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('isFax'), array('col-md-4')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('isFax'), ['col-md-4']) ?>
 
                     <div class="col-md-8">
-                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isFax'), array('js-yes-no-switch')) ?>
+                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isFax'), ['js-yes-no-switch']) ?>
                         <?= $this->RenderFormDescription($form->getElement('isFax')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('isFax')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($form->getElement('ppmBlack')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('ppmBlack'), array('col-md-4')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('ppmBlack'), ['col-md-4']) ?>
 
                     <div class="col-md-8">
                         <?= $this->RenderFormText($form->getElement('ppmBlack')) ?>
@@ -52,7 +52,7 @@ $form = $this->element;
                 </div>
 
                 <div class="form-group <?= ($form->getElement('ppmColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('ppmColor'), array('col-md-4')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('ppmColor'), ['col-md-4']) ?>
 
                     <div class="col-md-8">
                         <?= $this->RenderFormText($form->getElement('ppmColor')) ?>
@@ -63,47 +63,47 @@ $form = $this->element;
             </div>
             <div class="col-md-6">
                 <div class="form-group <?= ($form->getElement('isA3')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('isA3'), array('col-md-4')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('isA3'), ['col-md-4']) ?>
 
                     <div class="col-md-8">
-                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isA3'), array('js-yes-no-switch')) ?>
+                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isA3'), ['js-yes-no-switch']) ?>
                         <?= $this->RenderFormDescription($form->getElement('isA3')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('isA3')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($form->getElement('isCapableOfReportingTonerLevels')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('isCapableOfReportingTonerLevels'), array('col-md-4')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('isCapableOfReportingTonerLevels'), ['col-md-4']) ?>
 
                     <div class="col-md-8">
-                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isCapableOfReportingTonerLevels'), array('js-yes-no-switch')) ?>
+                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isCapableOfReportingTonerLevels'), ['js-yes-no-switch']) ?>
                         <?= $this->RenderFormDescription($form->getElement('isCapableOfReportingTonerLevels')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('isCapableOfReportingTonerLevels')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($form->getElement('jitCompatibleMasterDevice')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('jitCompatibleMasterDevice'), array('col-md-4')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('jitCompatibleMasterDevice'), ['col-md-4']) ?>
 
                     <div class="col-md-8">
-                        <?= $this->RenderFormBootstrapSwitch($form->getElement('jitCompatibleMasterDevice'), array('js-yes-no-switch')) ?>
+                        <?= $this->RenderFormBootstrapSwitch($form->getElement('jitCompatibleMasterDevice'), ['js-yes-no-switch']) ?>
                         <?= $this->RenderFormDescription($form->getElement('jitCompatibleMasterDevice')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('jitCompatibleMasterDevice')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($form->getElement('launchDate')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('launchDate'), array('col-md-4')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('launchDate'), ['col-md-4']) ?>
 
                     <div class="col-md-8">
-                        <?= $this->RenderFormDatePicker($form->getElement('launchDate'), array('js-date-picker')) ?>
+                        <?= $this->RenderFormDatePicker($form->getElement('launchDate'), ['js-date-picker']) ?>
                         <?= $this->RenderFormDescription($form->getElement('launchDate')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('launchDate')) ?>
                     </div>
                 </div>
 
                 <div class="form-group <?= ($form->getElement('wattsPowerNormal')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('wattsPowerNormal'), array('col-md-4')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('wattsPowerNormal'), ['col-md-4']) ?>
 
                     <div class="col-md-8">
                         <?= $this->RenderFormText($form->getElement('wattsPowerNormal')) ?>
@@ -113,7 +113,7 @@ $form = $this->element;
                 </div>
 
                 <div class="form-group <?= ($form->getElement('wattsPowerIdle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('wattsPowerIdle'), array('col-md-4')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('wattsPowerIdle'), ['col-md-4']) ?>
 
                     <div class="col-md-8">
                         <?= $this->RenderFormText($form->getElement('wattsPowerIdle')) ?>

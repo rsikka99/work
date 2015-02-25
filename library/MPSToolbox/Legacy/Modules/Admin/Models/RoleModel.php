@@ -60,10 +60,10 @@ class RoleModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"         => $this->id,
             "name"       => $this->name,
             "systemRole" => $this->systemRole,
-        );
+        ];
     }
 }

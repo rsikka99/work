@@ -795,7 +795,7 @@ class RmsUploadRowModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"                       => $this->id,
             "rmsProviderId"            => $this->rmsProviderId,
             "rmsModelId"               => $this->rmsModelId,
@@ -872,7 +872,7 @@ class RmsUploadRowModel extends My_Model_Abstract
             "rmsReportVersion"         => $this->rmsReportVersion,
             "managementProgram"        => $this->managementProgram,
             "location"                 => $this->location,
-        );
+        ];
     }
 
 

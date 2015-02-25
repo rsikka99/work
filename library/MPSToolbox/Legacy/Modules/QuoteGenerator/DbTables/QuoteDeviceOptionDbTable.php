@@ -12,7 +12,7 @@ use Zend_Db_Table_Abstract;
 class QuoteDeviceOptionDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'quote_device_options';
-    protected $_primary = array(
-        'id'
-    );
+    protected $_primary = [
+        'id',
+    ];
 }

@@ -28,7 +28,7 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
      */
     public function selectUploadAction ()
     {
-        $this->_pageTitle = array('Assessment', 'Select Upload');
+        $this->_pageTitle = ['Assessment', 'Select Upload'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FLEET_UPLOAD);
 
         if ($this->getRequest()->isPost())
@@ -48,7 +48,7 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => 'The Upload you selected is not valid.'));
+                    $this->_flashMessenger->addMessage(['danger' => 'The Upload you selected is not valid.']);
                 }
             }
             else if (isset($postData['noUploads']))
@@ -74,7 +74,7 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
      */
     public function surveyAction ()
     {
-        $this->_pageTitle = array('Assessment', 'Survey');
+        $this->_pageTitle = ['Assessment', 'Survey'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_SURVEY);
 
         /**
@@ -126,13 +126,13 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
                         }
                         else
                         {
-                            $this->_flashMessenger->addMessage(array('success' => "Your changes were saved successfully."));
+                            $this->_flashMessenger->addMessage(['success' => "Your changes were saved successfully."]);
                         }
                     }
                     else
                     {
                         $db->rollBack();
-                        $this->_flashMessenger->addMessage(array('danger' => 'Please correct the errors below before continuing.'));
+                        $this->_flashMessenger->addMessage(['danger' => 'Please correct the errors below before continuing.']);
                     }
                 }
                 catch (Exception $e)
@@ -152,7 +152,7 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
      */
     public function settingsAction ()
     {
-        $this->_pageTitle = array('Assessment', 'Settings');
+        $this->_pageTitle = ['Assessment', 'Settings'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_SETTINGS);
 
         if ($this->getRequest()->isPost())

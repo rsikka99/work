@@ -16,7 +16,7 @@ class SelectOptionsForm extends Zend_Form
     /**
      * @var OptionModel[]
      */
-    protected $_availableOptions = array();
+    protected $_availableOptions = [];
 
     /**
      * @param null|OptionModel[] $availableOptions
@@ -36,7 +36,7 @@ class SelectOptionsForm extends Zend_Form
         // Set the method for the display form to POST
         $this->setMethod('POST');
 
-        $optionList = array();
+        $optionList = [];
         /* @var $option OptionModel */
         if (count($this->_availableOptions) > 0)
         {
@@ -45,37 +45,28 @@ class SelectOptionsForm extends Zend_Form
                 $optionList [$option->id] = $option->name . ": " . $option->description;
             }
 
-            $this->addElement('multiCheckbox', 'options', array(
+            $this->addElement('multiCheckbox', 'options', [
                 'label'        => 'Options',
-                'multiOptions' => $optionList
-            ));
+                'multiOptions' => $optionList,
+            ]);
         }
 
         // Add the submit button
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'ignore' => true,
-            'label'  => 'Save'
-        ));
+            'label'  => 'Save',
+        ]);
 
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'ignore' => true,
-            'label'  => 'Cancel'
-        ));
+            'label'  => 'Cancel',
+        ]);
 
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript'       => 'forms/quotegen/add-options-form.phtml',
-                    'availableOptions' => $this->_availableOptions
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/quotegen/add-options-form.phtml', 'availableOptions' => $this->_availableOptions]]]);
     }
-
 }

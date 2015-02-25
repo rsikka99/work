@@ -37,7 +37,7 @@ $amountOfRows      = ceil(count($uniqueDeviceArray) / 2);
 $firstColumn  = true;
 $colorCounter = 0;
 
-$tableData = array();
+$tableData = [];
 
 ?>
 <table class="table-bordered" style="border-collapse: collapse;">
@@ -48,19 +48,19 @@ $tableData = array();
     {
         if ($counter < $amountOfRows)
         {
-            $tableData[$counter]["column1"] = array(
+            $tableData[$counter]["column1"] = [
                 "color"   => Healthcheck_ViewModel_Healthcheck::$COLOR_ARRAY[$counter],
                 "name"    => $key . " (" . $deviceCount . ")",
                 "percent" => number_format(($deviceCount / $totalAmount) * 100, 1) . "%",
-            );
+            ];
         }
         else
         {
-            $tableData[$counter - $amountOfRows]["column2"] = array(
+            $tableData[$counter - $amountOfRows]["column2"] = [
                 "color"   => Healthcheck_ViewModel_Healthcheck::$COLOR_ARRAY[$counter],
                 "name"    => $key . " (" . $deviceCount . ")",
                 "percent" => number_format(($deviceCount / $totalAmount) * 100, 1) . "%",
-            );
+            ];
 
         }
         $counter++;

@@ -33,118 +33,101 @@ class DeviceSetupForm extends Zend_Form
         /*
          * Manufacturer
          */
-        $manufacturers = array();
+        $manufacturers = [];
         /* @var $manufacturer ManufacturerModel */
         foreach (ManufacturerMapper::getInstance()->fetchAllAvailableManufacturers() as $manufacturer)
         {
             $manufacturers [$manufacturer->id] = $manufacturer->fullname;
         }
 
-        $this->addElement('select', 'manufacturerId', array(
+        $this->addElement('select', 'manufacturerId', [
             'label'        => 'Manufacturer:',
             'class'        => 'span3',
-            'multiOptions' => $manufacturers
-        ));
+            'multiOptions' => $manufacturers,
+        ]);
 
         /*
          * Printer Model Name
          */
-        $this->addElement('text', 'modelName', array(
+        $this->addElement('text', 'modelName', [
             'label'      => 'Model Name:',
             'class'      => 'span3',
             'required'   => true,
             'maxlength'  => 255,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(
-                        1,
-                        255
-                    )
-                )
-            )
-        ));
+                    'options'   => [1, 255],
+                ],
+            ],
+        ]);
 
         /*
          * Is Quote Gen Device
          */
-        $this->addElement('checkbox', 'can_sell', array(
+        $this->addElement('checkbox', 'can_sell', [
             'label'       => 'Can Sell Device:',
             'description' => 'Note: SKU is required when checked.',
-            'filters'     => array(
-                'Boolean'
-            )
-        ));
+            'filters'     => ['Boolean'],
+        ]);
 
         /*
          * SKU
          */
-        $this->addElement('text', 'oemSku', array(
+        $this->addElement('text', 'oemSku', [
             'label'      => 'OEM SKU:',
             'class'      => 'span2',
             'maxlength'  => 255,
             'required'   => false,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
+            'filters'    => ['StringTrim', 'StripTags'],
             'allowEmpty' => false,
-            'validators' => array(
-                new FieldDependsOnValue('can_sell', '1', array(
-                    new Zend_Validate_NotEmpty()
-                ), array(
-                    'validator' => 'StringLength',
-                    'options'   => array(
-                        1,
-                        255
-                    )
-                ))
-            )
-        ));
+            'validators' => [
+                new FieldDependsOnValue('can_sell', '1',
+                    [
+                        new Zend_Validate_NotEmpty()
+                    ],
+                    [
+                        'validator' => 'StringLength',
+                        'options'   => [1, 255],
+                    ]
+                ),
+            ],
+        ]);
 
-        $this->addElement('text', 'dealerSku', array(
+        $this->addElement('text', 'dealerSku', [
             'label'      => My_Brand::$dealerSku . ":",
             'class'      => 'span2',
             'maxlength'  => 255,
             'required'   => false,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators' => array(
-                new FieldDependsOnValue('can_sell', '1', array(
-                    new Zend_Validate_NotEmpty()
-                ), array(
-                    'validator' => 'StringLength',
-                    'options'   => array(
-                        1,
-                        255
-                    )
-                ))
-            )
-        ));
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                new FieldDependsOnValue('can_sell', '1',
+                    [
+                        new Zend_Validate_NotEmpty()
+                    ],
+                    [
+                        'validator' => 'StringLength',
+                        'options'   => [1, 255],
+                    ]
+                ),
+            ],
+        ]);
 
         /*
          * Description of standard features
          */
-        $this->addElement('textarea', 'description', array(
+        $this->addElement('textarea', 'description', [
             'label'    => 'Standard Features:',
             'style'    => 'height: 100px',
             'required' => false,
-            'filters'  => array(
-                'StringTrim',
-                'StripTags'
-            )
-        ));
+            'filters'  => ['StringTrim', 'StripTags']
+        ]);
 
         /*
          * Device Price
          */
-        $this->addElement('text', 'cost', array(
+        $this->addElement('text', 'cost', [
             'label'      => 'Device Cost:',
             'class'      => 'span1',
             'prepend'    => '$',
@@ -152,38 +135,32 @@ class DeviceSetupForm extends Zend_Form
             'maxlength'  => 8,
             'required'   => false,
             'allowEmpty' => false,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators' => array(
-                new FieldDependsOnValue('can_sell', '1', array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                new FieldDependsOnValue('can_sell', '1', [
                     new Zend_Validate_NotEmpty(),
                     new Zend_Validate_Float(),
-                    new Zend_Validate_Between(array(
-                        'min' => 1,
-                        'max' => 30000
-                    ))
-                ))
-            )
-        ));
+                    new Zend_Validate_Between(['min' => 1, 'max' => 30000]),
+                ]),
+            ],
+        ]);
 
         /*
          * Toner Configuration
          */
-        $tonerConfigs = array();
+        $tonerConfigs = [];
         /* @var $tonerConfig TonerConfigModel */
         foreach (TonerConfigMapper::getInstance()->fetchAll() as $tonerConfig)
         {
             $tonerConfigs [$tonerConfig->id] = $tonerConfig->name;
         }
 
-        $this->addElement('select', 'tonerConfigId', array(
+        $this->addElement('select', 'tonerConfigId', [
             'label'        => 'Toner Configuration:',
             'class'        => 'span3',
             'required'     => true,
-            'multiOptions' => $tonerConfigs
-        ));
+            'multiOptions' => $tonerConfigs,
+        ]);
 
         /*
          * Hidden Toner Configuration This will be used when editing to hold the toner config id when the dropdown is
@@ -193,134 +170,106 @@ class DeviceSetupForm extends Zend_Form
         /*
          * Is copier
          */
-        $this->addElement('checkbox', 'isCopier', array(
+        $this->addElement('checkbox', 'isCopier', [
             'label'   => 'Is Copier:',
-            'filters' => array(
-                'Boolean'
-            )
-        ));
+            'filters' => ['Boolean'],
+        ]);
 
         /*
          * Is fax
          */
-        $this->addElement('checkbox', 'isFax', array(
+        $this->addElement('checkbox', 'isFax', [
             'label'   => 'Is Fax:',
-            'filters' => array(
-                'Boolean'
-            )
-        ));
+            'filters' => ['Boolean'],
+        ]);
 
         /*
          * Is duplex
          */
-        $this->addElement('checkbox', 'isDuplex', array(
+        $this->addElement('checkbox', 'isDuplex', [
             'label'   => 'Is Duplex:',
-            'filters' => array(
-                'Boolean'
-            )
-        ));
+            'filters' => ['Boolean'],
+        ]);
 
         /*
          * Reports toner levels (JIT Compatible)
          */
-        $this->addElement('checkbox', 'reportsTonerLevels', array(
+        $this->addElement('checkbox', 'reportsTonerLevels', [
             'label'   => 'Reports toner levels:',
-            'filters' => array(
-                'Boolean'
-            )
-        ));
+            'filters' => ['Boolean'],
+        ]);
 
         /*
          * Printer Wattage (Running)
          */
-        $this->addElement('text', 'wattsPowerNormal', array(
+        $this->addElement('text', 'wattsPowerNormal', [
             'label'      => 'Watts Power Normal:',
             'class'      => 'span1',
             'maxlength'  => 4,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 'Int',
-                array(
+                [
                     'validator' => 'Between',
-                    'options'   => array(
-                        'min' => 1,
-                        'max' => 5000
-                    )
-                )
-            )
-        ));
+                    'options'   => ['min' => 1, 'max' => 5000],
+                ],
+            ],
+        ]);
 
         /*
          * Printer Wattage (Idle)
          */
-        $this->addElement('text', 'wattsPowerIdle', array(
+        $this->addElement('text', 'wattsPowerIdle', [
             'label'      => 'Watts Power Idle:',
             'class'      => 'span1',
             'maxlength'  => 4,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
+            'filters'    => ['StringTrim', 'StripTags'],
             'append'     => 'watts',
             'dimension'  => 1,
-            'validators' => array(
+            'validators' => [
                 'Int',
-                array(
+                [
                     'validator' => 'Between',
-                    'options'   => array(
-                        'min' => 1,
-                        'max' => 5000
-                    )
-                )
-            )
-        ));
+                    'options'   => ['min' => 1, 'max' => 5000],
+                ],
+            ],
+        ]);
 
         /*
          * Parts Cost Per Page
          */
-        $this->addElement('text', 'partsCostPerPage', array(
+        $this->addElement('text', 'partsCostPerPage', [
             'label'      => 'Parts Cost Per Page:',
             'class'      => 'span1',
             'maxlength'  => 8,
             'allowEmpty' => false,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators' => array(new FieldDependsOnValue('can_sell', '1', array(
-                new Zend_Validate_NotEmpty(),
-                new Zend_Validate_Float(),
-                new Zend_Validate_Between(array(
-                    'min' => 0,
-                    'max' => 5,
-                ))
-            )))
-        ));
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                new FieldDependsOnValue('can_sell', '1', [
+                    new Zend_Validate_NotEmpty(),
+                    new Zend_Validate_Float(),
+                    new Zend_Validate_Between(['min' => 0, 'max' => 5])
+                ]),
+            ],
+        ]);
 
         /*
         * Labor Cost Per Page
         */
-        $this->addElement('text', 'laborCostPerPage', array(
+        $this->addElement('text', 'laborCostPerPage', [
             'label'      => 'Labor Cost Per Page:',
             'class'      => 'span1',
             'maxlength'  => 8,
             'allowEmpty' => false,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators' => array(new FieldDependsOnValue('can_sell', '1', array(
-                new Zend_Validate_NotEmpty(),
-                new Zend_Validate_Float(),
-                new Zend_Validate_Between(array(
-                    'min' => 0,
-                    'max' => 5,
-                ))
-            )))
-        ));
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                new FieldDependsOnValue('can_sell', '1', [
+                    new Zend_Validate_NotEmpty(),
+                    new Zend_Validate_Float(),
+                    new Zend_Validate_Between(['min' => 0, 'max' => 5,]),
+                ]),
+            ],
+        ]);
 
         /*
          * Launch Date /
@@ -339,105 +288,82 @@ class DeviceSetupForm extends Zend_Form
                    ->addValidator(new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'))
                    ->setRequired(true)
                    ->setAttrib('maxlength', 10)
-                   ->addFilters(array(
-                       'StringTrim',
-                       'StripTags'
-                   ));
+                   ->addFilters(['StringTrim', 'StripTags']);
         $this->addElement($launchDate);
 
         /*
          * Print Speed (Monochrome)
          */
-        $this->addElement('text', 'ppmBlack', array(
+        $this->addElement('text', 'ppmBlack', [
             'label'      => 'Print Speed (Mono):',
             'class'      => 'span1',
             'maxlength'  => 4,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 'Int',
-                array(
+                [
                     'validator' => 'Between',
-                    'options'   => array(
-                        'min' => 0,
-                        'max' => 1000
-                    )
-                )
-            )
-        ));
+                    'options'   => ['min' => 0, 'max' => 1000],
+                ],
+            ],
+        ]);
 
         /*
          * Print Speed (Color)
          */
-        $this->addElement('text', 'ppmColor', array(
+        $this->addElement('text', 'ppmColor', [
             'label'      => 'Print Speed (Color):',
             'class'      => 'span1',
             'maxlength'  => 4,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 'Int',
-                array(
+                [
                     'validator' => 'Between',
-                    'options'   => array(
-                        'min' => 0,
-                        'max' => 1000
-                    )
-                )
-            )
-        ));
+                    'options'   => ['min' => 0, 'max' => 1000],
+                ],
+            ],
+        ]);
 
         /*
          * Is leased
          */
-        $this->addElement('checkbox', 'isLeased', array(
+        $this->addElement('checkbox', 'isLeased', [
             'label'       => 'Is Leased:',
             'description' => 'Note: Leased Toner Yield is required when checked.',
-            'filters'     => array(
-                'Boolean'
-            )
-        ));
+            'filters'     => ['Boolean'],
+        ]);
 
         /*
          * Leased Toner Yield
          */
-        $this->addElement('text', 'leasedTonerYield', array(
+        $this->addElement('text', 'leasedTonerYield', [
             'label'      => 'Leased Toner Yield:',
             'class'      => 'span1',
             'maxlength'  => 6,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
+            'filters'    => ['StringTrim', 'StripTags'],
             'allowEmpty' => false,
-            'validators' => array(
-                new FieldDependsOnValue('isLeased', '1', array(
+            'validators' => [
+                new FieldDependsOnValue('isLeased', '1', [
                     new Zend_Validate_NotEmpty(),
                     new Zend_Validate_Int(),
-                    new Zend_Validate_Between(array(
-                        'min' => 0,
-                        'max' => 100000
-                    ))
-                ))
-            )
-        ));
+                    new Zend_Validate_Between(['min' => 0, 'max' => 100000]),
+                ]),
+            ],
+        ]);
 
         $this->addElement('hidden', 'toner_array');
 
         // Add the submit button
-        $this->addElement('submit', 'submit', array(
-            'label' => 'Save'
-        ));
+        $this->addElement('submit', 'submit', [
+            'label' => 'Save',
+        ]);
 
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'label'          => 'Cancel',
             'formnovalidate' => true,
-        ));
+        ]);
 
     }
 }

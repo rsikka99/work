@@ -28,15 +28,15 @@ $totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->g
 /* @var $costPerPageSetting */
 $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
 
-$titleData = array(
+$titleData = [
     "hardwareOptimization" => $hardwareOptimization,
     "dealerLogoFile"       => $this->dealerLogoFile,
     "companyName"          => My_Brand::getDealerBranding()->shortDealerName,
-);
+];
 
 $profitabilityDevices = new OptimizationCustomerModel($hardwareOptimization);
 
-$data = array(
+$data = [
     "hardwareOptimization" => $hardwareOptimization,
     "optimization"         => $optimization,
     "dealerOptimization"   => $dealerOptimization,
@@ -45,7 +45,7 @@ $data = array(
     "deviceInstances"      => $deviceInstances,
     "totalDevices"         => $totalNumberOfDevices,
     "costPerPageSetting"   => $costPerPageSetting
-);
+];
 ?>
 <div class="container-fluid">
     <div class="row">

@@ -14,9 +14,9 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
     {
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_PRINTING_DEVICE_LIST))
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "error" => "You do not have permission to access this."
-            ));
+            ]);
 
             $this->redirectToRoute('assessment');
         }
@@ -26,17 +26,17 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
 
     public function indexAction ()
     {
-        $this->_pageTitle = array('Assessment', 'Printing Device List');
+        $this->_pageTitle = ['Assessment', 'Printing Device List'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
 
         $this->view->availableReports['PrintingDeviceList']['active'] = true;
-        $this->view->formats                                          = array(
+        $this->view->formats                                          = [
             "/assessment/report_printingdevicelist/generate/format/csv"  => $this->_csvFormat,
             "/assessment/report_printingdevicelist/generate/format/docx" => $this->_wordFormat
-        );
+        ];
         try
         {
             // Clear the cache for the report before proceeding
@@ -112,7 +112,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
 
         $justInTimeCompatibleTitle = My_Brand::$jit . ' Compatible';
 
-        $this->view->appendix_titles = array("Manufacturer", "Model", "IP Address", "Serial", "Age (Years)", "Purchased or Leased", "AMPV", $justInTimeCompatibleTitle);
+        $this->view->appendix_titles = ["Manufacturer", "Model", "IP Address", "Serial", "Age (Years)", "Purchased or Leased", "AMPV", $justInTimeCompatibleTitle];
 
         $appendix_values = "";
         try
@@ -120,7 +120,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
             /* @var $device DeviceInstanceModel */
             foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
-                $row               = array();
+                $row               = [];
                 $row []            = $device->getMasterDevice()->getManufacturer()->displayname;
                 $row []            = $device->getMasterDevice()->modelName;
                 $row []            = ($device->ipAddress) ? $device->ipAddress : "Unknown";
@@ -139,7 +139,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
         $this->view->appendix_values = $appendix_values;
 
         // Define our field titles
-        $this->view->excluded_titles = array("Manufacturer", "Model", "Serial", "IP Address", "Exclusion Reason");
+        $this->view->excluded_titles = ["Manufacturer", "Model", "Serial", "IP Address", "Exclusion Reason"];
 
         $excluded_values = "";
         try
@@ -147,7 +147,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
             /* @var $device DeviceInstanceModel */
             foreach ($assessmentViewModel->getExcludedDevices() as $device)
             {
-                $row = array();
+                $row = [];
                 if ($device->getIsMappedToMasterDevice())
                 {
                     $row [] = $device->getMasterDevice()->getFullDeviceName();

@@ -15,9 +15,9 @@ class Assessment_Report_LeasebuybackController extends Assessment_Library_Contro
     {
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_LEASE_BUYBACK))
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "error" => "You do not have permission to access this."
-            ));
+            ]);
 
             $this->redirectToRoute('assessment');
         }
@@ -27,16 +27,16 @@ class Assessment_Report_LeasebuybackController extends Assessment_Library_Contro
 
     public function indexAction ()
     {
-        $this->_pageTitle = array('Assessment', 'Lease Buyback');
+        $this->_pageTitle = ['Assessment', 'Lease Buyback'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
 
         $this->view->availableReports['LeaseBuyback']['active'] = true;
-        $this->view->formats                                    = array(
+        $this->view->formats                                    = [
             "/assessment/report_leasebuyback/generate/format/excel" => $this->_excelFormat,
-        );
+        ];
 
         try
         {
@@ -56,7 +56,7 @@ class Assessment_Report_LeasebuybackController extends Assessment_Library_Contro
      */
     public function generateAction ()
     {
-        $this->_pageTitle = array('Generate Lease Buyback');
+        $this->_pageTitle = ['Generate Lease Buyback'];
         $format           = $this->_getParam("format", "excel");
 
         switch ($format)
@@ -102,7 +102,7 @@ class Assessment_Report_LeasebuybackController extends Assessment_Library_Contro
             throw new Exception("Could not generate Lease Buyback excel report.");
         }
 
-        $leaseDeviceData = array();
+        $leaseDeviceData = [];
         $deviceCounter   = 0;
 
         /**

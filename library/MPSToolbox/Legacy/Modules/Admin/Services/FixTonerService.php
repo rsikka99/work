@@ -67,7 +67,7 @@ class FixTonerService
 
             $fileLines = file($filename, FILE_IGNORE_NEW_LINES);
 
-            $validHeaders = array('id', 'sku', 'yield', 'dealerSku', 'duplicateId');
+            $validHeaders = ['id', 'sku', 'yield', 'dealerSku', 'duplicateId'];
             foreach (str_getcsv(array_shift($fileLines)) as $header)
             {
                 if (!in_array($header, $validHeaders))
@@ -84,8 +84,8 @@ class FixTonerService
                 $db->beginTransaction();
 
 
-                $duplicateToners = array();
-                $fixableToners   = array();
+                $duplicateToners = [];
+                $fixableToners   = [];
 
                 foreach ($fileLines as $line)
                 {
@@ -120,7 +120,7 @@ class FixTonerService
                     // Find Toner Mappings For the real toner
                     $realTonersMapping = $deviceTonerMapper->fetchDeviceTonersByTonerId($csvToner['duplicateId']);
 
-                    $masterDeviceIds = array();
+                    $masterDeviceIds = [];
                     foreach ($realTonersMapping as $deviceToner)
                     {
                         $masterDeviceIds[] = $deviceToner->master_device_id;
@@ -152,7 +152,7 @@ class FixTonerService
 
                     if (strlen($csvToner['dealerSku']) > 2)
                     {
-                        $dealerTonerAttribute = $dealerTonerAttributeMapper->find(array($toner->id, $dealerId));
+                        $dealerTonerAttribute = $dealerTonerAttributeMapper->find([$toner->id, $dealerId]);
                         if (!$dealerTonerAttribute instanceof DealerTonerAttributeModel)
                         {
                             try
@@ -201,7 +201,7 @@ class FixTonerService
     {
         if (!isset($this->_form))
         {
-            $this->_form = new FixTonerForm(array('csv'), "1B", "8MB");
+            $this->_form = new FixTonerForm(['csv'], "1B", "8MB");
         }
 
         return $this->_form;
