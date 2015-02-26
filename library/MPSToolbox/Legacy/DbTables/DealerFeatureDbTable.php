@@ -16,7 +16,7 @@ class DealerFeatureDbTable extends Zend_Db_Table_Abstract implements My_Feature_
     public $col_dealerId  = 'dealerId';
     public $col_featureId = 'featureId';
 
-    protected $_name    = "dealer_features";
+    protected $_name    = 'dealer_features';
     protected $_primary = [
         'featureId',
         'dealerId',

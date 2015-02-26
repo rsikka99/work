@@ -61,9 +61,9 @@ class ImageModel extends My_Model_Abstract
     public function toArray ()
     {
         return [
-            "id"       => $this->id,
-            "image"    => $this->image,
-            "filename" => $this->filename,
+            'id'       => $this->id,
+            'image'    => $this->image,
+            'filename' => $this->filename,
         ];
     }
 }

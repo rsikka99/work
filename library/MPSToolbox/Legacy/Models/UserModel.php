@@ -207,8 +207,8 @@ class UserModel extends My_Model_Abstract
             'resetPasswordOnNextLogin' => $this->resetPasswordOnNextLogin,
             'eulaAccepted'             => $this->eulaAccepted,
             'locked'                   => $this->locked,
-            "dealerId"                 => $this->dealerId,
-            "lastSeen"                 => $this->lastSeen
+            'dealerId'                 => $this->dealerId,
+            'lastSeen'                 => $this->lastSeen
         ];
     }
 
@@ -252,9 +252,9 @@ class UserModel extends My_Model_Abstract
      */
     public static function cryptPassword ($password)
     {
-        if (!defined("CRYPT_SHA512") || CRYPT_SHA512 != 1)
+        if (!defined('CRYPT_SHA512') || CRYPT_SHA512 != 1)
         {
-            throw new Exception("Error, SHA512 encryption not available");
+            throw new Exception('Error, SHA512 encryption not available');
         }
 
         // What method to use (6 is SHA512)

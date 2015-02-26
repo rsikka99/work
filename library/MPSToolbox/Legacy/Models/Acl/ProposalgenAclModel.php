@@ -9,73 +9,73 @@ namespace MPSToolbox\Legacy\Models\Acl;
  */
 class ProposalgenAclModel
 {
-    const RESOURCE_PROPOSALGEN_CLIENT_PRICING_WILDCARD = "proposalgen__client-pricing__%";
+    const RESOURCE_PROPOSALGEN_CLIENT_PRICING_WILDCARD = 'proposalgen__client-pricing__%';
 
-    const RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD = "proposalgen__report_assessment__%";
+    const RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD = 'proposalgen__report_assessment__%';
 
-    const RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERS       = "proposalgen__admin__devicetoners";
-    const RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERCOUNT   = "proposalgen__admin__devicetonercount";
-    const RESOURCE_PROPOSALGEN_ADMIN_REPLACETONER       = "proposalgen__admin__replacetoner";
-    const RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS    = "proposalgen__admin__filterlistitems";
-    const RESOURCE_PROPOSALGEN_ADMIN_INDEX              = "proposalgen__admin__index";
-    const RESOURCE_PROPOSALGEN_ADMIN_MANAGEMATCHUPS     = "proposalgen__admin__managematchups";
-    const RESOURCE_PROPOSALGEN_ADMIN_SETMAPPEDTO        = "proposalgen__admin__set-mapped-to";
-    const RESOURCE_PROPOSALGEN_ADMIN_MATCHUPLIST        = "proposalgen__admin__matchuplist";
-    const RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS = "proposalgen__admin__managereplacements";
-    const RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST  = "proposalgen__admin__masterdeviceslist";
-    const RESOURCE_PROPOSALGEN_ADMIN_PRINTERMODELS      = "proposalgen__admin__printermodels";
-    const RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE    = "proposalgen__admin__search-for-device";
-    const RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST         = "proposalgen__admin__tonerslist";
-    const RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE     = "proposalgen__admin__saveandapprove";
+    const RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERS       = 'proposalgen__admin__devicetoners';
+    const RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERCOUNT   = 'proposalgen__admin__devicetonercount';
+    const RESOURCE_PROPOSALGEN_ADMIN_REPLACETONER       = 'proposalgen__admin__replacetoner';
+    const RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS    = 'proposalgen__admin__filterlistitems';
+    const RESOURCE_PROPOSALGEN_ADMIN_INDEX              = 'proposalgen__admin__index';
+    const RESOURCE_PROPOSALGEN_ADMIN_MANAGEMATCHUPS     = 'proposalgen__admin__managematchups';
+    const RESOURCE_PROPOSALGEN_ADMIN_SETMAPPEDTO        = 'proposalgen__admin__set-mapped-to';
+    const RESOURCE_PROPOSALGEN_ADMIN_MATCHUPLIST        = 'proposalgen__admin__matchuplist';
+    const RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS = 'proposalgen__admin__managereplacements';
+    const RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST  = 'proposalgen__admin__masterdeviceslist';
+    const RESOURCE_PROPOSALGEN_ADMIN_PRINTERMODELS      = 'proposalgen__admin__printermodels';
+    const RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE    = 'proposalgen__admin__search-for-device';
+    const RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST         = 'proposalgen__admin__tonerslist';
+    const RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE     = 'proposalgen__admin__saveandapprove';
 
-    const RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING = "proposalgen__costs__bulkdevicepricing";
-    const RESOURCE_PROPOSALGEN_COSTS_EXPORTPRICING     = "proposalgen__costs__export-pricing";
+    const RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING = 'proposalgen__costs__bulkdevicepricing';
+    const RESOURCE_PROPOSALGEN_COSTS_EXPORTPRICING     = 'proposalgen__costs__export-pricing';
 
-    const RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERPRICING   = "proposalgen__costs__bulk-file-toner-pricing";
-    const RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERMATCHUP   = "proposalgen__costs__bulk-file-toner-matchup";
-    const RESOURCE_PROPOSALGEN_COSTS_BULKFILEDEVICEPRICNG   = "proposalgen__costs__bulk-file-device-pricing";
-    const RESOURCE_PROPOSALGEN_COSTS_BULKFILEDEVICEFEATURES = "proposalgen__costs__bulk-file-device-features";
+    const RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERPRICING   = 'proposalgen__costs__bulk-file-toner-pricing';
+    const RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERMATCHUP   = 'proposalgen__costs__bulk-file-toner-matchup';
+    const RESOURCE_PROPOSALGEN_COSTS_BULKFILEDEVICEPRICNG   = 'proposalgen__costs__bulk-file-device-pricing';
+    const RESOURCE_PROPOSALGEN_COSTS_BULKFILEDEVICEFEATURES = 'proposalgen__costs__bulk-file-device-features';
 
-    const RESOURCE_PROPOSALGEN_FLEET_DEVICESUMMARYLIST     = "proposalgen__fleet__device-summary-list";
-    const RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST          = "proposalgen__fleet__excluded-list";
-    const RESOURCE_PROPOSALGEN_FLEET_REPORTSETTINGS        = "proposalgen__fleet__reportsettings";
-    const RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES    = "proposalgen__fleet__edit-unknown-device";
-    const RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST     = "proposalgen__fleet__device-mapping-list";
-    const RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS = "proposalgen__fleet__device-instance-details";
-    const RESOURCE_PROPOSALGEN_FLEET_RMSUPLOADLIST         = "proposalgen__fleet__rms-upload-list";
-    const RESOURCE_PROPOSALGEN_FLEET_INDEX                 = "proposalgen__fleet__index";
-    const RESOURCE_PROPOSALGEN_FLEET_MAPPING               = "proposalgen__fleet__mapping";
-    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG    = "proposalgen__fleet__toggle-excluded-flag";
-    const RESOURCE_PROPOSALGEN_FLEET_TOGGLELEASEDFLAG      = "proposalgen__fleet__toggle-leased-flag";
-    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEMANAGEDFLAG     = "proposalgen__fleet__toggle-managed-flag";
-    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEJITFLAG         = "proposalgen__fleet__toggle-jit-flag";
-    const RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE   = "proposalgen__fleet__remove-unknown-device";
-    const RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO           = "proposalgen__fleet__set-mapped-to";
-    const RESOURCE_PROPOSALGEN_FLEET_SUMMARY               = "proposalgen__fleet__summary";
+    const RESOURCE_PROPOSALGEN_FLEET_DEVICESUMMARYLIST     = 'proposalgen__fleet__device-summary-list';
+    const RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST          = 'proposalgen__fleet__excluded-list';
+    const RESOURCE_PROPOSALGEN_FLEET_REPORTSETTINGS        = 'proposalgen__fleet__reportsettings';
+    const RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES    = 'proposalgen__fleet__edit-unknown-device';
+    const RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST     = 'proposalgen__fleet__device-mapping-list';
+    const RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS = 'proposalgen__fleet__device-instance-details';
+    const RESOURCE_PROPOSALGEN_FLEET_RMSUPLOADLIST         = 'proposalgen__fleet__rms-upload-list';
+    const RESOURCE_PROPOSALGEN_FLEET_INDEX                 = 'proposalgen__fleet__index';
+    const RESOURCE_PROPOSALGEN_FLEET_MAPPING               = 'proposalgen__fleet__mapping';
+    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG    = 'proposalgen__fleet__toggle-excluded-flag';
+    const RESOURCE_PROPOSALGEN_FLEET_TOGGLELEASEDFLAG      = 'proposalgen__fleet__toggle-leased-flag';
+    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEMANAGEDFLAG     = 'proposalgen__fleet__toggle-managed-flag';
+    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEJITFLAG         = 'proposalgen__fleet__toggle-jit-flag';
+    const RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE   = 'proposalgen__fleet__remove-unknown-device';
+    const RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO           = 'proposalgen__fleet__set-mapped-to';
+    const RESOURCE_PROPOSALGEN_FLEET_SUMMARY               = 'proposalgen__fleet__summary';
 
-    const RESOURCE_PROPOSALGEN_INDEX_INDEX            = "proposalgen__index__index";
-    const RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD  = "proposalgen__manufacturer__%";
-    const RESOURCE_PROPOSALGEN_MANAGEDEVICES_WILDCARD = "proposalgen__managedevices__%";
-    const RESOURCE_PROPOSALGEN_OPTIMIZATION_WILDCARD  = "proposalgen__optimization__%";
-    const RESOURCE_PROPOSALGEN_SURVEY_WILDCARD        = "proposalgen__survey__%";
+    const RESOURCE_PROPOSALGEN_INDEX_INDEX            = 'proposalgen__index__index';
+    const RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD  = 'proposalgen__manufacturer__%';
+    const RESOURCE_PROPOSALGEN_MANAGEDEVICES_WILDCARD = 'proposalgen__managedevices__%';
+    const RESOURCE_PROPOSALGEN_OPTIMIZATION_WILDCARD  = 'proposalgen__optimization__%';
+    const RESOURCE_PROPOSALGEN_SURVEY_WILDCARD        = 'proposalgen__survey__%';
 
-    const RESOURCE_PROPOSALGEN_MANUFACTURER_EDIT                     = "proposalgen__manufacturer__edit";
-    const RESOURCE_PROPOSALGEN_MANUFACTURER_CREATE                   = "proposalgen__manufacturer__create";
-    const RESOURCE_PROPOSALGEN_MANUFACTURER_DELETE                   = "proposalgen__manufacturer__delete";
-    const RESOURCE_PROPOSALGEN_MANUFACTURER_INDEX                    = "proposalgen__manufacturer__index";
-    const RESOURCE_PROPOSALGEN_MANUFACTURER_VIEW                     = "proposalgen__manufacturer__view";
-    const RESOURCE_PROPOSALGEN_REPORT_INDEX                          = "proposalgen__report_index__index";
-    const RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD           = "proposalgen__report_grossmargin__%";
-    const RESOURCE_PROPOSALGEN_REPORT_HEALTHCHECK_WILDCARD           = "proposalgen__report_healthcheck__%";
-    const RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_CUSTOMER_WILDCARD = "proposalgen__report_optimization_customer__%";
-    const RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_DEALER_WILDCARD   = "proposalgen__report_optimization_dealer__%";
-    const RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD    = "proposalgen__report_printingdevicelist__%";
-    const RESOURCE_PROPOSALGEN_REPORT_OLDDEVICELIST_WILDCARD         = "proposalgen__report_olddevicelist__%";
-    const RESOURCE_PROPOSALGEN_REPORT_COSTANALYSIS_WILDCARD          = "proposalgen__report_costanalysis__%";
-    const RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD              = "proposalgen__report_solution__%";
-    const RESOURCE_PROPOSALGEN_REPORT_TONERS_WILDCARD                = "proposalgen__report_toners__%";
+    const RESOURCE_PROPOSALGEN_MANUFACTURER_EDIT                     = 'proposalgen__manufacturer__edit';
+    const RESOURCE_PROPOSALGEN_MANUFACTURER_CREATE                   = 'proposalgen__manufacturer__create';
+    const RESOURCE_PROPOSALGEN_MANUFACTURER_DELETE                   = 'proposalgen__manufacturer__delete';
+    const RESOURCE_PROPOSALGEN_MANUFACTURER_INDEX                    = 'proposalgen__manufacturer__index';
+    const RESOURCE_PROPOSALGEN_MANUFACTURER_VIEW                     = 'proposalgen__manufacturer__view';
+    const RESOURCE_PROPOSALGEN_REPORT_INDEX                          = 'proposalgen__report_index__index';
+    const RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD           = 'proposalgen__report_grossmargin__%';
+    const RESOURCE_PROPOSALGEN_REPORT_HEALTHCHECK_WILDCARD           = 'proposalgen__report_healthcheck__%';
+    const RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_CUSTOMER_WILDCARD = 'proposalgen__report_optimization_customer__%';
+    const RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_DEALER_WILDCARD   = 'proposalgen__report_optimization_dealer__%';
+    const RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD    = 'proposalgen__report_printingdevicelist__%';
+    const RESOURCE_PROPOSALGEN_REPORT_OLDDEVICELIST_WILDCARD         = 'proposalgen__report_olddevicelist__%';
+    const RESOURCE_PROPOSALGEN_REPORT_COSTANALYSIS_WILDCARD          = 'proposalgen__report_costanalysis__%';
+    const RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD              = 'proposalgen__report_solution__%';
+    const RESOURCE_PROPOSALGEN_REPORT_TONERS_WILDCARD                = 'proposalgen__report_toners__%';
 
-    const RESOURCE_PROPOSALGEN_WILDCARD = "proposalgen__%__%";
+    const RESOURCE_PROPOSALGEN_WILDCARD = 'proposalgen__%__%';
 
     /**
      * Sets up ACL resources and access for a module

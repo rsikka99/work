@@ -52,7 +52,7 @@ class OnboardingAbstractService
      *
      * @var string
      */
-    protected $_incomingDateFormat = "MM/dd/yyyy HH:ii:ss";
+    protected $_incomingDateFormat = 'MM/dd/yyyy HH:ii:ss';
 
     /**
      * A list of fields that are present in the CSV file
@@ -142,7 +142,7 @@ class OnboardingAbstractService
 
             if ($lineCount < 1)
             {
-                return "File was empty";
+                return 'File was empty';
             }
 
             /*
@@ -211,7 +211,7 @@ class OnboardingAbstractService
                     // Only validate lines that were combined properly (meaning they weren't empty and had the same column count as the headers)
                     if ($csvLine !== false)
                     {
-                        $csvLine["csvLineNumber"] = $csvLineNumber;
+                        $csvLine['csvLineNumber'] = $csvLineNumber;
 
                         /*
                          * Process our data and massage it into our upload line
@@ -269,7 +269,7 @@ class OnboardingAbstractService
                 $vendorHeadings[] = array_search($header, $this->_columnMapping);
             }
 
-            return "File is missing required these headers: [" . implode(',', $vendorHeadings) . "]. Are you sure you selected the right RMS Vendor?";
+            return 'File is missing required these headers: [' . implode(',', $vendorHeadings) . ']. Are you sure you selected the right RMS Vendor?';
         }
 
         return true;

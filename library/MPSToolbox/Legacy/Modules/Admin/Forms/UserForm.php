@@ -116,13 +116,13 @@ class UserForm extends Zend_Form
             if (count($roles) > 0)
             {
                 $userRoles = new Zend_Form_Element_MultiCheckbox('userRoles');
-                $userRoles->setLabel("User Roles:");
+                $userRoles->setLabel('User Roles:');
 
                 foreach ($roles as $role)
                 {
                     if ($role->id != AppAclModel::ROLE_SYSTEM_ADMIN || ($role->id == AppAclModel::ROLE_SYSTEM_ADMIN && $this->_dealerManagement == false))
                     {
-                        $roleName = ($role->systemRole) ? $role->name . " (System Role)" : $role->name;
+                        $roleName = ($role->systemRole) ? $role->name . ' (System Role)' : $role->name;
                         $userRoles->addMultiOption($role->id, $roleName);
                     }
                 }

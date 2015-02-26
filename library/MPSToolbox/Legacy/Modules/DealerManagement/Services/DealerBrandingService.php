@@ -98,7 +98,7 @@ class DealerBrandingService extends BaseService
         }
         else
         {
-            $this->addError(self::ERROR_DEALER_BRANDING_DOES_NOT_EXIST, "A branding for this dealer was not found");
+            $this->addError(self::ERROR_DEALER_BRANDING_DOES_NOT_EXIST, 'A branding for this dealer was not found');
         }
 
         return $success;
@@ -120,7 +120,7 @@ class DealerBrandingService extends BaseService
         }
         else
         {
-            $this->addError(self::ERROR_DEALER_BRANDING_DOES_NOT_EXIST, "A branding for this dealer was not found");
+            $this->addError(self::ERROR_DEALER_BRANDING_DOES_NOT_EXIST, 'A branding for this dealer was not found');
         }
 
         return $success;
@@ -142,7 +142,7 @@ class DealerBrandingService extends BaseService
         }
         else
         {
-            $this->addError(self::ERROR_FORM_INVALID, "The form has errors");
+            $this->addError(self::ERROR_FORM_INVALID, 'The form has errors');
         }
 
         return false;

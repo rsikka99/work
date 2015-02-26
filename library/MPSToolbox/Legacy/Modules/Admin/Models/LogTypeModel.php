@@ -53,8 +53,8 @@ class LogTypeModel extends My_Model_Abstract
     public function toArray ()
     {
         return [
-            "id"   => $this->getId(),
-            "name" => $this->getName()
+            'id'   => $this->getId(),
+            'name' => $this->getName()
         ];
     }
 

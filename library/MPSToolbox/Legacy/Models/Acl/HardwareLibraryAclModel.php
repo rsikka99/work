@@ -10,15 +10,15 @@ namespace MPSToolbox\Legacy\Models\Acl;
 class HardwareLibraryAclModel
 {
 
-    const RESOURCE_HARDWARE_LIBRARY_INDEX_INDEX      = "hardware-library__index__index";
-    const RESOURCE_HARDWARE_LIBRARY_QUOTEINDEX_INDEX = "hardware-library__quote_index__index";
-    const RESOURCE_HARDWARE_LIBRARY_TONER_WILDCARD   = "hardware-library__toner__%";
-    const RESOURCE_HARDWARE_LIBRARY_TONERS_WILDCARD  = "hardware-library__toners__%";
-    const RESOURCE_HARDWARE_LIBRARY_OPTION_WILDCARD  = "hardware-library__option__%";
+    const RESOURCE_HARDWARE_LIBRARY_INDEX_INDEX      = 'hardware-library__index__index';
+    const RESOURCE_HARDWARE_LIBRARY_QUOTEINDEX_INDEX = 'hardware-library__quote_index__index';
+    const RESOURCE_HARDWARE_LIBRARY_TONER_WILDCARD   = 'hardware-library__toner__%';
+    const RESOURCE_HARDWARE_LIBRARY_TONERS_WILDCARD  = 'hardware-library__toners__%';
+    const RESOURCE_HARDWARE_LIBRARY_OPTION_WILDCARD  = 'hardware-library__option__%';
 
 
-    const RESOURCE_HARDWARE_LIBRARY_DEVICES_WILDCARD        = "hardware-library__devices__%";
-    const RESOURCE_HARDWARE_LIBRARY_MANAGE_DEVICES_WILDCARD = "hardware-library__manage-devices__%";
+    const RESOURCE_HARDWARE_LIBRARY_DEVICES_WILDCARD        = 'hardware-library__devices__%';
+    const RESOURCE_HARDWARE_LIBRARY_MANAGE_DEVICES_WILDCARD = 'hardware-library__manage-devices__%';
 
     /**
      * Sets up ACL resources and access for a module

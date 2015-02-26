@@ -9,7 +9,7 @@ namespace MPSToolbox\Legacy\Models\Acl;
  */
 class AssessmentAclModel
 {
-    const RESOURCE_ASSESSMENT_WILDCARD = "assessment__%__%";
+    const RESOURCE_ASSESSMENT_WILDCARD = 'assessment__%__%';
 
     /**
      * Sets up ACL resources and access for a module

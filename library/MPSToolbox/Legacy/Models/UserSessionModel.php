@@ -51,8 +51,8 @@ class UserSessionModel extends My_Model_Abstract
     public function toArray ()
     {
         return [
-            "sessionId" => $this->sessionId,
-            "userId"    => $this->userId,
+            'sessionId' => $this->sessionId,
+            'userId'    => $this->userId,
         ];
     }
 }

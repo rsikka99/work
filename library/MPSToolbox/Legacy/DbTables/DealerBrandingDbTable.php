@@ -11,6 +11,6 @@ use Zend_Db_Table_Abstract;
  */
 class DealerBrandingDbTable extends Zend_Db_Table_Abstract
 {
-    protected $_name    = "dealer_branding";
+    protected $_name    = 'dealer_branding';
     protected $_primary = 'dealerId';
 }

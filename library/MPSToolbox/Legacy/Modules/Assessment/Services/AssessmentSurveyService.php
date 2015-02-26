@@ -65,10 +65,10 @@ class AssessmentSurveyService
                  */
                 switch ($formData['inkTonerOrderRadio'])
                 {
-                    case "Daily" :
+                    case 'Daily' :
                         $this->survey->numberOfSupplyOrdersPerMonth = SurveyEntity::SUPPLY_ORDERS_DAILY;
                         break;
-                    case "Weekly" :
+                    case 'Weekly' :
                         $this->survey->numberOfSupplyOrdersPerMonth = SurveyEntity::SUPPLY_ORDERS_WEEKLY;
                         break;
                     default :
@@ -137,20 +137,20 @@ class AssessmentSurveyService
     protected function createPopulateArray ($assessmentSurvey)
     {
         $formDataFromAnswers                           = [];
-        $formDataFromAnswers ["toner_cost_radio"]      = ($assessmentSurvey->costOfInkAndToner > 0) ? 'exact' : 'guess';
-        $formDataFromAnswers ["toner_cost"]            = ($assessmentSurvey->costOfInkAndToner > 0) ? $assessmentSurvey->costOfInkAndToner : null;
-        $formDataFromAnswers ["labor_cost_radio"]      = ($assessmentSurvey->costOfLabor !== null) ? 'exact' : 'guess';
-        $formDataFromAnswers ["labor_cost"]            = ($assessmentSurvey->costOfLabor !== null) ? $assessmentSurvey->costOfLabor : null;
-        $formDataFromAnswers ["avg_purchase"]          = ($assessmentSurvey->costToExecuteSuppliesOrder > 0) ? $assessmentSurvey->costToExecuteSuppliesOrder : SurveyEntity::DEFAULT_SUPPLIES_ORDER_COST;
-        $formDataFromAnswers ["it_hourlyRate"]         = ($assessmentSurvey->averageItHourlyRate > 0) ? $assessmentSurvey->averageItHourlyRate : SurveyEntity::DEFAULT_IT_HOURLY_RATE;
-        $formDataFromAnswers ["itHoursRadio"]          = ($assessmentSurvey->hoursSpentOnIt > 0) ? 'exact' : 'guess';
-        $formDataFromAnswers ["itHours"]               = ($assessmentSurvey->hoursSpentOnIt > 0) ? $assessmentSurvey->hoursSpentOnIt : null;
-        $formDataFromAnswers ["monthlyBreakdownRadio"] = ($assessmentSurvey->averageMonthlyBreakdowns > 0) ? 'exact' : 'guess';
-        $formDataFromAnswers ["monthlyBreakdown"]      = ($assessmentSurvey->averageMonthlyBreakdowns > 0) ? $assessmentSurvey->averageMonthlyBreakdowns : null;
-        $formDataFromAnswers ["pageCoverage_BW"]       = ($assessmentSurvey->pageCoverageMonochrome > 0) ? $assessmentSurvey->pageCoverageMonochrome : 6;
-        $formDataFromAnswers ["pageCoverage_Color"]    = ($assessmentSurvey->pageCoverageColor > 0) ? $assessmentSurvey->pageCoverageColor : 24;
-        $formDataFromAnswers ["printVolume"]           = ($assessmentSurvey->percentageOfInkjetPrintVolume > 0) ? $assessmentSurvey->percentageOfInkjetPrintVolume : 5;
-        $formDataFromAnswers ["repairTime"]            = ($assessmentSurvey->averageRepairTime > 0.0) ? $assessmentSurvey->averageRepairTime : 0.5;
+        $formDataFromAnswers ['toner_cost_radio']      = ($assessmentSurvey->costOfInkAndToner > 0) ? 'exact' : 'guess';
+        $formDataFromAnswers ['toner_cost']            = ($assessmentSurvey->costOfInkAndToner > 0) ? $assessmentSurvey->costOfInkAndToner : null;
+        $formDataFromAnswers ['labor_cost_radio']      = ($assessmentSurvey->costOfLabor !== null) ? 'exact' : 'guess';
+        $formDataFromAnswers ['labor_cost']            = ($assessmentSurvey->costOfLabor !== null) ? $assessmentSurvey->costOfLabor : null;
+        $formDataFromAnswers ['avg_purchase']          = ($assessmentSurvey->costToExecuteSuppliesOrder > 0) ? $assessmentSurvey->costToExecuteSuppliesOrder : SurveyEntity::DEFAULT_SUPPLIES_ORDER_COST;
+        $formDataFromAnswers ['it_hourlyRate']         = ($assessmentSurvey->averageItHourlyRate > 0) ? $assessmentSurvey->averageItHourlyRate : SurveyEntity::DEFAULT_IT_HOURLY_RATE;
+        $formDataFromAnswers ['itHoursRadio']          = ($assessmentSurvey->hoursSpentOnIt > 0) ? 'exact' : 'guess';
+        $formDataFromAnswers ['itHours']               = ($assessmentSurvey->hoursSpentOnIt > 0) ? $assessmentSurvey->hoursSpentOnIt : null;
+        $formDataFromAnswers ['monthlyBreakdownRadio'] = ($assessmentSurvey->averageMonthlyBreakdowns > 0) ? 'exact' : 'guess';
+        $formDataFromAnswers ['monthlyBreakdown']      = ($assessmentSurvey->averageMonthlyBreakdowns > 0) ? $assessmentSurvey->averageMonthlyBreakdowns : null;
+        $formDataFromAnswers ['pageCoverage_BW']       = ($assessmentSurvey->pageCoverageMonochrome > 0) ? $assessmentSurvey->pageCoverageMonochrome : 6;
+        $formDataFromAnswers ['pageCoverage_Color']    = ($assessmentSurvey->pageCoverageColor > 0) ? $assessmentSurvey->pageCoverageColor : 24;
+        $formDataFromAnswers ['printVolume']           = ($assessmentSurvey->percentageOfInkjetPrintVolume > 0) ? $assessmentSurvey->percentageOfInkjetPrintVolume : 5;
+        $formDataFromAnswers ['repairTime']            = ($assessmentSurvey->averageRepairTime > 0.0) ? $assessmentSurvey->averageRepairTime : 0.5;
 
         /**
          * Number of monthly supply orders
@@ -160,20 +160,20 @@ class AssessmentSurveyService
             switch ($assessmentSurvey->numberOfSupplyOrdersPerMonth)
             {
                 case SurveyEntity::SUPPLY_ORDERS_DAILY :
-                    $formDataFromAnswers ["inkTonerOrderRadio"] = "Daily";
+                    $formDataFromAnswers ['inkTonerOrderRadio'] = 'Daily';
                     break;
                 case SurveyEntity::SUPPLY_ORDERS_WEEKLY :
-                    $formDataFromAnswers ["inkTonerOrderRadio"] = "Weekly";
+                    $formDataFromAnswers ['inkTonerOrderRadio'] = 'Weekly';
                     break;
                 default :
-                    $formDataFromAnswers ["inkTonerOrderRadio"] = "Times per month";
-                    $formDataFromAnswers ["numb_monthlyOrders"] = $assessmentSurvey->numberOfSupplyOrdersPerMonth;
+                    $formDataFromAnswers ['inkTonerOrderRadio'] = 'Times per month';
+                    $formDataFromAnswers ['numb_monthlyOrders'] = $assessmentSurvey->numberOfSupplyOrdersPerMonth;
                     break;
             }
         }
         else
         {
-            $formDataFromAnswers ["inkTonerOrderRadio"] = "Daily";
+            $formDataFromAnswers ['inkTonerOrderRadio'] = 'Daily';
         }
 
         return $formDataFromAnswers;

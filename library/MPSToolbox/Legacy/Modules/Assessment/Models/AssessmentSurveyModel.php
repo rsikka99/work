@@ -156,18 +156,18 @@ class AssessmentSurveyModel extends My_Model_Abstract
     public function toArray ()
     {
         return [
-            "reportId"                      => $this->reportId,
-            "costOfInkAndToner"             => $this->costOfInkAndToner,
-            "costOfLabor"                   => $this->costOfLabor,
-            "costToExecuteSuppliesOrder"    => $this->costToExecuteSuppliesOrder,
-            "averageItHourlyRate"           => $this->averageItHourlyRate,
-            "numberOfSupplyOrdersPerMonth"  => $this->numberOfSupplyOrdersPerMonth,
-            "hoursSpentOnIt"                => $this->hoursSpentOnIt,
-            "averageMonthlyBreakdowns"      => $this->averageMonthlyBreakdowns,
-            "pageCoverageMonochrome"        => $this->pageCoverageMonochrome,
-            "pageCoverageColor"             => $this->pageCoverageColor,
-            "percentageOfInkjetPrintVolume" => $this->percentageOfInkjetPrintVolume,
-            "averageRepairTime"             => $this->averageRepairTime,
+            'reportId'                      => $this->reportId,
+            'costOfInkAndToner'             => $this->costOfInkAndToner,
+            'costOfLabor'                   => $this->costOfLabor,
+            'costToExecuteSuppliesOrder'    => $this->costToExecuteSuppliesOrder,
+            'averageItHourlyRate'           => $this->averageItHourlyRate,
+            'numberOfSupplyOrdersPerMonth'  => $this->numberOfSupplyOrdersPerMonth,
+            'hoursSpentOnIt'                => $this->hoursSpentOnIt,
+            'averageMonthlyBreakdowns'      => $this->averageMonthlyBreakdowns,
+            'pageCoverageMonochrome'        => $this->pageCoverageMonochrome,
+            'pageCoverageColor'             => $this->pageCoverageColor,
+            'percentageOfInkjetPrintVolume' => $this->percentageOfInkjetPrintVolume,
+            'averageRepairTime'             => $this->averageRepairTime,
         ];
     }
 }

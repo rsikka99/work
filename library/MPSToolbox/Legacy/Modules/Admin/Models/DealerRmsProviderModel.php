@@ -66,8 +66,8 @@ class DealerRmsProviderModel extends My_Model_Abstract
     public function toArray ()
     {
         return [
-            "dealerId"       => $this->dealerId,
-            "rmsProviderId" => $this->rmsProviderId,
+            'dealerId'       => $this->dealerId,
+            'rmsProviderId' => $this->rmsProviderId,
         ];
     }
 

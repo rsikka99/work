@@ -187,7 +187,7 @@ class FixTonerService
             catch (Exception $e)
             {
                 $db->rollback();
-                throw new Exception(implode("|", $csvToner) . "OLD SKU: $oldSku", 0, $e);
+                throw new Exception(implode('|', $csvToner) . "OLD SKU: $oldSku", 0, $e);
             }
         }
 
@@ -201,7 +201,7 @@ class FixTonerService
     {
         if (!isset($this->_form))
         {
-            $this->_form = new FixTonerForm(['csv'], "1B", "8MB");
+            $this->_form = new FixTonerForm(['csv'], '1B', '8MB');
         }
 
         return $this->_form;

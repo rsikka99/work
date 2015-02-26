@@ -20,7 +20,7 @@ class DeleteConfirmationForm extends Zend_Form
      * @param null|array $options
      *
      */
-    public function __construct ($message = "Are you sure you want to delete?", $options = null)
+    public function __construct ($message = 'Are you sure you want to delete?', $options = null)
     {
         $this->_formQuestion = $message;
         parent::__construct($options);

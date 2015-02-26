@@ -49,8 +49,8 @@ class UserEventLogModel extends My_Model_Abstract
     public function toArray ()
     {
         return [
-            "userId"     => $this->userId,
-            "eventLogId" => $this->eventLogId,
+            'userId'     => $this->userId,
+            'eventLogId' => $this->eventLogId,
         ];
     }
 }

@@ -14,10 +14,10 @@ class PreferencesAclModel
     /**
      * Preferences Constants
      */
-    const RESOURCE_PREFERENCES_WILDCARD     = "preferences__%__%";
-    const RESOURCE_PREFERENCES_CLIENT_WILDCARD = "preferences__client__%";
-    const RESOURCE_PREFERENCES_DEALER_WILDCARD = "preferences__dealer__%";
-    const RESOURCE_PREFERENCES_USER_WILDCARD   = "preferences__user__%";
+    const RESOURCE_PREFERENCES_WILDCARD        = 'preferences__%__%';
+    const RESOURCE_PREFERENCES_CLIENT_WILDCARD = 'preferences__client__%';
+    const RESOURCE_PREFERENCES_DEALER_WILDCARD = 'preferences__dealer__%';
+    const RESOURCE_PREFERENCES_USER_WILDCARD   = 'preferences__user__%';
 
     /**
      * Sets up ACL resources and access for a module

@@ -42,7 +42,7 @@ class FixTonerForm extends Zend_Form
         $this->setMethod('POST');
 
         $dealers    = DealerMapper::getInstance()->fetchAll();
-        $dealerList = [0 => "Select Company..."];
+        $dealerList = [0 => 'Select Company...'];
         foreach ($dealers as $dealer)
         {
             $dealerList[$dealer->id] = $dealer->dealerName;
