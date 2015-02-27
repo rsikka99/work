@@ -8,6 +8,33 @@
 *[RMS]: Remote Monitoring System
 *[UX]: User Experience
 
+Version 2.0.1
+=============
+* Added a new footer and support button
+* Added a new user profile page
+* Added better images for toner colors
+* Added separate parts and labor cost per page **default** settings for **color** devices
+* Added the ability to create quotes without requiring an RMS Upload for a customer
+* Added workflow improvements when selecting clients
+* Fixed compatibility issue with Internet Explorer when assigning options
+* Fixed forgot password functionality
+* Fixed issue preventing regular users from adding new toners to the system
+* Fixed issue that caused excluded devices to show up in the optmization grid even though they are not used in the optimization
+* Fixed issue where not all countries would show up in the country selector unless you manually typed their name in
+* Fixed issue where the leased device would be grayed out and unchecked
+* Fixed issue where filtering/creating options was sometimes not working
+* Fixed issue with assigning toners to a new device
+* Fixed issue with cancel button not redirecting the user to where they expected when under company management
+* Fixed issue with option mapper select statement
+* Fixed issue with toner grid - it was not reloading when the filters were changed.
+* Fixed margin calculation when displaying a negative gross margin
+* Fixed rare edge case where hardware optimizations would be duplicated dozens of times due to a cookie error
+* Fixed selecting compatible vendors not saving the order properly
+* Fixed some JavaScript errors occuring on the hardware optimization from time to time
+* Fixed various issues with bulk import/exporting
+* Fixed Quotes - date picker was appearing underneath elements
+* Removed lorem ipsum from the quote document
+
 Version 2.0
 ===========
 * Added Gravatar support - At the top right you'll see your gravatar. A blank avatar will be shown if you have not setup Gravatar
