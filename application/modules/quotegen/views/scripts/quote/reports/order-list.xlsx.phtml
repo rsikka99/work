@@ -27,7 +27,8 @@ $titles = [
     "Item",
     "SKU (OEM)",
     "SKU (DEALER)",
-    "Cost"
+    "Cost per Unit",
+    "Total Cost"
 ];
 
 $headerFill = [
@@ -71,12 +72,12 @@ $objPHPExcel->setActiveSheetIndex(0);
 
 // Start building the document
 $activeSheet->setCellValue('A1', 'Hardware Device List');
-$activeSheet->mergeCells('A1:D1');
+$activeSheet->mergeCells('A1:E1');
 // Centre the title
-$activeSheet->getStyle("A1:D1:")
+$activeSheet->getStyle("A1:E1:")
             ->getAlignment()
             ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-$activeSheet->getStyle('A1:D1')->applyFromArray($styleHeader);
+$activeSheet->getStyle('A1:E1')->applyFromArray($styleHeader);
 $activeSheet->getRowDimension('1')->setRowHeight(25);
 
 // Go through each device and build and array for output
@@ -93,7 +94,8 @@ foreach ($quoteDeviceGroups as $quoteDeviceGroup)
             $quoteDevice->name,
             $quoteDevice->oemSku,
             $quoteDevice->dealerSku,
-            $quoteDevice->cost
+            $quoteDevice->cost,
+            ($quoteDevice->cost * 1)  // The device quantity * cost - will always be 1
         ];
 
         // $deviceOptions builds an array of arrays representing quote device options
@@ -117,19 +119,20 @@ foreach ($quoteDeviceGroups as $quoteDeviceGroup)
             // Device Number Row
             $currentRow = $activeSheet->getHighestRow() + 2;
             $activeSheet->setCellValue("A{$currentRow}", "Device {$totalQuantity}");
-            $activeSheet->mergeCells("A{$currentRow}:D{$currentRow}");
-            $activeSheet->getStyle("A{$currentRow}:D{$currentRow}")->applyFromArray($styleFillBold);
+            $activeSheet->mergeCells("A{$currentRow}:E{$currentRow}");
+            $activeSheet->getStyle("A{$currentRow}:E{$currentRow}")->applyFromArray($styleFillBold);
 
             // Title Row
             $currentRow = $activeSheet->getHighestRow() + 1;
             $activeSheet->fromArray($titles, null, "A{$currentRow}");
-            $activeSheet->getStyle("A{$currentRow}:D{$currentRow}")->applyFromArray($styleFillBold);
+            $activeSheet->getStyle("A{$currentRow}:E{$currentRow}")->applyFromArray($styleFillBold);
 
             // Device Row
             $currentRow = $activeSheet->getHighestRow() + 1;
             $activeSheet->fromArray($device, null, "A{$currentRow}");
             $activeSheet->getStyle("A{$currentRow}")->applyFromArray($boldFont);
             $activeSheet->getStyle("D{$currentRow}")->getNumberFormat()->applyFromArray(['code' => PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE]);
+            $activeSheet->getStyle("E{$currentRow}")->getNumberFormat()->applyFromArray(['code' => PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE]);
 
             // Option Row
             // Use a foreach to go through options instead of using fromArray just in case
@@ -142,6 +145,8 @@ foreach ($quoteDeviceGroups as $quoteDeviceGroup)
                 $activeSheet->setCellValue("C{$currentRow}", $quoteDeviceOption->dealerSku);
                 $activeSheet->setCellValue("D{$currentRow}", $quoteDeviceOption->cost);
                 $activeSheet->getStyle("D{$currentRow}")->getNumberFormat()->applyFromArray(['code' => PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE]);
+                $activeSheet->setCellValue("E{$currentRow}", ($quoteDeviceOption->cost * $quoteDeviceOption->quantity));
+                $activeSheet->getStyle("E{$currentRow}")->getNumberFormat()->applyFromArray(['code' => PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE]);
             }
             $totalQuantity++;
         }
@@ -154,6 +159,7 @@ $activeSheet->getColumnDimension('A')->setWidth(40);
 $activeSheet->getColumnDimension('B')->setAutoSize(true);
 $activeSheet->getColumnDimension('C')->setAutoSize(true);
 $activeSheet->getColumnDimension('D')->setAutoSize(true);
+$activeSheet->getColumnDimension('E')->setAutoSize(true);
 
 // Rename sheet
 $activeSheet->setTitle('Hardware Device List');
