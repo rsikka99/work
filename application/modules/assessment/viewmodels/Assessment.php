@@ -1,4 +1,5 @@
 <?php
+use CpChart\Services\pChartFactory;
 use MPSToolbox\Legacy\Models\UserModel;
 use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel;
@@ -1940,10 +1941,78 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
+     * @return \CpChart\Classes\pImage
+     * @throws Exception
+     */
+    public function getThisGraph ()
+    {
+        $tempFile          = tmpfile();
+        $dealerBranding    = My_Brand::getDealerBranding();
+        $hexToRGBConverter = new \Tangent\Format\HexToRGB();
+        $highest           = 100;
+        $factory           = new pChartFactory();
+
+        $MyData = $factory->newData();
+
+        $MyData->addPoints([$this->getDevices()->leasedDeviceInstances->getCount()], "Number of leased devices");
+        $MyData->addPoints([$this->getDevices()->purchasedDeviceInstances->getCount()], "Number of purchased devices");
+
+        //Fixes x access scale appearing - hacky - needs fixing
+        $MyData->addPoints([""], "Printer Types");
+        $MyData->setSerieDescription("Printer Types", "Type");
+        $MyData->setAbscissa("Printer Types");
+
+        $leasedColor           = $dealerBranding->graphLeasedDeviceColor;
+        $purchasedColor        = $dealerBranding->graphPurchasedDeviceColor;
+        $leasedRGB             = $hexToRGBConverter->hexToRgb($leasedColor);
+        $purchasedRGB          = $hexToRGBConverter->hexToRgb($purchasedColor);
+        $leasedColorSetting    = ['R' => $leasedRGB['r'], 'G' => $leasedRGB['g'], 'B' => $leasedRGB['b']];
+        $purchasedColorSetting = ['R' => $purchasedRGB['r'], 'G' => $purchasedRGB['g'], 'B' => $purchasedRGB['b']];
+        $MyData->setPalette("Number of leased devices", $leasedColorSetting);
+        $MyData->setPalette("Number of purchased devices", $purchasedColorSetting);
+
+        $myPicture = $factory->newImage(680, 260, $MyData);
+
+        $myPicture->Antialias = false;
+
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 10, "R" => 127, "G" => 127, "B" => 127]);
+
+        $myPicture->setGraphArea(60, 40, 200, 200);
+
+        $AxisBoundaries = [0 => ["Min" => 0, "Max" => $highest * 1.1]];
+        $ScaleSettings  = ["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "DrawSubTicks" => false, "DrawArrows" => false, "ArrowSize" => 6];
+
+        $myPicture->drawScale(["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "AxisR" => 127, "AxisG" => 127, "AxisB" => 127, "InnerTickWidth" => 0, "OuterTickWidth" => 4, "TickR" => 127, "TickG" => 127, "TickB" => 127]);
+
+        /* Write the chart legend - this sets the x/y position */
+        $myPicture->drawLegend(60, 220, ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "FontR" => 127, "FontG" => 127, "FontB" => 127]);
+
+        /* Draw the chart */
+        $myPicture->drawBarChart(["DisplayValues" => true, "Surrounding" => -30]);
+
+        return $myPicture;
+    }
+
+    /**
+     * @return array|\CpChart\Classes\pImage
+     */
+    public function getNewGraphs ()
+    {
+        $newGraphs[] = $this->getThisGraph();
+        $newGraphs[] = $this->getThisGraph();
+
+        return $newGraphs;
+
+    }
+
+    /**
      * @return array
      */
     public function getGraphs ()
     {
+
+        $this->getThisGraph();
+
         if (!isset($this->Graphs))
         {
             $dealerBranding = My_Brand::getDealerBranding();
@@ -2438,6 +2507,18 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         }
 
         return $this->Graphs;
+    }
+
+    /**
+     * @param $newGraphs
+     *
+     * @return $this
+     */
+    public function setNewGraphs ($newGraphs)
+    {
+        $this->newGraphs = $newGraphs;
+
+        return $this;
     }
 
     /**

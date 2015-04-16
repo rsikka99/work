@@ -428,4 +428,107 @@ abstract class My_Controller_Report extends Action
         return $this->clientSettingsService;
     }
 
+
+    /**
+     * @param \CpChart\Classes\pImage[] $imageArray
+     * @param bool                      $local
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function cacheNewPNGImages ($imageArray, $local = true)
+    {
+
+        $cachePath       = $this->_fullCachePath;
+        $publicCachePath = $this->_relativeCachePath;
+
+        try
+        {
+            // Download files ahead of time
+            $randomSalt = strftime("%s") . mt_rand(10000, 30000);
+
+            $imagePathAndPrefix  = $publicCachePath . '/' . $randomSalt . "_";
+            $fullPathImagePrefix = $cachePath . '/' . $randomSalt . "_";
+
+            $newImages         = [];
+            $fullPathNewImages = [];
+
+            for ($i = 0; $i < sizeof($imageArray); $i++)
+            {
+                $imageFilename     = $imagePathAndPrefix . $i . '.png';
+                $fullImageFileName = $fullPathImagePrefix . $i . '.png';
+
+                if (file_exists($imageFilename)) // Delete file if it already exists
+                {
+                    unlink($imageFilename);
+                }
+
+                // Renders the image in the cached image folder
+                $imageArray[$i]->render($fullImageFileName);
+                $newImages []        = $imageFilename;
+                $fullPathNewImages[] = $fullImageFileName;
+
+            }
+
+
+//            foreach ($imageArray as $i)
+//            {
+//                $imageFilename = $imagePathAndPrefix . $i . '.png';
+//                if (file_exists($imageFilename)) // Delete file if it already exists
+//                {
+//                    unlink($imageFilename);
+//                }
+//
+//                // Renders the image in the cached image folder
+//                $i->render($imageFilename);
+//                $newImages [] = $imageFilename;
+//            }
+
+            /**
+             * Wait until all threads are finished downloading
+             */
+//            do
+//            {
+//                curl_multi_exec($curlHandle, $active);
+//            } while ($active);
+
+            /**
+             * Update our image array to point to cached images
+             */
+//            foreach ($imageArray as $i => & $imageUrl)
+//            {
+////                curl_multi_remove_handle($curlHandle, $curlConnections [$i]);
+////                curl_close($curlConnections [$i]);
+////                fclose($files [$i]);
+//                if ($local)
+//                {
+//                    $imageUrl = $cachePath . "/{$randomSalt}_{$i}.png";
+//                }
+//                else
+//                {
+//                    $imageUrl = $this->view->FullUrl($imageUrl = $publicCachePath . "/{$randomSalt}_{$i}.png");
+//                }
+//
+//            }
+//            curl_multi_close($curlHandle);
+
+            /**
+             * Attempt to change permissions on our files
+             */
+            chmod($cachePath, 0777);
+            foreach ($fullPathNewImages as $filePath)
+            {
+                chmod($filePath, 0777);
+            }
+        }
+        catch (Exception $e)
+        {
+            throw new Exception("Could not cache image files!", 0, $e);
+        }
+
+        return $newImages;
+
+    }
+
+
 }

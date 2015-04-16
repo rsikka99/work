@@ -53,6 +53,7 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
                 throw new Exception(sprintf('Assessment View Model is false. ["%s"]', implode(' | ', $this->view->ErrorMessages)));
             }
             $this->view->assessmentViewModel = $assessmentViewModel;
+            $this->view->newGraphs           = $this->cacheNewPNGImages($assessmentViewModel->getNewGraphs(), true);
         }
         catch (Exception $e)
         {
