@@ -53,7 +53,9 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
                 throw new Exception(sprintf('Assessment View Model is false. ["%s"]', implode(' | ', $this->view->ErrorMessages)));
             }
             $this->view->assessmentViewModel = $assessmentViewModel;
-            $this->view->newGraphs           = $this->cacheNewPNGImages($assessmentViewModel->getNewGraphs(), true);
+
+            // New Graphs being passed to view
+            $this->view->theGraphs = $this->cacheNewPNGImages($assessmentViewModel->getTheGraphs(), true);
         }
         catch (Exception $e)
         {
@@ -78,6 +80,7 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
                 $assessmentViewModel = $this->getAssessmentViewModel();
                 $graphs              = $this->cachePNGImages($assessmentViewModel->getGraphs(), true);
                 $assessmentViewModel->setGraphs($graphs);
+
                 $this->view->wordStyles = $this->getWordStyles();
                 $this->_helper->layout->disableLayout();
                 break;
@@ -89,6 +92,10 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
         $filename = $this->generateReportFilename($this->getAssessment()->getClient(), My_Brand::getDealerBranding()->assessmentTitle) . ".$format";
 
         $this->initReportVariables($filename);
+
+        // New graphs being passed to view
+        $newGraphs = $this->cacheNewPNGImages($assessmentViewModel->getNewGraphs(), true);
+        $assessmentViewModel->setNewGraphs($newGraphs);
 
         // Render early
         try

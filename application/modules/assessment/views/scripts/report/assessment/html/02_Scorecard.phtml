@@ -2,7 +2,7 @@
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 $graphs              = $assessmentViewModel->getGraphs();
-$newGraphs           = $this->newGraphs;
+$theGraphs           = $this->theGraphs;
 ?>
 <div class="h1">Your <?= My_Brand::getDealerBranding()->assessmentTitle ?></div>
 <p>It can be a challenge to understand your printing needs, and there are many factors to consider: hardware functionality, supplies delivery, service, parts,
@@ -60,7 +60,7 @@ $newGraphs           = $this->newGraphs;
 </table>
 <br />
 <div class="center">
-    <img src="<?= $newGraphs[0]; ?>" /> <!-- Annual printing costs for purchased hardware -->
+    <img src="<?= $theGraphs[0]; ?>" /> <!-- Annual printing costs for purchased hardware -->
 </div>
 <br />
 <br />

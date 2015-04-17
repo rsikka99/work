@@ -168,6 +168,20 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     public $highCostPurchasedDevices;
 
     /**
+     * Used for passing to phpWord docs as it requires full path to request image
+     *
+     * @var \PhpOffice\PhpWord\Shared\String
+     */
+    protected $absoluteGraphPaths;
+
+    /**
+     * Likely can get rid of this
+     *
+     * @var
+     */
+    protected $pImageGraphs = [];
+
+    /**
      * @param AssessmentModel $report
      */
     public function __construct (AssessmentModel $report)
@@ -1946,7 +1960,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      */
     public function getThisGraph ()
     {
-        $tempFile          = tmpfile();
         $dealerBranding    = My_Brand::getDealerBranding();
         $hexToRGBConverter = new \Tangent\Format\HexToRGB();
         $highest           = 100;
@@ -1975,14 +1988,14 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
         $myPicture->Antialias = false;
 
-        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 10, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
 
         $myPicture->setGraphArea(60, 40, 200, 200);
 
         $AxisBoundaries = [0 => ["Min" => 0, "Max" => $highest * 1.1]];
         $ScaleSettings  = ["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "DrawSubTicks" => false, "DrawArrows" => false, "ArrowSize" => 6];
 
-        $myPicture->drawScale(["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "AxisR" => 127, "AxisG" => 127, "AxisB" => 127, "InnerTickWidth" => 0, "OuterTickWidth" => 4, "TickR" => 127, "TickG" => 127, "TickB" => 127]);
+        $myPicture->drawScale(["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "AxisR" => 127, "AxisG" => 127, "AxisB" => 127, "InnerTickWidth" => 0, "OuterTickWidth" => 0, "TickR" => 127, "TickG" => 127, "TickB" => 127]);
 
         /* Write the chart legend - this sets the x/y position */
         $myPicture->drawLegend(60, 220, ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "FontR" => 127, "FontG" => 127, "FontB" => 127]);
@@ -2002,6 +2015,165 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         $newGraphs[] = $this->getThisGraph();
 
         return $newGraphs;
+
+    }
+
+    /**
+     * This function will eventually be renamed getGraphs() and take its place
+     * It will use the new pChart library to create pImages and returns an array
+     */
+    public function getTheGraphs ()
+    {
+        $dealerBranding    = My_Brand::getDealerBranding();
+        $hexToRGBConverter = new \Tangent\Format\HexToRGB();
+        $factory           = new pChartFactory();
+
+        /**
+         * -- PrintIQSavingsBarGraph
+         */
+        $MyData  = $factory->newData();
+        $highest = ($this->getPrintIQTotalCost() > $this->getTotalPurchasedAnnualCost() ? $this->getPrintIQTotalCost() : $this->getTotalPurchasedAnnualCost());
+
+        $MyData->addPoints([$this->getTotalPurchasedAnnualCost(), $this->getPrintIQTotalCost()], "Annual Printing Costs for Purchased Hardware");
+        $MyData->setAxisPosition(0, AXIS_POSITION_BOTTOM);
+        $MyData->setAxisName(0, "");
+        $MyData->addPoints(["Current", My_Brand::getDealerBranding()->mpsProgramName], "Costs");
+        $MyData->setSerieDescription("Costs", "Costs");
+        $MyData->setAxisDisplay(0, AXIS_FORMAT_CUSTOM, "formatDisplayCurrency");
+        $MyData->setAbscissa("Costs");
+
+        $myPicture = new \CpChart\Classes\pImage(650, 160, $MyData);
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+
+        /* Turn off Antialiasing */
+        $myPicture->Antialias = false;
+
+        $myPicture->drawText(225, 35, "Annual Printing Costs for Purchased Hardware", ["FontSize" => 11, "R" => 0, "G" => 0, "B" => 0]);
+
+        $axisBoundaries = [0 => ["Min" => 0, "Max" => $highest], 1 => ["Min" => 0, "Max" => $highest]];
+
+        $myPicture->setGraphArea(100, 70, 750, 175);
+        $myPicture->drawScale(["DrawSubTicks" => false, "Pos" => SCALE_POS_TOPBOTTOM, "Mode" => SCALE_MODE_MANUAL, "ManualScale" => $axisBoundaries, "TickR" => 127, "TickG" => 127, "TickB" => 127, "MinDivHeight" => 100, "OuterTickWidth" => 0, "InnerTickWidth" => 3, "AxisR" => 127, "AxisG" => 127, "AxisB" => 127]);
+
+        // Set the colors of the graph bars
+        $negColor = $hexToRGBConverter->hexToRgb($dealerBranding->graphNegativeColor);
+        $posColor = $hexToRGBConverter->hexToRgb($dealerBranding->graphPositiveColor);
+        $palette  = ["0" => ['R' => $negColor['r'], 'G' => $negColor['g'], 'B' => $negColor['b']], ['R' => $posColor['r'], 'G' => $posColor['g'], 'B' => $posColor['b']],];
+
+        /* Draw the chart */
+        $myPicture->drawBarChart(["DisplayPos" => LABEL_POS_RIGHT, "DisplayValues" => true, "OverrideColors" => $palette, "Surrounding" => 0]);
+
+        $this->pImageGraphs[] = $myPicture;
+
+
+        /*********** Leased Vs Purchased Bar Graph ****************************/
+
+        $highest = ($this->getDevices()->leasedDeviceInstances->getCount() > $this->getDevices()->purchasedDeviceInstances->getCount()) ? $this->getDevices()->leasedDeviceInstances->getCount() : $this->getDevices()->purchasedDeviceInstances->getCount();
+        $MyData  = $factory->newData();
+        $MyData->addPoints([$this->getDevices()->leasedDeviceInstances->getCount()], "Number of leased devices");
+        $MyData->addPoints([$this->getDevices()->purchasedDeviceInstances->getCount()], "Number of purchased devices");
+
+        //Fixes x access scale appearing - hacky - needs fixing
+        $MyData->addPoints([""], "Printer Types");
+        $MyData->setSerieDescription("Printer Types", "Type");
+        $MyData->setAbscissa("Printer Types");
+
+        $leasedRGB             = $hexToRGBConverter->hexToRgb($dealerBranding->graphLeasedDeviceColor);
+        $purchasedRGB          = $hexToRGBConverter->hexToRgb($dealerBranding->graphPurchasedDeviceColor);
+        $leasedColorSetting    = ['R' => $leasedRGB['r'], 'G' => $leasedRGB['g'], 'B' => $leasedRGB['b']];
+        $purchasedColorSetting = ['R' => $purchasedRGB['r'], 'G' => $purchasedRGB['g'], 'B' => $purchasedRGB['b']];
+        $MyData->setPalette("Number of leased devices", $leasedColorSetting);
+        $MyData->setPalette("Number of purchased devices", $purchasedColorSetting);
+
+        $myPicture            = $factory->newImage(265, 265, $MyData);
+        $myPicture->Antialias = false;
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->setGraphArea(60, 10, 200, 200);
+        $AxisBoundaries = [0 => ["Min" => 0, "Max" => $highest * 1.1]];
+        $myPicture->drawScale(["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "AxisR" => 127, "AxisG" => 127, "AxisB" => 127, "InnerTickWidth" => 0, "OuterTickWidth" => 0, "TickR" => 127, "TickG" => 127, "TickB" => 127]);
+
+        /* Write the chart legend - this sets the x/y position */
+        $myPicture->drawLegend(40, 220, ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "FontR" => 127, "FontG" => 127, "FontB" => 127]);
+        $myPicture->drawBarChart(["DisplayValues" => true, "Surrounding" => -30]);
+
+        $this->pImageGraphs[] = $myPicture;
+
+        /************ Leased Vs Purchased Page Count Bar Graph ****************/
+
+        $highest = ($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() > $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) ? $this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() : $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
+        $MyData  = $factory->newData();
+        $MyData->addPoints([round($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())], "Monthly pages on leased devices");
+        $MyData->addPoints([round($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())], 'Monthly pages on purchased devices');
+
+        //Fixes x access scale appearing - hacky - needs fixing
+        $MyData->addPoints([""], "Printer Types");
+        $MyData->setSerieDescription("Printer Types", "Type");
+        $MyData->setAbscissa("Printer Types");
+
+        $leasedRGB             = $hexToRGBConverter->hexToRgb($dealerBranding->graphLeasedDeviceColor);
+        $purchasedRGB          = $hexToRGBConverter->hexToRgb($dealerBranding->graphPurchasedDeviceColor);
+        $leasedColorSetting    = ['R' => $leasedRGB['r'], 'G' => $leasedRGB['g'], 'B' => $leasedRGB['b']];
+        $purchasedColorSetting = ['R' => $purchasedRGB['r'], 'G' => $purchasedRGB['g'], 'B' => $purchasedRGB['b']];
+        $MyData->setPalette("Monthly pages on leased devices", $leasedColorSetting);
+        $MyData->setPalette("Monthly pages on purchased devices", $purchasedColorSetting);
+
+        $myPicture            = $factory->newImage(265, 265, $MyData);
+        $myPicture->Antialias = false;
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->setGraphArea(60, 10, 200, 200);
+        $AxisBoundaries = [0 => ["Min" => 0, "Max" => $highest * 1.1]];
+        $myPicture->drawScale(["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "AxisR" => 127, "AxisG" => 127, "AxisB" => 127, "InnerTickWidth" => 0, "OuterTickWidth" => 0, "TickR" => 127, "TickG" => 127, "TickB" => 127]);
+        /* Write the chart legend - this sets the x/y position */
+        $myPicture->drawLegend(40, 220, ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "FontR" => 127, "FontG" => 127, "FontB" => 127]);
+        $myPicture->drawBarChart(["DisplayValues" => true, "Surrounding" => -30]);
+
+        $this->pImageGraphs[] = $myPicture;
+
+        /*********** Number of Printing Device Models and Supply Types ********/
+
+        $uniqueModelArray = [];
+        foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
+        {
+            if (array_key_exists($device->getMasterDevice()->modelName, $uniqueModelArray))
+            {
+                $uniqueModelArray [$device->getMasterDevice()->modelName] += 1;
+            }
+            else
+            {
+//                    $labels[$device->getMasterDevice()->modelName]            = $device->getMasterDevice()->modelName;
+                $uniqueModelArray [$device->getMasterDevice()->modelName] = 1;
+            }
+            $abscissaArray[] = $device->assetId;
+        }
+        $MyData = $factory->newData();
+        $MyData->addPoints($uniqueModelArray, 'Unique models');
+        $MyData->setSerieDescription("ScoreA", "Application A");
+
+        /* Define the absissa serie */
+        $MyData->addPoints($uniqueModelArray, "Labels");
+        $MyData->setAbscissa("Labels");
+
+        $myPicture = $factory->newImage(700, 270, $MyData, true);
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+
+        $colorArray = ["E21736", "b0bb21", "5c3f9b", "0191d3", "f89428", "e4858f", "fcc223", "B3C6FF", "ECFFB3", "386AFF", "FFB3EC", "cccccc", "00ff00", "000000", "E21736", "b0bb21", "5c3f9b", "0191d3", "f89428",
+                       "e4858f", "fcc223", "B3C6FF", "ECFFB3", "386AFF", "FFB3EC", "cccccc", "00ff00", "000000"];
+
+        $PieChart = $factory->newChart("pie", $myPicture, $MyData);
+
+        for ($i = 0; $i < count($uniqueModelArray); $i++)
+        {
+            $hexColor = $hexToRGBConverter->hexToRgb($colorArray[$i]);
+            $PieChart->setSliceColor(0, ["R" => $hexColor['r'], "G" => $hexColor['g'], "B" => $hexColor['b']]);
+        }
+
+        $PieChart->draw3DPie(280, 125, ["SecondPass" => true, "Radius" => 170]);
+
+        $this->pImageGraphs[] = $myPicture;
+
+
+        // Return the pImages[]
+        return $this->pImageGraphs;
 
     }
 
@@ -3308,4 +3480,17 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
         return $this->_totalLeaseBuybackPrice;
     }
+
+    /**
+     * Used by pCharts for formatting axis
+     *
+     * @param $value
+     *
+     * @return string
+     */
+    function formatDisplayCurrency ($value)
+    {
+        return "$" . number_format($value, 0, null, ",");
+    }
+
 }

@@ -12,6 +12,9 @@ $section = $this->section;
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 
+$newGraphs = $assessmentViewModel->getTheGraphs();
+$theGraph  = "/home/kmccully/apps/mpstoolbox/public/cache/reports/assessment/205/142927931614196_0.png";
+
 $section->addTitle(sprintf('Your %1$s', My_Brand::getDealerBranding()->assessmentTitle), 1);
 
 $section->addText(sprintf('It can be a challenge to understand your printing needs, and there are many factors to consider: hardware functionality, supplies delivery, service, parts, maintenance kits, IT time spent supporting printers -- and the cost for all of this. This free %1$s will allow you to make sense of your printing needs and costs. %2$s can help you get your office print under control with our smart and flexible managed print services solutions.', My_Brand::getDealerBranding()->assessmentTitle, $this->companyName));
@@ -68,7 +71,7 @@ $imageTable = $section->addTable();
 $imageTable->addRow();
 $cell   = $imageTable->addCell(9028, $this->styles->tables->singleimage->cell1);
 $graphs = $assessmentViewModel->getGraphs();
-$cell->addImage($graphs[0]);
+$cell->addImage($theGraph);
 
 // Textbreak fix to ensure the tables don't merge into each other
 $section->addTextBreak();

@@ -2,6 +2,7 @@
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 $graphs              = $assessmentViewModel->getGraphs();
+$theGraphs           = $this->theGraphs;
 ?>
 <div class="h1">Analysis: Service and Supplies Logistics</div>
 <br />
@@ -20,8 +21,8 @@ $graphs              = $assessmentViewModel->getGraphs();
     printers, are difficult to manage because you cannot monitor them with software.</p>
 <br />
 <div class="center">
-    <img src="<?= $graphs[1]; ?>" /> <!-- Devices leased/Devices Purchased -->
-    <img src="<?= $graphs[2]; ?>" /> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
+    <img src="<?= $theGraphs[1]; ?>" /> <!-- Devices leased/Devices Purchased -->
+    <img src="<?= $theGraphs[2]; ?>" /> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
 </div>
 <br />
 <?php
@@ -106,7 +107,7 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
     <strong><?= $this->currency($assessmentViewModel->getCashHeldInInventory()); ?> in operating cash held in printer
         supplies inventory</strong> at any given time.</p>
 <div class="center">
-    <img src="<?= $graphs[3]; ?>" /> <!--  Giant pie chart -->
+    <img src="<?= $theGraphs[3]; ?>" /> <!--  Giant pie chart -->
 </div>
 <p>By using printing devices with supplies in common, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space
     required. <?= $this->companyName; ?> can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and
