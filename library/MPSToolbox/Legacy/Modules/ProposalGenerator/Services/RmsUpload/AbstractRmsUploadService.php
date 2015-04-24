@@ -306,7 +306,38 @@ abstract class AbstractRmsUploadService
             $this->invalidCsvLines = [];
             $this->_csvHeaders     = [];
 
-            $fileLines = file($filename, FILE_IGNORE_NEW_LINES);
+            if (preg_match('#\.(xls|xlsx)$#',$filename)) {
+                $obj = \PHPExcel_IOFactory::load($filename);
+                $sheet = $obj->getSheet(0);
+                $maxCol = $sheet->getHighestDataColumn();
+                $maxRow = $sheet->getHighestDataRow();
+                for($row = 1; $row <= $maxRow; ++$row) {
+                    // Convert the row to an array...
+                    $cellsArray = $sheet->rangeToArray('A'.$row.':'.$maxCol.$row,'', true);
+                    // ... and write to the file
+                    $writeDelimiter = false;
+                    // Build the line
+                    $line = '';
+                    foreach ($cellsArray[0] as $element) {
+                        if (is_bool($element)) $element = $element?'TRUE':'FALSE';
+                        // Escape enclosures
+                        $element = str_replace('"', '"' . '"', $element);
+
+                        // Add delimiter
+                        if ($writeDelimiter) {
+                            $line .= ',';
+                        } else {
+                            $writeDelimiter = true;
+                        }
+
+                        // Add enclosed string
+                        $line .= '"' . $element . '"';
+                    }
+                    $fileLines[] = $line;
+                }
+            } else {
+                $fileLines = file($filename, FILE_IGNORE_NEW_LINES);
+            }
             $lineCount = count($fileLines) - 1 - $this->_linesToTrim;
 
             if ($lineCount < 1)
@@ -332,7 +363,8 @@ abstract class AbstractRmsUploadService
              */
             $this->_csvHeaders = [];
 
-            foreach (str_getcsv(array_shift($fileLines), $this->csv_delimiter, $this->csv_delimiter, $this->csv_escape) as $header)
+            $headerLine = str_getcsv(array_shift($fileLines), $this->csv_delimiter, $this->csv_delimiter, $this->csv_escape);
+            foreach ($headerLine as $header)
             {
                 $lowerCaseHeader = strtolower(trim($header));
                 /*
