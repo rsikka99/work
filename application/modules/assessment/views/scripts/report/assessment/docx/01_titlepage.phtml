@@ -33,7 +33,7 @@ $titlePage->addText('', null, 'titleStyle1');
 $titlePage->addTextBreak();
 
 $titlePage->addText('', 'titlepage_address', 'titleStyle3');
-$titlePage->addText("\t" . sprintf('Prepared For: %1$s', $assessmentViewModel->assessment->getClient()->companyName), 'titlepage_subtitle', 'titleStyle3');
+$titlePage->addText("\t" . sprintf('Prepared For: %1$s', htmlentities($assessmentViewModel->assessment->getClient()->companyName)), 'titlepage_subtitle', 'titleStyle3');
 
 // Parse the address
 $addressLines = explode("\n", $assessmentViewModel->assessment->getClient()->getAddress()->getFullAddressMultipleLines());
