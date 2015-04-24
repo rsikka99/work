@@ -57,9 +57,11 @@ class ComposerFunctions
      *
      * @param PackageEvent $event
      */
-    static function postPackageInstall (PackageEvent $event)
+    static function postPackageInstall (Event $event)
     {
-        self::handlePackage($event, $event->getOperation()->getPackage());
+//        self::handlePackage($event, $event->getOperation()->getPackage());
+        $installedPackage = $event->getComposer()->getPackage();
+        self::handlePackage($event, $installedPackage);
     }
 
     /**
@@ -67,8 +69,10 @@ class ComposerFunctions
      *
      * @param PackageEvent $event
      */
-    static function postPackageUpdate (PackageEvent $event)
+    static function postPackageUpdate (Event $event)
     {
-        self::handlePackage($event, $event->getOperation()->getTargetPackage());
+//        self::handlePackage($event, $event->getOperation()->getTargetPackage());
+        $installedPackage = $event->getComposer()->getPackage();
+        self::handlePackage($event, $installedPackage);
     }
 }
