@@ -12,7 +12,7 @@ class DeviceInstancesGroupModel
     /**
      * @var DeviceInstanceModel []
      */
-    protected $_deviceInstances = array();
+    protected $_deviceInstances = [];
 
     /**
      * @var PageCountsModel

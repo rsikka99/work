@@ -40,7 +40,7 @@ class QuoteDeviceForm extends Zend_Form
      *
      * @var Zend_Form_Element
      */
-    protected $_optionElements = array();
+    protected $_optionElements = [];
 
     /**
      * @param int        $id      The quote device id
@@ -67,51 +67,47 @@ class QuoteDeviceForm extends Zend_Form
             $deviceName->setIgnore(true);
             $this->addElement($deviceName);
 
-            $this->addElement('text', 'name', array(
+            $this->addElement('text', 'name', [
                 'label'    => 'Device Name',
                 'disabled' => true,
-                'ignore'   => true
-            ));
+                'ignore'   => true,
+            ]);
 
-            $this->addElement('text', 'oemSku', array(
+            $this->addElement('text', 'oemSku', [
                 'label'    => 'OEM SKU',
                 'disabled' => true,
-                'ignore'   => true
-            ));
+                'ignore'   => true,
+            ]);
 
-            $this->addElement('text', 'dealerSku', array(
+            $this->addElement('text', 'dealerSku', [
                 'label'    => My_Brand::$dealerSku,
                 'disabled' => true,
-                'ignore'   => true
-            ));
+                'ignore'   => true,
+            ]);
 
-            $this->addElement('text', 'totalPrice', array(
+            $this->addElement('text', 'totalPrice', [
                 'label'    => 'Total Package Price',
                 'disabled' => true,
-                'ignore'   => true
-            ));
+                'ignore'   => true,
+            ]);
 
-            $this->addElement('text', 'margin', array(
+            $this->addElement('text', 'margin', [
                 'label'      => 'Margin',
                 'class'      => 'span1',
-                'validators' => array(
+                'validators' => [
                     'Float',
-                    array(
+                    [
                         'validator' => 'Between',
-                        'options'   => array(
-                            'min'       => -100,
-                            'max'       => 100,
-                            'inclusive' => false
-                        )
-                    )
-                )
-            ));
+                        'options'   => ['min' => -100, 'max' => 100, 'inclusive' => false],
+                    ],
+                ],
+            ]);
 
-            $this->addElement('text', 'cost', array(
+            $this->addElement('text', 'cost', [
                 'label'    => 'Cost',
                 'disabled' => true,
-                'ignore'   => true
-            ));
+                'ignore'   => true,
+            ]);
 
             // For each option that is linked with the device
             /* @var $quoteDeviceOption QuoteDeviceOptionModel */
@@ -121,11 +117,11 @@ class QuoteDeviceForm extends Zend_Form
                 $object->quoteDeviceOption = $quoteDeviceOption;
 
                 // Create and text element with its name as option-{id}-quantity
-                $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->id}-quantity", array(
+                $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->id}-quantity", [
                     'label'       => $quoteDeviceOption->name,
                     'value'       => $quoteDeviceOption->quantity,
-                    'description' => $quoteDeviceOption->id
-                ));
+                    'description' => $quoteDeviceOption->id,
+                ]);
                 $optionElement->setAttrib('class', 'span1');
 
                 // Add the optionElement to the form
@@ -134,11 +130,11 @@ class QuoteDeviceForm extends Zend_Form
                 // Create a quantity namespace inside object and store the element
                 $object->quantity = $optionElement;
                 /* @var $quoteDeviceOption QuoteDeviceOptionModel */
-                $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->id}-cost", array(
+                $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->id}-cost", [
                     'label'       => $quoteDeviceOption->name,
                     'value'       => $quoteDeviceOption->cost,
-                    'description' => $quoteDeviceOption->id
-                ));
+                    'description' => $quoteDeviceOption->id,
+                ]);
                 $this->addElement($optionElement);
 
                 $object->cost = $optionElement;
@@ -148,31 +144,31 @@ class QuoteDeviceForm extends Zend_Form
             }
 
             // Add the add option
-            $this->addElement('submit', 'add', array(
+            $this->addElement('submit', 'add', [
                 'ignore' => true,
                 'label'  => 'Add',
-            ));
+            ]);
         }
         else
         {
-            $quoteDeviceList = array();
+            $quoteDeviceList = [];
             /* @var $device DeviceModel */
             foreach (DeviceMapper::getInstance()->fetchAll() as $quoteDevice)
             {
                 $quoteDeviceList [$quoteDevice->masterDeviceId] = $quoteDevice->getMasterDevice()->getFullDeviceName();
             }
-            $this->addElement('select', 'masterDeviceId', array(
+            $this->addElement('select', 'masterDeviceId', [
                 'label'        => 'Available Devices',
-                'multiOptions' => $quoteDeviceList
-            ));
+                'multiOptions' => $quoteDeviceList,
+            ]);
         }
 
-        $this->addElement('text', 'packageCost', array(
+        $this->addElement('text', 'packageCost', [
             'label'    => 'Package Cost per Unit',
             'value'    => $this->getQuoteDevice()->calculatePackageCost(),
             'disabled' => true,
-            'ignore'   => true
-        ));
+            'ignore'   => true,
+        ]);
     }
 
     public function loadDefaultDecorators ()
@@ -180,15 +176,10 @@ class QuoteDeviceForm extends Zend_Form
         // Only show the custom view script if we are showing defaults
         if ($this->_id)
         {
-            $this->setDecorators(array(
-                array(
-                    'ViewScript',
-                    array(
-                        'viewScript'     => 'forms/quotegen/quote/quote-device-form.phtml',
-                        'configurations' => DeviceConfigurationMapper::getInstance()->fetchAllDeviceConfigurationByDeviceIdAndDealerId($this->_quoteDevice->getDevice()->masterDeviceId)
-                    )
-                )
-            ));
+            $this->setDecorators([['ViewScript', [
+                'viewScript'     => 'forms/quotegen/quote/quote-device-form.phtml',
+                'configurations' => DeviceConfigurationMapper::getInstance()->fetchAllDeviceConfigurationByDeviceIdAndDealerId($this->_quoteDevice->getDevice()->masterDeviceId)
+            ]]]);
         }
     }
 

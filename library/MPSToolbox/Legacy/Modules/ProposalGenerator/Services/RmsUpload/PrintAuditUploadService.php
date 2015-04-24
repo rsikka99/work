@@ -14,9 +14,9 @@ class PrintAuditUploadService extends AbstractRmsUploadService
      *
      * @var string
      */
-    protected $_incomingDateFormat = array(
+    protected $_incomingDateFormat = [
         "m/d/Y",
-    );
+    ];
 
     /**
      * Column mapping for CSV -> Upload Row.
@@ -42,7 +42,7 @@ class PrintAuditUploadService extends AbstractRmsUploadService
 //        'yellowTonerSku'         => 'yellowTonerSku',
 //        'yellowTonerYield'       => 'yellowTonerYield',
 //        'yellowTonerCost'        => 'yellowTonerCost',
-    protected $_columnMapping = array(
+    protected $_columnMapping = [
         'rmsmodelid'             => 'rmsModelId',
         'assetid'                => 'assetId',
         'ismanaged'              => 'isManaged',
@@ -84,7 +84,7 @@ class PrintAuditUploadService extends AbstractRmsUploadService
         'pagecoveragemagenta'    => 'pageCoverageMagenta',
         'pagecoverageyellow'     => 'pageCoverageYellow',
         'location'               => 'location',
-    );
+    ];
 
 
     /**

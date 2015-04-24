@@ -235,7 +235,7 @@ class DealerSettingsService
         $currentFleetSetting  = new FleetSettingsEntity();
         $proposedFleetSetting = new FleetSettingsEntity();
 
-        foreach (array($currentFleetSetting, $proposedFleetSetting) as $fleetSetting)
+        foreach ([$currentFleetSetting, $proposedFleetSetting] as $fleetSetting)
         {
             /* @var $fleetSetting FleetSettingsEntity */
             $fleetSetting->useDevicePageCoverages            = false;

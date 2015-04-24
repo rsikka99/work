@@ -57,10 +57,10 @@ class DeviceSwapReasonDefaultModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "deviceSwapReasonCategoryId" => $this->deviceSwapReasonCategoryId,
             "dealerId"                   => $this->dealerId,
             "deviceSwapReasonId"         => $this->deviceSwapReasonId,
-        );
+        ];
     }
 }

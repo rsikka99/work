@@ -75,11 +75,11 @@ class LeasingSchemaRateModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "leasingSchemaTermId"  => $this->leasingSchemaTermId,
             "leasingSchemaRangeId" => $this->leasingSchemaRangeId,
             "rate"                 => $this->rate,
-        );
+        ];
     }
 
     /**

@@ -17,9 +17,9 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
     {
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_GROSS_MARGIN))
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "error" => "You do not have permission to access this."
-            ));
+            ]);
 
             $this->redirectToRoute('assessment');
         }
@@ -32,17 +32,17 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Assessment', 'Gross Margin');
+        $this->_pageTitle = ['Assessment', 'Gross Margin'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
 
         $this->view->availableReports['GrossMargin']['active'] = true;
-        $this->view->formats                                   = array(
+        $this->view->formats                                   = [
             "/assessment/report_grossmargin/generate/format/csv"  => $this->_csvFormat,
             "/assessment/report_grossmargin/generate/format/docx" => $this->_wordFormat
-        );
+        ];
 
         try
         {
@@ -126,7 +126,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
         }
 
         // Define our field titles
-        $fieldTitlesLvl1 = array(
+        $fieldTitlesLvl1 = [
             'Device Name',
             'Black And White',
             '',
@@ -145,9 +145,9 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
             '',
             '',
             'OEM SKUs',
-        );
+        ];
 
-        $fieldTitlesLvl2 = array(
+        $fieldTitlesLvl2 = [
             '(IP Address - Serial Number)',
             'AMPV',
             'Toner Cost',
@@ -171,12 +171,12 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
             'Yellow',
             'Three Color',
             'Four Color',
-        );
+        ];
 
         try
         {
             $dealerId         = Zend_Auth::getInstance()->getIdentity()->dealerId;
-            $fieldList_Values = array();
+            $fieldList_Values = [];
             /* @var $deviceInstance DeviceInstanceModel() */
             foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
@@ -184,7 +184,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 $colorToner = null;
 
                 $toners    = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($assessmentViewModel->getCostPerPageSettingForDealer());
-                $tonerSkus = array();
+                $tonerSkus = [];
 
                 foreach ($toners as $toner)
                 {
@@ -250,7 +250,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 }
 
                 // Create an array of purchased devices (this will be the dynamic CSV body)
-                $fieldList    = array();
+                $fieldList    = [];
                 $fieldList [] = str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) . " (" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")";
                 $fieldList [] = $this->view->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly());
                 $fieldList [] = $blackCost;
@@ -279,7 +279,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 $fieldList_Values [] = $fieldList;
             }
 
-            $fieldTotals    = array();
+            $fieldTotals    = [];
             $fieldTotals [] = 'Totals for ' . number_format($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount()) . ' devices:';
             $fieldTotals [] = $this->view->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly());
             $fieldTotals [] = $this->view->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly());

@@ -22,7 +22,7 @@ class FmAuditUploadService extends AbstractRmsUploadService
      *
      * @var array
      */
-    protected $_columnMapping = array(
+    protected $_columnMapping = [
         'printer model id'         => 'rmsModelId',
         'device id'                => 'assetId',
         'start date'               => 'monitorStartDate',
@@ -61,10 +61,10 @@ class FmAuditUploadService extends AbstractRmsUploadService
         'end meter color'          => 'endMeterColor',
         'start meter life'         => 'startMeterLife',
         'end meter life'           => 'endMeterLife',
-        'start meter print black ' => 'startMeterPrintBlack',
-        'end meter print black '   => 'endMeterPrintBlack',
-        'start meter print color ' => 'startMeterPrintColor',
-        'end meter print color '   => 'endMeterPrintColor',
+        'start meter print black' => 'startMeterPrintBlack',
+        'end meter print black'   => 'endMeterPrintBlack',
+        'start meter print color' => 'startMeterPrintColor',
+        'end meter print color'   => 'endMeterPrintColor',
         'start meter copy black'   => 'startMeterCopyBlack',
         'end meter copy black'     => 'endMeterCopyBlack',
         'start meter copy color'   => 'startMeterCopyColor',
@@ -77,5 +77,5 @@ class FmAuditUploadService extends AbstractRmsUploadService
         'toner level cyan'         => 'tonerLevelCyan',
         'toner level magenta'      => 'tonerLevelMagenta',
         'toner level yellow'       => 'tonerLevelYellow'
-    );
+    ];
 }

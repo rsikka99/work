@@ -49,9 +49,9 @@ class UserRoleModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
-            "userId" => $this->userId,
-            "roleId" => $this->roleId,
-        );
+        return [
+            'userId' => $this->userId,
+            'roleId' => $this->roleId,
+        ];
     }
 }

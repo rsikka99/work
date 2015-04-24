@@ -7,7 +7,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\ManufacturerModel;
 <div class="container">
     <?php if ($this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_MANUFACTURER_CREATE)) : ?>
         <div class="clearfix">
-            <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url(array(), 'hardware-library.manufacturers.create') ?>">
+            <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url([], 'hardware-library.manufacturers.create') ?>">
                 <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
         </div>
     <?php endif ?>
@@ -39,11 +39,11 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\ManufacturerModel;
                         <td>
                             <div class="btn-group btn-group-justified btn-group-xs">
                                 <?php if ($this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_MANUFACTURER_EDIT)) : ?>
-                                    <a class="btn btn-warning" title="Edit Manufacturer" href="<?= $this->url(array('id' => $manufacturer->id), 'hardware-library.manufacturers.edit'); ?>">
+                                    <a class="btn btn-warning" title="Edit Manufacturer" href="<?= $this->url(['id' => $manufacturer->id], 'hardware-library.manufacturers.edit'); ?>">
                                         <i class="glyphicon glyphicon-pencil"></i></a>
                                 <?php endif; ?>
                                 <?php if ($this->isAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_MANUFACTURER_DELETE)) : ?>
-                                    <a class="btn btn-danger" title="Delete Manufacturer" href="<?= $this->url(array('id' => $manufacturer->id), 'hardware-library.manufacturers.delete'); ?>">
+                                    <a class="btn btn-danger" title="Delete Manufacturer" href="<?= $this->url(['id' => $manufacturer->id], 'hardware-library.manufacturers.delete'); ?>">
                                         <i class="glyphicon glyphicon-trash"></i></a>
                                 <?php endif; ?>
                             </div>

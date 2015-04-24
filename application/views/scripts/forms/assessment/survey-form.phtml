@@ -6,7 +6,7 @@ $form = $this->element;
 $this->headScript()->appendFile($this->baseUrl('/js/app/legacy/proposalgen/survey/survey/SurveyForm.js'));
 ?>
 
-<?= $this->RenderFormOpen($form, array('form-horizontal js-survey-form')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal js-survey-form']) ?>
 <!--    FINANCE SECTION   -->
 <fieldset>
     <legend id="surveyFinanceSection">Finance</legend>
@@ -14,7 +14,7 @@ $this->headScript()->appendFile($this->baseUrl('/js/app/legacy/proposalgen/surve
     <!--    <p>How much did you spend last year on ink and toner for your printer fleet (excluding the cost of leased copiers)?</p>-->
 
     <div class="form-group <?= ($form->getElement('toner_cost_radio')->hasErrors() || $form->getElement('toner_cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('toner_cost'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('toner_cost'), ['col-sm-3']) ?>
 
         <div class="col-sm-6 col-md-4">
             <?= $this->RenderFormRadio($form->getElement('toner_cost_radio')) ?>
@@ -32,7 +32,7 @@ $this->headScript()->appendFile($this->baseUrl('/js/app/legacy/proposalgen/surve
     <!--    </p>-->
 
     <div class="form-group <?= ($form->getElement('labor_cost_radio')->hasErrors() || $form->getElement('toner_cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('labor_cost'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('labor_cost'), ['col-sm-3']) ?>
 
         <div class="col-sm-6 col-md-4">
             <?= $this->RenderFormRadio($form->getElement('labor_cost_radio')) ?>
@@ -49,7 +49,7 @@ $this->headScript()->appendFile($this->baseUrl('/js/app/legacy/proposalgen/surve
     <!--    </p>-->
 
     <div class="form-group <?= ($form->getElement('avg_purchase')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('avg_purchase'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('avg_purchase'), ['col-sm-3']) ?>
 
         <div class="col-sm-6 col-md-4">
             <?= $this->RenderFormText($form->getElement('avg_purchase'), null, '$') ?>
@@ -64,7 +64,7 @@ $this->headScript()->appendFile($this->baseUrl('/js/app/legacy/proposalgen/surve
     <!--    </p>-->
 
     <div class="form-group <?= ($form->getElement('it_hourlyRate')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('it_hourlyRate'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('it_hourlyRate'), ['col-sm-3']) ?>
 
         <div class="col-sm-6 col-md-4">
             <?= $this->RenderFormText($form->getElement('it_hourlyRate'), null, '$') ?>
@@ -80,7 +80,7 @@ $this->headScript()->appendFile($this->baseUrl('/js/app/legacy/proposalgen/surve
     <!--    <p>How many times per month does your organization order printer supplies?</p>-->
 
     <div class="form-group <?= ($form->getElement('inkTonerOrderRadio')->hasErrors() || $form->getElement('numb_monthlyOrders')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('inkTonerOrderRadio'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('inkTonerOrderRadio'), ['col-sm-3']) ?>
 
         <div class="col-sm-6 col-md-4">
             <?= $this->RenderFormRadio($form->getElement('inkTonerOrderRadio')) ?>
@@ -100,7 +100,7 @@ $this->headScript()->appendFile($this->baseUrl('/js/app/legacy/proposalgen/surve
     <!--    </p>-->
 
     <div class="form-group <?= ($form->getElement('itHoursRadio')->hasErrors() || $form->getElement('itHours')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('itHours'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('itHours'), ['col-sm-3']) ?>
 
         <div class="col-sm-6 col-md-4">
             <?= $this->RenderFormRadio($form->getElement('itHoursRadio')) ?>
@@ -116,7 +116,7 @@ $this->headScript()->appendFile($this->baseUrl('/js/app/legacy/proposalgen/surve
     <!--    </p>-->
 
     <div class="form-group <?= ($form->getElement('monthlyBreakdownRadio')->hasErrors() || $form->getElement('monthlyBreakdown')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('monthlyBreakdown'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('monthlyBreakdown'), ['col-sm-3']) ?>
 
         <div class="col-sm-6 col-md-4">
             <?= $this->RenderFormRadio($form->getElement('monthlyBreakdownRadio')) ?>
@@ -135,7 +135,7 @@ $this->headScript()->appendFile($this->baseUrl('/js/app/legacy/proposalgen/surve
     <!--        color. Estimate your own average page coverages.</p>-->
 
     <div class="form-group <?= ($form->getElement('pageCoverage_BW')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('pageCoverage_BW'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('pageCoverage_BW'), ['col-sm-3']) ?>
 
         <div class="col-sm-6 col-md-4">
             <?= $this->RenderFormText($form->getElement('pageCoverage_BW'), null, null, '%') ?>
@@ -144,7 +144,7 @@ $this->headScript()->appendFile($this->baseUrl('/js/app/legacy/proposalgen/surve
     </div>
 
     <div class="form-group <?= ($form->getElement('pageCoverage_Color')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('pageCoverage_Color'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('pageCoverage_Color'), ['col-sm-3']) ?>
 
         <div class="col-sm-6 col-md-4">
             <?= $this->RenderFormText($form->getElement('pageCoverage_Color'), null, null, '%') ?>
@@ -157,7 +157,7 @@ $this->headScript()->appendFile($this->baseUrl('/js/app/legacy/proposalgen/surve
     <!--    <p>What percent of your print volume is done on inkjet and other desktop printers?</p>-->
 
     <div class="form-group <?= ($form->getElement('printVolume')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('printVolume'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('printVolume'), ['col-sm-3']) ?>
 
         <div class="col-sm-6 col-md-4">
             <?= $this->RenderFormRadio($form->getElement('printVolume'), null, '$') ?>
@@ -170,7 +170,7 @@ $this->headScript()->appendFile($this->baseUrl('/js/app/legacy/proposalgen/surve
     <!--    <p>How long does it take, on average, for a printer to be fixed after it has broken down?</p>-->
 
     <div class="form-group <?= ($form->getElement('repairTime')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('repairTime'), array('col-sm-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('repairTime'), ['col-sm-3']) ?>
 
         <div class="col-sm-6 col-md-4">
             <?= $this->RenderFormRadio($form->getElement('repairTime'), null, '$') ?>

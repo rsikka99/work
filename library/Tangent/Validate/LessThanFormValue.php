@@ -11,18 +11,18 @@ namespace Tangent\Validate;
 class LessThanFormValue extends \Zend_Validate_Abstract
 {
     const NOT_LESS_THAN = 'not_less_than';
-    protected $_messageTemplates = array(
-        self::NOT_LESS_THAN => "'%value%' must be less than %max%"
-    );
+    protected $_messageTemplates = [
+        self::NOT_LESS_THAN => "'%value%' must be less than %max%",
+    ];
 
     /**
      * Additional variables available for validation failure messages
      *
      * @var array
      */
-    protected $_messageVariables = array(
-        'max' => '_max'
-    );
+    protected $_messageVariables = [
+        'max' => '_max',
+    ];
 
     /**
      * @var string Element name

@@ -89,9 +89,9 @@ class FeatureMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_id} = ?" => $primaryKey
-        ));
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -112,15 +112,15 @@ class FeatureMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof FeatureModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_id} = ?" => $object->id
-            );
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_id} = ?" => $object
-            );
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -205,7 +205,7 @@ class FeatureMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 150, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new FeatureModel($row->toArray());
@@ -228,9 +228,9 @@ class FeatureMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_id} = ?" => $id
-        );
+        ];
     }
 
 
@@ -252,11 +252,11 @@ class FeatureMapper extends My_Model_Mapper_Abstract
     public function fetchAllAsStringArray ()
     {
         $features           = $this->fetchAll();
-        $featuresStringList = array();
+        $featuresStringList = [];
 
         foreach ($features as $feature)
         {
-            $featuresStringList[] = array('id' => $feature->id, 'name' => $feature->name);
+            $featuresStringList[] = ['id' => $feature->id, 'name' => $feature->name];
         }
 
         return $featuresStringList;

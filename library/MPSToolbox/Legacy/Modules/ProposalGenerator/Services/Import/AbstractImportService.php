@@ -19,7 +19,7 @@ class AbstractImportService
      *
      * @var array
      */
-    protected $csvHeaders = array();
+    protected $csvHeaders = [];
 
     /**
      * Zend Filter that will filter and validate input data
@@ -33,14 +33,14 @@ class AbstractImportService
      *
      * @var array
      */
-    protected $_filters = array();
+    protected $_filters = [];
 
     /**
      * Common validators that are used multitude of times
      *
      * @var array
      */
-    protected $_validators = array();
+    protected $_validators = [];
 
     /**
      * @var Zend_File_Transfer_Adapter_Http
@@ -52,7 +52,7 @@ class AbstractImportService
      *
      * @var array
      */
-    public $importHeaders = array();
+    public $importHeaders = [];
 
     /**
      * @var
@@ -87,7 +87,7 @@ class AbstractImportService
         $this->_upload->addValidator('Count', false, 1);
         $this->_upload->getValidator('Count')->setMessage('<span class="warning">*</span> You are only allowed to upload 1 file at a time.');
         // Limit the size of all files to be uploaded to maximum 4MB and
-        $this->_upload->addValidator('FilesSize', false, array('min' => '0', 'max' => '4MB'));
+        $this->_upload->addValidator('FilesSize', false, ['min' => '0', 'max' => '4MB']);
         $this->_upload->getValidator('FilesSize')->setMessage('<span class="warning">*</span> File size must less than 4MB.');
 
         if ($this->_upload->receive())
@@ -121,7 +121,7 @@ class AbstractImportService
         {
             $this->_inputFilter->setData($data);
 
-            return $this->_inputFilter->isValid() ? $this->_inputFilter->getEscaped() : array("error" => array("invalid" => $this->_inputFilter->getInvalid()));
+            return $this->_inputFilter->isValid() ? $this->_inputFilter->getEscaped() : ["error" => ["invalid" => $this->_inputFilter->getInvalid()]];
         }
         catch (Zend_Filter_Exception $e)
         {

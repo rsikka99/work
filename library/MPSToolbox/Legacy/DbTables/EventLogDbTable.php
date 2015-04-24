@@ -11,6 +11,6 @@ use Zend_Db_Table_Abstract;
  */
 class EventLogDbTable extends Zend_Db_Table_Abstract
 {
-    protected $_primary = "id";
-    protected $_name    = "event_logs";
+    protected $_primary = 'id';
+    protected $_name    = 'event_logs';
 }

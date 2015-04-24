@@ -11,18 +11,18 @@ $isAdmin = $this->isAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETU
     <div class="tabbable"> <!-- Only required for left/right tabs -->
         <ul class="nav nav-tabs">
             <li>
-                <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.edit', true); ?>">Details</a>
+                <a href="<?= $this->url(['id' => $id], 'hardware-library.all-devices.edit', true); ?>">Details</a>
             </li>
             <?php
             if ($isAdmin) : ?>
                 <li>
-                    <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.toners', true); ?>">Toners</a>
+                    <a href="<?= $this->url(['id' => $id], 'hardware-library.all-devices.toners', true); ?>">Toners</a>
                 </li>
             <?php endif ?>
             <li class="active">
                 <a href="#tab3" data-toggle="tab">Available Options</a></li>
             <li>
-                <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.configurations', true); ?>">Hardware Configurations</a>
+                <a href="<?= $this->url(['id' => $id], 'hardware-library.all-devices.configurations', true); ?>">Hardware Configurations</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -53,7 +53,7 @@ $isAdmin = $this->isAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETU
                 </div>
 
                 <div class="clearfix">
-                    <a class="btn btn-success btn-sm pull-right create-button" href="<?= $this->url(array('id' => $id, 'page' => 'options'), 'quotes.options.create') ?>">
+                    <a class="btn btn-success btn-sm pull-right create-button" href="<?= $this->url(['id' => $id, 'page' => 'options'], 'quotes.options.create') ?>">
                         <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
                 </div>
 
@@ -95,7 +95,7 @@ $isAdmin = $this->isAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETU
                 <?php endif; ?>
 
                 <div style="text-align: center;">
-                    <a class="btn btn-default" title="Done" href="<?= $this->url(array(), 'hardware-library.all-devices', true); ?>">Done</a>
+                    <a class="btn btn-default" title="Done" href="<?= $this->url([], 'hardware-library.all-devices', true); ?>">Done</a>
                 </div>
             </form>
         </div>

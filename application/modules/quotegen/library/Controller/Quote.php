@@ -87,40 +87,40 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
 
         if (!My_Feature::canAccess(My_Feature::HARDWARE_QUOTE))
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "error" => "You do not have permission to access this."
-            ));
+            ]);
 
             $this->redirectToRoute('app.dashboard');
         }
 
         $this->_helper->contextSwitch()
-                      ->addContext('docx', array(
+                      ->addContext('docx', [
                           'suffix'    => 'docx',
-                          'callbacks' => array(
-                              'init' => array(
+                          'callbacks' => [
+                              'init' => [
                                   $this,
                                   'initDocxContext'
-                              ),
-                              'post' => array(
+                              ],
+                              'post' => [
                                   $this,
                                   'postDocxContext'
-                              )
-                          )
-                      ))
-                      ->addContext('xlsx', array(
+                              ]
+                          ]
+                      ])
+                      ->addContext('xlsx', [
                           'suffix'    => 'xlsx',
-                          'callbacks' => array(
-                              'init' => array(
+                          'callbacks' => [
+                              'init' => [
                                   $this,
                                   'initXlsxContext'
-                              ),
-                              'post' => array(
+                              ],
+                              'post' => [
                                   $this,
                                   'postXlsxContext'
-                              )
-                          )
-                      ));
+                              ]
+                          ]
+                      ]);
 
         $this->_userId       = Zend_Auth::getInstance()->getIdentity()->id;
         $this->_quoteSession = new Zend_Session_Namespace(Quotegen_Library_Controller_Quote::QUOTE_SESSION_NAMESPACE);
@@ -135,7 +135,7 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
             $this->_quote   = QuoteMapper::getInstance()->find($this->_quoteId);
             if (!$this->_quote)
             {
-                $this->_flashMessenger->addMessage(array('danger' => 'Could not find the selected quote.'));
+                $this->_flashMessenger->addMessage(['danger' => 'Could not find the selected quote.']);
                 $this->redirectToRoute('app.dashboard');
             }
         }
@@ -150,7 +150,7 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
             $client = ClientMapper::getInstance()->find($this->_mpsSession->selectedClientId);
             if (!$client instanceof ClientModel || $client->dealerId != $this->_identity->dealerId)
             {
-                $this->_flashMessenger->addMessage(array("danger" => "A client is not selected."));
+                $this->_flashMessenger->addMessage(["danger" => "A client is not selected."]);
                 $this->redirectToRoute('app.dashboard');
             }
             else
@@ -262,8 +262,8 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
         // Make sure they passed an id to us
         if (!$quoteDeviceId)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a device to edit first.'));
-            $this->redirectToRoute('quotes', array('quoteId' => $this->_quoteId));
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a device to edit first.']);
+            $this->redirectToRoute('quotes', ['quoteId' => $this->_quoteId]);
         }
 
         $quoteDevice = QuoteDeviceMapper::getInstance()->find($quoteDeviceId);
@@ -271,8 +271,8 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
         // Validate that we have a quote device that is associated with the quote
         if (!$quoteDevice || (int)$quoteDevice->quoteId !== (int)$this->_quoteId)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'You may only edit devices associated with this quote.'));
-            $this->redirectToRoute('quotes', array('quoteId' => $this->_quoteId));
+            $this->_flashMessenger->addMessage(['warning' => 'You may only edit devices associated with this quote.']);
+            $this->redirectToRoute('quotes', ['quoteId' => $this->_quoteId]);
         }
 
         return $quoteDevice;
@@ -287,7 +287,7 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
         // Redirect if we don't have a quote id or a quote
         if (!$this->_quoteId || !$this->_quote)
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'There was an error getting the quote you previously selected. Please try selecting a quote again and contact the system administrator if the issue persists.'));
+            $this->_flashMessenger->addMessage(['danger' => 'There was an error getting the quote you previously selected. Please try selecting a quote again and contact the system administrator if the issue persists.']);
             $this->redirectToRoute('app.dashboard');
         }
     }
@@ -316,8 +316,8 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
         // Redirect if we don't have a quote id or a quote
         if (!$this->_quoteId || !$this->_quote)
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'Invalid quote group selected!'));
-            $this->redirectToRoute('quotes', array('quoteId' => $this->_quoteId));
+            $this->_flashMessenger->addMessage(['danger' => 'Invalid quote group selected!']);
+            $this->redirectToRoute('quotes', ['quoteId' => $this->_quoteId]);
         }
     }
 
@@ -393,10 +393,10 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
             foreach ($favoriteDevice->getOptions() as $option)
             {
                 // Get the device option
-                $deviceOption = DeviceOptionMapper::getInstance()->find(array(
+                $deviceOption = DeviceOptionMapper::getInstance()->find([
                     $favoriteDevice->masterDeviceId,
                     $option->optionId
-                ));
+                ]);
 
                 // Insert quote device option
                 $quoteDeviceOption = $quoteDeviceService->syncOption(new QuoteDeviceOptionModel(), $deviceOption);
@@ -428,7 +428,7 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
      */
     public function getTotalPages ()
     {
-        $quantities                             = array();
+        $quantities                             = [];
         $quantities ['monochromePagesQuantity'] = 0;
         $quantities ['colorPagesQuantity']      = 0;
 
@@ -464,7 +464,7 @@ class Quotegen_Library_Controller_Quote extends My_Controller_Report
          */
         if ($this->getLayout()->isEnabled())
         {
-            $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation, array('quoteId' => $this->_quoteId)));
+            $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation, ['quoteId' => $this->_quoteId]));
         }
 
         parent::postDispatch();

@@ -12,8 +12,8 @@ use Zend_Db_Table_Abstract;
 class UserDeviceConfigurationDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'user_device_configurations';
-    protected $_primary = array(
+    protected $_primary = [
         'deviceConfigurationId',
-        'userId'
-    );
+        'userId',
+    ];
 }

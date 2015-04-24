@@ -7,10 +7,10 @@ $availableOptions = $this->availableOptions;
 $form             = $this->element;
 ?>
 
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
 <fieldset>
     <div class="form-group <?= ($form->getElement('name')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('name'), array('col-md-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('name'), ['col-md-3']) ?>
 
         <div class="col-md-8">
             <?= $this->RenderFormText($form->getElement('name')) ?>
@@ -19,7 +19,7 @@ $form             = $this->element;
         </div>
     </div>
     <div class="form-group <?= ($form->getElement('quoteDate')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('quoteDate'), array('col-md-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('quoteDate'), ['col-md-3']) ?>
 
         <div class="col-md-8">
             <?= $this->RenderFormText($form->getElement('quoteDate'), ['js-date-picker'], null, '<i class="fa fa-fw fa-calendar"></i>') ?>
@@ -32,7 +32,7 @@ $form             = $this->element;
 <fieldset>
     <div class="form-group">
         <div class="col-md-8 col-md-offset-3">
-            <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn btn-success')) ?>
+            <?= $this->RenderFormSubmit($form->getElement('submit'), ['btn btn-success']) ?>
         </div>
     </div>
 </fieldset>

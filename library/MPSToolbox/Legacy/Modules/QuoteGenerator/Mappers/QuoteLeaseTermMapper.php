@@ -70,9 +70,9 @@ class QuoteLeaseTermMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
-            $object->quoteId
-        );
+        return [
+            $object->quoteId,
+        ];
     }
 
     /**
@@ -95,9 +95,9 @@ class QuoteLeaseTermMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
-            "{$this->col_quoteId} = ?" => $primaryKey
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, [
+            "{$this->col_quoteId} = ?" => $primaryKey,
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -118,15 +118,15 @@ class QuoteLeaseTermMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof QuoteLeaseTermModel)
         {
-            $whereClause = array(
-                "{$this->col_quoteId} = ?" => $object->quoteId
-            );
+            $whereClause = [
+                "{$this->col_quoteId} = ?" => $object->quoteId,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_quoteId} = ?" => $object [0]
-            );
+            $whereClause = [
+                "{$this->col_quoteId} = ?" => $object [0],
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -211,7 +211,7 @@ class QuoteLeaseTermMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new QuoteLeaseTermModel($row->toArray());
@@ -234,9 +234,9 @@ class QuoteLeaseTermMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_quoteId} = ?" => $id [0]
-        );
+        return [
+            "{$this->col_quoteId} = ?" => $id [0],
+        ];
     }
 }
 

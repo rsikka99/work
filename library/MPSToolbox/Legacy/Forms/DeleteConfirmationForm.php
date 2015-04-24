@@ -20,7 +20,7 @@ class DeleteConfirmationForm extends Zend_Form
      * @param null|array $options
      *
      */
-    public function __construct ($message = "Are you sure you want to delete?", $options = null)
+    public function __construct ($message = 'Are you sure you want to delete?', $options = null)
     {
         $this->_formQuestion = $message;
         parent::__construct($options);
@@ -33,39 +33,31 @@ class DeleteConfirmationForm extends Zend_Form
         $this->setAttrib('class', 'form-horizontal');
 
         //setup cancel button
-        $submit = $this->createElement('submit', 'cancel', array(
+        $submit = $this->createElement('submit', 'cancel', [
             'ignore' => true,
-            'label'  => 'Cancel'
-        ));
+            'label'  => 'Cancel',
+        ]);
         //setup submit button
-        $cancel = $this->createElement('submit', 'submit', array(
+        $cancel = $this->createElement('submit', 'submit', [
             'ignore' => true,
-            'label'  => 'Delete'
-        ));
+            'label'  => 'Delete',
+        ]);
 
-        $this->addDisplayGroup(array(
+        $this->addDisplayGroup([
             $submit,
             $cancel
-        ), 'actions', array(
+        ], 'actions', [
             'disableLoadDefaultDecorators' => true,
-            'decorators'                   => array(
+            'decorators'                   => [
                 'Actions'
-            ),
+            ],
             'class'                        => 'form-actions-center'
-        ));
+        ]);
 
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/delete-confirmation-form.phtml',
-                    'message'    => $this->_formQuestion
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/delete-confirmation-form.phtml', 'message' => $this->_formQuestion]]]);
     }
 }

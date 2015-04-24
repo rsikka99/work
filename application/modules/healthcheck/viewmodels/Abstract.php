@@ -97,7 +97,7 @@ class Healthcheck_ViewModel_Abstract
             $this->_costPerPageSettingForCustomer->customerMonochromeCostPerPage = $clientSettings->genericSettings->mpsMonochromeCostPerPage;
             $this->_costPerPageSettingForCustomer->customerColorCostPerPage      = $clientSettings->genericSettings->mpsColorCostPerPage;
             $this->_costPerPageSettingForCustomer->pricingMargin                 = $clientSettings->genericSettings->tonerPricingMargin;
-            
+
             $this->_costPerPageSettingForCustomer->useCustomerCostPerPageForManagedDevices = true;
         }
 

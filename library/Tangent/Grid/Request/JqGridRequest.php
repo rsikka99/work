@@ -19,12 +19,12 @@ class JqGridRequest implements RequestInterface
     /**
      * @var Column[]
      */
-    protected $orderColumns = array();
+    protected $orderColumns = [];
 
     /**
      * @var Search[]
      */
-    protected $filters = array();
+    protected $filters = [];
 
     /**
      * @var int

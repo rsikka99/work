@@ -40,14 +40,15 @@ class FieldDependsOnValue extends \Zend_Validate_Abstract
      *
      * @var array
      */
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::VALIDATOR_FAILED => '%customError%',
         self::KEY_NOT_FOUND    => 'You must select an option',
-        self::KEY_IS_EMPTY     => 'Based on your previous answer, this field is required');
+        self::KEY_IS_EMPTY     => 'Based on your previous answer, this field is required'
+    ];
 
-    protected $_messageVariables  = array(
-        'customError' => 'customErrorMessage'
-    );
+    protected $_messageVariables  = [
+        'customError' => 'customErrorMessage',
+    ];
     protected $customErrorMessage = "Please ensure to enter valid data";
     /**
      * Key to test against

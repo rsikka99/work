@@ -48,9 +48,9 @@ class JitCompatibleMasterDeviceModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "masterDeviceId" => $this->masterDeviceId,
             "dealerId"       => $this->dealerId,
-        );
+        ];
     }
 }

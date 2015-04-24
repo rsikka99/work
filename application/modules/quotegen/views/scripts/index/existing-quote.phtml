@@ -12,7 +12,7 @@
             $('#clientId').attr('disabled', 'disabled');
             $.ajax(
                 {
-                    url    : '<?= $this->url(array('format' => 'json', 'controller' => 'index', 'action' => 'get-reports-for-client',)); ?>/clientId/' + clientId,
+                    url    : '<?= $this->url(['format' => 'json', 'controller' => 'index', 'action' => 'get-reports-for-client',]); ?>/clientId/' + clientId,
                     success: function (data)
                     {
                         var quotes = data['quotes'];

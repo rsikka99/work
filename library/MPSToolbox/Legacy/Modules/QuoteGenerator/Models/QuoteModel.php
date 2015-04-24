@@ -279,7 +279,7 @@ class QuoteModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"                        => $this->id,
             "clientId"                  => $this->clientId,
             "dateCreated"               => $this->dateCreated,
@@ -300,7 +300,7 @@ class QuoteModel extends My_Model_Abstract
             "dealerColorRankSetId"      => $this->dealerColorRankSetId,
             "name"                      => $this->name,
             "stepName"                  => $this->stepName,
-        );
+        ];
     }
 
     /**
@@ -308,10 +308,10 @@ class QuoteModel extends My_Model_Abstract
      */
     public function getTonerRankSets ()
     {
-        return array(
+        return [
             "dealerMonochromeRankSetArray" => $this->getDealerMonochromeRankSet()->getRanksAsArray(),
             "dealerColorRankSetArray"      => $this->getDealerColorRankSet()->getRanksAsArray(),
-        );
+        ];
     }
 
 

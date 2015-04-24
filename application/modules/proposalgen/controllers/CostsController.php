@@ -66,7 +66,7 @@ class Proposalgen_CostsController extends Action
         /**
          * FIXME: Is this used anymore?
          */
-        $this->view->privilege = array('System Admin');
+        $this->view->privilege = ['System Admin'];
 
         /**
          * Old variables
@@ -95,9 +95,9 @@ class Proposalgen_CostsController extends Action
      */
     public function bulkdevicepricingAction ()
     {
-        $this->_pageTitle        = array('Bulk Hardware/Pricing Updates');
-        $this->view->parts_list  = array();
-        $this->view->device_list = array();
+        $this->_pageTitle        = ['Bulk Hardware/Pricing Updates'];
+        $this->view->parts_list  = [];
+        $this->view->device_list = [];
         $db                      = Zend_Db_Table::getDefaultAdapter();
 
         // Fill manufacturers drop down
@@ -140,17 +140,17 @@ class Proposalgen_CostsController extends Action
                                 if ($price == "0")
                                 {
                                     $hasErrors = 1;
-                                    $this->_flashMessenger->addMessage(array(
+                                    $this->_flashMessenger->addMessage([
                                         "error" => "All values must be greater than 0. Please correct it and try again."
-                                    ));
+                                    ]);
                                     break;
                                 }
                                 else if ($price != '' && !is_numeric($price))
                                 {
                                     $hasErrors = 1;
-                                    $this->_flashMessenger->addMessage(array(
+                                    $this->_flashMessenger->addMessage([
                                         "error" => "All values must be numeric. Please correct it and try again."
-                                    ));
+                                    ]);
                                     break;
                                 }
                                 else if ($price != '' && $price > 0)
@@ -205,9 +205,9 @@ class Proposalgen_CostsController extends Action
 
                         if ($hasErrors == 0)
                         {
-                            $this->_flashMessenger->addMessage(array(
+                            $this->_flashMessenger->addMessage([
                                 "success" => "The toner pricing updates have been applied successfully."
-                            ));
+                            ]);
                         }
                         else
                         {
@@ -237,7 +237,7 @@ class Proposalgen_CostsController extends Action
                     {
                         /* @var $dealerMasterDeviceAttribute DealerMasterDeviceAttributeModel [] */
 
-                        $dealerMasterDeviceAttribute = array();
+                        $dealerMasterDeviceAttribute = [];
                         $dealerId                    = $this->_dealerId;
                         foreach ($formData as $key => $value)
                         {
@@ -253,7 +253,7 @@ class Proposalgen_CostsController extends Action
 
                                 if ($price != '' && !is_numeric($price))
                                 {
-                                    $this->_flashMessenger->addMessage(array("error" => "All values must be numeric. Please correct it and try again."));
+                                    $this->_flashMessenger->addMessage(["error" => "All values must be numeric. Please correct it and try again."]);
                                     break;
                                 }
                                 else if ($price != '')
@@ -287,7 +287,7 @@ class Proposalgen_CostsController extends Action
 
                                 if ($price != '' && !is_numeric($price))
                                 {
-                                    $this->_flashMessenger->addMessage(array("error" => "All values must be numeric. Please correct it and try again."));
+                                    $this->_flashMessenger->addMessage(["error" => "All values must be numeric. Please correct it and try again."]);
                                     break;
                                 }
                                 else if ($price != '')
@@ -317,7 +317,7 @@ class Proposalgen_CostsController extends Action
 
                         foreach ($dealerMasterDeviceAttribute as $key => $value)
                         {
-                            $masterAttribute = DealerMasterDeviceAttributeMapper::getInstance()->find(array($key, $this->_dealerId));
+                            $masterAttribute = DealerMasterDeviceAttributeMapper::getInstance()->find([$key, $this->_dealerId]);
                             if ($masterAttribute)
                             {
                                 if (isset($value->laborCostPerPage))
@@ -338,9 +338,9 @@ class Proposalgen_CostsController extends Action
 
                         if ($hasErrors == 0)
                         {
-                            $this->_flashMessenger->addMessage(array(
+                            $this->_flashMessenger->addMessage([
                                 "success" => "The device pricing updates have been applied successfully."
-                            ));
+                            ]);
                         }
                         else
                         {
@@ -373,7 +373,7 @@ class Proposalgen_CostsController extends Action
             {
                 $db->rollback();
                 \Tangent\Logger\Logger::logException($e);
-                $this->_flashMessenger->addMessage(array("error" => "Error: The updates were not saved. Reference #: " . \Tangent\Logger\Logger::getUniqueId()));
+                $this->_flashMessenger->addMessage(["error" => "Error: The updates were not saved. Reference #: " . \Tangent\Logger\Logger::getUniqueId()]);
             }
         }
     }
@@ -384,7 +384,7 @@ class Proposalgen_CostsController extends Action
     public function bulkFileDeviceFeaturesAction ()
     {
         $db                    = Zend_Db_Table::getDefaultAdapter();
-        $errorMessages         = array();
+        $errorMessages         = [];
         $deviceFeaturesService = new DeviceFeaturesImportService();
 
         $this->view->canApprove = $this->_canApprove();
@@ -406,7 +406,7 @@ class Proposalgen_CostsController extends Action
 
                             if (!isset($validData['error']))
                             {
-                                $dataArray = array(
+                                $dataArray = [
                                     'isDuplex'           => $validData[$deviceFeaturesService::DEVICE_FEATURES_DUPLEX],
                                     'isCopier'           => $validData[$deviceFeaturesService::DEVICE_FEATURES_SCAN],
                                     'reportsTonerLevels' => $validData[$deviceFeaturesService::DEVICE_FEATURES_REPORTS_TONER_LEVELS],
@@ -414,7 +414,7 @@ class Proposalgen_CostsController extends Action
                                     'ppmColor'           => $validData[$deviceFeaturesService::DEVICE_FEATURES_PPM_COLOR],
                                     'wattsPowerNormal'   => $validData[$deviceFeaturesService::DEVICE_FEATURES_OPERATING_WATTAGE],
                                     'wattsPowerIdle'     => $validData[$deviceFeaturesService::DEVICE_FEATURES_IDLE_WATTAGE],
-                                );
+                                ];
 
                                 $masterDevice = MasterDeviceMapper::getInstance()->find($validData['Master Printer ID']);
 
@@ -449,24 +449,24 @@ class Proposalgen_CostsController extends Action
                             }
                             $lineCounter++;
                         }
-                        $this->_flashMessenger->addMessage(array("success" => "Your pricing updates have been applied successfully."));
+                        $this->_flashMessenger->addMessage(["success" => "Your pricing updates have been applied successfully."]);
                         $db->commit();
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array("error" => "This file headers are incorrect please verify headers against export file."));
+                        $this->_flashMessenger->addMessage(["error" => "This file headers are incorrect please verify headers against export file."]);
                     }
                 }
                 catch (Exception $e)
                 {
                     $db->rollback();
-                    $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+                    $this->_flashMessenger->addMessage(["error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."]);
                 }
                 $deviceFeaturesService->closeFiles();
             }
             else
             {
-                $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+                $this->_flashMessenger->addMessage(["error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."]);
             }
         }
         $this->view->errorMessages = $errorMessages;
@@ -478,7 +478,7 @@ class Proposalgen_CostsController extends Action
     public function bulkFileTonerPricingAction ()
     {
         $db                  = Zend_Db_Table::getDefaultAdapter();
-        $errorMessages       = array();
+        $errorMessages       = [];
         $tonerPricingService = new TonerPricingImportService();
 
         if ($this->_request->isPost())
@@ -498,17 +498,17 @@ class Proposalgen_CostsController extends Action
 
                             if (!isset($validData['error']))
                             {
-                                $dataArray = array(
+                                $dataArray = [
                                     'tonerId'   => $validData[$tonerPricingService::TONER_PRICING_TONER_ID],
                                     'dealerSku' => $validData[$tonerPricingService::TONER_PRICING_DEALER_SKU],
                                     'cost'      => $validData[$tonerPricingService::TONER_PRICING_NEW_PRICE],
                                     'dealerId'  => $this->_dealerId,
-                                );
+                                ];
 
                                 $toner = TonerMapper::getInstance()->find($validData ['Toner ID']);
                                 if ($toner instanceof TonerModel)
                                 {
-                                    $tonerAttribute = DealerTonerAttributeMapper::getInstance()->find(array($dataArray['tonerId'], $this->_dealerId));
+                                    $tonerAttribute = DealerTonerAttributeMapper::getInstance()->find([$dataArray['tonerId'], $this->_dealerId]);
                                     // Does the toner attribute exists ?
                                     if ($tonerAttribute instanceof DealerTonerAttributeModel)
                                     {
@@ -544,24 +544,24 @@ class Proposalgen_CostsController extends Action
                             }
                             $lineCounter++;
                         }
-                        $this->_flashMessenger->addMessage(array("success" => "Your pricing updates have been applied successfully."));
+                        $this->_flashMessenger->addMessage(["success" => "Your pricing updates have been applied successfully."]);
                         $db->commit();
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array("error" => "This file headers are incorrect please verify headers against export file."));
+                        $this->_flashMessenger->addMessage(["error" => "This file headers are incorrect please verify headers against export file."]);
                     }
                 }
                 catch (Exception $e)
                 {
                     $db->rollback();
-                    $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+                    $this->_flashMessenger->addMessage(["error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."]);
                 }
                 $tonerPricingService->closeFiles();
             }
             else
             {
-                $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+                $this->_flashMessenger->addMessage(["error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."]);
             }
         }
 
@@ -575,7 +575,7 @@ class Proposalgen_CostsController extends Action
     public function bulkFileTonerMatchupAction ()
     {
         $db             = Zend_Db_Table::getDefaultAdapter();
-        $errorMessages  = array();
+        $errorMessages  = [];
         $matchupService = new TonerMatchupImportService();
 
         $canApprove             = $this->_canApprove();
@@ -623,7 +623,7 @@ class Proposalgen_CostsController extends Action
                                     }
                                     else
                                     {
-                                        $errorMessages [$lineCounter] = array('Toner Color' => 'No OEM Toner found and Toner Color not specified!');
+                                        $errorMessages [$lineCounter] = ['Toner Color' => 'No OEM Toner found and Toner Color not specified!'];
                                     }
                                 }
 
@@ -634,7 +634,7 @@ class Proposalgen_CostsController extends Action
                                     /**
                                      * Dealer Toner Attributes
                                      */
-                                    $dealerTonerAttribute = DealerTonerAttributeMapper::getInstance()->find(array($tonerId, $this->_dealerId));
+                                    $dealerTonerAttribute = DealerTonerAttributeMapper::getInstance()->find([$tonerId, $this->_dealerId]);
                                     if ($dealerTonerAttribute instanceof DealerTonerAttributeModel)
                                     {
                                         $dealerTonerAttribute->cost = $validData['parsedToners']['comp']['cost'];
@@ -667,7 +667,7 @@ class Proposalgen_CostsController extends Action
                                         $existingDeviceToners = DeviceTonerMapper::getInstance()->fetchDeviceTonersByTonerId($validData['parsedToners']['oem']['id']);
                                         foreach ($existingDeviceToners as $existingDeviceToner)
                                         {
-                                            if (!DeviceTonerMapper::getInstance()->find(array($tonerId, $existingDeviceToner->master_device_id)) instanceof DeviceTonerModel)
+                                            if (!DeviceTonerMapper::getInstance()->find([$tonerId, $existingDeviceToner->master_device_id]) instanceof DeviceTonerModel)
                                             {
                                                 $deviceToner                   = new DeviceTonerModel();
                                                 $deviceToner->toner_id         = $tonerId;
@@ -684,25 +684,25 @@ class Proposalgen_CostsController extends Action
                             }
                             $lineCounter++;
                         }
-                        $this->_flashMessenger->addMessage(array("success" => "Your pricing updates have been applied successfully."));
+                        $this->_flashMessenger->addMessage(["success" => "Your pricing updates have been applied successfully."]);
                         $db->commit();
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array("error" => "This file headers are incorrect please verify headers against export file."));
+                        $this->_flashMessenger->addMessage(["error" => "This file headers are incorrect please verify headers against export file."]);
                     }
                 }
                 catch (Exception $e)
                 {
                     $db->rollback();
                     \Tangent\Logger\Logger::logException($e);
-                    $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+                    $this->_flashMessenger->addMessage(["error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."]);
                 }
                 $matchupService->closeFiles();
             }
             else
             {
-                $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+                $this->_flashMessenger->addMessage(["error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."]);
             }
         }
         $this->view->errorMessages = $errorMessages;
@@ -714,7 +714,7 @@ class Proposalgen_CostsController extends Action
     public function bulkFileDevicePricingAction ()
     {
         $db                   = Zend_Db_Table::getDefaultAdapter();
-        $errorMessages        = array();
+        $errorMessages        = [];
         $devicePricingService = new DevicePricingImportService();
 
         if ($this->_request->isPost())
@@ -736,19 +736,19 @@ class Proposalgen_CostsController extends Action
                             {
                                 $masterDeviceId = $validData ['Master Printer ID'];
 
-                                $dataArray = array(
+                                $dataArray = [
                                     'masterDeviceId'   => $masterDeviceId,
                                     'dealerId'         => $this->_dealerId,
                                     'laborCostPerPage' => $validData[$devicePricingService::DEVICE_PRICING_LABOR_CPP],
                                     'partsCostPerPage' => $validData[$devicePricingService::DEVICE_PRICING_PARTS_CPP],
-                                );
+                                ];
 
                                 // Does the master device exist in our database?
                                 $masterDevice = MasterDeviceMapper::getInstance()->find($masterDeviceId);
                                 if ($masterDevice instanceof MasterDeviceModel)
                                 {
                                     // Do we have the master device already in this dealer device table
-                                    $masterDeviceAttribute = DealerMasterDeviceAttributeMapper::getInstance()->find(array($masterDeviceId, $this->_dealerId));
+                                    $masterDeviceAttribute = DealerMasterDeviceAttributeMapper::getInstance()->find([$masterDeviceId, $this->_dealerId]);
                                     if ($masterDeviceAttribute instanceof DealerMasterDeviceAttributeModel)
                                     {
                                         // If we have a master device attribute and the row is empty, delete the row
@@ -781,24 +781,24 @@ class Proposalgen_CostsController extends Action
                             }
                             $lineCounter++;
                         }
-                        $this->_flashMessenger->addMessage(array("success" => "Your pricing updates have been applied successfully."));
+                        $this->_flashMessenger->addMessage(["success" => "Your pricing updates have been applied successfully."]);
                         $db->commit();
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array("error" => "This file headers are incorrect please verify headers against export file."));
+                        $this->_flashMessenger->addMessage(["error" => "This file headers are incorrect please verify headers against export file."]);
                     }
                 }
                 catch (Exception $e)
                 {
                     $db->rollback();
-                    $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+                    $this->_flashMessenger->addMessage(["error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."]);
                 }
                 $devicePricingService->closeFiles();
             }
             else
             {
-                $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+                $this->_flashMessenger->addMessage(["error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."]);
             }
         }
         $this->view->canApprove    = $this->_canApprove();
@@ -845,8 +845,8 @@ class Proposalgen_CostsController extends Action
         $this->_helper->layout->disableLayout();
 
         $importType   = $this->_getParam('type', false);
-        $fieldTitles  = array();
-        $fieldRows    = array();
+        $fieldTitles  = [];
+        $fieldRows    = [];
         $filename     = "";
         $newFieldList = "";
 
@@ -880,7 +880,7 @@ class Proposalgen_CostsController extends Action
                 $filename            = "system_toner_matchup.csv";
                 $tonerMatchupService = new TonerMatchupImportService();
                 $fieldTitles         = $tonerMatchupService->csvHeaders;
-                $fieldRows           = array();
+                $fieldRows           = [];
             }
         }
         catch (Exception $e)

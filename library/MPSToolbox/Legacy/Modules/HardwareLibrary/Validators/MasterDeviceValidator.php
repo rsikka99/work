@@ -23,7 +23,7 @@ class MasterDeviceValidator
      */
     public static function validate ($masterDeviceModel)
     {
-        $validationMessages = array();
+        $validationMessages = [];
 
         /**
          * User ids are allowed to be null
@@ -151,23 +151,23 @@ class MasterDeviceValidator
         $validationErrorMessages = [];
 
 
-        $assignedOemTonerColors = array(
+        $assignedOemTonerColors = [
             TonerColorModel::BLACK       => false,
             TonerColorModel::CYAN        => false,
             TonerColorModel::MAGENTA     => false,
             TonerColorModel::YELLOW      => false,
             TonerColorModel::THREE_COLOR => false,
             TonerColorModel::FOUR_COLOR  => false,
-        );
+        ];
 
-        $assignedTonerColors = array(
+        $assignedTonerColors = [
             TonerColorModel::BLACK       => false,
             TonerColorModel::CYAN        => false,
             TonerColorModel::MAGENTA     => false,
             TonerColorModel::YELLOW      => false,
             TonerColorModel::THREE_COLOR => false,
             TonerColorModel::FOUR_COLOR  => false,
-        );
+        ];
 
         /**
          * Figure out what color and type of toners we have

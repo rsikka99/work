@@ -14,7 +14,7 @@ $paragraphStyle = $this->paragraphStyle;
 
 $leaseDetailsTable = $section->addTable($this->tableStyle->standard);
 $leaseDetailsTable->addRow(300);
-$leaseDetailsTable->addCell($tableSpan ['span8'], $cellStyle->invertBackground)->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$leaseDetailsTable->addCell($tableSpan ['span8'], $cellStyle->invertBackground)->addText(htmlspecialchars($contractTemplateSection->getContractSectionName()), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
 
 
 $contractHtml = new DOMDocument(5);
@@ -25,7 +25,7 @@ foreach ($contractHtml->getElementsByTagName('p') as $paragraphNode)
 {
     $leaseDetailsTable->addRow();
     $cell    = $leaseDetailsTable->addCell($tableSpan ['span8'], null);
-    $textRun = $cell->addTextRun(array_merge($paragraphStyle->noSpacingJustified, array('spacing' => 1.1)));
+    $textRun = $cell->addTextRun(array_merge($paragraphStyle->noSpacingJustified, ['spacing' => 1.1]));
 
     $childNodes = $paragraphNode->childNodes;
     for ($i = 0; $i < $childNodes->length; $i++)
@@ -35,11 +35,11 @@ foreach ($contractHtml->getElementsByTagName('p') as $paragraphNode)
 
         if ($node->tagName == 'b')
         {
-            $textRun->addText($node->textContent, $fontStyle->boldFinePrint);
+            $textRun->addText(htmlspecialchars($node->textContent), $fontStyle->boldFinePrint);
         }
         else
         {
-            $textRun->addText($node->textContent, $fontStyle->finePrint);
+            $textRun->addText(htmlspecialchars($node->textContent), $fontStyle->finePrint);
         }
     }
 }

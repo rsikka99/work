@@ -35,7 +35,7 @@ class Preferences_DealerController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Company Settings', 'Company');
+        $this->_pageTitle = ['Company Settings', 'Company'];
 
         if ($this->getRequest()->isPost())
         {
@@ -91,11 +91,11 @@ class Preferences_DealerController extends Action
             $service        = $this->getDealerSettingsService();
             $dealerSettings = $service->getDealerSettings($this->getIdentity()->dealerId);
             $service->saveAllSettingsForm($form, $dealerSettings);
-            $this->_flashMessenger->addMessage(array('success' => 'Settings Saved.'));
+            $this->_flashMessenger->addMessage(['success' => 'Settings Saved.']);
         }
         else
         {
-            $this->_flashMessenger->addMessage(array('error' => 'Please correct the errors below.'));
+            $this->_flashMessenger->addMessage(['error' => 'Please correct the errors below.']);
         }
 
 

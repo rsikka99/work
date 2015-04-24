@@ -22,7 +22,7 @@ class Api_ManufacturersController extends Action
         if ($manufacturerIdParam === false)
         {
             $manufacturers = ManufacturerEntity::all();
-            $this->sendJson(array('data' => $manufacturers->toArray()));
+            $this->sendJson(['data' => $manufacturers->toArray()]);
         }
         else
         {
@@ -34,7 +34,7 @@ class Api_ManufacturersController extends Action
             }
             else if ($manufacturers instanceof \Illuminate\Support\Collection)
             {
-                $this->sendJson(array('data' => $manufacturers->toArray()));
+                $this->sendJson(['data' => $manufacturers->toArray()]);
             }
             else
             {
@@ -49,7 +49,7 @@ class Api_ManufacturersController extends Action
      */
     public function createAction ()
     {
-        $this->sendJson(array("message" => "This is action is not implemented yet."));
+        $this->sendJson(["message" => "This is action is not implemented yet."]);
     }
 
     /**
@@ -57,7 +57,7 @@ class Api_ManufacturersController extends Action
      */
     public function deleteAction ()
     {
-        $this->sendJson(array("message" => "This is action is not implemented yet."));
+        $this->sendJson(["message" => "This is action is not implemented yet."]);
     }
 
     /**
@@ -65,6 +65,6 @@ class Api_ManufacturersController extends Action
      */
     public function updateAction ()
     {
-        $this->sendJson(array("message" => "This is action is not implemented yet."));
+        $this->sendJson(["message" => "This is action is not implemented yet."]);
     }
 }

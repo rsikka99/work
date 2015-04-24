@@ -24,7 +24,7 @@ class Admin_ClientController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('System', 'Clients', 'Client Management');
+        $this->_pageTitle = ['System', 'Clients', 'Client Management'];
         // Display all of the clients
         $mapper    = ClientMapper::getInstance();
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
@@ -44,14 +44,12 @@ class Admin_ClientController extends Action
      */
     public function deleteAction ()
     {
-        $this->_pageTitle = array('System', 'Clients', 'Delete Client');
+        $this->_pageTitle = ['System', 'Clients', 'Delete Client'];
         $clientId         = $this->_getParam('id', false);
 
         if (!$clientId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'warning' => 'Please select a client to delete first.'
-            ));
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a client to delete first.']);
             $this->redirectToRoute('admin.clients');
         }
 
@@ -59,9 +57,7 @@ class Admin_ClientController extends Action
         $client       = $clientMapper->find($clientId);
         if (!$client)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => 'There was an error selecting the client to delete.'
-            ));
+            $this->_flashMessenger->addMessage(['danger' => 'There was an error selecting the client to delete.']);
             $this->redirectToRoute('admin.clients');
         }
 
@@ -89,15 +85,11 @@ class Admin_ClientController extends Action
                     }
                     catch (Exception $e)
                     {
-                        $this->_flashMessenger->addMessage(array(
-                            'danger' => "Client {$client->companyName} cannot be deleted since there are  quote(s) attached."
-                        ));
+                        $this->_flashMessenger->addMessage(['danger' => "Client {$client->companyName} cannot be deleted since there are  quote(s) attached."]);
                         $this->redirectToRoute('admin.clients');
                     }
 
-                    $this->_flashMessenger->addMessage(array(
-                        'success' => "Client  {$client->companyName} was deleted successfully."
-                    ));
+                    $this->_flashMessenger->addMessage(['success' => "Client  {$client->companyName} was deleted successfully."]);
                     $this->redirectToRoute('admin.clients');
                 }
             }
@@ -114,7 +106,7 @@ class Admin_ClientController extends Action
      */
     public function createAction ()
     {
-        $this->_pageTitle = array('System', 'Clients', 'Create Client');
+        $this->_pageTitle = ['System', 'Clients', 'Create Client'];
         $clientService    = new ClientService();
         if ($this->getRequest()->isPost())
         {
@@ -136,18 +128,13 @@ class Admin_ClientController extends Action
 
             if ($clientId)
             {
-                $this->_flashMessenger->addMessage(array(
-                    'success' => "Client successfully created."
-                ));
+                $this->_flashMessenger->addMessage(['success' => "Client successfully created."]);
                 // Redirect with client id so that the client is preselected
-                $this->redirectToRoute('admin.clients', array(
-                    'clientId' => $clientId));
+                $this->redirectToRoute('admin.clients', ['clientId' => $clientId]);
             }
             else
             {
-                $this->_flashMessenger->addMessage(array(
-                    'danger' => "Please correct the errors below."
-                ));
+                $this->_flashMessenger->addMessage(['danger' => "Please correct the errors below."]);
             }
         }
 
@@ -156,7 +143,7 @@ class Admin_ClientController extends Action
 
     public function editAction ()
     {
-        $this->_pageTitle = array('System', 'Clients', 'Edit Client');
+        $this->_pageTitle = ['System', 'Clients', 'Edit Client'];
         // Get the passed client id
         $clientId = $this->_getParam('id', false);
         // Get the client object from the database
@@ -193,19 +180,13 @@ class Admin_ClientController extends Action
 
             if ($clientId)
             {
-                $this->_flashMessenger->addMessage(array(
-                    'success' => "Client {$client->companyName} successfully updated."
-                ));
+                $this->_flashMessenger->addMessage(['success' => "Client {$client->companyName} successfully updated."]);
                 // Redirect with client id so that the client is preselected
-                $this->redirectToRoute('admin.clients', array(
-                    'clientId' => $clientId
-                ));
+                $this->redirectToRoute('admin.clients', ['clientId' => $clientId]);
             }
             else
             {
-                $this->_flashMessenger->addMessage(array(
-                    'danger' => "Please correct the errors below."
-                ));
+                $this->_flashMessenger->addMessage(['danger' => "Please correct the errors below."]);
             }
         }
         $this->view->form = $clientService->getForm(false);

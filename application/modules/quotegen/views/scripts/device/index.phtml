@@ -5,7 +5,7 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceModel;
 ?>
 <div class="container">
     <div class="clearfix">
-        <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url(array(), 'quotes.devices.create') ?>">
+        <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url([], 'quotes.devices.create') ?>">
             <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
     </div>
     <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
@@ -27,11 +27,11 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceModel;
                     <td><?= $device->oemSku; ?></td>
                     <td>
                         <div class="btn-group btn-group-justified btn-group-xs">
-                            <a class="btn btn-info" title="View Device" href="<?= $this->url(array('id' => $device->masterDeviceId), 'quotes.devices.view'); ?>">
+                            <a class="btn btn-info" title="View Device" href="<?= $this->url(['id' => $device->masterDeviceId], 'quotes.devices.view'); ?>">
                                 <i class="glyphicon glyphicon-eye-open"></i></a>
-                            <a class="btn btn-warning" title="Edit Device" href="<?= $this->url(array('id' => $device->masterDeviceId), 'quotes.devices.edit'); ?>">
+                            <a class="btn btn-warning" title="Edit Device" href="<?= $this->url(['id' => $device->masterDeviceId], 'quotes.devices.edit'); ?>">
                                 <i class="glyphicon glyphicon-pencil"></i></a>
-                            <a class="btn btn-danger" title="Delete Device" href="<?= $this->url(array('id' => $device->masterDeviceId), 'quotes.devices.delete'); ?>">
+                            <a class="btn btn-danger" title="Delete Device" href="<?= $this->url(['id' => $device->masterDeviceId], 'quotes.devices.delete'); ?>">
                                 <i class="glyphicon glyphicon-trash"></i></a>
                         </div>
                     </td>

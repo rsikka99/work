@@ -208,21 +208,21 @@ $phpword->addTitleStyle(2, [
     'color'  => My_Brand::getDealerBranding()->h2FontColor,
     'bold'   => true,
     'italic' => true
-], array(
-    'shading' => array(
+], [
+    'shading' => [
         'fill' => My_Brand::getDealerBranding()->h2BackgroundColor,
-    ),
-));
+    ],
+]);
 
 // H3 Style #5881BC
 $phpword->addTitleStyle(3, [
     'size'  => 10,
     'color' => 'FF0000',
     'bold'  => true
-], array(
+], [
     'spaceBefore' => 100,
     'spaceAfter'  => 100
-));
+]);
 
 // H3 Style #5881BC
 $phpword->addFontStyle('heading3', [
@@ -617,7 +617,7 @@ $leaseQuoteTable = (object)[
                 'name' => 'Calibri',
                 'size' => 11
             ],
-            "smallFontStyle"      => [
+            "smallFontStyle" => [
                 'name' => 'Calibri',
                 'size' => 10
             ],
@@ -857,27 +857,27 @@ $leaseQuoteTable = (object)[
 /**
  * Setup some styles to be used across the report
  */
-$styles = (object)array(
-    "tables" => (object)array(
+$styles = (object)[
+    "tables" => (object)[
         "truecosts"  => $trueCostsTable,
         "quoteTable" => $leaseQuoteTable
-    )
-);
+    ]
+];
 
-$titledata = array(
+$titledata = [
     "phpword"        => $phpword,
     "section"        => $titlepageSection,
     "quote"          => $quote,
     "styles"         => $styles,
     "dealerLogoFile" => $this->dealerLogoFile,
-);
+];
 
-$data = array(
+$data = [
     "phpword" => $phpword,
     "section" => $section,
     "quote"   => $quote,
     "styles"  => $styles,
-);
+];
 
 // Actual document pages
 $this->partial("{$commonPartsBasePath}/docx/titlepage.phtml", $titledata);

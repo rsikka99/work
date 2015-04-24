@@ -78,12 +78,12 @@ class ContractTemplateModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"               => $this->id,
             "dealerId"         => $this->dealerId,
             "templateName"     => $this->templateName,
             "isSystemTemplate" => $this->isSystemTemplate,
-        );
+        ];
     }
 
 

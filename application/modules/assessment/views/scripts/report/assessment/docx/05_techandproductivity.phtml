@@ -29,25 +29,25 @@ $section->addText(sprintf('The average age of printing devices in your office is
 $section->addText('The breakdown of the ages of your printing devices is shown below:');
 $imageTable = $section->addTable();
 $imageTable->addRow();
-$cell = $imageTable->addCell(9028.8, array(
+$cell = $imageTable->addCell(9028.8, [
     'valign' => 'center'
-));
+]);
 
-$cell->addImage($graphs [9], array(
+$cell->addImage($graphs [9], [
     'align' => 'center'
-));
+]);
 $section->addTextBreak();
 
 $section->addText('The devices listed below have a high risk of breaking down, because of a combination of their age and the total amount of pages they have printed throughout their lifetime.');
 
-$cellWidths = array(
+$cellWidths = [
     3611,
     1805,
     1805,
     1805,
     1805,
     1805
-);
+];
 
 $highRiskDevicesTable = $section->addTable($this->styles->tables->highriskdevices->tablestyle);
 $highRiskDevicesTable->addRow($this->styles->tables->highriskdevices->rowheight, $this->styles->tables->rowheader);
@@ -63,7 +63,7 @@ foreach ($assessmentViewModel->getHighRiskDevices() as $device)
 {
     $highRiskDevicesTable->addRow($this->styles->tables->highriskdevices->rowheight, $this->styles->tables->rowstyle);
     $highRiskDevicesTable->addCell($cellWidths [0], $this->styles->tables->highriskdevices->cell1)->addText($device->getDeviceName(), null, 'nospacing');
-    $highRiskDevicesTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing');
+    $highRiskDevicesTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ?: "Unknown", null, 'nospacing');
     $highRiskDevicesTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(number_format($device->getAge()) . " year(s)", null, 'nospacing_centeralign');
     $highRiskDevicesTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
     $highRiskDevicesTable->addCell($cellWidths [4], $this->styles->tables->highriskdevices->cell5)->addText(number_format($device->getMeter()->endMeterLife), null, 'nospacing_centeralign');
@@ -83,10 +83,10 @@ $section->addTitle('IT Time Spent Supporting Printing Devices', 2);
 $section->addText(sprintf('Based on your questionnaire responses, your internal IT personnel spend an average of %1$s hours per week supporting printing devices. This results in the following:', number_format($assessmentViewModel->getWeeklyITHours())));
 
 // IT Time Spent Supporting Printing Devices table
-$cellWidths = array(
+$cellWidths = [
     7500,
     1528
-);
+];
 $table      = $section->addTable($this->styles->tables->twoColumnDataTable->tablestyle);
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
 $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText('Annual internal IT hours spent servicing and supporting printers', 'bold_text', 'nospacing');

@@ -6,12 +6,12 @@ $fh = fopen($this->savePath, "w+");
 
 
 fputcsv($fh, $this->fieldTitleList);
-fputcsv($fh, array());
-fputcsv($fh, array(My_Brand::getDealerBranding()->mpsProgramName . " Black And White CPP:", $this->monochromeCPP));
-fputcsv($fh, array());
-fputcsv($fh, array(My_Brand::getDealerBranding()->mpsProgramName . " Color CPP:", $this->colorCPP));
-fputcsv($fh, array());
-fputcsv($fh, array());
+fputcsv($fh, []);
+fputcsv($fh, [My_Brand::getDealerBranding()->mpsProgramName . " Black And White CPP:", $this->monochromeCPP]);
+fputcsv($fh, []);
+fputcsv($fh, [My_Brand::getDealerBranding()->mpsProgramName . " Color CPP:", $this->colorCPP]);
+fputcsv($fh, []);
+fputcsv($fh, []);
 
 foreach ($this->fieldList as $line)
 {

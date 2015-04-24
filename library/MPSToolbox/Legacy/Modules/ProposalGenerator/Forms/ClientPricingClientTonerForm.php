@@ -25,77 +25,71 @@ class ClientPricingClientTonerForm extends Twitter_Bootstrap_Form_Horizontal
     {
         $this->setMethod('post');
 
-        $this->addElement('hidden', 'id', array(
+        $this->addElement('hidden', 'id', [
             'label'    => 'Id',
             'class'    => 'span3',
             'required' => false,
             'disabled' => true,
-            'visible'  => false
-        ));
+            'visible'  => false,
+        ]);
 
-        $this->addElement('hidden', 'tonerId', array(
+        $this->addElement('hidden', 'tonerId', [
             'label'    => 'Toner Id',
             'class'    => 'span3',
             'required' => false,
             'disabled' => true,
-            'visible'  => false
-        ));
+            'visible'  => false,
+        ]);
 
-        $this->addElement('text', 'systemSku', array(
+        $this->addElement('text', 'systemSku', [
             'label'    => 'OEM SKU',
             'class'    => 'span3',
             'required' => false,
             'disabled' => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'dealerSku', array(
+        $this->addElement('text', 'dealerSku', [
             'label'    => My_Brand::$dealerSku,
             'class'    => 'span3',
             'required' => false,
             'disabled' => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'clientSku', array(
-            'label'     => 'Client SKU',
-            'class'     => 'span3',
-            'required'  => false,
-            'maxlength' => 255,
-            'filters'   => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validator' => 'StringLength',
-            'options'   => array(
-                1,
-                255
-            )
-        ));
+        $this->addElement('text', 'clientSku', [
+            'label'      => 'Client SKU',
+            'class'      => 'span3',
+            'required'   => false,
+            'maxlength'  => 255,
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
+                    'validator' => 'StringLength',
+                    'options'   => [1, 255],
+                ],
+            ],
+        ]);
 
-        $this->addElement('select', 'replacementTonerId', array(
+        $this->addElement('select', 'replacementTonerId', [
             'label'    => "Replacement Toner",
             'class'    => "span3",
             "required" => false,
-        ));
+        ]);
 
-        $costElement = $this->createElement('text', 'cost', array(
+        $costElement = $this->createElement('text', 'cost', [
             'label'      => 'Client Cost',
             'class'      => 'span3',
             'required'   => false,
             'maxlength'  => 255,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'greaterThan',
-                    'options'   => array(
-                        'min' => 0
-                    )),
-            )
-        ));
+                    'options'   => ['min' => 0],
+                ],
+            ],
+        ]);
 
-        $costElement->setErrorMessages(array("Must be greater than 0"));
+        $costElement->setErrorMessages(["Must be greater than 0"]);
         $this->addElement($costElement);
     }
 }

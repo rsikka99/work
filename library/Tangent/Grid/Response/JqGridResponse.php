@@ -16,11 +16,11 @@ class JqGridResponse extends AbstractResponse
      */
     public function getResponseForGrid ()
     {
-        return array(
+        return [
             'page'    => $this->getCurrentPage(),
             'total'   => $this->getTotalFilteredPages(),
             'records' => $this->recordsPerPage,
-            'rows'    => $this->data
-        );
+            'rows'    => $this->data,
+        ];
     }
 }

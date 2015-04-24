@@ -47,7 +47,7 @@ if (count($acceptableDeviceInstances) > 0)
     foreach ($acceptableDeviceInstances as $deviceInstance)
     {
         $table->addRow($tcStyle->body->rowheight, $this->styles->tables->tablestyle->rowstyle);
-        $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
+        $style = ($this->cycle([$tcStyle->body->cell1->odd, $tcStyle->body->cell1->even])->next()->current());
 
         $cell = $table->addCell($tcStyle->col1Width, $style);
         $cell->addText($deviceInstance->getMasterDevice()->getManufacturer()->fullname, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell1->manufacturerName->paragraphStyle);

@@ -181,7 +181,7 @@ class ClientTonerOrderModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"                 => $this->id,
             "tonerId"            => $this->tonerId,
             "clientId"           => $this->clientId,
@@ -195,7 +195,7 @@ class ClientTonerOrderModel extends My_Model_Abstract
             "dateShipped"        => $this->dateShipped,
             "dateReconciled"     => $this->dateReconciled,
             "replacementTonerId" => $this->replacementTonerId,
-        );
+        ];
     }
 
     /**
@@ -311,7 +311,7 @@ class ClientTonerOrderModel extends My_Model_Abstract
     {
         if (!isset($this->_replacementTonerSavings))
         {
-            $this->_replacementTonerSavings = array();
+            $this->_replacementTonerSavings = [];
         }
 
         $cacheKey = $margin;

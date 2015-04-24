@@ -8,7 +8,7 @@ use MPSToolbox\Legacy\Models\DealerModel;
         <a class="btn btn-success pull-right btn-sm create-button" href="<?php
 
 
-        echo $this->url(array(), 'admin.dealers.create') ?>">
+        echo $this->url([], 'admin.dealers.create') ?>">
             <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
     </div>
     <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
@@ -35,13 +35,13 @@ use MPSToolbox\Legacy\Models\DealerModel;
                             <?php if ($dealer->id == 1 && $this->Identity()->id != 1) : ?>
                                 <span class="btn btn-xs btn-warning disabled"><i class="glyphicon glyphicon-eye-close"></i></span>
                             <?php else : ?>
-                                <a class="btn btn-xs btn-info" title="Edit" href="<?= $this->url(array('id' => $dealer->id), 'admin.dealers.view'); ?>">
+                                <a class="btn btn-xs btn-info" title="Edit" href="<?= $this->url(['id' => $dealer->id], 'admin.dealers.view'); ?>">
                                     <i class="glyphicon glyphicon-eye-open"></i>
                                 </a>
                                 <?php if ($dealer->id == 1) : ?>
                                     <span class="btn btn-xs btn-danger disabled"><i class="glyphicon glyphicon-trash"></i></span>
                                 <?php else : ?>
-                                    <a class="btn btn-xs btn-danger" title="Delete" href="<?= $this->url(array('id' => $dealer->id), 'admin.dealers.delete'); ?>">
+                                    <a class="btn btn-xs btn-danger" title="Delete" href="<?= $this->url(['id' => $dealer->id], 'admin.dealers.delete'); ?>">
                                         <i class="glyphicon glyphicon-trash"></i>
                                     </a>
                                 <?php endif; ?>

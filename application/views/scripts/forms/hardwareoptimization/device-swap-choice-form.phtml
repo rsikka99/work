@@ -7,27 +7,27 @@ $form = $this->element;
 $devices = $this->devices;
 ?>
 
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
 <div class="clearfix">
     <fieldset class="col-md-10 col-md-offset-1">
         <?php foreach ($devices as $deviceInstance): ?>
             <div class="form-group <?= ($form->getElement('deviceInstance_' . $deviceInstance->id)->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                <?= $this->RenderFormLabel($form->getElement('deviceInstance_' . $deviceInstance->id), array('col-md-3')) ?>
+                <?= $this->RenderFormLabel($form->getElement('deviceInstance_' . $deviceInstance->id), ['col-md-3']) ?>
 
                 <div class="col-md-9">
-                    <?= $this->RenderFormSelect($form->getElement('deviceInstance_' . $deviceInstance->id )) ?>
+                    <?= $this->RenderFormSelect($form->getElement('deviceInstance_' . $deviceInstance->id)) ?>
                     <?= $this->RenderFormDescription($form->getElement('deviceInstance_' . $deviceInstance->id)) ?>
                     <?= $this->RenderFormElementErrors($form->getElement('deviceInstance_' . $deviceInstance->id)) ?>
                 </div>
             </div>
 
-            <div class="form-group <?= ($form->getElement('deviceInstanceReason_' .  $deviceInstance->id)->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                <?= $this->RenderFormLabel($form->getElement('deviceInstanceReason_' .  $deviceInstance->id), array('col-md-3')) ?>
+            <div class="form-group <?= ($form->getElement('deviceInstanceReason_' . $deviceInstance->id)->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('deviceInstanceReason_' . $deviceInstance->id), ['col-md-3']) ?>
 
                 <div class="col-md-9">
-                    <?= $this->RenderFormText($form->getElement('deviceInstanceReason_' .  $deviceInstance->id)) ?>
-                    <?= $this->RenderFormDescription($form->getElement('deviceInstanceReason_' .  $deviceInstance->id)) ?>
-                    <?= $this->RenderFormElementErrors($form->getElement('deviceInstanceReason_' .  $deviceInstance->id)) ?>
+                    <?= $this->RenderFormText($form->getElement('deviceInstanceReason_' . $deviceInstance->id)) ?>
+                    <?= $this->RenderFormDescription($form->getElement('deviceInstanceReason_' . $deviceInstance->id)) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('deviceInstanceReason_' . $deviceInstance->id)) ?>
                 </div>
             </div>
         <?php endforeach ?>

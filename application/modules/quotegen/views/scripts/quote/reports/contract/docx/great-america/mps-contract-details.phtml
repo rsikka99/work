@@ -13,10 +13,10 @@ $paragraphStyle = $this->paragraphStyle;
 // Begin Terms Table
 $termDetailsTable = $section->addTable($this->tableStyle->standard);
 $termDetailsTable->addRow();
-$termDetailsTable->addCell($tableSpan ['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span8))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$termDetailsTable->addCell($tableSpan ['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span8))->addText(htmlspecialchars($contractTemplateSection->getContractSectionName()), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
 $termDetailsTable->addRow();
-$termDetailsTable->addCell($tableSpan ['span2'], array_merge($cellStyle->span2, $cellStyle->center))->addText('TERM IN MONTHS: ' . $this->leaseDetails->termInMonths, $fontStyle->label, $paragraphStyle->noSpacing);
-$termDetailsTable->addCell($tableSpan ['span2'], array_merge($cellStyle->span2, $cellStyle->center))->addText('SECURITY DEPOSIT ' . $this->leaseDetails->securityDeposit, $fontStyle->label, $paragraphStyle->noSpacing);
+$termDetailsTable->addCell($tableSpan ['span2'], array_merge($cellStyle->span2, $cellStyle->center))->addText('TERM IN MONTHS: ' . htmlspecialchars($this->leaseDetails->termInMonths), $fontStyle->label, $paragraphStyle->noSpacing);
+$termDetailsTable->addCell($tableSpan ['span2'], array_merge($cellStyle->span2, $cellStyle->center))->addText('SECURITY DEPOSIT ' . htmlspecialchars($this->leaseDetails->securityDeposit), $fontStyle->label, $paragraphStyle->noSpacing);
 $termDetailsTable->addCell($tableSpan ['span4'], array_merge($cellStyle->span4, $cellStyle->center))->addText('METER FREQUENCY: MONTHLY OR SPECIFY OTHER: ___________', $fontStyle->label, $paragraphStyle->noSpacing);
 
 $section->addText(' ');
@@ -24,55 +24,55 @@ $leaseDetailsTable = $section->addTable($this->tableStyle->standard);
 $leaseDetailsTable->getStyle()->setBorderLeftSize(1)->setBorderRightSize(1)->setBorderBottomSize(1);
 
 $leaseDetailsTable->addRow();
-$leaseDetailsTable->addCell($tableSpan ['span4'], array_merge($cellStyle->invertBackground, $cellStyle->span4))->addText($this->header->sectionHeader[2], $fontStyle->invertBackground, $paragraphStyle->noSpacing);
-$leaseDetailsTable->addCell($tableSpan ['span4'], array_merge($cellStyle->invertBackground, $cellStyle->span4))->addText($this->header->sectionHeader[3], $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$leaseDetailsTable->addCell($tableSpan ['span4'], array_merge($cellStyle->invertBackground, $cellStyle->span4))->addText(htmlspecialchars($this->header->sectionHeader[2]), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$leaseDetailsTable->addCell($tableSpan ['span4'], array_merge($cellStyle->invertBackground, $cellStyle->span4))->addText(htmlspecialchars($this->header->sectionHeader[3]), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
 // Row #1
 $leaseDetailsTable->addRow();
 $leaseDetailsTable->addCell($tableSpan ['span2'], $cellStyle->span2)->addText('', null, $paragraphStyle->noSpacing);
-$leaseDetailsTable->addCell($tableSpan ['span1'], $cellStyle->bottomAlign)->addText(' B&W', $fontStyle->label, $paragraphStyle->noSpacing);
+$leaseDetailsTable->addCell($tableSpan ['span1'], $cellStyle->bottomAlign)->addText(htmlspecialchars(' B&W'), $fontStyle->label, $paragraphStyle->noSpacing);
 $leaseDetailsTable->addCell($tableSpan ['span1'], array_merge($cellStyle->rightBorder, $cellStyle->bottomAlign))->addText(' COLOR', $fontStyle->label, $paragraphStyle->noSpacing);
 
 $firstRowTextRun = $leaseDetailsTable->addCell($tableSpan ['span4'], array_merge($cellStyle->span4))->addTextRun($paragraphStyle->noSpacing);
 
 $firstRowTextRun->addText('MONTHLY FIXED CHARGE: ', $fontStyle->label);
-$firstRowTextRun->addText("{$this->leaseDetails->monthlyCharge}", $fontStyle->underline);
+$firstRowTextRun->addText($this->leaseDetails->monthlyCharge, $fontStyle->underline);
 $firstRowTextRun->addText("**");
 
 // Row #2
 $leaseDetailsTable->addRow();
 $leaseDetailsTable->addCell($tableSpan ['span2'], array_merge($cellStyle->bottomAlign, $cellStyle->span2))->addText("PER PAGE CHARGE**: ", $fontStyle->label, $paragraphStyle->noSpacing);
 $leaseDetailsTable->addCell($tableSpan ['span1'], array_merge($cellStyle->bottomAlign, $cellStyle->topBorder))
-                  ->addText("\${$this->leaseDetails->blackPerPageCharge}", null, $paragraphStyle->noSpacing);
+                  ->addText(htmlspecialchars($this->currency($this->leaseDetails->blackPerPageCharge)), null, $paragraphStyle->noSpacing);
 $leaseDetailsTable->addCell($tableSpan ['span1'], array_merge($cellStyle->rightBorder, $cellStyle->bottomAlign, $cellStyle->topBorder))
-                  ->addText("\${$this->leaseDetails->colorPerPageCharge}", null, $paragraphStyle->noSpacing);
+                  ->addText(htmlspecialchars($this->currency($this->leaseDetails->colorPerPageCharge)), null, $paragraphStyle->noSpacing);
 
 $leaseDetailsTable->addCell($tableSpan ['span2'], array_merge($cellStyle->bottomAlign, $cellStyle->span2))->addText(" ", null, $paragraphStyle->noSpacing);
-$leaseDetailsTable->addCell($tableSpan ['span1'], $cellStyle->bottomAlign)->addText("B&W ONLY DEVICE(S)", $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$leaseDetailsTable->addCell($tableSpan ['span1'], $cellStyle->bottomAlign)->addText(htmlspecialchars('B&W ONLY DEVICE(S)'), $fontStyle->label, $paragraphStyle->noSpacingCentered);
 $leaseDetailsTable->addCell($tableSpan ['span1'], array_merge($cellStyle->rightBorder, $cellStyle->bottomAlign))->addText(htmlspecialchars('B&W AND COLOR DEVICE(S)'), $fontStyle->label, $paragraphStyle->noSpacingCentered);
 
 // Row #3
 $leaseDetailsTable->addRow();
 $leaseDetailsTable->addCell($tableSpan ['span2'], array_merge($cellStyle->span2))->addText("", null, $paragraphStyle->noSpacing);
 $leaseDetailsTable->addCell($tableSpan ['span2'], array_merge($cellStyle->span2, $cellStyle->topBorder, $cellStyle->rightBorder))->addText("", null, $paragraphStyle->noSpacing);
-$leaseDetailsTable->addCell($tableSpan ['span2'], $cellStyle->span2)->addText('MONTLY ALLOWANCE PER DEVICE:  ', $fontStyle->label, $paragraphStyle->noSpacing);
-$leaseDetailsTable->addCell($tableSpan ['span1'], $cellStyle->topBorder)->addText("{$this->leaseDetails->monochromeAllowance}", null, $paragraphStyle->noSpacingCentered);
-$leaseDetailsTable->addCell($tableSpan ['span1'], array_merge($cellStyle->topBorder))->addText("{$this->leaseDetails->colorAllowance}", null, $paragraphStyle->noSpacingCentered);
+$leaseDetailsTable->addCell($tableSpan ['span2'], $cellStyle->span2)->addText('MONTHLY ALLOWANCE PER DEVICE:  ', $fontStyle->label, $paragraphStyle->noSpacing);
+$leaseDetailsTable->addCell($tableSpan ['span1'], $cellStyle->topBorder)->addText(htmlspecialchars($this->leaseDetails->monochromeAllowance), null, $paragraphStyle->noSpacingCentered);
+$leaseDetailsTable->addCell($tableSpan ['span1'], array_merge($cellStyle->topBorder))->addText(htmlspecialchars($this->leaseDetails->colorAllowance), null, $paragraphStyle->noSpacingCentered);
 
 // Row #4
 $leaseDetailsTable->addRow();
 $leaseDetailsTable->addCell($tableSpan ['span4'], array_merge($cellStyle->span4, $cellStyle->rightBorder))->addText("", null, $paragraphStyle->noSpacing);
 $leaseDetailsTable->addCell($tableSpan ['span2'], $cellStyle->span2)->addText("EXCESS PER PAGE CHARGE**:  ", $fontStyle->label, $paragraphStyle->noSpacing);
-$leaseDetailsTable->addCell($tableSpan ['span1'], $cellStyle->topBorder)->addText("\${$this->leaseDetails->monochromeCPP}", null, $paragraphStyle->noSpacingCentered);
-$leaseDetailsTable->addCell($tableSpan ['span1'], array_merge($cellStyle->topBorder))->addText("\${$this->leaseDetails->colorCPP}", null, $paragraphStyle->noSpacingCentered);
+$leaseDetailsTable->addCell($tableSpan ['span1'], $cellStyle->topBorder)->addText(htmlspecialchars($this->formatCostPerPage($this->leaseDetails->monochromeCPP)), null, $paragraphStyle->noSpacingCentered);
+$leaseDetailsTable->addCell($tableSpan ['span1'], array_merge($cellStyle->topBorder))->addText(htmlspecialchars($this->formatCostPerPage($this->leaseDetails->colorCPP)), null, $paragraphStyle->noSpacingCentered);
 
 // Row #5
 $leaseDetailsTable->addRow();
-$leaseDetailsTable->addCell($tableSpan ['span4'], array_merge($cellStyle->span4, $cellStyle->rightBorder))->addText("PROGRAM SET-UP FEE {$this->leaseDetails->programFee}", $fontStyle->label, $paragraphStyle->noSpacing);
-$leaseDetailsTable->addCell($tableSpan ['span4'], $cellStyle->span4)->addText("PROGRAM SET-UP FEE {$this->leaseDetails->programFee}", $fontStyle->label, $paragraphStyle->noSpacing);
+$leaseDetailsTable->addCell($tableSpan ['span4'], array_merge($cellStyle->span4, $cellStyle->rightBorder))->addText(htmlspecialchars("PROGRAM SET-UP FEE {$this->leaseDetails->programFee}"), $fontStyle->label, $paragraphStyle->noSpacing);
+$leaseDetailsTable->addCell($tableSpan ['span4'], $cellStyle->span4)->addText(htmlspecialchars(sprintf('PROGRAM SET-UP FEE %s', ($this->currency($this->leaseDetails->programFee)))), $fontStyle->label, $paragraphStyle->noSpacing);
 
 // Row #6t
 $leaseDetailsTable->addRow();
-$leaseDetailsTable->addCell($tableSpan ['span4'], array_merge($cellStyle->span4, $cellStyle->rightBorder, $cellStyle->bottomAlign))->addText("APPLIES TO \"YOUR DEVICES\" AS DEFINED BELOW       (**PLUS TAX)", $fontStyle->label, $paragraphStyle->noSpacing);
+$leaseDetailsTable->addCell($tableSpan ['span4'], array_merge($cellStyle->span4, $cellStyle->rightBorder, $cellStyle->bottomAlign))->addText('APPLIES TO "YOUR DEVICES" AS DEFINED BELOW       (**PLUS TAX)', $fontStyle->label, $paragraphStyle->noSpacing);
 $textRun = $leaseDetailsTable->addCell($tableSpan ['span4'], $cellStyle->span4)->addTextRun($paragraphStyle->noSpacing);
 
 $textRun->addText('INSTALLATION FEE: ', $fontStyle->label);
@@ -84,5 +84,5 @@ $textRun->addText('$0.00', $fontStyle->bold);
 
 // Row #7
 $leaseDetailsTable->addRow(400);
-$leaseDetailsTable->addCell($tableSpan ['span4'], array_merge($cellStyle->span4, $cellStyle->rightBorder))->addText("", null, $paragraphStyle->noSpacing);
-$leaseDetailsTable->addCell($tableSpan ['span4'], $cellStyle->span4)->addText("SEE MPS PROGRAM PLUS EQUIPMENT AND SCHEDULE AND DEVICE USAGE TERMS AND CONDITIONS (**PLUS TAX)", $fontStyle->label, $paragraphStyle->noSpacing);
+$leaseDetailsTable->addCell($tableSpan ['span4'], array_merge($cellStyle->span4, $cellStyle->rightBorder))->addText('', null, $paragraphStyle->noSpacing);
+$leaseDetailsTable->addCell($tableSpan ['span4'], $cellStyle->span4)->addText('SEE MPS PROGRAM PLUS EQUIPMENT AND SCHEDULE AND DEVICE USAGE TERMS AND CONDITIONS (**PLUS TAX)', $fontStyle->label, $paragraphStyle->noSpacing);

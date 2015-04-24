@@ -49,7 +49,7 @@ class Healthcheck_ViewModel_Ranking
                 , 1);
 
             $rankingText    = $this->getOverallRankingText($totalRanking, "supplies and service logistics");
-            $areasToImprove = array();
+            $areasToImprove = [];
 
             if ($ranking ["averageAgeRanking"] <= $totalRanking)
             {
@@ -72,10 +72,10 @@ class Healthcheck_ViewModel_Ranking
                 $rankingText .= implode(', ', $areasToImprove) . ".";
             }
 
-            $this->SuppliesAndServiceLogistics = (object)array(
+            $this->SuppliesAndServiceLogistics = (object)[
                 "Rank"        => $totalRanking,
                 "RankingText" => $rankingText
-            );
+            ];
         }
 
         return $this->SuppliesAndServiceLogistics;
@@ -99,7 +99,7 @@ class Healthcheck_ViewModel_Ranking
             $totalRanking = round(((($AverageMonthlyPrintVolumePerPrinter + $AverageMonthlyPrintVolumePerEmployee + $NumberOfEmployeesPerDevice) / 3) + (($UnderusedDevices + $OverusedDevices) / 2)) / 2, 1);
 
             $rankingText    = $this->getOverallRankingText($totalRanking, "printer hardware usage");
-            $areasToImprove = array();
+            $areasToImprove = [];
             if ($AverageMonthlyPrintVolumePerPrinter <= $totalRanking)
             {
                 $areasToImprove [] = "reduce the number of printing devices in your office through consolidation or device retirement";
@@ -119,10 +119,10 @@ class Healthcheck_ViewModel_Ranking
                 $rankingText = trim(trim($rankingText), ",") . ".";
             }
 
-            $this->PrintingHardwareUsage = (object)array(
+            $this->PrintingHardwareUsage = (object)[
                 "Rank"        => $totalRanking,
                 "RankingText" => $rankingText
-            );
+            ];
         }
 
         return $this->PrintingHardwareUsage;
@@ -146,7 +146,7 @@ class Healthcheck_ViewModel_Ranking
             $totalRanking       = round(((($AverageAge + $PercentITTime) / 2) + $technologyFeatures) / 2, 1);
 
             $rankingText    = $this->getOverallRankingText($totalRanking, "technology reliability and user productivity");
-            $areasToImprove = array();
+            $areasToImprove = [];
             if ($AverageAge <= $totalRanking)
             {
                 $areasToImprove [] = "update its printing devices to newer, more reliable machines";
@@ -170,10 +170,10 @@ class Healthcheck_ViewModel_Ranking
                 $rankingText = trim(trim($rankingText), ",") . ".";
             }
 
-            $this->TechnologyReliabilityAndUserProductivity = (object)array(
+            $this->TechnologyReliabilityAndUserProductivity = (object)[
                 "Rank"        => $totalRanking,
                 "RankingText" => $rankingText
-            );
+            ];
         }
 
         return $this->TechnologyReliabilityAndUserProductivity;
@@ -207,7 +207,7 @@ class Healthcheck_ViewModel_Ranking
             $totalRanking = round((($AverageKWHPerDevicePerMonth + $AverageOperatingWatts + ($greenFeatures)) / $rankingsCalculated), 1);
 
             $rankingText    = $this->getOverallRankingText($totalRanking, "environmental friendliness");
-            $areasToImprove = array();
+            $areasToImprove = [];
             if ($AverageKWHPerDevicePerMonth <= $totalRanking || $AverageOperatingWatts <= $totalRanking)
             {
                 $areasToImprove [] = "retire equipment that consumes a large amount of energy or move page volumes to more energy-efficient machines";
@@ -227,10 +227,10 @@ class Healthcheck_ViewModel_Ranking
                 $rankingText = trim(trim($rankingText), ",") . ".";
             }
 
-            $this->EnvironmentalFriendliness = (object)array(
+            $this->EnvironmentalFriendliness = (object)[
                 "Rank"        => $totalRanking,
                 "RankingText" => $rankingText
-            );
+            ];
         }
 
         return $this->EnvironmentalFriendliness;
@@ -247,13 +247,13 @@ class Healthcheck_ViewModel_Ranking
     public function getOverallRankingText ($rank, $sectionName)
     {
         $ratingText = "";
-        $ratings    = array(
+        $ratings    = [
             "poor"          => 2.0,
             "below average" => 4.0,
             "average"       => 6.0,
             "above average" => 8.0,
             "excellent"     => 10.0
-        );
+        ];
         foreach ($ratings as $ratingText => $rating)
         {
             if ($rank <= $rating)
@@ -275,10 +275,10 @@ class Healthcheck_ViewModel_Ranking
         {
             // The following array is in the following range step format
             // array($valueToCheck => $ranking)
-            $this->RankingCriteria = array(
-                "ServiceAndSuppliesLogistics"              => array(
+            $this->RankingCriteria = [
+                "ServiceAndSuppliesLogistics"              => [
 
-                    "AverageAge"           => array(
+                    "AverageAge"           => [
                         2  => 10,
                         3  => 9,
                         4  => 8,
@@ -288,8 +288,8 @@ class Healthcheck_ViewModel_Ranking
                         8  => 4,
                         9  => 3,
                         10 => 0
-                    ),
-                    "DifferentSupplyTypes" => array(
+                    ],
+                    "DifferentSupplyTypes" => [
                         1  => 60,
                         2  => 50,
                         3  => 45,
@@ -300,18 +300,18 @@ class Healthcheck_ViewModel_Ranking
                         8  => 20,
                         9  => 15,
                         10 => 0,
-                    ),
-                    "ReportsTonerLevels"   => array(
+                    ],
+                    "ReportsTonerLevels"   => [
                         1  => 75,
                         2  => 80,
                         4  => 85,
                         6  => 90,
                         8  => 95,
                         10 => 99,
-                    ),
-                ),
-                "PrintingHardwareUsage"                    => array(
-                    "AverageMonthlyPrintVolumePerPrinter"  => array(
+                    ],
+                ],
+                "PrintingHardwareUsage"                    => [
+                    "AverageMonthlyPrintVolumePerPrinter"  => [
                         1  => 2480,
                         2  => 2756,
                         3  => 3062,
@@ -322,8 +322,8 @@ class Healthcheck_ViewModel_Ranking
                         8  => 5082,
                         9  => 5590,
                         10 => 6149
-                    ),
-                    "AverageMonthlyPrintVolumePerEmployee" => array(
+                    ],
+                    "AverageMonthlyPrintVolumePerEmployee" => [
                         10 => 80,
                         9  => 100,
                         8  => 120,
@@ -334,8 +334,8 @@ class Healthcheck_ViewModel_Ranking
                         3  => 220,
                         2  => 240,
                         1  => 260
-                    ),
-                    "NumberOfEmployeesPerDevice"           => array(
+                    ],
+                    "NumberOfEmployeesPerDevice"           => [
                         1  => 1.95,
                         2  => 2.30,
                         3  => 2.70,
@@ -346,8 +346,8 @@ class Healthcheck_ViewModel_Ranking
                         8  => 5.82,
                         9  => 6.69,
                         10 => 7.70
-                    ),
-                    "UnderusedDevices"                     => array(
+                    ],
+                    "UnderusedDevices"                     => [
                         10 => 10,
                         9  => 20,
                         8  => 30,
@@ -358,8 +358,8 @@ class Healthcheck_ViewModel_Ranking
                         3  => 80,
                         2  => 90,
                         1  => 100
-                    ),
-                    "OverusedDevices"                      => array(
+                    ],
+                    "OverusedDevices"                      => [
                         10 => 10,
                         9  => 20,
                         8  => 30,
@@ -370,10 +370,10 @@ class Healthcheck_ViewModel_Ranking
                         3  => 80,
                         2  => 90,
                         1  => 100
-                    )
-                ),
-                "TechnologyReliabilityAndUserProductivity" => array(
-                    "AverageAge"    => array(
+                    ]
+                ],
+                "TechnologyReliabilityAndUserProductivity" => [
+                    "AverageAge"    => [
                         10 => 3.28,
                         9  => 3.65,
                         8  => 4.05,
@@ -384,8 +384,8 @@ class Healthcheck_ViewModel_Ranking
                         3  => 6.66,
                         2  => 7.32,
                         1  => 8.05
-                    ),
-                    "PercentITTime" => array(
+                    ],
+                    "PercentITTime" => [
                         10 => 10,
                         9  => 11,
                         8  => 12,
@@ -396,8 +396,8 @@ class Healthcheck_ViewModel_Ranking
                         3  => 20,
                         2  => 22,
                         1  => 24
-                    ),
-                    "ScanCapable"   => array(
+                    ],
+                    "ScanCapable"   => [
                         1  => 0,
                         2  => 10,
                         3  => 20,
@@ -408,8 +408,8 @@ class Healthcheck_ViewModel_Ranking
                         8  => 70,
                         9  => 80,
                         10 => 90
-                    ),
-                    "FaxCapable"    => array(
+                    ],
+                    "FaxCapable"    => [
                         1  => 0,
                         2  => 10,
                         3  => 20,
@@ -420,8 +420,8 @@ class Healthcheck_ViewModel_Ranking
                         8  => 70,
                         9  => 80,
                         10 => 90
-                    ),
-                    "ColorCapable"  => array(
+                    ],
+                    "ColorCapable"  => [
                         1  => 0,
                         2  => 10,
                         3  => 20,
@@ -432,10 +432,10 @@ class Healthcheck_ViewModel_Ranking
                         8  => 70,
                         9  => 80,
                         10 => 90
-                    )
-                ),
-                "EnvironmentalFriendliness"                => array(
-                    "AverageKWHPerDevicePerMonth" => array(
+                    ]
+                ],
+                "EnvironmentalFriendliness"                => [
+                    "AverageKWHPerDevicePerMonth" => [
                         10 => 26.24,
                         9  => 29.16,
                         8  => 32.40,
@@ -446,8 +446,8 @@ class Healthcheck_ViewModel_Ranking
                         3  => 53.24,
                         2  => 58.56,
                         1  => 64.42
-                    ),
-                    "AverageOperatingWatts"       => array(
+                    ],
+                    "AverageOperatingWatts"       => [
                         10 => 100,
                         9  => 200,
                         8  => 300,
@@ -458,8 +458,8 @@ class Healthcheck_ViewModel_Ranking
                         3  => 800,
                         2  => 900,
                         1  => 1000
-                    ),
-                    "DuplexCapable"               => array(
+                    ],
+                    "DuplexCapable"               => [
                         1  => 0,
                         2  => 10,
                         3  => 20,
@@ -470,8 +470,8 @@ class Healthcheck_ViewModel_Ranking
                         8  => 70,
                         9  => 80,
                         10 => 90
-                    ),
-                    "ScanCapable"                 => array(
+                    ],
+                    "ScanCapable"                 => [
                         1  => 0,
                         2  => 10,
                         3  => 20,
@@ -482,10 +482,10 @@ class Healthcheck_ViewModel_Ranking
                         8  => 70,
                         9  => 80,
                         10 => 90
-                    )
-                ),
-                "Expense"                                  => array(
-                    "LeasedBWPerPage"       => array(
+                    ]
+                ],
+                "Expense"                                  => [
+                    "LeasedBWPerPage"       => [
                         10 => 0.0200,
                         9  => 0.0220,
                         8  => 0.0242,
@@ -496,8 +496,8 @@ class Healthcheck_ViewModel_Ranking
                         3  => 0.0390,
                         2  => 0.0429,
                         1  => 0.0472
-                    ),
-                    "LeasedColorPerPage"    => array(
+                    ],
+                    "LeasedColorPerPage"    => [
                         10 => 0.0900,
                         9  => 0.0990,
                         8  => 0.1089,
@@ -508,8 +508,8 @@ class Healthcheck_ViewModel_Ranking
                         3  => 0.1754,
                         2  => 0.1929,
                         1  => 0.2122
-                    ),
-                    "PurchasedBWPerPage"    => array(
+                    ],
+                    "PurchasedBWPerPage"    => [
                         10 => 0.0200,
                         9  => 0.0220,
                         8  => 0.0242,
@@ -520,8 +520,8 @@ class Healthcheck_ViewModel_Ranking
                         3  => 0.0390,
                         2  => 0.0429,
                         1  => 0.0472
-                    ),
-                    "PurchasedColorPerPage" => array(
+                    ],
+                    "PurchasedColorPerPage" => [
                         10 => 0.0900,
                         9  => 0.0990,
                         8  => 0.1089,
@@ -532,9 +532,9 @@ class Healthcheck_ViewModel_Ranking
                         3  => 0.1754,
                         2  => 0.1929,
                         1  => 0.2122
-                    )
-                )
-            );
+                    ]
+                ]
+            ];
         }
 
         return $this->RankingCriteria;

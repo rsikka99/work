@@ -20,6 +20,7 @@ class RmsProviderModel extends My_Model_Abstract
     const RMS_PROVIDER_PRINTFLEET_THREE = 6;
     const RMS_PROVIDER_PRINT_TRACKER    = 7;
     const RMS_PROVIDER_LEXMARK          = 8;
+    const RMS_PROVIDER_FMAUDIT_FOUR     = 8;
 
     /**
      * @var int
@@ -59,9 +60,9 @@ class RmsProviderModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"   => $this->id,
             "name" => $this->name,
-        );
+        ];
     }
 }

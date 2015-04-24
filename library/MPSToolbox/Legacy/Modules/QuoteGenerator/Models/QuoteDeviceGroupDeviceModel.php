@@ -95,13 +95,13 @@ class QuoteDeviceGroupDeviceModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "quoteDeviceId"           => $this->quoteDeviceId,
             "quoteDeviceGroupId"      => $this->quoteDeviceGroupId,
             "quantity"                => $this->quantity,
             "monochromePagesQuantity" => $this->monochromePagesQuantity,
             "colorPagesQuantity"      => $this->colorPagesQuantity,
-        );
+        ];
     }
 
     /**

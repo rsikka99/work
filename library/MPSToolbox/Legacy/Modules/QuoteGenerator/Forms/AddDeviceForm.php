@@ -21,15 +21,15 @@ class AddDeviceForm extends Zend_Form
         $this->setMethod('POST');
 
         // An add configuration button for the favorite devices
-        $this->addElement('submit', 'addDevice', array(
+        $this->addElement('submit', 'addDevice', [
             'ignore' => true,
             'label'  => 'Add',
-        ));
+        ]);
 
         // Get configurations from database
         $devices = DeviceMapper::getInstance()->fetchQuoteDeviceListForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
         // Populate array with configurations
-        $data        = array();
+        $data        = [];
         $data ['-1'] = 'Select Device...';
 
         /* @var $device DeviceModel */
@@ -39,21 +39,14 @@ class AddDeviceForm extends Zend_Form
         }
 
         // This is a list of favorite devices that the user can add
-        $this->addElement('select', 'masterDeviceId', array(
+        $this->addElement('select', 'masterDeviceId', [
             'label'        => 'Add Device',
             'multiOptions' => $data,
-        ));
+        ]);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/quotegen/quote/add-device-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/quotegen/quote/add-device-form.phtml']]]);
     }
 }

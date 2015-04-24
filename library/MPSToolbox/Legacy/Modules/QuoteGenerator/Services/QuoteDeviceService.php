@@ -124,7 +124,7 @@ class QuoteDeviceService
             // If an id is passed then we want a new quote device
             $quoteDevice = new QuoteDeviceModel();
 
-            $device = DeviceMapper::getInstance()->find(array($object, $this->getQuote()->getClient()->dealerId));
+            $device = DeviceMapper::getInstance()->find([$object, $this->getQuote()->getClient()->dealerId]);
         }
 
         if (!$device instanceof DeviceModel)

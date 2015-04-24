@@ -24,17 +24,17 @@ class Timer
         $time = self::getMicrotimeFloat();
         if ($includeInPageCategory || is_null($group))
         {
-            self::$_milestones ["Page"] [] = array(
+            self::$_milestones ["Page"] [] = [
                 $name,
-                $time
-            );
+                $time,
+            ];
         }
         if (!is_null($group))
         {
-            self::$_milestones [$group] [] = array(
+            self::$_milestones [$group] [] = [
                 $name,
-                $time
-            );
+                $time,
+            ];
         }
     }
 

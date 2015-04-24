@@ -21,7 +21,7 @@ class TonerPricingImportService extends AbstractImportService
     const TONER_PRICING_DEALER_SKU   = "Dealer SKU";
     const TONER_PRICING_NEW_PRICE    = "New Price";
 
-    public $csvHeaders = array(
+    public $csvHeaders = [
         self::TONER_PRICING_TONER_ID,
         self::TONER_PRICING_MANUFACTURER,
         self::TONER_PRICING_SKU,
@@ -30,34 +30,34 @@ class TonerPricingImportService extends AbstractImportService
         self::TONER_PRICING_SYSTEM_PRICE,
         self::TONER_PRICING_DEALER_SKU,
         self::TONER_PRICING_NEW_PRICE,
-    );
+    ];
 
     public function __construct ()
     {
         $this->_inputFilter = new Zend_Filter_Input(
-            array(
-                '*'                           => array(
+            [
+                '*'                           => [
                     'StripTags',
                     'StringTrim',
-                ),
-                self::TONER_PRICING_NEW_PRICE => array(
+                ],
+                self::TONER_PRICING_NEW_PRICE => [
                     new My_Filter_StringReplace(
-                        array(
+                        [
                             "find" => "$"
-                        )
+                        ]
                     )
-                )
-            ),
-            array(
-                '*'                           => array(
+                ]
+            ],
+            [
+                '*'                           => [
                     'allowEmpty' => true,
-                ),
-                self::TONER_PRICING_NEW_PRICE => array(
+                ],
+                self::TONER_PRICING_NEW_PRICE => [
                     'allowEmpty' => true,
                     new Zend_Validate_Float(),
-                    array('GreaterThan', 0)
-                )
-            )
+                    ['GreaterThan', 0]
+                ]
+            ]
         );
 
     }

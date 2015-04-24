@@ -4,11 +4,11 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\DeviceConfigurationForm;
 
 $form = $this->element;
 ?>
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
 
 <fieldset>
     <div class="form-group <?= ($form->getElement('deviceName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('deviceName'), array('col-md-3')) ?>
+        <?= $this->RenderFormLabel($form->getElement('deviceName'), ['col-md-3']) ?>
 
         <div class="col-md-6">
             <?= $this->RenderFormText($form->getElement('deviceName')) ?>
@@ -25,7 +25,7 @@ $form = $this->element;
     <?php if (count($form->getOptionElements()) > 0) : ?>
         <?php foreach ($form->getOptionElements() as $element) : ?>
             <?php echo $element ?>
-            <?= $this->RenderFormSubmit($form->getElement('add'), array('btn', 'btn-primary')) ?>
+            <?= $this->RenderFormSubmit($form->getElement('add'), ['btn', 'btn-primary']) ?>
         <?php endforeach; ?>
     <?php else : ?>
         <p>There are no options added to this device yet.</p>
@@ -35,8 +35,8 @@ $form = $this->element;
 
 <fieldset>
     <hr>
-    <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
-    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('submit'), ['btn', 'btn-primary']) ?>
+    <?= $this->RenderFormSubmit($form->getElement('cancel'), ['btn', 'btn-default']) ?>
 </fieldset>
 <?= $this->RenderFormClose($form) ?>
 

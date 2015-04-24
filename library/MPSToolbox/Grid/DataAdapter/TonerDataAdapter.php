@@ -22,17 +22,17 @@ class TonerDataAdapter implements DataAdapterInterface
     /**
      * @var AbstractFilter[]
      */
-    protected $filters = array();
+    protected $filters = [];
 
     /**
      * @var Column[]
      */
-    protected $orderBy = array();
+    protected $orderBy = [];
 
     /**
      * @var Column[]
      */
-    protected $defaultOrderBy = array();
+    protected $defaultOrderBy = [];
 
     protected $startRecord = 0;
     protected $limit       = 10;
@@ -43,7 +43,7 @@ class TonerDataAdapter implements DataAdapterInterface
      * @param TonerMapper $mapper
      * @param array       $defaultOrder
      */
-    public function __construct (TonerMapper $mapper, $defaultOrder = array())
+    public function __construct (TonerMapper $mapper, $defaultOrder = [])
     {
         $this->mapper = $mapper;
 
@@ -103,7 +103,7 @@ class TonerDataAdapter implements DataAdapterInterface
      */
     public function resetOrderBy ()
     {
-        $this->orderBy = array();
+        $this->orderBy = [];
 
         return $this;
     }
@@ -125,7 +125,7 @@ class TonerDataAdapter implements DataAdapterInterface
      */
     public function count ()
     {
-        return $this->mapper->getCanSellMasterDevices($this->getOrderBy(), array(), null, null, $this->onlyQuoteDevices, true);
+        return $this->mapper->getCanSellMasterDevices($this->getOrderBy(), [], null, null, $this->onlyQuoteDevices, true);
     }
 
     /**

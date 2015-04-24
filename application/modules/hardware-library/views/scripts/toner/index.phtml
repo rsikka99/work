@@ -9,8 +9,8 @@ $this->headScript()->appendFile($this->baseUrl('js/app/legacy/hardware-library/t
 <script>
     <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
     var isSaveAndApproveAdmin = <?=($this->IsAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, AppAclModel::PRIVILEGE_ADMIN) ? 'true' : 'false'); ?>,
-        canDelete = <?=($this->IsAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETUP_DELETE, AppAclModel::PRIVILEGE_VIEW) ? 'true' : 'false'); ?>,
-        dealerSkuName = '<?= My_Brand::$dealerSku; ?>';
+        canDelete             = <?=($this->IsAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETUP_DELETE, AppAclModel::PRIVILEGE_VIEW) ? 'true' : 'false'); ?>,
+        dealerSkuName         = '<?= My_Brand::$dealerSku; ?>';
     <?php $this->headScript()->captureEnd(); ?>
 </script>
 <div class="container">

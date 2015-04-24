@@ -5,11 +5,11 @@ use MPSToolbox\Legacy\Modules\HardwareOptimization\Forms\HardwareOptimizationQuo
 $form = $this->element;
 ?>
 
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
 <fieldset>
     <div class="row">
-        <div class="col-md-3"><?= $this->RenderFormSubmit($form->getElement('purchasedQuote'), array('btn')) ?></div>
-        <div class="col-md-offset-1"><?= $this->RenderFormSubmit($form->getElement('leasedQuote'), array('btn')) ?></div>
+        <div class="col-md-3"><?= $this->RenderFormSubmit($form->getElement('purchasedQuote'), ['btn']) ?></div>
+        <div class="col-md-offset-1"><?= $this->RenderFormSubmit($form->getElement('leasedQuote'), ['btn']) ?></div>
     </div>
 </fieldset>
 <?= $this->RenderFormClose($form) ?>

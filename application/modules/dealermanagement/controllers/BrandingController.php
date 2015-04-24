@@ -32,7 +32,7 @@ class Dealermanagement_BrandingController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Company Branding', 'Company');
+        $this->_pageTitle = ['Company Branding', 'Company'];
 
         $dealerBrandingService = new DealerBrandingService();
         $form                  = $dealerBrandingService->getDealerBrandingForm();
@@ -76,14 +76,14 @@ class Dealermanagement_BrandingController extends Action
                 {
                     foreach ($dealerBrandingService->getErrors() as $errorType => $errorMessage)
                     {
-                        $this->_flashMessenger->addMessage(array('error' => $errorMessage));
+                        $this->_flashMessenger->addMessage(['error' => $errorMessage]);
                     }
                 }
                 else
                 {
                     My_Brand::resetDealerBrandingCache();
                     LessCssService::compileReportStyles(true);
-                    $this->_flashMessenger->addMessage(array('success' => 'Branding Saved.'));
+                    $this->_flashMessenger->addMessage(['success' => 'Branding Saved.']);
                 }
             }
         }

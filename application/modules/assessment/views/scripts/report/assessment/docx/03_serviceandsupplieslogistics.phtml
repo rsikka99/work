@@ -49,9 +49,9 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
 
 $textRun = $section->addTextRun();
 $textRun->addText('Based on your questionnaire, ');
-$textRun->addText(sprintf('%1$s of your printing is done on inkjet devices. ', $inkJetString), array(
+$textRun->addText(sprintf('%1$s of your printing is done on inkjet devices. ', $inkJetString), [
     'bold' => true
-));
+]);
 $textRun->addText('We did not monitor inkjet machines that are not connected to the network, and on average, pages printed to inkjet printers cost three times more than pages printed to laser devices. Without being on the network, users also cannot share these devices. There are some instances where desktop printers are appropriate, for instance, if a single user requires confidential, high-convenience printing. We can help you consolidate desktop hardware where appropriate, and where desktop printing is required, we can help you select network-capable equipment so your desktop printing can be managed with the rest of your office print.');
 $excludedDeviceCount = count($assessmentViewModel->getExcludedDevices());
 if ($excludedDeviceCount > 0)
@@ -64,10 +64,10 @@ $section->addTitle('Efficiency of Break-Fix Service', 2);
 $section->addText('Based on your questionnaire responses, we discovered the following:');
 
 // Efficiency of Break-Fix Service table
-$cellWidths = array(
+$cellWidths = [
     7500,
     1528
-);
+];
 $table      = $section->addTable($this->styles->tables->twoColumnDataTable->tablestyle);
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
 $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText('Number of printer repairs per month', 'bold_text', 'nospacing');
@@ -86,10 +86,10 @@ $section->addTitle('Number of Vendors', 2);
 $section->addText('Based on your questionnaire responses, we discovered the following:');
 
 // Number of Vendors table
-$cellWidths = array(
+$cellWidths = [
     7500,
     1528
-);
+];
 
 $table = $section->addTable($this->styles->tables->twoColumnDataTable->tablestyle);
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
@@ -122,10 +122,10 @@ $section->addText(sprintf('Out of your %1$s networked printing devices, you have
 
 $imageTable = $section->addTable();
 $imageTable->addRow();
-$cell = $imageTable->addCell(9028.8, array('valign' => 'center'));
+$cell = $imageTable->addCell(9028.8, ['valign' => 'center']);
 
-$cell->addImage($graphs[3], array(
+$cell->addImage($graphs[3], [
     'align' => 'center'
-));
+]);
 
 $section->addText(sprintf('By using the same supplies for all printing devices, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. %1$s can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.', $this->companyName));

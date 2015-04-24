@@ -104,7 +104,7 @@ class ManageMasterDevicesService
      */
     public function getForms ($showSupplies = true, $showDeviceAttributes = true, $showHardwareOptimization = true, $showHardwareQuote = true, $showAvailableOptions = true, $showHardwareConfigurations = true)
     {
-        $formsToShow = array();
+        $formsToShow = [];
 
         if ($showDeviceAttributes)
         {
@@ -161,7 +161,7 @@ class ManageMasterDevicesService
         }
         else
         {
-            $json = array();
+            $json = [];
 
             foreach ($form->getMessages() as $errorElementName => $errorElement)
             {
@@ -195,10 +195,10 @@ class ManageMasterDevicesService
      */
     public function validateToners ($tonerIds, $tonerConfigId, $manufacturerId, $masterDeviceId = false)
     {
-        $toners                  = array();
-        $currentToners           = array();
-        $validationErrorMessages = array();
-        $newTonerIds = array();
+        $toners                  = [];
+        $currentToners           = [];
+        $validationErrorMessages = [];
+        $newTonerIds = [];
 
         if ($masterDeviceId)
         {
@@ -238,23 +238,23 @@ class ManageMasterDevicesService
             }
         }
 
-        $assignedOemTonerColors = array(
+        $assignedOemTonerColors = [
             TonerColorModel::BLACK       => false,
             TonerColorModel::CYAN        => false,
             TonerColorModel::MAGENTA     => false,
             TonerColorModel::YELLOW      => false,
             TonerColorModel::THREE_COLOR => false,
             TonerColorModel::FOUR_COLOR  => false,
-        );
+        ];
 
-        $assignedTonerColors = array(
+        $assignedTonerColors = [
             TonerColorModel::BLACK       => false,
             TonerColorModel::CYAN        => false,
             TonerColorModel::MAGENTA     => false,
             TonerColorModel::YELLOW      => false,
             TonerColorModel::THREE_COLOR => false,
             TonerColorModel::FOUR_COLOR  => false,
-        );
+        ];
 
         /**
          * Figure out what color and type of toners we have
@@ -451,13 +451,13 @@ class ManageMasterDevicesService
         {
             if ($validatedData['isDeviceSwap'] == 1 && $validatedData['isSelling'] == 1)
             {
-                $deviceSwap = new DeviceSwapModel(array('masterDeviceId' => $this->masterDeviceId, 'dealerId' => $this->_dealerId));
+                $deviceSwap = new DeviceSwapModel(['masterDeviceId' => $this->masterDeviceId, 'dealerId' => $this->_dealerId]);
 
                 $deviceSwap->saveObject($validatedData);
             }
             else
             {
-                $deviceSwap = $deviceSwapMapper->find(array($this->masterDeviceId, $this->_dealerId));
+                $deviceSwap = $deviceSwapMapper->find([$this->masterDeviceId, $this->_dealerId]);
 
                 if ($deviceSwap)
                 {
@@ -489,14 +489,14 @@ class ManageMasterDevicesService
         {
             if ($validatedData['isSelling'] == 1)
             {
-                $device = new DeviceModel(array('masterDeviceId' => $this->masterDeviceId, 'dealerId' => $this->_dealerId));
+                $device = new DeviceModel(['masterDeviceId' => $this->masterDeviceId, 'dealerId' => $this->_dealerId]);
                 $device->populate($validatedData);
 
                 $device->saveObject();
             }
             else
             {
-                $device = $deviceMapper->find(array($this->masterDeviceId, $this->_dealerId));
+                $device = $deviceMapper->find([$this->masterDeviceId, $this->_dealerId]);
 
                 if ($device)
                 {
@@ -533,11 +533,11 @@ class ManageMasterDevicesService
             }
             else if ($masterDevice)
             {
-                $dealerMasterDeviceAttributes = DealerMasterDeviceAttributeMapper::getInstance()->find(array($this->masterDeviceId, $this->_dealerId));
+                $dealerMasterDeviceAttributes = DealerMasterDeviceAttributeMapper::getInstance()->find([$this->masterDeviceId, $this->_dealerId]);
 
                 if ($dealerMasterDeviceAttributes)
                 {
-                    $this->_suppliesAndServiceForm->populate(array("dealerLaborCostPerPage" => $dealerMasterDeviceAttributes->laborCostPerPage, "dealerPartsCostPerPage" => $dealerMasterDeviceAttributes->partsCostPerPage, 'leaseBuybackPrice' => $dealerMasterDeviceAttributes->leaseBuybackPrice));
+                    $this->_suppliesAndServiceForm->populate(["dealerLaborCostPerPage" => $dealerMasterDeviceAttributes->laborCostPerPage, "dealerPartsCostPerPage" => $dealerMasterDeviceAttributes->partsCostPerPage, 'leaseBuybackPrice' => $dealerMasterDeviceAttributes->leaseBuybackPrice]);
                 }
 
                 $this->_suppliesAndServiceForm->populate($masterDevice->toArray());
@@ -568,10 +568,10 @@ class ManageMasterDevicesService
                 $this->_deviceAttributesForm->populate($masterDevice->toArray());
             }
 
-            $jitCompatibleMasterDevice = JitCompatibleMasterDeviceMapper::getInstance()->find(array($this->masterDeviceId, $this->_dealerId));
+            $jitCompatibleMasterDevice = JitCompatibleMasterDeviceMapper::getInstance()->find([$this->masterDeviceId, $this->_dealerId]);
             if ($jitCompatibleMasterDevice instanceof JitCompatibleMasterDeviceModel)
             {
-                $this->_deviceAttributesForm->populate(array('jitCompatibleMasterDevice' => true));
+                $this->_deviceAttributesForm->populate(['jitCompatibleMasterDevice' => true]);
             }
         }
 
@@ -588,12 +588,12 @@ class ManageMasterDevicesService
         if (!isset($this->_hardwareOptimizationForm))
         {
             $this->_hardwareOptimizationForm = new HardwareOptimizationForm();
-            $deviceSwap                      = DeviceSwapMapper::getInstance()->find(array($this->masterDeviceId, $this->_dealerId));
+            $deviceSwap                      = DeviceSwapMapper::getInstance()->find([$this->masterDeviceId, $this->_dealerId]);
 
             if ($deviceSwap)
             {
                 $this->_hardwareOptimizationForm->populate($deviceSwap->toArray());
-                $this->_hardwareOptimizationForm->populate(array('isDeviceSwap' => true));
+                $this->_hardwareOptimizationForm->populate(['isDeviceSwap' => true]);
             }
         }
 
@@ -610,12 +610,12 @@ class ManageMasterDevicesService
         if (!isset($this->_hardwareQuoteForm))
         {
             $this->_hardwareQuoteForm = new HardwareQuoteForm();
-            $device                   = DeviceMapper::getInstance()->find(array($this->masterDeviceId, $this->_dealerId));
+            $device                   = DeviceMapper::getInstance()->find([$this->masterDeviceId, $this->_dealerId]);
 
             if ($device)
             {
                 $this->_hardwareQuoteForm->populate($device->toArray());
-                $this->_hardwareQuoteForm->populate(array('isSelling' => true));
+                $this->_hardwareQuoteForm->populate(['isSelling' => true]);
                 $this->isQuoteDevice = true;
             }
         }
@@ -684,7 +684,7 @@ class ManageMasterDevicesService
         $dealerTonerAttributesMapper = DealerTonerAttributeMapper::getInstance();
         $deviceTonerMapper           = DeviceTonerMapper::getInstance();
         $tonerMapper                 = TonerMapper::getInstance();
-        $validData                   = array();
+        $validData                   = [];
         $toner                       = null;
 
         // We need to remove the prefix on the formValues
@@ -734,7 +734,7 @@ class ManageMasterDevicesService
                      */
                     if ($masterDevice instanceof MasterDeviceModel)
                     {
-                        $deviceToner = $deviceTonerMapper->find(array($toner->id, $this->masterDeviceId));
+                        $deviceToner = $deviceTonerMapper->find([$toner->id, $this->masterDeviceId]);
                         if (!$deviceToner instanceof DeviceTonerModel)
                         {
                             $deviceToner                   = new DeviceTonerModel();
@@ -760,7 +760,7 @@ class ManageMasterDevicesService
                             {
                                 $toner->isSystemDevice = 1;
 
-                                $deviceToner = $deviceTonerMapper->find(array($toner->id, $this->masterDeviceId));
+                                $deviceToner = $deviceTonerMapper->find([$toner->id, $this->masterDeviceId]);
                                 if ($deviceToner instanceof DeviceTonerModel)
                                 {
                                     $deviceToner->isSystemDevice = 1;
@@ -849,7 +849,7 @@ class ManageMasterDevicesService
     {
         $optionMapper = OptionMapper::getInstance();
 
-        $newData = array();
+        $newData = [];
 
         //We need to remove the prefix on the formValues
         foreach ($validatedData as $key => $value)
@@ -915,7 +915,7 @@ class ManageMasterDevicesService
     public function updateHardwareConfigurationsForm ($validatedData = false, $deleteId = false)
     {
         $configurationMapper = DeviceConfigurationMapper::getInstance();
-        $newData             = array();
+        $newData             = [];
 
         //We need to remove the prefix on the formValues
         foreach ($validatedData as $key => $value)
@@ -974,7 +974,7 @@ class ManageMasterDevicesService
                         else
                         {
                             // Delete existing device options
-                            $deviceConfigurationOption = $deviceConfigurationOptionMapper->delete($deviceConfigurationOptionMapper->fetch($deviceConfigurationOptionMapper->getWhereId(array($newData['id'], $optionId))));
+                            $deviceConfigurationOption = $deviceConfigurationOptionMapper->delete($deviceConfigurationOptionMapper->fetch($deviceConfigurationOptionMapper->getWhereId([$newData['id'], $optionId])));
                             $deviceConfigurationOptionMapper->delete($deviceConfigurationOption);
                         }
                     }
@@ -1025,8 +1025,8 @@ class ManageMasterDevicesService
     {
         $deviceTonerMapper = DeviceTonerMapper::getInstance();
 
-        $toners         = array();
-        $affectedToners = array();
+        $toners         = [];
+        $affectedToners = [];
 
         if ($masterDeviceId)
         {
@@ -1073,8 +1073,8 @@ class ManageMasterDevicesService
     {
         $deviceTonerMapper = DeviceTonerMapper::getInstance();
 
-        $toners         = array();
-        $affectedToners = array();
+        $toners         = [];
+        $affectedToners = [];
 
         if ($masterDeviceId)
         {

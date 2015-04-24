@@ -5,7 +5,7 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\CategoryModel;
 ?>
 <div class="container">
     <div class="clearfix">
-        <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url(array(), 'quotes.category-options.create') ?>">
+        <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url([], 'quotes.category-options.create') ?>">
             <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
     </div>
     <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
@@ -25,9 +25,9 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\CategoryModel;
                     <td><?= $categories->description; ?></td>
                     <td>
                         <div class="btn-group btn-group-justified btn-group-xs">
-                            <a class="btn btn-info" title="View" href="<?= $this->url(array('id' => $categories->id), 'quotes.category-options.view'); ?>"><i class="glyphicon glyphicon-eye-open"></i></a>
-                            <a class="btn btn-warning" title="Edit" href="<?= $this->url(array('id' => $categories->id), 'quotes.category-options.edit'); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                            <a class="btn btn-danger" title="Delete" href="<?= $this->url(array('id' => $categories->id), 'quotes.category-options.delete'); ?>"><i class="glyphicon glyphicon-trash"></i></a>
+                            <a class="btn btn-info" title="View" href="<?= $this->url(['id' => $categories->id], 'quotes.category-options.view'); ?>"><i class="glyphicon glyphicon-eye-open"></i></a>
+                            <a class="btn btn-warning" title="Edit" href="<?= $this->url(['id' => $categories->id], 'quotes.category-options.edit'); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
+                            <a class="btn btn-danger" title="Delete" href="<?= $this->url(['id' => $categories->id], 'quotes.category-options.delete'); ?>"><i class="glyphicon glyphicon-trash"></i></a>
                         </div>
                     </td>
                 </tr>

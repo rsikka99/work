@@ -12,7 +12,7 @@ class Assessment_Report_DebugController extends Assessment_Library_Controller_Ac
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Assessment', 'Debug');
+        $this->_pageTitle = ['Assessment', 'Debug'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();

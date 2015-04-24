@@ -136,7 +136,7 @@ class HardwareOptimizationModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"           => $this->id,
             "clientId"     => $this->clientId,
             "dealerId"     => $this->dealerId,
@@ -145,7 +145,7 @@ class HardwareOptimizationModel extends My_Model_Abstract
             "name"         => $this->name,
             "rmsUploadId"  => $this->rmsUploadId,
             "stepName"     => $this->stepName,
-        );
+        ];
     }
 
     /**

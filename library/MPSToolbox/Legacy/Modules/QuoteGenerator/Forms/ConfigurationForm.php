@@ -19,52 +19,43 @@ class ConfigurationForm extends Zend_Form
         // Set the method for the display form to POST
         $this->setMethod('POST');
 
-        $masterDeviceList = array();
+        $masterDeviceList = [];
         foreach (DeviceMapper::getInstance()->fetchQuoteDeviceListForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId) as $device)
         {
             $masterDeviceList [$device->masterDeviceId] = $device->getMasterDevice()->getFullDeviceName();
         }
-        $this->addElement('select', 'masterDeviceId', array(
+        $this->addElement('select', 'masterDeviceId', [
             'label'        => 'Master Device',
-            'multiOptions' => $masterDeviceList
-        ));
+            'multiOptions' => $masterDeviceList,
+        ]);
 
-        $this->addElement('text', 'name', array(
+        $this->addElement('text', 'name', [
             'label'     => 'Name',
             'required'  => true,
             'maxlength' => 255,
-            'filters'   => array(
-                'StringTrim',
-                'StripTags'
-            )
-        ));
+            'filters'   => ['StringTrim', 'StripTags'],
+        ]);
 
-        $this->addElement('textarea', 'description', array(
+        $this->addElement('textarea', 'description', [
             'label'     => 'Description',
             'id'        => 'description',
             'required'  => true,
             'style'     => 'height: 100px',
             'maxlength' => 255,
-            'filters'   => array(
-                'StringTrim',
-                'StripTags'
-            )
-        ));
+            'filters'   => ['StringTrim', 'StripTags'],
+        ]);
 
         // Add the submit button
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'ignore' => true,
-            'label'  => 'Save'
-        ));
+            'label'  => 'Save',
+        ]);
 
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'ignore'         => true,
             'label'          => 'Cancel',
-            'formnovalidate' => true
-        ));
-
+            'formnovalidate' => true,
+        ]);
     }
-
-
 }

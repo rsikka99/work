@@ -9,10 +9,10 @@ namespace MPSToolbox\Legacy\Models\Acl;
  */
 class HealthCheckAclModel
 {
-    const RESOURCE_HEALTHCHECK_INDEX_WILDCARD     = "healthcheck__index__%";
-    const RESOURCE_HEALTHCHECK_REPORT_INDEX       = "healthcheck__report_index__%";
-    const RESOURCE_HEALTHCHECK_REPORT_HEALTHCHECK = "healthcheck__report_healthcheck__%";
-    const RESOURCE_HEALTHCHECK_REPORT_PRINTIQ     = "healthcheck__report_printiq_healthcheck__%";
+    const RESOURCE_HEALTHCHECK_INDEX_WILDCARD     = 'healthcheck__index__%';
+    const RESOURCE_HEALTHCHECK_REPORT_INDEX       = 'healthcheck__report_index__%';
+    const RESOURCE_HEALTHCHECK_REPORT_HEALTHCHECK = 'healthcheck__report_healthcheck__%';
+    const RESOURCE_HEALTHCHECK_REPORT_PRINTIQ     = 'healthcheck__report_printiq_healthcheck__%';
 
     /**
      * Sets up ACL resources and access for a module

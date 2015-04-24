@@ -22,89 +22,78 @@ class OptionForm extends Zend_Form
         // Set the method for the display form to POST
         $this->setMethod('POST');
 
-        $this->addElement('text', 'name', array(
-            'label'     => 'Name:',
-            'class'     => 'span3',
-            'required'  => true,
-            'maxlength' => 255,
-            'filters'   => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validator' => 'StringLength',
-            'options'   => array(
-                1,
-                255
-            )
-        ));
+        $this->addElement('text', 'name', [
+            'label'      => 'Name:',
+            'class'      => 'span3',
+            'required'   => true,
+            'maxlength'  => 255,
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
+                    'validator' => 'StringLength',
+                    'options'   => [1, 255],
+                ],
+            ],
+        ]);
 
-        $this->addElement('textarea', 'description', array(
-            'label'     => 'Description:',
-            'class'     => 'span3',
-            'id'        => 'description',
-            'required'  => true,
-            'style'     => 'height: 100px',
-            'maxlength' => 255,
-            'filters'   => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validator' => 'StringLength',
-            'options'   => array(
-                1,
-                255
-            )
-        ));
+        $this->addElement('textarea', 'description', [
+            'label'      => 'Description:',
+            'class'      => 'span3',
+            'id'         => 'description',
+            'required'   => true,
+            'style'      => 'height: 100px',
+            'maxlength'  => 255,
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
+                    'validator' => 'StringLength',
+                    'options'   => [1, 255],
+                ],
+            ],
+        ]);
 
-        $this->addElement('text', 'cost', array(
+        $this->addElement('text', 'cost', [
             'label'      => 'Price:',
             'class'      => 'span1',
             'required'   => true,
             'maxlength'  => 8,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators' => array(
-                'Float'
-            )
-        ));
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                'Float',
+            ],
+        ]);
 
-        $this->addElement('text', 'oemSku', array(
-            'label'     => 'OEM SKU:',
-            'class'     => 'span3',
-            'required'  => true,
-            'maxlength' => 255,
-            'filters'   => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validator' => 'StringLength',
-            'options'   => array(
-                1,
-                255
-            )
-        ));
+        $this->addElement('text', 'oemSku', [
+            'label'      => 'OEM SKU:',
+            'class'      => 'span3',
+            'required'   => true,
+            'maxlength'  => 255,
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
+                    'validator' => 'StringLength',
+                    'options'   => [1, 255],
+                ],
+            ],
+        ]);
 
-        $this->addElement('text', 'dealerSku', array(
-            'label'     => My_Brand::$dealerSku . ":",
-            'class'     => 'span3',
-            'maxlength' => 255,
-            'filters'   => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validator' => 'StringLength',
-            'options'   => array(
-                1,
-                255
-            )
-        ));
+        $this->addElement('text', 'dealerSku', [
+            'label'      => My_Brand::$dealerSku . ":",
+            'class'      => 'span3',
+            'maxlength'  => 255,
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
+                    'validator' => 'StringLength',
+                    'options'   => [1, 255],
+                ],
+            ],
+        ]);
 
 
-        $optionCategoryCheckBox = new Zend_Form_Element_MultiCheckbox('categories', array(
-            'label' => 'Categories:'
-        ));
+        $optionCategoryCheckBox = new Zend_Form_Element_MultiCheckbox('categories', [
+            'label' => 'Categories:',
+        ]);
 
         $categories = CategoryMapper::getInstance()->fetchAllForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
         /* @var $category CategoryModel */
@@ -119,17 +108,17 @@ class OptionForm extends Zend_Form
         }
 
         // Add the submit button
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'ignore' => true,
-            'label'  => 'Save'
-        ));
+            'label'  => 'Save',
+        ]);
 
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'ignore'         => true,
             'label'          => 'Cancel',
             'formnovalidate' => true,
-        ));
+        ]);
 
     }
 }

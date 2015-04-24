@@ -53,7 +53,7 @@ class SelectQuoteForm extends Twitter_Bootstrap_Form_Inline
          */
         $this->_addClassNames('form-center-actions');
 
-        $clientList = array();
+        $clientList = [];
         /* @var $client ClientModel */
         foreach (ClientMapper::getInstance()->fetchAll() as $client)
         {
@@ -64,8 +64,8 @@ class SelectQuoteForm extends Twitter_Bootstrap_Form_Inline
         $clientSelect->setLabel('Company Name');
         $this->addElement($clientSelect);
 
-        $quoteList          = array();
-        $quoteListValidator = array();
+        $quoteList          = [];
+        $quoteListValidator = [];
         /* @var $quote QuoteModel */
         foreach (QuoteMapper::getInstance()->fetchAllForUser($this->_userId) as $quote)
         {
@@ -80,29 +80,29 @@ class SelectQuoteForm extends Twitter_Bootstrap_Form_Inline
 
         // Quotes element setup vars
         $quotes->addMultiOptions($quoteList);
-        $quotes->addValidator('InArray', false, array(
-            $quoteListValidator
-        ));
+        $quotes->addValidator('InArray', false, [
+            $quoteListValidator,
+        ]);
         $quotes->setLabel('Quote Date');
 
         // Add the quote element to the form
         $this->addElement($quotes);
 
         // Add the submit button
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY,
             'ignore'     => true,
             'label'      => 'Continue',
-            'decorators' => array(
+            'decorators' => [
                 'ViewHelper',
-                array(
+                [
                     'HtmlTag',
-                    array(
+                    [
                         'tag'   => 'div',
                         'class' => 'form-actions'
-                    )
-                )
-            )
-        ));
+                    ],
+                ],
+            ],
+        ]);
     }
 }

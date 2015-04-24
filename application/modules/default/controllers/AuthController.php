@@ -52,7 +52,7 @@ class Default_AuthController extends Action
      */
     function loginAction ()
     {
-        $this->_pageTitle = array('Login');
+        $this->_pageTitle = ['Login'];
 
         $this->view->layout()->setLayout('auth');
         $request = $this->getRequest();
@@ -64,7 +64,7 @@ class Default_AuthController extends Action
         {
             if ($request->getParam('forgotPassword', false))
             {
-                $this->redirectToRoute('auth.login.forgotPassword', array('email' => $this->getParam('email')));
+                $this->redirectToRoute('auth.login.forgotPassword', ['email' => $this->getParam('email')]);
             }
             if ($form->isValid($request->getPost()))
             {
@@ -152,12 +152,12 @@ class Default_AuthController extends Action
                             // I'm using this in the custom adapter, so messages will be user friendly coming out of it.
                             foreach ($result->getMessages() as $message)
                             {
-                                $this->_flashMessenger->addMessage(array('danger' => $message));
+                                $this->_flashMessenger->addMessage(['danger' => $message]);
                             }
                             break;
                         default :
                             // Put a generic invalid credential message
-                            $this->_flashMessenger->addMessage(array('danger' => 'The email/password combination you entered was invalid.'));
+                            $this->_flashMessenger->addMessage(['danger' => 'The email/password combination you entered was invalid.']);
 
                             break;
                     }
@@ -367,18 +367,18 @@ class Default_AuthController extends Action
                         $identity->resetPasswordOnNextLogin = false;
                         $auth->getStorage()->write($identity);
 
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'success' => 'Password Changed Successfully'
-                        ));
+                        ]);
 
                         // Redirects user to logout screen to login again
                         $this->redirectToRoute('auth.login');
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'danger' => 'You entered the incorrect current password!'
-                        ));
+                        ]);
                     }
                 }
             }
@@ -475,9 +475,9 @@ class Default_AuthController extends Action
         if ($resetUid !== null)
         {
             // Step 2. Verify the reset id and update the request
-            $passwordResetRequest = UserPasswordResetRequestMapper::getInstance()->fetch(array(
+            $passwordResetRequest = UserPasswordResetRequestMapper::getInstance()->fetch([
                 "resetToken = ?" => $resetUid
-            ));
+            ]);
             if ($passwordResetRequest)
             {
                 // If we already reset our password with this hash, then it should no longer be valid
@@ -528,14 +528,14 @@ class Default_AuthController extends Action
         $email  = $config->email;
 
         //grab the email configuration settings from application.ini
-        $emailConfig = array(
+        $emailConfig = [
             'auth'     => 'login',
             'username' => $email->username,
             'password' => $email->password,
             'ssl'      => $email->ssl,
             'port'     => $email->port,
             'host'     => $email->host
-        );
+        ];
 
         //grab the email host from application.ini
         $mailTransport = new Zend_Mail_Transport_Smtp($emailConfig['host'], $emailConfig);

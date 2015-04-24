@@ -16,7 +16,7 @@ class My_Brand
     public static $jit       = "JIT";
     public static $dealerSku = "Dealer SKU";
 
-    protected static $dealerBrandingCache = array();
+    protected static $dealerBrandingCache = [];
 
 
     /**
@@ -62,7 +62,7 @@ class My_Brand
     {
         if (!isset(self::$dealerBrandingCache))
         {
-            self::$dealerBrandingCache = array();
+            self::$dealerBrandingCache = [];
         }
 
         if ($dealerId === null)
@@ -96,7 +96,7 @@ class My_Brand
      */
     public static function resetDealerBrandingCache ()
     {
-        self::$dealerBrandingCache = array();
+        self::$dealerBrandingCache = [];
     }
 
     /**
@@ -108,7 +108,7 @@ class My_Brand
     {
         $dealerBranding = self::getDealerBranding($dealerId);
 
-        return array(
+        return [
             "reportTitlePageTitleColor"                 => $dealerBranding->titlePageTitleFontColor,
             "reportTitlePageTitleBackgroundColor"       => $dealerBranding->titlePageTitleBackgroundColor,
             "reportTitlePageInformationColor"           => $dealerBranding->titlePageInformationFontColor,
@@ -128,7 +128,7 @@ class My_Brand
             "jitName"                                   => $dealerBranding->shortJitProgramName,
             "jitFullName"                               => $dealerBranding->jitProgramName,
             "dealerSku"                                 => self::$dealerSku,
-        );
+        ];
     }
 
     /**
@@ -140,7 +140,7 @@ class My_Brand
     {
         $dealerBranding = self::getDealerBranding($dealerId);
 
-        return array(
+        return [
             "reportTitlePageTitleColor"                 => $dealerBranding->titlePageTitleFontColor,
             "reportTitlePageTitleBackgroundColor"       => $dealerBranding->titlePageTitleBackgroundColor,
             "reportTitlePageInformationColor"           => $dealerBranding->titlePageInformationFontColor,
@@ -152,7 +152,7 @@ class My_Brand
 
             // TODO lrobert: Fix this color to either be hard coded into for the Print IQ version of the software
             "reportWhiteTitlePageTextColor"             => self::$reportWhiteTitlePageTextColor,
-        );
+        ];
     }
 
 }

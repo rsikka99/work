@@ -22,10 +22,10 @@ use Zend_View_Helper_ServerUrl;
  */
 class UserService extends BaseService
 {
-    const ERROR_USERNAME_EXISTS     = "UsernameExists";
-    const ERROR_USEREMAIL_EXISTS    = "UserEmailExists";
-    const ERROR_USER_DOES_NOT_EXIST = "UserDoesNotExist";
-    const ERROR_FORM_INVALID        = "FormInvalid";
+    const ERROR_USERNAME_EXISTS     = 'UsernameExists';
+    const ERROR_USEREMAIL_EXISTS    = 'UserEmailExists';
+    const ERROR_USER_DOES_NOT_EXIST = 'UserDoesNotExist';
+    const ERROR_FORM_INVALID        = 'FormInvalid';
 
     /**
      * The form
@@ -79,7 +79,7 @@ class UserService extends BaseService
     protected function _populateForm (UserModel $user)
     {
         $populateData = $user->toArray();
-        $userRoles    = array();
+        $userRoles    = [];
         foreach ($user->getUserRoles() as $userRole)
         {
             $userRoles[] = $userRole->roleId;
@@ -138,8 +138,8 @@ class UserService extends BaseService
             {
                 if (count($usersByEmail->toArray()) > 0)
                 {
-                    $this->addError(self::ERROR_USEREMAIL_EXISTS, "A user with this email already exists");
-                    $this->_form->getElement('email')->addError("Email already exists");
+                    $this->addError(self::ERROR_USEREMAIL_EXISTS, 'A user with this email already exists');
+                    $this->_form->getElement('email')->addError('Email already exists');
                 }
 
             }
@@ -192,7 +192,7 @@ class UserService extends BaseService
 
                 if (!isset($filteredData['userRoles']))
                 {
-                    $filteredData['userRoles'] = array();
+                    $filteredData['userRoles'] = [];
                 }
 
                 $userMapper->save($user);
@@ -252,7 +252,7 @@ class UserService extends BaseService
         }
         else
         {
-            $this->addError(self::ERROR_USER_DOES_NOT_EXIST, "A user with this name was not found");
+            $this->addError(self::ERROR_USER_DOES_NOT_EXIST, 'A user with this name was not found');
         }
 
         return $success;
@@ -274,7 +274,7 @@ class UserService extends BaseService
         }
         else
         {
-            $this->addError(self::ERROR_USER_DOES_NOT_EXIST, "A user with this name was not found");
+            $this->addError(self::ERROR_USER_DOES_NOT_EXIST, 'A user with this name was not found');
         }
 
         return $success;
@@ -296,7 +296,7 @@ class UserService extends BaseService
         }
         else
         {
-            $this->addError(self::ERROR_FORM_INVALID, "The form has errors");
+            $this->addError(self::ERROR_FORM_INVALID, 'The form has errors');
         }
 
         return false;
@@ -306,14 +306,14 @@ class UserService extends BaseService
     {
         $config = Zend_Registry::get('config');
 
-        $emailConfig = array(
+        $emailConfig = [
             'auth'     => 'login',
             'username' => $config->email->username,
             'password' => $config->email->password,
             'ssl'      => $config->email->ssl,
             'port'     => $config->email->port,
             'host'     => $config->email->host
-        );
+        ];
 
         Zend_Mail::setDefaultTransport(new Zend_Mail_Transport_Smtp($emailConfig['host'], $emailConfig));
         Zend_Mail::setDefaultFrom($emailConfig['username'], $config->app->name);
@@ -329,7 +329,7 @@ class UserService extends BaseService
         $urlHelper     = new Zend_View_Helper_ServerUrl();
         $baseUrlHelper = new Zend_View_Helper_BaseUrl();
 
-        return $urlHelper->serverUrl($baseUrlHelper->baseUrl("/"));
+        return $urlHelper->serverUrl($baseUrlHelper->baseUrl('/'));
     }
 
     /**
@@ -356,14 +356,14 @@ class UserService extends BaseService
          */
         $textBody = "{$appName} - New Account\n";
         $textBody .= "Your {$appName} credentials:\n";
-        $textBody .= str_pad("", strlen("Your {$appName} credentials:"), '-');
+        $textBody .= str_pad('', strlen("Your {$appName} credentials:"), '-');
         $textBody .= "Username: {$user->email}\n";
         $textBody .= "Password: {$plainTextPassword}\n";
         $textBody .= "Application URL: {$appUrl}\n";
 
         if ($user->resetPasswordOnNextLogin)
         {
-            $textBody .= "* You will be required to change your password on your first login.\n";
+            $textBody .= '* You will be required to change your password on your first login.\n';
         }
 
         $mail->setBodyText($textBody);

@@ -20,20 +20,20 @@ class FleetStepsModel extends My_Navigation_Abstract
      *
      * @var array
      */
-    private static $stepNames = array(
-        self::STEP_FLEET_UPLOAD  => array(
+    private static $stepNames = [
+        self::STEP_FLEET_UPLOAD  => [
             'name'  => 'Upload',
-            'route' => 'rms-upload.upload-file'
-        ),
-        self::STEP_FLEET_MAPPING => array(
+            'route' => 'rms-upload.upload-file',
+        ],
+        self::STEP_FLEET_MAPPING => [
             'name'  => 'Mapping',
-            'route' => 'rms-upload.mapping'
-        ),
-        self::STEP_FLEET_SUMMARY => array(
+            'route' => 'rms-upload.mapping',
+        ],
+        self::STEP_FLEET_SUMMARY => [
             'name'  => 'Summary',
-            'route' => 'rms-upload.summary'
-        )
-    );
+            'route' => 'rms-upload.summary',
+        ],
+    ];
 
     /**
      * @var FleetStepsModel

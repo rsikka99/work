@@ -12,7 +12,7 @@ $form = $this->element;
                 <legend>Select RMS Providers</legend>
 
                 <div class="form-group <?= ($form->getElement('rmsProviderIds')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('rmsProviderIds'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('rmsProviderIds'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormCheckbox($form->getElement('rmsProviderIds')) ?>
@@ -25,8 +25,8 @@ $form = $this->element;
     </div>
 
     <fieldset>
-        <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
-        <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+        <?= $this->RenderFormSubmit($form->getElement('submit'), ['btn', 'btn-primary']) ?>
+        <?= $this->RenderFormSubmit($form->getElement('cancel'), ['btn', 'btn-default']) ?>
     </fieldset>
 
 </form>

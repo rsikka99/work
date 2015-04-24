@@ -77,11 +77,11 @@ class DeviceInstanceReplacementMasterDeviceModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "deviceInstanceId"       => $this->deviceInstanceId,
             "masterDeviceId"         => $this->masterDeviceId,
             "hardwareOptimizationId" => $this->hardwareOptimizationId,
-        );
+        ];
     }
 
     /**

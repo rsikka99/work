@@ -39,7 +39,7 @@ class UserMatchupMappingService extends AbstractDeviceMappingService
         $rmsProviderId  = $deviceInstance->getRmsUploadRow()->rmsProviderId;
         $rmsModelId     = $deviceInstance->getRmsUploadRow()->rmsModelId;
 
-        $rmsUserMatchup = $this->_rmsUserMatchupMapper->find(array($rmsProviderId, $rmsModelId, $userId));
+        $rmsUserMatchup = $this->_rmsUserMatchupMapper->find([$rmsProviderId, $rmsModelId, $userId]);
         if ($rmsUserMatchup)
         {
             $masterDeviceId = $rmsUserMatchup->masterDeviceId;

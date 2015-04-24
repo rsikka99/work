@@ -41,7 +41,7 @@ if (count($totalNumberOfDevices) > 0)
 // Begin with data rows
     foreach ($excludedDeviceInstances as $deviceInstance)
     {
-        $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
+        $style = ($this->cycle([$tcStyle->body->cell1->odd, $tcStyle->body->cell1->even])->next()->current());
 
         $table->addRow($tcStyle->body->rowheight, $this->styles->tables->tablestyle->rowstyle);
         $table->addCell($tcStyle->col1Width, $style)->addText($deviceInstance->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
@@ -54,7 +54,7 @@ if (count($totalNumberOfDevices) > 0)
 
     foreach ($unmappedInstances as $deviceInstance)
     {
-        $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
+        $style = ($this->cycle([$tcStyle->body->cell1->odd, $tcStyle->body->cell1->even])->next()->current());
 
         $table->addRow($tcStyle->body->rowheight);
         $table->addCell($tcStyle->col1Width, $style)->addText($deviceInstance->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);

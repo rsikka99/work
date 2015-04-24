@@ -29,7 +29,7 @@ class DeviceConfigurationForm extends Zend_Form
      *
      * @var Zend_Form_Element[]
      */
-    protected $_optionElements = array();
+    protected $_optionElements = [];
 
     /**
      * @param int  $id
@@ -60,12 +60,11 @@ class DeviceConfigurationForm extends Zend_Form
             /* @var $deviceConfigurationOption DeviceConfigurationOptionModel */
             foreach ($device->getOptions() as $deviceConfigurationOption)
             {
-                $optionElement = $this->createElement('text', "option-{$deviceConfigurationOption->optionId}", array(
-                        'label'       => $deviceConfigurationOption->getOption()->name,
-                        'value'       => $deviceConfigurationOption->quantity,
-                        'description' => $deviceConfigurationOption->optionId
-                    )
-                );
+                $optionElement = $this->createElement('text', "option-{$deviceConfigurationOption->optionId}", [
+                    'label'       => $deviceConfigurationOption->getOption()->name,
+                    'value'       => $deviceConfigurationOption->quantity,
+                    'description' => $deviceConfigurationOption->optionId,
+                ]);
                 $optionElement->setAttrib('class', 'span1');
                 $this->_optionElements [] = $optionElement;
             }
@@ -73,40 +72,38 @@ class DeviceConfigurationForm extends Zend_Form
             $this->addElements($this->_optionElements);
 
             // Add the add option
-            $this->addElement('submit', 'add', array(
+            $this->addElement('submit', 'add', [
                 'ignore' => true,
                 'label'  => 'Add',
-                'class'  => 'btn btn-success btn-xs'
-            ));
+                'class'  => 'btn btn-success btn-xs',
+            ]);
         }
         // otherwise, we're creating a new device configuration
         else
         {
-            $quoteDeviceList = array();
+            $quoteDeviceList = [];
             /* @var $device DeviceModel */
             foreach (DeviceMapper::getInstance()->fetchAll() as $device)
             {
                 $quoteDeviceList [$device->masterDeviceId] = $device->getMasterDevice()->getFullDeviceName();
             }
-            $this->addElement('select', 'masterDeviceId', array(
+            $this->addElement('select', 'masterDeviceId', [
                 'label'        => 'Available Devices:',
-                'multiOptions' => $quoteDeviceList
-            ));
+                'multiOptions' => $quoteDeviceList,
+            ]);
         }
 
         // Add the submit button
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'ignore' => true,
-            'label'  => 'Save'
-        ));
+            'label'  => 'Save',
+        ]);
 
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'ignore' => true,
-            'label'  => 'Cancel'
-        ));
-
-
+            'label'  => 'Cancel',
+        ]);
     }
 
     public function loadDefaultDecorators ()
@@ -114,14 +111,7 @@ class DeviceConfigurationForm extends Zend_Form
         // Only show the custom view script if we are showing defaults
         if ($this->_id)
         {
-            $this->setDecorators(array(
-                array(
-                    'ViewScript',
-                    array(
-                        'viewScript' => 'forms/quotegen/edit-device-configuration-form.phtml',
-                    )
-                )
-            ));
+            $this->setDecorators([['ViewScript', ['viewScript' => 'forms/quotegen/edit-device-configuration-form.phtml',]]]);
         }
     }
 

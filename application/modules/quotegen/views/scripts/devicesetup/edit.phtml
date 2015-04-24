@@ -14,16 +14,16 @@ $id = $this->id;
 
             <?php if ($this->isAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, AppAclModel::PRIVILEGE_ADMIN)) : ?>
                 <li>
-                    <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.toners', true); ?>">Toners</a>
+                    <a href="<?= $this->url(['id' => $id], 'hardware-library.all-devices.toners', true); ?>">Toners</a>
                 </li>
             <?php endif ?>
 
             <?php if ($this->quotegendevice) : ?>
                 <li>
-                    <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.options', true); ?>">Available Options</a>
+                    <a href="<?= $this->url(['id' => $id], 'hardware-library.all-devices.options', true); ?>">Available Options</a>
                 </li>
                 <li>
-                    <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.configurations', true); ?>">Hardware Configurations</a>
+                    <a href="<?= $this->url(['id' => $id], 'hardware-library.all-devices.configurations', true); ?>">Hardware Configurations</a>
                 </li>
             <?php endif ?>
         </ul>

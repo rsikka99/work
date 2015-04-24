@@ -51,48 +51,48 @@ abstract class My_Controller_Report extends Action
      *
      * @var array
      */
-    protected $_csvFormat = array(
+    protected $_csvFormat = [
         'extension'      => 'csv',
         'name'           => 'CSV',
         'loadingmessage' => '',
-        'btnstyle'       => 'success'
-    );
+        'btnstyle'       => 'success',
+    ];
 
     /**
      * Format details for excel (xlsx) files
      *
      * @var array
      */
-    protected $_excelFormat = array(
+    protected $_excelFormat = [
         'extension'      => 'xlsx',
         'name'           => 'Excel (XLSX)',
         'loadingmessage' => '',
-        'btnstyle'       => 'success'
-    );
+        'btnstyle'       => 'success',
+    ];
 
     /**
      * Format details for pdf files
      *
      * @var array
      */
-    protected $_pdfFormat = array(
+    protected $_pdfFormat = [
         'extension'      => 'pdf',
         'name'           => 'PDF',
         'loadingmessage' => 'Please wait a moment while we generate your report',
-        'btnstyle'       => 'danger'
-    );
+        'btnstyle'       => 'danger',
+    ];
 
     /**
      * Format details for docx files
      *
      * @var array
      */
-    protected $_wordFormat = array(
+    protected $_wordFormat = [
         'extension'      => 'docx',
         'name'           => 'Word (DOCX)',
         'loadingmessage' => 'Please wait a moment while we generate your report',
-        'btnstyle'       => 'primary'
-    );
+        'btnstyle'       => 'primary',
+    ];
 
     public function init ()
     {
@@ -122,10 +122,10 @@ abstract class My_Controller_Report extends Action
             $randomSalt         = strftime("%s") . mt_rand(10000, 30000);
             $imagePathAndPrefix = $cachePath . '/' . $randomSalt . "_";
 
-            $newImages       = array();
+            $newImages       = [];
             $curlHandle      = curl_multi_init();
-            $curlConnections = array();
-            $files           = array();
+            $curlConnections = [];
+            $files           = [];
 
             foreach ($imageArray as $i => $fetchUrl)
             {
@@ -208,7 +208,7 @@ abstract class My_Controller_Report extends Action
         try
         {
             $fileDeleteDate = strtotime("-1 hour");
-            $files          = array();
+            $files          = [];
 
             // Get all files to delete
             if (false !== ($handle = @opendir($path)))
@@ -340,7 +340,7 @@ abstract class My_Controller_Report extends Action
      */
     public function settingsAction ()
     {
-        $this->_pageTitle = array('Settings', 'Client');
+        $this->_pageTitle = ['Settings', 'Client'];
 
         if ($this->getRequest()->isPost())
         {
@@ -391,7 +391,7 @@ abstract class My_Controller_Report extends Action
         }
         else
         {
-            $this->_flashMessenger->addMessage(array('error' => 'Please correct the errors below.'));
+            $this->_flashMessenger->addMessage(['error' => 'Please correct the errors below.']);
         }
 
 

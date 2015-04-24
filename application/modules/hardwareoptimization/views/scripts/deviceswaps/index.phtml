@@ -2,7 +2,9 @@
 <div class="container">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <div class="pull-right"> <button class="btn btn-success btn-xs" id="createNewBtn">Create new</button> </div>
+            <div class="pull-right">
+                <button class="btn btn-success btn-xs" id="createNewBtn">Create new</button>
+            </div>
             Manage Device Swaps
         </div>
         <div class="panel-body">
@@ -15,7 +17,9 @@
 
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <div class="pull-right"><button class="btn btn-success btn-xs" id="createReasonBtn">Create New</button></div>
+            <div class="pull-right">
+                <button class="btn btn-success btn-xs" id="createReasonBtn">Create New</button>
+            </div>
             Device Swap Change Logic Text
         </div>
         <div class="panel-body">
@@ -34,7 +38,7 @@
                 <h4 class="modal-title">Create / Edit Device Swap</h4>
             </div>
             <div class="modal-body">
-                    <div class="alert alert-danger" id="save-error" style="display: none;">
+                <div class="alert alert-danger" id="save-error" style="display: none;">
                 </div>
                 <?= $this->form ?>
                 <p>Note only devices that have been enabled in the hardware library can be added to device swaps. Go to the All Devices Icon and enter the device
@@ -96,7 +100,7 @@
                 <h4 class="modal-title">Create / Edit Swap Reason</h4>
             </div>
             <div class="modal-body">
-                    <div class="alert alert-danger" id="reason-add-save-error" style="display: none;"></div>
+                <div class="alert alert-danger" id="reason-add-save-error" style="display: none;"></div>
                 <?= $this->deviceSwapForm; ?>
             </div>
             <div class="modal-footer">

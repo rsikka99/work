@@ -110,14 +110,14 @@ class ClientModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"            => $this->id,
             "dealerId"      => $this->dealerId,
             "accountNumber" => $this->accountNumber,
             "companyName"   => $this->companyName,
             "legalName"     => $this->legalName,
             "employeeCount" => $this->employeeCount,
-        );
+        ];
     }
 
     /**

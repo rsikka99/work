@@ -12,7 +12,7 @@ class ColumnFactory
     /**
      * @var string[]
      */
-    protected $validColumns = array();
+    protected $validColumns = [];
 
     /**
      * @param string[] $validColumns

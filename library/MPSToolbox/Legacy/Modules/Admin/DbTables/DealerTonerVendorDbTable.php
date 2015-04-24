@@ -12,8 +12,8 @@ use Zend_Db_Table_Abstract;
 class DealerTonerVendorDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'dealer_toner_vendors';
-    protected $_primary = array(
+    protected $_primary = [
         'dealerId',
         'manufacturerId',
-    );
+    ];
 }

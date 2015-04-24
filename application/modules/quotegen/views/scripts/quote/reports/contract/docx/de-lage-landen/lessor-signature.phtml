@@ -15,7 +15,7 @@ $lessorTable->getStyle()->setBorderBottomSize(1)->setBorderLeftSize(1)->setBorde
 $lessorTable->getStyle()->setCellMargin(50);
 
 $lessorTable->addRow(300);
-$lessorTable->addCell($tableSpan ['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span2))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$lessorTable->addCell($tableSpan ['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span2))->addText(htmlspecialchars($contractTemplateSection->getContractSectionName()), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
 
 /*
  * De Lage Landen address
@@ -28,7 +28,7 @@ $cell = $lessorTable->addCell($tableSpan ['span8'], array_merge($cellStyle->span
 
 foreach ($guarantyHtml->getElementsByTagName('p') as $paragraphNode)
 {
-    $textRun = $cell->addTextRun(array('lineHeight' => 1));
+    $textRun = $cell->addTextRun(['lineHeight' => 1]);
 
     $childNodes = $paragraphNode->childNodes;
     for ($i = 0; $i < $childNodes->length; $i++)
@@ -38,11 +38,11 @@ foreach ($guarantyHtml->getElementsByTagName('p') as $paragraphNode)
 
         if ($node->tagName == 'b')
         {
-            $textRun->addText($node->textContent, $fontStyle->boldFinePrint);
+            $textRun->addText(htmlspecialchars($node->textContent), $fontStyle->boldFinePrint);
         }
         else
         {
-            $textRun->addText($node->textContent, $fontStyle->finePrint);
+            $textRun->addText(htmlspecialchars($node->textContent), $fontStyle->finePrint);
         }
     }
 }

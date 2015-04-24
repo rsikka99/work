@@ -75,7 +75,7 @@ class Default_IndexController extends Action
      */
     public function noClientsAction ()
     {
-        $this->_pageTitle = array('Your first client');
+        $this->_pageTitle = ['Your first client'];
 
         $clientService = new ClientService();
 
@@ -87,12 +87,12 @@ class Default_IndexController extends Action
             if ($newClientId !== false)
             {
                 $this->getMpsSession()->selectedClientId = $newClientId;
-                $this->_flashMessenger->addMessage(array('success' => 'Congratulations! You\'ve successfully created your first client.'));
+                $this->_flashMessenger->addMessage(['success' => 'Congratulations! You\'ve successfully created your first client.']);
                 $this->redirectToRoute('app.dashboard.no-uploads');
             }
             else
             {
-                $this->_flashMessenger->addMessage(array('danger' => 'We had trouble validating your data. Please review the errors on the form and try again.'));
+                $this->_flashMessenger->addMessage(['danger' => 'We had trouble validating your data. Please review the errors on the form and try again.']);
             }
         }
 
@@ -104,7 +104,7 @@ class Default_IndexController extends Action
      */
     public function noUploadsAction ()
     {
-        $this->_pageTitle = array('Upload fleet data');
+        $this->_pageTitle = ['Upload fleet data'];
 
         $uploadService = new RmsUploadService($this->getIdentity()->id, $this->getIdentity()->dealerId, $this->getSelectedClient()->id);
 
@@ -121,7 +121,7 @@ class Default_IndexController extends Action
      */
     public function selectUploadAction ()
     {
-        $this->_pageTitle = array('Select Upload');
+        $this->_pageTitle = ['Select Upload'];
         $client           = $this->getSelectedClient();
 
         // We must have a client
@@ -302,14 +302,14 @@ class Default_IndexController extends Action
      */
     public function showDashboard ()
     {
-        $this->_pageTitle   = array('Dashboard');
+        $this->_pageTitle   = ['Dashboard'];
         $this->view->userId = $this->getIdentity()->id;
 
-        $availableReports               = array();
-        $availableQuotes                = array();
-        $availableHealthchecks          = array();
-        $availableHardwareOptimizations = array();
-        $rmsUploads                     = array();
+        $availableReports               = [];
+        $availableQuotes                = [];
+        $availableHealthchecks          = [];
+        $availableHardwareOptimizations = [];
+        $rmsUploads                     = [];
 
         $hasUpload = $this->getSelectedUpload() instanceof RmsUploadEntity;
 
@@ -349,7 +349,7 @@ class Default_IndexController extends Action
                 $client      = ClientMapper::getInstance()->find($newClientId);
                 if ($client)
                 {
-                    $userViewedClient = UserViewedClientMapper::getInstance()->find(array($this->getIdentity()->id, $client->id));
+                    $userViewedClient = UserViewedClientMapper::getInstance()->find([$this->getIdentity()->id, $client->id]);
                     if ($userViewedClient instanceof UserViewedClientModel)
                     {
                         $userViewedClient->dateViewed = new Zend_Db_Expr("NOW()");
@@ -372,7 +372,7 @@ class Default_IndexController extends Action
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => 'Invalid Client'));
+                    $this->_flashMessenger->addMessage(['danger' => 'Invalid Client']);
                 }
 
 
@@ -381,7 +381,7 @@ class Default_IndexController extends Action
             {
                 $assessmentId = $postData['selectAssessment'];
 
-                $validAssessmentIds = array(0);
+                $validAssessmentIds = [0];
                 foreach ($availableReports as $report)
                 {
                     $validAssessmentIds[] = $report->id;
@@ -399,7 +399,7 @@ class Default_IndexController extends Action
             {
                 $selectedQuoteId = $postData['selectQuote'];
 
-                $validQuoteIds = array();
+                $validQuoteIds = [];
                 foreach ($availableQuotes as $quote)
                 {
                     $validQuoteIds[] = $quote->id;
@@ -409,7 +409,7 @@ class Default_IndexController extends Action
 
                 if ($inArray->isValid($selectedQuoteId))
                 {
-                    $this->redirectToRoute('quotes', array('quoteId' => $selectedQuoteId));
+                    $this->redirectToRoute('quotes', ['quoteId' => $selectedQuoteId]);
                 }
                 else
                 {
@@ -419,18 +419,18 @@ class Default_IndexController extends Action
             else if (isset($postData['createLeasedQuote']))
             {
                 $selectedQuoteId = $this->_createNewQuote(QuoteModel::QUOTE_TYPE_LEASED);
-                $this->redirectToRoute('quotes', array('quoteId' => $selectedQuoteId));
+                $this->redirectToRoute('quotes', ['quoteId' => $selectedQuoteId]);
             }
             else if (isset($postData['createPurchasedQuote']))
             {
                 $selectedQuoteId = $this->_createNewQuote(QuoteModel::QUOTE_TYPE_PURCHASED);
-                $this->redirectToRoute('quotes', array('quoteId' => $selectedQuoteId));
+                $this->redirectToRoute('quotes', ['quoteId' => $selectedQuoteId]);
             }
             else if (isset($postData['selectHealthcheck']))
             {
                 $healthcheckId = $postData['selectHealthcheck'];
 
-                $validReportIds = array(0);
+                $validReportIds = [0];
                 foreach ($availableHealthchecks as $healthcheck)
                 {
                     $validReportIds[] = $healthcheck->id;
@@ -446,7 +446,7 @@ class Default_IndexController extends Action
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array("warning" => "Please select a health check"));
+                    $this->_flashMessenger->addMessage(["warning" => "Please select a health check"]);
                 }
             }
             else if (isset($postData['selectHardwareOptimization']))
@@ -455,7 +455,7 @@ class Default_IndexController extends Action
 
                 if ($hardwareOptimizationId > 0)
                 {
-                    $validReportIds = array(0);
+                    $validReportIds = [0];
                     foreach ($availableHardwareOptimizations as $report)
                     {
                         $validReportIds[] = $report->id;
@@ -470,7 +470,7 @@ class Default_IndexController extends Action
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array("warning" => "Please select a hardware optimization"));
+                        $this->_flashMessenger->addMessage(["warning" => "Please select a hardware optimization"]);
                     }
                 }
                 else
@@ -516,7 +516,7 @@ class Default_IndexController extends Action
                 }
                 else
                 {
-                    $this->redirectToRoute('rms-upload.mapping', array('rmsUploadId' => $rmsUploadId));
+                    $this->redirectToRoute('rms-upload.mapping', ['rmsUploadId' => $rmsUploadId]);
                 }
             }
             else if (isset($postData['uploadCustomerTonerCost']))
@@ -542,9 +542,9 @@ class Default_IndexController extends Action
          */
         if (!$this->view->isAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_QUOTE_INDEX, AppAclModel::PRIVILEGE_VIEW))
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'error' => "You do not have sufficient privileges to access this page. If you feel this is in error please contact your administrator."
-            ));
+            ]);
             $this->redirectToRoute('app.dashboard');
         }
         $quote = new QuoteModel();
@@ -557,7 +557,7 @@ class Default_IndexController extends Action
      */
     public function createClientAction ()
     {
-        $this->_pageTitle = array('Create Client');
+        $this->_pageTitle = ['Create Client'];
         $clientService    = new ClientService();
 
         if ($this->getRequest()->isPost())
@@ -606,7 +606,7 @@ class Default_IndexController extends Action
      */
     public function editClientAction ()
     {
-        $this->_pageTitle = array('Edit Client');
+        $this->_pageTitle = ['Edit Client'];
         // Get the passed client id
         $clientId = $this->getSelectedClient()->id;
         // Get the client object from the database
@@ -614,7 +614,7 @@ class Default_IndexController extends Action
 
         if (!$client)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a client first.'));
+            $this->_flashMessenger->addMessage(['warning' => 'Please select a client first.']);
             $this->redirectToRoute('company.clients');
         }
 
@@ -642,19 +642,19 @@ class Default_IndexController extends Action
 
             if ($clientId)
             {
-                $this->_flashMessenger->addMessage(array(
+                $this->_flashMessenger->addMessage([
                     'success' => "Client {$client->companyName} successfully updated."
-                ));
+                ]);
                 // Redirect with client id so that the client is preselected
-                $this->redirectToRoute('company.clients', array(
+                $this->redirectToRoute('company.clients', [
                     'clientId' => $clientId
-                ));
+                ]);
             }
             else
             {
-                $this->_flashMessenger->addMessage(array(
+                $this->_flashMessenger->addMessage([
                     'danger' => "Please correct the errors below."
-                ));
+                ]);
             }
         }
         $this->view->form = $clientService->getForm();
@@ -667,18 +667,18 @@ class Default_IndexController extends Action
     public function searchForClientAction ()
     {
 
-        $this->_pageTitle = array('Client Search');
+        $this->_pageTitle = ['Client Search'];
         $searchTerm       = $this->getParam('query', false);
-        $results          = array();
+        $results          = [];
         if ($searchTerm !== false)
         {
             $clients = ClientMapper::getInstance()->searchForClientByCompanyNameAndDealer($searchTerm, $this->getIdentity()->dealerId);
             foreach ($clients as $client)
             {
-                $results[] = array(
+                $results[] = [
                     "id"          => $client->id,
                     "companyName" => $client->companyName
-                );
+                ];
             }
         }
 
@@ -690,7 +690,7 @@ class Default_IndexController extends Action
      */
     public function viewAllClientsAction ()
     {
-        $this->_pageTitle    = array('Select Client');
+        $this->_pageTitle    = ['Select Client'];
         $this->view->clients = ClientMapper::getInstance()->fetchClientListForDealer($this->getIdentity()->dealerId);
     }
 
@@ -699,7 +699,7 @@ class Default_IndexController extends Action
      */
     public function selectClientAction ()
     {
-        $this->_pageTitle   = array('Select Client');
+        $this->_pageTitle   = ['Select Client'];
         $this->view->userId = $this->getIdentity()->id;
 
         if ($this->getRequest()->isPost())
@@ -729,7 +729,7 @@ class Default_IndexController extends Action
         $client = ClientMapper::getInstance()->find($clientId);
         if ($client)
         {
-            $userViewedClient = UserViewedClientMapper::getInstance()->find(array($this->getIdentity()->id, $client->id));
+            $userViewedClient = UserViewedClientMapper::getInstance()->find([$this->getIdentity()->id, $client->id]);
             if ($userViewedClient instanceof UserViewedClientModel)
             {
                 $userViewedClient->dateViewed = new Zend_Db_Expr("NOW()");
@@ -771,7 +771,7 @@ class Default_IndexController extends Action
         }
         else
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'Invalid Client'));
+            $this->_flashMessenger->addMessage(['danger' => 'Invalid Client']);
         }
     }
 }

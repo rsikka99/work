@@ -22,20 +22,20 @@ class HardwareOptimizationStepsModel extends My_Navigation_Abstract
      *
      * @var array
      */
-    private static $stepNames = array(
-        self::STEP_SETTINGS     => array(
+    private static $stepNames = [
+        self::STEP_SETTINGS     => [
             'name'  => 'Settings',
-            'route' => 'hardwareoptimization.settings'
-        ),
-        self::STEP_OPTIMIZE     => array(
+            'route' => 'hardwareoptimization.settings',
+        ],
+        self::STEP_OPTIMIZE     => [
             'name'  => 'Optimize',
-            'route' => 'hardwareoptimization.optimization'
-        ),
-        self::STEP_FINISHED     => array(
+            'route' => 'hardwareoptimization.optimization',
+        ],
+        self::STEP_FINISHED     => [
             'name'  => 'Reports',
-            'route' => 'hardwareoptimization.report-index'
-        )
-    );
+            'route' => 'hardwareoptimization.report-index',
+        ],
+    ];
 
     /**
      * @var AssessmentStepsModel

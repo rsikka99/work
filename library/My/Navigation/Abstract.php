@@ -66,7 +66,7 @@ abstract class My_Navigation_Abstract
     {
         $previousStep = null;
         $currentStep  = null;
-        $this->steps  = array();
+        $this->steps  = [];
 
         // Add Steps: WARNING, logic here will mess with your head.
         foreach ($steps as $stepName => $step)

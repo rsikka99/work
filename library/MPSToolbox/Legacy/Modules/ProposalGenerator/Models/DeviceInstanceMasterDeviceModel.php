@@ -62,10 +62,10 @@ class DeviceInstanceMasterDeviceModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "deviceInstanceId" => $this->deviceInstanceId,
             "masterDeviceId"   => $this->masterDeviceId,
-        );
+        ];
     }
 
     /**

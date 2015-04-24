@@ -12,7 +12,7 @@ $paragraphStyle = $this->paragraphStyle;
 
 $unconditionalGuarantyTable = $section->addTable($this->tableStyle->standard);
 $unconditionalGuarantyTable->addRow(300);
-$unconditionalGuarantyTable->addCell(null, array_merge($cellStyle->invertBackground, $cellStyle->span4))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$unconditionalGuarantyTable->addCell(null, array_merge($cellStyle->invertBackground, $cellStyle->span4))->addText(htmlspecialchars($contractTemplateSection->getContractSectionName()), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
 
 $guarantyHtml = new DOMDocument(5);
 $guarantyHtml->loadHTML($contractTemplateSection->getContractSectionText());
@@ -33,11 +33,11 @@ foreach ($guarantyHtml->getElementsByTagName('p') as $paragraphNode)
 
         if ($node->tagName == 'b')
         {
-            $textRun->addText($node->textContent, $fontStyle->boldFinePrint);
+            $textRun->addText(htmlspecialchars($node->textContent), $fontStyle->boldFinePrint);
         }
         else
         {
-            $textRun->addText($node->textContent, $fontStyle->finePrint);
+            $textRun->addText(htmlspecialchars($node->textContent), $fontStyle->finePrint);
         }
     }
 }

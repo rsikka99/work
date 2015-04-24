@@ -15,9 +15,7 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
     {
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_CUSTOMER_COST_ANALYSIS))
         {
-            $this->_flashMessenger->addMessage(array(
-                "error" => "You do not have permission to access this."
-            ));
+            $this->_flashMessenger->addMessage(["error" => "You do not have permission to access this.",]);
             $this->redirectToRoute('assessment');
         }
 
@@ -26,17 +24,17 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
 
     public function indexAction ()
     {
-        $this->_pageTitle = array('Assessment', 'Cost Analysis');
+        $this->_pageTitle = ['Assessment', 'Cost Analysis'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
 
         $this->view->availableReports['CustomerCostAnalysis']['active'] = true;
-        $this->view->formats                                            = array(
+        $this->view->formats                                            = [
             "/assessment/report_costanalysis/generate/format/csv"  => $this->_csvFormat,
-            "/assessment/report_costanalysis/generate/format/docx" => $this->_wordFormat
-        );
+            "/assessment/report_costanalysis/generate/format/docx" => $this->_wordFormat,
+        ];
 
         try
         {
@@ -109,7 +107,7 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
         }
 
         // Define our field titles
-        $fieldTitleList = array(
+        $fieldTitleList = [
             'Device Name',
             '% Of Monthly Cost',
             'Monthly Black Volume',
@@ -117,7 +115,7 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
             'Black CPP',
             'Color CPP',
             'Estimated Monthly Cost',
-        );
+        ];
 
         try
         {
@@ -130,7 +128,7 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
                 $isColor              = ($deviceInstance->getMasterDevice()->tonerConfigId != TonerConfigModel::BLACK_ONLY) ? true : false;
 
                 // Create an array of purchased devices (this will be the dynamic CSV body)
-                $fieldList    = array();
+                $fieldList    = [];
                 $fieldList [] = $deviceInstance->getDeviceName();
                 $fieldList [] = "%" . number_format($percentOfMonthlyCost, 2);
                 $fieldList [] = $this->view->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly());

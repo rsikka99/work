@@ -12,8 +12,8 @@ use Zend_Db_Table_Abstract;
 class DealerRmsProviderDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'dealer_rms_providers';
-    protected $_primary = array(
+    protected $_primary = [
         'dealerId',
         'rmsProviderId',
-    );
+    ];
 }

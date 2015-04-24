@@ -81,10 +81,10 @@ class SurveySettingModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"                => $this->id,
             "pageCoverageMono"  => $this->pageCoverageMono,
             "pageCoverageColor" => $this->pageCoverageColor,
-        );
+        ];
     }
 }

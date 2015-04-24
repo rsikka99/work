@@ -10,16 +10,16 @@ $id = $this->id;
     <div class="tabbable"> <!-- Only required for left/right tabs -->
         <ul class="nav nav-tabs">
             <li>
-                <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.edit', true); ?>">Details</a>
+                <a href="<?= $this->url(['id' => $id], 'hardware-library.all-devices.edit', true); ?>">Details</a>
             </li>
             <?php $isAdmin = $this->isAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, AppAclModel::PRIVILEGE_ADMIN); ?>
             <?php if ($isAdmin) : ?>
                 <li>
-                    <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.toners', true); ?>">Toners</a>
+                    <a href="<?= $this->url(['id' => $id], 'hardware-library.all-devices.toners', true); ?>">Toners</a>
                 </li>
             <?php endif ?>
             <li>
-                <a href="<?= $this->url(array('id' => $id), 'hardware-library.all-devices.options', true); ?>">Available Options</a>
+                <a href="<?= $this->url(['id' => $id], 'hardware-library.all-devices.options', true); ?>">Available Options</a>
             </li>
             <li class="active">
                 <a href="#tab4" data-toggle="tab">Hardware Configurations</a>
@@ -32,7 +32,7 @@ $id = $this->id;
                 <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
 
                     <div class="clearfix">
-                        <a class="btn btn-success btn-sm pull-right create-button" href="<?= $this->url(array('id' => $id, 'page' => 'configurations'), 'quotes.configurations.create.id') ?>">
+                        <a class="btn btn-success btn-sm pull-right create-button" href="<?= $this->url(['id' => $id, 'page' => 'configurations'], 'quotes.configurations.create.id') ?>">
                             <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
                     </div>
 
@@ -54,8 +54,8 @@ $id = $this->id;
                                 <td><?= $configuration->description; ?></td>
                                 <td>
                                     <div class="" style="text-align: center;">
-                                        <a class="btn btn-warning btn-xs" title="Edit Configuration" href="<?= $this->url(array('id' => $id, 'configurationid' => $configuration->id, 'page' => 'configurations'), 'quotes.configurations.edit.page'); ?>"><i class="glyphicon glyphicon-pencil icon-white"></i></a>
-                                        <a class="btn btn-danger btn-xs" title="Delete Configuration" href="<?= $this->url(array('id' => $id, 'configurationid' => $configuration->id, 'page' => 'configurations'), 'quotes.configurations.delete.page'); ?>"><i class="glyphicon glyphglyphicon glyphicon-trash"></i></a>
+                                        <a class="btn btn-warning btn-xs" title="Edit Configuration" href="<?= $this->url(['id' => $id, 'configurationid' => $configuration->id, 'page' => 'configurations'], 'quotes.configurations.edit.page'); ?>"><i class="glyphicon glyphicon-pencil icon-white"></i></a>
+                                        <a class="btn btn-danger btn-xs" title="Delete Configuration" href="<?= $this->url(['id' => $id, 'configurationid' => $configuration->id, 'page' => 'configurations'], 'quotes.configurations.delete.page'); ?>"><i class="glyphicon glyphglyphicon glyphicon-trash"></i></a>
                                     </div>
                                 </td>
                             </tr>
@@ -70,14 +70,14 @@ $id = $this->id;
                     <h4>There are no configurations</h4>
                     <br />
                     <div class="clearfix">
-                        <a class="btn btn-success btn-sm create-button" href="<?= $this->url(array('id' => $id, 'page' => 'configurations'), 'quotes.configurations.create.id') ?>">
+                        <a class="btn btn-success btn-sm create-button" href="<?= $this->url(['id' => $id, 'page' => 'configurations'], 'quotes.configurations.create.id') ?>">
                             <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
                     </div>
 
                 <?php endif; ?>
 
                 <div style="text-align: center;">
-                    <a class="btn btn-default" title="Done" href="<?= $this->url(array(), 'hardware-library.all-devices', true); ?>">Done</a>
+                    <a class="btn btn-default" title="Done" href="<?= $this->url([], 'hardware-library.all-devices', true); ?>">Done</a>
                 </div>
 
             </form>

@@ -21,77 +21,77 @@ class GenericSettingsForm extends \Zend_Form
         /**
          * Generic Settings
          */
-        $this->addElement('text', 'defaultEnergyCost', array(
+        $this->addElement('text', 'defaultEnergyCost', [
             'label'       => 'Energy Cost $/kWh',
             'description' => 'Used to calculate the approximate cost of energy used by devices.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'defaultMonthlyLeasePayment', array(
+        $this->addElement('text', 'defaultMonthlyLeasePayment', [
             'label'       => 'Monthly Lease Payment',
             'description' => 'Used on the assessment to calculate the approximate annual leasing cost of devices marked as leased.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'defaultPrinterCost', array(
+        $this->addElement('text', 'defaultPrinterCost', [
             'label'       => 'Default Printer Cost',
             'description' => 'Used on the assessment to calculate the approximate annual cost of device purchases.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'leasedMonochromeCostPerPage', array(
+        $this->addElement('text', 'leasedMonochromeCostPerPage', [
             'label'       => 'Leased Monochrome CPP',
             'description' => 'Any monochrome devices marked as <strong>leased</strong> will use this cost per page instead.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'leasedColorCostPerPage', array(
+        $this->addElement('text', 'leasedColorCostPerPage', [
             'label'       => 'Leased Color CPP',
             'description' => 'Any color devices marked as <strong>leased</strong> will use this cost per page instead.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'mpsMonochromeCostPerPage', array(
+        $this->addElement('text', 'mpsMonochromeCostPerPage', [
             'label'       => 'Existing MPS Monochrome CPP',
             'description' => 'Any monochrome devices marked as <strong>managed</strong> will use this cost per page instead.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'mpsColorCostPerPage', array(
+        $this->addElement('text', 'mpsColorCostPerPage', [
             'label'       => 'Existing MPS Color CPP',
             'description' => 'Any color devices marked as <strong>managed</strong> will use this cost per page instead.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'tonerMargin', array(
+        $this->addElement('text', 'tonerMargin', [
             'label'       => 'Pricing Margin on Toners',
             'description' => 'The margin percentage to add onto the current toner cost in the system.',
-        ));
+        ]);
 
-        $this->addElement('text', 'targetMonochromeCostPerPage', array(
+        $this->addElement('text', 'targetMonochromeCostPerPage', [
             'label'       => 'Pre-Optimized Monochrome CPP',
             'description' => 'The cost per page you\'d like to charge the customer.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'targetColorCostPerPage', array(
+        $this->addElement('text', 'targetColorCostPerPage', [
             'label'       => 'Pre-Optimized Color CPP',
             'description' => 'The cost per page you\'d like to charge the customer.',
             'required'    => true,
-        ));
+        ]);
 
         /**
          * Form Actions
          */
-        $this->addElement('submit', 'save', array(
+        $this->addElement('submit', 'save', [
             'label' => 'Submit',
             'class' => 'btn btn-primary',
-        ));
+        ]);
 
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'label' => 'Cancel',
-            'class' => 'btn btn-default'
-        ));
+            'class' => 'btn btn-default',
+        ]);
     }
 
     /**
@@ -101,7 +101,7 @@ class GenericSettingsForm extends \Zend_Form
     {
         if ($genericSettings instanceof GenericSettingsEntity)
         {
-            $genericSettings = array(
+            $genericSettings = [
                 'defaultMonthlyLeasePayment'  => $genericSettings->defaultMonthlyLeasePayment,
                 'defaultPrinterCost'          => $genericSettings->defaultPrinterCost,
                 'defaultEnergyCost'           => $genericSettings->defaultEnergyCost,
@@ -112,7 +112,7 @@ class GenericSettingsForm extends \Zend_Form
                 'tonerMargin'                 => $genericSettings->tonerPricingMargin,
                 'targetMonochromeCostPerPage' => $genericSettings->targetMonochromeCostPerPage,
                 'targetColorCostPerPage'      => $genericSettings->targetColorCostPerPage,
-            );
+            ];
         }
 
         if ($genericSettings)
@@ -156,13 +156,6 @@ class GenericSettingsForm extends \Zend_Form
      */
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/client-settings-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/client-settings-form.phtml']]]);
     }
 }

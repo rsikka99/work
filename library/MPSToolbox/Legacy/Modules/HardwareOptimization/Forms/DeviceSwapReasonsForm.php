@@ -17,15 +17,15 @@ class DeviceSwapReasonsForm extends Zend_Form
         $this->setMethod("POST");
         $this->setAttrib('id', 'deviceSwapReason');
 
-        $reasonCategoryElement = $this->createElement("select", "reasonCategory", array(
+        $reasonCategoryElement = $this->createElement("select", "reasonCategory", [
             "label"    => "Reason category",
             "required" => true,
             "id"       => "reasonCategory"
-        ));
+        ]);
 
         $this->addElement($reasonCategoryElement);
 
-        $reasons = array();
+        $reasons = [];
 
         foreach (DeviceSwapReasonCategoryMapper::getInstance()->fetchAll() as $reason)
         {
@@ -34,16 +34,16 @@ class DeviceSwapReasonsForm extends Zend_Form
 
         $reasonCategoryElement->setMultiOptions($reasons);
 
-        $this->addElement("text", "reason", array(
+        $this->addElement("text", "reason", [
             "label"    => "Reason",
             "id"       => "reason",
-            "required" => true
-        ));
+            "required" => true,
+        ]);
 
-        $this->addElement('checkbox', 'isDefault', array(
+        $this->addElement('checkbox', 'isDefault', [
             "label" => "Default Reason",
-            "id"    => "isDefault"
-        ));
+            "id"    => "isDefault",
+        ]);
 
         $this->addElement('hidden', 'deviceSwapReasonId');
 
@@ -51,13 +51,6 @@ class DeviceSwapReasonsForm extends Zend_Form
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/hardwareoptimization/device-swap-reason-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/hardwareoptimization/device-swap-reason-form.phtml']]]);
     }
 }

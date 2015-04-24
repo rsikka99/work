@@ -16,13 +16,13 @@ function getNewSection ($phpWord, &$sections, $sectionName = 'default')
 {
     if (!isset($sections[$sectionName]))
     {
-        $section                = $phpWord->addSection(array(
+        $section                = $phpWord->addSection([
             'orientation'  => null,
             'marginLeft'   => 300,
             'marginRight'  => 300,
             'marginTop'    => 300,
             'marginBottom' => 300
-        ));
+        ]);
         $sections[$sectionName] = $section;
     }
 
@@ -32,7 +32,7 @@ function getNewSection ($phpWord, &$sections, $sectionName = 'default')
 /**
  * @var $sections \PhpOffice\PhpWord\Element\Section[]
  */
-$sections = array();
+$sections = [];
 
 /* @var $contractTemplate ContractTemplateModel */
 $contractTemplate = $this->contractTemplate;
@@ -84,7 +84,7 @@ $this->render("{$basePath}/formattingStyles.phtml");
 
 $contractTemplateSections = $contractTemplate->getContractTemplateSections();
 
-$contractTemplateSectionBySectionId = array();
+$contractTemplateSectionBySectionId = [];
 foreach ($contractTemplateSections as $contractTemplateSection)
 {
     if ($contractTemplateSection->enabled && !isset($contractTemplateSectionBySectionId[$contractTemplateSection->contractSectionId]))
@@ -97,7 +97,7 @@ foreach ($contractTemplateSections as $contractTemplateSection)
  * Render the different sections if they've appeared
  */
 
-$defaultData = array(
+$defaultData = [
     "section"        => $section,
     "tableStyle"     => $this->tableStyle,
     "fontStyle"      => $this->fontStyle,
@@ -107,7 +107,7 @@ $defaultData = array(
     "leaseDetails"   => $this->leaseDetails,
     "company"        => $this->company,
     "quote"          => $this->quote,
-);
+];
 
 /*
  * Great America contract sections
@@ -120,10 +120,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_C
 {
     $this->partial("{$basePath}/great-america/customer-you-your.phtml", array_merge(
             $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_CUSTOMER_YOU_YOUR],
-            )
-        )
+            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_CUSTOMER_YOU_YOUR],])
     );
 
     if (!isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_VENDOR]))
@@ -140,10 +137,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_V
 {
     $this->partial("{$basePath}/great-america/vendor.phtml", array_merge(
             $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_VENDOR],
-            )
-        )
+            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_VENDOR],])
     );
     $section->addTextBreak();
 }
@@ -155,10 +149,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_C
 {
     $this->partial("{$basePath}/great-america/contract.phtml", array_merge(
             $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_CONTRACT],
-            )
-        )
+            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_CONTRACT],])
     );
     $section->addTextBreak();
 }
@@ -170,10 +161,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_M
 {
     $this->partial("{$basePath}/great-america/mps-contract-details.phtml", array_merge(
             $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_MPS_CONTRACT_DETAILS],
-            )
-        )
+            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_MPS_CONTRACT_DETAILS],])
     );
     $section->addTextBreak();
 }
@@ -181,18 +169,15 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_M
 /**
  * Hardware Contract Details
  */
-if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_HARDWARE_CONTRACT_DETAILS]))
-{
-    $this->partial("{$basePath}/great-america/hardware-contract-details.phtml", array_merge(
-            $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_HARDWARE_CONTRACT_DETAILS],
-            )
-        )
-    );
-    $section->addTextBreak();
-}
-
+//if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_HARDWARE_CONTRACT_DETAILS]))
+//{
+//    $this->partial("{$basePath}/great-america/hardware-contract-details.phtml", array_merge(
+//            $defaultData,
+//            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_HARDWARE_CONTRACT_DETAILS],])
+//    );
+//    $section->addTextBreak();
+//}
+//
 /**
  * Customer's Authorized Signature - Signature Box
  */
@@ -200,10 +185,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_C
 {
     $this->partial("{$basePath}/great-america/customers-authorizing-signature.phtml", array_merge(
             $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_CUSTOMERS_AUTH_SIGNATURE],
-            )
-        )
+            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_CUSTOMERS_AUTH_SIGNATURE],])
     );
     $section->addTextBreak();
 }
@@ -215,10 +197,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_O
 {
     $this->partial("{$basePath}/great-america/owner-we-us-our.phtml", array_merge(
             $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_OWNER_WE_US_OUR],
-            )
-        )
+            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_OWNER_WE_US_OUR],])
     );
     $section->addTextBreak();
 }
@@ -230,10 +209,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_U
 {
     $this->partial("{$basePath}/great-america/unconditional-guaranty.phtml", array_merge(
             $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_UNCONDITIONAL_GUARANTY],
-            )
-        )
+            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_UNCONDITIONAL_GUARANTY],])
     );
     $section->addTextBreak();
 }
@@ -248,11 +224,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_E
 
     $this->partial("{$basePath}/great-america/equipment-list.phtml", array_merge(
             $defaultData,
-            array(
-                "section"                 => $equipmentSection,
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_EQUIPMENT_LIST],
-            )
-        )
+            ["section" => $equipmentSection, "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_EQUIPMENT_LIST],])
     );
 }
 
@@ -265,11 +237,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_A
 
     $this->partial("{$basePath}/great-america/additional-terms-and-conditions.phtml", array_merge(
             $defaultData,
-            array(
-                "section"                 => $termsAndConditionsSection,
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_ADDITIONAL_TERMS_AND_CONDITIONS],
-            )
-        )
+            ["section" => $termsAndConditionsSection, "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_GA_ADDITIONAL_TERMS_AND_CONDITIONS],])
     );
 }
 
@@ -284,10 +252,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_
 {
     $this->partial("{$basePath}/de-lage-landen/lessee-information.phtml", array_merge(
             $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_LESSEE_INFO],
-            )
-        )
+            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_LESSEE_INFO],])
     );
 }
 
@@ -299,10 +264,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_
 {
     $this->partial("{$basePath}/de-lage-landen/payment-information.phtml", array_merge(
             $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_PAYMENT_INFO],
-            )
-        )
+            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_PAYMENT_INFO],])
     );
 }
 
@@ -313,10 +275,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_
 {
     $this->partial("{$basePath}/de-lage-landen/lessee-signature.phtml", array_merge(
             $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_LESSEE_SIGNATURE],
-            )
-        )
+            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_LESSEE_SIGNATURE],])
     );
 }
 
@@ -327,10 +286,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_
 {
     $this->partial("{$basePath}/de-lage-landen/lessor-signature.phtml", array_merge(
             $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_LESSOR_SIGNATURE],
-            )
-        )
+            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_LESSOR_SIGNATURE],])
     );
 }
 
@@ -341,10 +297,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_
 {
     $this->partial("{$basePath}/de-lage-landen/acceptance.phtml", array_merge(
             $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_ACCEPTANCE],
-            )
-        )
+            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_ACCEPTANCE],])
     );
 }
 
@@ -355,10 +308,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_
 {
     $this->partial("{$basePath}/de-lage-landen/guaranty.phtml", array_merge(
             $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_GUARANTY],
-            )
-        )
+            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_GUARANTY],])
     );
 }
 
@@ -370,10 +320,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_
 {
     $this->partial("{$basePath}/de-lage-landen/terms-and-conditions.phtml", array_merge(
             $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_TERMS_AND_CONDITIONS],
-            )
-        )
+            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_TERMS_AND_CONDITIONS],])
     );
 }
 
@@ -385,10 +332,7 @@ if (isset($contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_
 {
     $this->partial("{$basePath}/de-lage-landen/schedule.phtml", array_merge(
             $defaultData,
-            array(
-                "contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_SCHEDULE],
-            )
-        )
+            ["contractTemplateSection" => $contractTemplateSectionBySectionId[ContractSectionModel::SECTION_DLL_SCHEDULE],])
     );
 }
 

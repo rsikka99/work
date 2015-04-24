@@ -21,25 +21,25 @@ class AppAclModel extends Zend_Acl
     /**
      * Roles
      */
-    const ROLE_GUEST                              = "-1";
-    const ROLE_AUTHENTICATED_USER                 = "0";
-    const ROLE_SYSTEM_ADMIN                       = "1";
-    const ROLE_COMPANY_ADMINISTRATOR              = "2";
-    const ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR = "3";
-    const ROLE_MASTER_DEVICE_ADMINISTRATOR        = "4";
+    const ROLE_GUEST                              = '-1';
+    const ROLE_AUTHENTICATED_USER                 = '0';
+    const ROLE_SYSTEM_ADMIN                       = '1';
+    const ROLE_COMPANY_ADMINISTRATOR              = '2';
+    const ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR = '3';
+    const ROLE_MASTER_DEVICE_ADMINISTRATOR        = '4';
 
     /**
      * Resource parameters
      */
-    const SEPARATOR = "__";
-    const WILDCARD  = "%";
+    const SEPARATOR = '__';
+    const WILDCARD  = '%';
 
     /**
      * This is what kind of access we want to allow. We can use this to provide dynamic pages based on ACL
      */
-    const PRIVILEGE_ADMIN = "Admin";
-    const PRIVILEGE_VIEW  = "View";
-    const PRIVILEGE_EDIT  = "Edit";
+    const PRIVILEGE_ADMIN = 'Admin';
+    const PRIVILEGE_VIEW  = 'View';
+    const PRIVILEGE_EDIT  = 'Edit';
 
     /**
      * @var AppAclModel
@@ -105,8 +105,8 @@ class AppAclModel extends Zend_Acl
     public function isAllowed ($role = null, $resource = null, $privilege = null)
     {
         $isAllowed             = false;
-        $roles                 = array();
-        $resourceAssertionList = array();
+        $roles                 = [];
+        $resourceAssertionList = [];
 
         $userId = 0;
 
@@ -295,7 +295,7 @@ class AppAclModel extends Zend_Acl
      *
      * @return bool
      */
-    public function saveToCache ($data, $id = null, $tags = array(), $specificLifetime = false, $priority = 8)
+    public function saveToCache ($data, $id = null, $tags = [], $specificLifetime = false, $priority = 8)
     {
         $cache = $this->getCache();
         if ($cache !== false)

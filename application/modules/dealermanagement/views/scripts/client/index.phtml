@@ -7,7 +7,7 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
 ?>
 <div class="container">
     <div class="clearfix">
-        <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url(array(), 'company.clients.create') ?>">
+        <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url([], 'company.clients.create') ?>">
             <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
     </div>
     <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
@@ -29,14 +29,14 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
                     <td><?= $this->escape($client->legalName); ?></td>
                     <td>
                         <div class="btn-group btn-group-justified">
-                            <a class="btn btn-xs btn-info" title="View" href="<?= $this->url(array('id' => $client->id), 'company.clients.view'); ?>">
+                            <a class="btn btn-xs btn-info" title="View" href="<?= $this->url(['id' => $client->id], 'company.clients.view'); ?>">
                                 <i class="glyphicon glyphicon-eye-open"></i>
                             </a>
-                            <a class="btn btn-xs btn-warning" title="Edit" href="<?= $this->url(array('id' => $client->id), 'company.clients.edit'); ?>">
+                            <a class="btn btn-xs btn-warning" title="Edit" href="<?= $this->url(['id' => $client->id], 'company.clients.edit'); ?>">
                                 <i class="glyphicon glyphicon-pencil"></i>
                             </a>
                             <?php if ($this->IsAllowed(DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_CLIENT_DELETE, AppAclModel::PRIVILEGE_VIEW)): ?>
-                                <a class="btn btn-xs btn-danger" title="Delete" href="<?= $this->url(array('id' => $client->id), 'company.clients.delete'); ?>">
+                                <a class="btn btn-xs btn-danger" title="Delete" href="<?= $this->url(['id' => $client->id], 'company.clients.delete'); ?>">
                                     <i class="glyphicon glyphicon-trash"></i>
                                 </a>
                             <?php endif; ?>

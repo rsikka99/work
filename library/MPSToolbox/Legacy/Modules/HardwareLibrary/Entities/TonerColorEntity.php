@@ -27,14 +27,14 @@ class TonerColorEntity extends EloquentModel
      *
      * @var string[]
      */
-    static $ColorNames = array(
+    static $ColorNames = [
         self::BLACK       => "Black",
         self::CYAN        => "Cyan",
         self::MAGENTA     => "Magenta",
         self::YELLOW      => "Yellow",
         self::THREE_COLOR => "Three Color",
-        self::FOUR_COLOR  => "Four Color"
-    );
+        self::FOUR_COLOR  => "Four Color",
+    ];
 
     protected $table      = 'toner_colors';
     public    $timestamps = false;

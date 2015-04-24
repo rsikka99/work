@@ -25,7 +25,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Quote', 'Pages');
+        $this->_pageTitle = ['Quote', 'Pages'];
         $form             = new QuotePageForm($this->_quote);
 
         $request = $this->getRequest();
@@ -135,26 +135,26 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                     {
                         $this->updateQuoteStepName();
                         $this->saveQuote();
-                        $this->redirectToRoute('quotes.hardware-financing', array('quoteId' => $this->_quoteId));
+                        $this->redirectToRoute('quotes.hardware-financing', ['quoteId' => $this->_quoteId]);
                     }
                     else
                     {
                         // Refresh the page
-                        $this->redirectToRoute(null, array('quoteId' => $this->_quoteId));
+                        $this->redirectToRoute(null, ['quoteId' => $this->_quoteId]);
                     }
                 }
                 // form invalid : show error messages 
                 else
                 {
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'danger' => 'Please correct the errors below.'
-                    ));
+                    ]);
                 }
             }
             // Go back button is clicked : got back to quote_groups
             else
             {
-                $this->redirectToRoute('quotes.group-devices', array('quoteId' => $this->_quoteId));
+                $this->redirectToRoute('quotes.group-devices', ['quoteId' => $this->_quoteId]);
             }
         }
 

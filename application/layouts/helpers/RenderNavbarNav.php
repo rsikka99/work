@@ -17,7 +17,7 @@ class App_View_Helper_RenderNavbarNav extends Zend_View_Helper_Abstract
      */
     public function RenderNavbarNav ($container, $navClass = "nav navbar-nav", $maxDepth = 2)
     {
-        $html = array();
+        $html = [];
         if (count($container) > 0)
         {
             $html[]  = sprintf('<ul class="%s">', $navClass);
@@ -38,7 +38,7 @@ class App_View_Helper_RenderNavbarNav extends Zend_View_Helper_Abstract
      */
     protected function _render_nav ($pages, $depth)
     {
-        $html = array();
+        $html = [];
         foreach ($pages as $page)
         {
             if ($page->isVisible())

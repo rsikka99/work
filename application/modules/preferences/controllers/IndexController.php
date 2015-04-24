@@ -11,7 +11,7 @@ class Preferences_IndexController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Settings');
+        $this->_pageTitle = ['Settings'];
     }
 
 }

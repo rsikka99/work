@@ -157,19 +157,19 @@ class AssessmentModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
-            "id"                  => $this->id,
-            "clientId"            => $this->clientId,
-            "dealerId"            => $this->dealerId,
-            "rmsUploadId"         => $this->rmsUploadId,
-            "userPricingOverride" => $this->userPricingOverride,
-            "stepName"            => $this->stepName,
-            "dateCreated"         => $this->dateCreated,
-            "lastModified"        => $this->lastModified,
-            "reportDate"          => $this->reportDate,
-            "devicesModified"     => $this->devicesModified,
-            "name"                => $this->name,
-        );
+        return [
+            'id'                  => $this->id,
+            'clientId'            => $this->clientId,
+            'dealerId'            => $this->dealerId,
+            'rmsUploadId'         => $this->rmsUploadId,
+            'userPricingOverride' => $this->userPricingOverride,
+            'stepName'            => $this->stepName,
+            'dateCreated'         => $this->dateCreated,
+            'lastModified'        => $this->lastModified,
+            'reportDate'          => $this->reportDate,
+            'devicesModified'     => $this->devicesModified,
+            'name'                => $this->name,
+        ];
     }
 
     /**

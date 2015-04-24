@@ -22,7 +22,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Quote', 'Group Devices');
+        $this->_pageTitle = ['Quote', 'Group Devices'];
         $form             = new QuoteGroupForm($this->_quote);
 
         $request = $this->getRequest();
@@ -32,9 +32,9 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
 
             if (isset($values ['goBack']))
             {
-                $this->redirectToRoute('quotes', array(
+                $this->redirectToRoute('quotes', [
                     'quoteId' => $this->_quoteId
-                ));
+                ]);
             }
             else
             {
@@ -54,46 +54,46 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
 
                         QuoteDeviceGroupMapper::getInstance()->insert($quoteDeviceGroup);
 
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'success' => "Group '{$quoteDeviceGroup->name}' successfully created."
-                        ));
+                        ]);
 
                         // Redirect to ourselves
-                        $this->redirectToRoute(null, array(
+                        $this->redirectToRoute(null, [
                             'quoteId' => $this->_quoteId
-                        ));
+                        ]);
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'danger' => 'Please correct the errors below:'
-                        ));
+                        ]);
                     }
                 }
                 else if (isset($values ['deleteGroup']))
                 {
-                    if ($form->isValidPartial(array(
+                    if ($form->isValidPartial([
                         'deleteGroup' => $values ['deleteGroup']
-                    ))
+                    ])
                     )
                     {
                         QuoteDeviceGroupMapper::getInstance()->delete($form->getSubForm('deviceQuantity')
                                                                            ->getValue('deleteGroup'));
 
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'success' => 'Group Deleted.'
-                        ));
+                        ]);
 
                         // Redirect to ourselves
-                        $this->redirectToRoute(null, array(
+                        $this->redirectToRoute(null, [
                             'quoteId' => $this->_quoteId
-                        ));
+                        ]);
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'danger' => 'You cannot delete this group.'
-                        ));
+                        ]);
                     }
                 }
                 else if (isset($values ['addDevice']))
@@ -107,10 +107,10 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         $quantity           = $addDeviceToGroupSubform->getValue('quantity');
 
                         $quoteDeviceGroupDeviceMapper = QuoteDeviceGroupDeviceMapper::getInstance();
-                        $quoteDeviceGroupDevice       = $quoteDeviceGroupDeviceMapper->find(array(
+                        $quoteDeviceGroupDevice       = $quoteDeviceGroupDeviceMapper->find([
                             $quoteDeviceId,
                             $quoteDeviceGroupId
-                        ));
+                        ]);
 
                         // If we found one, update it, otherwise insert a new one
                         if ($quoteDeviceGroupDevice)
@@ -136,20 +136,20 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                             QuoteDeviceGroupDeviceMapper::getInstance()->insert($quoteDeviceGroupDevice);
                         }
 
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'success' => "Added the devices successfully."
-                        ));
+                        ]);
 
                         // Redirect to ourselves
-                        $this->redirectToRoute(null, array(
+                        $this->redirectToRoute(null, [
                             'quoteId' => $this->_quoteId
-                        ));
+                        ]);
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'danger' => 'Please correct the errors below:'
-                        ));
+                        ]);
                     }
                 }
                 else if (isset($values ['deleteDeviceFromGroup']))
@@ -161,20 +161,20 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
 
                         QuoteDeviceGroupDeviceMapper::getInstance()->delete($keyPair);
 
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'success' => 'Device deleted successfully.'
-                        ));
+                        ]);
 
                         // Redirect to ourselves
-                        $this->redirectToRoute(null, array(
+                        $this->redirectToRoute(null, [
                             'quoteId' => $this->_quoteId
-                        ));
+                        ]);
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'danger' => 'You cannot delete this device.'
-                        ));
+                        ]);
                     }
                 }
                 else
@@ -221,9 +221,9 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
 
                             if ($quantityUpdates > 0)
                             {
-                                $this->_flashMessenger->addMessage(array(
+                                $this->_flashMessenger->addMessage([
                                     'success' => 'Your changes to the device quantities have been saved.'
-                                ));
+                                ]);
                             }
 
                             // Redirect?
@@ -231,7 +231,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                             {
                                 $this->updateQuoteStepName();
                                 $this->saveQuote();
-                                $this->redirectToRoute('quotes.manage-pages', array('quoteId' => $this->_quoteId));
+                                $this->redirectToRoute('quotes.manage-pages', ['quoteId' => $this->_quoteId]);
                             }
                             else
                             {
@@ -245,16 +245,16 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                             // Log the error
                             \Tangent\Logger\Logger::logException($e);
 
-                            $this->_flashMessenger->addMessage(array(
+                            $this->_flashMessenger->addMessage([
                                 'danger' => 'There was an error saving your changes. Please try again or contact your system administrator.'
-                            ));
+                            ]);
                         }
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'danger' => 'Please correct the errors below:'
-                        ));
+                        ]);
                     }
                 }
             }

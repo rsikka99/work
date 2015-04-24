@@ -22,6 +22,6 @@ class FormatCostPerPage extends \Zend_View_Helper_Abstract
      */
     public function formatCostPerPage ($costPerPage, $precision = 4)
     {
-        return $this->view->currency((float)$costPerPage, array('precision' => $precision));
+        return $this->view->currency((float)$costPerPage, ['precision' => $precision]);
     }
 }

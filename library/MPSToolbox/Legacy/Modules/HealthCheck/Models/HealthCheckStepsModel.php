@@ -18,16 +18,16 @@ class HealthCheckStepsModel extends My_Navigation_Abstract
      *
      * @var array
      */
-    private static $stepNames = array(
-        self::STEP_SETTINGS => array(
+    private static $stepNames = [
+        self::STEP_SETTINGS => [
             'name'  => 'Settings',
             'route' => 'healthcheck.settings'
-        ),
-        self::STEP_FINISHED => array(
+        ],
+        self::STEP_FINISHED => [
             'name'  => 'Report',
             'route' => 'healthcheck.report'
-        )
-    );
+        ]
+    ];
 
     /**
      * @var HealthCheckStepsModel

@@ -7,7 +7,7 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceConfigurationModel;
     <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
 
         <div class="clearfix">
-            <a class="btn btn-success btn-sm pull-right create-button" href="<?= $this->url(array(), 'quotes.configurations.create') ?>">
+            <a class="btn btn-success btn-sm pull-right create-button" href="<?= $this->url([], 'quotes.configurations.create') ?>">
                 <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
         </div>
 
@@ -30,9 +30,9 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceConfigurationModel;
                         <td><?= $deviceConfiguration->description; ?></td>
                         <td>
                             <div class="" style="text-align: center;">
-                                <a class="btn btn-warning btn-xs" title="Edit Configuration" href="<?= $this->url(array('configurationid' => $deviceConfiguration->id), 'quotes.configurations.edit'); ?>">
+                                <a class="btn btn-warning btn-xs" title="Edit Configuration" href="<?= $this->url(['configurationid' => $deviceConfiguration->id], 'quotes.configurations.edit'); ?>">
                                     <i class="glyphicon glyphicon-pencil icon-white"></i></a>
-                                <a class="btn btn-danger btn-xs" title="Delete Configuration" href="<?= $this->url(array('configurationid' => $deviceConfiguration->id), 'quotes.configurations.delete'); ?>">
+                                <a class="btn btn-danger btn-xs" title="Delete Configuration" href="<?= $this->url(['configurationid' => $deviceConfiguration->id], 'quotes.configurations.delete'); ?>">
                                     <i class="glyphicon glyphglyphicon glyphicon-trash"></i></a>
                             </div>
                         </td>
@@ -44,7 +44,7 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceConfigurationModel;
         </div>
 
     <?php else : ?>
-        <a class="btn btn-success btn-sm pull-right" href="<?= $this->url(array(), 'quotes.configurations.create') ?>">
+        <a class="btn btn-success btn-sm pull-right" href="<?= $this->url([], 'quotes.configurations.create') ?>">
             <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
         <h4>There are no device configurations</h4>
     <?php endif; ?>

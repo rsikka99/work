@@ -12,5 +12,5 @@ use Zend_Db_Table_Abstract;
 class DeviceInstanceReplacementMasterDeviceDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'device_instance_replacement_master_devices';
-    protected $_primary = array('deviceInstanceId', 'hardwareOptimizationId');
+    protected $_primary = ['deviceInstanceId', 'hardwareOptimizationId'];
 }

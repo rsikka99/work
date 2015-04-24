@@ -6,7 +6,7 @@ use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\AvailableOp
 $form = $this->element;
 ?>
 
-<?= $this->RenderFormOpen($form, array('js-option-form')) ?>
+<?= $this->RenderFormOpen($form, ['js-option-form']) ?>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group <?= ($form->getElement('name')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
@@ -26,7 +26,7 @@ $form = $this->element;
         <div class="col-md-6">
             <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                 <?= $this->RenderFormLabel($form->getElement('cost')) ?>
-                <?= $this->RenderFormText($form->getElement('cost'), array(), '$') ?>
+                <?= $this->RenderFormText($form->getElement('cost'), [], '$') ?>
                 <?= $this->RenderFormDescription($form->getElement('cost')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('cost')) ?>
             </div>

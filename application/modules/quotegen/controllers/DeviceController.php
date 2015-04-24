@@ -74,18 +74,18 @@ class Quotegen_DeviceController extends Action
 
         if (!$deviceId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'warning' => 'Please select a device to delete first.'
-            ));
+            ]);
             $this->redirectToRoute('quotes.devices');
         }
 
         $device = $this->getDevice($deviceId);
         if (!$device)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'There was an error selecting the device to delete.'
-            ));
+            ]);
             $this->redirectToRoute('quotes.devices');
         }
 
@@ -121,9 +121,9 @@ class Quotegen_DeviceController extends Action
                         DeviceConfigurationMapper::getInstance()->delete($deviceConfiguration);
                     }
                     $this->getDeviceMapper()->delete($device);
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'success' => "Device  '{$device->getMasterDevice()->getFullDeviceName()}' was deleted successfully."
-                    ));
+                    ]);
                     $this->redirectToRoute('quotes.devices');
                 }
             }
@@ -160,20 +160,20 @@ class Quotegen_DeviceController extends Action
                             $device->populate($values);
                             $deviceId = $this->getDeviceMapper()->insert($device);
 
-                            $this->_flashMessenger->addMessage(array(
+                            $this->_flashMessenger->addMessage([
                                 'success' => "Device {$device->masterDeviceId} was added successfully."
-                            ));
+                            ]);
 
                             // Redirect them here so that the form reloads
-                            $this->redirectToRoute('quotes.devices.edit', array(
+                            $this->redirectToRoute('quotes.devices.edit', [
                                 'id' => $deviceId
-                            ));
+                            ]);
                         }
                         catch (Exception $e)
                         {
-                            $this->_flashMessenger->addMessage(array(
+                            $this->_flashMessenger->addMessage([
                                 'danger' => 'There was an error processing this request.  Please try again.'
-                            ));
+                            ]);
                             $form->populate($request->getPost());
                         }
                     }
@@ -206,9 +206,9 @@ class Quotegen_DeviceController extends Action
         // If they haven't provided an id, send them back to the view all device page
         if (!$deviceId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'warning' => 'Please select a device to edit first.'
-            ));
+            ]);
             $this->redirectToRoute('quotes.devices');
         }
 
@@ -219,9 +219,9 @@ class Quotegen_DeviceController extends Action
         // If the device doesn't exist, send them back to the view all devices page
         if (!$device)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'There was an error selecting the device to edit.'
-            ));
+            ]);
             $this->redirectToRoute('quotes.devices');
         }
 
@@ -261,18 +261,18 @@ class Quotegen_DeviceController extends Action
                             $deviceOptionMapper->save($object->deviceOption);
                         }
 
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'success' => "Device '" . $this->view->escape($device->getMasterDevice()->getFullDeviceName()) . "' was updated successfully."
-                        ));
+                        ]);
 
                         // Save new device attributes (SKU)
                         $deviceMapper->save($device);
 
                         if (isset($values ['addOption']))
                         {
-                            $this->redirectToRoute('quotes.devices.add-options', array(
+                            $this->redirectToRoute('quotes.devices.add-options', [
                                 'deviceId' => $deviceId
-                            ));
+                            ]);
                         }
                         $form->populate($values);
                     }
@@ -283,9 +283,9 @@ class Quotegen_DeviceController extends Action
                 }
                 catch (InvalidArgumentException $e)
                 {
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'danger' => $e->getMessage()
-                    ));
+                    ]);
                 }
             }
             else
@@ -295,14 +295,14 @@ class Quotegen_DeviceController extends Action
             }
         }
 
-        $form->setDecorators(array(
-            array(
+        $form->setDecorators([
+            [
                 'ViewScript',
-                array(
+                [
                     'viewScript' => 'forms/quotegen/edit-form.phtml',
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
 
         $this->view->form = $form;
     }
@@ -317,12 +317,12 @@ class Quotegen_DeviceController extends Action
         $availableOptions = OptionMapper::getInstance()->fetchAllAvailableOptionsForDevice($deviceId);
         if (count($availableOptions) < 1)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'info' => "There are no more options to add to this device."
-            ));
-            $this->redirectToRoute('quotes.devices.edit', array(
+            ]);
+            $this->redirectToRoute('quotes.devices.edit', [
                 'id' => $deviceId
-            ));
+            ]);
         }
 
         $form = new SelectOptionsForm($availableOptions);
@@ -368,12 +368,12 @@ class Quotegen_DeviceController extends Action
                             }
                         }
 
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'success' => "Successfully added {$insertedOptions} options to {$device->getMasterDevice()->getFullDeviceName()} successfully."
-                        ));
-                        $this->redirectToRoute('quotes.devices.edit', array(
+                        ]);
+                        $this->redirectToRoute('quotes.devices.edit', [
                             'id' => $deviceId
-                        ));
+                        ]);
                     }
                     else
                     {
@@ -382,17 +382,17 @@ class Quotegen_DeviceController extends Action
                 }
                 catch (InvalidArgumentException $e)
                 {
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'danger' => $e->getMessage()
-                    ));
+                    ]);
                 }
             }
             else
             {
                 // User has cancelled. Go back to the edit page
-                $this->redirectToRoute('quotes.devices.edit', array(
+                $this->redirectToRoute('quotes.devices.edit', [
                     'id' => $deviceId
-                ));
+                ]);
             }
         }
 
@@ -414,20 +414,20 @@ class Quotegen_DeviceController extends Action
             $deviceOption->masterDeviceId = $id;
             $deviceOption->optionId       = $optionId;
             DeviceOptionMapper::getInstance()->delete($deviceOption);
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'success' => "Option deleted successfully."
-            ));
+            ]);
         }
         catch (Exception $e)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'error' => "Could not delete that option."
-            ));
+            ]);
         }
 
-        $this->redirectToRoute('quotes.devices.edit', array(
+        $this->redirectToRoute('quotes.devices.edit', [
             'id' => $id
-        ));
+        ]);
     }
 
     /**

@@ -22,7 +22,7 @@ $deleteDeviceButton      = $deviceQuantitySubForm->getElement('deleteDeviceFromG
         <div class="col-sm-4">
             <div class="input-group">
                 <?= $this->RenderFormText($addGroupSubForm->getElement('name')) ?>
-                <span class="input-group-btn"><?= $this->RenderFormSubmit($addGroupSubForm->getElement('addGroup'), array('btn-success')) ?></span>
+                <span class="input-group-btn"><?= $this->RenderFormSubmit($addGroupSubForm->getElement('addGroup'), ['btn-success']) ?></span>
             </div>
             <?= $this->RenderFormDescription($addGroupSubForm->getElement('name')) ?>
             <?= $this->RenderFormElementErrors($addGroupSubForm->getElement('name')) ?>
@@ -37,23 +37,23 @@ $deleteDeviceButton      = $deviceQuantitySubForm->getElement('deleteDeviceFromG
 
     <div class="form-inline">
         <div class="form-group">
-            <?= $this->RenderFormSubmit($addDeviceToGroupSubForm->getElement('addDevice'), array('btn btn-success btn-sm')) ?>
+            <?= $this->RenderFormSubmit($addDeviceToGroupSubForm->getElement('addDevice'), ['btn btn-success btn-sm']) ?>
         </div>
 
         <div class="form-group <?= ($addDeviceToGroupSubForm->getElement('quantity')->hasErrors()) ? 'has-error' : '' ?>">
-            <?= $this->RenderFormLabel($addDeviceToGroupSubForm->getElement('quantity'), array('sr-only')) ?>
+            <?= $this->RenderFormLabel($addDeviceToGroupSubForm->getElement('quantity'), ['sr-only']) ?>
             <?= $this->RenderFormText($addDeviceToGroupSubForm->getElement('quantity')) ?>
         </div>
 
         <div class="form-group <?= ($addDeviceToGroupSubForm->getElement('quoteDeviceId')->hasErrors()) ? 'has-error' : '' ?>">
-            <?= $this->RenderFormLabel($addDeviceToGroupSubForm->getElement('quoteDeviceId'), array('sr-only')) ?>
+            <?= $this->RenderFormLabel($addDeviceToGroupSubForm->getElement('quoteDeviceId'), ['sr-only']) ?>
             <?= $this->RenderFormSelect($addDeviceToGroupSubForm->getElement('quoteDeviceId')) ?>
         </div>
 
         <span> device to the</span>
 
         <div class="form-group <?= ($addDeviceToGroupSubForm->getElement('quoteDeviceGroupId')->hasErrors()) ? 'has-error' : '' ?>">
-            <?= $this->RenderFormLabel($addDeviceToGroupSubForm->getElement('quoteDeviceGroupId'), array('sr-only')) ?>
+            <?= $this->RenderFormLabel($addDeviceToGroupSubForm->getElement('quoteDeviceGroupId'), ['sr-only']) ?>
             <?= $this->RenderFormSelect($addDeviceToGroupSubForm->getElement('quoteDeviceGroupId')) ?>
         </div>
 
@@ -99,7 +99,7 @@ $deleteDeviceButton      = $deviceQuantitySubForm->getElement('deleteDeviceFromG
                             <td>
                                 <?php if (count($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions()) > 0) : ?>
                                     <?php
-                                    $optionList = array();
+                                    $optionList = [];
                                     foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption)
                                     {
                                         $optionList [] = "{$quoteDeviceOption->oemSku} (x{$quoteDeviceOption->quantity})";

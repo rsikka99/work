@@ -12,12 +12,12 @@ use My_Model_Abstract;
  */
 class EventLogTypeModel extends My_Model_Abstract
 {
-    const LOGIN                   = "login";
-    const LOGIN_FAIL              = "login_fail";
-    const LOGOUT                  = "logout";
-    const CHANGE_PASSWORD         = "change_password";
-    const FORGOT_PASSWORD_SEND    = "forgot_password_send";
-    const FORGOT_PASSWORD_CHANGED = "forgot_password_changed";
+    const LOGIN                   = 'login';
+    const LOGIN_FAIL              = 'login_fail';
+    const LOGOUT                  = 'logout';
+    const CHANGE_PASSWORD         = 'change_password';
+    const FORGOT_PASSWORD_SEND    = 'forgot_password_send';
+    const FORGOT_PASSWORD_CHANGED = 'forgot_password_changed';
 
     /**
      * @var String
@@ -65,10 +65,10 @@ class EventLogTypeModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
-            "id"          => $this->id,
-            "name"        => $this->name,
-            "description" => $this->description,
-        );
+        return [
+            'id'          => $this->id,
+            'name'        => $this->name,
+            'description' => $this->description,
+        ];
     }
 }

@@ -62,18 +62,18 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
 
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT))
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "error" => "You do not have permission to access this."
-            ));
+            ]);
 
             $this->redirectToRoute('assessment');
         }
 
         if (!$this->getSelectedClient() instanceof \MPSToolbox\Legacy\Entities\ClientEntity)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "danger" => "A client is not selected."
-            ));
+            ]);
 
             $this->redirectToRoute('app.dashboard');
         }
@@ -82,9 +82,9 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
 
         if (!$this->getSelectedUpload() instanceof \MPSToolbox\Legacy\Entities\RmsUploadEntity)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "danger" => "An RMS upload is not selected."
-            ));
+            ]);
 
             $this->redirectToRoute('app.dashboard');
         }
@@ -109,110 +109,110 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
     public function initReportList ()
     {
         // This is a list of reports that we can view.
-        $availableReportsArray            = array();
-        $availableReportsArray["Reports"] = array(
+        $availableReportsArray            = [];
+        $availableReportsArray["Reports"] = [
             "pagetitle" => "Select a report...",
             "active"    => false,
-            "url"       => $this->view->url(array(), 'assessment.report-index')
-        );
+            "url"       => $this->view->url([], 'assessment.report-index')
+        ];
 
         if (My_Feature::canAccess(My_Feature::ASSESSMENT))
         {
-            $availableReportsArray["Assessment"] = array(
+            $availableReportsArray["Assessment"] = [
                 "pagetitle" => "Assessment",
                 "active"    => false,
-                "url"       => $this->view->url(array(), 'assessment.report-assessment')
-            );
+                "url"       => $this->view->url([], 'assessment.report-assessment')
+            ];
         }
 
         if (My_Feature::canAccess(My_Feature::ASSESSMENT_CUSTOMER_COST_ANALYSIS))
         {
-            $availableReportsArray["CustomerCostAnalysis"] = array(
+            $availableReportsArray["CustomerCostAnalysis"] = [
                 "pagetitle" => "Customer Cost Analysis",
                 "active"    => false,
-                "url"       => $this->view->url(array(), 'assessment.report-cost-analysis')
-            );
+                "url"       => $this->view->url([], 'assessment.report-cost-analysis')
+            ];
         }
 
         if (My_Feature::canAccess(My_Feature::ASSESSMENT_GROSS_MARGIN))
         {
-            $availableReportsArray["GrossMargin"] = array(
+            $availableReportsArray["GrossMargin"] = [
                 "pagetitle" => "Gross Margin",
                 "active"    => false,
-                "url"       => $this->view->url(array(), 'assessment.report-gross-margin')
-            );
+                "url"       => $this->view->url([], 'assessment.report-gross-margin')
+            ];
         }
 
         if (My_Feature::canAccess(My_Feature::ASSESSMENT_TONER_VENDOR_GROSS_MARGIN))
         {
-            $availableReportsArray["TonerVendorGrossMargin"] = array(
+            $availableReportsArray["TonerVendorGrossMargin"] = [
                 "pagetitle" => "Toner Vendor Gross Margin",
                 "active"    => false,
-                "url"       => $this->view->url(array(), 'assessment.report-toner-vendor-gross-margin')
-            );
+                "url"       => $this->view->url([], 'assessment.report-toner-vendor-gross-margin')
+            ];
         }
 
         if (My_Feature::canAccess(My_Feature::ASSESSMENT_JIT_SUPPLY_AND_TONER_SKU_REPORT))
         {
-            $availableReportsArray["JITSupplyAndTonerSku"] = array(
+            $availableReportsArray["JITSupplyAndTonerSku"] = [
                 "pagetitle" => My_Brand::$jit . " Supply and Toner SKU Report",
                 "active"    => false,
-                "url"       => $this->view->url(array(), 'assessment.report-jit-supply-and-toner-sku')
-            );
+                "url"       => $this->view->url([], 'assessment.report-jit-supply-and-toner-sku')
+            ];
         }
 
         if (My_Feature::canAccess(My_Feature::ASSESSMENT_OLD_DEVICE_LIST))
         {
-            $availableReportsArray["OldDeviceList"] = array(
+            $availableReportsArray["OldDeviceList"] = [
                 "pagetitle" => "Old Device List",
                 "active"    => false,
-                "url"       => $this->view->url(array(), 'assessment.report-old-device-list')
-            );
+                "url"       => $this->view->url([], 'assessment.report-old-device-list')
+            ];
         }
 
         if (My_Feature::canAccess(My_Feature::ASSESSMENT_PRINTING_DEVICE_LIST))
         {
-            $availableReportsArray["PrintingDeviceList"] = array(
+            $availableReportsArray["PrintingDeviceList"] = [
                 "pagetitle" => "Printing Device List",
                 "active"    => false,
-                "url"       => $this->view->url(array(), 'assessment.report-printing-device-list')
-            );
+                "url"       => $this->view->url([], 'assessment.report-printing-device-list')
+            ];
         }
 
         if (My_Feature::canAccess(My_Feature::ASSESSMENT_SOLUTION))
         {
-            $availableReportsArray["Solution"] = array(
+            $availableReportsArray["Solution"] = [
                 "pagetitle" => "Solution",
                 "active"    => false,
-                "url"       => $this->view->url(array(), 'assessment.report-solution')
-            );
+                "url"       => $this->view->url([], 'assessment.report-solution')
+            ];
         }
 
         if (My_Feature::canAccess(My_Feature::ASSESSMENT_LEASE_BUYBACK))
         {
-            $availableReportsArray["LeaseBuyback"] = array(
+            $availableReportsArray["LeaseBuyback"] = [
                 "pagetitle" => "Lease Buyback",
                 "active"    => false,
-                "url"       => $this->view->url(array(), 'assessment.report-lease-buy-back')
-            );
+                "url"       => $this->view->url([], 'assessment.report-lease-buy-back')
+            ];
         }
 
         if (My_Feature::canAccess(My_Feature::ASSESSMENT_FLEET_ATTRIBUTES))
         {
-            $availableReportsArray["FleetAttributes"] = array(
+            $availableReportsArray["FleetAttributes"] = [
                 "pagetitle" => "Fleet Attributes",
                 "active"    => false,
-                "url"       => $this->view->url(array(), 'assessment.report-fleet-attributes')
-            );
+                "url"       => $this->view->url([], 'assessment.report-fleet-attributes')
+            ];
         }
 
         if (My_Feature::canAccess(My_Feature::ASSESSMENT_UTILIZATION))
         {
-            $availableReportsArray["Utilization"] = array(
+            $availableReportsArray["Utilization"] = [
                 "pagetitle" => "Utilization",
                 "active"    => false,
-                "url"       => $this->view->url(array(), 'assessment.report-utilization')
-            );
+                "url"       => $this->view->url([], 'assessment.report-utilization')
+            ];
         }
 
         $this->view->availableReports = $availableReportsArray;
@@ -228,10 +228,10 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
         $this->view->headScript()->appendFile($this->view->baseUrl('/js/app/legacy/HtmlReport.js'));
         if ($this->getAssessment()->id < 1)
         {
-            $this->_flashMessenger->addMessage(array("error" => "Please select a report first."));
+            $this->_flashMessenger->addMessage(["error" => "Please select a report first."]);
 
             // Send user to the index
-            $this->redirectToRoute(array(), 'assessment');
+            $this->redirectToRoute([], 'assessment');
         }
 
         $this->view->dealerLogoFile = $this->getDealerLogoFile();

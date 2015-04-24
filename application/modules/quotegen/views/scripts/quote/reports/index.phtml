@@ -35,7 +35,7 @@ $contractTemplates = ContractTemplateMapper::getInstance()->fetchAllForDealer($t
 
                 </div>
                 <div class="panel-footer text-right">
-                    <a class="downloadButton btn btn-primary btn-xs" title="Download quote in DOCX format" data-ext="docx" href="<?= $this->url(array('format' => 'docx', 'quoteId' => $quote->id), 'quotes.reports.' . (($quote->isLeased()) ? 'lease' : 'purchase')); ?>">
+                    <a class="downloadButton btn btn-primary btn-xs" title="Download quote in DOCX format" data-ext="docx" href="<?= $this->url(['format' => 'docx', 'quoteId' => $quote->id], 'quotes.reports.' . (($quote->isLeased()) ? 'lease' : 'purchase')); ?>">
                         <i class='fa fa-fw fa-download'></i>
                         Download (DOCX)
                     </a>
@@ -59,7 +59,7 @@ $contractTemplates = ContractTemplateMapper::getInstance()->fetchAllForDealer($t
                         </select>
 
                         <span class="input-group-btn">
-                            <a class="downloadButton btn btn-primary" title="Download contract in DOCX format" data-ext="docx" data-extra-parameter="contractTemplateId" href="<?= $this->url(array('format' => 'docx', 'quoteId' => $quote->id), 'quotes.reports.contract'); ?>">
+                            <a class="downloadButton btn btn-primary" title="Download contract in DOCX format" data-ext="docx" data-extra-parameter="contractTemplateId" href="<?= $this->url(['format' => 'docx', 'quoteId' => $quote->id], 'quotes.reports.contract'); ?>">
                                 <i class='fa fa-fw fa-download'></i>
                                 Download (DOCX)
                             </a>
@@ -75,7 +75,7 @@ $contractTemplates = ContractTemplateMapper::getInstance()->fetchAllForDealer($t
                     <p>An order list meant for internal consumption. It lists all the SKUs that need to be ordered to fulfill the quote.</p>
                 </div>
                 <div class="panel-footer text-right">
-                    <a class="downloadButton btn btn-success btn-xs" title="Download order list in XLSX format" data-ext="xlsx" href="<?= $this->url(array('format' => 'xlsx', 'quoteId' => $quote->id), 'quotes.reports.order-list'); ?>">
+                    <a class="downloadButton btn btn-success btn-xs" title="Download order list in XLSX format" data-ext="xlsx" href="<?= $this->url(['format' => 'xlsx', 'quoteId' => $quote->id], 'quotes.reports.order-list'); ?>">
                         <i class='fa fa-fw fa-download'></i>
                         Download (XLSX)
                     </a>

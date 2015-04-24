@@ -23,14 +23,14 @@ class PrintFleetVersionThreeUploadService extends AbstractRmsUploadService
      *
      * @var string
      */
-    protected $_incomingDateFormat = array(
+    protected $_incomingDateFormat = [
         'Y-m-d\TH:i:s',
         'Y-m-d\TH:i:s.u',
         'Y-m-d\TH:i:s.uO',
         DateTime::ISO8601,
         'm/d/Y G:i',
         "m/d/Y h:i:s A",
-    );
+    ];
 
     /**
      * Column mapping for CSV -> Upload Row.
@@ -38,7 +38,7 @@ class PrintFleetVersionThreeUploadService extends AbstractRmsUploadService
      *
      * @var array
      */
-    protected $_columnMapping = array(
+    protected $_columnMapping = [
         'rmsvendorname'            => 'rmsVendorName',
         'rmsreportversion'         => 'rmsReportVersion',
         'rmsmodelid'               => 'rmsModelId',
@@ -101,5 +101,5 @@ class PrintFleetVersionThreeUploadService extends AbstractRmsUploadService
         'monocoverage'             => 'pageCoverageMonochrome',
         'colorcoverage'            => 'pageCoverageColor',
         'location'                 => 'location',
-    );
+    ];
 }

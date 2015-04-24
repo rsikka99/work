@@ -81,10 +81,10 @@ class DeviceSwapReasonDefaultMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_deviceSwapReasonCategoryId} = ?" => $primaryKey[0],
-            "{$this->col_dealerId} = ?"                   => $primaryKey[1]
-        ));
+            "{$this->col_dealerId} = ?"                   => $primaryKey[1],
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -105,17 +105,17 @@ class DeviceSwapReasonDefaultMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof DeviceSwapReasonDefaultModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_deviceSwapReasonCategoryId} = ?" => $object->deviceSwapReasonCategoryId,
-                "{$this->col_dealerId} = ?"                   => $object->dealerId
-            );
+                "{$this->col_dealerId} = ?"                   => $object->dealerId,
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_deviceSwapReasonCategoryId} = ?" => $object[0],
-                "{$this->col_dealerId} = ?"                   => $object[1]
-            );
+                "{$this->col_dealerId} = ?"                   => $object[1],
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -200,7 +200,7 @@ class DeviceSwapReasonDefaultMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new DeviceSwapReasonDefaultModel($row->toArray());
@@ -223,10 +223,10 @@ class DeviceSwapReasonDefaultMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_deviceSwapReasonCategoryId} = ?" => $id[0],
-            "{$this->col_dealerId} = ?"                   => $id[1]
-        );
+            "{$this->col_dealerId} = ?"                   => $id[1],
+        ];
     }
 
     /**
@@ -236,10 +236,10 @@ class DeviceSwapReasonDefaultMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
+        return [
             $object->deviceSwapReasonCategoryId,
-            $object->dealerId
-        );
+            $object->dealerId,
+        ];
     }
 
     /**
@@ -249,7 +249,7 @@ class DeviceSwapReasonDefaultMapper extends My_Model_Mapper_Abstract
      */
     public function findDefaultByReasonId ($reasonId)
     {
-        return $this->fetch(array("{$this->col_deviceSwapReasonId} = ?" => $reasonId));
+        return $this->fetch(["{$this->col_deviceSwapReasonId} = ?" => $reasonId]);
     }
 
     /**
@@ -260,7 +260,7 @@ class DeviceSwapReasonDefaultMapper extends My_Model_Mapper_Abstract
      */
     public function findDefaultByDealerId ($categoryId, $dealerId)
     {
-        return $this->fetch(array("{$this->col_deviceSwapReasonCategoryId} = ?" => $categoryId, "{$this->col_dealerId} = ?" => $dealerId));
+        return $this->fetch(["{$this->col_deviceSwapReasonCategoryId} = ?" => $categoryId, "{$this->col_dealerId} = ?" => $dealerId]);
     }
 
     /**
@@ -272,6 +272,6 @@ class DeviceSwapReasonDefaultMapper extends My_Model_Mapper_Abstract
      */
     public function deleteDefaultReasonByDealerId ($dealerId)
     {
-        return $this->getDbTable()->delete(array("{$this->col_dealerId} = ?" => $dealerId));
+        return $this->getDbTable()->delete(["{$this->col_dealerId} = ?" => $dealerId]);
     }
 }

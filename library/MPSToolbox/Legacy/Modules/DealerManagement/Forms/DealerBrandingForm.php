@@ -37,144 +37,144 @@ class DealerBrandingForm extends Zend_Form
          * Names
          * ==============================================
          */
-        $this->addElement('text', 'dealerName', array(
+        $this->addElement('text', 'dealerName', [
             'label'      => 'Dealer Name:',
             'required'   => true,
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
-                array('validator' => 'StringLength', 'options' => array(2, 255),),
-            ),
-        ));
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                ['validator' => 'StringLength', 'options' => [2, 255]],
+            ],
+        ]);
 
-        $this->addElement('text', 'shortDealerName', array(
+        $this->addElement('text', 'shortDealerName', [
             'label'      => 'Shortened Dealer Name:',
             'required'   => true,
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
-                array('validator' => 'StringLength', 'options' => array(2, 255),),
-            ),
-        ));
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                ['validator' => 'StringLength', 'options' => [2, 255]],
+            ],
+        ]);
 
-        $this->addElement('text', 'mpsProgramName', array(
+        $this->addElement('text', 'mpsProgramName', [
             'label'      => 'MPS Program Name:',
             'required'   => true,
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
-                array('validator' => 'StringLength', 'options' => array(2, 255),),
-            ),
-        ));
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                ['validator' => 'StringLength', 'options' => [2, 255]],
+            ],
+        ]);
 
-        $this->addElement('text', 'shortMpsProgramName', array(
+        $this->addElement('text', 'shortMpsProgramName', [
             'label'      => 'Shortened MPS Program Name:',
             'required'   => true,
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
-                array('validator' => 'StringLength', 'options' => array(2, 255),),
-            ),
-        ));
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                ['validator' => 'StringLength', 'options' => [2, 255]],
+            ],
+        ]);
 
-        $this->addElement('text', 'jitProgramName', array(
+        $this->addElement('text', 'jitProgramName', [
             'label'      => 'JIT Program Name:',
             'required'   => true,
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
-                array('validator' => 'StringLength', 'options' => array(2, 255),),
-            ),
-        ));
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                ['validator' => 'StringLength', 'options' => [2, 255]],
+            ],
+        ]);
 
-        $this->addElement('text', 'shortJitProgramName', array(
+        $this->addElement('text', 'shortJitProgramName', [
             'label'      => 'Shortened JIT Program Name:',
             'required'   => true,
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
-                array('validator' => 'StringLength', 'options' => array(2, 255),),
-            ),
-        ));
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                ['validator' => 'StringLength', 'options' => [2, 255]],
+            ],
+        ]);
 
         /**
          * ==============================================
          * Font Colors
          * ==============================================
          */
-        $this->addElement('text', 'titlePageTitleFontColor', array(
+        $this->addElement('text', 'titlePageTitleFontColor', [
             'label'      => 'Title Page Title Font Color:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'titlePageTitleBackgroundColor', array(
+        $this->addElement('text', 'titlePageTitleBackgroundColor', [
             'label'      => 'Title Page Title Background Color:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'titlePageInformationFontColor', array(
+        $this->addElement('text', 'titlePageInformationFontColor', [
             'label'      => 'Title Page Text Color:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'titlePageInformationBackgroundColor', array(
+        $this->addElement('text', 'titlePageInformationBackgroundColor', [
             'label'      => 'Title Page Text Background Color:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'h1FontColor', array(
+        $this->addElement('text', 'h1FontColor', [
             'label'      => 'H1 Font Color:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'h1BackgroundColor', array(
+        $this->addElement('text', 'h1BackgroundColor', [
             'label'      => 'H1 Background Color:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'h2FontColor', array(
+        $this->addElement('text', 'h2FontColor', [
             'label'      => 'H2 Font Color:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'h2BackgroundColor', array(
+        $this->addElement('text', 'h2BackgroundColor', [
             'label'      => 'H2 Background Color:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
 
         /**
@@ -182,379 +182,379 @@ class DealerBrandingForm extends Zend_Form
          * Graph Colors
          * ==============================================
          */
-        $this->addElement('text', 'graphCustomerColor', array(
+        $this->addElement('text', 'graphCustomerColor', [
             'label'      => 'Graph Color - Customer:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphDealerColor', array(
+        $this->addElement('text', 'graphDealerColor', [
             'label'      => 'Graph Color - Your Company:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphPositiveColor', array(
+        $this->addElement('text', 'graphPositiveColor', [
             'label'      => 'Graph Color - Positive Meaning:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphNegativeColor', array(
+        $this->addElement('text', 'graphNegativeColor', [
             'label'      => 'Graph Color - Negative Meaning:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphMonoDeviceColor', array(
+        $this->addElement('text', 'graphMonoDeviceColor', [
             'label'      => 'Graph Color - Monochrome Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphColorDeviceColor', array(
+        $this->addElement('text', 'graphColorDeviceColor', [
             'label'      => 'Graph Color - Color Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphCopyCapableDeviceColor', array(
+        $this->addElement('text', 'graphCopyCapableDeviceColor', [
             'label'      => 'Graph Color - Copy/Scan Capable Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphDuplexCapableDeviceColor', array(
+        $this->addElement('text', 'graphDuplexCapableDeviceColor', [
             'label'      => 'Graph Color - Duplex Capable Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphFaxCapableDeviceColor', array(
+        $this->addElement('text', 'graphFaxCapableDeviceColor', [
             'label'      => 'Graph Color - Fax Capable Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphPurchasedDeviceColor', array(
+        $this->addElement('text', 'graphPurchasedDeviceColor', [
             'label'      => 'Graph Color - Purchased Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphLeasedDeviceColor', array(
+        $this->addElement('text', 'graphLeasedDeviceColor', [
             'label'      => 'Graph Color - Leased Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphExcludedDeviceColor', array(
+        $this->addElement('text', 'graphExcludedDeviceColor', [
             'label'      => 'Graph Color - Excluded Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphIndustryAverageColor', array(
+        $this->addElement('text', 'graphIndustryAverageColor', [
             'label'      => 'Graph Color - Industry Average:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphKeepDeviceColor', array(
+        $this->addElement('text', 'graphKeepDeviceColor', [
             'label'      => 'Graph Color - Optimization - Keep Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphReplacedDeviceColor', array(
+        $this->addElement('text', 'graphReplacedDeviceColor', [
             'label'      => 'Graph Color - Optimization - Replaced Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphDoNotRepairDeviceColor', array(
+        $this->addElement('text', 'graphDoNotRepairDeviceColor', [
             'label'      => 'Graph Color - Optimization - Do Not Repair Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphRetireDeviceColor', array(
+        $this->addElement('text', 'graphRetireDeviceColor', [
             'label'      => 'Graph Color - Optimization - Retire Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphManagedDeviceColor', array(
+        $this->addElement('text', 'graphManagedDeviceColor', [
             'label'      => 'Graph Color - Health Check - Managed Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphManageableDeviceColor', array(
+        $this->addElement('text', 'graphManageableDeviceColor', [
             'label'      => 'Graph Color - Health Check - Manageable Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphFutureReviewDeviceColor', array(
+        $this->addElement('text', 'graphFutureReviewDeviceColor', [
             'label'      => 'Graph Color - Health Check - Future Review Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphJitCompatibleDeviceColor', array(
+        $this->addElement('text', 'graphJitCompatibleDeviceColor', [
             'label'      => 'Graph Color - JIT Compatible Devices:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphCompatibleDeviceColor', array(
+        $this->addElement('text', 'graphCompatibleDeviceColor', [
             'label'      => 'Graph Color - Compatible Devices (for any reason):',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphNotCompatibleDeviceColor', array(
+        $this->addElement('text', 'graphNotCompatibleDeviceColor', [
             'label'      => 'Graph Color - Not Compatible Devices (for any reason):',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphCurrentSituationColor', array(
+        $this->addElement('text', 'graphCurrentSituationColor', [
             'label'      => 'Graph Color - Current Situation:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphNewSituationColor', array(
+        $this->addElement('text', 'graphNewSituationColor', [
             'label'      => 'Graph Color - New Situation:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphAgeOfDevices1', array(
+        $this->addElement('text', 'graphAgeOfDevices1', [
             'label'      => 'Graph Color - Age Of Devices 0-2 Years:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphAgeOfDevices2', array(
+        $this->addElement('text', 'graphAgeOfDevices2', [
             'label'      => 'Graph Color - Age Of Devices 2-4 Years:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphAgeOfDevices3', array(
+        $this->addElement('text', 'graphAgeOfDevices3', [
             'label'      => 'Graph Color - Age Of Devices 4-8 Years:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'graphAgeOfDevices4', array(
+        $this->addElement('text', 'graphAgeOfDevices4', [
             'label'      => 'Graph Color - Age Of Devices 8+ Years:',
             'required'   => true,
             'class'      => 'hex-color-input',
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
                 $hexColorValidator,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->addElement('text', 'assessmentTitle', array(
+        $this->addElement('text', 'assessmentTitle', [
             'label'      => 'Assessment Title:',
             'required'   => true,
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array('min' => 0, 'max' => 200),
-                ),
-            ),
-        ));
+                    'options'   => ['min' => 0, 'max' => 200],
+                ],
+            ],
+        ]);
 
-        $this->addElement('text', 'customerCostAnalysisTitle', array(
+        $this->addElement('text', 'customerCostAnalysisTitle', [
             'label'      => 'Customer Cost Analysis Title:',
             'required'   => true,
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array('min' => 0, 'max' => 200),
-                ),
-            ),
-        ));
+                    'options'   => ['min' => 0, 'max' => 200],
+                ],
+            ],
+        ]);
 
-        $this->addElement('text', 'customerOptimizationTitle', array(
+        $this->addElement('text', 'customerOptimizationTitle', [
             'label'      => 'Customer Optimization Title:',
             'required'   => true,
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array('min' => 0, 'max' => 200),
-                ),
-            ),
-        ));
+                    'options'   => ['min' => 0, 'max' => 200],
+                ],
+            ],
+        ]);
 
-        $this->addElement('text', 'healthCheckTitle', array(
+        $this->addElement('text', 'healthCheckTitle', [
             'label'      => 'Business Review Title:',
             'required'   => true,
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array('min' => 0, 'max' => 200),
-                ),
-            ),
-        ));
+                    'options'   => ['min' => 0, 'max' => 200],
+                ],
+            ],
+        ]);
 
-        $this->addElement('text', 'leaseQuoteTitle', array(
+        $this->addElement('text', 'leaseQuoteTitle', [
             'label'      => 'Lease Quote Title:',
             'required'   => true,
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array('min' => 0, 'max' => 200),
-                ),
-            ),
-        ));
+                    'options'   => ['min' => 0, 'max' => 200],
+                ],
+            ],
+        ]);
 
-        $this->addElement('text', 'purchaseQuoteTitle', array(
+        $this->addElement('text', 'purchaseQuoteTitle', [
             'label'      => 'Purchase Quote Title:',
             'required'   => true,
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array('min' => 0, 'max' => 200),
-                ),
-            ),
-        ));
+                    'options'   => ['min' => 0, 'max' => 200],
+                ],
+            ],
+        ]);
 
-        $this->addElement('text', 'solutionTitle', array(
+        $this->addElement('text', 'solutionTitle', [
             'label'      => 'Solution Title:',
             'required'   => true,
-            'filters'    => array('StringTrim', 'StripTags',),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array('min' => 0, 'max' => 200),
-                ),
-            ),
-        ));
+                    'options'   => ['min' => 0, 'max' => 200],
+                ],
+            ],
+        ]);
 
 
         /**
@@ -566,29 +566,29 @@ class DealerBrandingForm extends Zend_Form
         /**
          * Cancel Button
          */
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'ignore' => true,
-            'label'  => 'Cancel'
-        ));
+            'label'  => 'Cancel',
+        ]);
 
         /**
          * Save Button
          */
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'ignore' => true,
-            'label'  => 'Save'
-        ));
+            'label'  => 'Save',
+        ]);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
+        $this->setDecorators([
+            [
                 'ViewScript',
-                array(
+                [
                     'viewScript' => 'forms/dealermanagement/dealer-branding-form.phtml'
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
     }
 }

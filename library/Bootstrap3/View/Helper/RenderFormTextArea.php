@@ -17,14 +17,14 @@ class RenderFormTextArea extends RenderFormAbstract
      *
      * @return string
      */
-    public function RenderFormTextArea (\Zend_Form_Element $element, $elementClasses = array())
+    public function RenderFormTextArea (\Zend_Form_Element $element, $elementClasses = [])
     {
-        $html = array();
+        $html = [];
         if ($element instanceof \Zend_Form_Element_Textarea)
         {
             if (!is_array($elementClasses))
             {
-                $elementClasses = array($elementClasses);
+                $elementClasses = [$elementClasses];
             }
             array_unshift($elementClasses, 'form-control');
 
@@ -43,7 +43,7 @@ class RenderFormTextArea extends RenderFormAbstract
              *  Prep attributes
              */
             $attributes['class']  = $this->processClasses($attributes, $elementClasses);
-            $serializedAttributes = $this->serializeAttributes($attributes, array('options'));
+            $serializedAttributes = $this->serializeAttributes($attributes, ['options']);
             $element->setAttribs($attributes);
 
             $html [] = sprintf('<textarea name="%1$s" %2$s>%3$s</textarea>', $element->getName(), $serializedAttributes, $element->getValue());

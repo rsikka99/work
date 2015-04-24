@@ -12,8 +12,5 @@ use Zend_Db_Table_Abstract;
 class DeviceSwapDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = "device_swaps";
-    protected $_primary = array(
-        "masterDeviceId",
-        "dealerId"
-    );
+    protected $_primary = ["masterDeviceId", "dealerId"];
 }

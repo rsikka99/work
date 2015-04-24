@@ -22,22 +22,22 @@ class OptimizationFunctionalityDeviceReplacementModel implements OptimizationDev
     /**
      * @var DeviceSwapModel[]
      */
-    protected $_blackReplacementDevices = array();
+    protected $_blackReplacementDevices = [];
 
     /**
      * @var DeviceSwapModel[]
      */
-    protected $_blackMfpReplacementDevices = array();
+    protected $_blackMfpReplacementDevices = [];
 
     /**
      * @var DeviceSwapModel[]
      */
-    protected $_colorReplacementDevices = array();
+    protected $_colorReplacementDevices = [];
 
     /**
      * @var DeviceSwapModel[]
      */
-    protected $_colorMfpReplacementDevices = array();
+    protected $_colorMfpReplacementDevices = [];
 
     /**
      * @var CostPerPageSettingModel

@@ -7,10 +7,14 @@ use MPSToolbox\Legacy\Entities\RmsUploadEntity;
     <div class="row">
         <div class="col-sm-10">
             <p class="lead">Please select an upload to use or upload a new one.</p>
-            <p>You can also <a href="<?= $this->url([], 'app.dashboard') ?>">skip to the <i class="fa fa-fw fa-dashboard"></i> dashboard</a> if you are only interested in hardware quotes.</p>
+
+            <p>You can also
+                <a href="<?= $this->url([], 'app.dashboard') ?>">skip to the
+                    <i class="fa fa-fw fa-dashboard"></i> dashboard</a> if you are only interested in hardware quotes.
+            </p>
         </div>
         <div class="col-sm-2">
-            <a class="btn btn-primary" href="<?= $this->url(array(), 'rms-upload.upload-file') ?>" title="Upload New">
+            <a class="btn btn-primary" href="<?= $this->url([], 'rms-upload.upload-file') ?>" title="Upload New">
                 <i class="fa fa-user fa-upload"></i>
                 Upload New
             </a>
@@ -43,10 +47,10 @@ use MPSToolbox\Legacy\Entities\RmsUploadEntity;
                         <td><?= $rmsUpload->rmsProvider->name; ?></td>
                         <td>
                             <div class="btn-group">
-                            <button name="rmsUploadId" value="<?= $rmsUpload->id; ?>" class="btn btn-primary btn-xs">
-                                <i class="fa fa-fw fa-check"></i> Select
-                            </button>
-                            <a class="btn btn-danger btn-xs js-delete-confirmation" href="<?= $this->url(['rmsUploadId' => $rmsUpload->id], 'app.dashboard.delete-rms-upload') ?>" title="Delete"><i class="fa fa-fw fa-trash-o"></i></a>
+                                <button name="rmsUploadId" value="<?= $rmsUpload->id; ?>" class="btn btn-primary btn-xs">
+                                    <i class="fa fa-fw fa-check"></i> Select
+                                </button>
+                                <a class="btn btn-danger btn-xs js-delete-confirmation" href="<?= $this->url(['rmsUploadId' => $rmsUpload->id], 'app.dashboard.delete-rms-upload') ?>" title="Delete"><i class="fa fa-fw fa-trash-o"></i></a>
                             </div>
                         </td>
                     </tr>

@@ -12,7 +12,7 @@ $form = $this->element;
                 <fieldset>
                     <legend>Contact Belongs To</legend>
                     <div class="form-group <?= ($form->getElement('dealerId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                        <?= $this->RenderFormLabel($form->getElement('dealerId'), array('col-md-3')) ?>
+                        <?= $this->RenderFormLabel($form->getElement('dealerId'), ['col-md-3']) ?>
 
                         <div class="col-md-9">
                             <?= $this->RenderFormSelect($form->getElement('dealerId')) ?>
@@ -25,7 +25,7 @@ $form = $this->element;
             <fieldset>
                 <legend>Company Details</legend>
                 <div class="form-group <?= ($form->getElement('accountNumber')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('accountNumber'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('accountNumber'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormText($form->getElement('accountNumber')) ?>
@@ -35,7 +35,7 @@ $form = $this->element;
                 </div>
 
                 <div class="form-group <?= ($form->getElement('companyName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('companyName'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('companyName'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormText($form->getElement('companyName')) ?>
@@ -45,7 +45,7 @@ $form = $this->element;
                 </div>
 
                 <div class="form-group <?= ($form->getElement('legalName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('legalName'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('legalName'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormText($form->getElement('legalName')) ?>
@@ -55,7 +55,7 @@ $form = $this->element;
                 </div>
 
                 <div class="form-group <?= ($form->getElement('employeeCount')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('employeeCount'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('employeeCount'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormText($form->getElement('employeeCount')) ?>
@@ -70,7 +70,7 @@ $form = $this->element;
             <fieldset>
                 <legend>Primary Contact Details</legend>
                 <div class="form-group <?= ($form->getElement('firstName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('firstName'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('firstName'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormText($form->getElement('firstName')) ?>
@@ -79,7 +79,7 @@ $form = $this->element;
                     </div>
                 </div>
                 <div class="form-group <?= ($form->getElement('lastName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('lastName'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('lastName'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormText($form->getElement('lastName')) ?>
@@ -88,7 +88,7 @@ $form = $this->element;
                     </div>
                 </div>
                 <div class="form-group <?= ($form->getElement('phoneNumber')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('phoneNumber'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('phoneNumber'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormText($form->getElement('phoneNumber')) ?>
@@ -101,7 +101,7 @@ $form = $this->element;
             <fieldset>
                 <legend>Company Address</legend>
                 <div class="form-group <?= ($form->getElement('addressLine1')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('addressLine1'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('addressLine1'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormText($form->getElement('addressLine1')) ?>
@@ -111,7 +111,7 @@ $form = $this->element;
                 </div>
 
                 <div class="form-group <?= ($form->getElement('addressLine2')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('addressLine2'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('addressLine2'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormText($form->getElement('addressLine2')) ?>
@@ -121,7 +121,7 @@ $form = $this->element;
                 </div>
 
                 <div class="form-group <?= ($form->getElement('city')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('city'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('city'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormText($form->getElement('city')) ?>
@@ -131,7 +131,7 @@ $form = $this->element;
                 </div>
 
                 <div class="form-group <?= ($form->getElement('region')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('region'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('region'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormText($form->getElement('region')) ?>
@@ -141,7 +141,7 @@ $form = $this->element;
                 </div>
 
                 <div class="form-group <?= ($form->getElement('postCode')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('postCode'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('postCode'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormText($form->getElement('postCode')) ?>
@@ -151,10 +151,10 @@ $form = $this->element;
                 </div>
 
                 <div class="form-group <?= ($form->getElement('countryId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('countryId'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('countryId'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
-                        <?= $this->RenderFormText($form->getElement('countryId'), array('js-select-country')) ?>
+                        <?= $this->RenderFormText($form->getElement('countryId'), ['js-select-country']) ?>
                         <?= $this->RenderFormDescription($form->getElement('countryId')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('countryId')) ?>
                     </div>
@@ -167,8 +167,8 @@ $form = $this->element;
 
         <hr>
         <ul class="pager">
-            <li><?= $this->RenderFormSubmit($form->getElement('Save'), array('btn', 'btn-primary')) ?></li>
-            <li><?= $this->RenderFormSubmit($form->getElement('Cancel'), array('btn', 'btn-default')) ?></li>
+            <li><?= $this->RenderFormSubmit($form->getElement('Save'), ['btn', 'btn-primary']) ?></li>
+            <li><?= $this->RenderFormSubmit($form->getElement('Cancel'), ['btn', 'btn-default']) ?></li>
         </ul>
     </fieldset>
 </form>

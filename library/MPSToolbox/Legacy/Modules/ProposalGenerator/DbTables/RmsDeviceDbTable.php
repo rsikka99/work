@@ -12,5 +12,5 @@ use Zend_Db_Table_Abstract;
 class RmsDeviceDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'rms_devices';
-    protected $_primary = array('rmsProviderId', 'rmsModelId');
+    protected $_primary = ['rmsProviderId', 'rmsModelId'];
 }

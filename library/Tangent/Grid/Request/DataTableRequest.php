@@ -18,12 +18,12 @@ class DataTableRequest implements RequestInterface
     /**
      * @var Column[]
      */
-    protected $orderColumns = array();
+    protected $orderColumns = [];
 
     /**
      * @var \Tangent\Grid\Filter\AbstractFilter[]
      */
-    protected $filters = array();
+    protected $filters = [];
 
     /**
      * @var int

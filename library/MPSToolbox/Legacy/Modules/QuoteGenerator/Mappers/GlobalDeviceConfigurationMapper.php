@@ -45,9 +45,9 @@ class GlobalDeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function countByDeviceId ($deviceConfigurationId)
     {
-        return $this->count(array(
-            "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId
-        ));
+        return $this->count([
+            "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId,
+        ]);
     }
 
     /**
@@ -93,9 +93,9 @@ class GlobalDeviceConfigurationMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
-            "{$this->col_deviceConfigurationId} = ?" => $primaryKey
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, [
+            "{$this->col_deviceConfigurationId} = ?" => $primaryKey,
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -116,15 +116,15 @@ class GlobalDeviceConfigurationMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof GlobalDeviceConfigurationModel)
         {
-            $whereClause = array(
-                "{$this->col_deviceConfigurationId} = ?" => $object->deviceConfigurationId
-            );
+            $whereClause = [
+                "{$this->col_deviceConfigurationId} = ?" => $object->deviceConfigurationId,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_deviceConfigurationId} = ?" => $object
-            );
+            $whereClause = [
+                "{$this->col_deviceConfigurationId} = ?" => $object,
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -209,7 +209,7 @@ class GlobalDeviceConfigurationMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new GlobalDeviceConfigurationModel($row->toArray());
@@ -232,9 +232,9 @@ class GlobalDeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_deviceConfigurationId} = ?" => $id
-        );
+        return [
+            "{$this->col_deviceConfigurationId} = ?" => $id,
+        ];
     }
 
     /**

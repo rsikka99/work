@@ -19,7 +19,7 @@ $section->addTitle("Fleet Attributes", 1);
 $section->addText("The following provides a summary of your existing printing devices.");
 $section->addText("Devices marked for future consideration are shown in gray.");
 
-$cellWidths = array(
+$cellWidths = [
     5000,
     900,
     900,
@@ -28,7 +28,7 @@ $cellWidths = array(
     900,
     900,
     900
-);
+];
 $tcStyle    = $this->styles->tables->fleetattributes;
 /**
  * Compatible with jit Devices
@@ -49,9 +49,9 @@ foreach ($healthcheckViewModel->getDevices()->compatibleDeviceInstances->getDevi
 
     $compatibleDevicesTable->addRow(null, $this->styles->tables->rowstyle);
     $cell = $compatibleDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
-    $cell->addText($deviceName, null, array('spaceAfter' => 0));
-    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
-    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
+    $cell->addText($deviceName, null, ['spaceAfter' => 0]);
+    $cell->addText($device->serialNumber, null, ['spaceAfter' => 0]);
+    $cell->addText($device->ipAddress, null, ['spaceAfter' => 0]);
     $compatibleDevicesTable->addCell($cellWidths [1], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
     $compatibleDevicesTable->addCell($cellWidths [2], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell3))->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_rightalign');
     $compatibleDevicesTable->addCell($cellWidths [3], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format($device->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) . '%'), null, 'nospacing_rightalign');
@@ -60,7 +60,7 @@ foreach ($healthcheckViewModel->getDevices()->compatibleDeviceInstances->getDevi
 }
 $section->addPageBreak();
 
-$cellWidths = array(
+$cellWidths = [
     5000,
     900,
     900,
@@ -69,7 +69,7 @@ $cellWidths = array(
     900,
     900,
     900
-);
+];
 
 /**
  * Non compatible with jit Devices
@@ -91,9 +91,9 @@ foreach ($healthcheckViewModel->getDevices()->notCompatibleDeviceInstances->getD
 
     $notCompatibleDevicesTable->addRow(null, $this->styles->tables->rowstyle);
     $cell = $notCompatibleDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
-    $cell->addText($deviceName, null, array('spaceAfter' => 0));
-    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
-    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
+    $cell->addText($deviceName, null, ['spaceAfter' => 0]);
+    $cell->addText($device->serialNumber, null, ['spaceAfter' => 0]);
+    $cell->addText($device->ipAddress, null, ['spaceAfter' => 0]);
     $notCompatibleDevicesTable->addCell($cellWidths [1], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
     $notCompatibleDevicesTable->addCell($cellWidths [2], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell3))->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_rightalign');
     $notCompatibleDevicesTable->addCell($cellWidths [3], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format($device->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) . '%'), null, 'nospacing_rightalign');
@@ -103,7 +103,7 @@ foreach ($healthcheckViewModel->getDevices()->notCompatibleDeviceInstances->getD
 $section->addPageBreak();
 
 
-$cellWidths = array(
+$cellWidths = [
     6500,
     500,
     500,
@@ -112,7 +112,7 @@ $cellWidths = array(
     500,
     500,
     500
-);
+];
 $tcStyle    = $this->styles->tables->fleetattributes;
 /**
  * Optimized Devices
@@ -133,9 +133,9 @@ foreach ($healthcheckViewModel->getOptimizedDevices() as $device)
 
     $optimizedDevicesTable->addRow(null, $this->styles->tables->rowstyle);
     $cell = $optimizedDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
-    $cell->addText($deviceName, null, array('spaceAfter' => 0));
-    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
-    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
+    $cell->addText($deviceName, null, ['spaceAfter' => 0]);
+    $cell->addText($device->serialNumber, null, ['spaceAfter' => 0]);
+    $cell->addText($device->ipAddress, null, ['spaceAfter' => 0]);
     $optimizedDevicesTable->addCell($cellWidths [1], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
     $optimizedDevicesTable->addCell($cellWidths [2], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell3))->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_rightalign');
     $optimizedDevicesTable->addCell($cellWidths [3], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format($device->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) . '%'), null, 'nospacing_rightalign');
@@ -144,7 +144,7 @@ foreach ($healthcheckViewModel->getOptimizedDevices() as $device)
 }
 $section->addPageBreak();
 
-$cellWidths = array(
+$cellWidths = [
     5500,
     500,
     500,
@@ -153,7 +153,7 @@ $cellWidths = array(
     500,
     500,
     500
-);
+];
 
 /**
  * Underutilized Devices
@@ -178,9 +178,9 @@ foreach ($healthcheckViewModel->getUnderutilizedDevices() as $device)
 
     $UnderutilizedDevicesTable->addRow(null, $this->styles->tables->rowstyle);
     $cell = $UnderutilizedDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
-    $cell->addText($deviceName, null, array('spaceAfter' => 0));
-    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
-    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
+    $cell->addText($deviceName, null, ['spaceAfter' => 0]);
+    $cell->addText($device->serialNumber, null, ['spaceAfter' => 0]);
+    $cell->addText($device->ipAddress, null, ['spaceAfter' => 0]);
     $UnderutilizedDevicesTable->addCell($cellWidths [1], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
     $UnderutilizedDevicesTable->addCell($cellWidths [2], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell3))->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_rightalign');
     $UnderutilizedDevicesTable->addCell($cellWidths [3], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format($device->getMasterDevice()->maximumRecommendedMonthlyPageVolume), null, 'nospacing_rightalign');
@@ -215,9 +215,9 @@ foreach ($healthcheckViewModel->getOverutilizedDevices() as $device)
 
     $OverutilizedDevicesTable->addRow(null, $this->styles->tables->rowstyle);
     $cell = $OverutilizedDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
-    $cell->addText($deviceName, null, array('spaceAfter' => 0));
-    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
-    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
+    $cell->addText($deviceName, null, ['spaceAfter' => 0]);
+    $cell->addText($device->serialNumber, null, ['spaceAfter' => 0]);
+    $cell->addText($device->ipAddress, null, ['spaceAfter' => 0]);
     $OverutilizedDevicesTable->addCell($cellWidths [1], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
     $OverutilizedDevicesTable->addCell($cellWidths [2], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell3))->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_rightalign');
     $OverutilizedDevicesTable->addCell($cellWidths [3], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format($device->getMasterDevice()->maximumRecommendedMonthlyPageVolume), null, 'nospacing_rightalign');
@@ -228,7 +228,7 @@ foreach ($healthcheckViewModel->getOverutilizedDevices() as $device)
     $OverutilizedDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(sprintf('Migrate excess page volume to an %1$s compatible device.', $this->jit), null, 'nospacing_leftalign');
 }
 
-$cellWidths = array(
+$cellWidths = [
     4500,
     500,
     500,
@@ -237,7 +237,7 @@ $cellWidths = array(
     500,
     500,
     1000,
-);
+];
 $section->addPageBreak();
 /**
  * Old Devices
@@ -261,9 +261,9 @@ foreach ($healthcheckViewModel->getOldDevices() as $device)
 
     $oldDevicesTable->addRow(null, $this->styles->tables->rowheader);
     $cell = $oldDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
-    $cell->addText($deviceName, null, array('spaceAfter' => 0));
-    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
-    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
+    $cell->addText($deviceName, null, ['spaceAfter' => 0]);
+    $cell->addText($device->serialNumber, null, ['spaceAfter' => 0]);
+    $cell->addText($device->ipAddress, null, ['spaceAfter' => 0]);
     $oldDevicesTable->addCell($cellWidths [1], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
     $oldDevicesTable->addCell($cellWidths [2], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell3))->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_rightalign');
     $oldDevicesTable->addCell($cellWidths [3], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format($device->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) . '%'), null, 'nospacing_rightalign');
@@ -297,9 +297,9 @@ foreach ($healthcheckViewModel->getDevicesNotReportingTonerLevels() as $device)
 
     $notReportingTonerDevicesTable->addRow(null, $this->styles->tables->rowstyle);
     $cell = $notReportingTonerDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
-    $cell->addText($deviceName, null, array('spaceAfter' => 0));
-    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
-    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
+    $cell->addText($deviceName, null, ['spaceAfter' => 0]);
+    $cell->addText($device->serialNumber, null, ['spaceAfter' => 0]);
+    $cell->addText($device->ipAddress, null, ['spaceAfter' => 0]);
     $notReportingTonerDevicesTable->addCell($cellWidths [1], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
     $notReportingTonerDevicesTable->addCell($cellWidths [2], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell3))->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_rightalign');
     $notReportingTonerDevicesTable->addCell($cellWidths [3], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format($device->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) . '%'), null, 'nospacing_rightalign');

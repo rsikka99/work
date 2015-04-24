@@ -22,7 +22,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
      */
     public function selectUploadAction ()
     {
-        $this->_pageTitle = array('Healthcheck', 'Select Upload');
+        $this->_pageTitle = ['Healthcheck', 'Select Upload'];
         // Mark the step we're on as active
         $this->_navigation->setActiveStep(HealthCheckStepsModel::STEP_SELECT_UPLOAD);
         $healthcheck = $this->getHealthcheck();
@@ -45,7 +45,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => 'The upload you selected is not valid.'));
+                    $this->_flashMessenger->addMessage(['danger' => 'The upload you selected is not valid.']);
                 }
             }
             else if (isset($postData['noUploads']))
@@ -70,7 +70,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
      */
     public function settingsAction ()
     {
-        $this->_pageTitle = array('Healthcheck', 'Settings');
+        $this->_pageTitle = ['Healthcheck', 'Settings'];
         $this->_navigation->setActiveStep(HealthCheckStepsModel::STEP_SETTINGS);
 
         if ($this->getRequest()->isPost())

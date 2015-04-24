@@ -65,7 +65,7 @@ foreach ($this->utilizationData as $deviceData)
 
     $activeSheet->getStyleByColumnAndRow(3, $currentRow)->getNumberFormat()->setFormatCode('#,##0');
     $activeSheet->getStyleByColumnAndRow(4, $currentRow)->getNumberFormat()->setFormatCode('#,##0');
-    $activeSheet->getStyleByColumnAndRow(5, $currentRow)->getNumberFormat()->applyFromArray(array('code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+    $activeSheet->getStyleByColumnAndRow(5, $currentRow)->getNumberFormat()->applyFromArray(['code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00]);
 }
 
 // Save Excel 2007 file

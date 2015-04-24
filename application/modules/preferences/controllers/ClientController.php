@@ -24,9 +24,9 @@ class Preferences_ClientController extends Action
     {
         if (!$this->getSelectedClient() instanceof \MPSToolbox\Legacy\Entities\ClientEntity)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "danger" => "A client is not selected."
-            ));
+            ]);
 
             $this->redirectToRoute('app.dashboard');
         }
@@ -37,7 +37,7 @@ class Preferences_ClientController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Client Settings', 'Client');
+        $this->_pageTitle = ['Client Settings', 'Client'];
 
         if ($this->getRequest()->isPost())
         {
@@ -97,11 +97,11 @@ class Preferences_ClientController extends Action
             $service        = $this->getClientSettingsService();
             $clientSettings = $service->getClientSettings($this->getSelectedClient()->id, $dealerId);
             $service->saveAllSettingsForm($form, $clientSettings);
-            $this->_flashMessenger->addMessage(array('success' => 'Settings Saved.'));
+            $this->_flashMessenger->addMessage(['success' => 'Settings Saved.']);
         }
         else
         {
-            $this->_flashMessenger->addMessage(array('error' => 'Please correct the errors below.'));
+            $this->_flashMessenger->addMessage(['error' => 'Please correct the errors below.']);
         }
 
 

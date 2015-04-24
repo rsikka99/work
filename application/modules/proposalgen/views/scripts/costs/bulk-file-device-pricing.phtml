@@ -12,16 +12,16 @@ $this->headScript()->appendFile($this->baseUrl('js/app/legacy/proposalgen/cost/C
                 <a href="#" title="Device Price"> Device Price </a></li>
             <?php if ($this->canApprove) : ?>
                 <li>
-                    <a href="<?= $this->url(array(), 'hardware-library.bulk-hardware-pricing-updates.bulk-file-device-features'); ?>" title="Device Features">
+                    <a href="<?= $this->url([], 'hardware-library.bulk-hardware-pricing-updates.bulk-file-device-features'); ?>" title="Device Features">
                         Device Features </a>
                 </li>
             <?php endif; ?>
             <li>
-                <a href="<?= $this->url(array(), 'hardware-library.bulk-hardware-pricing-updates.bulk-file-toner-pricing'); ?>" title="Toner Pricing">
+                <a href="<?= $this->url([], 'hardware-library.bulk-hardware-pricing-updates.bulk-file-toner-pricing'); ?>" title="Toner Pricing">
                     Toner Pricing</a>
             </li>
             <li>
-                <a href="<?= $this->url(array(), 'hardware-library.bulk-hardware-pricing-updates.bulk-file-toner-matchup'); ?>" title="Toner Matchup">
+                <a href="<?= $this->url([], 'hardware-library.bulk-hardware-pricing-updates.bulk-file-toner-matchup'); ?>" title="Toner Matchup">
                     Toner Matchup </a>
             </li>
         </ul>
@@ -50,7 +50,7 @@ $this->headScript()->appendFile($this->baseUrl('js/app/legacy/proposalgen/cost/C
         </div>
     </div>
     <br />
-    <a href="<?= $this->url(array(), 'hardware-library.bulk-hardware-pricing-updates'); ?>" class="btn btn-default">Back</a>
+    <a href="<?= $this->url([], 'hardware-library.bulk-hardware-pricing-updates'); ?>" class="btn btn-default">Back</a>
 
     <?php if ($this->errorMessages != null): ?>
         <div class="well">

@@ -53,9 +53,9 @@ class UserSurveySettingModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "userId"          => $this->userId,
             "surveySettingId" => $this->surveySettingId,
-        );
+        ];
     }
 }

@@ -5,10 +5,10 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\DeviceSetupForm;
 $form = $this->element;
 ?>
 
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
 <fieldset>
     <div class="form-group <?= ($form->getElement('manufacturerId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('manufacturerId'), array('col-md-2')) ?>
+        <?= $this->RenderFormLabel($form->getElement('manufacturerId'), ['col-md-2']) ?>
 
         <div class="col-md-5 input-group">
             <?= $this->RenderFormSelect($form->getElement('manufacturerId')) ?>
@@ -18,7 +18,7 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('modelName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('modelName'), array('col-md-2')) ?>
+        <?= $this->RenderFormLabel($form->getElement('modelName'), ['col-md-2']) ?>
 
         <div class="col-md-5 input-group">
             <?= $this->RenderFormText($form->getElement('modelName')) ?>
@@ -28,7 +28,7 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('can_sell')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('can_sell'), array('col-md-2')) ?>
+        <?= $this->RenderFormLabel($form->getElement('can_sell'), ['col-md-2']) ?>
 
         <div class="col-md-5   input-group">
             <?= $this->RenderFormCheckbox($form->getElement('can_sell')) ?>
@@ -38,7 +38,7 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('oemSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('oemSku'), array('col-md-2')) ?>
+        <?= $this->RenderFormLabel($form->getElement('oemSku'), ['col-md-2']) ?>
 
         <div class="col-md-5  input-group ">
             <?= $this->RenderFormText($form->getElement('oemSku')) ?>
@@ -48,7 +48,7 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('dealerSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('dealerSku'), array('col-md-2')) ?>
+        <?= $this->RenderFormLabel($form->getElement('dealerSku'), ['col-md-2']) ?>
 
         <div class="col-md-5  input-group ">
             <?= $this->RenderFormText($form->getElement('dealerSku')) ?>
@@ -58,7 +58,7 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('description')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('description'), array('col-md-2')) ?>
+        <?= $this->RenderFormLabel($form->getElement('description'), ['col-md-2']) ?>
 
         <div class="col-md-5  input-group ">
             <?= $this->RenderFormTextArea($form->getElement('description')) ?>
@@ -68,7 +68,7 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('cost'), array('col-md-2')) ?>
+        <?= $this->RenderFormLabel($form->getElement('cost'), ['col-md-2']) ?>
 
         <div class="col-md-2  input-group">
             <span class="input-group-addon">$</span>
@@ -119,7 +119,7 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('wattsPowerNormal')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('wattsPowerNormal'), array('col-md-2')) ?>
+        <?= $this->RenderFormLabel($form->getElement('wattsPowerNormal'), ['col-md-2']) ?>
 
         <div class="col-md-2  input-group ">
             <?= $this->RenderFormText($form->getElement('wattsPowerNormal')) ?>
@@ -129,7 +129,7 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('wattsPowerIdle')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('wattsPowerIdle'), array('col-md-2')) ?>
+        <?= $this->RenderFormLabel($form->getElement('wattsPowerIdle'), ['col-md-2']) ?>
 
         <div class="col-md-2  input-group ">
             <?= $this->RenderFormText($form->getElement('wattsPowerIdle')) ?>
@@ -139,7 +139,7 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('partsCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('partsCostPerPage'), array('col-md-2')) ?>
+        <?= $this->RenderFormLabel($form->getElement('partsCostPerPage'), ['col-md-2']) ?>
 
         <div class="col-md-2 input-group">
             <span class="input-group-addon">$</span>
@@ -150,7 +150,7 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('laborCostPerPage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('laborCostPerPage'), array('col-md-2')) ?>
+        <?= $this->RenderFormLabel($form->getElement('laborCostPerPage'), ['col-md-2']) ?>
 
         <div class="col-md-2  input-group ">
             <span class="input-group-addon">$</span>
@@ -161,7 +161,7 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('ppmBlack')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('ppmBlack'), array('col-md-2')) ?>
+        <?= $this->RenderFormLabel($form->getElement('ppmBlack'), ['col-md-2']) ?>
 
         <div class="col-md-2  input-group ">
             <?= $this->RenderFormText($form->getElement('ppmBlack')) ?>
@@ -171,7 +171,7 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('ppmColor')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('ppmColor'), array('col-md-2')) ?>
+        <?= $this->RenderFormLabel($form->getElement('ppmColor'), ['col-md-2']) ?>
 
         <div class="col-md-2  input-group ">
             <?= $this->RenderFormText($form->getElement('ppmColor')) ?>
@@ -189,7 +189,7 @@ $form = $this->element;
     </div>
 
     <div class="form-group <?= ($form->getElement('leasedTonerYield')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-        <?= $this->RenderFormLabel($form->getElement('leasedTonerYield'), array('col-md-2')) ?>
+        <?= $this->RenderFormLabel($form->getElement('leasedTonerYield'), ['col-md-2']) ?>
 
         <div class="col-md-2  input-group ">
             <?= $this->RenderFormText($form->getElement('leasedTonerYield')) ?>
@@ -204,7 +204,7 @@ $form = $this->element;
     <hr>
     <?= ($form->getElement('toner_array')) ?>
     <?= $this->formHidden($form->getElement('toner_array')) ?>
-    <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
-    <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+    <?= $this->RenderFormSubmit($form->getElement('submit'), ['btn', 'btn-primary']) ?>
+    <?= $this->RenderFormSubmit($form->getElement('cancel'), ['btn', 'btn-default']) ?>
 </fieldset>
 <?= $this->RenderFormClose($form) ?>

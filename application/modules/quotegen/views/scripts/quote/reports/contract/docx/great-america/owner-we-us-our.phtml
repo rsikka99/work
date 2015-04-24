@@ -12,7 +12,7 @@ $paragraphStyle = $this->paragraphStyle;
 
 $footerTable = $section->addTable($this->tableStyle->standard);
 $footerTable->addRow(300);
-$footerTable->addCell($tableSpan ['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span4))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$footerTable->addCell($tableSpan ['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span4))->addText(htmlspecialchars($contractTemplateSection->getContractSectionName()), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
 $footerTable->addRow();
 $footerTable->addCell($tableSpan ['span8'], $cellStyle->span4)->addText(' ', $fontStyle->finePrint, $paragraphStyle->noSpacing);
 $footerTable->addRow(350);

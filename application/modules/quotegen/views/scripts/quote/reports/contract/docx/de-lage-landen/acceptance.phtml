@@ -9,14 +9,14 @@ $tableSpan     = $this->tableStyle->gridSpan;
 $noSpacing     = $this->paragraphStyle->noSpacing;
 $labelFont     = $this->fontStyle->label;
 $cellStyle     = $this->cellStyle;
-$statementFont = array('size' => '9', 'bold' => true);
+$statementFont = ['size' => '9', 'bold' => true];
 
 $acceptanceTable = $section->addTable($this->tableStyle->standard);
 $acceptanceTable->getStyle()->setBorderBottomSize(1)->setBorderLeftSize(1)->setBorderRightSize(1);
 $acceptanceTable->getStyle()->setCellMargin(50);
 
 $acceptanceTable->addRow(300);
-$acceptanceTable->addCell($tableSpan ['span8'], array_merge($this->cellStyle->invertBackground, $this->cellStyle->span2))->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $noSpacing);
+$acceptanceTable->addCell($tableSpan ['span8'], array_merge($this->cellStyle->invertBackground, $this->cellStyle->span2))->addText(htmlspecialchars($contractTemplateSection->getContractSectionName()), $this->fontStyle->invertBackground, $noSpacing);
 
 $acceptanceTable->addRow(300);
 $textRun = $acceptanceTable->addCell($tableSpan ['span8'], $this->cellStyle->span2)->addTextRun($noSpacing);

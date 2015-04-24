@@ -34,11 +34,11 @@ class App_View_Helper_Footermenu extends Zend_View_Helper_Abstract
             // Render the menu
             $html = $this->view->MyNavigation()
                                ->menu()
-                               ->renderMenu($container, array(
+                               ->renderMenu($container, [
                                    'minDepth' => 0,
                                    'maxDepth' => 0,
-                                   'ulClass'  => $class
-                               ));
+                                   'ulClass'  => $class,
+                               ]);
 
             // Bring back it's original visibility
             if ($wasInvisible)

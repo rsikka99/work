@@ -90,9 +90,9 @@ class Statsd
     {
         if (!is_array($stats))
         {
-            $stats = array($stats);
+            $stats = [$stats];
         }
-        $data = array();
+        $data = [];
         foreach ($stats as $stat)
         {
             $data[$stat] = "$delta|$metric";
@@ -115,7 +115,7 @@ class Statsd
         }
 
         // Sampling
-        $sampledData = array();
+        $sampledData = [];
 
         if ($sampleRate < 1)
         {

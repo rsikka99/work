@@ -27,14 +27,14 @@ class DataTableResponse extends AbstractResponse
      */
     public function getResponseForGrid ()
     {
-        $response = array(
+        $response = [
             'draw'            => $this->request->getRequestIdentifier(),
             'currentPage'     => $this->getCurrentPage(),
             'data'            => $this->data,
             'recordsPerPage'  => $this->recordsPerPage,
             'recordsTotal'    => $this->totalRecords,
             'recordsFiltered' => $this->totalFilteredRecords,
-        );
+        ];
 
         if (isset($this->errorMessage) && strlen($this->errorMessage) > 0)
         {

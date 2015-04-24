@@ -39,10 +39,10 @@ class DeviceSwapViewModel
     {
         if (!isset($this->_replacementModelsByType))
         {
-            $this->_replacementModelsByType[MasterDeviceModel::$TonerConfigNames[MasterDeviceModel::DEVICE_TYPE_MONO]]      = array();
-            $this->_replacementModelsByType[MasterDeviceModel::$TonerConfigNames[MasterDeviceModel::DEVICE_TYPE_MONO_MFP]]  = array();
-            $this->_replacementModelsByType[MasterDeviceModel::$TonerConfigNames[MasterDeviceModel::DEVICE_TYPE_COLOR]]     = array();
-            $this->_replacementModelsByType[MasterDeviceModel::$TonerConfigNames[MasterDeviceModel::DEVICE_TYPE_COLOR_MFP]] = array();
+            $this->_replacementModelsByType[MasterDeviceModel::$TonerConfigNames[MasterDeviceModel::DEVICE_TYPE_MONO]]      = [];
+            $this->_replacementModelsByType[MasterDeviceModel::$TonerConfigNames[MasterDeviceModel::DEVICE_TYPE_MONO_MFP]]  = [];
+            $this->_replacementModelsByType[MasterDeviceModel::$TonerConfigNames[MasterDeviceModel::DEVICE_TYPE_COLOR]]     = [];
+            $this->_replacementModelsByType[MasterDeviceModel::$TonerConfigNames[MasterDeviceModel::DEVICE_TYPE_COLOR_MFP]] = [];
 
             $costPerPageSetting                         = new CostPerPageSettingModel();
             $costPerPageSetting->adminCostPerPage       = 0;
@@ -52,7 +52,7 @@ class DeviceSwapViewModel
 
             foreach ($this->getReplacementDevices() as $replacementDevice)
             {
-                $data         = array();
+                $data         = [];
                 $masterDevice = $replacementDevice->getMasterDevice();
 
                 $data['isColor']       = $masterDevice->isColor();

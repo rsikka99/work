@@ -19,10 +19,10 @@ $section->addTitle("Analysis: Printing Hardware Usage", 1);
 $section->addTitle('Hardware Utilization and Capacity', 2);
 $section->addText('Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity. Based on information collected with our monitoring software, we detected the following number of networked printers and have estimated your average page volumes:');
 
-$cellWidths = array(
+$cellWidths = [
     6018,
     3009
-);
+];
 
 $estimatedTonerCostsTable = $section->addTable($this->styles->tables->estimatedTonerCosts->tablestyle);
 
@@ -43,11 +43,11 @@ $section->addText('A good measure of the recommended maximum monthly page volume
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['HardwareUtilizationCapacityBar'], array('align' => 'center'));
+$imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['HardwareUtilizationCapacityBar'], ['align' => 'center']);
 
 $imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['HardwareUtilizationCapacityPercent'], array('align' => 'center'));
+$imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['HardwareUtilizationCapacityPercent'], ['align' => 'center']);
 
 $section->addTextBreak();
 $section->addTitle('Underused and Overused Printing Devices', 2);
@@ -58,12 +58,12 @@ $section->addText('Overused printing devices risk having more frequent breakdown
 $section->addPageBreak();
 
 
-$cellWidths             = array(
+$cellWidths             = [
     4000,
     1805,
     1805,
     1805
-);
+];
 $lowestUtilizationTable = $section->addTable($this->styles->tables->utilization->tablestyle);
 $lowestUtilizationTable->addRow(null, $this->styles->tables->rowheader);
 $lowestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cellHeader)->addText('Lowest Utilization', 'bold_text', 'nospacing_centeralign');

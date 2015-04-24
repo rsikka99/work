@@ -28,7 +28,7 @@ class Admin_FixController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Fix Functions');
+        $this->_pageTitle = ['Fix Functions'];
     }
 
     /**
@@ -36,7 +36,7 @@ class Admin_FixController extends Action
      */
     public function tonersAction ()
     {
-        $this->_pageTitle = array('Fix Toners');
+        $this->_pageTitle = ['Fix Toners'];
         $fixTonerService  = new FixTonerService();
         $form             = $fixTonerService->getForm();
 
@@ -55,12 +55,12 @@ class Admin_FixController extends Action
 
                     if ($success)
                     {
-                        $this->_flashMessenger->addMessage(array("success" => "Processed Toners"));
+                        $this->_flashMessenger->addMessage(["success" => "Processed Toners"]);
                         $this->redirectToRoute('admin.fix-toners');
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array("danger" => $fixTonerService->errorMessages));
+                        $this->_flashMessenger->addMessage(["danger" => $fixTonerService->errorMessages]);
                     }
                 }
             }

@@ -11,6 +11,6 @@ class HardwareLibrary_IndexController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Hardware Library');
+        $this->_pageTitle = ['Hardware Library'];
     }
 }

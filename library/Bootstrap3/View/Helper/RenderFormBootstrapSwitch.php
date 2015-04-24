@@ -17,13 +17,13 @@ class RenderFormBootstrapSwitch extends RenderFormAbstract
      *
      * @return string
      */
-    public function RenderFormBootstrapSwitch (\Zend_Form_Element $element, $elementClasses = array())
+    public function RenderFormBootstrapSwitch (\Zend_Form_Element $element, $elementClasses = [])
     {
-        $html = array();
+        $html = [];
 
         if (!is_array($elementClasses))
         {
-            $elementClasses = array($elementClasses);
+            $elementClasses = [$elementClasses];
         }
 
         if ($element->hasErrors())
@@ -41,7 +41,7 @@ class RenderFormBootstrapSwitch extends RenderFormAbstract
          *  Prep attributes
          */
         $attributes['class']  = $this->processClasses($attributes, $elementClasses);
-        $serializedAttributes = $this->serializeAttributes($attributes, array('options'));
+        $serializedAttributes = $this->serializeAttributes($attributes, ['options']);
         $element->setAttribs($attributes);
 
         if ($element instanceof \Zend_Form_Element_MultiCheckbox)

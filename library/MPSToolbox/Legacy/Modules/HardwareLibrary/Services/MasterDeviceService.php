@@ -76,17 +76,17 @@ class MasterDeviceService
      */
     public function searchForMasterDevice ($searchTerm)
     {
-        $results            = array();
+        $results            = [];
         $masterDeviceMapper = MasterDeviceMapper::getInstance();
 
         if ($searchTerm !== false)
         {
             foreach ($masterDeviceMapper->searchByName($searchTerm) as $masterDeviceSearchResult)
             {
-                $results[] = array(
+                $results[] = [
                     "id"   => $masterDeviceSearchResult->masterDeviceId,
                     "text" => $masterDeviceSearchResult->masterDeviceFullDeviceName
-                );
+                ];
             }
         }
 

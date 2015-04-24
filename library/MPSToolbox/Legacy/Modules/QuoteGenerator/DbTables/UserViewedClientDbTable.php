@@ -12,8 +12,8 @@ use Zend_Db_Table_Abstract;
 class UserViewedClientDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'user_viewed_clients';
-    protected $_primary = array(
+    protected $_primary = [
         'userId',
-        'clientId'
-    );
+        'clientId',
+    ];
 }

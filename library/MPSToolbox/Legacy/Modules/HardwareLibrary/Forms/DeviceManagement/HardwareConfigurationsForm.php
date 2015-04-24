@@ -35,7 +35,7 @@ class HardwareConfigurationsForm extends Zend_Form
      *
      * @var Zend_Form_Element
      */
-    protected $_optionElements = array();
+    protected $_optionElements = [];
 
     /**
      * @param int  $deviceConfigurationId
@@ -55,40 +55,40 @@ class HardwareConfigurationsForm extends Zend_Form
     {
         $this->setMethod('post');
 
-        $this->addElement('text', 'hardwareConfigurationsname', array(
+        $this->addElement('text', 'hardwareConfigurationsname', [
             'label'      => 'Name:',
             'required'   => true,
             'maxlength'  => 255,
-            'filters'    => array('StringTrim', 'StripTags'),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(1, 255),
-                ),
-            ),
-        ));
+                    'options'   => [1, 255],
+                ],
+            ],
+        ]);
 
-        $this->addElement('textarea', 'hardwareConfigurationsdescription', array(
+        $this->addElement('textarea', 'hardwareConfigurationsdescription', [
             'label'      => 'Description:',
             'required'   => true,
             'style'      => 'height: 100px',
             'cols'       => '40',
             'maxlength'  => 255,
-            'filters'    => array('StringTrim', 'StripTags'),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(1, 255),
-                ),
-            ),
-        ));
+                    'options'   => [1, 255],
+                ],
+            ],
+        ]);
 
         /**
          * Options
          */
         if ($this->_masterDeviceId > 0)
         {
-            $device = DeviceMapper::getInstance()->find(array($this->_masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
+            $device = DeviceMapper::getInstance()->find([$this->_masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId]);
 
             if ($device)
             {
@@ -97,24 +97,24 @@ class HardwareConfigurationsForm extends Zend_Form
                 /* @var $deviceOption DeviceOptionModel */
                 foreach ($device->getDeviceOptions() as $deviceOption)
                 {
-                    $deviceConfigurationOption = $deviceConfigurationOptionMapper->find(array($this->_deviceConfigurationId, $deviceOption->getOption()->id));
+                    $deviceConfigurationOption = $deviceConfigurationOptionMapper->find([$this->_deviceConfigurationId, $deviceOption->getOption()->id]);
 
-                    $optionElement = $this->createElement('text', "hardwareConfigurationsoption{$deviceOption->optionId}", array(
-                            'label'      => $deviceOption->getOption()->name,
-                            'value'      => ($deviceConfigurationOption ? $deviceConfigurationOption->quantity : 0),
-                            'class'      => 'span4',
-                            'maxlength'  => 8,
-                            'required'   => false,
-                            'allowEmpty' => true,
-                            'filters'    => array('StringTrim', 'StripTags'),
-                            'validators' => array(
-                                array(
-                                    'validator' => 'Between',
-                                    'options' => array('min' => 0, 'max' => 1000)),
-                                'Int'
-                            ),
-                        )
-                    );
+                    $optionElement = $this->createElement('text', "hardwareConfigurationsoption{$deviceOption->optionId}", [
+                        'label'      => $deviceOption->getOption()->name,
+                        'value'      => ($deviceConfigurationOption ? $deviceConfigurationOption->quantity : 0),
+                        'class'      => 'span4',
+                        'maxlength'  => 8,
+                        'required'   => false,
+                        'allowEmpty' => true,
+                        'filters'    => ['StringTrim', 'StripTags'],
+                        'validators' => [
+                            [
+                                'validator' => 'Between',
+                                'options'   => ['min' => 0, 'max' => 1000]
+                            ],
+                            'Int',
+                        ],
+                    ]);
                     $optionElement->setAttrib('class', 'span1');
                     $optionElement->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
                     $this->_optionElements [] = $optionElement;
@@ -125,33 +125,25 @@ class HardwareConfigurationsForm extends Zend_Form
                     $this->addDisplayGroup($this->_optionElements, "optionsGroup");
                     $optionsGroup = $this->getDisplayGroup("optionsGroup");
                     $optionsGroup->setDescription("Quantity");
-                    $optionsGroup->setDecorators(array(
+                    $optionsGroup->setDecorators([
                         'FormElements',
-                        array('HtmlTag',
-                              array('tag'   => 'div',
-                                    'class' => 'myClass')),
-                        array('Description',
-                              array('tag'       => 'h3',
-                                    'placement' => 'prepend',
-                                    'class'     => 'text-center'))
-                    ));
+                        ['HtmlTag',
+                         ['tag'   => 'div',
+                          'class' => 'myClass']],
+                        ['Description',
+                         ['tag'       => 'h3',
+                          'placement' => 'prepend',
+                          'class'     => 'text-center']]
+                    ]);
                 }
             }
         }
-        $this->addElement('hidden', 'hardwareConfigurationsid', array());
+        $this->addElement('hidden', 'hardwareConfigurationsid', []);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript'     => 'forms/hardware-library/device-management/hardware-configurations-form.phtml',
-                    'masterDeviceId' => $this->_masterDeviceId
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/hardware-library/device-management/hardware-configurations-form.phtml', 'masterDeviceId' => $this->_masterDeviceId]]]);
     }
 
     public function getOptionElements ()

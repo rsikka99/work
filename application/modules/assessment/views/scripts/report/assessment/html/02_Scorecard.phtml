@@ -1,7 +1,7 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$graphs = $assessmentViewModel->getGraphs();
+$graphs              = $assessmentViewModel->getGraphs();
 ?>
 <div class="h1">Your <?= My_Brand::getDealerBranding()->assessmentTitle ?></div>
 <p>It can be a challenge to understand your printing needs, and there are many factors to consider: hardware functionality, supplies delivery, service, parts,
@@ -65,5 +65,5 @@ $graphs = $assessmentViewModel->getGraphs();
 <br />
 <div class="annualSavings">
     Our <?= $this->brandName; ?> program could provide you with annual savings of up to
-    <strong><?= $this->currency($assessmentViewModel->getPrintIQSavings(), array('precision' => 0)); ?></strong>
+    <strong><?= $this->currency($assessmentViewModel->getPrintIQSavings(), ['precision' => 0]); ?></strong>
 </div>

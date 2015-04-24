@@ -21,7 +21,7 @@ class Quotegen_CategoryController extends Action
     {
         // Get all current items in categories table
         $categoryMapper = new CategoryMapper();
-        $paginator      = new Zend_Paginator(new My_Paginator_MapperAdapter($categoryMapper, array('dealerId = ?' => Zend_Auth::getInstance()->getIdentity()->dealerId)));
+        $paginator      = new Zend_Paginator(new My_Paginator_MapperAdapter($categoryMapper, ['dealerId = ?' => Zend_Auth::getInstance()->getIdentity()->dealerId]));
 
         // Set current page
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
@@ -39,9 +39,9 @@ class Quotegen_CategoryController extends Action
 
         if (!$categoryId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'warning' => 'Please select a category to delete first.'
-            ));
+            ]);
             $this->redirectToRoute('quotes.category-options');
         }
 
@@ -50,17 +50,17 @@ class Quotegen_CategoryController extends Action
 
         if (!$category)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'There was an error selecting the category to delete.'
-            ));
+            ]);
             $this->redirectToRoute('quotes.category-options');
         }
         // If we are trying to access a category from another dealer, kick them back to index
         if ($category && $category->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'You do not have permission to access this.'
-            ));
+            ]);
             // Redirect
             $this->redirectToRoute('quotes.category-options');
         }
@@ -82,9 +82,9 @@ class Quotegen_CategoryController extends Action
                         // Delete the entry from the category table.
                         CategoryMapper::getInstance()->delete($category);
 
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'success' => "Category  {$this->view->escape($category->name)} was deleted successfully."
-                        ));
+                        ]);
 
                         // Redirect the user back to index action of this controller.
                         $this->redirectToRoute('quotes.category-options');
@@ -92,9 +92,9 @@ class Quotegen_CategoryController extends Action
                 }
                 catch (Exception $e)
                 {
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'danger' => 'There was an error deleting this category.  Please try again.'
-                    ));
+                    ]);
                 }
             }
             else
@@ -132,16 +132,16 @@ class Quotegen_CategoryController extends Action
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'danger' => 'Please correct the errors below.'
-                        ));
+                        ]);
                     }
                 }
                 catch (Exception $e)
                 {
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'danger' => 'There was an error creating this category.  Please try again..'
-                    ));
+                    ]);
                 }
             }
             else // If user has selected cancel send user back to the index pages of this Controller
@@ -158,9 +158,9 @@ class Quotegen_CategoryController extends Action
 
         if (!$categoryId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'warning' => 'Please select a category first.'
-            ));
+            ]);
             $this->redirectToRoute('quotes.category-options');
         }
 
@@ -171,9 +171,9 @@ class Quotegen_CategoryController extends Action
         // If we are trying to access a category from another dealer, kick them back to index
         if ($category && $category->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'You do not have permission to access this.'
-            ));
+            ]);
             // Redirect
             $this->redirectToRoute('quotes.category-options');
         }
@@ -195,24 +195,24 @@ class Quotegen_CategoryController extends Action
                         $category->id = $categoryId;
                         CategoryMapper::getInstance()->save($category, $categoryId);
 
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'success' => "Category was updated successfully."
-                        ));
+                        ]);
 
                         $this->redirectToRoute('quotes.category-options');
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'danger' => 'Please correct the errors below'
-                        ));
+                        ]);
                     }
                 }
                 catch (Exception $e)
                 {
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'danger' => 'There was an error updating this category.  Please try again'
-                    ));
+                    ]);
                 }
             }
             else
@@ -234,9 +234,9 @@ class Quotegen_CategoryController extends Action
         // If we are trying to access a category from another dealer, kick them back to index
         if ($category && $category->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'You do not have permission to access this.'
-            ));
+            ]);
             // Redirect
             $this->redirectToRoute('quotes.category-options');
         }

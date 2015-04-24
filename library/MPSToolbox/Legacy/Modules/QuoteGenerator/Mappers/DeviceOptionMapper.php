@@ -82,10 +82,10 @@ class DeviceOptionMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_masterDeviceId} = ?" => $primaryKey [0],
-            "{$this->col_optionId} = ?"       => $primaryKey [1]
-        ));
+            "{$this->col_optionId} = ?"       => $primaryKey [1],
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -106,17 +106,17 @@ class DeviceOptionMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof DeviceOptionModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_masterDeviceId} = ?" => $object->masterDeviceId,
-                "{$this->col_optionId} = ?"       => $object->optionId
-            );
+                "{$this->col_optionId} = ?"       => $object->optionId,
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_masterDeviceId} = ?" => $object [0],
-                "{$this->col_optionId} = ?"       => $object [1]
-            );
+                "{$this->col_optionId} = ?"       => $object [1],
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -133,9 +133,9 @@ class DeviceOptionMapper extends My_Model_Mapper_Abstract
      */
     public function deleteOptionsByDeviceId ($deviceId)
     {
-        return $this->getDbTable()->delete(array(
-            "{$this->col_masterDeviceId} = ?" => $deviceId
-        ));
+        return $this->getDbTable()->delete([
+            "{$this->col_masterDeviceId} = ?" => $deviceId,
+        ]);
     }
 
     /**
@@ -155,7 +155,7 @@ class DeviceOptionMapper extends My_Model_Mapper_Abstract
         }
 
         // Assuming we don't have a cached object, lets go get it.
-        $result = $this->getDbTable()->find(array('masterDeviceId' => $id [0]), array('optionId' => $id [1]));
+        $result = $this->getDbTable()->find(['masterDeviceId' => $id [0]], ['optionId' => $id [1]]);
         if (0 == count($result))
         {
             return false;
@@ -218,7 +218,7 @@ class DeviceOptionMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new DeviceOptionModel($row->toArray());
@@ -245,8 +245,8 @@ class DeviceOptionMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllOptionsByDeviceId ($id)
     {
-        $resultSet = $this->getDbTable()->fetchAll(array('masterDeviceId = ?' => $id));
-        $entries   = array();
+        $resultSet = $this->getDbTable()->fetchAll(['masterDeviceId = ?' => $id]);
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object     = new DeviceOptionModel($row->toArray());
@@ -266,10 +266,10 @@ class DeviceOptionMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_masterDeviceId} = ?" => $id [0],
-            "{$this->col_optionId} = ?"       => $id [1]
-        );
+            "{$this->col_optionId} = ?"       => $id [1],
+        ];
     }
 
     /**
@@ -279,10 +279,10 @@ class DeviceOptionMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
+        return [
             $object->masterDeviceId,
-            $object->optionId
-        );
+            $object->optionId,
+        ];
     }
 
     /**
@@ -294,7 +294,7 @@ class DeviceOptionMapper extends My_Model_Mapper_Abstract
      */
     public function fetchDeviceOptionListForDealer ($dealerId)
     {
-        $options = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+        $options = $this->fetchAll(["{$this->col_dealerId} = ?" => $dealerId]);
 
         return $options;
     }
@@ -309,10 +309,10 @@ class DeviceOptionMapper extends My_Model_Mapper_Abstract
      */
     public function fetchDeviceOptionListForDealerAndDevice ($masterDeviceId, $dealerId)
     {
-        $options = $this->fetchAll(array(
-                "{$this->col_masterDeviceId} = ?" => $masterDeviceId,
-                "{$this->col_dealerId} = ?"       => $dealerId)
-        );
+        $options = $this->fetchAll([
+            "{$this->col_masterDeviceId} = ?" => $masterDeviceId,
+            "{$this->col_dealerId} = ?"       => $dealerId,
+        ]);
 
         return $options;
     }

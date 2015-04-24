@@ -1,8 +1,8 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$this->brandName = My_Brand::getDealerBranding()->mpsProgramName;
-$this->companyName = My_Brand::getDealerBranding()->shortDealerName;
+$this->brandName     = My_Brand::getDealerBranding()->mpsProgramName;
+$this->companyName   = My_Brand::getDealerBranding()->shortDealerName;
 ?>
 <div class="h1">Solution: <?= $this->brandName; ?></div>
 <p>Get the most out of your existing printing assets with the <?= $this->brandName; ?> program. <?= $this->companyName; ?> will take over the
@@ -129,7 +129,7 @@ $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
                 <strong>Total annual savings with <?= $this->brandName; ?></strong>
             </td>
             <td width="125" class="right">
-                <strong><?= $this->currency($assessmentViewModel->getPrintIQSavings(), array('precision' => 0)); ?></strong>
+                <strong><?= $this->currency($assessmentViewModel->getPrintIQSavings(), ['precision' => 0]); ?></strong>
             </td>
         </tr>
         </tbody>

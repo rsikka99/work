@@ -11,7 +11,7 @@ $form = $this->element;
     <div class="form-group <?= ($form->getElement('masterDeviceId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
         <div class="input-group input-group-sm">
             <?= $this->RenderFormSelect($form->getElement('masterDeviceId')) ?>
-            <span class="input-group-btn"><?= $this->RenderFormSubmit($form->getElement('addDevice'), array('btn btn-success')) ?></span>
+            <span class="input-group-btn"><?= $this->RenderFormSubmit($form->getElement('addDevice'), ['btn btn-success']) ?></span>
         </div>
         <?= $this->RenderFormElementErrors($form->getElement('masterDeviceId')) ?>
     </div>

@@ -92,13 +92,13 @@ class ContractTemplateSectionModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "contractTemplateId" => $this->contractTemplateId,
             "contractSectionId"  => $this->contractSectionId,
             "enabled"            => $this->enabled,
             "sectionName"        => $this->sectionName,
             "sectionText"        => $this->sectionText,
-        );
+        ];
     }
 
     /**

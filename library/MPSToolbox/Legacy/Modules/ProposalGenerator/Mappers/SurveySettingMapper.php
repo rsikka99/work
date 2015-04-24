@@ -74,9 +74,9 @@ class SurveySettingMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
-            'id = ?' => $primaryKey
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, [
+            'id = ?' => $primaryKey,
+        ]);
 
         return $rowsAffected;
     }
@@ -94,15 +94,15 @@ class SurveySettingMapper extends My_Model_Mapper_Abstract
     {
         if ($survey_setting instanceof SurveySettingModel)
         {
-            $whereClause = array(
-                'id = ?' => $survey_setting->id
-            );
+            $whereClause = [
+                'id = ?' => $survey_setting->id,
+            ];
         }
         else
         {
-            $whereClause = array(
-                'id = ?' => $survey_setting
-            );
+            $whereClause = [
+                'id = ?' => $survey_setting,
+            ];
         }
 
         return $this->getDbTable()->delete($whereClause);
@@ -168,7 +168,7 @@ class SurveySettingMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $entries [] = new SurveySettingModel($row->toArray());

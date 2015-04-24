@@ -1,7 +1,6 @@
-
 <div class="container assessment" id="htmlReportContainer">
     <?php
-    $this->brandName = My_Brand::getDealerBranding()->mpsProgramName;
+    $this->brandName   = My_Brand::getDealerBranding()->mpsProgramName;
     $this->companyName = My_Brand::getDealerBranding()->shortDealerName;
     echo $this->render('report/assessment/html/01_Title.phtml');
     echo $this->render('report/assessment/html/02_Scorecard.phtml');

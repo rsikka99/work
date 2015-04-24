@@ -12,14 +12,14 @@ class JQGrid
      *
      * @var array
      */
-    protected $_validSortColumns = array();
+    protected $_validSortColumns = [];
 
     /**
      * The column to group by
      *
      * @var array
      */
-    protected $_validGroupByColumns = array();
+    protected $_validGroupByColumns = [];
 
     /**
      * The column to sort by
@@ -141,14 +141,14 @@ class JQGrid
      */
     public function createPagerResponseArray ()
     {
-        $jsonResponse = array(
+        $jsonResponse = [
             'page'            => $this->getCurrentPage(),
             'total'           => $this->calculateTotalPages(),
             'records'         => $this->getRecordCount(),
             'recordsTotal'    => $this->getRecordCount(),
             'recordsFiltered' => $this->getRecordCount(),
             'rows'            => $this->getRows()
-        );
+        ];
 
         return $jsonResponse;
     }

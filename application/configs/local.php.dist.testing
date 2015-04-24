@@ -1,6 +1,6 @@
 <?php
-return array(
-    'app'         => array(
+return [
+    'app'         => [
         'title'          => 'MPS Toolbox',
         'theme'          => 'default',
         'useAnalytics'   => false,
@@ -8,37 +8,37 @@ return array(
         'useFeedbackTab' => false,
         'supportEmail'   => 'support@tangentmtw.com',
         'copyright'      => 'Tangent MTW',
-    ),
-    'email'       => array(
+    ],
+    'email'       => [
         'host'     => '',
         'ssl'      => 'SSL',
         'port'     => '465',
         'username' => '',
         'password' => '',
-    ),
-    'phpSettings' => array(
+    ],
+    'phpSettings' => [
         'display_errors'    => true,
         'displayExceptions' => true,
-    ),
-    'resources'   => array(
-        'db'              => array(
-            'params' => array(
+    ],
+    'resources'   => [
+        'db'              => [
+            'params' => [
                 'host'     => '127.0.0.1',
                 'username' => 'mpstoolbox_test',
                 'password' => 'mpstoolbox_test',
                 'dbname'   => 'mpstoolbox_test',
-            ),
-        ),
-        'frontController' => array(
-            'params' => array(
+            ],
+        ],
+        'frontController' => [
+            'params' => [
                 'displayExceptions' => true,
-            ),
-        ),
-    ),
-    'statsd'      => array(
+            ],
+        ],
+    ],
+    'statsd'      => [
         'rootBucket' => 'testing.mpstoolbox.com',
         'enabled'   => false,
         'host'      => '',
         'port'      => 8125,
-    ),
-);
+    ],
+];

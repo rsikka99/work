@@ -84,10 +84,10 @@ class ContractTemplateSectionMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_contractTemplateId} = ?" => $primaryKey [0],
-            "{$this->col_contractSectionId} = ?"  => $primaryKey [1]
-        ));
+            "{$this->col_contractSectionId} = ?"  => $primaryKey [1],
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -108,17 +108,17 @@ class ContractTemplateSectionMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof ContractTemplateSectionModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_contractTemplateId} = ?" => $object->contractTemplateId,
-                "{$this->col_contractSectionId} = ?"  => $object->contractSectionId
-            );
+                "{$this->col_contractSectionId} = ?"  => $object->contractSectionId,
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_contractTemplateId} = ?" => $object [0],
-                "{$this->col_contractSectionId} = ?"  => $object [1]
-            );
+                "{$this->col_contractSectionId} = ?"  => $object [1],
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -202,7 +202,7 @@ class ContractTemplateSectionMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new ContractTemplateSectionModel($row->toArray());
@@ -225,10 +225,10 @@ class ContractTemplateSectionMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_contractTemplateId} = ?" => $id [0],
-            "{$this->col_contractSectionId} = ?"  => $id [1]
-        );
+            "{$this->col_contractSectionId} = ?"  => $id [1],
+        ];
     }
 
     /**
@@ -238,10 +238,10 @@ class ContractTemplateSectionMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
+        return [
             $object->contractTemplateId,
-            $object->contractSectionId
-        );
+            $object->contractSectionId,
+        ];
     }
 
     /**
@@ -253,9 +253,9 @@ class ContractTemplateSectionMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllForContractTemplate ($contractTemplateId)
     {
-        return $this->fetchAll(array(
+        return $this->fetchAll([
             "{$this->col_contractTemplateId} = ?" => $contractTemplateId,
-        ));
+        ]);
     }
 }
 

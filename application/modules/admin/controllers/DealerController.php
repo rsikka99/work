@@ -29,7 +29,7 @@ class Admin_DealerController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('System', 'Dealers', 'Dealer Management');
+        $this->_pageTitle = ['System', 'Dealers', 'Dealer Management'];
         $dealerMapper     = DealerMapper::getInstance();
         $paginator        = new Zend_Paginator(new My_Paginator_MapperAdapter($dealerMapper));
 
@@ -52,7 +52,7 @@ class Admin_DealerController extends Action
 
         if ($dealerId === false)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'You must select a dealer to edit.'));
+            $this->_flashMessenger->addMessage(['warning' => 'You must select a dealer to edit.']);
             $this->redirectToRoute('admin.dealers');
         }
 
@@ -60,11 +60,11 @@ class Admin_DealerController extends Action
         $dealer       = $dealerMapper->find($dealerId);
         if (!$dealer instanceof DealerModel)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Invalid dealer selected.'));
+            $this->_flashMessenger->addMessage(['warning' => 'Invalid dealer selected.']);
             $this->redirectToRoute('admin.dealers');
         }
 
-        $this->_pageTitle = array($dealer->dealerName, 'Dealers', 'System');
+        $this->_pageTitle = ['Dealers', 'System'];
 
         $this->view->dealer = $dealer;
     }
@@ -80,7 +80,7 @@ class Admin_DealerController extends Action
     {
         if ($dealerId === false)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'You must select a dealer to edit.'));
+            $this->_flashMessenger->addMessage(['warning' => 'You must select a dealer to edit.']);
             $this->redirectToRoute('admin.dealers');
         }
 
@@ -92,7 +92,7 @@ class Admin_DealerController extends Action
 
         if (!$dealer instanceof DealerModel)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Invalid dealer selected.'));
+            $this->_flashMessenger->addMessage(['warning' => 'Invalid dealer selected.']);
             $this->redirectToRoute('admin.dealers');
         }
 
@@ -109,11 +109,11 @@ class Admin_DealerController extends Action
         $dealerId            = $this->getRequest()->getUserParam('id', false);
         $dealer              = $this->getDealer($dealerId);
 
-        $this->_pageTitle = array('Edit: ' . $dealer->dealerName, 'Dealers', 'System');
+        $this->_pageTitle = ['Edit: ' . $dealer->dealerName, 'Dealers', 'System'];
 
 
         $featureList = $dealerFeatureMapper->fetchFeatureListForDealer($dealerId);
-        $features    = array();
+        $features    = [];
         foreach ($featureList as $feature)
         {
             $features['dealerFeatures'][] = $feature->featureId;
@@ -128,7 +128,7 @@ class Admin_DealerController extends Action
             $postData = $this->getRequest()->getPost();
             if (isset($postData ['cancel']))
             {
-                $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                $this->redirectToRoute('admin.dealers.view', ['id' => $dealerId]);
             }
             else
             {
@@ -191,13 +191,13 @@ class Admin_DealerController extends Action
                         $db->commit();
 
                         // All done
-                        $this->_flashMessenger->addMessage(array('success' => "{$dealer->dealerName} has been successfully updated!"));
-                        $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                        $this->_flashMessenger->addMessage(['success' => "{$dealer->dealerName} has been successfully updated!"]);
+                        $this->redirectToRoute('admin.dealers.view', ['id' => $dealerId]);
                     }
                     catch (Exception $e)
                     {
                         $db->rollBack();
-                        $this->_flashMessenger->addMessage(array('danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."));
+                        $this->_flashMessenger->addMessage(['danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."]);
                         \Tangent\Logger\Logger::logException($e);
                     }
                 }
@@ -226,7 +226,7 @@ class Admin_DealerController extends Action
             $postData = $this->getRequest()->getPost();
             if (isset($postData['cancel']))
             {
-                $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                $this->redirectToRoute('admin.dealers.view', ['id' => $dealerId]);
             }
             else
             {
@@ -236,17 +236,17 @@ class Admin_DealerController extends Action
 
                     $dealerTonerVendorService->updateDealerTonerVendors($dealerId, $formValues);
 
-                    $this->_flashMessenger->addMessage(array('success' => "Dealer Toner Vendors successfully updated"));
-                    $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                    $this->_flashMessenger->addMessage(['success' => "Dealer Toner Vendors successfully updated"]);
+                    $this->redirectToRoute('admin.dealers.view', ['id' => $dealerId]);
                 }
             }
         }
         else
         {
-            $form->populate(array('manufacturerIds' => $dealerTonerVendorService->getDealerTonerVendorsAsArray($dealerId)));
+            $form->populate(['manufacturerIds' => $dealerTonerVendorService->getDealerTonerVendorsAsArray($dealerId)]);
         }
 
-        $this->_pageTitle = array('Edit Toner Vendors for: ' . $dealer->dealerName, 'Dealers', 'System');
+        $this->_pageTitle = ['Edit Toner Vendors for: ' . $dealer->dealerName, 'Dealers', 'System'];
 
         $this->view->form = $form;
     }
@@ -266,7 +266,7 @@ class Admin_DealerController extends Action
             $postData = $this->getRequest()->getPost();
             if (isset($postData['cancel']))
             {
-                $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                $this->redirectToRoute('admin.dealers.view', ['id' => $dealerId]);
             }
             else
             {
@@ -276,17 +276,17 @@ class Admin_DealerController extends Action
 
                     $dealerRmsProviderService->updateDealerRmsProviders($dealerId, $formValues);
 
-                    $this->_flashMessenger->addMessage(array('success' => "Dealer RMS Providers successfully updated"));
-                    $this->redirectToRoute('admin.dealers.view', array('id' => $dealerId));
+                    $this->_flashMessenger->addMessage(['success' => "Dealer RMS Providers successfully updated"]);
+                    $this->redirectToRoute('admin.dealers.view', ['id' => $dealerId]);
                 }
             }
         }
         else
         {
-            $form->populate(array('rmsProviderIds' => $dealerRmsProviderService->getDealerRmsProvidersAsArray($dealerId)));
+            $form->populate(['rmsProviderIds' => $dealerRmsProviderService->getDealerRmsProvidersAsArray($dealerId)]);
         }
 
-        $this->_pageTitle = array('Edit RMS Providers for: ' . $dealer->dealerName, 'Dealers', 'System');
+        $this->_pageTitle = ['Edit RMS Providers for: ' . $dealer->dealerName, 'Dealers', 'System'];
 
         $this->view->form = $form;
     }
@@ -364,7 +364,7 @@ class Admin_DealerController extends Action
      */
     public function createAction ()
     {
-        $this->_pageTitle = array('System', 'Dealers', 'Create Dealer');
+        $this->_pageTitle = ['System', 'Dealers', 'Create Dealer'];
         $form             = new DealerForm();
 
         $request = $this->getRequest();
@@ -391,7 +391,6 @@ class Admin_DealerController extends Action
                         // Save the dealer with the id to the database
                         $dealerId = DealerMapper::getInstance()->insert($dealer);
 
-                        $newDeviceSwapReasonArray = array();
                         // Copy the systems default reason for the dealers system default reason
                         foreach (DeviceSwapReasonMapper::getInstance()->fetchAllReasonByDealerId(1) as $deviceSwapReason)
                         {
@@ -428,24 +427,24 @@ class Admin_DealerController extends Action
 
                         if ($dealerId)
                         {
-                            $this->_flashMessenger->addMessage(array('success' => "Dealer {$dealer->dealerName} successfully created"));
+                            $this->_flashMessenger->addMessage(['success' => "Dealer {$dealer->dealerName} successfully created"]);
                             $this->redirectToRoute('admin.dealers');
                         }
                         else
                         {
-                            $this->_flashMessenger->addMessage(array('danger' => "Error saving dealer to database. If problem persists please contact your system administrator."));
+                            $this->_flashMessenger->addMessage(['danger' => "Error saving dealer to database. If problem persists please contact your system administrator."]);
                         }
                     }
                     catch (Exception $e)
                     {
                         $db->rollBack();
-                        $this->_flashMessenger->addMessage(array('danger' => "Error saving dealer to database. If problem persists please contact your system administrator."));
+                        $this->_flashMessenger->addMessage(['danger' => "Error saving dealer to database. If problem persists please contact your system administrator."]);
                         \Tangent\Logger\Logger::logException($e);
                     }
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => 'Errors on form, please correct and try again'));
+                    $this->_flashMessenger->addMessage(['danger' => 'Errors on form, please correct and try again']);
                 }
             }
             else
@@ -462,19 +461,19 @@ class Admin_DealerController extends Action
      */
     public function deleteAction ()
     {
-        $this->_pageTitle = array('System', 'Dealers', 'Delete Dealer');
+        $this->_pageTitle = ['System', 'Dealers', 'Delete Dealer'];
         $dealerId         = $this->getRequest()->getUserParam('id');
         $dealer           = DealerMapper::getInstance()->find($dealerId);
 
         if ($dealerId == 1)
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'You cannot delete the root dealer company.'));
+            $this->_flashMessenger->addMessage(['danger' => 'You cannot delete the root dealer company.']);
             $this->redirect('admin.dealers');
         }
 
         if (!$dealer instanceof DealerModel)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Invalid dealer selected.'));
+            $this->_flashMessenger->addMessage(['warning' => 'Invalid dealer selected.']);
             $this->redirect('admin.dealers');
         }
 
@@ -511,14 +510,14 @@ class Admin_DealerController extends Action
                         $db->commit();
 
                         // We have successfully deleted it then redirect and display message
-                        $this->_flashMessenger->addMessage(array("success" => "Successfully deleted {$dealer->dealerName}."));
+                        $this->_flashMessenger->addMessage(["success" => "Successfully deleted {$dealer->dealerName}."]);
                         $this->redirectToRoute('admin.dealers');
                     }
                     catch (Exception $e)
                     {
                         $db->rollBack();
                         \Tangent\Logger\Logger::logException($e);
-                        $this->_flashMessenger->addMessage(array("danger" => "Error deleting {$dealer->dealerName}, please try again."));
+                        $this->_flashMessenger->addMessage(["danger" => "Error deleting {$dealer->dealerName}, please try again."]);
                     }
                 }
             }

@@ -1,7 +1,7 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$graphs = $assessmentViewModel->getGraphs();
+$graphs              = $assessmentViewModel->getGraphs();
 ?>
 <div class="h1">Analysis: Printing Hardware Usage</div>
 <table cellspacing="0" class="gradesTable">
@@ -19,7 +19,8 @@ $graphs = $assessmentViewModel->getGraphs();
     <strong><?= number_format($assessmentViewModel->calculateAveragePagesPerDeviceMonthly()); ?>
     </strong> pages each per month, for an average total monthly print volume of
     <strong><?= $this->formatPageVolume($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></strong> pages.
-    Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.</p>
+    Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.
+</p>
 
 <div class="center">
     <img src="<?= $graphs[4]; ?>" /> <!-- Average monthly pages per networked printer -->
@@ -28,8 +29,10 @@ $graphs = $assessmentViewModel->getGraphs();
 </div>
 
 <div class="pheader">Underused and Overused Printing Devices</div>
-<p>Currently, <strong><?= number_format($assessmentViewModel->getPercentDevicesUnderused()); ?>%</strong> of your printing devices are printing less than
-    one quarter of our recommended monthly print volume, and <strong><?= number_format($assessmentViewModel->getPercentDevicesOverused()); ?>%</strong>
+<p>Currently,
+    <strong><?= number_format($assessmentViewModel->getPercentDevicesUnderused()); ?>%</strong> of your printing devices are printing less than
+    one quarter of our recommended monthly print volume, and
+    <strong><?= number_format($assessmentViewModel->getPercentDevicesOverused()); ?>%</strong>
     are printing above our recommended monthly print volume. Our recommended monthly print volumes are equal to the manufacturer's stated yield for a single
     print cartridge (for monochrome devices, the black cartridge, and for color devices, a single color cartridge unless the device is not being used for
     color).</p>
@@ -53,7 +56,7 @@ $graphs = $assessmentViewModel->getGraphs();
                 <div><?= $deviceInstance->getDeviceName() ?></div>
             </td>
             <td class="column2">
-                <div class=" center"><?= ($deviceInstance->serialNumber) ? : 'Unknown'; ?></div>
+                <div class=" center"><?= ($deviceInstance->serialNumber) ?: 'Unknown'; ?></div>
             </td>
             <td class="column3">
                 <div class=" center"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
@@ -81,7 +84,7 @@ $graphs = $assessmentViewModel->getGraphs();
                 <div><?= $deviceInstance->getDeviceName() ?></div>
             </td>
             <td class="column2">
-                <div class=" center"><?= ($deviceInstance->serialNumber) ? : 'Unknown' ?></div>
+                <div class=" center"><?= ($deviceInstance->serialNumber) ?: 'Unknown' ?></div>
             </td>
             <td class="column3">
                 <div class=" center"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
@@ -97,7 +100,8 @@ $graphs = $assessmentViewModel->getGraphs();
 <br /> <br />
 
 <div class="pheader">Color Usage</div>
-<p>You currently have <strong><?= $assessmentViewModel->getNumberOfColorCapableDevices(); ?></strong> color printing devices that print a monthly average
+<p>You currently have
+    <strong><?= $assessmentViewModel->getNumberOfColorCapableDevices(); ?></strong> color printing devices that print a monthly average
     of
     <strong><?= $this->formatPageVolume($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></strong> color pages per month, which is
     <strong><?= number_format(($assessmentViewModel->getPercentages()->TotalColorPercentage * 100), 2); ?>%</strong> of your total monthly print volume.

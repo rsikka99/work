@@ -16,9 +16,9 @@ class Goals extends \Zend_Validate_Abstract
 {
     const NUMBER_ALREADY_USED = 'inUse';
 
-    protected $_messageTemplates = array(
-        self::NUMBER_ALREADY_USED => 'Can only use digits 1 through 5 once.'
-    );
+    protected $_messageTemplates = [
+        self::NUMBER_ALREADY_USED => 'Can only use digits 1 through 5 once.',
+    ];
 
     public function isValid ($value)
     {

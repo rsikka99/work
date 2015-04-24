@@ -22,7 +22,7 @@ class ImportRmsCsvForm extends Zend_Form
     /**
      * @var array
      */
-    protected $_validFileExtensions = array();
+    protected $_validFileExtensions = [];
 
     /**
      * @var int
@@ -57,34 +57,34 @@ class ImportRmsCsvForm extends Zend_Form
         // Set the method for the display form to POST
         $this->setMethod('POST');
 
-        $this->addElement('select', 'rmsProviderId', array(
+        $this->addElement('select', 'rmsProviderId', [
             'label'        => 'RMS Provider',
             'required'     => true,
             'multiOptions' => RmsProviderMapper::getInstance()->fetchAllForDealerDropdown($this->_dealerId),
-        ));
+        ]);
 
-        $this->addElement('file', 'uploadFile', array(
+        $this->addElement('file', 'uploadFile', [
             'label'       => 'Choose a file to upload',
             'destination' => $this->getView()->App()->uploadPath,
             'required'    => true,
             'accept'      => '.csv',
-            'validators'  => array(
+            'validators'  => [
 //                'Extension' => array('extension' => 'csv'),
 //                'Count'     => array('count' => 1),
 //                'File_Size' => array('min' => $this->_minFileSize, 'max' => $this->_maxFileSize)
-            )
-        ));
+            ],
+        ]);
 
-        $this->addElement('submit', 'performUpload', array(
+        $this->addElement('submit', 'performUpload', [
             'label'  => 'Upload File <i class="fa fa-fw fa-upload"></i>',
             'ignore' => true,
-        ));
+        ]);
 
-        $this->addElement('submit', 'goBack', array(
+        $this->addElement('submit', 'goBack', [
             'label'          => '<i class="fa fa-fw fa-arrow-left"></i> Go Back',
             'ignore'         => true,
             'formnovalidate' => true,
-        ));
+        ]);
     }
 
     /**

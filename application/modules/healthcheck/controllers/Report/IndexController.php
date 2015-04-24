@@ -9,7 +9,7 @@ class Healthcheck_Report_IndexController extends Healthcheck_Library_Controller_
     public function preDispatch ()
     {
         parent::preDispatch();
-        $this->view->ErrorMessages = array();
+        $this->view->ErrorMessages = [];
     }
 
     public function postDispatch ()
@@ -31,7 +31,7 @@ class Healthcheck_Report_IndexController extends Healthcheck_Library_Controller_
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Healthcheck', 'Report');
+        $this->_pageTitle = ['Healthcheck', 'Report'];
         $this->_navigation->setActiveStep(HealthCheckStepsModel::STEP_FINISHED);
 
         if ($this->getRequest()->isPost())
@@ -52,6 +52,6 @@ class Healthcheck_Report_IndexController extends Healthcheck_Library_Controller_
         $this->view->companyName = $healthcheck->getClient()->companyName;
         $this->view->reportName  = $healthcheck->getClient()->companyName;
 
-        $this->view->navigationForm = $this->view->navigationForm  = new \MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentNavigationForm(\MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentNavigationForm::BUTTONS_BACK);
+        $this->view->navigationForm = $this->view->navigationForm = new \MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentNavigationForm(\MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentNavigationForm::BUTTONS_BACK);
     }
 }

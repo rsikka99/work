@@ -86,11 +86,11 @@ class ContractSectionModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"                 => $this->id,
             "sectionDefaultName" => $this->sectionDefaultName,
             "sectionDefaultText" => $this->sectionDefaultText,
-        );
+        ];
     }
 
 }

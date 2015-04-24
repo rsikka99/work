@@ -17,9 +17,9 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
     {
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_TONER_VENDOR_GROSS_MARGIN))
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "error" => "You do not have permission to access this."
-            ));
+            ]);
 
             $this->redirectToRoute('assessment');
         }
@@ -32,16 +32,16 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Assessment', 'Toner Vendor Gross Margin');
+        $this->_pageTitle = ['Assessment', 'Toner Vendor Gross Margin'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
         $this->initTonerVendorGrossMargin();
         $this->view->availableReports['TonerVendorGrossMargin']['active'] = true;
-        $this->view->formats                                              = array(
+        $this->view->formats                                              = [
             "/assessment/report_tonervendorgrossmargin/generate/format/excel" => $this->_excelFormat,
-        );
+        ];
 
         try
         {
@@ -95,7 +95,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
         $assessmentViewModel = $this->getAssessmentViewModel();
 
         // Define our field titles
-        $fieldTitlesLvl1 = array(
+        $fieldTitlesLvl1 = [
             '',
             '',
             '',
@@ -107,9 +107,9 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
             '',
             'Color',
             ''
-        );
+        ];
 
-        $fieldTitlesLvl2 = array(
+        $fieldTitlesLvl2 = [
             'Manufacturer',
             'Device Name',
             'IP Address',
@@ -124,10 +124,10 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
             'Toner Yield',
             'CPP',
             'Total Printing Cost'
-        );
+        ];
 
-        $fieldTitles         = array($fieldTitlesLvl1, $fieldTitlesLvl2);
-        $vendorSeparatedData = array();
+        $fieldTitles         = [$fieldTitlesLvl1, $fieldTitlesLvl2];
+        $vendorSeparatedData = [];
 
         $dealerTonerVendors = DealerTonerVendorMapper::getInstance()->fetchAllForDealer($this->_identity->dealerId);
 
@@ -155,7 +155,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
             $currentPercentage = $arrayData['statisticsGroup']['right']['Overall Margin'];
             if ($currentPercentage > $highestMargin)
             {
-                $highestMarginNames = array($arrayData['pageTitle']);
+                $highestMarginNames = [$arrayData['pageTitle']];
                 $highestMargin      = $currentPercentage;
             }
             else if ($currentPercentage == $highestMargin)
@@ -178,7 +178,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
      */
     function getStatistics ($assessmentViewModel, $costPerPageSetting)
     {
-        $statisticsGroup                                                                            = array();
+        $statisticsGroup                                                                            = [];
         $statisticsGroup['left'][My_Brand::getDealerBranding()->mpsProgramName . ' Monochrome CPP'] = $this->view->formatCostPerPage($assessmentViewModel->getMPSBlackAndWhiteCPP());
         $statisticsGroup['left'][My_Brand::getDealerBranding()->mpsProgramName . ' Color CPP']      = $this->view->formatCostPerPage($assessmentViewModel->getMPSColorCPP());
         $statisticsGroup['left']['Weighted Monochrome CPP']                                         = $this->view->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP($costPerPageSetting)->BlackAndWhite);
@@ -238,7 +238,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
         // Get the statistics
         $statisticsGroup = $this->getStatistics($assessmentViewModel, $costPerPageSetting);
 
-        $fieldLists = array();
+        $fieldLists = [];
         try
         {
             foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
@@ -303,7 +303,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
                 }
 
                 // Create an array of purchased devices (this will be the dynamic CSV body)
-                $rowData                     = array();
+                $rowData                     = [];
                 $rowData [0]['deviceName']   = str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName());
                 $rowData [0]['manufacturer'] = $deviceInstance->getMasterDevice()->getManufacturer()->fullname;
                 $rowData [0]['name']         = $deviceInstance->getMasterDevice()->modelName;
@@ -325,7 +325,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
                 $fieldLists[]                = $rowData;
             }
 
-            $fieldTotals      = array();
+            $fieldTotals      = [];
             $fieldTotals [0]  = 'Totals for ' . $assessmentViewModel->getDevices()->purchasedDeviceInstances->getCount() . ' devices:';
             $fieldTotals [4]  = $assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly();
             $fieldTotals [5]  = '';
@@ -343,6 +343,6 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
             throw new Exception("CSV File could not be opened/written for export.", 0, $e);
         }
 
-        return array('pageTitle' => $pageTitle, 'fieldTitles' => $fieldTitles, 'statisticsGroup' => $statisticsGroup, 'fieldTotals' => $fieldTotals, 'fieldLists' => $fieldLists);
+        return ['pageTitle' => $pageTitle, 'fieldTitles' => $fieldTitles, 'statisticsGroup' => $statisticsGroup, 'fieldTotals' => $fieldTotals, 'fieldLists' => $fieldLists];
     }
 }

@@ -13,9 +13,9 @@ class Assessment_Report_SolutionController extends Assessment_Library_Controller
     {
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_SOLUTION))
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "error" => "You do not have permission to access this."
-            ));
+            ]);
 
             $this->redirectToRoute('assessment');
         }
@@ -30,16 +30,16 @@ class Assessment_Report_SolutionController extends Assessment_Library_Controller
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Assessment', 'Solution');
+        $this->_pageTitle = ['Assessment', 'Solution'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
 
         $this->view->availableReports['Solution']['active'] = true;
-        $this->view->formats                                = array(
+        $this->view->formats                                = [
             "/assessment/report_solution/generate/format/docx" => $this->_wordFormat
-        );
+        ];
 
         try
         {

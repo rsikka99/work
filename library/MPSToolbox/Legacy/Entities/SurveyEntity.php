@@ -48,7 +48,7 @@ class SurveyEntity extends EloquentModel
      *
      * @var array
      */
-    protected $dates = array('surveyed_at');
+    protected $dates = ['surveyed_at'];
 
     /**
      * Accessor to remove trailing 0's on decimals

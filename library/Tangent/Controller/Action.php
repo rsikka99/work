@@ -110,7 +110,7 @@ class Action extends \Zend_Controller_Action
      * @param \Zend_Controller_Response_Abstract $response
      * @param array                              $invokeArgs
      */
-    public function __construct (\Zend_Controller_Request_Abstract $request, \Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
+    public function __construct (\Zend_Controller_Request_Abstract $request, \Zend_Controller_Response_Abstract $response, array $invokeArgs = [])
     {
         $this->_flashMessenger = new \Zend_Controller_Action_Helper_FlashMessenger();
         parent::__construct($request, $response, $invokeArgs);
@@ -298,7 +298,7 @@ class Action extends \Zend_Controller_Action
     public function sendJsonError ($message, $sendNow = true, $keepLayouts = false)
     {
         $this->getResponse()->setHttpResponseCode(500);
-        $this->_helper->json(array("error" => $message), $sendNow, $keepLayouts);
+        $this->_helper->json(["error" => $message], $sendNow, $keepLayouts);
     }
 
     /**
@@ -311,7 +311,7 @@ class Action extends \Zend_Controller_Action
      * @param  string $module
      * @param  array  $params
      */
-    public function redirector ($action, $controller = null, $module = null, array $params = array())
+    public function redirector ($action, $controller = null, $module = null, array $params = [])
     {
         $this->_helper->redirector($action, $controller, $module, $params);
     }
@@ -326,7 +326,7 @@ class Action extends \Zend_Controller_Action
      * @param bool   $reset
      * @param bool   $encode
      */
-    public function redirectToRoute ($routeName, $urlOptions = array(), $reset = false, $encode = true)
+    public function redirectToRoute ($routeName, $urlOptions = [], $reset = false, $encode = true)
     {
         $this->_helper->redirector->gotoRoute($urlOptions, $routeName, $reset, $encode);
     }
@@ -345,7 +345,7 @@ class Action extends \Zend_Controller_Action
             // Only redirect when there is a step to redirect to.
             if ($activeStep->nextStep instanceof \My_Navigation_Step)
             {
-                $this->redirectToRoute($activeStep->nextStep->route, array($params));
+                $this->redirectToRoute($activeStep->nextStep->route, [$params]);
             }
         }
     }
@@ -364,7 +364,7 @@ class Action extends \Zend_Controller_Action
             // Only redirect when there is a step to redirect to.
             if ($activeStep->previousStep instanceof \My_Navigation_Step)
             {
-                $this->redirectToRoute($activeStep->previousStep->route, array($params));
+                $this->redirectToRoute($activeStep->previousStep->route, [$params]);
             }
         }
     }

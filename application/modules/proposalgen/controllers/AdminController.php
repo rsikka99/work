@@ -42,8 +42,8 @@ class Proposalgen_AdminController extends Action
         /**
          * FIXME: Hardcoded privilege
          */
-        $this->view->privilege = array('System Admin');
-        $this->privilege       = array('System Admin');
+        $this->view->privilege = ['System Admin'];
+        $this->privilege       = ['System Admin'];
 
         $this->config               = Zend_Registry::get('config');
         $this->view->app            = $this->config->app;
@@ -61,7 +61,7 @@ class Proposalgen_AdminController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Admin Console');
+        $this->_pageTitle = ['Admin Console'];
     }
 
     /**
@@ -71,19 +71,19 @@ class Proposalgen_AdminController extends Action
     {
         $manufacturerId      = $this->getParam('manufacturerid', false);
         $jsonResponse        = new stdClass();
-        $jsonResponse->rows  = array();
+        $jsonResponse->rows  = [];
         $master_devicesTable = new MasterDeviceDbTable();
-        $result              = $master_devicesTable->fetchAll(array('manufacturerId = ?' => $manufacturerId), 'modelName');
+        $result              = $master_devicesTable->fetchAll(['manufacturerId = ?' => $manufacturerId], 'modelName');
 
         if (count($result) > 0)
         {
             foreach ($result as $row)
             {
-                $jsonResponse->rows[] = array('id' => $row['id'], 'cell' => array(
+                $jsonResponse->rows[] = ['id' => $row['id'], 'cell' => [
                     $row ['id'],
                     ucwords(strtolower($row ['modelName']))
 
-                ));
+                ]];
             }
         }
         $this->sendJson($jsonResponse);
@@ -106,12 +106,12 @@ class Proposalgen_AdminController extends Action
             {
                 // get toners for device
                 $select = $db->select()
-                             ->from(array(
+                             ->from([
                                  't' => 'toners'
-                             ))
-                             ->join(array(
+                             ])
+                             ->join([
                                  'td' => 'device_toners'
-                             ), 't.id = td.toner_id')
+                             ], 't.id = td.toner_id')
                              ->where('td.master_device_id = ?', $deviceID);
                 $stmt   = $db->query($select);
 
@@ -127,20 +127,20 @@ class Proposalgen_AdminController extends Action
                 }
 
                 $select      = $db->select()
-                                  ->from(array(
+                                  ->from([
                                       'md' => 'master_devices'
-                                  ))
-                                  ->joinLeft(array(
+                                  ])
+                                  ->joinLeft([
                                       'm' => 'manufacturers'
-                                  ), 'm.id = md.manufacturerId')
-                                  ->joinLeft(array(
+                                  ], 'm.id = md.manufacturerId')
+                                  ->joinLeft([
                                       'rd' => 'replacement_devices'
-                                  ), 'rd.masterDeviceId = md.id')
+                                  ], 'rd.masterDeviceId = md.id')
                                   ->where('md.id = ?', $deviceID);
                 $stmt        = $db->query($select);
                 $row         = $stmt->fetchAll();
                 $launch_date = new Zend_Date($row [0] ['launchDate'], "yyyy/mm/dd HH:ii:ss");
-                $formData    = array(
+                $formData    = [
                     'launch_date'           => $launch_date->toString('mm/dd/yyyy'),
                     'toner_config_id'       => $row [0] ['tonerConfigId'],
                     'is_copier'             => $row [0] ['isCopier'] ? true : false,
@@ -164,12 +164,12 @@ class Proposalgen_AdminController extends Action
                     'ppm_color'             => $row [0] ['ppmColor'],
                     'partsCostPerPage'      => $row [0] ['partsCostPerPage'],
                     'laborCostPerPage'      => $row [0] ['laborCostPerPage'],
-                );
+                ];
             }
             else
             {
                 // empty form values
-                $formData = array();
+                $formData = [];
             }
         }
         catch (Exception $e)
@@ -191,9 +191,9 @@ class Proposalgen_AdminController extends Action
 
         try
         {
-            $formdata = array(
+            $formdata = [
                 'report_count' => count($device_instances)
-            );
+            ];
         }
         catch (Exception $e)
         {
@@ -224,9 +224,9 @@ class Proposalgen_AdminController extends Action
             {
                 case "man" :
                     $select = $db->select();
-                    $select->from(array(
+                    $select->from([
                         'm' => 'manufacturers'
-                    ));
+                    ]);
                     $select->where('isDeleted = 0');
                     $select->order('fullname');
                     $stmt   = $db->query($select);
@@ -239,25 +239,25 @@ class Proposalgen_AdminController extends Action
                         foreach ($result as $row)
                         {
                             $formData->rows [$i] ['id']   = $row ['id'];
-                            $formData->rows [$i] ['cell'] = array(
+                            $formData->rows [$i] ['cell'] = [
                                 $row ['id'],
                                 ucwords(strtolower($row ['fullname']))
-                            );
+                            ];
                             $i++;
                         }
                     }
                     else
                     {
                         // empty form values
-                        $formData = array();
+                        $formData = [];
                     }
                     break;
 
                 case "color" :
                     $select = $db->select();
-                    $select->from(array(
+                    $select->from([
                         'tc' => 'toner_colors'
-                    ));
+                    ]);
                     $select->order('name');
                     $stmt   = $db->query($select);
                     $result = $stmt->fetchAll();
@@ -269,17 +269,17 @@ class Proposalgen_AdminController extends Action
                         foreach ($result as $row)
                         {
                             $formData->rows [$i] ['id']   = $row ['id'];
-                            $formData->rows [$i] ['cell'] = array(
+                            $formData->rows [$i] ['cell'] = [
                                 $row ['id'],
                                 ucwords(strtolower($row ['name']))
-                            );
+                            ];
                             $i++;
                         }
                     }
                     else
                     {
                         // empty form values
-                        $formData = array();
+                        $formData = [];
                     }
                     break;
             }
@@ -302,7 +302,7 @@ class Proposalgen_AdminController extends Action
     public function devicetonersAction ()
     {
         $gridFormData   = new stdClass();
-        $toners         = array();
+        $toners         = [];
         $masterDeviceId = $this->_getParam('deviceid', false);
         $tonerArray     = $this->_getParam('list', '');
 
@@ -324,12 +324,12 @@ class Proposalgen_AdminController extends Action
             $gridFormData->page    = 1;
             $gridFormData->total   = 1;
             $gridFormData->records = 50;
-            $gridFormData->rows    = array();
+            $gridFormData->rows    = [];
             foreach ($toners as $toner)
             {
                 $formDataRow       = new stdClass();
                 $formDataRow->id   = $toner->id;
-                $formDataRow->cell = array(
+                $formDataRow->cell = [
                     $toner->id,
                     $toner->sku,
                     $toner->getManufacturer()->displayname,
@@ -340,7 +340,7 @@ class Proposalgen_AdminController extends Action
                     $masterDeviceId,
                     $masterDeviceId,
                     null
-                );
+                ];
 
                 $gridFormData->rows[] = $formDataRow;
             }
@@ -417,12 +417,12 @@ class Proposalgen_AdminController extends Action
                 {
                     // GET ALL SAME COLOR TONERS FOR DEVICE
                     $select = $db->select();
-                    $select->from(array(
+                    $select->from([
                         'dt' => 'device_toners'
-                    ));
-                    $select->joinLeft(array(
+                    ]);
+                    $select->joinLeft([
                         't' => 'toners'
-                    ), 'dt.toner_id = t.id');
+                    ], 'dt.toner_id = t.id');
                     $select->where('t.tonerColorId = ' . $toner_color_id . ' AND dt.master_device_id = ' . $deviceToner->master_device_id);
                     $stmt        = $db->query($select);
                     $num_devices = $stmt->fetchAll();
@@ -435,15 +435,15 @@ class Proposalgen_AdminController extends Action
 
                 // GET SAME COLOR TONERS
                 $select = $db->select();
-                $select->from(array(
+                $select->from([
                     't' => 'toners'
-                ));
-                $select->joinLeft(array(
+                ]);
+                $select->joinLeft([
                     'tc' => 'toner_colors'
-                ), 'tc.id = t.tonerColorId');
-                $select->joinLeft(array(
+                ], 'tc.id = t.tonerColorId');
+                $select->joinLeft([
                     'm' => 'manufacturers'
-                ), 'm.id = t.manufacturerId');
+                ], 'm.id = t.manufacturerId');
                 $select->where('t.id != ' . $toner_id . ' AND t.tonerColorId = ' . $toner_color_id . $where);
                 $stmt   = $db->query($select);
                 $result = $stmt->fetchAll();
@@ -465,15 +465,15 @@ class Proposalgen_AdminController extends Action
 
                 $start  = $limit * $page - $limit;
                 $select = $db->select();
-                $select->from(array(
-                    't' => 'toners'), array('id AS toners_id', 'sku', 'yield', 'cost')
+                $select->from([
+                    't' => 'toners'], ['id AS toners_id', 'sku', 'yield', 'cost']
                 );
-                $select->joinLeft(array(
+                $select->joinLeft([
                     'tc' => 'toner_colors'
-                ), 'tc.id = t.tonerColorId');
-                $select->joinLeft(array(
+                ], 'tc.id = t.tonerColorId');
+                $select->joinLeft([
                     'm' => 'manufacturers'
-                ), 'm.id = t.manufacturerId');
+                ], 'm.id = t.manufacturerId');
                 $select->where('t.id != ' . $toner_id . ' AND t.tonerColorId = ' . $toner_color_id . $where);
                 $select->order($sidx . ' ' . $sord);
                 $select->limit($limit, $start);
@@ -488,7 +488,7 @@ class Proposalgen_AdminController extends Action
                     foreach ($result as $row)
                     {
                         $formData->rows [$i] ['id']   = $row ['toners_id'];
-                        $formData->rows [$i] ['cell'] = array(
+                        $formData->rows [$i] ['cell'] = [
                             $row ['toners_id'],
                             $row ['sku'],
                             ucwords(strtolower($row ['fullname'])),
@@ -497,14 +497,14 @@ class Proposalgen_AdminController extends Action
                             $row ['cost'],
                             $num_devices_count,
                             $deviceTonersCount
-                        );
+                        ];
                         $i++;
                     }
                 }
                 else
                 {
                     // Empty form values
-                    $formData = array();
+                    $formData = [];
                 }
             }
             catch (Exception $e)
@@ -515,7 +515,7 @@ class Proposalgen_AdminController extends Action
         }
         else
         {
-            $formData = array();
+            $formData = [];
         }
 
         $this->sendJson($formData);
@@ -543,12 +543,12 @@ class Proposalgen_AdminController extends Action
                 $master_device_id = $deviceToner->master_device_id;
                 // GET ALL SAME COLOR TONERS FOR DEVICE
                 $select = $db->select();
-                $select->from(array(
+                $select->from([
                     'dt' => 'device_toners'
-                ));
-                $select->joinLeft(array(
+                ]);
+                $select->joinLeft([
                     't' => 'toners'
-                ), 'dt.toner_id = t.id');
+                ], 'dt.toner_id = t.id');
                 $select->where('t.tonerColorId = ' . $toner_color_id . ' AND dt.master_device_id = ' . $master_device_id);
                 $stmt        = $db->query($select);
                 $num_devices = $stmt->fetchAll();
@@ -559,10 +559,10 @@ class Proposalgen_AdminController extends Action
                 }
             }
 
-            $formData = array(
+            $formData = [
                 'total_count'  => count($deviceToners),
                 'device_count' => $num_devices_count
-            );
+            ];
         }
         catch (Exception $e)
         {
@@ -609,7 +609,7 @@ class Proposalgen_AdminController extends Action
                 {
                     // UPDATE ALL DEVICES WITH THIS TONER (replace_id) TO
                     // REPLACEMENT TONER (with_id)
-                    $device_toner           = DeviceTonerMapper::getInstance()->find(array($replace_id, $deviceToner->master_device_id));
+                    $device_toner           = DeviceTonerMapper::getInstance()->find([$replace_id, $deviceToner->master_device_id]);
                     $device_toner->toner_id = $with_id;
                     DeviceTonerMapper::getInstance()->insert($device_toner);
                     $toner_count += 1;
@@ -631,7 +631,7 @@ class Proposalgen_AdminController extends Action
                         {
                             // UPDATE ALL DEVICES WITH THIS TONER (replace_id)
                             // TO REPLACEMENT TONER (with_id)
-                            $device_toner           = DeviceTonerMapper::getInstance()->find(array($replace_id, $master_device_id));
+                            $device_toner           = DeviceTonerMapper::getInstance()->find([$replace_id, $master_device_id]);
                             $device_toner->toner_id = $with_id;
                             DeviceTonerMapper::getInstance()->insert($device_toner);
                             $toner_count += 1;
@@ -641,12 +641,12 @@ class Proposalgen_AdminController extends Action
                             // UPDATE ONLY DEVICES WHERE THIS IS THE LAST OF
                             // IT'S COLOR ($toner_color_id)
                             $select = $db->select();
-                            $select->from(array(
+                            $select->from([
                                 'dt' => 'device_toners'
-                            ));
-                            $select->joinLeft(array(
+                            ]);
+                            $select->joinLeft([
                                 't' => 'toners'
-                            ), 'dt.toner_id = t.id');
+                            ], 'dt.toner_id = t.id');
                             $select->where('t.tonerColorId = ' . $toner_color_id . ' AND dt.master_device_id = ' . $master_device_id);
                             $stmt        = $db->query($select);
                             $num_devices = $stmt->fetchAll();
@@ -655,7 +655,7 @@ class Proposalgen_AdminController extends Action
                             {
                                 // UPDATE THIS DEVICE WITH REPLACEMENT TONER
                                 // (with_id)
-                                $device_toner           = DeviceTonerMapper::getInstance()->find(array($replace_id, $master_device_id));
+                                $device_toner           = DeviceTonerMapper::getInstance()->find([$replace_id, $master_device_id]);
                                 $device_toner->toner_id = $with_id;
                                 DeviceTonerMapper::getInstance()->insert($device_toner);
                                 $toner_count += 1;
@@ -663,9 +663,9 @@ class Proposalgen_AdminController extends Action
                         }
                     }
 
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         "success" => "The toner has been replaced and deleted successfully."
-                    ));
+                    ]);
                 }
                 else
                 {
@@ -691,7 +691,7 @@ class Proposalgen_AdminController extends Action
             // Update the toner vendor manufacturer
             TonerVendorManufacturerMapper::getInstance()->updateTonerVendorByManufacturerId($toner->manufacturerId);
 
-            $uniqueMasterDevices = array();
+            $uniqueMasterDevices = [];
             foreach ($deviceToners as $deviceToner)
             {
                 if (!isset($uniqueMasterDevices[$deviceToner->master_device_id]))
@@ -718,7 +718,7 @@ class Proposalgen_AdminController extends Action
             $message = "An error has occurred and the toner was not replaced.";
         }
 
-        $this->sendJson(array("message" => $message));
+        $this->sendJson(["message" => $message]);
     }
 
 
@@ -732,26 +732,26 @@ class Proposalgen_AdminController extends Action
     {
         $manufacturerId    = $this->_getParam('manufacturerid', false);
         $manufacturerTable = new ManufacturerDbTable();
-        $manufacturer      = $manufacturerTable->fetchRow(array('id = ?' => $manufacturerId));
+        $manufacturer      = $manufacturerTable->fetchRow(['id = ?' => $manufacturerId]);
 
         try
         {
             if (count($manufacturer->toArray()) > 0)
             {
-                $formData = array(
+                $formData = [
                     'manufacturer_name'        => Trim(ucwords(strtolower($manufacturer ['fullname']))),
                     'manufacturer_displayname' => Trim(ucwords(strtolower($manufacturer ['displayname']))),
                     'is_deleted'               => ($manufacturer ['isDeleted'] == 1 ? true : false)
-                );
+                ];
             }
             else
             {
                 // Empty form values
-                $formData = array(
+                $formData = [
                     'manufacturer_name'        => '',
                     'manufacturer_displayname' => '',
                     'is_deleted'               => false
-                );
+                ];
             }
         }
         catch (Exception $e)
@@ -821,12 +821,12 @@ class Proposalgen_AdminController extends Action
                 foreach ($masterDevices as $masterDevice)
                 {
                     $response->rows [$i] ['id'] = $masterDevice->id;
-                    $response->rows [$i]        = array(
+                    $response->rows [$i]        = [
                         "masterID"                   => $masterDevice->id,
                         "manufacturerId"             => $masterDevice->getManufacturer()->fullname,
                         "printer_model"              => $masterDevice->modelName,
                         "labor_cost_per_page_dealer" => number_format($masterDevice->getDealerAttributes()->laborCostPerPage, 4),
-                        "parts_cost_per_page_dealer" => number_format($masterDevice->getDealerAttributes()->partsCostPerPage, 4));
+                        "parts_cost_per_page_dealer" => number_format($masterDevice->getDealerAttributes()->partsCostPerPage, 4)];
                     $i++;
                 }
             }
@@ -896,25 +896,25 @@ class Proposalgen_AdminController extends Action
 
         if ($master_device_id > 0)
         {
-            $toner_fields_list = array(
+            $toner_fields_list = [
                 'id AS toner_id',
                 'sku AS toner_SKU',
                 'yield AS toner_yield',
                 'cost AS toner_price',
                 '(SELECT master_device_id FROM device_toners AS sdt WHERE sdt.toner_id = t.id AND sdt.master_device_id = ' . $master_device_id . ') AS is_added',
                 'GROUP_CONCAT(CONCAT(mdm.fullname," ",md.modelName) SEPARATOR "; ") AS device_list'
-            );
+            ];
         }
         else
         {
-            $toner_fields_list = array(
+            $toner_fields_list = [
                 'id AS toner_id',
                 'sku AS toner_SKU',
                 'yield AS toner_yield',
                 'cost AS toner_price',
                 '(null) AS is_added',
                 'device_list' => new Zend_Db_Expr("GROUP_CONCAT(CONCAT(mdm.fullname, ' ', md.modelName) SEPARATOR '; ')")
-            );
+            ];
         }
         $formData = new stdClass();
 
@@ -923,35 +923,35 @@ class Proposalgen_AdminController extends Action
         {
             // Get count
             $select = $db->select()
-                         ->from(array(
+                         ->from([
                              't' => 'toners'
-                         ), $toner_fields_list)
-                         ->joinLeft(array(
+                         ], $toner_fields_list)
+                         ->joinLeft([
                              'dt' => 'device_toners'
-                         ), 'dt.toner_id = t.id', array(
+                         ], 'dt.toner_id = t.id', [
                              'master_device_id'
-                         ))
-                         ->joinLeft(array(
+                         ])
+                         ->joinLeft([
                              'tm' => 'manufacturers'
-                         ), 'tm.id = t.manufacturerId', array(
+                         ], 'tm.id = t.manufacturerId', [
                              'tm.fullname AS toner_manufacturer'
-                         ))
-                         ->joinLeft(array(
+                         ])
+                         ->joinLeft([
                              'md' => 'master_devices'
-                         ), 'md.id = dt.master_device_id')
-                         ->joinLeft(array(
+                         ], 'md.id = dt.master_device_id')
+                         ->joinLeft([
                              'mdm' => 'manufacturers'
-                         ), 'mdm.id = md.manufacturerId', array(
+                         ], 'mdm.id = md.manufacturerId', [
                              'mdm.fullname AS manufacturer_name'
-                         ))
-                         ->joinLeft(array(
+                         ])
+                         ->joinLeft([
                              'tc' => 'toner_colors'
-                         ), 'tc.id = t.tonerColorId', array(
+                         ], 'tc.id = t.tonerColorId', [
                              'name AS toner_color_name'
-                         ))
-                         ->joinLeft(array(
+                         ])
+                         ->joinLeft([
                              'dta' => 'dealer_toner_attributes'
-                         ), "t.id = dta.tonerId AND dealerId = {$dealerId}", array('cost AS toner_dealer_price', 'dealerSku'))
+                         ], "t.id = dta.tonerId AND dealerId = {$dealerId}", ['cost AS toner_dealer_price', 'dealerSku'])
                          ->where('t.id > 0' . $where);
 
             if ($where_compatible)
@@ -994,7 +994,7 @@ class Proposalgen_AdminController extends Action
                 foreach ($result as $row)
                 {
                     $formData->rows [$i] ['id'] = $row ['toner_id'];
-                    $formData->rows [$i]        = array(
+                    $formData->rows [$i]        = [
                         "toner_id"           => $row ['toner_id'],
                         "toner_SKU"          => $row ['toner_SKU'],
                         "manufacturer_name"  => ucwords(strtolower($row ['toner_manufacturer'])),
@@ -1006,13 +1006,13 @@ class Proposalgen_AdminController extends Action
                         "is_added"           => $row ['is_added'],
                         "device_list"        => ucwords(strtolower($row ['device_list'])),
                         "dealer_sku"         => $row['dealerSku']
-                    );
+                    ];
                     $i++;
                 }
             }
             else
             {
-                $formData = array();
+                $formData = [];
             }
         }
         catch (Exception $e)
@@ -1025,7 +1025,7 @@ class Proposalgen_AdminController extends Action
 
     public function managematchupsAction ()
     {
-        $this->_pageTitle   = array('Manage Printer Matchups');
+        $this->_pageTitle   = ['Manage Printer Matchups'];
         $this->view->source = "PrintFleet";
 
         // Fill manufacturers drop down
@@ -1054,12 +1054,12 @@ class Proposalgen_AdminController extends Action
 
             if ($masterDeviceId === 0 || $masterDevice)
             {
-                $rmsDevice = RmsDeviceMapper::getInstance()->find(array($rmsProviderId, $rmsModelId));
+                $rmsDevice = RmsDeviceMapper::getInstance()->find([$rmsProviderId, $rmsModelId]);
 
                 if ($rmsDevice)
                 {
                     // If all is good, lets perform our update
-                    $rmsMasterMatchup = RmsMasterMatchupMapper::getInstance()->find(array($rmsProviderId, $rmsModelId));
+                    $rmsMasterMatchup = RmsMasterMatchupMapper::getInstance()->find([$rmsProviderId, $rmsModelId]);
                     if ($rmsMasterMatchup)
                     {
                         if ($masterDeviceId > 0)
@@ -1117,15 +1117,15 @@ class Proposalgen_AdminController extends Action
         if ($errorMessage)
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array(
+            $this->sendJson([
                 'error' => $errorMessage
-            ));
+            ]);
         }
         else
         {
-            $this->sendJson(array(
+            $this->sendJson([
                 'success' => true
-            ));
+            ]);
         }
     }
 
@@ -1138,22 +1138,22 @@ class Proposalgen_AdminController extends Action
         $rmsDeviceMapper = RmsDeviceMapper::getInstance();
         $jqGrid          = new JQGrid();
 
-        $jqGridParameters = array(
+        $jqGridParameters = [
             'sidx' => $this->_getParam('sidx', 'rmsProviderName'),
             'sord' => $this->_getParam('sord', 'ASC'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10)
-        );
+        ];
 
         $jqGrid->parseJQGridPagingRequest($jqGridParameters);
 
         // Set up validation arrays
-        $sortColumns = array(
+        $sortColumns = [
             'rmsProviderId',
             'rmsProviderName',
             'rmsModelId',
             'rmsProviderDeviceName'
-        );
+        ];
         $jqGrid->setValidSortColumns($sortColumns);
 
         if ($jqGrid->sortingIsValid())
@@ -1168,13 +1168,13 @@ class Proposalgen_AdminController extends Action
             $searchValue    = $this->_getParam('criteria', null);
 
             // Validate filtering parameters
-            $filterCriteriaValidator = new Zend_Validate_InArray(array(
-                'haystack' => array(
+            $filterCriteriaValidator = new Zend_Validate_InArray([
+                'haystack' => [
                     'printer',
                     'model',
                     'onlyUnmapped'
-                )
-            ));
+                ]
+            ]);
             // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
             if ($searchCriteria != 'onlyUnmapped' && ($searchCriteria === '' || $searchValue === '' || !$filterCriteriaValidator->isValid($searchCriteria)))
             {
@@ -1205,9 +1205,9 @@ class Proposalgen_AdminController extends Action
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array(
+            $this->sendJson([
                 'error' => 'Sorting parameters are invalid'
-            ));
+            ]);
         }
     }
 

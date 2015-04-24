@@ -16,21 +16,21 @@ class MultiManager
      *
      * @var array
      */
-    private $_curlOptions = array(CURLOPT_RETURNTRANSFER => true);
+    private $_curlOptions = [CURLOPT_RETURNTRANSFER => true];
 
     /**
      * Current running requests.
      *
      * @var MultiRequest[]
      */
-    private $_requests = array();
+    private $_requests = [];
 
     /**
      * Array of failed requests that need to be tried again.
      *
      * @var MultiRequest[]
      */
-    private $_retryRequests = array();
+    private $_retryRequests = [];
 
     /**
      * cURL Multi handle.
@@ -177,7 +177,7 @@ class MultiManager
         $requestsToRetry = $this->_retryRequests;
 
         // Delete old array so there is no mix up when starting retries
-        $this->_retryRequests = array();
+        $this->_retryRequests = [];
 
         if ($requestsToRetry)
         {

@@ -12,8 +12,8 @@ use Zend_Db_Table_Abstract;
 class DeviceConfigurationOptionDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'device_configuration_options';
-    protected $_primary = array(
+    protected $_primary = [
         'deviceConfigurationId',
-        'optionId'
-    );
+        'optionId',
+    ];
 }

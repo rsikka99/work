@@ -11,9 +11,9 @@ $assessmentViewModel = $this->assessmentViewModel;
 /**
  * Variables
  */
-$listParagraphStyle = array(
+$listParagraphStyle = [
     'spaceAfter' => 80
-);
+];
 
 /**
  * Section Start
@@ -125,6 +125,6 @@ $table = $section->addTable($tc->tablestyle);
 
 $table->addRow($tc->body->rowheight);
 $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf('Total annual savings with %1$s', $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-$table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText($this->currency($assessmentViewModel->getPrintIQSavings(), array('precision' => 0)), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+$table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText($this->currency($assessmentViewModel->getPrintIQSavings(), ['precision' => 0]), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 
 // EOF

@@ -13,9 +13,9 @@ $assessmentViewModel = $this->assessmentViewModel;
 $section->addTitle(My_Brand::getDealerBranding()->customerCostAnalysisTitle);
 
 $textRun = $section->addTextRun();
-$textRun->addText("Average Monochrome CPP: ", array("bold" => true));
+$textRun->addText("Average Monochrome CPP: ", ["bold" => true]);
 $textRun->addText($this->formatCostPerPage($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage));
 
 $textRun = $section->addTextRun();
-$textRun->addText("Average Color CPP: ", array("bold" => true));
+$textRun->addText("Average Color CPP: ", ["bold" => true]);
 $textRun->addText($this->formatCostPerPage($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->colorCostPerPage));

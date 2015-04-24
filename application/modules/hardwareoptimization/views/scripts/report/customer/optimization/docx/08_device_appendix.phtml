@@ -29,89 +29,89 @@ $section->addPageBreak();
 $section->addTitle(sprintf('Device Appendix (%1$s devices)', number_format($totalNumberOfDevices), 1));
 
 $this->partial('report/customer/optimization/docx/device_table.phtml',
-    array(
+    [
         "section"                  => $section,
         "title"                    => "Acceptable Devices",
         "description"              => "The following devices have been deemed productive and we suggest keeping these devices.",
         "descriptionIfZeroDevices" => "There are no devices deemed productive and that we suggest keeping.",
-        "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_KEEP])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_KEEP] : array(),
+        "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_KEEP])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_KEEP] : [],
         "showReplacementDevices"   => false,
         "hardwareOptimization"     => $hardwareOptimization,
         "totalNumberOfDevices"     => $totalNumberOfDevices,
         "showReason"               => false,
         "tcStyle"                  => $this->devicetables->tables->acceptable,
         "tableStyle"               => $this->styles->tables,
-    )
+    ]
 );
 
 $section->addTextBreak();
 
 $this->partial('report/customer/optimization/docx/device_table.phtml',
-    array(
+    [
         "section"                  => $section,
         "title"                    => "Suggested Replacement Devices",
         "description"              => "The following devices have been targeted for replacement.",
         "descriptionIfZeroDevices" => "There are no devices currently targeted for replacement.",
-        "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE] : array(),
+        "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE] : [],
         "showReplacementDevices"   => true,
         "hardwareOptimization"     => $hardwareOptimization,
         "totalNumberOfDevices"     => $totalNumberOfDevices,
         "showReason"               => true,
         "tcStyle"                  => $this->devicetables->tables->replacement,
         "tableStyle"               => $this->styles->tables,
-    )
+    ]
 );
 
 $section->addTextBreak();
 
 $this->partial('report/customer/optimization/docx/device_table.phtml',
-    array(
+    [
         "section"                  => $section,
         "title"                    => "Suggested Upgrades",
         "description"              => "The following devices have been targeted for upgraded functionality.",
         "descriptionIfZeroDevices" => "There are no devices currently targeted for upgraded functionality.",
-        "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE] : array(),
+        "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE] : [],
         "showReplacementDevices"   => true,
         "hardwareOptimization"     => $hardwareOptimization,
         "totalNumberOfDevices"     => $totalNumberOfDevices,
         "showReason"               => true,
         "tcStyle"                  => $this->devicetables->tables->upgraded,
         "tableStyle"               => $this->styles->tables,
-    )
+    ]
 );
 
 $section->addTextBreak();
 
 $this->partial('report/customer/optimization/docx/device_table.phtml',
-    array(
+    [
         "section"                  => $section,
         "title"                    => "Devices Eligible for Retirement and Migration",
         "description"              => "Devices with both low volume and age of over " . DeviceInstanceModel::RETIREMENT_AGE . " years have been targeted for retirement. We suggest migrating page volumes to other devices.",
         "descriptionIfZeroDevices" => "There are no devices currently targeted for retirement.",
-        "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_RETIRE])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_RETIRE] : array(),
+        "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_RETIRE])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_RETIRE] : [],
         "showReplacementDevices"   => false,
         "hardwareOptimization"     => $hardwareOptimization,
         "totalNumberOfDevices"     => $totalNumberOfDevices,
         "showReason"               => false,
         "tcStyle"                  => $this->devicetables->tables->retire,
         "tableStyle"               => $this->styles->tables,
-    )
+    ]
 );
 
 $section->addTextBreak();
 
 $this->partial('report/customer/optimization/docx/device_table.phtml',
-    array(
+    [
         "section"                  => $section,
         "title"                    => "Devices Flagged as Do Not Repair",
         "description"              => "These devices have been flagged for replacement upon breakdown based on operational reliability.",
         "descriptionIfZeroDevices" => "There are no devices currently flagged for replacement upon breakdown.",
-        "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_DNR])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_DNR] : array(),
+        "deviceInstances"          => (isset($deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_DNR])) ? $deviceInstances[HardwareOptimizationDeviceInstanceModel::ACTION_DNR] : [],
         "showReplacementDevices"   => false,
         "hardwareOptimization"     => $hardwareOptimization,
         "totalNumberOfDevices"     => $totalNumberOfDevices,
         "showReason"               => true,
         "tcStyle"                  => $this->devicetables->tables->flagged,
         "tableStyle"               => $this->styles->tables,
-    )
+    ]
 );

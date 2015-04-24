@@ -63,7 +63,7 @@ if (count($deviceInstances) > 0)
         $masterDevice            = $deviceInstance->getMasterDevice();
         $replacementMasterDevice = $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getMasterDevice();
         $isColor                 = ($masterDevice->tonerConfigId !== TonerConfigModel::BLACK_ONLY) ? true : false;
-        $cycle                   = ($this->cycle(array(true, false))->next()->current());
+        $cycle                   = ($this->cycle([true, false])->next()->current());
         if ($cycle)
         {
             $ampvStyle = $tcStyle->body->cell5->even;

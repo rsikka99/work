@@ -35,79 +35,79 @@ class ProposedFleetSettingsForm extends \Zend_Form
          */
 
 
-        $this->addElement('checkbox', 'proposedUseDevicePageCoverages', array(
+        $this->addElement('checkbox', 'proposedUseDevicePageCoverages', [
             'label'       => 'Use Device Page Coverages',
             'description' => 'Use the actual page coverage value reported by the RMS.',
-        ));
+        ]);
 
-        $this->addElement('text', 'proposedPageCoverageMono', array(
+        $this->addElement('text', 'proposedPageCoverageMono', [
             'label'       => 'Default Monochrome Coverage',
             'description' => 'Apply this coverage to determine the toner costs of all monochrome pages.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'proposedPageCoverageColor', array(
+        $this->addElement('text', 'proposedPageCoverageColor', [
             'label'       => 'Default Color Coverage',
             'description' => 'Apply this coverage to determine the toner costs of all color (CMYK) pages.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'proposedDefaultAdminCostPerPage', array(
+        $this->addElement('text', 'proposedDefaultAdminCostPerPage', [
             'label'       => 'Admin CPP',
             'description' => 'You can specify an additional cost per page here. It is applied to all devices.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'proposedDefaultMonochromeLaborCostPerPage', array(
+        $this->addElement('text', 'proposedDefaultMonochromeLaborCostPerPage', [
             'label'       => 'Monochrome Device Labor CPP',
             'description' => 'The default labor cost per page to apply to monochrome devices.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'proposedDefaultMonochromePartsCostPerPage', array(
+        $this->addElement('text', 'proposedDefaultMonochromePartsCostPerPage', [
             'label'       => 'Monochrome Device Parts CPP',
             'description' => 'The default parts cost per page to apply to monochrome devices.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'proposedDefaultColorLaborCostPerPage', array(
+        $this->addElement('text', 'proposedDefaultColorLaborCostPerPage', [
             'label'       => 'Color Device Labor CPP',
             'description' => 'The default labor cost per page to apply to color devices.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'proposedDefaultColorPartsCostPerPage', array(
+        $this->addElement('text', 'proposedDefaultColorPartsCostPerPage', [
             'label'       => 'Color Device Parts CPP',
             'description' => 'The default parts cost per page to apply to color devices.',
             'required'    => true,
-        ));
+        ]);
 
-        $this->addElement('multiselect', 'proposedMonochromeRankSetArray', array(
+        $this->addElement('multiselect', 'proposedMonochromeRankSetArray', [
             'label'        => 'Monochrome Toner Vendors',
             'description'  => 'Which supply vendor(s) would you like to use for <strong>monochrome devices</strong>?<br><em>Note: The system always uses OEM as the <strong>last</strong> option. If you leave this blank then it will use <strong>only OEM</strong> supplies.</em>',
             'class'        => 'tonerMultiselect',
             'multiOptions' => $tonerVendors,
-        ));
+        ]);
 
-        $this->addElement('multiselect', 'proposedColorRankSetArray', array(
+        $this->addElement('multiselect', 'proposedColorRankSetArray', [
             'label'        => 'Color Toner Vendors',
             'description'  => 'Which supply vendor(s) would you like to use for <strong>color devices</strong>?<br><em>Note: The system always uses OEM as the <strong>last</strong> option. If you leave this blank then it will use <strong>only OEM</strong> supplies.</em>',
             'class'        => 'tonerMultiselect',
             'multiOptions' => $tonerVendors,
-        ));
+        ]);
 
         /**
          * Form Actions
          */
-        $this->addElement('submit', 'save', array(
+        $this->addElement('submit', 'save', [
             'label' => 'Submit',
             'class' => 'btn btn-primary',
-        ));
+        ]);
 
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'label' => 'Cancel',
-            'class' => 'btn btn-default'
-        ));
+            'class' => 'btn btn-default',
+        ]);
     }
 
     /**
@@ -117,7 +117,7 @@ class ProposedFleetSettingsForm extends \Zend_Form
     {
         if ($fleetSettings instanceof FleetSettingsEntity)
         {
-            $fleetSettings = array(
+            $fleetSettings = [
                 'proposedUseDevicePageCoverages'            => $fleetSettings->useDevicePageCoverages,
                 'proposedPageCoverageMono'                  => $fleetSettings->defaultMonochromeCoverage,
                 'proposedPageCoverageColor'                 => $fleetSettings->defaultColorCoverage,
@@ -128,7 +128,7 @@ class ProposedFleetSettingsForm extends \Zend_Form
                 'proposedDefaultColorPartsCostPerPage'      => $fleetSettings->defaultColorPartsCostPerPage,
                 'proposedMonochromeRankSetArray'            => $fleetSettings->getMonochromeRankSet()->getRanksAsArray(),
                 'proposedColorRankSetArray'                 => $fleetSettings->getColorRankSet()->getRanksAsArray(),
-            );
+            ];
         }
 
         if ($fleetSettings)
@@ -170,7 +170,7 @@ class ProposedFleetSettingsForm extends \Zend_Form
      */
     public function getMonochromeRanks ()
     {
-        $tonerRanks = array();
+        $tonerRanks = [];
 
         $manufacturerIds = $this->getValue('proposedMonochromeRankSetArray');
         if ($manufacturerIds)
@@ -196,7 +196,7 @@ class ProposedFleetSettingsForm extends \Zend_Form
      */
     public function getColorRanks ()
     {
-        $tonerRanks = array();
+        $tonerRanks = [];
 
         $manufacturerIds = $this->getValue('proposedColorRankSetArray');
         if ($manufacturerIds)

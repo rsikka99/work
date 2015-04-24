@@ -18,7 +18,7 @@ class RenderFormClose extends RenderFormAbstract
      */
     public function RenderFormClose (\Zend_Form $form)
     {
-        $html = array();
+        $html = [];
         if ($form instanceof \Zend_Form)
         {
             $html[] = "</form>";

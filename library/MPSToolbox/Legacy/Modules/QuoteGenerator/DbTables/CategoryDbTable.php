@@ -12,7 +12,7 @@ use Zend_Db_Table_Abstract;
 class CategoryDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'categories';
-    protected $_primary = array(
-        'id'
-    );
+    protected $_primary = [
+        'id',
+    ];
 }

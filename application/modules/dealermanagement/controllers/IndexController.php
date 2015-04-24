@@ -11,7 +11,7 @@ class Dealermanagement_IndexController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Company Dashboard');
+        $this->_pageTitle = ['Company Dashboard'];
 
         /* Nothing To Do */
     }

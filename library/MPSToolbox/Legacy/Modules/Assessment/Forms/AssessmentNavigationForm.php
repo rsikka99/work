@@ -61,15 +61,15 @@ class AssessmentNavigationForm extends Zend_Form
     public static function addFormActionsToForm ($buttonMode, $form)
     {
         // Validate the button mode
-        if (!in_array($buttonMode, array(
+        if (!in_array($buttonMode, [
             self::BUTTONS_ALL,
             self::BUTTONS_SAVE_NEXT,
             self::BUTTONS_BACK_NEXT,
             self::BUTTONS_BACK_SAVE,
             self::BUTTONS_BACK,
             self::BUTTONS_SAVE,
-            self::BUTTONS_NEXT
-        ))
+            self::BUTTONS_NEXT,
+        ])
         )
         {
             throw new InvalidArgumentException('Invalid Button Mode!');
@@ -78,7 +78,7 @@ class AssessmentNavigationForm extends Zend_Form
         $goBackButton = false;
         $nextButton   = false;
         $saveButton   = false;
-        $addedButtons = array();
+        $addedButtons = [];
 
         switch ($buttonMode)
         {
@@ -113,54 +113,47 @@ class AssessmentNavigationForm extends Zend_Form
         // Go Back
         if ($goBackButton)
         {
-            $form->addElement('button', 'goBack', array(
+            $form->addElement('button', 'goBack', [
                 'label' => '<i class="fa fa-fw fa-arrow-left"></i>  Go Back',
                 'type'  => 'submit',
                 'class' => 'btn btn-default',
-            ));
+            ]);
             $addedButtons [] = 'goBack';
         }
 
         // Save Button
         if ($saveButton)
         {
-            $form->addElement('button', 'save', array(
+            $form->addElement('button', 'save', [
                 'label' => '<i class="fa fa-fw fa-check"></i> Save',
                 'type'  => 'submit',
                 'class' => 'btn btn-success',
-            ));
+            ]);
             $addedButtons [] = 'save';
         }
 
         // Next (Save & Continue) Button
         if ($nextButton)
         {
-            $form->addElement('button', 'saveAndContinue', array(
+            $form->addElement('button', 'saveAndContinue', [
                 'label' => 'Save & Continue <i class="fa fa-fw fa-arrow-right"></i>',
                 'type'  => 'submit',
                 'class' => 'btn btn-primary',
-            ));
+            ]);
             $addedButtons [] = 'saveAndContinue';
         }
 
         // Add the buttons the the form actions
-        $form->addDisplayGroup($addedButtons, 'actions', array(
+        $form->addDisplayGroup($addedButtons, 'actions', [
             'disableLoadDefaultDecorators' => true,
-            'decorators'                   => array(
+            'decorators'                   => [
                 'Actions'
-            )
-        ));
+            ]
+        ]);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/assessment/navigation-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/assessment/navigation-form.phtml']]]);
     }
 }

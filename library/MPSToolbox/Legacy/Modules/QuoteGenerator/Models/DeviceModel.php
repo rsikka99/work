@@ -103,14 +103,14 @@ class DeviceModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "masterDeviceId" => $this->masterDeviceId,
             "dealerId"       => $this->dealerId,
             "oemSku"         => $this->oemSku,
             "dealerSku"      => $this->dealerSku,
             "description"    => $this->description,
-            "cost"           => $this->cost
-        );
+            "cost"           => $this->cost,
+        ];
     }
 
     /**
@@ -182,7 +182,7 @@ class DeviceModel extends My_Model_Abstract
         // Do we have an instance of it in our database?
         $quoteDeviceMapper = DeviceMapper::getInstance();
 
-        if ($quoteDeviceMapper->find(array($this->masterDeviceId, $this->dealerId)))
+        if ($quoteDeviceMapper->find([$this->masterDeviceId, $this->dealerId]))
         {
             $quoteDeviceMapper->save($this);
         }

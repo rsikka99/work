@@ -16,11 +16,11 @@ class DealerFeatureDbTable extends Zend_Db_Table_Abstract implements My_Feature_
     public $col_dealerId  = 'dealerId';
     public $col_featureId = 'featureId';
 
-    protected $_name    = "dealer_features";
-    protected $_primary = array(
+    protected $_name    = 'dealer_features';
+    protected $_primary = [
         'featureId',
-        'dealerId'
-    );
+        'dealerId',
+    ];
 
     /**
      * Should get a array of feature names and return them in string form
@@ -33,7 +33,7 @@ class DealerFeatureDbTable extends Zend_Db_Table_Abstract implements My_Feature_
          * FIXME lrobert: How can we inject Zend_Auth/dealerId
          */
         $zendAuth    = Zend_Auth::getInstance();
-        $featureList = array();
+        $featureList = [];
 
         if ($zendAuth->hasIdentity() && isset($zendAuth->getIdentity()->dealerId))
         {

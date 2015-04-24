@@ -62,18 +62,18 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
 
         if (!My_Feature::canAccess(My_Feature::HEALTHCHECK))
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "error" => "You do not have permission to access this."
-            ));
+            ]);
 
             $this->redirectToRoute('app.dashboard');
         }
 
         if (!$this->getSelectedClient() instanceof \MPSToolbox\Legacy\Entities\ClientEntity)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "danger" => "A client is not selected."
-            ));
+            ]);
 
             $this->redirectToRoute('app.dashboard');
         }
@@ -82,9 +82,9 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
 
         if (!$this->getSelectedUpload() instanceof \MPSToolbox\Legacy\Entities\RmsUploadEntity)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "danger" => "An RMS upload is not selected."
-            ));
+            ]);
 
             $this->redirectToRoute('app.dashboard');
         }
@@ -108,28 +108,28 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
     public function initReportList ()
     {
         // This is a list of reports that we can view.
-        $availableReports            = array();
-        $availableReports["Reports"] = array(
+        $availableReports            = [];
+        $availableReports["Reports"] = [
             "pagetitle" => "Select a report...",
             "active"    => false,
-            "url"       => $this->view->url(array(), 'healthcheck')
-        );
+            "url"       => $this->view->url([], 'healthcheck')
+        ];
 
         if (My_Feature::canAccess(My_Feature::HEALTHCHECK_PRINTIQ))
         {
-            $availableReports['Printiq_Healthcheck'] = array(
+            $availableReports['Printiq_Healthcheck'] = [
                 "pagetitle" => "Health Check",
                 "active"    => false,
-                "url"       => $this->view->url(array(), 'healthcheck.report-printiq')
-            );
+                "url"       => $this->view->url([], 'healthcheck.report-printiq')
+            ];
         }
         else
         {
-            $availableReports['Healthcheck'] = array(
+            $availableReports['Healthcheck'] = [
                 "pagetitle" => "Health Check",
                 "active"    => false,
-                "url"       => $this->view->url(array(), 'healthcheck.report')
-            );
+                "url"       => $this->view->url([], 'healthcheck.report')
+            ];
         }
         $this->view->availableReports = $availableReports;
     }
@@ -145,7 +145,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
 
         if ($this->getHealthcheck()->id < 1)
         {
-            $this->_flashMessenger->addMessage(array("error" => "Please select a report first."));
+            $this->_flashMessenger->addMessage(["error" => "Please select a report first."]);
 
             // Send user to the index
             $this->redirectToRoute('app.dashboard');

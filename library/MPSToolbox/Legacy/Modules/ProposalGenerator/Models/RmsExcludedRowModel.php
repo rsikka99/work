@@ -128,7 +128,7 @@ class RmsExcludedRowModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"               => $this->id,
             "rmsUploadId"      => $this->rmsUploadId,
             "rmsProviderId"    => $this->rmsProviderId,
@@ -139,6 +139,6 @@ class RmsExcludedRowModel extends My_Model_Abstract
             "manufacturerName" => $this->manufacturerName,
             "reason"           => $this->reason,
             "csvLineNumber"    => $this->csvLineNumber,
-        );
+        ];
     }
 }

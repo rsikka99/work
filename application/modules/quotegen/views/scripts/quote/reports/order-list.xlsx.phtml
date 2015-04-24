@@ -23,40 +23,40 @@ $quote = $this->Quote();
 /* @var $quote QuoteModel */
 $totalQuantity = 1;
 
-$titles = array(
+$titles = [
     "Item",
     "SKU (OEM)",
     "SKU (DEALER)",
-    "Serial Number",
-    "Location"
-);
+    "Cost per Unit",
+    "Total Cost"
+];
 
-$headerFill = array(
+$headerFill = [
     'type'  => PHPExcel_Style_Fill::FILL_SOLID,
-    'color' => array(
+    'color' => [
         'rgb' => 'D8D8D8'
-    )
-);
+    ]
+];
 
-$boldFont = array(
-    'font' => array(
+$boldFont = [
+    'font' => [
         'bold' => true
-    )
-);
+    ]
+];
 
-$styleHeader   = array(
+$styleHeader   = [
     'fill' => $headerFill,
-    'font' => array(
+    'font' => [
         'bold' => true,
         'size' => '16'
-    )
-);
-$styleFillBold = array(
+    ]
+];
+$styleFillBold = [
     'fill' => $headerFill,
-    'font' => array(
+    'font' => [
         'bold' => true
-    )
-);
+    ]
+];
 
 // Create a new PHPExcel Object * New PHPExcel objects will have one attached worksheet by default
 /* @var $objPHPExcel PHPExcel */
@@ -90,22 +90,25 @@ foreach ($quoteDeviceGroups as $quoteDeviceGroup)
     {
         $quoteDevice = $quoteDeviceGroupDevice->getQuoteDevice();
         // $device builds an array used to output quote device information
-        $device = array(
+        $device = [
             $quoteDevice->name,
             $quoteDevice->oemSku,
-            $quoteDevice->dealerSku
-        );
+            $quoteDevice->dealerSku,
+            $quoteDevice->cost,
+            ($quoteDevice->cost * 1)  // The device quantity * cost - will always be 1
+        ];
 
         // $deviceOptions builds an array of arrays representing quote device options
-        $deviceOptions = array();
+        $deviceOptions = [];
         //var $quoteDeviceOption MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceOptionModel */
         foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption)
         {
-            $deviceOptions [] = array(
+            $deviceOptions [] = [
                 "name"      => $quoteDeviceOption->name,
                 "oemSku"    => $quoteDeviceOption->oemSku,
-                "dealerSku" => $quoteDeviceOption->dealerSku
-            );
+                "dealerSku" => $quoteDeviceOption->dealerSku,
+                "cost"      => $quoteDeviceOption->cost
+            ];
         }
 
         // Build the data sheet
@@ -128,6 +131,8 @@ foreach ($quoteDeviceGroups as $quoteDeviceGroup)
             $currentRow = $activeSheet->getHighestRow() + 1;
             $activeSheet->fromArray($device, null, "A{$currentRow}");
             $activeSheet->getStyle("A{$currentRow}")->applyFromArray($boldFont);
+            $activeSheet->getStyle("D{$currentRow}")->getNumberFormat()->applyFromArray(['code' => PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE]);
+            $activeSheet->getStyle("E{$currentRow}")->getNumberFormat()->applyFromArray(['code' => PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE]);
 
             // Option Row
             // Use a foreach to go through options instead of using fromArray just in case
@@ -138,6 +143,10 @@ foreach ($quoteDeviceGroups as $quoteDeviceGroup)
                 $activeSheet->setCellValue("A{$currentRow}", sprintf("%s x %s", number_format($quoteDeviceOption->quantity), $quoteDeviceOption->name));
                 $activeSheet->setCellValue("B{$currentRow}", $quoteDeviceOption->oemSku);
                 $activeSheet->setCellValue("C{$currentRow}", $quoteDeviceOption->dealerSku);
+                $activeSheet->setCellValue("D{$currentRow}", $quoteDeviceOption->cost);
+                $activeSheet->getStyle("D{$currentRow}")->getNumberFormat()->applyFromArray(['code' => PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE]);
+                $activeSheet->setCellValue("E{$currentRow}", ($quoteDeviceOption->cost * $quoteDeviceOption->quantity));
+                $activeSheet->getStyle("E{$currentRow}")->getNumberFormat()->applyFromArray(['code' => PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE]);
             }
             $totalQuantity++;
         }

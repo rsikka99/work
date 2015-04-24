@@ -61,7 +61,8 @@ $assessmentViewModel = $this->assessmentViewModel;
     </tr>
     <tr>
         <td>Estimated annual total lease payments<br /><em>Based on
-                <?= $this->currency($assessmentViewModel->assessment->getClient()->getClientSettings()->genericSettings->defaultMonthlyLeasePayment); ?> per month per device</em></td>
+                <?= $this->currency($assessmentViewModel->assessment->getClient()->getClientSettings()->genericSettings->defaultMonthlyLeasePayment); ?> per month per device</em>
+        </td>
 
         <td class="right"><?= $this->currency($assessmentViewModel->getCombinedAnnualLeasePayments()); ?></td>
     </tr>
@@ -98,19 +99,22 @@ $assessmentViewModel = $this->assessmentViewModel;
     spends time servicing them when they break down.</p>
 <p>The costs below are based on data collected using remote monitoring software and your questionnaire responses. It also assumes a monochrome page coverage of
     <strong><?= number_format($assessmentViewModel->getPageCoverageBlackAndWhite()); ?>%</strong> and color coverage of
-    <strong><?= number_format($assessmentViewModel->getPageCoverageColor()); ?>%</strong>.</p>
+    <strong><?= number_format($assessmentViewModel->getPageCoverageColor()); ?>%</strong>.
+</p>
 <table cellspacing="0" style="font-size: 10pt;">
     <tr>
         <td style="width: 565px;" class="bold">Supplies</td>
         <td style="width: 80px;" class="right">&nbsp;</td>
     </tr>
     <tr>
-        <td>Annual cost of ink and toner<br /><em>Based on data collected by <?= $this->companyName; ?>.<br>On the questionnaire you answered: <?= ($assessmentViewModel->assessment->getClient()->getSurvey()->costOfInkAndToner) ? $this->currency($assessmentViewModel->assessment->getClient()->getSurvey()->costOfInkAndToner) : "I don't know" ?>.</em></td>
+        <td>Annual cost of ink and toner<br /><em>Based on data collected by <?= $this->companyName; ?>.<br>On the questionnaire you answered: <?= ($assessmentViewModel->assessment->getClient()->getSurvey()->costOfInkAndToner) ? $this->currency($assessmentViewModel->assessment->getClient()->getSurvey()->costOfInkAndToner) : "I don't know" ?>.</em>
+        </td>
         <td class="right">
             <?= $this->currency($assessmentViewModel->getCostOfInkAndToner($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></td>
     </tr>
     <tr>
-        <td>Annual administration cost of executing supplies orders<br /><em>Based on your questionnaire responses.</em></td>
+        <td>Annual administration cost of executing supplies orders<br /><em>Based on your questionnaire responses.</em>
+        </td>
         <td class="right"><?= $this->currency($assessmentViewModel->getCostOfExecutingSuppliesOrders()); ?></td>
     </tr>
     <tr>
@@ -124,11 +128,13 @@ $assessmentViewModel = $this->assessmentViewModel;
         <td class="right">&nbsp;</td>
     </tr>
     <tr>
-        <td style="width: 565px;">Annual cost of sourcing outside service organizations<br /><em>Based on your questionnaire responses.</em></td>
+        <td style="width: 565px;">Annual cost of sourcing outside service organizations<br /><em>Based on your questionnaire responses.</em>
+        </td>
         <td style="width: 80px;" class="right"><?= $this->currency($assessmentViewModel->getAnnualCostOfOutSourcing()); ?></td>
     </tr>
     <tr>
-        <td>Annual cost of internal IT servicing and supporting printing devices<br /><em>Based on your questionnaire responses.</em></td>
+        <td>Annual cost of internal IT servicing and supporting printing devices<br /><em>Based on your questionnaire responses.</em>
+        </td>
         <td class="right"><?= $this->currency($assessmentViewModel->getAnnualITCost()); ?></td>
     </tr>
     <tr>
@@ -142,8 +148,10 @@ $assessmentViewModel = $this->assessmentViewModel;
         <td class="right">&nbsp;</td>
     </tr>
     <tr>
-        <td style="width: 565px;"><strong>Total estimated annual cost of hardware purchases</strong><br /><em>Based on the age of your devices and an average
-                purchase price of <?= $this->currency($assessmentViewModel->assessment->getClient()->getClientSettings()->genericSettings->defaultPrinterCost) ?>.</em></td>
+        <td style="width: 565px;">
+            <strong>Total estimated annual cost of hardware purchases</strong><br /><em>Based on the age of your devices and an average
+                purchase price of <?= $this->currency($assessmentViewModel->assessment->getClient()->getClientSettings()->genericSettings->defaultPrinterCost) ?>.</em>
+        </td>
         <td style="width: 80px;" class="right bold"><?= $this->currency($assessmentViewModel->getAnnualCostOfHardwarePurchases()); ?></td>
     </tr>
     <tr>
@@ -194,7 +202,7 @@ $assessmentViewModel = $this->assessmentViewModel;
             <td>
                 <div style="width: 225px; padding: 0px;"><?= $deviceInstance->getDeviceName(); ?></div>
             </td>
-            <td class="center"><?= ($deviceInstance->serialNumber) ? : 'Unknown'; ?></td>
+            <td class="center"><?= ($deviceInstance->serialNumber) ?: 'Unknown'; ?></td>
             <td class="center"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?> pages</td>
             <td class="center">
                 <?= $this->currency($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></td>

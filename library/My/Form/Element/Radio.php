@@ -32,9 +32,9 @@ class My_Form_Element_Radio extends Zend_Form_Element_Radio
         }
 
         $all_options   = $this->options;
-        $this->options = array(
+        $this->options = [
             $radio_key_value => $this->options [$radio_key_value]
-        );
+        ];
 
         $view    = $this->getView();
         $content = '';

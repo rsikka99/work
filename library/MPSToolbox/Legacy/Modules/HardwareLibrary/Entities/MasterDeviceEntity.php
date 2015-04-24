@@ -88,7 +88,7 @@ class MasterDeviceEntity extends EloquentModel
      */
     public function toners ()
     {
-        return $this->belongsToMany('\MPSToolbox\Legacy\Modules\HardwareLibrary\Entities\TonerEntity', 'device_toners', 'master_device_id', 'toner_id')->withPivot(array('userId', 'isSystemDevice'));
+        return $this->belongsToMany('\MPSToolbox\Legacy\Modules\HardwareLibrary\Entities\TonerEntity', 'device_toners', 'master_device_id', 'toner_id')->withPivot(['userId', 'isSystemDevice']);
     }
 
     /**

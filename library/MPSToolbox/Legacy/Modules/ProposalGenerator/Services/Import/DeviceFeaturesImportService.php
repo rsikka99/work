@@ -24,7 +24,7 @@ class DeviceFeaturesImportService extends AbstractImportService
     const DEVICE_FEATURES_IDLE_WATTAGE         = "Idle Wattage";
     const DEVICE_FEATURES_JIT_COMPATIBILITY    = "JIT Compatibility";
 
-    public $csvHeaders = array(
+    public $csvHeaders = [
         self::DEVICE_FEATURES_MASTER_PRINTER_ID,
         self::DEVICE_FEATURES_MANUFACTURER,
         self::DEVICE_FEATURES_PRINTER_MODEL,
@@ -36,56 +36,56 @@ class DeviceFeaturesImportService extends AbstractImportService
         self::DEVICE_FEATURES_OPERATING_WATTAGE,
         self::DEVICE_FEATURES_IDLE_WATTAGE,
         self::DEVICE_FEATURES_JIT_COMPATIBILITY,
-    );
+    ];
 
     public function __construct ()
     {
         $this->_inputFilter = new Zend_Filter_Input(
-            array(
-                '*' => array(
+            [
+                '*' => [
                     'StringTrim',
                     'StripTags',
-                )
-            ),
-            array(
-                '*'                                        => array(
+                ]
+            ],
+            [
+                '*'                                        => [
                     'allowEmpty' => true,
-                ),
-                self::DEVICE_FEATURES_DUPLEX               => array(
+                ],
+                self::DEVICE_FEATURES_DUPLEX               => [
                     new Zend_Validate_Int(),
-                    array('Between', 0, 1, true),
-                ),
-                self::DEVICE_FEATURES_SCAN                 => array(
+                    ['Between', 0, 1, true],
+                ],
+                self::DEVICE_FEATURES_SCAN                 => [
                     new Zend_Validate_Int(),
-                    array('Between', 0, 1, true),
-                ),
-                self::DEVICE_FEATURES_REPORTS_TONER_LEVELS => array(
+                    ['Between', 0, 1, true],
+                ],
+                self::DEVICE_FEATURES_REPORTS_TONER_LEVELS => [
                     new Zend_Validate_Int(),
-                    array('Between', 0, 1, true),
-                ),
-                self::DEVICE_FEATURES_PPM_MONOCHROME       => array(
-                    'allowEmpty' => true,
-                    new Zend_Validate_Float(),
-                    array('Between', 0, 1000, true),
-                ),
-                self::DEVICE_FEATURES_PPM_COLOR            => array(
+                    ['Between', 0, 1, true],
+                ],
+                self::DEVICE_FEATURES_PPM_MONOCHROME       => [
                     'allowEmpty' => true,
                     new Zend_Validate_Float(),
-                    array('Between', 0, 1000, true),
-                ),
-                self::DEVICE_FEATURES_OPERATING_WATTAGE    => array(
+                    ['Between', 0, 1000, true],
+                ],
+                self::DEVICE_FEATURES_PPM_COLOR            => [
+                    'allowEmpty' => true,
                     new Zend_Validate_Float(),
-                    array('Between', 0, 10000, true),
-                ),
-                self::DEVICE_FEATURES_IDLE_WATTAGE         => array(
+                    ['Between', 0, 1000, true],
+                ],
+                self::DEVICE_FEATURES_OPERATING_WATTAGE    => [
                     new Zend_Validate_Float(),
-                    array('Between', 0, 10000, true),
-                ),
-                self::DEVICE_FEATURES_JIT_COMPATIBILITY    => array(
+                    ['Between', 0, 10000, true],
+                ],
+                self::DEVICE_FEATURES_IDLE_WATTAGE         => [
+                    new Zend_Validate_Float(),
+                    ['Between', 0, 10000, true],
+                ],
+                self::DEVICE_FEATURES_JIT_COMPATIBILITY    => [
                     new Zend_Validate_Int(),
-                    array('Between', 0, 1, true),
-                ),
-            )
+                    ['Between', 0, 1, true],
+                ],
+            ]
         );
     }
 }

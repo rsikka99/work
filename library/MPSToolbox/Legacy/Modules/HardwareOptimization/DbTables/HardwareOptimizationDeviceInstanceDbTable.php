@@ -12,8 +12,5 @@ use Zend_Db_Table_Abstract;
 class HardwareOptimizationDeviceInstanceDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'hardware_optimization_device_instances';
-    protected $_primary = array(
-        'deviceInstanceId',
-        'hardwareOptimizationId'
-    );
+    protected $_primary = ['deviceInstanceId', 'hardwareOptimizationId'];
 }

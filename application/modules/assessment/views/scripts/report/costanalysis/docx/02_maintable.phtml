@@ -30,7 +30,7 @@ foreach ($deviceInstances as $deviceInstance)
 {
     $isColor              = ($deviceInstance->getMasterDevice()->tonerConfigId != TonerConfigModel::BLACK_ONLY) ? true : false;
     $percentOfMonthlyCost = ($assessmentViewModel->calculateTotalMonthlyCost() > 0) ? number_format($deviceInstance->calculateMonthlyCost($costPerPageSetting) / $assessmentViewModel->calculateTotalMonthlyCost() * 100, 2) : 0;
-    $cycle                = ($this->cycle(array(true, false))->next()->current());
+    $cycle                = ($this->cycle([true, false])->next()->current());
     if ($cycle)
     {
         $style = $tcStyle->body->cell1->even;

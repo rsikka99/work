@@ -12,8 +12,8 @@ use Zend_Db_Table_Abstract;
 class JitCompatibleMasterDeviceDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'jit_compatible_master_devices';
-    protected $_primary = array(
+    protected $_primary = [
         'masterDeviceId',
-        'dealerId'
-    );
+        'dealerId',
+    ];
 }

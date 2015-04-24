@@ -25,66 +25,53 @@ class LeasingSchemaTermForm extends Zend_Form
         $this->setName('leasingSchemaTerm');
         $this->setAttrib('id', 'leasingSchemaTerm');
 
-        $this->addElement('hidden', 'hdnId', array());
+        $this->addElement('hidden', 'hdnId', []);
 
-        $this->addElement('text', 'term', array(
+        $this->addElement('text', 'term', [
             'label'      => 'New Term:',
             'required'   => true,
             'class'      => 'span2',
-            'filters'    => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(
-                        1,
-                        3
-                    )
-                ),
-                array(
+                    'options'   => [1, 3],
+                ],
+                [
                     'validator' => 'Digits',
                     'message'   => 'Please enter a numeric value.'
-                )
-            )
-        ));
+                ],
+            ],
+        ]);
         foreach ($leasingSchemaRanges as $leasingSchemaRange)
         {
             $leasingSchemaRangeId = $leasingSchemaRange->id;
 
-            $this->addElement('text', "rate{$leasingSchemaRangeId}", array(
+            $this->addElement('text', "rate{$leasingSchemaRangeId}", [
                 'label'      => 'Rate:',
                 'required'   => true,
-                'filters'    => array(
-                    'StringTrim',
-                    'StripTags'
-                ),
+                'filters'    => ['StringTrim', 'StripTags'],
                 'class'      => 'span2 text-right',
-                'validators' => array(
-                    array(
+                'validators' => [
+                    [
                         'validator' => 'Between',
-                        'options'   => array(
-                            0.00001,
-                            1.00000
-                        )
-                    )
-                )
-            ));
+                        'options'   => [0.00001, 1.00000],
+                    ],
+                ],
+            ]);
         }
 
         // Add the submit button
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'ignore' => true,
-            'label'  => 'Save'
-        ));
+            'label'  => 'Save',
+        ]);
 
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'ignore'         => true,
             'label'          => 'Back',
             'formnovalidate' => true,
-        ));
-
+        ]);
     }
 }

@@ -9,7 +9,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand navbar-brand-image" href="<?php echo $this->url(array(), 'app.dashboard'); ?>" title="<?= $this->app()->title; ?>"><img src="<?= $this->baseUrl('img/branding/logo/navbar_brand.png') ?>" alt="MPS Toolbox Logo" /></a>
+            <a class="navbar-brand navbar-brand-image" href="<?php echo $this->url([], 'app.dashboard'); ?>" title="<?= $this->app()->title; ?>"><img src="<?= $this->baseUrl('img/branding/logo/navbar_brand.png') ?>" alt="MPS Toolbox Logo" /></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -28,7 +28,7 @@
                             </a>
                             <?php echo $clientMenu; ?>
                         <?php else : ?>
-                            <a class="label-danger" href="<?= $this->url(array(), 'app.dashboard.select-client') ?>" title="Select a client">
+                            <a class="label-danger" href="<?= $this->url([], 'app.dashboard.select-client') ?>" title="Select a client">
                                 <i class="fa fa-user fa-fw"></i>
                                 Select a client
                             </a>
@@ -46,7 +46,7 @@
                     </li>
                 <?php else : ?>
                     <li>
-                        <a class="btn btn-danger" href="<?php echo $this->url(array(), 'auth.login'); ?>">Login</a>
+                        <a class="btn btn-danger" href="<?php echo $this->url([], 'auth.login'); ?>">Login</a>
                     </li>
                 <?php endif; ?>
             </ul>

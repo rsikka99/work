@@ -83,9 +83,9 @@ class ContactMapper extends My_Model_Mapper_Abstract
             $primaryKey = $data [$this->col_id];
         }
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
-            "{$this->col_id}  = ?" => $primaryKey
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, [
+            "{$this->col_id}  = ?" => $primaryKey,
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -106,15 +106,15 @@ class ContactMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof ContactModel)
         {
-            $whereClause = array(
-                "{$this->col_id}  = ?" => $object->id
-            );
+            $whereClause = [
+                "{$this->col_id}  = ?" => $object->id,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_id}  = ?" => $object
-            );
+            $whereClause = [
+                "{$this->col_id}  = ?" => $object,
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -199,7 +199,7 @@ class ContactMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new ContactModel($row->toArray());
@@ -223,9 +223,9 @@ class ContactMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_id}  = ?" => $id
-        );
+        return [
+            "{$this->col_id}  = ?" => $id,
+        ];
     }
 
     /**
@@ -238,9 +238,9 @@ class ContactMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereClientId ($id)
     {
-        return array(
-            "{$this->col_clientId}  = ?" => $id
-        );
+        return [
+            "{$this->col_clientId}  = ?" => $id,
+        ];
     }
 
     /**

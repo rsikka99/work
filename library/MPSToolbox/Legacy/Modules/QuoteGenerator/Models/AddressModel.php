@@ -116,7 +116,7 @@ class AddressModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"           => $this->id,
             "clientId"     => $this->clientId,
             "addressLine1" => $this->addressLine1,
@@ -125,7 +125,7 @@ class AddressModel extends My_Model_Abstract
             "region"       => $this->region,
             "postCode"     => $this->postCode,
             "countryId"    => $this->countryId,
-        );
+        ];
     }
 
     /**

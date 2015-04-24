@@ -7,6 +7,10 @@ use MPSToolbox\Legacy\Mappers\UserMapper;
 use MPSToolbox\Legacy\Modules\Admin\Mappers\ImageMapper;
 use MPSToolbox\Legacy\Modules\Preferences\Mappers\DealerSettingMapper;
 use MPSToolbox\Legacy\Modules\Preferences\Models\DealerSettingModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\RmsProviderMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerVendorManufacturerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsProviderModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerVendorManufacturerModel;
 use My_Model_Abstract;
 
 /**
@@ -61,6 +65,16 @@ class DealerModel extends My_Model_Abstract
      */
     protected $_users;
 
+    /**
+     * @var RmsProviderModel[]
+     */
+    protected $_rmsProviders;
+
+    /**
+     * @var TonerVendorManufacturerModel[]
+     */
+    protected $_tonerVendors;
+
 
     /**
      * @param array $params An array of data to populate the model with
@@ -98,13 +112,13 @@ class DealerModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
-            "id"                => $this->id,
-            "userLicenses"      => $this->userLicenses,
-            "dealerName"        => $this->dealerName,
-            "dateCreated"       => $this->dateCreated,
-            "dealerLogoImageId" => $this->dealerLogoImageId,
-        );
+        return [
+            'id'                => $this->id,
+            'userLicenses'      => $this->userLicenses,
+            'dealerName'        => $this->dealerName,
+            'dateCreated'       => $this->dateCreated,
+            'dealerLogoImageId' => $this->dealerLogoImageId,
+        ];
     }
 
 
@@ -196,4 +210,56 @@ class DealerModel extends My_Model_Abstract
 
         return $this;
     }
+
+    /**
+     * Gets a list of RMS providers assigned to the dealer
+     *
+     * @return \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsProviderModel[]
+     */
+    public function getRmsProviders ()
+    {
+        if (!isset($this->_rmsProviders))
+        {
+            $this->_rmsProviders = RmsProviderMapper::getInstance()->fetchAllForDealer($this->id);
+        }
+
+        return $this->_rmsProviders;
+    }
+
+    /**
+     * Setter for _rmsProviders
+     *
+     * @param \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsProviderModel[] $rmsProviders
+     */
+    public function setRmsProviders ($rmsProviders)
+    {
+        $this->_rmsProviders = $rmsProviders;
+    }
+
+    /**
+     * Getter for _tonerVendors
+     *
+     * @return \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerVendorManufacturerModel[]
+     */
+    public function getTonerVendors ()
+    {
+        if (!isset($this->_tonerVendors))
+        {
+            $this->_tonerVendors = TonerVendorManufacturerMapper::getInstance()->fetchAllForDealer($this->id);
+        }
+
+        return $this->_tonerVendors;
+    }
+
+    /**
+     * Setter for _tonerVendors
+     *
+     * @param \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerVendorManufacturerModel[] $tonerVendors
+     */
+    public function setTonerVendors ($tonerVendors)
+    {
+        $this->_tonerVendors = $tonerVendors;
+    }
+
+
 }

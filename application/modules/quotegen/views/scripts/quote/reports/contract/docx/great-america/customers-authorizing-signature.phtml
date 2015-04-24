@@ -14,7 +14,7 @@ $paragraphStyle = $this->paragraphStyle;
 
 $customerSignatureTable = $section->addTable($this->tableStyle->standard);
 $customerSignatureTable->addRow(300);
-$customerSignatureTable->addCell($tableSpan ['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span4))->addText($contractTemplateSection->getContractSectionName(), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
+$customerSignatureTable->addCell($tableSpan ['span8'], array_merge($cellStyle->invertBackground, $cellStyle->span4))->addText(htmlspecialchars($contractTemplateSection->getContractSectionName()), $fontStyle->invertBackground, $paragraphStyle->noSpacing);
 
 /**
  * Signature Text
@@ -37,11 +37,11 @@ foreach ($guarantyHtml->getElementsByTagName('p') as $paragraphNode)
 
         if ($node->tagName == 'b')
         {
-            $textRun->addText($node->textContent, $fontStyle->boldFinePrint);
+            $textRun->addText(htmlspecialchars($node->textContent), $fontStyle->boldFinePrint);
         }
         else
         {
-            $textRun->addText($node->textContent, $fontStyle->finePrint);
+            $textRun->addText(htmlspecialchars($node->textContent), $fontStyle->finePrint);
         }
     }
 }
@@ -57,5 +57,5 @@ $customerSignatureTable->addCell($tableSpan ['span1'], $cellStyle->bottomAlign)-
 $customerSignatureTable->addRow();
 $customerSignatureTable->addCell($tableSpan ['span1'], $cellStyle->topBorder)->addText('CUSTOMER', $fontStyle->label, $paragraphStyle->noSpacingCentered);
 $customerSignatureTable->addCell($tableSpan ['span3'], $cellStyle->topBorder)->addText('SIGNATURE', $fontStyle->label, $paragraphStyle->noSpacingCentered);
-$customerSignatureTable->addCell($tableSpan ['span3'], $cellStyle->topBorder)->addText('PRINT NAME & TITLE', $fontStyle->label, $paragraphStyle->noSpacingCentered);
+$customerSignatureTable->addCell($tableSpan ['span3'], $cellStyle->topBorder)->addText(htmlspecialchars('PRINT NAME & TITLE'), $fontStyle->label, $paragraphStyle->noSpacingCentered);
 $customerSignatureTable->addCell($tableSpan ['span1'], $cellStyle->topBorder)->addText('DATE', $fontStyle->label, $paragraphStyle->noSpacingCentered);

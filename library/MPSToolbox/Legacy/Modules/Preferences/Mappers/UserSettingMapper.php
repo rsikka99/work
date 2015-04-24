@@ -80,9 +80,9 @@ class UserSettingMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
-            "{$this->col_userId} = ?" => $primaryKey
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, [
+            "{$this->col_userId} = ?" => $primaryKey,
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -103,15 +103,15 @@ class UserSettingMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof UserSettingModel)
         {
-            $whereClause = array(
-                "{$this->col_userId} = ?" => $object->userId
-            );
+            $whereClause = [
+                "{$this->col_userId} = ?" => $object->userId,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_userId} = ?" => $object
-            );
+            $whereClause = [
+                "{$this->col_userId} = ?" => $object,
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -196,7 +196,7 @@ class UserSettingMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new UserSettingModel($row->toArray());
@@ -219,9 +219,9 @@ class UserSettingMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_userId} = ?" => $id
-        );
+        return [
+            "{$this->col_userId} = ?" => $id,
+        ];
     }
 
     /**

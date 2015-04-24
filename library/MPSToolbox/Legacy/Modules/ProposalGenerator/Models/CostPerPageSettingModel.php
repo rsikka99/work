@@ -246,7 +246,7 @@ class CostPerPageSettingModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "adminCostPerPage"              => $this->adminCostPerPage,
             "monochromePartsCostPerPage"    => $this->monochromePartsCostPerPage,
             "monochromeLaborCostPerPage"    => $this->monochromeLaborCostPerPage,
@@ -262,7 +262,7 @@ class CostPerPageSettingModel extends My_Model_Abstract
             "clientId"                      => $this->clientId,
             "dealerId"                      => $this->dealerId,
             "pricingMargin"                 => $this->pricingMargin,
-        );
+        ];
     }
 
     /**

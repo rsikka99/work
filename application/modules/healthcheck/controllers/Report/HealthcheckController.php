@@ -12,7 +12,7 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Healthcheck');
+        $this->_pageTitle = ['Healthcheck'];
         $this->_navigation->setActiveStep(HealthCheckStepsModel::STEP_FINISHED);
 
         /**
@@ -28,10 +28,10 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
 
         $this->view->availableReports['Healthcheck']['active'] = true;
 
-        $this->view->formats = array(
+        $this->view->formats = [
             "/healthcheck/report_healthcheck/generate/format/excel" => $this->_excelFormat,
             "/healthcheck/report_healthcheck/generate/format/docx"  => $this->_wordFormat
-        );
+        ];
 
         $this->view->reportTitle = My_Brand::getDealerBranding()->healthCheckTitle;
 
@@ -102,7 +102,6 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
                 throw new Exception('Invalid Format Requested!');
                 break;
         }
-
 
 
         $this->initReportVariables($filename);

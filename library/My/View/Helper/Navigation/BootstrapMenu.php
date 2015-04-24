@@ -59,7 +59,7 @@ class My_View_Helper_Navigation_BootstrapMenu extends Zend_View_Helper_Navigatio
         }
 
         // Build class list
-        $class = ($page->getClass()) ? array($page->getClass()) : array();
+        $class = ($page->getClass()) ? [$page->getClass()] : [];
         if ($page->hasChildren())
         {
             $class[] = 'dropdown-toggle';
@@ -67,11 +67,11 @@ class My_View_Helper_Navigation_BootstrapMenu extends Zend_View_Helper_Navigatio
         }
 
         // get attribs for element
-        $attribs = array(
+        $attribs = [
             'id'    => $page->getId(),
             'title' => $title,
             'class' => implode(' ', $class),
-        );
+        ];
 
         $toggle = '';
         if ($page->hasChildren())
@@ -337,7 +337,7 @@ class My_View_Helper_Navigation_BootstrapMenu extends Zend_View_Helper_Navigatio
      * @return string                                rendered menu
      */
     public function renderMenu (Zend_Navigation_Container $container = null,
-                                array $options = array())
+                                array $options = [])
     {
         if (null === $container)
         {
@@ -402,13 +402,13 @@ class My_View_Helper_Navigation_BootstrapMenu extends Zend_View_Helper_Navigatio
                                    $ulClass = null,
                                    $indent = null)
     {
-        return $this->renderMenu($container, array(
+        return $this->renderMenu($container, [
             'indent'           => $indent,
             'ulClass'          => $ulClass,
             'minDepth'         => null,
             'maxDepth'         => null,
             'onlyActiveBranch' => true,
-            'renderParents'    => false
-        ));
+            'renderParents'    => false,
+        ]);
     }
 }

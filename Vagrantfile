@@ -66,7 +66,7 @@ Vagrant.configure('2') do |config|
     web.vm.network 'public_network', :bridge => 'en0: Wi-Fi (AirPort)'
 
     # Mount the project into the VM
-    web.vm.synced_folder './', '/home/vagrant/apps/mpstoolbox'
+    web.vm.synced_folder './', '/home/vagrant/apps/mpstoolbox', type: shareType
 
     # Mount and configure using salt
     web.vm.synced_folder './vagrant_files/salt/roots/', '/srv/'

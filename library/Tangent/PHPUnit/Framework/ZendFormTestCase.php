@@ -75,7 +75,7 @@ abstract class Tangent_PHPUnit_Framework_ZendFormTestCase extends Tangent_PHPUni
     public function getExpandedMessages ($form)
     {
         $errorMessages = $form->getMessages();
-        $formMessages  = array();
+        $formMessages  = [];
 
         foreach ($errorMessages as $elementName => $messages)
         {

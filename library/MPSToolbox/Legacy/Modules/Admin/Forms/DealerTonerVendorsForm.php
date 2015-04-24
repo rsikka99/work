@@ -21,23 +21,23 @@ class DealerTonerVendorsForm extends Zend_Form
          * Compatible Toner Vendor Manufacturer List
          */
         $tonerVendorManufacturers = TonerVendorManufacturerMapper::getInstance()->fetchAllForDropdown();
-        $this->addElement('multiCheckbox', 'manufacturerIds', array(
+        $this->addElement('multiCheckbox', 'manufacturerIds', [
             'label'        => 'Compatible Vendors',
             'multiOptions' => $tonerVendorManufacturers,
-        ));
+        ]);
 
         /**
          * Form Actions
          */
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'label'  => 'Save',
             'ignore' => true,
-        ));
+        ]);
 
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'label'  => 'Cancel',
             'ignore' => true,
-        ));
+        ]);
 
 
     }
@@ -47,14 +47,7 @@ class DealerTonerVendorsForm extends Zend_Form
      */
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/admin/dealer-toner-vendors-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/admin/dealer-toner-vendors-form.phtml']]]);
 
         return $this;
     }

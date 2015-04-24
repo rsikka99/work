@@ -30,7 +30,7 @@ class QuoteGroupForm extends FormWithNavigation
      * @param int             $formButtonMode
      * @param array           $buttons
      */
-    public function __construct ($quote = null, $options = null, $options = null, $formButtonMode = self::FORM_BUTTON_MODE_NAVIGATION, $buttons = array(self::BUTTONS_ALL))
+    public function __construct ($quote = null, $options = null, $options = null, $formButtonMode = self::FORM_BUTTON_MODE_NAVIGATION, $buttons = [self::BUTTONS_ALL])
     {
         $this->_quote = $quote;
         parent::__construct($options, $formButtonMode, $buttons);
@@ -51,37 +51,34 @@ class QuoteGroupForm extends FormWithNavigation
         // Add device to group sub form
         // ----------------------------------------------------------------------
         $addDeviceToGroupSubForm = new Twitter_Bootstrap_Form_Inline();
-        $addDeviceToGroupSubForm->setElementDecorators(array(
+        $addDeviceToGroupSubForm->setElementDecorators([
             'FieldSize',
             'ViewHelper',
             'Addon',
             'PopoverElementErrors',
-            'Wrapper'
-        ));
+            'Wrapper',
+        ]);
 
         $this->addSubForm($addDeviceToGroupSubForm, 'addDeviceToGroup');
 
         // Quantity of the new device
-        $addDeviceToGroupSubForm->addElement('text', 'quantity', array(
+        $addDeviceToGroupSubForm->addElement('text', 'quantity', [
             'label'      => 'Quantity',
             'class'      => 'span1',
             'value'      => 1,
-            'validators' => array(
+            'validators' => [
                 'Int',
-                array(
+                [
                     'validator' => 'Between',
-                    'options'   => array(
-                        'min' => $minDeviceQuantity,
-                        'max' => $maxDeviceQuantity
-                    )
-                )
-            )
-        ));
+                    'options'   => ['min' => $minDeviceQuantity, 'max' => $maxDeviceQuantity],
+                ],
+            ],
+        ]);
 
         // Available devices
-        $deviceDropdown = $addDeviceToGroupSubForm->createElement('select', 'quoteDeviceId', array(
-            'label' => 'Devices:'
-        ));
+        $deviceDropdown = $addDeviceToGroupSubForm->createElement('select', 'quoteDeviceId', [
+            'label' => 'Devices:',
+        ]);
 
         /* @var $quoteDevice QuoteDeviceModel */
         foreach ($this->_quote->getQuoteDevices() as $quoteDevice)
@@ -92,9 +89,9 @@ class QuoteGroupForm extends FormWithNavigation
         $addDeviceToGroupSubForm->addElement($deviceDropdown);
 
         // Groups
-        $groupDropdown = $addDeviceToGroupSubForm->createElement('select', 'quoteDeviceGroupId', array(
-            'label' => 'Groups:'
-        ));
+        $groupDropdown = $addDeviceToGroupSubForm->createElement('select', 'quoteDeviceGroupId', [
+            'label' => 'Groups:',
+        ]);
 
         foreach ($this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
@@ -103,39 +100,39 @@ class QuoteGroupForm extends FormWithNavigation
         $addDeviceToGroupSubForm->addElement($groupDropdown);
 
         // Add button
-        $addDeviceToGroupSubForm->addElement('submit', 'addDevice', array(
-            'label' => 'Add'
-        ));
+        $addDeviceToGroupSubForm->addElement('submit', 'addDevice', [
+            'label' => 'Add',
+        ]);
 
         // ----------------------------------------------------------------------
         // Add group subform
         // ----------------------------------------------------------------------
         $addGroupSubform = new Twitter_Bootstrap_Form_Inline();
-        $addGroupSubform->setElementDecorators(array(
+        $addGroupSubform->setElementDecorators([
             'FieldSize',
             'ViewHelper',
             'Addon',
             'PopoverElementErrors',
-            'Wrapper'
-        ));
+            'Wrapper',
+        ]);
         $this->addSubForm($addGroupSubform, 'addGroup');
 
         // The add group button
-        $addGroupSubform->addElement('submit', 'addGroup', array(
-            'label' => 'Add Group'
-        ));
+        $addGroupSubform->addElement('submit', 'addGroup', [
+            'label' => 'Add Group',
+        ]);
 
         // The name of the new group
-        $addGroupSubform->addElement('text', 'name', array(
+        $addGroupSubform->addElement('text', 'name', [
             'label'      => 'Add a new group',
-            'filters'    => array('StringTrim', 'StripTags'),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(3, 40)
-                )
-            )
-        ));
+                    'options'   => [3, 40],
+                ],
+            ],
+        ]);
 
         // ----------------------------------------------------------------------
         // Quantity subform
@@ -143,100 +140,90 @@ class QuoteGroupForm extends FormWithNavigation
         $deviceQuantitySubform = new Twitter_Bootstrap_Form_Inline();
         $this->addSubForm($deviceQuantitySubform, 'deviceQuantity');
 
-        $deviceQuantitySubform->setElementDecorators(array(
+        $deviceQuantitySubform->setElementDecorators([
             'FieldSize',
             'ViewHelper',
             'Addon',
             'PopoverElementErrors',
-            'Wrapper'
-        ));
+            'Wrapper',
+        ]);
 
         // Setup all the boxes
 
 
-        $validQuoteGroupId_DeviceId_Combinations = array();
-        $validQuoteGroupIds                      = array();
+        $validQuoteGroupId_DeviceId_Combinations = [];
+        $validQuoteGroupIds                      = [];
         /* @var $quoteDeviceGroup QuoteDeviceGroupModel */
         foreach ($this->getQuote()->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
 
             $validQuoteGroupIds [] = "{$quoteDeviceGroup->id}";
-            $this->addElement("text", "groupName_{$quoteDeviceGroup->id}", array(
+            $this->addElement("text", "groupName_{$quoteDeviceGroup->id}", [
                 'required'   => true,
                 'class'      => 'span4',
                 'value'      => $quoteDeviceGroup->name,
-                'filters'    => array('StringTrim', 'StripTags'),
-                'validators' => array(
-                    array(
+                'filters'    => ['StringTrim', 'StripTags'],
+                'validators' => [
+                    [
                         'validator' => 'StringLength',
-                        'options'   => array(3, 40)
-                    )
-                )
-            ));
+                        'options'   => [3, 40],
+                    ],
+                ],
+            ]);
 
             /* @var $quoteDeviceGroupDevice QuoteDeviceGroupDeviceModel */
             foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
             {
-                $deviceQuantitySubform->addElement('text', "quantity_{$quoteDeviceGroupDevice->quoteDeviceGroupId}_{$quoteDeviceGroupDevice->quoteDeviceId}", array(
+                $deviceQuantitySubform->addElement('text', "quantity_{$quoteDeviceGroupDevice->quoteDeviceGroupId}_{$quoteDeviceGroupDevice->quoteDeviceId}", [
                     'label'      => 'Quantity',
                     'required'   => true,
                     'class'      => 'span1',
                     'value'      => $quoteDeviceGroupDevice->quantity,
-                    'validators' => array(
+                    'validators' => [
                         'Int',
-                        array(
+                        [
                             'validator' => 'Between',
-                            'options'   => array(
-                                'min' => $minDeviceQuantity,
-                                'max' => $maxDeviceQuantity
-                            )
-                        )
-                    )
-                ));
+                            'options'   => ['min' => $minDeviceQuantity, 'max' => $maxDeviceQuantity],
+                        ],
+                    ],
+                ]);
 
                 $validQuoteGroupId_DeviceId_Combinations [] = "{$quoteDeviceGroupDevice->quoteDeviceId}_{$quoteDeviceGroupDevice->quoteDeviceGroupId}";
             }
         }
 
         // Delete group button
-        $deviceQuantitySubform->addElement('submit', 'deleteGroup', array(
+        $deviceQuantitySubform->addElement('submit', 'deleteGroup', [
             'label'      => ' ',
             'icon'       => 'trash',
-            'validators' => array(
-                array(
+            'validators' => [
+                [
                     'validator' => 'InArray',
-                    'options'   => array('haystack' => $validQuoteGroupIds)
-                )
-            ),
-            'value'      => '1'
-        ));
+                    'options'   => ['haystack' => $validQuoteGroupIds],
+                ],
+            ],
+            'value'      => '1',
+        ]);
 
         // Delete device from group button
-        $deviceQuantitySubform->addElement('submit', 'deleteDeviceFromGroup', array(
+        $deviceQuantitySubform->addElement('submit', 'deleteDeviceFromGroup', [
             'label'      => ' ',
             'icon'       => 'trash',
-            'validators' => array(
-                array(
+            'validators' => [
+                [
                     'validator' => 'InArray',
-                    'options'   => array('haystack' => $validQuoteGroupId_DeviceId_Combinations)
-                )
-            ),
-            'value'      => '1'
-        ));
+                    'options'   => ['haystack' => $validQuoteGroupId_DeviceId_Combinations],
+                ],
+            ],
+            'value'      => '1',
+        ]);
 
         QuoteNavigationForm::addFormActionsToForm(QuoteNavigationForm::BUTTONS_ALL, $this);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/quotegen/quote/group-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/quotegen/quote/group-form.phtml']]]);
     }
 
     /**

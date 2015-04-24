@@ -10,20 +10,20 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ContractTemplateModel;
  */
 class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
 {
-    public $contexts = array(
-        "purchase-quote" => array(
+    public $contexts = [
+        "purchase-quote" => [
             'docx'
-        ),
-        'lease-quote'    => array(
+        ],
+        'lease-quote'    => [
             'docx'
-        ),
-        'order-list'     => array(
+        ],
+        'order-list'     => [
             'xlsx'
-        ),
-        'contract'       => array(
+        ],
+        'contract'       => [
             'docx'
-        )
-    );
+        ]
+    ];
 
     public function init ()
     {
@@ -41,7 +41,7 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Quote', 'Reports');
+        $this->_pageTitle = ['Quote', 'Reports'];
         $request          = $this->getRequest();
 
         $form = new QuoteGeneralForm($this->_quote);
@@ -58,16 +58,16 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'danger' => 'Please correct the errors below.'
-                    ));
+                    ]);
                 }
             }
             else
             {
-                $this->redirectToRoute('quotes.hardware-financing', array(
+                $this->redirectToRoute('quotes.hardware-financing', [
                     'quoteId' => $this->_quoteId
-                ));
+                ]);
             }
         }
 

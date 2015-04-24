@@ -74,14 +74,14 @@ class HardwareLibrary_ManageDevicesController extends Action
         $firstLoad      = $this->_getParam('firstLoad', false);
 
         $jqGridService    = new JQGrid();
-        $jqGridParameters = array(
+        $jqGridParameters = [
             'sidx' => $this->_getParam('sidx', 'id'),
             'sord' => $this->_getParam('sord', 'desc'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10),
-        );
+        ];
 
-        $jqGridService->setValidSortColumns(array(
+        $jqGridService->setValidSortColumns([
             'id',
             'tonerColorId',
             'sku',
@@ -90,14 +90,14 @@ class HardwareLibrary_ManageDevicesController extends Action
             'yield',
             'dealerCost',
             'device_list',
-        ));
+        ]);
 
         $jqGridService->parseJQGridPagingRequest($jqGridParameters);
 
 
         if ($jqGridService->sortingIsValid())
         {
-            $sortOrder = array();
+            $sortOrder = [];
             if ($jqGridService->hasGrouping())
             {
                 $sortOrder[] = $jqGridService->getGroupByColumn() . ' ' . $jqGridService->getGroupBySortOrder();
@@ -147,9 +147,9 @@ class HardwareLibrary_ManageDevicesController extends Action
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array(
+            $this->sendJson([
                 'error' => sprintf('Sort index "%s" is not a valid sorting index.', $jqGridService->getSortColumn())
-            ));
+            ]);
         }
     }
 
@@ -165,16 +165,16 @@ class HardwareLibrary_ManageDevicesController extends Action
         $filterTonerSku       = $this->_getParam('filterTonerSku', false);
         $filterTonerColorId   = $this->_getParam('filterTonerColorId', false);
 
-        $jqGridParameters = array(
+        $jqGridParameters = [
             'sidx' => $this->_getParam('sidx', 'id'),
             'sord' => $this->_getParam('sord', 'desc'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10),
-        );
+        ];
 
         $jqGridService = new JQGrid();
 
-        $jqGridService->setValidSortColumns(array(
+        $jqGridService->setValidSortColumns([
             'id',
             'tonerColorId',
             'sku',
@@ -183,7 +183,7 @@ class HardwareLibrary_ManageDevicesController extends Action
             'yield',
             'dealerCost',
             'device_list',
-        ));
+        ]);
         $jqGridService->parseJQGridPagingRequest($jqGridParameters);
 
         $tonerMapper = TonerMapper::getInstance();
@@ -235,7 +235,7 @@ class HardwareLibrary_ManageDevicesController extends Action
                 $startRecord = 0;
             }
 
-            $sortOrder = array();
+            $sortOrder = [];
 
             if ($jqGridService->hasGrouping())
             {
@@ -285,9 +285,9 @@ class HardwareLibrary_ManageDevicesController extends Action
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array(
+            $this->sendJson([
                 'error' => sprintf('Sort index "%s" is not a valid sorting index.', $jqGridService->getSortColumn())
-            ));
+            ]);
         }
     }
 
@@ -303,11 +303,11 @@ class HardwareLibrary_ManageDevicesController extends Action
             $masterDeviceId = $this->_request->getParam('masterDeviceId', false);
             if ($optionId && $masterDeviceId)
             {
-                $device = DeviceMapper::getInstance()->find(array($masterDeviceId, $this->_identity->dealerId));
+                $device = DeviceMapper::getInstance()->find([$masterDeviceId, $this->_identity->dealerId]);
                 if ($device)
                 {
                     $deviceOptionMapper = DeviceOptionMapper::getInstance();
-                    $deviceOption       = $deviceOptionMapper->find(array($masterDeviceId, $optionId));
+                    $deviceOption       = $deviceOptionMapper->find([$masterDeviceId, $optionId]);
                     if ($deviceOption)
                     {
                         $deviceOptionMapper->delete($deviceOption);
@@ -398,9 +398,9 @@ class HardwareLibrary_ManageDevicesController extends Action
             $isAllowed                 = ((!$masterDevice instanceof MasterDeviceModel || !$masterDevice->isSystemDevice || $this->_isAdmin) ? true : false);
             $manageMasterDeviceService = new ManageMasterDevicesService($masterDeviceId, $this->_identity->dealerId, $isAllowed, $this->_isAdmin);
 
-            $forms                      = array();
-            $suppliesErrors             = array();
-            $modelAndManufacturerErrors = array();
+            $forms                      = [];
+            $suppliesErrors             = [];
+            $modelAndManufacturerErrors = [];
             $formErrors                 = null;
             $tonersList                 = null;
 
@@ -478,8 +478,8 @@ class HardwareLibrary_ManageDevicesController extends Action
                 $forms['hardwareQuote'] = new HardwareQuoteForm();
             }
 
-            $formErrors = array();
-            $validData  = array();
+            $formErrors = [];
+            $validData  = [];
 
             foreach ($forms as $formName => $form)
             {
@@ -516,10 +516,10 @@ class HardwareLibrary_ManageDevicesController extends Action
                                 array_merge(
                                     $validData['suppliesAndService'],
                                     $validData['deviceAttributes'],
-                                    array(
+                                    [
                                         "manufacturerId" => $manufacturerId,
                                         "modelName"      => $modelName
-                                    )
+                                    ]
                                 ),
                                 $approve
                             );
@@ -531,11 +531,11 @@ class HardwareLibrary_ManageDevicesController extends Action
 
                         if ($tonerIds)
                         {
-                            $tonerIdsToAdd    = array();
-                            $finalTonerIdList = array();
-                            $tonerIdsToDelete = array();
-                            $currentToners    = array();
-                            $newTonerIds      = array();
+                            $tonerIdsToAdd    = [];
+                            $finalTonerIdList = [];
+                            $tonerIdsToDelete = [];
+                            $currentToners    = [];
+                            $newTonerIds      = [];
 
                             foreach (TonerMapper::getInstance()->find($tonerIds) as $toner)
                             {
@@ -604,9 +604,9 @@ class HardwareLibrary_ManageDevicesController extends Action
                         if (!$manageMasterDeviceService->saveHardwareOptimization(
                             array_merge(
                                 $validData['hardwareOptimization'],
-                                array(
+                                [
                                     'isSelling' => $validData['hardwareQuote']['isSelling']
-                                )
+                                ]
                             ))
                         )
                         {
@@ -623,7 +623,7 @@ class HardwareLibrary_ManageDevicesController extends Action
                     }
 
                     $db->commit();
-                    $this->sendJson(array("masterDeviceId" => $manageMasterDeviceService->masterDeviceId, "message" => "Successfully updated master device"));
+                    $this->sendJson(["masterDeviceId" => $manageMasterDeviceService->masterDeviceId, "message" => "Successfully updated master device"]);
                 }
                 catch (Exception $e)
                 {
@@ -684,7 +684,7 @@ class HardwareLibrary_ManageDevicesController extends Action
                 $form = $manageMasterDeviceService->getAvailableTonersForm(isset($formData['form']['availableTonersId']) ? $formData['form']['availableTonersId'] : null);
             }
 
-            $formErrors = array();
+            $formErrors = [];
             $errorArray = $manageMasterDeviceService->validateData($form, $formData['form'], $formName);
 
             if ($errorArray != null)
@@ -725,7 +725,7 @@ class HardwareLibrary_ManageDevicesController extends Action
                     $id = $manageMasterDeviceService->updateAvailableTonersForm($formData['form'], 0, $masterDevice);
                     if ($id > 0)
                     {
-                        $this->sendJson(array("Message" => "Successfully updated available toners form", "id" => $id));
+                        $this->sendJson(["Message" => "Successfully updated available toners form", "id" => $id]);
                     }
                     else
                     {
@@ -797,19 +797,19 @@ class HardwareLibrary_ManageDevicesController extends Action
 
         $jqGridService = new JQGrid();
 
-        $jqGridParameters = array(
+        $jqGridParameters = [
             'sidx' => $this->_getParam('sidx', 'modelName'),
             'sord' => $this->_getParam('sord', 'desc'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10),
-        );
+        ];
 
-        $sortColumns = array(
+        $sortColumns = [
             'id',
             'name',
             'description',
             'modelName',
-        );
+        ];
 
         $jqGridService->setValidSortColumns($sortColumns);
         $jqGridService->parseJQGridPagingRequest($jqGridParameters);
@@ -817,10 +817,10 @@ class HardwareLibrary_ManageDevicesController extends Action
         if ($jqGridService->sortingIsValid())
         {
 
-            $filterCriteriaValidator = new Zend_Validate_InArray(array(
+            $filterCriteriaValidator = new Zend_Validate_InArray([
                 'haystack' => $sortColumns
 
-            ));
+            ]);
 
             // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
             if ($searchCriteria === null || $searchValue === null || !$filterCriteriaValidator->isValid($searchCriteria))
@@ -841,7 +841,7 @@ class HardwareLibrary_ManageDevicesController extends Action
                 $jqGridService->setCurrentPage($jqGridService->calculateTotalPages());
             }
 
-            $sortOrder = array();
+            $sortOrder = [];
 
             if ($jqGridService->hasGrouping())
             {
@@ -915,7 +915,7 @@ class HardwareLibrary_ManageDevicesController extends Action
                 $this->sendJsonError("Failed to save device toner");
             }
 
-            $this->sendJson(array("Successfully assigned toner"));
+            $this->sendJson(["Successfully assigned toner"]);
         }
         else
         {
@@ -950,7 +950,7 @@ class HardwareLibrary_ManageDevicesController extends Action
                 $this->sendJsonError("Failed to delete device toner");
             }
 
-            $this->sendJson(array("Successfully removed toner"));
+            $this->sendJson(["Successfully removed toner"]);
         }
         else
         {
@@ -971,18 +971,18 @@ class HardwareLibrary_ManageDevicesController extends Action
 
         $jqGridService = new JQGrid();
 
-        $jqGridParameters = array(
+        $jqGridParameters = [
             'sidx' => $this->_getParam('sidx', 'yield'),
             'sord' => $this->_getParam('sord', 'desc'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10),
-        );
+        ];
 
-        $sortColumns = array(
+        $sortColumns = [
             'id',
             'name',
             'description'
-        );
+        ];
 
         $jqGridService->setValidSortColumns($sortColumns);
 
@@ -990,9 +990,9 @@ class HardwareLibrary_ManageDevicesController extends Action
         {
             $jqGridService->parseJQGridPagingRequest($jqGridParameters);
 
-            $filterCriteriaValidator = new Zend_Validate_InArray(array(
+            $filterCriteriaValidator = new Zend_Validate_InArray([
                 'haystack' => $sortColumns
-            ));
+            ]);
 
             // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
             if ($searchCriteria === null || $searchValue === null || !$filterCriteriaValidator->isValid($searchCriteria))
@@ -1012,7 +1012,7 @@ class HardwareLibrary_ManageDevicesController extends Action
                 $jqGridService->setCurrentPage($jqGridService->calculateTotalPages());
             }
 
-            $sortOrder = array();
+            $sortOrder = [];
 
             if ($jqGridService->hasGrouping())
             {
@@ -1039,7 +1039,7 @@ class HardwareLibrary_ManageDevicesController extends Action
      */
     public function searchForManufacturerAction ()
     {
-        $results        = array();
+        $results        = [];
         $manufacturerId = $this->getParam('manufacturerId', false);
         if ($manufacturerId)
         {

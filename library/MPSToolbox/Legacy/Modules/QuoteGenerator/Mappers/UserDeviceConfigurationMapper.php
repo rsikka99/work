@@ -46,9 +46,9 @@ class UserDeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function countByDeviceId ($deviceConfigurationId)
     {
-        return $this->count(array(
-            "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId
-        ));
+        return $this->count([
+            "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId,
+        ]);
     }
 
     /**
@@ -94,10 +94,10 @@ class UserDeviceConfigurationMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_deviceConfigurationId} = ?" => $primaryKey [0],
-            "{$this->col_userId} = ?"                => $primaryKey [1]
-        ));
+            "{$this->col_userId} = ?"                => $primaryKey [1],
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -118,17 +118,17 @@ class UserDeviceConfigurationMapper extends My_Model_Mapper_Abstract
     {
         if ($userDeviceConfiguration instanceof UserDeviceConfigurationModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_deviceConfigurationId} = ?" => $userDeviceConfiguration->deviceConfigurationId,
-                "{$this->col_userId} = ?"                => $userDeviceConfiguration->userId
-            );
+                "{$this->col_userId} = ?"                => $userDeviceConfiguration->userId,
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_deviceConfigurationId} = ?" => $userDeviceConfiguration [0],
-                "{$this->col_userId} = ?"                => $userDeviceConfiguration [1]
-            );
+                "{$this->col_userId} = ?"                => $userDeviceConfiguration [1],
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -145,9 +145,9 @@ class UserDeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function deleteUserDeviceConfigurationByDeviceId ($deviceConfigurationId)
     {
-        return $rowsAffected = $this->getDbTable()->delete(array(
-            "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId
-        ));
+        return $rowsAffected = $this->getDbTable()->delete([
+            "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId,
+        ]);
     }
 
     /**
@@ -229,7 +229,7 @@ class UserDeviceConfigurationMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new UserDeviceConfigurationModel($row->toArray());
@@ -254,10 +254,10 @@ class UserDeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_deviceConfigurationId} = ?" => $id [0],
-            "{$this->col_userId} = ?"                => $id [1]
-        );
+            "{$this->col_userId} = ?"                => $id [1],
+        ];
     }
 
     /**
@@ -267,10 +267,10 @@ class UserDeviceConfigurationMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
+        return [
             $object->userId,
-            $object->deviceConfigurationId
-        );
+            $object->deviceConfigurationId,
+        ];
     }
 }
 

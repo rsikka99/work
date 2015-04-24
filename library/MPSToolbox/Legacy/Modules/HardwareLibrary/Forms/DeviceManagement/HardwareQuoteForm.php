@@ -22,83 +22,75 @@ class HardwareQuoteForm extends Zend_Form
         $this->setMethod('post');
         $this->setAttrib('id', 'hardwareQuote');
 
-        $this->addElement('checkbox', 'isSelling', array(
+        $this->addElement('checkbox', 'isSelling', [
             'label' => 'Sell This Device'
-        ));
+        ]);
 
         /*
          * Your SKU
          */
-        $this->addElement('text', 'oemSku', array(
+        $this->addElement('text', 'oemSku', [
             'label'      => 'OEM SKU',
             'maxlength'  => 255,
             'required'   => false,
-            'filters'    => array('StringTrim', 'StripTags'),
+            'filters'    => ['StringTrim', 'StripTags'],
             'allowEmpty' => false,
-            'validators' => array(
-                new FieldDependsOnValue('isSelling', '1', array(
+            'validators' => [
+                new FieldDependsOnValue('isSelling', '1', [
                     new Zend_Validate_NotEmpty()
-                ), array(
+                ], [
                     'validator' => 'StringLength',
-                    'options'   => array(1, 255)
-                ))
-            )
-        ));
+                    'options'   => [1, 255]
+                ]),
+            ],
+        ]);
         /*
          * Dealer SKU
          */
-        $this->addElement('text', 'dealerSku', array(
+        $this->addElement('text', 'dealerSku', [
             'label'      => My_Brand::$dealerSku,
             'maxlength'  => 255,
             'required'   => false,
-            'filters'    => array('StringTrim', 'StripTags'),
+            'filters'    => ['StringTrim', 'StripTags'],
             'allowEmpty' => false,
-            'validators' => array(
-                new FieldDependsOnValue('isSelling', '1', array(
+            'validators' => [
+                new FieldDependsOnValue('isSelling', '1', [
                     new Zend_Validate_NotEmpty()
-                ), array(
+                ], [
                     'validator' => 'StringLength',
-                    'options'   => array(1, 255)
-                ))
-            )
-        ));
+                    'options'   => [1, 255]
+                ]),
+            ],
+        ]);
         /*
         * Cost
         */
-        $this->addElement('text', 'cost', array(
+        $this->addElement('text', 'cost', [
             'label'      => 'Your cost',
             'maxlength'  => 255,
             'required'   => false,
-            'filters'    => array('StringTrim', 'StripTags'),
+            'filters'    => ['StringTrim', 'StripTags'],
             'allowEmpty' => false,
-            'validators' => array(
-                new FieldDependsOnValue('isSelling', '1', array(
+            'validators' => [
+                new FieldDependsOnValue('isSelling', '1', [
                     new Zend_Validate_NotEmpty(),
                     new Zend_Validate_Float(),
-                    new Zend_Validate_GreaterThan(0)
-                )),
-
-            )
-        ));
+                    new Zend_Validate_GreaterThan(0),
+                ]),
+            ],
+        ]);
         /*
          * Description of standard features
          */
-        $this->addElement('textarea', 'description', array(
+        $this->addElement('textarea', 'description', [
             'label'    => 'Standard Features',
             'required' => false,
-            'filters'  => array('StringTrim', 'StripTags'),
-        ));
+            'filters'  => ['StringTrim', 'StripTags'],
+        ]);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/hardware-library/device-management/hardware-quote-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/hardware-library/device-management/hardware-quote-form.phtml']]]);
     }
 }

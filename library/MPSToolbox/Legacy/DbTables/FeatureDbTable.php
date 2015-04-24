@@ -11,6 +11,6 @@ use Zend_Db_Table_Abstract;
  */
 class FeatureDbTable extends Zend_Db_Table_Abstract
 {
-    protected $_primary = "id";
-    protected $_name    = "features";
+    protected $_primary = 'id';
+    protected $_name    = 'features';
 }

@@ -14,11 +14,11 @@ class NerDataUploadService extends AbstractRmsUploadService
      *
      * @var string
      */
-    protected $_incomingDateFormat = array(
+    protected $_incomingDateFormat = [
         "n/j/Y",
         "m/d/Y",
         "n/d/Y G:i",
-    );
+    ];
 
     /**
      * Column mapping for CSV -> Upload Row.
@@ -26,7 +26,7 @@ class NerDataUploadService extends AbstractRmsUploadService
      *
      * @var array
      */
-    protected $_columnMapping = array(
+    protected $_columnMapping = [
         'rmsvendorname'        => 'rmsVendorName',
         'rmsreportversion'     => 'rmsReportVersion',
         'rmsmodelid'           => 'rmsModelId',
@@ -93,5 +93,5 @@ class NerDataUploadService extends AbstractRmsUploadService
         'discoverydate'        => 'discoveryDate',
         'monitorstartdate'     => 'monitorStartDate',
         'monitorenddate'       => 'monitorEndDate',
-    );
+    ];
 }

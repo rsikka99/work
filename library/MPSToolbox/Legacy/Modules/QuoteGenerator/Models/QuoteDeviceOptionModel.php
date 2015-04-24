@@ -128,7 +128,7 @@ class QuoteDeviceOptionModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"               => $this->id,
             "quoteDeviceId"    => $this->quoteDeviceId,
             "oemSku"           => $this->oemSku,
@@ -138,7 +138,7 @@ class QuoteDeviceOptionModel extends My_Model_Abstract
             "cost"             => $this->cost,
             "quantity"         => $this->quantity,
             "includedQuantity" => $this->includedQuantity,
-        );
+        ];
     }
 
     /**

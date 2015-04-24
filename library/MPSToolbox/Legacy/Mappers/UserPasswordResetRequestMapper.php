@@ -81,9 +81,9 @@ class UserPasswordResetRequestMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_id} = ?" => $primaryKey
-        ));
+        ]);
 
         // Save the object into the cache
         //$this->saveItemToCache($object);
@@ -104,15 +104,15 @@ class UserPasswordResetRequestMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof UserPasswordResetRequestModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_id} = ?" => $object->id
-            );
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_id} = ?" => $object
-            );
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -209,9 +209,9 @@ class UserPasswordResetRequestMapper extends My_Model_Mapper_Abstract
      */
     public function deleteByUserId ($userId)
     {
-        $whereClause  = array(
+        $whereClause  = [
             "{$this->userId} = ?" => $userId
-        );
+        ];
         $rowsAffected = $this->getDbTable()->delete($whereClause);
 
         return $rowsAffected;

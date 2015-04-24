@@ -28,14 +28,14 @@ abstract class My_Model_Mapper_Abstract
      *
      * @var My_Model_Abstract[]
      */
-    protected $_rowHashTable = array();
+    protected $_rowHashTable = [];
 
     /**
      * A hash table to store copies of mappers as singletons.
      *
      * @var My_Model_Mapper_Abstract[]
      */
-    private static $_mapperHashTable = array();
+    private static $_mapperHashTable = [];
 
     /**
      * Gets an instance of a mapper or class.
@@ -131,9 +131,9 @@ abstract class My_Model_Mapper_Abstract
         $dbTable = $this->getDbTable();
 
         $select = $dbTable->select();
-        $select->from($dbTable, array(
-            'COUNT(*) as count'
-        ));
+        $select->from($dbTable, [
+            'COUNT(*) as count',
+        ]);
 
         // If we have a where, apply all the where bindings.
         if ($where !== null)

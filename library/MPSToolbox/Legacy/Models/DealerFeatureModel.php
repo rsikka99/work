@@ -49,9 +49,9 @@ class DealerFeatureModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
-            "featureId" => $this->featureId,
-            "dealerId"  => $this->dealerId,
-        );
+        return [
+            'featureId' => $this->featureId,
+            'dealerId'  => $this->dealerId,
+        ];
     }
 }

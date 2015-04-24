@@ -54,11 +54,11 @@ class DeviceInstanceDeviceSwapReasonModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "hardwareOptimizationId" => $this->hardwareOptimizationId,
             "deviceInstanceId"       => $this->deviceInstanceId,
             "deviceSwapReasonId"     => $this->deviceSwapReasonId,
-        );
+        ];
     }
 
 }

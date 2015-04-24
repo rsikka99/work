@@ -28,12 +28,12 @@ class MasterDeviceModel extends My_Model_Abstract
 
     const LIFE_PAGE_COUNT_MONTHS = 36;
 
-    static $TonerConfigNames = array(
+    static $TonerConfigNames = [
         self::DEVICE_TYPE_MONO      => "Monochrome",
         self::DEVICE_TYPE_MONO_MFP  => "Monochrome MFP",
         self::DEVICE_TYPE_COLOR     => "Color",
-        self::DEVICE_TYPE_COLOR_MFP => "Color MFP"
-    );
+        self::DEVICE_TYPE_COLOR_MFP => "Color MFP",
+    ];
 
 
     static $ReportLaborCostPerPage = 0;
@@ -220,7 +220,7 @@ class MasterDeviceModel extends My_Model_Abstract
         if (!isset($this->_dealerAttributes))
         {
 
-            $where                   = DealerMasterDeviceAttributeMapper::getInstance()->getWhereId(array($this->id, Zend_Auth::getInstance()->getIdentity()->dealerId));
+            $where                   = DealerMasterDeviceAttributeMapper::getInstance()->getWhereId([$this->id, Zend_Auth::getInstance()->getIdentity()->dealerId]);
             $this->_dealerAttributes = DealerMasterDeviceAttributeMapper::getInstance()->fetch($where);
         }
 
@@ -240,7 +240,7 @@ class MasterDeviceModel extends My_Model_Abstract
     {
         if (!isset($this->_maximumMonthlyPageVolume))
         {
-            $this->_maximumMonthlyPageVolume = array();
+            $this->_maximumMonthlyPageVolume = [];
         }
 
         $cacheKey = $costPerPageSetting->createCacheKey();
@@ -422,7 +422,7 @@ class MasterDeviceModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"                                  => $this->id,
             "userId"                              => $this->userId,
             "manufacturerId"                      => $this->manufacturerId,
@@ -444,7 +444,7 @@ class MasterDeviceModel extends My_Model_Abstract
             "isLeased"                            => $this->isLeased,
             "leasedTonerYield"                    => $this->leasedTonerYield,
             "isCapableOfReportingTonerLevels"     => $this->isCapableOfReportingTonerLevels,
-        );
+        ];
     }
 
     /**
@@ -761,7 +761,7 @@ class MasterDeviceModel extends My_Model_Abstract
          */
         if (!isset($this->_cachedDeviceCostPerPage))
         {
-            $this->_cachedDeviceCostPerPage = array();
+            $this->_cachedDeviceCostPerPage = [];
         }
 
         $cacheKey = $costPerPageSetting->createCacheKey();
@@ -789,7 +789,7 @@ class MasterDeviceModel extends My_Model_Abstract
     {
         if (!isset($this->_cachedCheapestTonerVendorSet))
         {
-            $this->_cachedCheapestTonerVendorSet = array();
+            $this->_cachedCheapestTonerVendorSet = [];
         }
 
         $cacheKey = $costPerPageSetting->createCacheKey();
@@ -893,7 +893,7 @@ class MasterDeviceModel extends My_Model_Abstract
      */
     public function isJitCompatible ($dealerId)
     {
-        return JitCompatibleMasterDeviceMapper::getInstance()->find(array($this->id, $dealerId)) instanceof JitCompatibleMasterDeviceModel;
+        return JitCompatibleMasterDeviceMapper::getInstance()->find([$this->id, $dealerId]) instanceof JitCompatibleMasterDeviceModel;
     }
 
     /**
@@ -952,7 +952,7 @@ class MasterDeviceModel extends My_Model_Abstract
     {
         if (!isset($this->_hasValidToners))
         {
-            $this->_hasValidToners = array();
+            $this->_hasValidToners = [];
         }
 
         $cacheKey = "{$dealerId}_{$clientId}";
@@ -960,7 +960,7 @@ class MasterDeviceModel extends My_Model_Abstract
         if (!isset($this->_hasValidToners[$cacheKey]))
         {
             $masterDeviceService = new ManageMasterDevicesService($this->id, $dealerId);
-            $tonerList           = array();
+            $tonerList           = [];
 
             foreach ($this->getToners($dealerId, $clientId) as $manufacturerIdList)
             {

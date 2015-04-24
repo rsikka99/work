@@ -6,14 +6,14 @@ $form = $this->element;
 ?>
 
 
-<?= $this->RenderFormOpen($form, array('form-horizontal')) ?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
     <div class="row">
         <div class="col-sm-6">
             <?php if ($form->getElement('dealerName') instanceof Zend_Form_Element) : ?>
                 <fieldset>
                     <legend>Dealer Profile</legend>
                     <div class="form-group <?= ($form->getElement('dealerName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                        <?= $this->RenderFormLabel($form->getElement('dealerName'), array('col-md-3')) ?>
+                        <?= $this->RenderFormLabel($form->getElement('dealerName'), ['col-md-3']) ?>
 
                         <div class="col-md-9">
                             <?= $this->RenderFormText($form->getElement('dealerName')) ?>
@@ -25,7 +25,7 @@ $form = $this->element;
             <?php endif; ?>
             <fieldset>
                 <div class="form-group <?= ($form->getElement('userLicenses')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('userLicenses'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('userLicenses'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormText($form->getElement('userLicenses')) ?>
@@ -35,7 +35,7 @@ $form = $this->element;
                 </div>
 
                 <div class="form-group <?= ($form->getElement('dealerLogoImage')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('dealerLogoImage'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('dealerLogoImage'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormFile($form->getElement('dealerLogoImage')) ?>
@@ -45,7 +45,7 @@ $form = $this->element;
                 </div>
 
                 <div class="form-group <?= ($form->getElement('dealerFeatures')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('dealerFeatures'), array('col-md-3')) ?>
+                    <?= $this->RenderFormLabel($form->getElement('dealerFeatures'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
                         <?= $this->RenderFormCheckbox($form->getElement('dealerFeatures')) ?>
@@ -58,7 +58,7 @@ $form = $this->element;
     </div>
     <fieldset>
         <hr>
-        <?= $this->RenderFormSubmit($form->getElement('submit'), array('btn', 'btn-primary')) ?>
-        <?= $this->RenderFormSubmit($form->getElement('cancel'), array('btn', 'btn-default')) ?>
+        <?= $this->RenderFormSubmit($form->getElement('submit'), ['btn', 'btn-primary']) ?>
+        <?= $this->RenderFormSubmit($form->getElement('cancel'), ['btn', 'btn-default']) ?>
     </fieldset>
 <?= $this->RenderFormClose($form) ?>

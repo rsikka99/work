@@ -13,7 +13,7 @@ $titlePage = $this->section;
 /**
  * Right aligned logo
  */
-$detailsTable = $titlePage->addTable(array('cellMarginRight' => 900));
+$detailsTable = $titlePage->addTable(['cellMarginRight' => 900]);
 $detailsTable->addRow(4090);
 $imageCell = $detailsTable->addCell(12240);
 $imageCell->addText(' ');
@@ -25,10 +25,10 @@ $detailsTable->addRow(4070);
 $textCell = $detailsTable->addCell(12240);
 $textCell->addText(My_Brand::getDealerBranding()->healthCheckTitle, 'titlepage_title', 'nospacing_rightalign');
 $textCell->addText('Prepared For: ', 'titlepage_subtitle_italic', 'rightalign');
-$textCell->addText(sprintf('%1$s', $healthcheckViewModel->healthcheck->getClient()->companyName), 'titlepage_subtitle', array(
+$textCell->addText(sprintf('%1$s', $healthcheckViewModel->healthcheck->getClient()->companyName), 'titlepage_subtitle', [
     'align'       => 'right',
     'spaceBefore' => 200,
-));
+]);
 
 $addressModel = $healthcheckViewModel->healthcheck->getClient()->getAddress();
 

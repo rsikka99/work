@@ -9,7 +9,7 @@ namespace MPSToolbox\Legacy\Models\Acl;
  */
 class HardwareOptimizationAclModel
 {
-    const RESOURCE_HARDWAREOPTIMIZATION_WILDCARD = "hardwareoptimization__%__%";
+    const RESOURCE_HARDWAREOPTIMIZATION_WILDCARD = 'hardwareoptimization__%__%';
 
     /**
      * Sets up ACL resources and access for a module

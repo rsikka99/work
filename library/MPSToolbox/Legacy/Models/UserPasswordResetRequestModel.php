@@ -52,7 +52,7 @@ class UserPasswordResetRequestModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             'id'            => $this->id,
             'dateRequested' => $this->dateRequested,
             'resetToken'    => $this->resetToken,
@@ -60,7 +60,7 @@ class UserPasswordResetRequestModel extends My_Model_Abstract
             'resetVerified' => $this->resetVerified,
             'userId'        => $this->userId,
             'resetUsed'     => $this->resetUsed
-        );
+        ];
     }
 
     /**

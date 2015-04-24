@@ -17,15 +17,15 @@ class RenderFormLabel extends RenderFormAbstract
      *
      * @return string
      */
-    public function RenderFormLabel (\Zend_Form_Element $element, $elementClasses = array())
+    public function RenderFormLabel (\Zend_Form_Element $element, $elementClasses = [])
     {
-        $html = array();
+        $html = [];
 
         if ($element instanceof \Zend_Form_Element)
         {
             if (!is_array($elementClasses))
             {
-                $elementClasses = array($elementClasses);
+                $elementClasses = [$elementClasses];
             }
 
             array_unshift($elementClasses, 'control-label');

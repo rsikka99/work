@@ -21,28 +21,28 @@ class QuoteSettingsForm extends \Zend_Form
         /**
          * Hardware Quote Default Settings
          */
-        $this->addElement('text', 'defaultDeviceMargin', array(
+        $this->addElement('text', 'defaultDeviceMargin', [
             'label'    => 'Default Margin on Devices',
             'required' => true,
-        ));
+        ]);
 
-        $this->addElement('text', 'defaultPageMargin', array(
+        $this->addElement('text', 'defaultPageMargin', [
             'label'    => 'Default Margin on Pages',
             'required' => true,
-        ));
+        ]);
 
         /**
          * Form Actions
          */
-        $this->addElement('submit', 'save', array(
+        $this->addElement('submit', 'save', [
             'label' => 'Submit',
             'class' => 'btn btn-primary',
-        ));
+        ]);
 
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'label' => 'Cancel',
-            'class' => 'btn btn-default'
-        ));
+            'class' => 'btn btn-default',
+        ]);
     }
 
 
@@ -53,10 +53,10 @@ class QuoteSettingsForm extends \Zend_Form
     {
         if ($quoteSettings instanceof QuoteSettingsEntity)
         {
-            $quoteSettings = array(
+            $quoteSettings = [
                 'defaultDeviceMargin' => $quoteSettings->defaultDeviceMargin,
                 'defaultPageMargin'   => $quoteSettings->defaultPageMargin,
-            );
+            ];
         }
 
         if ($quoteSettings)
@@ -92,13 +92,6 @@ class QuoteSettingsForm extends \Zend_Form
      */
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/client-settings-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/client-settings-form.phtml']]]);
     }
 }

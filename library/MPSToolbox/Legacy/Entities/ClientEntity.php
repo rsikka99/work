@@ -30,7 +30,7 @@ class ClientEntity extends EloquentModel
 
     public function getDates ()
     {
-        return array('dateViewed');
+        return ['dateViewed'];
     }
 
     /**

@@ -75,7 +75,7 @@ class DealerBrandingModel extends My_Model_Abstract
     /**
      * @var string
      */
-    public $h1BackgroundColor = "#FFFFFF";
+    public $h1BackgroundColor = '#FFFFFF';
 
     /**
      * @var string
@@ -240,37 +240,37 @@ class DealerBrandingModel extends My_Model_Abstract
     /**
      * @var string
      */
-    public $assessmentTitle = "Assessment";
+    public $assessmentTitle = 'Assessment';
 
     /**
      * @var string
      */
-    public $customerCostAnalysisTitle = "Cost Analysis";
+    public $customerCostAnalysisTitle = 'Cost Analysis';
 
     /**
      * @var string
      */
-    public $customerOptimizationTitle = "Hardware Optimization";
+    public $customerOptimizationTitle = 'Hardware Optimization';
 
     /**
      * @var string
      */
-    public $healthCheckTitle = "Business Review";
+    public $healthCheckTitle = 'Business Review';
 
     /**
      * @var string
      */
-    public $leaseQuoteTitle = "Hardware Quote";
+    public $leaseQuoteTitle = 'Hardware Quote';
 
     /**
      * @var string
      */
-    public $purchaseQuoteTitle = "Hardware Quote";
+    public $purchaseQuoteTitle = 'Hardware Quote';
 
     /**
      * @var string
      */
-    public $solutionTitle = "Solution";
+    public $solutionTitle = 'Solution';
 
     /**
      * @var DealerModel
@@ -550,59 +550,59 @@ class DealerBrandingModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
-            "dealerId"                            => $this->dealerId,
-            "dealerName"                          => $this->dealerName,
-            "shortDealerName"                     => $this->shortDealerName,
-            "mpsProgramName"                      => $this->mpsProgramName,
-            "shortMpsProgramName"                 => $this->shortMpsProgramName,
-            "jitProgramName"                      => $this->jitProgramName,
-            "shortJitProgramName"                 => $this->shortJitProgramName,
-            "titlePageTitleFontColor"             => $this->titlePageTitleFontColor,
-            "titlePageTitleBackgroundColor"       => $this->titlePageTitleBackgroundColor,
-            "titlePageInformationFontColor"       => $this->titlePageInformationFontColor,
-            "titlePageInformationBackgroundColor" => $this->titlePageInformationBackgroundColor,
-            "h1FontColor"                         => $this->h1FontColor,
-            "h1BackgroundColor"                   => $this->h1BackgroundColor,
-            "h2FontColor"                         => $this->h2FontColor,
-            "h2BackgroundColor"                   => $this->h2BackgroundColor,
-            "graphCustomerColor"                  => $this->graphCustomerColor,
-            "graphDealerColor"                    => $this->graphDealerColor,
-            "graphPositiveColor"                  => $this->graphPositiveColor,
-            "graphNegativeColor"                  => $this->graphNegativeColor,
-            "graphPurchasedDeviceColor"           => $this->graphPurchasedDeviceColor,
-            "graphLeasedDeviceColor"              => $this->graphLeasedDeviceColor,
-            "graphExcludedDeviceColor"            => $this->graphExcludedDeviceColor,
-            "graphIndustryAverageColor"           => $this->graphIndustryAverageColor,
-            "graphKeepDeviceColor"                => $this->graphKeepDeviceColor,
-            "graphReplacedDeviceColor"            => $this->graphReplacedDeviceColor,
-            "graphDoNotRepairDeviceColor"         => $this->graphDoNotRepairDeviceColor,
-            "graphRetireDeviceColor"              => $this->graphRetireDeviceColor,
-            "graphManagedDeviceColor"             => $this->graphManagedDeviceColor,
-            "graphManageableDeviceColor"          => $this->graphManageableDeviceColor,
-            "graphFutureReviewDeviceColor"        => $this->graphFutureReviewDeviceColor,
-            "graphJitCompatibleDeviceColor"       => $this->graphJitCompatibleDeviceColor,
-            "graphCompatibleDeviceColor"          => $this->graphCompatibleDeviceColor,
-            "graphNotCompatibleDeviceColor"       => $this->graphNotCompatibleDeviceColor,
-            "graphCurrentSituationColor"          => $this->graphCurrentSituationColor,
-            "graphNewSituationColor"              => $this->graphNewSituationColor,
-            "graphAgeOfDevices1"                  => $this->graphAgeOfDevices1,
-            "graphAgeOfDevices2"                  => $this->graphAgeOfDevices2,
-            "graphAgeOfDevices3"                  => $this->graphAgeOfDevices3,
-            "graphAgeOfDevices4"                  => $this->graphAgeOfDevices4,
-            "graphMonoDeviceColor"                => $this->graphMonoDeviceColor,
-            "graphColorDeviceColor"               => $this->graphColorDeviceColor,
-            "graphCopyCapableDeviceColor"         => $this->graphCopyCapableDeviceColor,
-            "graphDuplexCapableDeviceColor"       => $this->graphDuplexCapableDeviceColor,
-            "graphFaxCapableDeviceColor"          => $this->graphFaxCapableDeviceColor,
-            "assessmentTitle"                     => $this->assessmentTitle,
-            "customerCostAnalysisTitle"           => $this->customerCostAnalysisTitle,
-            "customerOptimizationTitle"           => $this->customerOptimizationTitle,
-            "healthCheckTitle"                    => $this->healthCheckTitle,
-            "leaseQuoteTitle"                     => $this->leaseQuoteTitle,
-            "purchaseQuoteTitle"                  => $this->purchaseQuoteTitle,
-            "solutionTitle"                       => $this->solutionTitle,
-        );
+        return [
+            'dealerId'                            => $this->dealerId,
+            'dealerName'                          => $this->dealerName,
+            'shortDealerName'                     => $this->shortDealerName,
+            'mpsProgramName'                      => $this->mpsProgramName,
+            'shortMpsProgramName'                 => $this->shortMpsProgramName,
+            'jitProgramName'                      => $this->jitProgramName,
+            'shortJitProgramName'                 => $this->shortJitProgramName,
+            'titlePageTitleFontColor'             => $this->titlePageTitleFontColor,
+            'titlePageTitleBackgroundColor'       => $this->titlePageTitleBackgroundColor,
+            'titlePageInformationFontColor'       => $this->titlePageInformationFontColor,
+            'titlePageInformationBackgroundColor' => $this->titlePageInformationBackgroundColor,
+            'h1FontColor'                         => $this->h1FontColor,
+            'h1BackgroundColor'                   => $this->h1BackgroundColor,
+            'h2FontColor'                         => $this->h2FontColor,
+            'h2BackgroundColor'                   => $this->h2BackgroundColor,
+            'graphCustomerColor'                  => $this->graphCustomerColor,
+            'graphDealerColor'                    => $this->graphDealerColor,
+            'graphPositiveColor'                  => $this->graphPositiveColor,
+            'graphNegativeColor'                  => $this->graphNegativeColor,
+            'graphPurchasedDeviceColor'           => $this->graphPurchasedDeviceColor,
+            'graphLeasedDeviceColor'              => $this->graphLeasedDeviceColor,
+            'graphExcludedDeviceColor'            => $this->graphExcludedDeviceColor,
+            'graphIndustryAverageColor'           => $this->graphIndustryAverageColor,
+            'graphKeepDeviceColor'                => $this->graphKeepDeviceColor,
+            'graphReplacedDeviceColor'            => $this->graphReplacedDeviceColor,
+            'graphDoNotRepairDeviceColor'         => $this->graphDoNotRepairDeviceColor,
+            'graphRetireDeviceColor'              => $this->graphRetireDeviceColor,
+            'graphManagedDeviceColor'             => $this->graphManagedDeviceColor,
+            'graphManageableDeviceColor'          => $this->graphManageableDeviceColor,
+            'graphFutureReviewDeviceColor'        => $this->graphFutureReviewDeviceColor,
+            'graphJitCompatibleDeviceColor'       => $this->graphJitCompatibleDeviceColor,
+            'graphCompatibleDeviceColor'          => $this->graphCompatibleDeviceColor,
+            'graphNotCompatibleDeviceColor'       => $this->graphNotCompatibleDeviceColor,
+            'graphCurrentSituationColor'          => $this->graphCurrentSituationColor,
+            'graphNewSituationColor'              => $this->graphNewSituationColor,
+            'graphAgeOfDevices1'                  => $this->graphAgeOfDevices1,
+            'graphAgeOfDevices2'                  => $this->graphAgeOfDevices2,
+            'graphAgeOfDevices3'                  => $this->graphAgeOfDevices3,
+            'graphAgeOfDevices4'                  => $this->graphAgeOfDevices4,
+            'graphMonoDeviceColor'                => $this->graphMonoDeviceColor,
+            'graphColorDeviceColor'               => $this->graphColorDeviceColor,
+            'graphCopyCapableDeviceColor'         => $this->graphCopyCapableDeviceColor,
+            'graphDuplexCapableDeviceColor'       => $this->graphDuplexCapableDeviceColor,
+            'graphFaxCapableDeviceColor'          => $this->graphFaxCapableDeviceColor,
+            'assessmentTitle'                     => $this->assessmentTitle,
+            'customerCostAnalysisTitle'           => $this->customerCostAnalysisTitle,
+            'customerOptimizationTitle'           => $this->customerOptimizationTitle,
+            'healthCheckTitle'                    => $this->healthCheckTitle,
+            'leaseQuoteTitle'                     => $this->leaseQuoteTitle,
+            'purchaseQuoteTitle'                  => $this->purchaseQuoteTitle,
+            'solutionTitle'                       => $this->solutionTitle,
+        ];
     }
 
     /**

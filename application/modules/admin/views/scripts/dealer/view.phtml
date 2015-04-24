@@ -1,124 +1,183 @@
 <?php
 
-use MPSToolbox\Legacy\Mappers\DealerMapper;
 use MPSToolbox\Legacy\Models\DealerModel;
-use MPSToolbox\Legacy\Models\UserModel;
 
 /* @var $dealer DealerModel */
 $dealer = $this->dealer;
 ?>
 <div class="container">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <a class="pull-right btn btn-warning btn-xs" href="<?= $this->url(array('id' => $dealer->id), 'admin.dealers.edit') ?>">
-                <i class="glyphicon glyphicon-pencil"></i>
-                Edit
-            </a>
-
-            <h2>#<?= number_format($dealer->id) ?> - <?= $dealer->dealerName ?> -
-                <small>Created on <?= $dealer->dateCreated ?></small>
-            </h2>
-        </div>
-        <div class="panel-body">
-            <h3>Dealer Logo</h3>
-            <?php if ($dealer->dealerLogoImageId > 0) : ?>
-                <p class="text-center">
-                    <img src="<?= $this->baseUrl($dealer->getDealerLogoImageFile()) ?>" alt="Tangent MTW Dealer Logo File" style="box-shadow: 0 0 2px #ccc;">
-                </p>
-            <?php else : ?>
-                <div class="alert alert-info">
-                    <i class="fa fa-fw fa-info-circle"></i> Dealer does not have a logo file!
+    <div class="row">
+        <div class="col-lg-9 col-center-block">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="pull-right">
+                        <a class="js-tooltip" href="<?= $this->url(['dealerId' => $dealer->id], 'admin.dealers.create-user') ?>" title="Add User"><i class="fa fa-fw fa-user-plus"></i></a>
+                        <a class="js-tooltip" href="<?= $this->url(['id' => $dealer->id], 'admin.dealers.edit') ?>" title="Edit Dealer Details"><i class="fa fa-fw fa-pencil"></i></a>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <p class="lead">
+                                <i class="fa fa-fw fa-4x fa-group"></i></p>
+                        </div>
+                        <div class="col-sm-10">
+                            <p class="lead"><?= $dealer->dealerName ?><br>
+                                <small>Created on <?= \Carbon\Carbon::createFromFormat("Y-m-d", $dealer->dateCreated)->toDayDateTimeString() ?></small>
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            <?php endif; ?>
-            <hr>
-            <h3>Toner Vendors</h3>
+                <div class="panel-body">
+                    <div class="pull-right">
+                        <a class="js-tooltip" href="<?= $this->url(['id' => $dealer->id], 'admin.dealers.edit') ?>" title="Edit Dealer"><i class="fa fa-fw fa-pencil"></i></a>
+                    </div>
+                    <p class="lead">
+                        <a data-toggle="collapse" data-parent="#panel-dealer-logo" href="#panel-dealer-logo">
+                            Dealer Logo
+                            <?php if ($dealer->dealerLogoImageId > 0) : ?>
+                                <small>
+                                    <span class="text-success"><i class="fa fa-fw fa-check-circle"></i></span>
+                                </small>
+                            <?php else : ?>
+                                <small>
+                                    <span class="text-warning"><i class="fa fa-fw fa-warning"></i>No Logo</span>
+                                </small>
+                            <?php endif; ?>
+                        </a>
+                    </p>
+                </div>
+                <div class="panel-collapse collapse out" id="panel-dealer-logo">
+                    <div class="panel-body">
+                        <?php if ($dealer->dealerLogoImageId > 0) : ?>
+                            <p class="text-center">
+                                <img src="<?= $this->baseUrl($dealer->getDealerLogoImageFile()) ?>" alt="Tangent MTW Dealer Logo File" style="box-shadow: 0 0 2px #ccc;">
+                            </p>
+                        <?php else : ?>
+                            <div class="alert alert-info">
+                                <i class="fa fa-fw fa-info-circle"></i> Dealer does not have a logo file!
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <hr>
+                <div class="panel-body">
+                    <div class="pull-right">
+                        <a class="js-tooltip" href="<?= $this->url(['id' => $dealer->id], 'admin.dealers.edit-rms-providers') ?>" title="Edit RMS Providers"><i class="fa fa-fw fa-pencil"></i></a>
+                    </div>
+                    <p class="lead">
+                        <a data-toggle="collapse" data-parent="#panel-rms-providers" href="#panel-rms-providers">
+                            RMS Providers
+                            <span class="badge"><?= count($dealer->getRmsProviders()) ?></span>
+                        </a>
+                    </p>
+                </div>
+                <div class="panel-collapse collapse out" id="panel-rms-providers">
+                    <div class="panel-body">
+                        <?php if (count($dealer->getRmsProviders()) > 0) : ?>
+                            <ul>
+                                <?php foreach ($dealer->getRmsProviders() as $rmsProvider) : ?>
+                                    <li><?= $rmsProvider->name ?></li>
+                                <?php endforeach ?>
+                            </ul>
+                        <?php else : ?>
+                            <p>There are no RMS providers selected</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <hr>
+                <div class="panel-body">
+                    <div class="pull-right">
+                        <a class="js-tooltip" href="<?= $this->url(['id' => $dealer->id], 'admin.dealers.edit-toner-vendors') ?>" title="Edit Toner Vendors"><i class="fa fa-fw fa-pencil"></i></a>
+                    </div>
+                    <p class="lead">
+                        <a data-toggle="collapse" data-parent="#panel-toner-vendors" href="#panel-toner-vendors">
+                            Toner Vendors
+                            <span class="badge"><?= count($dealer->getTonerVendors()) ?></span>
+                        </a>
+                    </p>
+                </div>
+                <div class="panel-collapse collapse out" id="panel-toner-vendors">
+                    <div class="panel-body">
+                        <?php if (count($dealer->getTonerVendors()) > 0) : ?>
+                            <ul>
+                                <?php foreach ($dealer->getTonerVendors() as $tonerVendor) : ?>
+                                    <li><?= $tonerVendor->getManufacturerName() ?></li>
+                                <?php endforeach ?>
+                            </ul>
+                        <?php else : ?>
+                            <p>There are no toner vendors selected</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <hr>
+                <div class="panel-body">
+                    <div class="pull-right">
+                        <a class="js-tooltip" href="<?= $this->url(['dealerId' => $dealer->id], 'admin.dealers.create-user') ?>" title="Add User"><i class="fa fa-fw fa-user-plus"></i></a>
+                    </div>
+                    <p class="lead">
+                        <a data-toggle="collapse" data-parent="#panel-users" href="#panel-users">Users -
+                            <small><?= number_format($dealer->getNumberOfLicensesUsed()) ?> / <?= number_format($dealer->userLicenses) ?></small>
+                        </a>
+                    </p>
+                </div>
+                <div class="panel-collapse collapse out" id="panel-users">
+                    <div class="panel-body">
 
-            <p>
-                <a class="btn btn-warning btn-xs" href="<?= $this->url(array('id' => $dealer->id), 'admin.dealers.edit-toner-vendors') ?>">
-                    <i class="glyphicon glyphicon-pencil"></i>
-                    Edit Toner Vendors
-                </a>
-            </p>
-            <hr>
-            <h3>RMS Providers</h3>
-
-            <p>
-                <a class="btn btn-warning btn-xs" href="<?= $this->url(array('id' => $dealer->id), 'admin.dealers.edit-rms-providers') ?>">
-                    <i class="glyphicon glyphicon-pencil"></i>
-                    Edit RMS Providers
-                </a>
-            </p>
-            <hr>
-            <h3>Users -
-                <small><?= number_format($dealer->getNumberOfLicensesUsed()) ?> / <?= number_format($dealer->userLicenses) ?></small>
-                <a class="btn btn-success btn-xs create-button" href="<?= $this->url(array('dealerId' => $dealer->id), 'admin.dealers.create-user') ?>">
-                    <i class="glyphicon glyphicon-plus-sign"></i>
-                    Add User
-                </a>
-            </h3>
-
-            <div class="progress progress-striped">
-                <?php $width = count($dealer->getUsers()) / $dealer->userLicenses * 100; ?>
-                <div class="bar <?= (count($dealer->getUsers()) < $dealer->userLicenses) ? '' : 'bar-danger'; ?>" style="width: <?= ($width > 100) ? 100 : $width . '%' ?>;"></div>
+                        <table class="table table-striped table-condensed table-hover">
+                            <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Name</th>
+                                <th style="max-width: 80px;">Login Attempts</th>
+                                <th>Frozen Until</th>
+                                <th style="max-width: 80px;">Locked</th>
+                                <th>Last Seen</th>
+                                <th style="max-width: 100px;">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="info">
+                            </tr>
+                            <?php if (count($dealer->getUsers()) > 0) : ?>
+                                <?php foreach ($dealer->getUsers() as $user) : ?>
+                                    <tr>
+                                        <td><?= $user->email; ?></td>
+                                        <td><?= $user->firstname; ?> <?= $user->lastname; ?></td>
+                                        <td style="text-align: center;"><?= $user->loginAttempts; ?></td>
+                                        <td><?= ($user->isFrozen()) ? $user->frozenUntil : ""; ?></td>
+                                        <td style="text-align: center;"><?= ($user->locked) ? "Yes" : "No"; ?></td>
+                                        <td>
+                                            <span class="js-tooltip" data-toggle="tooltip" title="<?= $user->lastSeen ?>"><i class="fa fa-fw fa-clock-o"></i> <?= ($user->lastSeen === null) ? "Never" : (new \Carbon\Carbon($user->lastSeen))->diffForHumans(); ?></span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs">
+                                                <?php if ($user->id == 1 && $this->identity()->id !== 1) : ?>
+                                                    <span class="btn btn-warning btn-mini disabled"><i class="glyphicon glyphicon-pencil"></i></span>
+                                                <?php else : ?>
+                                                    <a class="btn btn-warning btn-mini" title="Edit User" href="<?= $this->url(['id' => $user->id, 'dealerId' => $dealer->id], 'admin.dealers.users.edit') ?>">
+                                                        <i class="glyphicon glyphicon-pencil"></i></a>
+                                                    <?php if ($user->id == 1) : ?>
+                                                        <span class="btn btn-danger btn-mini disabled"><i class="glyphicon glyphicon-trash"></i></span>
+                                                    <?php else : ?>
+                                                        <a class="btn btn-danger btn-mini" title="Delete User" href="<?= $this->url(['id' => $user->id, 'dealerId' => $dealer->id], 'admin.users.delete') ?>"><i class="glyphicon glyphicon-trash"></i></a>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <tr class="warning">
+                                    <td colspan="8">No users added yet.</td>
+                                </tr>
+                            <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <a class="btn btn-default" href="<?= $this->url([], 'admin.dealers') ?>"><i class="fa fa-fw fa-arrow-left"></i> Go Back</a>
+                </div>
             </div>
-            <table class="table table-striped table-bordered">
-                <thead>
-                <tr>
-                    <th>Email</th>
-                    <th>Name</th>
-                    <th style="width: 70px;">Login Attempts</th>
-                    <th style="width: 100px;">Frozen Until</th>
-                    <th style="width: 60px;">Locked</th>
-                    <th style="width: 180px;">Last Seen</th>
-                    <th style="width: 80px;">Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="info">
-                </tr>
-                <?php if (count($dealer->getUsers()) > 0) : ?>
-                    <?php foreach ($dealer->getUsers() as $user) : ?>
-                        <tr>
-                            <td><?= $user->email; ?></td>
-                            <td><?= $user->firstname; ?> <?= $user->lastname; ?></td>
-                            <td style="text-align: center;"><?= $user->loginAttempts; ?></td>
-                            <td><?= ($user->isFrozen()) ? $user->frozenUntil : ""; ?></td>
-                            <td style="text-align: center;"><?= ($user->locked) ? "Yes" : "No"; ?></td>
-                            <td>
-                                <span class="js-tooltip" data-toggle="tooltip" title="<?= $user->lastSeen ?>"><i class="fa fa-fw fa-clock-o"></i> <?= ($user->lastSeen === null) ? "Never" : (new \Carbon\Carbon($user->lastSeen))->diffForHumans(); ?></span>
-                            </td>
-                            <td>
-                                <div class="btn-group btn-group-xs">
-                                    <?php if ($user->id == 1 && $this->identity()->id !== 1) : ?>
-                                        <span class="btn btn-warning btn-mini disabled"><i class="glyphicon glyphicon-pencil"></i></span>
-                                    <?php else : ?>
-                                        <a class="btn btn-warning btn-mini" title="Edit User" href="<?= $this->url(array('id' => $user->id, 'dealerId' => $dealer->id), 'admin.dealers.users.edit') ?>">
-                                            <i class="glyphicon glyphicon-pencil"></i></a>
-                                        <?php if ($user->id == 1) : ?>
-                                            <span class="btn btn-danger btn-mini disabled"><i class="glyphicon glyphicon-trash"></i></span>
-                                        <?php else : ?>
-                                            <a class="btn btn-danger btn-mini" title="Delete User" href="<?= $this->url(array('id' => $user->id, 'dealerId' => $dealer->id), 'admin.users.delete') ?>"><i class="glyphicon glyphicon-trash"></i></a>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else : ?>
-                    <tr class="warning">
-                        <td colspan="8">No users added yet.</td>
-                    </tr>
-                <?php endif; ?>
-                </tbody>
-            </table>
-
         </div>
-
-    </div>
-    <div class="well">
-        <a class="btn btn-default" href="<?= $this->url(array(), 'admin.dealers') ?>">
-            <i class="glyphicon glyphicon-arrow-left"></i>
-            Go Back
-        </a>
     </div>
 </div>

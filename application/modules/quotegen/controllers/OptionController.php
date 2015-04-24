@@ -22,7 +22,7 @@ class Quotegen_OptionController extends Action
     {
         // Get all current items in categories table
         $optionMapper = OptionMapper::getInstance();
-        $paginator    = new Zend_Paginator(new My_Paginator_MapperAdapter($optionMapper, array('dealerId = ?' => Zend_Auth::getInstance()->getIdentity()->dealerId)));
+        $paginator    = new Zend_Paginator(new My_Paginator_MapperAdapter($optionMapper, ['dealerId = ?' => Zend_Auth::getInstance()->getIdentity()->dealerId]));
 
         // Set current page
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
@@ -40,9 +40,9 @@ class Quotegen_OptionController extends Action
 
         if (!$optionId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'warning' => 'Please select an option to delete first.'
-            ));
+            ]);
             $this->redirectToRoute('quotes.category-options');
         }
 
@@ -51,17 +51,17 @@ class Quotegen_OptionController extends Action
 
         if (!$option)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'There was an error finding that option to delete.'
-            ));
+            ]);
             $this->redirectToRoute('quotes.category-options');
         }
         // If we are trying to access a option from another dealer, kick them back
         else if ($option->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'You do not have permission to access this.'
-            ));
+            ]);
             // Redirect
             $this->redirectToRoute('quotes.category-options');
         }
@@ -81,9 +81,9 @@ class Quotegen_OptionController extends Action
                     OptionCategoryMapper::getInstance()->deleteByOptionId($option->id);
                     $optionMapper->delete($option);
 
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'success' => "Option  {$this->view->escape($option->name)} was deleted successfully."
-                    ));
+                    ]);
                     $this->redirectToRoute('quotes.category-options');
                 }
             }
@@ -132,15 +132,15 @@ class Quotegen_OptionController extends Action
                             $optionCategory->categoryId = $categoryId;
                             OptionCategoryMapper::getInstance()->insert($optionCategory);
                         }
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'success' => "Option {$values['name']} Created"
-                        ));
+                        ]);
                         if ($page == "options")
                         {
                             // User has cancelled. Go back to the edit page
-                            $this->redirectToRoute('hardware-library.all-devices.options', array(
+                            $this->redirectToRoute('hardware-library.all-devices.options', [
                                 'id' => $id
-                            ));
+                            ]);
                         }
                         else
                         {
@@ -155,9 +155,9 @@ class Quotegen_OptionController extends Action
                 }
                 catch (Exception $e)
                 {
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'danger' => $e->getMessage()
-                    ));
+                    ]);
                 }
             }
             else // Cancel was hit: redirect user
@@ -165,9 +165,9 @@ class Quotegen_OptionController extends Action
                 if ($page == "options")
                 {
                     // User has cancelled. Go back to the edit page
-                    $this->redirectToRoute('hardware-library.all-devices.options', array(
+                    $this->redirectToRoute('hardware-library.all-devices.options', [
                         'id' => $id
-                    ));
+                    ]);
                 }
                 else
                 {
@@ -177,14 +177,14 @@ class Quotegen_OptionController extends Action
             }
         }
         // Add form to page
-        $form->setDecorators(array(
-            array(
+        $form->setDecorators([
+            [
                 'ViewScript',
-                array(
+                [
                     'viewScript' => 'forms/quotegen/option-form.phtml',
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
 
         $this->view->form = $form;
     }
@@ -196,9 +196,9 @@ class Quotegen_OptionController extends Action
         // If not idea is set then back to index page
         if (!$optionId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'warning' => 'Please select an option first.'
-            ));
+            ]);
             // Redirect
             $this->redirectToRoute('quotes.category-options');
         }
@@ -213,9 +213,9 @@ class Quotegen_OptionController extends Action
         // If we are trying to access a option from another dealer, kick them back
         if ($option && $option->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'You do not have permission to access this.'
-            ));
+            ]);
             // Redirect
             $this->redirectToRoute('quotes.category-options');
         }
@@ -251,7 +251,7 @@ class Quotegen_OptionController extends Action
                         $optionCategory           = new OptionCategoryModel();
                         $optionCategory->optionId = $option->id;
 
-                        $categoryIds [] = array();
+                        $categoryIds [] = [];
                         /* @var $category CategoryModel */
                         foreach ($option->getCategories() as $category)
                         {
@@ -276,9 +276,9 @@ class Quotegen_OptionController extends Action
                             }
                         }
                         $optionMapper->save($option, $optionId);
-                        $this->_flashMessenger->addMessage(array(
+                        $this->_flashMessenger->addMessage([
                             'success' => "Category setting was updated successfully."
-                        ));
+                        ]);
 
                         $this->redirectToRoute('quotes.category-options');
                     }
@@ -289,9 +289,9 @@ class Quotegen_OptionController extends Action
                 }
                 catch (InvalidArgumentException $e)
                 {
-                    $this->_flashMessenger->addMessage(array(
+                    $this->_flashMessenger->addMessage([
                         'danger' => $e->getMessage()
-                    ));
+                    ]);
                 }
             }
             else // Client hit cancel, redirect
@@ -302,14 +302,14 @@ class Quotegen_OptionController extends Action
         }
 
         // Add form to page
-        $form->setDecorators(array(
-            array(
+        $form->setDecorators([
+            [
                 'ViewScript',
-                array(
+                [
                     'viewScript' => 'forms/quotegen/option-form.phtml',
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
 
         $this->view->form = $form;
     }

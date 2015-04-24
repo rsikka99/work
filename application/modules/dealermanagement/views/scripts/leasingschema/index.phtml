@@ -5,9 +5,9 @@ use MPSToolbox\Legacy\Models\UserModel;
 ?>
 <div class="container">
     <div class="clearfix">
-        <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url(array(), 'company.leasing-schema.create') ?>">
+        <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url([], 'company.leasing-schema.create') ?>">
             <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
-        <a class="btn btn-warning pull-right btn-sm" href="<?= $this->url(array(), 'company.leasing-schema.import-leasing-rate') ?>">Import from file</a>
+        <a class="btn btn-warning pull-right btn-sm" href="<?= $this->url([], 'company.leasing-schema.import-leasing-rate') ?>">Import from file</a>
     </div>
     <?php if (isset($this->leasingSchemas) && count($this->leasingSchemas) > 0) : ?>
         <table class="table table-striped table-condensed table-bordered">
@@ -26,9 +26,9 @@ use MPSToolbox\Legacy\Models\UserModel;
                     <td><?= $leasingSchema->name; ?></td>
                     <td>
                         <div class="btn-group btn-group-justified btn-group-sm">
-                            <a class="btn btn-warning" title="Edit Leasing Rate" href="<?= $this->url(array('leasingSchemaId' => $leasingSchema->id), 'company.leasing-schema.edit') ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                            <a class="btn btn-danger" title="Delete Leasing Rate" href="<?= $this->url(array('leasingSchemaId' => $leasingSchema->id), 'company.leasing-schema.delete') ?>"><i class="glyphicon glyphicon-trash"></i></a>
-                            <a class="btn btn-primary" title="Update Leasing Rate" href="<?= $this->url(array('leasingSchemaId' => $leasingSchema->id), 'company.leasing-schema.view') ?>"><i class="glyphicon glyphicon-cog"></i></a>
+                            <a class="btn btn-warning" title="Edit Leasing Rate" href="<?= $this->url(['leasingSchemaId' => $leasingSchema->id], 'company.leasing-schema.edit') ?>"><i class="glyphicon glyphicon-pencil"></i></a>
+                            <a class="btn btn-danger" title="Delete Leasing Rate" href="<?= $this->url(['leasingSchemaId' => $leasingSchema->id], 'company.leasing-schema.delete') ?>"><i class="glyphicon glyphicon-trash"></i></a>
+                            <a class="btn btn-primary" title="Update Leasing Rate" href="<?= $this->url(['leasingSchemaId' => $leasingSchema->id], 'company.leasing-schema.view') ?>"><i class="glyphicon glyphicon-cog"></i></a>
                         </div>
                     </td>
                 </tr>

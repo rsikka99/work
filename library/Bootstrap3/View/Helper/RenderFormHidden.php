@@ -17,14 +17,14 @@ class RenderFormHidden extends RenderFormAbstract
      *
      * @return string
      */
-    public function RenderFormHidden (\Zend_Form_Element $element, $elementClasses = array())
+    public function RenderFormHidden (\Zend_Form_Element $element, $elementClasses = [])
     {
-        $html = array();
+        $html = [];
         if ($element instanceof \Zend_Form_Element_Hidden)
         {
             if (!is_array($elementClasses))
             {
-                $elementClasses = array($elementClasses);
+                $elementClasses = [$elementClasses];
             }
 
             $attributes = $element->getAttribs();
@@ -37,7 +37,7 @@ class RenderFormHidden extends RenderFormAbstract
              *  Prep attributes
              */
             $attributes['class']  = $this->processClasses($attributes, $elementClasses);
-            $serializedAttributes = $this->serializeAttributes($attributes, array('options'));
+            $serializedAttributes = $this->serializeAttributes($attributes, ['options']);
             $element->setAttribs($attributes);
 
             $html [] = sprintf(

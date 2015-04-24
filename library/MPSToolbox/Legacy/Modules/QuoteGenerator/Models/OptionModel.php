@@ -115,7 +115,7 @@ class OptionModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"          => $this->id,
             "dealerId"    => $this->dealerId,
             "name"        => $this->name,
@@ -123,7 +123,7 @@ class OptionModel extends My_Model_Abstract
             "cost"        => $this->cost,
             "oemSku"      => $this->oemSku,
             "dealerSku"   => $this->dealerSku,
-        );
+        ];
     }
 
     /**

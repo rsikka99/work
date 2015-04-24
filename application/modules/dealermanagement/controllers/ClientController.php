@@ -25,7 +25,7 @@ class Dealermanagement_ClientController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = array('Your Clients', 'Company');
+        $this->_pageTitle = ['Your Clients', 'Company'];
         // Display all of the clients
         $mapper    = ClientMapper::getInstance();
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper, UserMapper::getInstance()->getWhereDealerId(Zend_Auth::getInstance()->getIdentity()->dealerId)));
@@ -44,22 +44,22 @@ class Dealermanagement_ClientController extends Action
      */
     public function deleteAction ()
     {
-        $this->_pageTitle = array('Delete Client', 'Your Clients', 'Company');
+        $this->_pageTitle = ['Delete Client', 'Your Clients', 'Company'];
         $clientId         = $this->_getParam('id', false);
         $dealerId         = Zend_Auth::getInstance()->getIdentity()->dealerId;
         if (!$clientId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'warning' => 'Please select a client to delete first.'
-            ));
+            ]);
             $this->redirectToRoute('company.clients');
         }
         $client = ClientMapper::getInstance()->find($clientId);
         if ($client && $client->dealerId != $dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'Insufficient Privilege: You cannot delete this client.'
-            ));
+            ]);
             $this->redirectToRoute('company.clients');
         }
 
@@ -67,9 +67,9 @@ class Dealermanagement_ClientController extends Action
         $client       = $clientMapper->find($clientId);
         if (!$client)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'There was an error selecting the client to delete.'
-            ));
+            ]);
             $this->redirectToRoute('company.clients');
         }
 
@@ -98,11 +98,11 @@ class Dealermanagement_ClientController extends Action
                     catch (Exception $e)
                     {
                         throw new Exception("Passing exception up the chain.", 0, $e);
-                        $this->_flashMessenger->addMessage(array('danger' => "Client {$client->companyName} cannot be deleted since there are  quote(s) attached."));
+                        $this->_flashMessenger->addMessage(['danger' => "Client {$client->companyName} cannot be deleted since there are  quote(s) attached."]);
                         $this->redirectToRoute('company.clients');
                     }
 
-                    $this->_flashMessenger->addMessage(array('success' => "Client  {$client->companyName} was deleted successfully."));
+                    $this->_flashMessenger->addMessage(['success' => "Client  {$client->companyName} was deleted successfully."]);
                     $this->redirectToRoute('company.clients');
                 }
             }
@@ -119,7 +119,7 @@ class Dealermanagement_ClientController extends Action
      */
     public function createAction ()
     {
-        $this->_pageTitle = array('Create Client', 'Your Clients', 'Company');
+        $this->_pageTitle = ['Create Client', 'Your Clients', 'Company'];
         $clientService    = new ClientService();
         if ($this->getRequest()->isPost())
         {
@@ -143,19 +143,19 @@ class Dealermanagement_ClientController extends Action
 
             if ($clientId)
             {
-                $this->_flashMessenger->addMessage(array(
+                $this->_flashMessenger->addMessage([
                     'success' => "Client successfully created."
-                ));
+                ]);
                 // Redirect with client id so that the client is preselected
-                $this->redirectToRoute('company.clients', array(
+                $this->redirectToRoute('company.clients', [
                     'clientId' => $clientId
-                ));
+                ]);
             }
             else
             {
-                $this->_flashMessenger->addMessage(array(
+                $this->_flashMessenger->addMessage([
                     'danger' => "Please correct the errors below."
-                ));
+                ]);
             }
         }
 
@@ -164,7 +164,7 @@ class Dealermanagement_ClientController extends Action
 
     public function editAction ()
     {
-        $this->_pageTitle = array('Edit Client', 'Your Clients', 'Company');
+        $this->_pageTitle = ['Edit Client', 'Your Clients', 'Company'];
         // Get the passed client id
         $clientId = $this->_getParam('id', false);
         $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
@@ -172,9 +172,9 @@ class Dealermanagement_ClientController extends Action
         $client = ClientMapper::getInstance()->find($clientId);
         if ($client && $client->dealerId != $dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'Insufficient Privilege: You cannot edit this client.'
-            ));
+            ]);
             $this->redirectToRoute('company.clients');
         }
         // Start the client service
@@ -207,19 +207,19 @@ class Dealermanagement_ClientController extends Action
 
             if ($clientId)
             {
-                $this->_flashMessenger->addMessage(array(
+                $this->_flashMessenger->addMessage([
                     'success' => "Client {$client->companyName} successfully updated."
-                ));
+                ]);
                 // Redirect with client id so that the client is preselected
-                $this->redirectToRoute('company.clients', array(
+                $this->redirectToRoute('company.clients', [
                     'clientId' => $clientId
-                ));
+                ]);
             }
             else
             {
-                $this->_flashMessenger->addMessage(array(
+                $this->_flashMessenger->addMessage([
                     'danger' => "Please correct the errors below."
-                ));
+                ]);
             }
         }
         $this->view->form = $clientService->getForm();
@@ -230,7 +230,7 @@ class Dealermanagement_ClientController extends Action
      */
     public function viewAction ()
     {
-        $this->_pageTitle = array('Viewing Client', 'Your Clients', 'Company');
+        $this->_pageTitle = ['Viewing Client', 'Your Clients', 'Company'];
 
         $this->view->client = ClientMapper::getInstance()->find($this->_getParam('id', false));
         $dealerId           = Zend_Auth::getInstance()->getIdentity()->dealerId;
@@ -240,9 +240,9 @@ class Dealermanagement_ClientController extends Action
         }
         if ($this->view->client && $this->view->client->dealerId != $dealerId)
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 'danger' => 'Insufficient Privilege: You cannot view this client.'
-            ));
+            ]);
             $this->redirectToRoute('company.clients');
         }
         $this->view->address = AddressMapper::getInstance()->find($this->_getParam('id', false));

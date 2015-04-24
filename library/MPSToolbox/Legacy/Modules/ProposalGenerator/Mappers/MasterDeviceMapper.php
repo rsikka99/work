@@ -36,7 +36,7 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
      */
     protected $_defaultDbTable = 'MPSToolbox\Legacy\Modules\ProposalGenerator\DbTables\MasterDeviceDbTable';
 
-    protected $columnAliases = array();
+    protected $columnAliases = [];
 
     /**
      * Gets an instance of the mapper
@@ -50,9 +50,9 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
 
     function __construct ()
     {
-        $this->columnAliases = array(
+        $this->columnAliases = [
             'deviceName' => "CONCAT(manufacturers.displayname, \" \", master_devices.modelName)",
-        );
+        ];
     }
 
 
@@ -104,9 +104,9 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
-            "{$this->col_id} = ?" => $primaryKey
-        ));
+        $rowsAffected = $this->getDbTable()->update($data, [
+            "{$this->col_id} = ?" => $primaryKey,
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -127,15 +127,15 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof MasterDeviceModel)
         {
-            $whereClause = array(
-                "{$this->col_id} = ?" => $object->id
-            );
+            $whereClause = [
+                "{$this->col_id} = ?" => $object->id,
+            ];
         }
         else
         {
-            $whereClause = array(
-                "{$this->col_id} = ?" => $object
-            );
+            $whereClause = [
+                "{$this->col_id} = ?" => $object,
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -220,7 +220,7 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new MasterDeviceModel($row->toArray());
@@ -243,9 +243,9 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
-            "{$this->col_id} = ?" => $id
-        );
+        return [
+            "{$this->col_id} = ?" => $id,
+        ];
     }
 
     /**
@@ -260,7 +260,7 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllLikePrinterModel ($criteria, $order = null, $count = 25, $offset = null)
     {
-        return $this->fetchAll(array("{$this->col_modelName} LIKE ?" => "%{$criteria}%"), $order, $count, $offset);
+        return $this->fetchAll(["{$this->col_modelName} LIKE ?" => "%{$criteria}%"], $order, $count, $offset);
     }
 
     /**
@@ -275,7 +275,7 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllByManufacturerId ($criteria, $order = null, $count = 25, $offset = null)
     {
-        return $this->fetchAll(array("{$this->col_manufacturerId} = ?" => $criteria), $order, $count, $offset);
+        return $this->fetchAll(["{$this->col_manufacturerId} = ?" => $criteria], $order, $count, $offset);
     }
 
     /**
@@ -291,10 +291,10 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
     public function fetchAllByManufacturerFullName ($criteria, $order = null, $count = 25, $offset = null)
     {
         $manufacturerMapper = ManufacturerMapper::getInstance();
-        $manufacturer       = $manufacturerMapper->fetch(array("{$manufacturerMapper->col_fullName} = ?" => $criteria));
+        $manufacturer       = $manufacturerMapper->fetch(["{$manufacturerMapper->col_fullName} = ?" => $criteria]);
         if ($manufacturer)
         {
-            return $this->fetchAll(array("{$this->col_manufacturerId} = ?" => $manufacturer->id), $order, $count, $offset);
+            return $this->fetchAll(["{$this->col_manufacturerId} = ?" => $manufacturer->id], $order, $count, $offset);
         }
 
         return false;
@@ -319,7 +319,7 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
                           ->getAdapter()
                           ->fetchAll($sql);
 
-        $entries = array();
+        $entries = [];
         foreach ($resultSet as $row)
         {
             $object = new MasterDeviceModel($row);
@@ -364,7 +364,7 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
         $masterDevicesTableName = MasterDeviceMapper::getInstance()->getTableName();
         $manufacturerTableName  = ManufacturerMapper::getInstance()->getTableName();
         $deviceTableName        = DeviceMapper::getInstance()->getTableName();
-        $manufacturerColumns    = array();
+        $manufacturerColumns    = [];
 
         if ($justCount)
         {
@@ -375,13 +375,13 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
             // Make sure we don't select any other columns
             if ($onlyQuoteDevices)
             {
-                $deviceColumns       = array('count' => 'COUNT(*)');
-                $masterDeviceColumns = array();
+                $deviceColumns       = ['count' => 'COUNT(*)'];
+                $masterDeviceColumns = [];
             }
             else
             {
-                $masterDeviceColumns = array('count' => 'COUNT(*)');
-                $deviceColumns       = array();
+                $masterDeviceColumns = ['count' => 'COUNT(*)'];
+                $deviceColumns       = [];
             }
 
         }
@@ -390,24 +390,24 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
             /**
              * Setup the columns we want to select
              */
-            $masterDeviceColumns = array(
+            $masterDeviceColumns = [
                 'id',
                 'modelName',
-                'isSystemDevice'
-            );
-            $deviceColumns       = array(
+                'isSystemDevice',
+            ];
+            $deviceColumns       = [
                 'oemSku',
-                'dealerSku'
-            );
-            $manufacturerColumns = array(
-                'displayname'
-            );
+                'dealerSku',
+            ];
+            $manufacturerColumns = [
+                'displayname',
+            ];
         }
 
         /**
          * Build our where array
          */
-        $whereClause = array();
+        $whereClause = [];
         foreach ($filters as $filter)
         {
             $whereColumn = $this->getColumn($filter->getFilterIndex());
@@ -522,7 +522,7 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
         $manufacturerTableName       = ManufacturerMapper::getInstance()->getTableName();
         $dealerMasterDeviceTableName = DealerMasterDeviceAttributeMapper::getInstance()->getTableName();
 
-        $whereClause = array();
+        $whereClause = [];
         if (strcasecmp($filterByColumn, 'modelName') === 0 && $filterValue !== '')
         {
             $whereClause ["CONCAT({$manufacturerTableName}.fullname, \" \", {$masterDevicesTableName}.modelName) LIKE ?"] = "%{$filterValue}%";
@@ -534,25 +534,25 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
 
         if ($justCount)
         {
-            $masterDeviceColumns       = array('count' => 'COUNT(*)');
+            $masterDeviceColumns       = ['count' => 'COUNT(*)'];
             $manufacturerColumns       = null;
             $dealerMasterDeviceColumns = null;
         }
         else
         {
-            $masterDeviceColumns       = array(
+            $masterDeviceColumns       = [
                 'id',
                 'manufacturerId',
-                'modelName'
-            );
-            $manufacturerColumns       = array(
+                'modelName',
+            ];
+            $manufacturerColumns       = [
                 'fullname',
-                'displayname'
-            );
-            $dealerMasterDeviceColumns = array(
+                'displayname',
+            ];
+            $dealerMasterDeviceColumns = [
                 'laborCostPerPage',
-                'partsCostPerPage'
-            );
+                'partsCostPerPage',
+            ];
         }
 
         /*
@@ -613,7 +613,7 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
 
             $zendDbStatement     = $db->query($zendDbSelect);
             $masterDeviceResults = $zendDbStatement->fetchAll();
-            $masterDevices       = array();
+            $masterDevices       = [];
             foreach ($masterDeviceResults as $masterDeviceResult)
             {
                 $object = new MasterDeviceModel($masterDeviceResult);
@@ -653,9 +653,9 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
             $modelName = "%{$modelName}%";
         }
 
-        $whereClause = array(
-            "{$this->col_modelName} LIKE ?" => $modelName
-        );
+        $whereClause = [
+            "{$this->col_modelName} LIKE ?" => $modelName,
+        ];
 
         if ($manufacturerId !== null)
         {
@@ -679,7 +679,7 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
      */
     public function searchByName ($searchTerm, $manufacturerId = null)
     {
-        $masterDeviceSearchResults = array();
+        $masterDeviceSearchResults = [];
         $manufacturerMapper        = ManufacturerMapper::getInstance();
 
         $returnLimit = 10;
@@ -701,28 +701,28 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
         $select = $db->select();
         $select
             ->from(
-                array(
-                    'md' => $this->getTableName()
-                ),
-                array(
+                [
+                    'md' => $this->getTableName(),
+                ],
+                [
                     'masterDeviceId'             => $this->col_id,
                     'masterDeviceModelName'      => $this->col_modelName,
                     'masterDeviceFullDeviceName' => $fullDeviceNameUsingDisplayManufacturerName,
                     'masterDeviceTonerConfigId'  => $this->col_tonerConfigId,
                     'masterDeviceIsMfp'          => $this->col_isCopier,
                     'masterDeviceIsColor'        => "IF({$this->col_tonerConfigId} = 1, true, false)",
-                )
+                ]
             )
             ->joinLeft(
-                array(
-                    'm' => $manufacturerMapper->getTableName()
-                ),
+                [
+                    'm' => $manufacturerMapper->getTableName(),
+                ],
                 "m.{$manufacturerMapper->col_id} = md.{$this->col_manufacturerId}",
-                array(
+                [
                     'manufacturerId'          => $manufacturerMapper->col_id,
                     'manufacturerDisplayName' => $manufacturerMapper->col_displayName,
                     'manufacturerFullName'    => $manufacturerMapper->col_fullName,
-                )
+                ]
             )
             ->where("({$fullDeviceNameUsingDisplayManufacturerName} LIKE :searchTerm OR {$fullDeviceNameUsingFullManufacturerName} LIKE :searchTerm)")
             ->where("m.{$manufacturerMapper->col_isDeleted} = 0")
@@ -737,9 +737,9 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
             $select->where("m.{$manufacturerMapper->col_id} = ?", $manufacturerId);
         }
 
-        $stmt = $db->query($select, array(
+        $stmt = $db->query($select, [
             'searchTerm' => $searchTerm,
-        ));
+        ]);
 
         foreach ($stmt->fetchAll() as $result)
         {
@@ -770,17 +770,17 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
         $db       = Zend_Db_Table::getDefaultAdapter();
         $dealerId = $db->quote($dealerId, 'INT');
         $select   = $db->select()
-                       ->from(array('pmd' => 'master_devices'), array(
+                       ->from(['pmd' => 'master_devices'], [
                            'pmd.*',
-                       ))
-                       ->joinLeft(array('dmda' => 'dealer_master_device_attributes'), "pmd.id = dmda.masterDeviceId AND dmda.dealerId = {$dealerId}", array(
+                       ])
+                       ->joinLeft(['dmda' => 'dealer_master_device_attributes'], "pmd.id = dmda.masterDeviceId AND dmda.dealerId = {$dealerId}", [
                            "calculatedPartsCostPerPage"    => "COALESCE(dmda.partsCostPerPage, NULL)",
                            "calculatedLaborCostPerPage"    => "COALESCE(dmda.laborCostPerPage, NULL)",
                            "isUsingDealerPartsCostPerPage" => "(dmda.partsCostPerPage IS NOT NULL)",
                            "isUsingDealerLaborCostPerPage" => "(dmda.laborCostPerPage IS NOT NULL)",
                            "isUsingReportLaborCostPerPage" => "(dmda.laborCostPerPage IS NULL)",
-                           "isUsingReportPartsCostPerPage" => "(dmda.partsCostPerPage IS NULL)"
-                       ))
+                           "isUsingReportPartsCostPerPage" => "(dmda.partsCostPerPage IS NULL)",
+                       ])
                        ->where("pmd.id = ? ", $masterDeviceId);
 
         $stmt = $db->query($select);
@@ -811,28 +811,25 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
         $db->beginTransaction();
 
         $select = $db->select()
-                     ->from(array(
-                         'md' => 'master_devices'
-                     ), array(
+                     ->from([
+                         'md' => 'master_devices',
+                     ], [
                          'id AS master_id',
                          'modelName',
-                     ))
-                     ->joinLeft(array(
-                         'm' => 'manufacturers'
-                     ), 'm.id = md.manufacturerId', array(
-                         'fullname'
-                     ))
-                     ->joinLeft(array(
-                             'dmda' => 'dealer_master_device_attributes'
-                         ), "dmda.masterDeviceId = md.id AND dmda.dealerId = {$dealerId}",
-                         array(
-                             'laborCostPerPage',
-                             'partsCostPerPage',
-                         ))
-                     ->order(array(
+                     ])
+                     ->joinLeft([
+                         'm' => 'manufacturers',
+                     ], 'm.id = md.manufacturerId', [
+                         'fullname',
+                     ])
+                     ->joinLeft(
+                         ['dmda' => 'dealer_master_device_attributes'],
+                         "dmda.masterDeviceId = md.id AND dmda.dealerId = {$dealerId}",
+                         ['laborCostPerPage', 'partsCostPerPage'])
+                     ->order([
                          'm.fullname',
                          'md.modelName',
-                     ));
+                     ]);
 
         if ($manufacturerId > 0)
         {
@@ -841,17 +838,17 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
 
         $stmt      = $db->query($select);
         $result    = $stmt->fetchAll();
-        $fieldList = array();
+        $fieldList = [];
 
         foreach ($result as $value)
         {
-            $fieldList [] = array(
+            $fieldList [] = [
                 $value ['master_id'],
                 $value ['fullname'],
                 $value ['modelName'],
                 $value ['laborCostPerPage'],
                 $value ['partsCostPerPage'],
-            );
+            ];
         }
 
         return $fieldList;
@@ -870,39 +867,41 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
         $db->beginTransaction();
         $dealerId  = $db->quote($dealerId, 'INT');
         $select    = $db->select()
-                        ->from(array(
-                            'md' => 'master_devices'
-                        ), array(
-                            'id AS master_id',
-                            'modelName',
-                            'isDuplex',
-                            'isCopier',
-                            'isCapableOfReportingTonerLevels',
-                            'ppmBlack',
-                            'ppmColor',
-                            'wattsPowerNormal',
-                            'wattsPowerIdle',
-                            'IF(jcmd.masterDeviceId IS NULL,0,1) AS jitCompatible',
-                        ))
-                        ->joinLeft(array(
-                            'm' => 'manufacturers'
-                        ), 'm.id = md.manufacturerId', array(
-                            'fullname'
-                        ))
-                        ->joinLeft(array(
-                            'jcmd' => 'jit_compatible_master_devices'
-                        ), "jcmd.dealerId = {$dealerId} AND jcmd.masterDeviceId = md.id", array())
-                        ->order(array(
+                        ->from(
+                            ['md' => 'master_devices',],
+                            [
+                                'id AS master_id',
+                                'modelName',
+                                'isDuplex',
+                                'isCopier',
+                                'isCapableOfReportingTonerLevels',
+                                'ppmBlack',
+                                'ppmColor',
+                                'wattsPowerNormal',
+                                'wattsPowerIdle',
+                                'IF(jcmd.masterDeviceId IS NULL,0,1) AS jitCompatible',
+                            ])
+                        ->joinLeft(
+                            ['m' => 'manufacturers'],
+                            'm.id = md.manufacturerId',
+                            ['fullname']
+                        )
+                        ->joinLeft(
+                            ['jcmd' => 'jit_compatible_master_devices'],
+                            "jcmd.dealerId = {$dealerId} AND jcmd.masterDeviceId = md.id",
+                            []
+                        )
+                        ->order([
                             'm.fullname',
                             'md.modelName',
-                        ));
+                        ]);
         $stmt      = $db->query($select);
         $result    = $stmt->fetchAll();
-        $fieldList = array();
+        $fieldList = [];
 
         foreach ($result as $value)
         {
-            $fieldList [] = array(
+            $fieldList [] = [
                 $value ['master_id'],
                 $value ['fullname'],
                 $value ['modelName'],
@@ -913,8 +912,8 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
                 $value ['ppmColor'],
                 $value ['wattsPowerNormal'],
                 $value ['wattsPowerIdle'],
-                $value ['jitCompatible']
-            );
+                $value ['jitCompatible'],
+            ];
         }
 
         return $fieldList;

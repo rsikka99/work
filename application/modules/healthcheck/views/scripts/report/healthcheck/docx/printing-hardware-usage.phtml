@@ -25,17 +25,17 @@ $section->addText(sprintf('You currently have %1$s networked printing devices th
 
 $imageTable = $section->addTable($this->styles->tables->tripleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell1)->addImage($graphs ['AverageMonthlyPagesBarGraph'], array('align' => 'center'));
-$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell2)->addImage($graphs ['AverageMonthlyPagesPerEmployeeBarGraph'], array('align' => 'center'));
-$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell3)->addImage($graphs ['EmployeesPerDeviceBarGraph'], array('align' => 'center'));
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell1)->addImage($graphs ['AverageMonthlyPagesBarGraph'], ['align' => 'center']);
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell2)->addImage($graphs ['AverageMonthlyPagesPerEmployeeBarGraph'], ['align' => 'center']);
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell3)->addImage($graphs ['EmployeesPerDeviceBarGraph'], ['align' => 'center']);
 
 $section->addTitle('Hardware Utilization and Capacity', 2);
 
 $section->addText('Based on information collected with our monitoring software, we detected the following number of networked printers and have estimated your average page volumes:');
-$cellWidths = array(
+$cellWidths = [
     6018,
     3009
-);
+];
 
 
 $estimatedTonerCostsTable = $section->addTable($this->styles->tables->estimatedTonerCosts->tablestyle);
@@ -52,18 +52,18 @@ $estimatedTonerCostsTable->addRow();
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText('Average number of pages per device, per month', null, null);
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText(number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()), null, 'nospacing_rightalign');
 $section->addTextBreak();
-$section->addText('A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer\'s stated yield of a single print cartridge. In essence, you should not have to change the same toner cartridge more than once per month.', null, array('spaceAfter' => 150));
-$section->addText('Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices. As a guide we suggest that total company printing should range between 30 and 50% of maximum fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets.', null, array('spaceAfter' => 150));
+$section->addText('A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer\'s stated yield of a single print cartridge. In essence, you should not have to change the same toner cartridge more than once per month.', null, ['spaceAfter' => 150]);
+$section->addText('Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices. As a guide we suggest that total company printing should range between 30 and 50% of maximum fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets.', null, ['spaceAfter' => 150]);
 $section->addText('Most companies find that they have more printing hardware than they need. The following chart displays your estimated monthly page volume compared to your maximum monthly page capacity.');
 
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['HardwareUtilizationCapacityBar'], array('align' => 'center'));
+$imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['HardwareUtilizationCapacityBar'], ['align' => 'center']);
 
 $imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['HardwareUtilizationCapacityPercent'], array('align' => 'center'));
+$imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['HardwareUtilizationCapacityPercent'], ['align' => 'center']);
 
 $section->addTextBreak();
 $section->addTitle('Underused and Overused Printing Devices', 2);
@@ -74,12 +74,12 @@ $section->addText('Overused printing devices risk having more frequent breakdown
 $section->addPageBreak();
 
 
-$cellWidths             = array(
+$cellWidths             = [
     4000,
     1805,
     1805,
     1805
-);
+];
 $lowestUtilizationTable = $section->addTable($this->styles->tables->utilization->tablestyle);
 $lowestUtilizationTable->addRow(null, $tcStyle->rowheader);
 $lowestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cellHeader)->addText('Lowest Utilization', 'bold_text', 'nospacing_centeralign');

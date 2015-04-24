@@ -22,7 +22,7 @@ class My_View_Helper_Navigation_Menu extends Zend_View_Helper_Navigation_Menu
      *
      * @return string
      */
-    public function renderMenu (Zend_Navigation_Container $container = null, array $options = array())
+    public function renderMenu (Zend_Navigation_Container $container = null, array $options = [])
     {
         return $this->applyBootstrapClassesAndIds(parent::renderMenu($container, $options));
     }

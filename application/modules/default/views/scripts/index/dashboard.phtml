@@ -42,12 +42,14 @@ $hasRmsUpload = $rmsUpload instanceof RmsUploadEntity;
                         <code><i class="fa fa-fw fa-file-text"></i> <?= $rmsUpload->fileName ?>
                         </code></a> uploaded
                     <i class="fa fa-fw fa-clock-o js-tooltip btn-link" title="<?= $rmsUpload->uploadDate->format('F j, Y h:i:s A') ?>"></i> <?= $rmsUpload->uploadDate->diffForHumans() ?>
-                    <small>(<a class="" href="<?= $this->url([], 'app.dashboard.change-upload') ?>">Change</a>)</small>
+                    <small>(<a class="" href="<?= $this->url([], 'app.dashboard.change-upload') ?>">Change</a>)
+                    </small>
                 </p>
             <?php else : ?>
                 <p>
                     <a href="<?= $this->url([], 'app.dashboard.select-upload') ?>" title="Select Upload" class="btn btn-primary"><i class="fa fa-fw fa-upload"></i>
-                        Select Upload</a> <small>Select an upload to unlock the other reports</small>
+                        Select Upload</a>
+                    <small>Select an upload to unlock the other reports</small>
                 </p>
             <?php endif; ?>
         </div>
@@ -315,7 +317,7 @@ $hasRmsUpload = $rmsUpload instanceof RmsUploadEntity;
     <?php if (My_Feature::canAccess(My_Feature::CLIENT_PRICING)) : ?>
         <h3>Client Pricing</h3>
         <div>There are currently <?= ClientTonerOrderMapper::getInstance()->jqgridFetchAllForClient($this->selectedClientId, Zend_auth::getInstance()->getIdentity()->dealerId, null, 10000, 0, null, null, true); ?> SKUs that this client has pricing for.
-            <a class="btn btn-xs btn-primary" href="<?= $this->url(array(), 'client.pricing'); ?>">Manage Client Pricing</a>
+            <a class="btn btn-xs btn-primary" href="<?= $this->url([], 'client.pricing'); ?>">Manage Client Pricing</a>
         </div>
     <?php endif; ?>
 </div>

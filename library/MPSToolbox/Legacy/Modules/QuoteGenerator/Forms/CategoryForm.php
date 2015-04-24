@@ -17,50 +17,36 @@ class CategoryForm extends Zend_Form
         // Set the method for the display form to POST
         $this->setMethod('POST');
 
-        $this->addElement('text', 'name', array(
+        $this->addElement('text', 'name', [
             'label'    => 'Name:',
             'required' => true,
+            'filters'  => ['StringTrim', 'StripTags'],
+        ]);
 
-            'filters'  => array(
-                'StringTrim',
-                'StripTags'
-            )
-        ));
-
-        $this->addElement('textarea', 'description', array(
+        $this->addElement('textarea', 'description', [
             'label'    => 'Description:',
             'required' => true,
             'style'    => 'height: 100px',
-            'filters'  => array(
-                'StringTrim',
-                'StripTags'
-            )
-        ));
+            'filters'  => ['StringTrim', 'StripTags'],
+        ]);
 
         // Add the submit button
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'ignore' => true,
             'label'  => 'Save'
-        ));
+        ]);
 
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'ignore'         => true,
             'label'          => 'Cancel',
             'formnovalidate' => true
-        ));
+        ]);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/quotegen/category-options-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/quotegen/category-options-form.phtml']]]);
     }
 
 }

@@ -49,7 +49,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
      */
     public function selectUploadAction ()
     {
-        $this->_pageTitle = array('Hardware Optimization', 'Select Upload');
+        $this->_pageTitle = ['Hardware Optimization', 'Select Upload'];
 
         $this->_navigation->setActiveStep(HardwareOptimizationStepsModel::STEP_FLEET_UPLOAD);
 
@@ -70,7 +70,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => 'The upload you selected is not valid.'));
+                    $this->_flashMessenger->addMessage(['danger' => 'The upload you selected is not valid.']);
                 }
             }
             else if (isset($postData['noUploads']))
@@ -96,7 +96,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
      */
     public function settingsAction ()
     {
-        $this->_pageTitle = array('Hardware Optimization', 'Settings');
+        $this->_pageTitle = ['Hardware Optimization', 'Settings'];
         $this->_navigation->setActiveStep(HardwareOptimizationStepsModel::STEP_SETTINGS);
 
         if ($this->getRequest()->isPost())
@@ -131,7 +131,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
      */
     public function optimizeAction ()
     {
-        $this->_pageTitle = array('Hardware Optimization', 'Optimize');
+        $this->_pageTitle = ['Hardware Optimization', 'Optimize'];
         // Mark the step we're on as active
         $this->_navigation->setActiveStep(HardwareOptimizationStepsModel::STEP_OPTIMIZE);
 
@@ -158,24 +158,24 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                     // Analyze the fleet. If it is successful we need to rebuild our form
                     if ($this->_analyzeFleet())
                     {
-                        $this->_flashMessenger->addMessage(array('success' => "We've optimized your fleet. Please review the changes before proceeding."));
+                        $this->_flashMessenger->addMessage(['success' => "We've optimized your fleet. Please review the changes before proceeding."]);
                         $this->redirectToRoute('hardwareoptimization.optimization');
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array('danger' => "There was an error saving your replacement choices."));
+                        $this->_flashMessenger->addMessage(['danger' => "There was an error saving your replacement choices."]);
                     }
                 }
                 else if ($form->getValue('ResetReplacements'))
                 {
                     if ($this->_resetReplacements())
                     {
-                        $this->_flashMessenger->addMessage(array('success' => "Device replacements have been reset."));
+                        $this->_flashMessenger->addMessage(['success' => "Device replacements have been reset."]);
                         $this->redirectToRoute('hardwareoptimization.optimization');
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array('danger' => "There was an error resetting your replacement choices."));
+                        $this->_flashMessenger->addMessage(['danger' => "There was an error resetting your replacement choices."]);
                     }
                 }
                 else if ($form->getValues('Cancel'))
@@ -218,12 +218,12 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             $colorMfpReplacementDevices = DeviceSwapMapper::getInstance()->getColorMfpReplacementDevices($this->_dealerId);
 
             $standardDeviceReplacement = new OptimizationStandardDeviceReplacementModel(
-                array(
+                [
                     'black'    => $blackReplacementDevices,
                     'blackmfp' => $blackMfpReplacementDevices,
                     'color'    => $colorReplacementDevices,
                     'colormfp' => $colorMfpReplacementDevices
-                ),
+                ],
                 $this->_dealerId,
                 $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->costThreshold,
                 $optimization->getCostPerPageSettingForDealer(),
@@ -239,12 +239,12 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             $colorMfpReplacementDevices = DeviceSwapMapper::getInstance()->getColorMfpReplacementDevices($this->_dealerId);
 
             $functionalityDeviceReplacement = new \MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationFunctionalityDeviceReplacementModel(
-                array(
+                [
                     'black'    => $blackReplacementDevices,
                     'blackmfp' => $blackMfpReplacementDevices,
                     'color'    => $colorReplacementDevices,
                     'colormfp' => $colorMfpReplacementDevices
-                ),
+                ],
                 $this->_dealerId,
                 $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->lossThreshold,
                 $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->costThreshold,
@@ -367,8 +367,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
         $hasReplacementDevice = ($replacementDevice instanceof MasterDeviceModel);
 
-        $device = array(
-            "deviceInstance" => array(
+        $device = [
+            "deviceInstance" => [
                 "deviceName"             => "{$deviceInstance->getMasterDevice()->getManufacturer()->fullname} {$deviceInstance->getMasterDevice()->modelName}",
                 "ipAddress"              => $deviceInstance->ipAddress,
                 "age"                    => $deviceInstance->getAge(),
@@ -391,14 +391,14 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 "ppmBlack"               => ($deviceInstance->getMasterDevice()->ppmBlack > 0) ? number_format($deviceInstance->getMasterDevice()->ppmBlack) : 'N/A',
                 "ppmColor"               => ($deviceInstance->getMasterDevice()->ppmColor > 0) ? number_format($deviceInstance->getMasterDevice()->ppmColor) : 'N/A',
                 "location"               => (strlen($deviceInstance->location) > 0) ? $deviceInstance->location : 'N/A',
-            ),
+            ],
             "hasReplacement" => (int)$hasReplacementDevice
-        );
+        ];
 
 
         if ($hasReplacementDevice)
         {
-            $device ["replacementDevice"] = array(
+            $device ["replacementDevice"] = [
                 "deviceName"            => "{$replacementDevice->getManufacturer()->fullname} {$replacementDevice->modelName}",
                 "age"                   => $replacementDevice->getAge(),
                 "isColor"               => (int)$replacementDevice->isColor(),
@@ -410,7 +410,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 "ppmBlack"              => ($replacementDevice->ppmBlack > 0) ? number_format($replacementDevice->ppmBlack) : 'N/A',
                 "ppmColor"              => ($replacementDevice->ppmColor > 0) ? number_format($replacementDevice->ppmColor) : 'N/A',
                 "reason"                => $deviceInstance->getReason($this->_hardwareOptimization->id)
-            );
+            ];
         }
 
         $this->sendJson($device);
@@ -472,7 +472,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             /**
              * REPLACE
              */
-            $deviceSwap = DeviceSwapMapper::getInstance()->find(array($replacementDeviceId, $this->_identity->dealerId));
+            $deviceSwap = DeviceSwapMapper::getInstance()->find([$replacementDeviceId, $this->_identity->dealerId]);
 
             if ($deviceSwap instanceof DeviceSwapModel)
             {
@@ -488,18 +488,18 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                     $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromePartsCostPerPage
                 );
 
-
                 $costDelta = $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer()) -
                              $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForReplacements(), $replacementMasterDevice);
 
                 if ($costDelta < $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->costThreshold)
                 {
-                    $hardwareOptimizationDeviceInstance->action = HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE;
-
-                    $costDelta = $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer()) -
-                                 $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForReplacements(), $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->blackToColorRatio);
+                    if ($replacementMasterDevice->isColor() && !$deviceInstance->getMasterDevice()->isColor())
+                    {
+                        $hardwareOptimizationDeviceInstance->action = HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE;
+                        $costDelta                                  = $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer()) -
+                                                                      $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForReplacements(), $replacementMasterDevice, $this->_hardwareOptimization->getClient()->getClientSettings()->optimizationSettings->blackToColorRatio);
+                    }
                 }
-
 
                 /**
                  * Update the reason to match the default
@@ -508,7 +508,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
                 $hardwareOptimizationDeviceInstance->deviceSwapReasonId = $deviceSwapReasonId;
 
-                $form                        = new DeviceSwapChoiceForm(array($deviceInstance), $this->_dealerId, $this->_hardwareOptimization->id);
+                $form                        = new DeviceSwapChoiceForm([$deviceInstance], $this->_dealerId, $this->_hardwareOptimization->id);
                 $deviceInstanceReasonElement = $form->getElement("deviceInstanceReason_" . $deviceInstanceId);
             }
             else
@@ -544,10 +544,11 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
                 $hardwareOptimizationDeviceInstance->deviceSwapReasonId = $deviceSwapReasonId;
 
-                $form                        = new DeviceSwapChoiceForm(array($deviceInstance), $this->_dealerId, $this->_hardwareOptimization->id);
+                $form                        = new DeviceSwapChoiceForm([$deviceInstance], $this->_dealerId, $this->_hardwareOptimization->id);
                 $deviceInstanceReasonElement = $form->getElement("deviceInstanceReason_" . $deviceInstanceId);
             }
         }
+
 
         /**
          * Save the data
@@ -585,14 +586,14 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             ],
             "costDelta"         => (float)$costDelta,
             "replaceReason"     => ($deviceInstanceReasonElement !== null) ? $deviceInstanceReasonElement->renderViewHelper() : " ",
-            "deviceActionCount" => array(
+            "deviceActionCount" => [
                 "keep"    => number_format(count($devicesGroupedByAction[HardwareOptimizationDeviceInstanceModel::ACTION_KEEP])),
                 "retire"  => number_format(count($devicesGroupedByAction[HardwareOptimizationDeviceInstanceModel::ACTION_RETIRE])),
                 "replace" => number_format(count($devicesGroupedByAction[HardwareOptimizationDeviceInstanceModel::ACTION_REPLACE])),
                 "upgrade" => number_format(count($devicesGroupedByAction[HardwareOptimizationDeviceInstanceModel::ACTION_UPGRADE])),
                 "dnr"     => number_format(count($devicesGroupedByAction[HardwareOptimizationDeviceInstanceModel::ACTION_DNR])),
                 "total"   => $optimization->getDevices()->purchasedDeviceInstances->getCount(),
-            ),
+            ],
         ]);
 
     }
@@ -619,12 +620,12 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         /*
          * Grab the incoming parameters
          */
-        $jqGridServiceParameters = array(
+        $jqGridServiceParameters = [
             'sidx' => $this->_getParam('sidx', 'device'),
             'sord' => $this->_getParam('sord', 'desc'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10)
-        );
+        ];
 
         $jqGridService->parseJQGridPagingRequest($jqGridServiceParameters);
 
@@ -736,7 +737,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             $this->sendJsonError("Error saving device reason. Please try again. #" . \Tangent\Logger\Logger::getUniqueId());
         }
 
-        $this->sendJson(array("success" => "Reason Saved!"));
+        $this->sendJson(["success" => "Reason Saved!"]);
     }
 
     /**

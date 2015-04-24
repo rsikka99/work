@@ -39,8 +39,8 @@ class GlobalDeviceConfigurationModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "deviceConfigurationId" => $this->deviceConfigurationId,
-        );
+        ];
     }
 }

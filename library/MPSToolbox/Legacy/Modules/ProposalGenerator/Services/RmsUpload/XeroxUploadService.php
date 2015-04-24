@@ -29,7 +29,7 @@ class XeroxUploadService extends AbstractRmsUploadService
      *
      * @var array
      */
-    protected $_columnMapping = array(
+    protected $_columnMapping = [
         'tag'           => 'assetId',
         'meter date 2'  => 'monitorStartDate',
         'meter date 1'  => 'monitorEndDate',
@@ -44,5 +44,5 @@ class XeroxUploadService extends AbstractRmsUploadService
         'total meter 2' => 'startMeterLife',
         'total meter 1' => 'endMeterLife',
         'location'      => 'location',
-    );
+    ];
 }

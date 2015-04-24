@@ -80,13 +80,13 @@ class DealerMasterDeviceAttributeModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "masterDeviceId"    => $this->masterDeviceId,
             "dealerId"          => $this->dealerId,
             "partsCostPerPage"  => $this->partsCostPerPage,
             "laborCostPerPage"  => $this->laborCostPerPage,
             "leaseBuybackPrice" => $this->leaseBuybackPrice,
-        );
+        ];
     }
 
     /**
@@ -107,7 +107,7 @@ class DealerMasterDeviceAttributeModel extends My_Model_Abstract
         }
         else
         {
-            if ($dealerMasterDeviceAttributeMapper->fetch($dealerMasterDeviceAttributeMapper->getWhereId(array($this->masterDeviceId, $this->dealerId))))
+            if ($dealerMasterDeviceAttributeMapper->fetch($dealerMasterDeviceAttributeMapper->getWhereId([$this->masterDeviceId, $this->dealerId])))
             {
                 $dealerMasterDeviceAttributeMapper->save($this);
             }

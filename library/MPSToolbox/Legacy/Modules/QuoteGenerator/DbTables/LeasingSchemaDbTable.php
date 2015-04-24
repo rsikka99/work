@@ -12,7 +12,7 @@ use Zend_Db_Table_Abstract;
 class LeasingSchemaDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'leasing_schemas';
-    protected $_primary = array(
-        'id'
-    );
+    protected $_primary = [
+        'id',
+    ];
 }

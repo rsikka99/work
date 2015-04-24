@@ -32,7 +32,7 @@ $form = $this->element;
                 <div class="col-md-10 col-md-push-1">
                     <div class="form-group <?= ($form->getElement('yield')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                         <?= $this->RenderFormLabel($form->getElement('yield')) ?>
-                        <?= $this->RenderFormText($form->getElement('yield'), array(), null, 'pages') ?>
+                        <?= $this->RenderFormText($form->getElement('yield'), [], null, 'pages') ?>
                         <?= $this->RenderFormDescription($form->getElement('yield')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('yield')) ?>
                     </div>
@@ -49,7 +49,7 @@ $form = $this->element;
 
                     <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                         <?= $this->RenderFormLabel($form->getElement('cost')) ?>
-                        <?= $this->RenderFormText($form->getElement('cost'), array(), '$') ?>
+                        <?= $this->RenderFormText($form->getElement('cost'), [], '$') ?>
                         <?= $this->RenderFormDescription($form->getElement('cost')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('cost')) ?>
                     </div>
@@ -64,7 +64,7 @@ $form = $this->element;
 
                     <div class="form-group <?= ($form->getElement('dealerCost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                         <?= $this->RenderFormLabel($form->getElement('dealerCost')) ?>
-                        <?= $this->RenderFormText($form->getElement('dealerCost'), array(), '$') ?>
+                        <?= $this->RenderFormText($form->getElement('dealerCost'), [], '$') ?>
                         <?= $this->RenderFormDescription($form->getElement('dealerCost')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('dealerCost')) ?>
                     </div>

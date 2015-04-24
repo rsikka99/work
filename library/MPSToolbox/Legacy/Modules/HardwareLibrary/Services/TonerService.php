@@ -186,7 +186,7 @@ class TonerService
          */
         if ($masterDevice instanceof MasterDeviceModel && $toner instanceof TonerModel)
         {
-            $deviceToner = $deviceTonerMapper->find(array($toner->id, $masterDevice->id));
+            $deviceToner = $deviceTonerMapper->find([$toner->id, $masterDevice->id]);
             if (!$deviceToner instanceof DeviceTonerModel)
             {
                 $deviceToner                   = new DeviceTonerModel();
@@ -223,7 +223,7 @@ class TonerService
      */
     public function getTonersByColorId ($toners)
     {
-        $tonersByColorId = array();
+        $tonersByColorId = [];
         foreach ($toners as $toner)
         {
             $tonersByColorId [$toner->tonerColorId] = $toner;
@@ -241,7 +241,7 @@ class TonerService
      */
     public function getOemTonersByTonerSet ($tonerSets)
     {
-        $oemTonerArray = array();
+        $oemTonerArray = [];
 
         foreach ($tonerSets as $tonerSet)
         {
@@ -275,7 +275,7 @@ class TonerService
      */
     public function getToners ($tonerIds)
     {
-        $toners = array();
+        $toners = [];
 
         $tonerEntities = TonerEntity::find($tonerIds);
         if ($tonerEntities instanceof TonerEntity)

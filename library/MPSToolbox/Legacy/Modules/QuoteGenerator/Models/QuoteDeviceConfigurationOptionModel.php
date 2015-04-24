@@ -74,11 +74,11 @@ class QuoteDeviceConfigurationOptionModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "quoteDeviceOptionId" => $this->quoteDeviceOptionId,
             "optionId"            => $this->optionId,
             "masterDeviceId"      => $this->masterDeviceId,
-        );
+        ];
     }
 
     /**
@@ -90,10 +90,10 @@ class QuoteDeviceConfigurationOptionModel extends My_Model_Abstract
     {
         if (!isset($this->_deviceOption))
         {
-            $this->_deviceOption = DeviceOptionMapper::getInstance()->find(array(
+            $this->_deviceOption = DeviceOptionMapper::getInstance()->find([
                 $this->masterDeviceId,
-                $this->optionId
-            ));
+                $this->optionId,
+            ]);
         }
 
         return $this->_deviceOption;

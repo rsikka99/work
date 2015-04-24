@@ -66,59 +66,48 @@ class UserForm extends Zend_Form
         // Validators
         $datetimeValidator = new My_Validate_DateTime();
 
-        $this->addElement('text', 'firstname', array(
+        $this->addElement('text', 'firstname', [
             'label'      => 'First Name:',
             'required'   => true,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags',
-                $alphaNumericWithSpaces
-            ),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags', $alphaNumericWithSpaces],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(2, 30)
-                )
-            )
-        ));
+                    'options'   => [2, 30],
+                ],
+            ],
+        ]);
 
-        $this->addElement('text', 'lastname', array(
+        $this->addElement('text', 'lastname', [
             'label'      => 'Last Name:',
             'required'   => true,
-            'filters'    => array(
-                'StringTrim',
-                'StripTags',
-                $alphaNumericWithSpaces
-            ),
-            'validators' => array(
-                array(
+            'filters'    => ['StringTrim', 'StripTags', $alphaNumericWithSpaces],
+            'validators' => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(2, 30)
-                )
-            )
-        ));
+                    'options'   => [2, 30],
+                ],
+            ],
+        ]);
 
-        $this->addElement('text', 'email', array(
+        $this->addElement('text', 'email', [
             'label'         => 'Email:',
             'required'      => true,
-            'filters'       => array(
-                'StringTrim',
-                'StripTags'
-            ),
-            'validators'    => array(
-                array(
+            'filters'       => ['StringTrim', 'StripTags'],
+            'validators'    => [
+                [
                     'validator' => 'StringLength',
-                    'options'   => array(4, 200)
-                ),
-                array(
+                    'options'   => [4, 200]
+                ],
+                [
                     'validator' => 'EmailAddress',
                     'allow'     => Zend_Validate_Hostname::ALLOW_DNS
-                )
-            ),
-            'errorMessages' => array(
+                ],
+            ],
+            'errorMessages' => [
                 'EmailAddress' => 'Invalid Email Address'
-            )
-        ));
+            ],
+        ]);
 
         // No need to edit this when creating a user
         if ($this->getFormMode() !== self::MODE_USER_EDIT)
@@ -127,13 +116,13 @@ class UserForm extends Zend_Form
             if (count($roles) > 0)
             {
                 $userRoles = new Zend_Form_Element_MultiCheckbox('userRoles');
-                $userRoles->setLabel("User Roles:");
+                $userRoles->setLabel('User Roles:');
 
                 foreach ($roles as $role)
                 {
                     if ($role->id != AppAclModel::ROLE_SYSTEM_ADMIN || ($role->id == AppAclModel::ROLE_SYSTEM_ADMIN && $this->_dealerManagement == false))
                     {
-                        $roleName = ($role->systemRole) ? $role->name . " (System Role)" : $role->name;
+                        $roleName = ($role->systemRole) ? $role->name . ' (System Role)' : $role->name;
                         $userRoles->addMultiOption($role->id, $roleName);
                     }
                 }
@@ -141,7 +130,7 @@ class UserForm extends Zend_Form
             }
 
             $firstDealerId = null;
-            $dealers       = array();
+            $dealers       = [];
             foreach (DealerMapper::getInstance()->fetchAll() as $dealer)
             {
                 // Use this to grab the first id in the leasing schema dropdown
@@ -154,26 +143,26 @@ class UserForm extends Zend_Form
 
             if ($dealers)
             {
-                $this->addElement('select', 'dealerId', array(
+                $this->addElement('select', 'dealerId', [
                     'label'        => 'Dealer:',
                     'class'        => 'input-medium',
                     'multiOptions' => $dealers,
                     'required'     => true,
                     'value'        => ($this->_defaultDealerId > 0) ? $this->_defaultDealerId : $firstDealerId,
-                ));
+                ]);
             }
 
 
             if ($this->getFormMode() === self::MODE_EDIT)
             {
-                $this->addElement('text', 'loginAttempts', array(
+                $this->addElement('text', 'loginAttempts', [
                     'label'    => 'Login Attempts:',
                     'disabled' => true
-                ));
+                ]);
 
-                $this->addElement('checkbox', 'resetLoginAttempts', array(
+                $this->addElement('checkbox', 'resetLoginAttempts', [
                     'label' => 'Reset Login Attempts',
-                ));
+                ]);
 
 
                 $minYear     = (int)date('Y') - 2;
@@ -188,66 +177,64 @@ class UserForm extends Zend_Form
                             ->setDescription('yyyy-mm-dd hh:mm')
                             ->addValidator($datetimeValidator)
                             ->setRequired(false);
-                $frozenUntil->addFilters(array(
-                    'StringTrim',
-                    'StripTags'
-                ));
+
+                $frozenUntil->addFilters(['StringTrim', 'StripTags']);
 
                 $this->addElement($frozenUntil);
 
-                $this->addElement('checkbox', 'locked', array(
+                $this->addElement('checkbox', 'locked', [
                     'label'    => 'Locked',
-                    'filters'  => array(new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL)),
+                    'filters'  => [new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL)],
                     'required' => false
-                ));
+                ]);
 
-                $this->addElement('checkbox', 'reset_password', array(
+                $this->addElement('checkbox', 'reset_password', [
                     'label' => 'Reset Password',
-                ));
+                ]);
             }
 
-            $this->addElement('password', 'password', array(
+            $this->addElement('password', 'password', [
                 'label'         => 'New Password:',
                 'required'      => true,
-                'filters'       => array('StringTrim'),
-                'validators'    => array(
-                    array(
+                'filters'       => ['StringTrim'],
+                'validators'    => [
+                    [
                         'validator' => 'StringLength',
-                        'options'   => array(6, 255)
-                    ),
-                ),
-                'errorMessages' => array(
+                        'options'   => [6, 255]
+                    ],
+                ],
+                'errorMessages' => [
                     'StringLength' => 'Passwords must be at least 6 characters.',
-                )
-            ));
+                ]
+            ]);
 
-            $this->addElement('password', 'password_confirm', array(
+            $this->addElement('password', 'password_confirm', [
                 'required'      => true,
                 'label'         => 'Confirm New Password:',
                 'allowEmpty'    => false,
-                'filters'       => array('StringTrim'),
-                'validators'    => array(
-                    array(
+                'filters'       => ['StringTrim'],
+                'validators'    => [
+                    [
                         'validator' => 'Identical',
-                        'options'   => array('token' => 'password')
-                    )
-                ),
-                'errorMessages' => array(
+                        'options'   => ['token' => 'password']
+                    ]
+                ],
+                'errorMessages' => [
                     'Identical' => 'Passwords must match.'
-                )
-            ));
+                ]
+            ]);
 
             if ($this->getFormMode() === self::MODE_CREATE)
             {
-                $this->addElement('checkbox', 'send_email', array(
+                $this->addElement('checkbox', 'send_email', [
                     'label'   => 'Send Password to User via Email',
                     'checked' => true
-                ));
+                ]);
 
-                $this->addElement('checkbox', 'resetPasswordOnNextLogin', array(
+                $this->addElement('checkbox', 'resetPasswordOnNextLogin', [
                     'label'    => 'Require Password Change On Next Login',
                     'required' => true
-                ));
+                ]);
             }
             else
             {
@@ -255,36 +242,29 @@ class UserForm extends Zend_Form
                 $this->getElement('password_confirm')->setRequired(false);
             }
 
-            $this->addElement('checkbox', 'resetPasswordOnNextLogin', array(
+            $this->addElement('checkbox', 'resetPasswordOnNextLogin', [
                 'label' => 'Require Password Change On Next Login'
-            ));
+            ]);
         }
 
         // Add the submit button
-        $this->addElement('submit', 'submit', array(
+        $this->addElement('submit', 'submit', [
             'ignore' => true,
             'label'  => 'Save'
-        ));
+        ]);
 
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array(
+        $this->addElement('submit', 'cancel', [
             'ignore'         => true,
             'label'          => 'Cancel',
             'formnovalidate' => true,
-        ));
+        ]);
 
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/admin/user-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/admin/user-form.phtml']]]);
     }
 
     /**

@@ -58,7 +58,7 @@ class Api_ClientController extends Action
             /**
              * Setup Filters
              */
-            $filterCriteriaValidator = new Zend_Validate_InArray(array('haystack' => array('companyName')));
+            $filterCriteriaValidator = new Zend_Validate_InArray(['haystack' => ['companyName']]);
 
             if (is_array($searchParams) && array_key_exists('value', $searchParams) && strlen($searchParams['value']) > 0)
             {

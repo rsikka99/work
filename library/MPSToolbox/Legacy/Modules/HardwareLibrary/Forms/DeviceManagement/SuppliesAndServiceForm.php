@@ -39,97 +39,90 @@ class SuppliesAndServiceForm extends Zend_Form
         /**
          * Toner configuration
          */
-        $this->addElement('select', 'tonerConfigId', array(
+        $this->addElement('select', 'tonerConfigId', [
             'label'        => 'Toner Configuration',
             'id'           => 'tonerConfigId',
             'description'  => 'The type of toners that fit into this device.',
             'required'     => false,
             'disabled'     => (!$this->_isAllowed),
             'multiOptions' => TonerConfigMapper::getInstance()->fetchAllForMultiOptions(),
-        ));
+        ]);
 
         /**
          * Is Leased
          */
-        $this->addElement('checkbox', 'isLeased', array(
+        $this->addElement('checkbox', 'isLeased', [
             'label'    => 'Is Leased',
             'id'       => 'isLeased',
             'disabled' => (!$this->_isAllowed),
-        ));
+        ]);
 
         /**
          * Leased Toner Yield
          */
-        $this->addElement('text', 'leasedTonerYield', array(
+        $this->addElement('text', 'leasedTonerYield', [
             'label'       => 'Leased Toner Yield',
             'id'          => 'leasedTonerYield',
             'description' => 'If this device is marked as leased you must fill this out.',
-            'filters'     => array('StringTrim', 'StripTags'),
+            'filters'     => ['StringTrim', 'StripTags'],
             'allowEmpty'  => false,
-            'validators'  => array(
-                new FieldDependsOnValue('isLeased', '1', array(
+            'disabled'    => (!$this->_isAllowed),
+            'validators'  => [
+                new FieldDependsOnValue('isLeased', '1', [
                         new Zend_Validate_NotEmpty(),
                         new Zend_Validate_Int(),
-                        new Zend_Validate_Between(array('min' => 0, 'max' => 100000))
-                    )
+                        new Zend_Validate_Between(['min' => 0, 'max' => 100000])
+                    ]
                 ),
-            ),
-            'disabled'    => (!$this->_isAllowed),
-        ));
+            ],
+        ]);
 
         /**
          * Parts Cost Per Page
          */
-        $this->addElement('text', 'dealerPartsCostPerPage', array(
+        $this->addElement('text', 'dealerPartsCostPerPage', [
             'label'       => 'Parts CPP',
             'id'          => 'dealerParsCostPerPage',
             'description' => 'Your parts cost per page to manage this device. Overrides the default parts cost per page in reports.',
             'maxlength'   => 8,
             'required'    => $this->_isQuoteDevice,
-            'filters'     => array('StringTrim', 'StripTags'),
-            'validators'  => array(
-                array(
+            'filters'     => ['StringTrim', 'StripTags'],
+            'validators'  => [
+                [
                     'validator' => 'Between',
-                    'options'   => array('min' => 0, 'max' => 5),
-                ),
-            ),
-        ));
+                    'options'   => ['min' => 0, 'max' => 5],
+                ],
+            ],
+        ]);
 
         /**
          * Labor Cost Per Page
          */
-        $this->addElement('text', 'dealerLaborCostPerPage', array(
+        $this->addElement('text', 'dealerLaborCostPerPage', [
             'label'       => 'Labor CPP',
             'id'          => 'dealerLaborCostPerPage',
             'description' => 'Your labor cost per page to manage this device. Overrides the default labor cost per page in reports.',
             'maxlength'   => 8,
             'required'    => $this->_isQuoteDevice,
-            'filters'     => array('StringTrim', 'StripTags'),
-            'validators'  => array('float',),
-        ));
+            'filters'     => ['StringTrim', 'StripTags'],
+            'validators'  => ['float'],
+        ]);
 
         /**
          * Lease Buyback
          */
-        $this->addElement('text', 'leaseBuybackPrice', array(
+        $this->addElement('text', 'leaseBuybackPrice', [
             'label'       => 'Lease Buyback Price',
             'id'          => 'leaseBuybackPrice',
             'description' => 'Used in calculations for the lease buyback report.',
             'maxlength'   => 8,
-            'filters'     => array('StringTrim', 'StripTags'),
-            'validators' => array('float',),
-        ));
+            'filters'     => ['StringTrim', 'StripTags'],
+            'validators'  => ['float'],
+        ]);
     }
 
     public function loadDefaultDecorators ()
     {
-        $this->setDecorators(array(
-            array(
-                'ViewScript',
-                array(
-                    'viewScript' => 'forms/hardware-library/device-management/supplies-and-service-form.phtml'
-                )
-            )
-        ));
+        $this->setDecorators([['ViewScript', ['viewScript' => 'forms/hardware-library/device-management/supplies-and-service-form.phtml']]]);
     }
 }

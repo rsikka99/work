@@ -12,8 +12,8 @@ use Zend_Db_Table_Abstract;
 class UserQuoteSettingDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'user_quote_settings';
-    protected $_primary = array(
+    protected $_primary = [
         'userId',
-        'quoteSettingId'
-    );
+        'quoteSettingId',
+    ];
 }

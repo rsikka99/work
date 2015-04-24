@@ -14,9 +14,9 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
     {
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_OLD_DEVICE_LIST))
         {
-            $this->_flashMessenger->addMessage(array(
+            $this->_flashMessenger->addMessage([
                 "error" => "You do not have permission to access this."
-            ));
+            ]);
 
             $this->redirectToRoute('assessment');
         }
@@ -26,7 +26,7 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
 
     public function indexAction ()
     {
-        $this->_pageTitle = array('Assessment', 'Old Device List');
+        $this->_pageTitle = ['Assessment', 'Old Device List'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
 
         $this->initReportList();
@@ -34,9 +34,9 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
 
         $this->view->availableReports['OldDeviceList']['active'] = true;
 
-        $this->view->formats = array(
+        $this->view->formats = [
             "/assessment/report_olddevicelist/generate/format/csv" => $this->_csvFormat
-        );
+        ];
         try
         {
             // Clear the cache for the report before proceeding
@@ -109,7 +109,7 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
             /* @var $device DeviceInstanceModel */
             foreach ($assessmentViewModel->getIncludedDevicesSortedAscendingByAge() as $device)
             {
-                $row    = array();
+                $row    = [];
                 $row [] = $device->getMasterDevice()->getFullDeviceName();
                 $row [] = ($device->ipAddress) ? $device->ipAddress : "Unknown";
                 $row [] = ($device->serialNumber) ? $device->serialNumber : "Unknown";

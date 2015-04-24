@@ -12,5 +12,5 @@ use Zend_Db_Table_Abstract;
 class RmsMasterMatchupDbTable extends Zend_Db_Table_Abstract
 {
     protected $_name    = 'rms_master_matchups';
-    protected $_primary = array('rmsProviderId', 'rmsModelId');
+    protected $_primary = ['rmsProviderId', 'rmsModelId'];
 }

@@ -81,10 +81,10 @@ class DealerTonerAttributeMapper extends My_Model_Mapper_Abstract
         }
 
         // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, array(
+        $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_tonerId} = ?"  => $primaryKey [0],
             "{$this->col_dealerId} = ?" => $primaryKey [1],
-        ));
+        ]);
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -105,18 +105,18 @@ class DealerTonerAttributeMapper extends My_Model_Mapper_Abstract
     {
         if ($object instanceof DealerTonerAttributeModel)
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_tonerId} = ?"  => $object->tonerId,
                 "{$this->col_dealerId} = ?" => $object->dealerId,
 
-            );
+            ];
         }
         else
         {
-            $whereClause = array(
+            $whereClause = [
                 "{$this->col_tonerId} = ?"  => $object[0],
                 "{$this->col_dealerId} = ?" => $object[1],
-            );
+            ];
         }
 
         $rowsAffected = $this->getDbTable()->delete($whereClause);
@@ -203,7 +203,7 @@ class DealerTonerAttributeMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new DealerTonerAttributeModel($row->toArray());
@@ -228,10 +228,10 @@ class DealerTonerAttributeMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             "{$this->col_tonerId} = ?"  => $id [0],
             "{$this->col_dealerId} = ?" => $id [1],
-        );
+        ];
     }
 
     /**
@@ -242,7 +242,7 @@ class DealerTonerAttributeMapper extends My_Model_Mapper_Abstract
      */
     public function findTonerAttributeByTonerId ($tonerId, $dealerId)
     {
-        return $this->fetch(array("{$this->col_tonerId} = ?" => $tonerId, "{$this->col_dealerId} =  ?" => $dealerId));
+        return $this->fetch(["{$this->col_tonerId} = ?" => $tonerId, "{$this->col_dealerId} =  ?" => $dealerId]);
     }
 
     /**
@@ -252,9 +252,9 @@ class DealerTonerAttributeMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
+        return [
             $object->tonerId,
-            $object->dealerId
-        );
+            $object->dealerId,
+        ];
     }
 }

@@ -24,14 +24,14 @@ class TonerColorModel extends My_Model_Abstract
      *
      * @var string[]
      */
-    static $ColorNames = array(
+    static $ColorNames = [
         self::BLACK       => "Black",
         self::CYAN        => "Cyan",
         self::MAGENTA     => "Magenta",
         self::YELLOW      => "Yellow",
         self::THREE_COLOR => "Three Color",
-        self::FOUR_COLOR  => "Four Color"
-    );
+        self::FOUR_COLOR  => "Four Color",
+    ];
 
     /**
      * @var int
@@ -70,9 +70,9 @@ class TonerColorModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return array(
+        return [
             "id"   => $this->id,
             "name" => $this->name,
-        );
+        ];
     }
 }

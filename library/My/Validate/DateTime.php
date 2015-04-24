@@ -17,17 +17,17 @@ class My_Validate_DateTime extends Zend_Validate_Abstract
 
     const INVALID_DATE_FORMAT = 'invalid_date_format';
 
-    protected $_messageTemplates = array(
-        self::INVALID_DATE_FORMAT => "'%value%' is not a valid date format"
-    );
+    protected $_messageTemplates = [
+        self::INVALID_DATE_FORMAT => "'%value%' is not a valid date format",
+    ];
 
     private $_validator;
 
     public function __construct ($regex = self::FORMAT_DATE_TIME_1)
     {
-        $this->_validator = new Zend_Validate_Regex(array(
-            'pattern' => $regex
-        ));
+        $this->_validator = new Zend_Validate_Regex([
+            'pattern' => $regex,
+        ]);
     }
 
     /**

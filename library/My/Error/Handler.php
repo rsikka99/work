@@ -5,7 +5,7 @@
  */
 class My_Error_Handler
 {
-    static $errorCounts = array(
+    static $errorCounts = [
         "E_ERROR"      => 0,
         "E_WARNING"    => 0,
         "E_NOTICE"     => 0,
@@ -13,9 +13,9 @@ class My_Error_Handler
         "E_PARSE"      => 0,
         "E_DEPRECATED" => 0,
         "E_OTHER"      => 0,
-    );
+    ];
 
-    static $errorNames  = array(
+    static $errorNames  = [
         1     => "E_ERROR",
         2     => "E_WARNING",
         4     => "E_PARSE",
@@ -31,9 +31,9 @@ class My_Error_Handler
         4096  => "E_RECOVERABLE_ERROR",
         8192  => "E_DEPRECATED",
         16384 => "E_USER_DEPRECATED",
-        32767 => "E_ALL"
-    );
-    static $errorColors = array(
+        32767 => "E_ALL",
+    ];
+    static $errorColors = [
         1     => "danger",
         2     => "",
         4     => "danger",
@@ -49,9 +49,9 @@ class My_Error_Handler
         4096  => "danger",
         8192  => "warning",
         16384 => "warning",
-        32767 => "danger"
-    );
-    static $errors      = array();
+        32767 => "danger",
+    ];
+    static $errors      = [];
 
     /**
      * Handles php errors
@@ -116,7 +116,7 @@ class My_Error_Handler
      */
     public static function set ()
     {
-        set_error_handler(array(__CLASS__, 'handle'));
+        set_error_handler([__CLASS__, 'handle']);
     }
 
     /**
@@ -133,7 +133,7 @@ class My_Error_Handler
         array_pop($trace); // remove call to previous method
         $trace  = array_reverse($trace);
         $length = count($trace);
-        $result = array();
+        $result = [];
 
         for ($i = 0; $i < $length; $i++)
         {

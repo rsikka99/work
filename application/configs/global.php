@@ -1,10 +1,10 @@
 <?php
-return array(
+return [
     'appnamespace'         => 'App',
-    'autoloadernamespaces' => array(
+    'autoloadernamespaces' => [
         'twitterbootstrap' => 'Twitter_Bootstrap_',
-    ),
-    'app'                  => array(
+    ],
+    'app'                  => [
         'uploadPath'     => DATA_PATH . '/uploads',
         'copyright'      => 'Tangent MTW',
         'useAnalytics'   => false,
@@ -12,107 +12,107 @@ return array(
         'useChatTab'     => false,
         'supportEmail'   => 'support@tangentmtw.com',
         'locale'         => 'en_GB',
-    ),
-    'bootstrap'            => array(
+    ],
+    'bootstrap'            => [
         'path'  => APPLICATION_PATH . '/Bootstrap.php',
         'class' => 'Bootstrap',
-    ),
-    'feature'              => array(
+    ],
+    'feature'              => [
         'adapter' => 'My_Feature_DbTableAdapter',
-        'options' => array(
+        'options' => [
             'className' => 'MPSToolbox\Legacy\DbTables\DealerFeatureDbTable',
-        ),
-    ),
-    'includePaths'         => array(
+        ],
+    ],
+    'includePaths'         => [
         'library' => APPLICATION_BASE_PATH . '/library',
-    ),
-    'phpSettings'          => array(
+    ],
+    'phpSettings'          => [
         'timezone'          => 'America/New_York',
         'display_errors'    => false,
         'displayExceptions' => false,
-    ),
-    'pluginPaths'          => array(
+    ],
+    'pluginPaths'          => [
         'ZendX_Application_Resource' => 'ZendX/Application/Resource',
-    ),
-    'resources'            => array(
-        'cachemanager'    => array(
-            'acl_cache'        => array(
-                'frontend' => array(
+    ],
+    'resources'            => [
+        'cachemanager'    => [
+            'acl_cache'        => [
+                'frontend' => [
                     'name'                 => 'Core',
                     'customFrontendNaming' => false,
-                    'options'              => array(
+                    'options'              => [
                         'lifetime'                => 7200,
                         'caching'                 => true,
                         'automatic_serialization' => true,
-                    ),
-                ),
-                'backend'  => array(
+                    ],
+                ],
+                'backend'  => [
                     'name'    => 'File',
-                    'options' => array(
+                    'options' => [
                         'cache_dir' => DATA_PATH . '/cache/acl/',
-                    ),
-                ),
-            ),
-            'navigation_cache' => array(
-                'frontend' => array(
+                    ],
+                ],
+            ],
+            'navigation_cache' => [
+                'frontend' => [
                     'name'                 => 'File',
                     'customFrontendNaming' => false,
-                    'options'              => array(
-                        'master_files'            => array(
+                    'options'              => [
+                        'master_files'            => [
                             APPLICATION_PATH . '/configs/navigation.xml',
-                        ),
+                        ],
                         'caching'                 => true,
                         'automatic_serialization' => true,
-                    ),
-                ),
-                'backend'  => array(
+                    ],
+                ],
+                'backend'  => [
                     'name'    => 'File',
-                    'options' => array(
+                    'options' => [
                         'cache_dir' => DATA_PATH . '/cache/navigation/',
-                    ),
-                ),
-            ),
-        ),
-        'db'              => array(
+                    ],
+                ],
+            ],
+        ],
+        'db'              => [
             'adapter'               => 'Pdo_Mysql',
             'isDefaultTableAdapter' => true,
-        ),
-        'frontController' => array(
+        ],
+        'frontController' => [
             'controllerDirectory' => APPLICATION_PATH . '/controllers',
             'moduleDirectory'     => APPLICATION_PATH . '/modules',
-            'params'              => array(
+            'params'              => [
                 'displayExceptions'   => false,
                 'prefixDefaultModule' => true,
-            ),
-            'plugins'             => array(
+            ],
+            'plugins'             => [
                 'My_Controller_Plugin_Acl',
                 'My_Controller_Plugin_ForceUserAction',
                 'My_Controller_Plugin_UserActivity',
                 '\\MPSToolbox\\Legacy\\Controllers\\Plugins\\AddScriptPath',
-            ),
-        ),
-        'jquery'          => array(
+            ],
+        ],
+        'jquery'          => [
             'version'    => '1.11.1',
             'ui_enable'  => true,
             'ui_version' => '1.10.3',
-        ),
-        'layout'          => array(
+        ],
+        'layout'          => [
             'layoutPath' => APPLICATION_PATH . '/layouts/scripts'
-        ),
-        'log'             => array(
-            'stream' => array(
+        ],
+        'log'             => [
+            'stream' => [
                 'filterName'   => 'Priority',
-                'filterParams' => array(
+                'filterParams' => [
                     'priority' => 4,
-                ),
+                ],
                 'writerName'   => 'Stream',
-                'writerParams' => array(
+                'writerParams' => [
                     'stream' => DATA_PATH . '/logs/application.log',
                     'mode'   => 'a',
-                ),
-            ),
-        ),
-        'modules'         => array(
+                ],
+            ],
+        ],
+        'modules'         => [
             'Admin',
             'Assessment',
             'DealerManagement',
@@ -123,22 +123,22 @@ return array(
             'Preferences',
             'Proposalgen',
             'Quotegen',
-        ),
-        'session'         => array(
+        ],
+        'session'         => [
             'name'             => 'MPSToolbox',
             'save_path'        => DATA_PATH . '/sessions',
             'use_only_cookies' => 'on',
             'cookie_lifetime'  => 43200,
             'gc_maxlifetime'   => '43200',
-        ),
-        'view'            => array(
-            'helperPath' => array(
+        ],
+        'view'            => [
+            'helperPath' => [
                 'My_View_Helper'             => 'My/View/Helper',
                 'My_View_Helper_Navigation'  => 'My/View/Helper/Navigation',
                 'Tangent\\View\\Helper\\'    => 'Tangent/View/Helper',
                 'Bootstrap3\\View\\Helper\\' => 'Bootstrap3/View/Helper',
                 'App_View_Helper'            => APPLICATION_PATH . '/layouts/helpers',
-            ),
-        ),
-    ),
-);
+            ],
+        ],
+    ],
+];

@@ -27,7 +27,7 @@ class AvailableOptionsForm extends Zend_Form
             'label'      => 'Description',
             'required'   => true,
             'rows'       => 5,
-            'filters'    => array('StringTrim', 'StripTags'),
+            'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [['validator' => 'StringLength', 'options' => [1, 255],],],
         ]);
 

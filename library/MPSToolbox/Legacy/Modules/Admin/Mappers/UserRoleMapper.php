@@ -192,7 +192,7 @@ class UserRoleMapper extends My_Model_Mapper_Abstract
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
-        $entries   = array();
+        $entries   = [];
         foreach ($resultSet as $row)
         {
             $object = new UserRoleModel($row->toArray());
@@ -215,10 +215,10 @@ class UserRoleMapper extends My_Model_Mapper_Abstract
      */
     public function getWhereId ($id)
     {
-        return array(
+        return [
             'userId = ?' => $id [0],
-            'roleId = ?' => $id [1]
-        );
+            'roleId = ?' => $id [1],
+        ];
     }
 
     /**
@@ -228,10 +228,10 @@ class UserRoleMapper extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
+        return [
             $object->userId,
             $object->roleId,
-        );
+        ];
     }
 
     /**
@@ -243,9 +243,9 @@ class UserRoleMapper extends My_Model_Mapper_Abstract
      */
     public function fetchAllRolesForUser ($userId)
     {
-        return $this->fetchAll(array(
-            'userId = ?' => $userId
-        ));
+        return $this->fetchAll([
+            'userId = ?' => $userId,
+        ]);
     }
 
     /**
@@ -257,8 +257,8 @@ class UserRoleMapper extends My_Model_Mapper_Abstract
      */
     public function deleteAllRolesForUser ($userId)
     {
-        return $this->getDbTable()->delete(array(
-            'userId = ?' => $userId
-        ));
+        return $this->getDbTable()->delete([
+            'userId = ?' => $userId,
+        ]);
     }
 }

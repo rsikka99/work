@@ -16,8 +16,8 @@ $leasingSchema = $this->leasingSchema;
         ?>
         <div class="clearfix">
             <div class="pull-right">
-                <a class="btn btn-warning" href="<?= $this->url(array('leasingSchemaId' => $leasingSchema->id), 'company.leasing-schema.import-leasing-rate') ?>">Import from file</a>
-                <a class="btn btn-default" title="Clear Schema" href="<?= $this->url(array('leasingSchemaId' => $leasingSchema->id), 'company.leasing-schema.clear-provider'); ?>">
+                <a class="btn btn-warning" href="<?= $this->url(['leasingSchemaId' => $leasingSchema->id], 'company.leasing-schema.import-leasing-rate') ?>">Import from file</a>
+                <a class="btn btn-default" title="Clear Schema" href="<?= $this->url(['leasingSchemaId' => $leasingSchema->id], 'company.leasing-schema.clear-provider'); ?>">
                     <i class="glyphicon glyphicon-exclamation-sign icon-white"></i> Clear Schema
                 </a>
             </div>
@@ -50,11 +50,11 @@ $leasingSchema = $this->leasingSchema;
                         <?php endforeach; ?>
 
                         <td style="text-align: center;">
-                            <a class="btn btn-warning btn-xs" title="Edit Term" href="<?= $this->url(array('id' => $term->id, 'leasingSchemaId' => $leasingSchema->id), 'company.leasing-schema.edit-term'); ?>">
+                            <a class="btn btn-warning btn-xs" title="Edit Term" href="<?= $this->url(['id' => $term->id, 'leasingSchemaId' => $leasingSchema->id], 'company.leasing-schema.edit-term'); ?>">
                                 <i class="glyphicon glyphicon-pencil icon-white"></i>
                             </a>
                             <?php if (count($leasingSchema->getTerms()) > 1) : ?>
-                                <a class="btn btn-danger btn-xs" title="Delete Term" href="<?= $this->url(array('id' => $term->id, 'leasingSchemaId' => $leasingSchema->id), 'company.leasing-schema.delete-term'); ?>">
+                                <a class="btn btn-danger btn-xs" title="Delete Term" href="<?= $this->url(['id' => $term->id, 'leasingSchemaId' => $leasingSchema->id], 'company.leasing-schema.delete-term'); ?>">
                                     <i class="glyphicon glyphglyphicon glyphicon-trash"></i>
                                 </a>
                             <?php endif; ?>
@@ -65,11 +65,11 @@ $leasingSchema = $this->leasingSchema;
                     <td></td>
                     <?php foreach ($leasingSchema->getRanges() as $range) : ?>
                         <td style="text-align: center;">
-                            <a class="btn btn-warning btn-xs" title="Edit Range" href="<?= $this->url(array('id' => $range->id, 'leasingSchemaId' => $range->leasingSchemaId), 'company.leasing-schema.edit-range'); ?>">
+                            <a class="btn btn-warning btn-xs" title="Edit Range" href="<?= $this->url(['id' => $range->id, 'leasingSchemaId' => $range->leasingSchemaId], 'company.leasing-schema.edit-range'); ?>">
                                 <i class="glyphicon glyphicon-pencil icon-white"></i>
                             </a>
                             <?php if ($range->startRange != 0) : ?>
-                                <a class="btn btn-danger btn-xs" title="Delete Range" href="<?= $this->url(array('id' => $range->id, 'leasingSchemaId' => $range->leasingSchemaId), 'company.leasing-schema.delete-range'); ?>">
+                                <a class="btn btn-danger btn-xs" title="Delete Range" href="<?= $this->url(['id' => $range->id, 'leasingSchemaId' => $range->leasingSchemaId], 'company.leasing-schema.delete-range'); ?>">
                                     <i class="glyphicon glyphglyphicon glyphicon-trash"></i>
                                 </a>
                             <?php endif; ?>
@@ -83,11 +83,11 @@ $leasingSchema = $this->leasingSchema;
 
         <div class="clearfix">
              <span class="pull-left">
-                 <a class="btn btn-default" title="Back" href="<?= $this->url(array(), 'company.leasing-schema'); ?>">Done</a>
+                 <a class="btn btn-default" title="Back" href="<?= $this->url([], 'company.leasing-schema'); ?>">Done</a>
             </span>
     	<span class="pull-right">
-          	<a class="btn btn-success" title="Add Term" href="<?= $this->url(array('leasingSchemaId' => $range->leasingSchemaId), 'company.leasing-schema.add-term'); ?>"><i class="glyphicon glyphicon-plus-sign icon-white"></i> Add Term</a>
-          	<a class="btn btn-success" title="Add Range" href="<?= $this->url(array('leasingSchemaId' => $range->leasingSchemaId), 'company.leasing-schema.add-range'); ?>"><i class="glyphicon glyphicon-plus-sign icon-white"></i> Add Range</a>
+          	<a class="btn btn-success" title="Add Term" href="<?= $this->url(['leasingSchemaId' => $range->leasingSchemaId], 'company.leasing-schema.add-term'); ?>"><i class="glyphicon glyphicon-plus-sign icon-white"></i> Add Term</a>
+          	<a class="btn btn-success" title="Add Range" href="<?= $this->url(['leasingSchemaId' => $range->leasingSchemaId], 'company.leasing-schema.add-range'); ?>"><i class="glyphicon glyphicon-plus-sign icon-white"></i> Add Range</a>
     	</span>
         </div>
     <?php else : ?>

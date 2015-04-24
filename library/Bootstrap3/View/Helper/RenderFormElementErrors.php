@@ -21,7 +21,7 @@ class RenderFormElementErrors extends RenderFormAbstract
      */
     public function RenderFormElementErrors (\Zend_Form_Element $element, $helpClass = 'help-block', $addFeedback = true)
     {
-        $html = array();
+        $html = [];
         if ($element instanceof \Zend_Form_Element)
         {
             if ($element->hasErrors())
