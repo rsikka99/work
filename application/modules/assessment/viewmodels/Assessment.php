@@ -1,5 +1,6 @@
 <?php
 use CpChart\Services\pChartFactory;
+use CpChart\Classes\pPie;
 use MPSToolbox\Legacy\Models\UserModel;
 use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel;
@@ -2024,9 +2025,17 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      */
     public function getTheGraphs ()
     {
-        $dealerBranding    = My_Brand::getDealerBranding();
+        $dealerBranding = My_Brand::getDealerBranding();
+        // Other variables used in several places
+        $companyName   = mb_strimwidth($this->assessment->getClient()->companyName, 0, 23, "...");
+        $employeeCount = $this->assessment->getClient()->employeeCount;
+
         $hexToRGBConverter = new \Tangent\Format\HexToRGB();
         $factory           = new pChartFactory();
+
+        // Chart Styles
+        $pieChartStyles  = ["SecondPass" => true, "ValuePosition" => PIE_VALUE_INSIDE, "WriteValues" => PIE_VALUE_PERCENTAGE, "SliceHeight" => 10];
+        $pieLegendStyles = ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "BoxSize" => 10];
 
         /**
          * -- PrintIQSavingsBarGraph
@@ -2140,7 +2149,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             }
             else
             {
-//                    $labels[$device->getMasterDevice()->modelName]            = $device->getMasterDevice()->modelName;
                 $uniqueModelArray [$device->getMasterDevice()->modelName] = 1;
             }
             $abscissaArray[] = $device->assetId;
@@ -2171,6 +2179,432 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
         $this->pImageGraphs[] = $myPicture;
 
+        /*****Average Monthly Pages per Networked Printer*****/
+
+        $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount(), 0);
+        $highest          = ($averagePageCount > self::AVERAGE_MONTHLY_PAGES_PER_DEVICE) ? $averagePageCount : self::AVERAGE_MONTHLY_PAGES_PER_DEVICE;
+
+        $MyData = $factory->newData();
+        $MyData->addPoints([$averagePageCount], $companyName);
+        $MyData->addPoints([self::AVERAGE_MONTHLY_PAGES_PER_DEVICE], "Average");
+
+        //Fixes x access scale appearing - hacky - needs fixing
+        $MyData->addPoints([""], "Printer Types");
+        $MyData->setSerieDescription("Printer Types", "Type");
+        $MyData->setAbscissa("Printer Types");
+
+        $graphCustomerColor        = $hexToRGBConverter->hexToRgb($dealerBranding->graphCustomerColor);
+        $graphIndustryAverageColor = $hexToRGBConverter->hexToRgb($dealerBranding->graphIndustryAverageColor);
+        $customerColorSetting      = ['R' => $graphCustomerColor['r'], 'G' => $graphCustomerColor['g'], 'B' => $graphCustomerColor['b']];
+        $averageColorSetting       = ['R' => $graphIndustryAverageColor['r'], 'G' => $graphIndustryAverageColor['g'], 'B' => $graphIndustryAverageColor['b']];
+        $MyData->setPalette($companyName, $customerColorSetting);
+        $MyData->setPalette("Average", $averageColorSetting);
+
+        $myPicture            = $factory->newImage(175, 300, $MyData);
+        $myPicture->Antialias = false;
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->setGraphArea(60, 50, 150, 245);
+        $AxisBoundaries = [0 => ["Min" => 0, "Max" => $highest * 1.1]];
+        $myPicture->drawScale(["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "AxisR" => 127, "AxisG" => 127, "AxisB" => 127, "InnerTickWidth" => 0, "OuterTickWidth" => 0, "TickR" => 127, "TickG" => 127, "TickB" => 127]);
+
+        $myPicture->drawText(10, 30, "Average Monthly Pages \n per Networked Printer", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0]);
+
+        /* Write the chart legend - this sets the x/y position */
+        $myPicture->drawLegend(50, 260, ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "FontR" => 127, "FontG" => 127, "FontB" => 127]);
+        $myPicture->drawBarChart(["DisplayValues" => true, "Surrounding" => -30]);
+
+        $this->pImageGraphs[] = $myPicture;
+
+
+        /********** Average Monthly Pages per Employee ***********************/
+
+        $pagesPerEmployee = ($employeeCount > 0) ? round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $employeeCount) : 0;
+        $highest          = (Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
+
+        $MyData = $factory->newData();
+        $MyData->addPoints([$pagesPerEmployee], $companyName);
+        $MyData->addPoints([self::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE], "Average");
+
+        //Fixes x access scale appearing - hacky - needs fixing
+        $MyData->addPoints([""], "Printer Types");
+        $MyData->setSerieDescription("Printer Types", "Type");
+        $MyData->setAbscissa("Printer Types");
+
+        $graphCustomerColor        = $hexToRGBConverter->hexToRgb($dealerBranding->graphCustomerColor);
+        $graphIndustryAverageColor = $hexToRGBConverter->hexToRgb($dealerBranding->graphIndustryAverageColor);
+        $customerColorSetting      = ['R' => $graphCustomerColor['r'], 'G' => $graphCustomerColor['g'], 'B' => $graphCustomerColor['b']];
+        $averageColorSetting       = ['R' => $graphIndustryAverageColor['r'], 'G' => $graphIndustryAverageColor['g'], 'B' => $graphIndustryAverageColor['b']];
+        $MyData->setPalette($companyName, $customerColorSetting);
+        $MyData->setPalette("Average", $averageColorSetting);
+
+        $myPicture            = $factory->newImage(175, 300, $MyData);
+        $myPicture->Antialias = false;
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->setGraphArea(60, 50, 150, 245);
+        $AxisBoundaries = [0 => ["Min" => 0, "Max" => $highest * 1.1]];
+        $myPicture->drawScale(["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "AxisR" => 127, "AxisG" => 127, "AxisB" => 127, "InnerTickWidth" => 0, "OuterTickWidth" => 0, "TickR" => 127, "TickG" => 127, "TickB" => 127]);
+
+        $myPicture->drawText(90, 30, "Average Monthly Pages\n        per Employee", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]);
+
+        /* Write the chart legend - this sets the x/y position */
+        $myPicture->drawLegend(50, 260, ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "FontR" => 127, "FontG" => 127, "FontB" => 127]);
+        $myPicture->drawBarChart(["DisplayValues" => true, "Surrounding" => -30]);
+
+        $this->pImageGraphs[] = $myPicture;
+
+        /********** Average Monthly Pages per Employee ***********************/
+
+        $devicesPerEmployee = round($employeeCount / $this->getDevices()->allIncludedDeviceInstances->getCount(), 2);
+        $highest            = ($devicesPerEmployee > self::AVERAGE_EMPLOYEES_PER_DEVICE) ? $devicesPerEmployee : self::AVERAGE_EMPLOYEES_PER_DEVICE;
+
+        $MyData = $factory->newData();
+        $MyData->addPoints([$devicesPerEmployee], $companyName);
+        $MyData->addPoints([self::AVERAGE_EMPLOYEES_PER_DEVICE], "Average");
+
+        //Fixes x access scale appearing - hacky - needs fixing
+        $MyData->addPoints([""], "Printer Types");
+        $MyData->setSerieDescription("Printer Types", "Type");
+        $MyData->setAbscissa("Printer Types");
+
+        $graphCustomerColor        = $hexToRGBConverter->hexToRgb($dealerBranding->graphCustomerColor);
+        $graphIndustryAverageColor = $hexToRGBConverter->hexToRgb($dealerBranding->graphIndustryAverageColor);
+        $customerColorSetting      = ['R' => $graphCustomerColor['r'], 'G' => $graphCustomerColor['g'], 'B' => $graphCustomerColor['b']];
+        $averageColorSetting       = ['R' => $graphIndustryAverageColor['r'], 'G' => $graphIndustryAverageColor['g'], 'B' => $graphIndustryAverageColor['b']];
+        $MyData->setPalette($companyName, $customerColorSetting);
+        $MyData->setPalette("Average", $averageColorSetting);
+
+        $myPicture            = $factory->newImage(175, 300, $MyData);
+        $myPicture->Antialias = false;
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->setGraphArea(60, 50, 150, 245);
+        $AxisBoundaries = [0 => ["Min" => 0, "Max" => $highest * 1.1]];
+        $myPicture->drawScale(["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "AxisR" => 127, "AxisG" => 127, "AxisB" => 127, "InnerTickWidth" => 0, "OuterTickWidth" => 0, "TickR" => 127, "TickG" => 127, "TickB" => 127]);
+
+        $myPicture->drawText(90, 30, " Employees per\nPrinting Device", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]);
+
+        /* Write the chart legend - this sets the x/y position */
+        $myPicture->drawLegend(50, 260, ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "FontR" => 127, "FontG" => 127, "FontB" => 127]);
+        $myPicture->drawBarChart(["DisplayValues" => true, "Surrounding" => -30]);
+
+        $this->pImageGraphs[] = $myPicture;
+
+        /************** Color-Capable Printing Devices ***********************/
+
+        $colorPercentage = 0;
+        if ($this->getDevices()->allIncludedDeviceInstances->getCount())
+        {
+            $colorPercentage = round((($this->getNumberOfColorCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
+        }
+
+        $notColorPercentage = 100 - $colorPercentage;
+
+        $MyData = $factory->newData();
+        $MyData->addPoints([$colorPercentage, $notColorPercentage], 'color-capable-devices');
+        $MyData->setSerieDescription("Color-capable", "Black-and-white only");
+        $MyData->addPoints(["Color-capable", "Black-and-white only"], "Labels");
+        $MyData->setAbscissa("Labels");
+
+        $graphColorDeviceColor = $hexToRGBConverter->hexToRgb($dealerBranding->graphColorDeviceColor);
+        $graphMonoDeviceColor  = $hexToRGBConverter->hexToRgb($dealerBranding->graphMonoDeviceColor);
+        $graphColorSetting     = ['R' => $graphColorDeviceColor['r'], 'G' => $graphColorDeviceColor['g'], 'B' => $graphColorDeviceColor['b']];
+        $graphMonoSetting      = ['R' => $graphMonoDeviceColor['r'], 'G' => $graphMonoDeviceColor['g'], 'B' => $graphMonoDeviceColor['b']];
+
+        $myPicture = $factory->newImage(400, 270, $MyData, true);
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->drawText(180, 20, "Color-Capable Printing Devices", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]);
+        $PieChart = $factory->newChart("pie", $myPicture, $MyData);
+        $PieChart->setSliceColor(0, $graphColorSetting);
+        $PieChart->setSliceColor(1, $graphMonoSetting);
+        $PieChart->drawPieLegend(120, 170, $pieLegendStyles);
+
+        $PieChart->draw3DPie(180, 100, array_merge($pieChartStyles, ["Radius" => 100]));
+
+        $this->pImageGraphs[] = $myPicture;
+
+        /************** Color vs Black/White Pages ****************************/
+
+        $colorPercentage = 0;
+        if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() > 0)
+        {
+            $colorPercentage = round((($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) * 100), 2);
+        }
+
+        $bwPercentage = 100 - $colorPercentage;
+
+        $MyData = $factory->newData();
+        $MyData->addPoints([$colorPercentage, $bwPercentage], 'Color pages printed');
+        $MyData->setSerieDescription("Color pages printed", "Black-and-white pages printed");
+        $MyData->addPoints(["Color pages printed", "Black-and-white pages printed"], "Labels");
+        $MyData->setAbscissa("Labels");
+
+        $graphColorDeviceColor = $hexToRGBConverter->hexToRgb($dealerBranding->graphColorDeviceColor);
+        $graphMonoDeviceColor  = $hexToRGBConverter->hexToRgb($dealerBranding->graphMonoDeviceColor);
+        $graphColorSetting     = ['R' => $graphColorDeviceColor['r'], 'G' => $graphColorDeviceColor['g'], 'B' => $graphColorDeviceColor['b']];
+        $graphMonoSetting      = ['R' => $graphMonoDeviceColor['r'], 'G' => $graphMonoDeviceColor['g'], 'B' => $graphMonoDeviceColor['b']];
+
+        $myPicture = $factory->newImage(400, 270, $MyData, true);
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->drawText(180, 20, "Color vs Black/White Pages", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]);
+        $PieChart = $factory->newChart("pie", $myPicture, $MyData);
+        $PieChart->setSliceColor(0, $graphColorSetting);
+        $PieChart->setSliceColor(1, $graphMonoSetting);
+
+        $PieChart->drawPieLegend(120, 170, $pieLegendStyles);
+        $PieChart->draw3DPie(180, 100, array_merge($pieChartStyles, ["Radius" => 100]));
+
+        $this->pImageGraphs[] = $myPicture;
+
+
+        /************* Age of Printing Devices *******************************/
+
+        $deviceAges = [
+            "Less than 5 years old" => 0,
+            "5-6 years old"         => 0,
+            "7-8 years old"         => 0,
+            "More than 8 years old" => 0
+        ];
+        foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
+        {
+            if ($device->getAge() < 5)
+            {
+                $deviceAges ["Less than 5 years old"]++;
+            }
+            else if ($device->getAge() <= 6)
+            {
+                $deviceAges ["5-6 years old"]++;
+            }
+            else if ($device->getAge() <= 8)
+            {
+                $deviceAges ["7-8 years old"]++;
+            }
+            else
+            {
+                $deviceAges ["More than 8 years old"]++;
+            }
+        }
+        $dataSet     = [];
+        $legendItems = [];
+        $labels      = [];
+
+        foreach ($deviceAges as $legendItem => $count)
+        {
+            $legendItems [] = $legendItem;
+            $dataSet []     = $count;
+            if ($count > 0)
+            {
+                $percentage = round(($count / $this->getDevices()->purchasedDeviceInstances->getCount()) * 100, 2);
+                $labels []  = "$percentage%";
+            }
+        }
+        $MyData = $factory->newData();
+        $MyData->addPoints($dataSet, 'Age of printing devices');
+        $MyData->setSerieDescription($deviceAges);
+        $keys = [];
+        foreach ($deviceAges as $key => $value)
+        {
+            $keys[] = $key;
+        }
+        $MyData->addPoints($keys, "Labels");
+        $MyData->setAbscissa("Labels");
+
+        $color1 = $hexToRGBConverter->hexToRgb($dealerBranding->graphAgeOfDevices1);
+        $color2 = $hexToRGBConverter->hexToRgb($dealerBranding->graphAgeOfDevices2);
+        $color3 = $hexToRGBConverter->hexToRgb($dealerBranding->graphAgeOfDevices3);
+        $color4 = $hexToRGBConverter->hexToRgb($dealerBranding->graphAgeOfDevices4);
+
+        $rgbColor1 = ['R' => $color1['r'], 'G' => $color1['g'], 'B' => $color1['b']];
+        $rgbColor2 = ['R' => $color2['r'], 'G' => $color2['g'], 'B' => $color2['b']];
+        $rgbColor3 = ['R' => $color3['r'], 'G' => $color3['g'], 'B' => $color3['b']];
+        $rgbColor4 = ['R' => $color4['r'], 'G' => $color4['g'], 'B' => $color4['b']];
+
+        $myPicture = $factory->newImage(400, 270, $MyData, true);
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+
+        $PieChart = $factory->newChart("pie", $myPicture, $MyData);
+        $PieChart->setSliceColor(0, $rgbColor1);
+        $PieChart->setSliceColor(1, $rgbColor2);
+        $PieChart->setSliceColor(2, $rgbColor3);
+        $PieChart->setSliceColor(3, $rgbColor4);
+
+        $PieChart->drawPieLegend(120, 170, $pieLegendStyles);
+
+        $PieChart->draw3DPie(180, 100, array_merge($pieChartStyles, ["Radius" => 100, "ValueR" => 127, "ValueG" => 127, "ValueB" => 127]));
+
+        $this->pImageGraphs[] = $myPicture;
+
+
+        /***************** Scan-Capable Printing Devices *********************/
+
+
+        if ($this->getDevices()->allIncludedDeviceInstances->getCount())
+        {
+            $scanPercentage = round((($this->getNumberOfScanCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
+        }
+        else
+        {
+            $scanPercentage = 0;
+        }
+        $notScanPercentage = 100 - $scanPercentage;
+
+        $MyData = $factory->newData();
+        $MyData->addPoints([$scanPercentage, $notScanPercentage], 'Scan-Capable Printing Devices');
+        $MyData->setSerieDescription("Scan-capable", "Not scan-capable");
+        $MyData->addPoints(["Scan-capable", "Not scan-capable"], "Labels");
+        $MyData->setAbscissa("Labels");
+
+        $graphCopyCapableDeviceColor   = $hexToRGBConverter->hexToRgb($dealerBranding->graphCopyCapableDeviceColor);
+        $graphNotCompatibleDeviceColor = $hexToRGBConverter->hexToRgb($dealerBranding->graphNotCompatibleDeviceColor);
+        $copyCapableSetting            = ['R' => $graphCopyCapableDeviceColor['r'], 'G' => $graphCopyCapableDeviceColor['g'], 'B' => $graphCopyCapableDeviceColor['b']];
+        $notCompatibleSetting          = ['R' => $graphNotCompatibleDeviceColor['r'], 'G' => $graphNotCompatibleDeviceColor['g'], 'B' => $graphNotCompatibleDeviceColor['b']];
+
+        $myPicture = $factory->newImage(200, 160, $MyData, true);
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->drawText(95, 20, "Scan-Capable Printing Devices", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]);
+        $PieChart = $factory->newChart("pie", $myPicture, $MyData);
+        $PieChart->setSliceColor(0, $copyCapableSetting);
+        $PieChart->setSliceColor(1, $notCompatibleSetting);
+        $PieChart->drawPieLegend(60, 130, $pieLegendStyles);
+
+        $PieChart->draw3DPie(100, 90, array_merge($pieChartStyles, ["Radius" => 60]));
+
+        $this->pImageGraphs[] = $myPicture;
+
+
+        /********************* Fax-Capable Printing Devices *******************/
+
+
+        $faxPercentage = 0;
+        if ($this->getDevices()->allIncludedDeviceInstances->getCount())
+        {
+            $faxPercentage = round((($this->getNumberOfFaxCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
+        }
+
+        $notFaxPercentage = 100 - $faxPercentage;
+
+        $MyData = $factory->newData();
+        $MyData->addPoints([$faxPercentage, $notFaxPercentage], 'Fax-Capable Printing Devices');
+        $MyData->setSerieDescription("Fax-capable", "Not fax-capable");
+        $MyData->addPoints(["Fax-capable", "Not fax-capable"], "Labels");
+        $MyData->setAbscissa("Labels");
+
+        $graphFaxCapableDeviceColor    = $hexToRGBConverter->hexToRgb($dealerBranding->graphFaxCapableDeviceColor);
+        $graphNotCompatibleDeviceColor = $hexToRGBConverter->hexToRgb($dealerBranding->graphNotCompatibleDeviceColor);
+        $copyCapableSetting            = ['R' => $graphFaxCapableDeviceColor['r'], 'G' => $graphFaxCapableDeviceColor['g'], 'B' => $graphFaxCapableDeviceColor['b']];
+        $notCompatibleSetting          = ['R' => $graphNotCompatibleDeviceColor['r'], 'G' => $graphNotCompatibleDeviceColor['g'], 'B' => $graphNotCompatibleDeviceColor['b']];
+
+        $myPicture = $factory->newImage(200, 160, $MyData, true);
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->drawText(95, 20, "Fax-Capable Printing Devices", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]);
+        $PieChart = $factory->newChart("pie", $myPicture, $MyData);
+        $PieChart->setSliceColor(0, $copyCapableSetting);
+        $PieChart->setSliceColor(1, $notCompatibleSetting);
+        $PieChart->drawPieLegend(60, 130, $pieLegendStyles);
+
+        $PieChart->draw3DPie(100, 90, array_merge($pieChartStyles, ["Radius" => 60]));
+
+        $this->pImageGraphs[] = $myPicture;
+
+        /******************* Color-Capable Printing Devices ******************/
+
+        $colorPercentage = 0;
+        if ($this->getDevices()->allIncludedDeviceInstances->getCount())
+        {
+            $colorPercentage = round((($this->getNumberOfColorCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
+        }
+
+        $notColorPercentage = 100 - $colorPercentage;
+
+        $MyData = $factory->newData();
+        $MyData->addPoints([$colorPercentage, $notColorPercentage], 'color-capable-devices');
+        $MyData->setSerieDescription("Color-capable", "Black-and-white only");
+        $MyData->addPoints(["Color-capable", "Black-and-white only"], "Labels");
+        $MyData->setAbscissa("Labels");
+
+        $graphColorDeviceColor = $hexToRGBConverter->hexToRgb($dealerBranding->graphColorDeviceColor);
+        $graphMonoDeviceColor  = $hexToRGBConverter->hexToRgb($dealerBranding->graphMonoDeviceColor);
+        $graphColorSetting     = ['R' => $graphColorDeviceColor['r'], 'G' => $graphColorDeviceColor['g'], 'B' => $graphColorDeviceColor['b']];
+        $graphMonoSetting      = ['R' => $graphMonoDeviceColor['r'], 'G' => $graphMonoDeviceColor['g'], 'B' => $graphMonoDeviceColor['b']];
+
+        $myPicture = $factory->newImage(200, 160, $MyData, true);
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->drawText(95, 20, "Color-Capable Printing Devices", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]);
+        $PieChart = $factory->newChart("pie", $myPicture, $MyData);
+        $PieChart->setSliceColor(0, $graphColorSetting);
+        $PieChart->setSliceColor(1, $graphMonoSetting);
+        $PieChart->drawPieLegend(60, 130, $pieLegendStyles);
+
+        $PieChart->draw3DPie(100, 90, array_merge($pieChartStyles, ["Radius" => 60]));
+
+        $this->pImageGraphs[] = $myPicture;
+
+        /****************** Duplex-Capable Printing Devices *******************/
+
+        $duplexPercentage = 0;
+        if ($this->getDevices()->allIncludedDeviceInstances->getCount())
+        {
+            $duplexPercentage = round((($this->getNumberOfDuplexCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
+        }
+
+        $notDuplexPercentage = 100 - $duplexPercentage;
+
+        $MyData = $factory->newData();
+        $MyData->addPoints([$duplexPercentage, $notDuplexPercentage], 'Duplex-Capable Printing Devices');
+        $MyData->setSerieDescription("Duplex-capable", "Not duplex-capable");
+        $MyData->addPoints(["Duplex-capable", "Not duplex-capable"], "Labels");
+        $MyData->setAbscissa("Labels");
+
+        $graphDuplexDeviceColor    = $hexToRGBConverter->hexToRgb($dealerBranding->graphDuplexCapableDeviceColor);
+        $graphNotDuplexDeviceColor = $hexToRGBConverter->hexToRgb($dealerBranding->graphNotCompatibleDeviceColor);
+        $graphDuplexSetting        = ['R' => $graphDuplexDeviceColor['r'], 'G' => $graphDuplexDeviceColor['g'], 'B' => $graphDuplexDeviceColor['b']];
+        $graphNotDuplexSetting     = ['R' => $graphNotDuplexDeviceColor['r'], 'G' => $graphNotDuplexDeviceColor['g'], 'B' => $graphNotDuplexDeviceColor['b']];
+
+        $myPicture = $factory->newImage(305, 210, $MyData, true);
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->drawText(150, 20, "Duplex-Capable Printing Devices", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]);
+        $PieChart = $factory->newChart("pie", $myPicture, $MyData);
+        $PieChart->setSliceColor(0, $graphDuplexSetting);
+        $PieChart->setSliceColor(1, $graphNotDuplexSetting);
+        $PieChart->drawPieLegend(90, 170, $pieLegendStyles);
+
+        $PieChart->draw3DPie(150, 100, array_merge($pieChartStyles, ["Radius" => 100]));
+
+        $this->pImageGraphs[] = $myPicture;
+
+        /***************** Scan-Capable Printing Devices *********************/
+
+        if ($this->getDevices()->allIncludedDeviceInstances->getCount())
+        {
+            $scanPercentage = round((($this->getNumberOfScanCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
+        }
+        else
+        {
+            $scanPercentage = 0;
+        }
+        $notScanPercentage = 100 - $scanPercentage;
+
+        $MyData = $factory->newData();
+        $MyData->addPoints([$scanPercentage, $notScanPercentage], 'Scan-Capable Printing Devices');
+        $MyData->setSerieDescription("Scan-capable", "Not scan-capable");
+        $MyData->addPoints(["Scan-capable", "Not scan-capable"], "Labels");
+        $MyData->setAbscissa("Labels");
+
+        $graphCopyCapableDeviceColor   = $hexToRGBConverter->hexToRgb($dealerBranding->graphCopyCapableDeviceColor);
+        $graphNotCompatibleDeviceColor = $hexToRGBConverter->hexToRgb($dealerBranding->graphNotCompatibleDeviceColor);
+        $copyCapableSetting            = ['R' => $graphCopyCapableDeviceColor['r'], 'G' => $graphCopyCapableDeviceColor['g'], 'B' => $graphCopyCapableDeviceColor['b']];
+        $notCompatibleSetting          = ['R' => $graphNotCompatibleDeviceColor['r'], 'G' => $graphNotCompatibleDeviceColor['g'], 'B' => $graphNotCompatibleDeviceColor['b']];
+
+        $myPicture = $factory->newImage(305, 210, $MyData, true);
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->drawText(150, 20, "Scan-Capable Printing Devices", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]);
+        $PieChart = $factory->newChart("pie", $myPicture, $MyData);
+        $PieChart->setSliceColor(0, $copyCapableSetting);
+        $PieChart->setSliceColor(1, $notCompatibleSetting);
+        $PieChart->drawPieLegend(90, 170, $pieLegendStyles);
+
+        $PieChart->draw3DPie(150, 100, array_merge($pieChartStyles, ["Radius" => 100]));
+
+
+        $this->pImageGraphs[] = $myPicture;
 
         // Return the pImages[]
         return $this->pImageGraphs;
@@ -2415,7 +2849,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $this->Graphs [] = $barGraph->getUrl();
 
             /**
-             * -- AverageMonthlyPagesPerEmployeeBarGraph
+             * -- AverageDevicesPerEmployeeBarGraph
              */
             $devicesPerEmployee = round($employeeCount / $this->getDevices()->allIncludedDeviceInstances->getCount(), 2);
             $highest            = ($devicesPerEmployee > self::AVERAGE_EMPLOYEES_PER_DEVICE) ? $devicesPerEmployee : self::AVERAGE_EMPLOYEES_PER_DEVICE;
