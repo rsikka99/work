@@ -94,8 +94,7 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
         $this->initReportVariables($filename);
 
         // New graphs being passed to view
-        $assessmentViewModel->setNewGraphs($newGraphs);
-        $this->view->theGraphs = $this->cacheNewPNGImages($assessmentViewModel->getTheGraphs(), true, true);
+        $this->view->graphs = $this->cacheNewPNGImages($assessmentViewModel->getTheGraphs(), true, true);
 
         // Render early
         try

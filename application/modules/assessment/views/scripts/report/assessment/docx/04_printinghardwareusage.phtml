@@ -12,7 +12,8 @@ $section = $this->section;
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$graphs              = $assessmentViewModel->getGraphs();
+/* The graphs */
+$graphs = $this->graphs;
 
 $section->addTitle('Analysis: Printing Hardware Usage', 1);
 
@@ -33,9 +34,9 @@ $section->addText(sprintf('You currently have %1$s networked printing %2$s that 
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell1)->addImage($graphs [4]);
-$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell2)->addImage($graphs [5]);
-$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell3)->addImage($graphs [6]);
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell1)->addImage($graphs[4]);
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell2)->addImage($graphs[5]);
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell3)->addImage($graphs[6]);
 
 $section->addTextBreak();
 
@@ -100,7 +101,7 @@ $section->addTextBreak();
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs [7]);
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs [8]);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs[8]);
 $section->addTextBreak();
 
 $section->addText('Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company\'s professional image, improve comprehension and increase readership.');
