@@ -597,6 +597,8 @@ class HardwareLibrary_ManageDevicesController extends Action
                                 }
                             }
                         }
+
+                        $manageMasterDeviceService->recalculateMaximumRecommendedMonthlyPageVolume();
                     }
 
                     if (count($validData['hardwareOptimization']) > 0)
