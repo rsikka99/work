@@ -436,7 +436,7 @@ abstract class My_Controller_Report extends Action
      * @return mixed
      * @throws Exception
      */
-    public function cacheNewPNGImages ($imageArray, $local = true)
+    public function cacheNewPNGImages ($imageArray, $local = true, $fullPathRequested = false)
     {
 
         $cachePath       = $this->_fullCachePath;
@@ -524,6 +524,12 @@ abstract class My_Controller_Report extends Action
         catch (Exception $e)
         {
             throw new Exception("Could not cache image files!", 0, $e);
+        }
+
+        /* Are we rendering a DOCX? If so, we need the full file path */
+        if ($fullPathRequested)
+        {
+            return $fullPathNewImages;
         }
 
         return $newImages;
