@@ -68,7 +68,7 @@ class Assessment_ViewModel_Ranking
 
             if (count($areasToImprove) > 0)
             {
-                $rankingText .= " To improve your score in this area, " . $this->proposal->assessment->getClient()->companyName . " could ";
+                $rankingText .= " To improve your score in this area, " . htmlentities($this->proposal->assessment->getClient()->companyName) . " could ";
                 $rankingText .= implode(', ', $areasToImprove) . ".";
             }
 
@@ -111,7 +111,7 @@ class Assessment_ViewModel_Ranking
 
             if (count($areasToImprove) > 0)
             {
-                $rankingText .= " To improve your score in this area, " . $this->proposal->assessment->getClient()->companyName . " could ";
+                $rankingText .= " To improve your score in this area, " . htmlentities($this->proposal->assessment->getClient()->companyName) . " could ";
                 foreach ($areasToImprove as $improvementText)
                 {
                     $rankingText .= $improvementText . ", ";
@@ -162,7 +162,7 @@ class Assessment_ViewModel_Ranking
 
             if (count($areasToImprove) > 0)
             {
-                $rankingText .= " To improve your score in this area, " . $this->proposal->assessment->getClient()->companyName . " could ";
+                $rankingText .= " To improve your score in this area, " . htmlentities($this->proposal->assessment->getClient()->companyName) . " could ";
                 foreach ($areasToImprove as $improvementText)
                 {
                     $rankingText .= $improvementText . ", ";
@@ -219,7 +219,7 @@ class Assessment_ViewModel_Ranking
 
             if (count($areasToImprove) > 0)
             {
-                $rankingText .= " To improve your score in this area, " . $this->proposal->assessment->getClient()->companyName . " could ";
+                $rankingText .= " To improve your score in this area, " . htmlentities($this->proposal->assessment->getClient()->companyName) . " could ";
                 foreach ($areasToImprove as $improvementText)
                 {
                     $rankingText .= $improvementText . ", ";

@@ -22,6 +22,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsUploadModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsUploadRowModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\AbstractRmsUploadService;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\FmAuditUploadService;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\FmAuditVersionFourUploadService;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\NerDataUploadService;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\PrintAuditUploadService;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\PrintFleetVersionThreeUploadService;
@@ -138,6 +139,10 @@ class RmsUploadService
                 case RmsProviderModel::RMS_PROVIDER_FMAUDIT:
                     $uploadProviderId = RmsProviderModel::RMS_PROVIDER_FMAUDIT;
                     $uploadCsvService = new FmAuditUploadService();
+                    break;
+                case RmsProviderModel::RMS_PROVIDER_FMAUDIT_FOUR:
+                    $uploadProviderId = RmsProviderModel::RMS_PROVIDER_FMAUDIT_FOUR;
+                    $uploadCsvService = new FmAuditVersionFourUploadService();
                     break;
                 case RmsProviderModel::RMS_PROVIDER_XEROX:
                     $uploadProviderId = RmsProviderModel::RMS_PROVIDER_XEROX;
