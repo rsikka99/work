@@ -62,6 +62,10 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
                 throw new Exception("Healthcheck View Model is false");
             }
             $this->view->healthcheckViewModel = $healthcheckViewModel;
+
+            // New Graphs being passed to view
+            $this->view->theGraphs = $this->cacheNewPNGImages($healthcheckViewModel->getTheGraphs(), true);
+
         }
         catch (Exception $e)
         {

@@ -1,4 +1,6 @@
 <?php
+
+use CpChart\Services\pChartFactory;
 use MPSToolbox\Legacy\Modules\HealthCheck\Models\HealthCheckModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ClientTonerOrderMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\ClientTonerOrderModel;
@@ -30,6 +32,23 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     const OLD_DEVICE_THRESHOLD   = 10;
     const GALLONS_WATER_PER_PAGE = 2.6; // Number of pages * this gives amount of gallons
     const PAGES_PER_TREE         = 7800; //Number of pages divided by this, gives amount of trees
+
+    /**
+     * Average Monthly Pages Per Employee
+     */
+    const AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE = 200;
+    /**
+     * Average Monthly Pages Per Device
+     */
+    const AVERAGE_MONTHLY_PAGES_PER_DEVICE = 1500;
+
+    /**
+     * AVERAGE NUMBER OF EMPLOYEES PER DEVICE
+     */
+    const AVERAGE_EMPLOYEES_PER_DEVICE = 4.4;
+
+    protected $pImageGraphs = [];
+
     public static $Proposal;
 
     // New Separated Proposal
@@ -3114,6 +3133,204 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $this->Graphs;
+    }
+
+    /**
+     * This function will eventually be renamed getGraphs() and take its place
+     * It will use the new pChart library to create pImages and returns an array
+     */
+    public function getTheGraphs ()
+    {
+        $dealerBranding = My_Brand::getDealerBranding();
+        // Other variables used in several places
+        $companyName = mb_strimwidth($this->healthcheck->getClient()->companyName, 0, 23, "...");
+        $employeeCount = $this->healthcheck->getClient()->employeeCount;
+
+        $hexToRGBConverter = new \Tangent\Format\HexToRGB();
+        $factory = new pChartFactory();
+
+        // Chart Styles
+        $pieChartStyles = ["SecondPass" => true, "ValuePosition" => PIE_VALUE_INSIDE, "WriteValues" => PIE_VALUE_PERCENTAGE, "SliceHeight" => 10];
+        $pieLegendStyles = ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "BoxSize" => 10];
+
+        /*****Average Monthly Pages per Networked Printer*****/
+        $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount(), 0);
+        $highest          = ($averagePageCount > self::AVERAGE_MONTHLY_PAGES_PER_DEVICE) ? $averagePageCount : self::AVERAGE_MONTHLY_PAGES_PER_DEVICE;
+
+        $MyData = $factory->newData();
+        $MyData->addPoints([$averagePageCount], $companyName);
+        $MyData->addPoints([self::AVERAGE_MONTHLY_PAGES_PER_DEVICE], "Average");
+
+        //Fixes x access scale appearing - hacky - needs fixing
+        $MyData->addPoints([""], "Printer Types");
+        $MyData->setSerieDescription("Printer Types", "Type");
+        $MyData->setAbscissa("Printer Types");
+
+        $graphCustomerColor        = $hexToRGBConverter->hexToRgb($dealerBranding->graphCustomerColor);
+        $graphIndustryAverageColor = $hexToRGBConverter->hexToRgb($dealerBranding->graphIndustryAverageColor);
+        $customerColorSetting      = ['R' => $graphCustomerColor['r'], 'G' => $graphCustomerColor['g'], 'B' => $graphCustomerColor['b']];
+        $averageColorSetting       = ['R' => $graphIndustryAverageColor['r'], 'G' => $graphIndustryAverageColor['g'], 'B' => $graphIndustryAverageColor['b']];
+        $MyData->setPalette($companyName, $customerColorSetting);
+        $MyData->setPalette("Average", $averageColorSetting);
+
+        $myPicture            = $factory->newImage(175, 300, $MyData);
+        $myPicture->Antialias = false;
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->setGraphArea(60, 50, 150, 245);
+        $AxisBoundaries = [0 => ["Min" => 0, "Max" => $highest * 1.1]];
+        $myPicture->drawScale(["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "AxisR" => 127, "AxisG" => 127, "AxisB" => 127, "InnerTickWidth" => 0, "OuterTickWidth" => 0, "TickR" => 127, "TickG" => 127, "TickB" => 127]);
+
+        $myPicture->drawText(10, 30, "Average Monthly Pages \n per Networked Printer", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0]);
+
+        /* Write the chart legend - this sets the x/y position */
+        $myPicture->drawLegend(50, 260, ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "FontR" => 127, "FontG" => 127, "FontB" => 127]);
+        $myPicture->drawBarChart(["DisplayValues" => true, "Surrounding" => -30]);
+
+        $this->pImageGraphs['AverageMonthlyPagesBarGraph'] = $myPicture;
+
+
+        /********** Average Monthly Pages per Employee ***********************/
+
+        $pagesPerEmployee = ($employeeCount > 0) ? round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $employeeCount) : 0;
+        $highest          = (Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
+
+        $MyData = $factory->newData();
+        $MyData->addPoints([$pagesPerEmployee], $companyName);
+        $MyData->addPoints([self::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE], "Average");
+
+        //Fixes x access scale appearing - hacky - needs fixing
+        $MyData->addPoints([""], "Printer Types");
+        $MyData->setSerieDescription("Printer Types", "Type");
+        $MyData->setAbscissa("Printer Types");
+
+        $graphCustomerColor        = $hexToRGBConverter->hexToRgb($dealerBranding->graphCustomerColor);
+        $graphIndustryAverageColor = $hexToRGBConverter->hexToRgb($dealerBranding->graphIndustryAverageColor);
+        $customerColorSetting      = ['R' => $graphCustomerColor['r'], 'G' => $graphCustomerColor['g'], 'B' => $graphCustomerColor['b']];
+        $averageColorSetting       = ['R' => $graphIndustryAverageColor['r'], 'G' => $graphIndustryAverageColor['g'], 'B' => $graphIndustryAverageColor['b']];
+        $MyData->setPalette($companyName, $customerColorSetting);
+        $MyData->setPalette("Average", $averageColorSetting);
+
+        $myPicture            = $factory->newImage(175, 300, $MyData);
+        $myPicture->Antialias = false;
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->setGraphArea(60, 50, 150, 245);
+        $AxisBoundaries = [0 => ["Min" => 0, "Max" => $highest * 1.1]];
+        $myPicture->drawScale(["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "AxisR" => 127, "AxisG" => 127, "AxisB" => 127, "InnerTickWidth" => 0, "OuterTickWidth" => 0, "TickR" => 127, "TickG" => 127, "TickB" => 127]);
+
+        $myPicture->drawText(90, 30, "Average Monthly Pages\n        per Employee", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]);
+
+        /* Write the chart legend - this sets the x/y position */
+        $myPicture->drawLegend(50, 260, ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "FontR" => 127, "FontG" => 127, "FontB" => 127]);
+        $myPicture->drawBarChart(["DisplayValues" => true, "Surrounding" => -30]);
+
+        $this->pImageGraphs['AverageMonthlyPagesPerEmployeeBarGraph'] = $myPicture;
+
+        /********** Employees per Printing Device ***********************/
+
+        $devicesPerEmployee = round($employeeCount / $this->getDevices()->allIncludedDeviceInstances->getCount(), 2);
+        $highest            = ($devicesPerEmployee > self::AVERAGE_EMPLOYEES_PER_DEVICE) ? $devicesPerEmployee : self::AVERAGE_EMPLOYEES_PER_DEVICE;
+
+        $MyData = $factory->newData();
+        $MyData->addPoints([$devicesPerEmployee], $companyName);
+        $MyData->addPoints([self::AVERAGE_EMPLOYEES_PER_DEVICE], "Average");
+
+        //Fixes x access scale appearing - hacky - needs fixing
+        $MyData->addPoints([""], "Printer Types");
+        $MyData->setSerieDescription("Printer Types", "Type");
+        $MyData->setAbscissa("Printer Types");
+
+        $graphCustomerColor        = $hexToRGBConverter->hexToRgb($dealerBranding->graphCustomerColor);
+        $graphIndustryAverageColor = $hexToRGBConverter->hexToRgb($dealerBranding->graphIndustryAverageColor);
+        $customerColorSetting      = ['R' => $graphCustomerColor['r'], 'G' => $graphCustomerColor['g'], 'B' => $graphCustomerColor['b']];
+        $averageColorSetting       = ['R' => $graphIndustryAverageColor['r'], 'G' => $graphIndustryAverageColor['g'], 'B' => $graphIndustryAverageColor['b']];
+        $MyData->setPalette($companyName, $customerColorSetting);
+        $MyData->setPalette("Average", $averageColorSetting);
+
+        $myPicture            = $factory->newImage(175, 300, $MyData);
+        $myPicture->Antialias = false;
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->setGraphArea(60, 50, 150, 245);
+        $AxisBoundaries = [0 => ["Min" => 0, "Max" => $highest * 1.1]];
+        $myPicture->drawScale(["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "AxisR" => 127, "AxisG" => 127, "AxisB" => 127, "InnerTickWidth" => 0, "OuterTickWidth" => 0, "TickR" => 127, "TickG" => 127, "TickB" => 127]);
+
+        $myPicture->drawText(90, 30, " Employees per\nPrinting Device", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]);
+
+        /* Write the chart legend - this sets the x/y position */
+        $myPicture->drawLegend(50, 260, ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "FontR" => 127, "FontG" => 127, "FontB" => 127]);
+        $myPicture->drawBarChart(["DisplayValues" => true, "Surrounding" => -30]);
+
+        $this->pImageGraphs['EmployeesPerDeviceBarGraph'] = $myPicture;
+
+        /* --- ColorCapablePrintingDevices --- */
+        $value1 = $this->getDevices()->colorCapableDeviceInstances->getCount();
+        $value2 = $this->getDevices()->allIncludedDeviceInstances->getCount() - $this->getDevices()->colorCapableDeviceInstances->getCount();
+        $highest  = max($value1,$value2);
+
+        $MyData = $factory->newData();
+        $MyData->addPoints([$value1], 'Color-capable');
+        $MyData->addPoints([$value2], 'Black-and-white only');
+
+        //Fixes x access scale appearing - hacky - needs fixing
+        $MyData->addPoints([""], "Printer Types");
+        $MyData->setSerieDescription("Printer Types", "Type");
+        $MyData->setAbscissa("Printer Types");
+
+        $graphColorDeviceColor        = $hexToRGBConverter->hexToRgb_uppercase($dealerBranding->graphColorDeviceColor);
+        $graphMonoDeviceColor = $hexToRGBConverter->hexToRgb_uppercase($dealerBranding->graphMonoDeviceColor);
+        $MyData->setPalette('Color-capable', $graphColorDeviceColor);
+        $MyData->setPalette('Black-and-white only', $graphMonoDeviceColor);
+
+        $myPicture            = $factory->newImage(280, 210, $MyData);
+        $myPicture->Antialias = false;
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->setGraphArea(60, 50, 280-25, 210-55);
+        $AxisBoundaries = [0 => ["Min" => 0, "Max" => $highest * 1.1]];
+        $myPicture->drawScale(["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "AxisR" => 127, "AxisG" => 127, "AxisB" => 127, "InnerTickWidth" => 0, "OuterTickWidth" => 0, "TickR" => 127, "TickG" => 127, "TickB" => 127]);
+
+        $myPicture->drawText(90, 30, "Color-Capable\nPrinting Devices", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]);
+
+        /* Write the chart legend - this sets the x/y position */
+        $myPicture->drawLegend(50, 210-40, ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "FontR" => 127, "FontG" => 127, "FontB" => 127]);
+        $myPicture->drawBarChart(["DisplayValues" => true, "Surrounding" => -30]);
+
+        $this->pImageGraphs['ColorCapablePrintingDevices'] = $myPicture;
+
+        /* -- ColorVSBWPagesGraph -- */
+        $value1 = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly());
+        $value2 = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() - $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly());
+        $highest  = max($value1,$value2);
+
+        $MyData = $factory->newData();
+        $MyData->addPoints([$value1], 'Color pages printed');
+        $MyData->addPoints([$value2], 'Black-and-white pages printed');
+
+        //Fixes x access scale appearing - hacky - needs fixing
+        $MyData->addPoints([""], "Printer Types");
+        $MyData->setSerieDescription("Printer Types", "Type");
+        $MyData->setAbscissa("Printer Types");
+
+        $graphColorDeviceColor        = $hexToRGBConverter->hexToRgb_uppercase($dealerBranding->graphColorDeviceColor);
+        $graphMonoDeviceColor = $hexToRGBConverter->hexToRgb_uppercase($dealerBranding->graphMonoDeviceColor);
+        $MyData->setPalette('Color pages printed', $graphColorDeviceColor);
+        $MyData->setPalette('Black-and-white pages printed', $graphMonoDeviceColor);
+
+        $myPicture            = $factory->newImage(280, 210, $MyData);
+        $myPicture->Antialias = false;
+        $myPicture->setFontProperties(["FontName" => "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+        $myPicture->setGraphArea(60, 50, 280-25, 210-55);
+        $AxisBoundaries = [0 => ["Min" => 0, "Max" => $highest * 1.1]];
+        $myPicture->drawScale(["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "AxisR" => 127, "AxisG" => 127, "AxisB" => 127, "InnerTickWidth" => 0, "OuterTickWidth" => 0, "TickR" => 127, "TickG" => 127, "TickB" => 127]);
+
+        $myPicture->drawText(90, 30, "Color vs\nBlack/White Pages", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]);
+
+        /* Write the chart legend - this sets the x/y position */
+        $myPicture->drawLegend(50, 210-40, ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "FontR" => 127, "FontG" => 127, "FontB" => 127]);
+        $myPicture->drawBarChart(["DisplayValues" => true, "Surrounding" => -30]);
+
+        $this->pImageGraphs['ColorVSBWPagesGraph'] = $myPicture;
+
+        /* --- */
+        return $this->pImageGraphs;
     }
 
     /**

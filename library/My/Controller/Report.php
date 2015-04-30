@@ -453,7 +453,8 @@ abstract class My_Controller_Report extends Action
             $newImages         = [];
             $fullPathNewImages = [];
 
-            for ($i = 0; $i < sizeof($imageArray); $i++)
+            //for ($i = 0; $i < sizeof($imageArray); $i++)
+            foreach ($imageArray as $i=>$obj)
             {
                 $imageFilename     = $imagePathAndPrefix . $i . '.png';
                 $fullImageFileName = $fullPathImagePrefix . $i . '.png';
@@ -464,10 +465,9 @@ abstract class My_Controller_Report extends Action
                 }
 
                 // Renders the image in the cached image folder
-                $imageArray[$i]->render($fullImageFileName);
-                $newImages []        = $imageFilename;
-                $fullPathNewImages[] = $fullImageFileName;
-
+                $obj->render($fullImageFileName);
+                $newImages [$i]        = $imageFilename;
+                $fullPathNewImages[$i] = $fullImageFileName;
             }
 
 

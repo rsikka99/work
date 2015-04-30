@@ -2,6 +2,8 @@
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
 $graphs               = $healthcheckViewModel->getGraphs();
+$theGraphs           = $this->theGraphs;
+
 ?>
 <div class="h1">Analysis: Printing Hardware Usage</div>
 <div class="pheader">Print Volume and Number of Printing Devices</div>
@@ -14,9 +16,9 @@ $graphs               = $healthcheckViewModel->getGraphs();
 </p>
 <br /> <br />
 <div class="center">
-    <img src="<?= $graphs['AverageMonthlyPagesBarGraph']; ?>" style="width: 30%; height: 30%;" /> <!-- Average monthly pages per networked printer -->
-    <img src="<?= $graphs['AverageMonthlyPagesPerEmployeeBarGraph']; ?>" style="width: 30%; height: 30%;" /> <!-- Average monthly pages per employee -->
-    <img src="<?= $graphs['EmployeesPerDeviceBarGraph']; ?>" style="width: 30%; height: 30%;" /> <!-- Employees per printing device -->
+    <img src="<?= $theGraphs['AverageMonthlyPagesBarGraph']; ?>" style="width: 30%; height: 30%;" /> <!-- Average monthly pages per networked printer -->
+    <img src="<?= $theGraphs['AverageMonthlyPagesPerEmployeeBarGraph']; ?>" style="width: 30%; height: 30%;" /> <!-- Average monthly pages per employee -->
+    <img src="<?= $theGraphs['EmployeesPerDeviceBarGraph']; ?>" style="width: 30%; height: 30%;" /> <!-- Employees per printing device -->
 </div>
 <br /> <br />
 <div class="pheader">Hardware Utilization and Capacity</div>
@@ -132,10 +134,10 @@ $graphs               = $healthcheckViewModel->getGraphs();
     <table>
         <tbody>
         <tr>
-            <td><img src="<?= $graphs['ColorCapablePrintingDevices']; ?>" />
+            <td><img src="<?= $theGraphs['ColorCapablePrintingDevices']; ?>" />
             </td>
             <!-- Devices Purchased -->
-            <td><img src="<?= $graphs['ColorVSBWPagesGraph']; ?>" /></td>
+            <td><img src="<?= $theGraphs['ColorVSBWPagesGraph']; ?>" /></td>
             <!-- Monthly pages on devices not leased -->
         </tr>
         </tbody>
