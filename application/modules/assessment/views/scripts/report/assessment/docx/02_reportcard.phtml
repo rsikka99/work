@@ -12,8 +12,9 @@ $section = $this->section;
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 
-$newGraphs = $assessmentViewModel->getTheGraphs();
-$theGraph  = "/home/kmccully/apps/mpstoolbox/public/cache/reports/assessment/205/142927931614196_0.png";
+/* The graphs */
+$graphs = $this->graphs;
+
 
 $section->addTitle(sprintf('Your %1$s', My_Brand::getDealerBranding()->assessmentTitle), 1);
 
@@ -69,9 +70,8 @@ $section->addTextBreak();
 
 $imageTable = $section->addTable();
 $imageTable->addRow();
-$cell   = $imageTable->addCell(9028, $this->styles->tables->singleimage->cell1);
-$graphs = $assessmentViewModel->getGraphs();
-$cell->addImage($theGraph);
+$cell = $imageTable->addCell(9028, $this->styles->tables->singleimage->cell1);
+$cell->addImage($graphs[0]);
 
 // Textbreak fix to ensure the tables don't merge into each other
 $section->addTextBreak();
