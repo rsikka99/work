@@ -2007,17 +2007,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         return $myPicture;
     }
 
-    /**
-     * @return array|\CpChart\Classes\pImage
-     */
-    public function getNewGraphs ()
-    {
-        $newGraphs[] = $this->getThisGraph();
-        $newGraphs[] = $this->getThisGraph();
-
-        return $newGraphs;
-
-    }
 
     /**
      * This function will eventually be renamed getGraphs() and take its place
