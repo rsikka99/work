@@ -308,6 +308,15 @@ class ManageMasterDevicesService
         }
     }
 
+    /**
+     *
+     */
+    public function recalculateMaximumRecommendedMonthlyPageVolume() {
+        $masterDeviceMapper = MasterDeviceMapper::getInstance();
+        $masterDevice       = $masterDeviceMapper->find($this->masterDeviceId);
+        $masterDevice->recalculateMaximumRecommendedMonthlyPageVolume();
+        $masterDeviceMapper->save($masterDevice);
+    }
 
     /**
      * @param array $validatedData
