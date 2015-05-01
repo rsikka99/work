@@ -23,6 +23,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsUploadRowModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\AbstractRmsUploadService;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\FmAuditUploadService;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\FmAuditVersionFourUploadService;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\LexmarkRmsUploadService;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\NerDataUploadService;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\PrintAuditUploadService;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\PrintFleetVersionThreeUploadService;
@@ -161,8 +162,8 @@ class RmsUploadService
                     $uploadCsvService = new PrintTrackerUploadService();
                     break;
                 case RmsProviderModel::RMS_PROVIDER_LEXMARK:
-                    $uploadProviderId = RmsProviderModel::RMS_PROVIDER_PRINT_TRACKER;
-                    $uploadCsvService = new PrintTrackerUploadService();
+                    $uploadProviderId = RmsProviderModel::RMS_PROVIDER_LEXMARK;
+                    $uploadCsvService = new LexmarkRmsUploadService();
                     break;
                 default :
                     $uploadCsvService    = null;
@@ -173,6 +174,7 @@ class RmsUploadService
 
             if ($uploadCsvService instanceof AbstractRmsUploadService)
             {
+
                 $db = Zend_Db_Table::getDefaultAdapter();
                 $db->beginTransaction();
                 try

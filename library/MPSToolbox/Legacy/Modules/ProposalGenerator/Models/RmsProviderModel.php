@@ -19,8 +19,8 @@ class RmsProviderModel extends My_Model_Abstract
     const RMS_PROVIDER_NER_DATA         = 5;
     const RMS_PROVIDER_PRINTFLEET_THREE = 6;
     const RMS_PROVIDER_PRINT_TRACKER    = 7;
-    const RMS_PROVIDER_LEXMARK          = 8;
     const RMS_PROVIDER_FMAUDIT_FOUR     = 8;
+    const RMS_PROVIDER_LEXMARK          = 9;
 
     /**
      * @var int
