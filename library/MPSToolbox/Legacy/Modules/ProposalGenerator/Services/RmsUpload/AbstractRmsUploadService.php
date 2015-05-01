@@ -336,6 +336,7 @@ abstract class AbstractRmsUploadService
                     $fileLines[] = $line;
                 }
             } else {
+                ini_set("auto_detect_line_endings", true);
                 $fileLines = file($filename, FILE_IGNORE_NEW_LINES);
             }
             $lineCount = count($fileLines) - 1 - $this->_linesToTrim;
