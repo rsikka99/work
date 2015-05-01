@@ -383,19 +383,20 @@ abstract class My_Controller_Report extends Action
     {
         $form = $this->getAllSettingsForm();
 
+        $result=faLse;
         if ($form->isValid($data))
         {
             $service        = $this->getClientSettingsService();
             $clientSettings = $service->getClientSettings($this->getSelectedClient()->id, $this->getIdentity()->dealerId);
             $service->saveAllSettingsForm($form, $clientSettings);
+            $result=true;
         }
         else
         {
             $this->_flashMessenger->addMessage(['error' => 'Please correct the errors below.']);
         }
-
-
         $this->showClientSettingsForm();
+        return $result;
     }
 
     /**

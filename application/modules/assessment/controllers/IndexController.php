@@ -161,14 +161,14 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
 
             if (!isset($postData['goBack']))
             {
-                $this->saveClientSettingsForm($postData);
-                $this->saveAssessment();
-
-                if (isset($postData['saveAndContinue']))
-                {
-                    $this->updateAssessmentStepName();
+                if ($this->saveClientSettingsForm($postData)) {
                     $this->saveAssessment();
-                    $this->gotoNextNavigationStep($this->_navigation);
+
+                    if (isset($postData['saveAndContinue'])) {
+                        $this->updateAssessmentStepName();
+                        $this->saveAssessment();
+                        $this->gotoNextNavigationStep($this->_navigation);
+                    }
                 }
             }
             else

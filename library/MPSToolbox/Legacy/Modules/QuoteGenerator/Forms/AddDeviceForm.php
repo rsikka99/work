@@ -12,7 +12,7 @@ use Zend_Auth;
  *
  * @package MPSToolbox\Legacy\Modules\QuoteGenerator\Forms
  */
-class AddDeviceForm extends Zend_Form
+class AddDeviceForm extends \My_Form_Form
 {
 
     public function init ()

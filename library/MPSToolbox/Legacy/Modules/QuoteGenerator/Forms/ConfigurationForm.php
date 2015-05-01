@@ -11,7 +11,7 @@ use Zend_Auth;
  *
  * @package MPSToolbox\Legacy\Modules\QuoteGenerator\Forms
  */
-class ConfigurationForm extends Zend_Form
+class ConfigurationForm extends \My_Form_Form
 {
 
     public function init ()

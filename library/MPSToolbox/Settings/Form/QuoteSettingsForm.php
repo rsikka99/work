@@ -9,7 +9,7 @@ use MPSToolbox\Settings\Entities\QuoteSettingsEntity as QuoteSettingsEntity;
  *
  * @package MPSToolbox\Settings\Form
  */
-class QuoteSettingsForm extends \Zend_Form
+class QuoteSettingsForm extends \My_Form_Form
 {
     /**
      * Initializes the form with all the elements required
@@ -21,12 +21,12 @@ class QuoteSettingsForm extends \Zend_Form
         /**
          * Hardware Quote Default Settings
          */
-        $this->addElement('text', 'defaultDeviceMargin', [
+        $this->addElement('text_float', 'defaultDeviceMargin', [
             'label'    => 'Default Margin on Devices',
             'required' => true,
         ]);
 
-        $this->addElement('text', 'defaultPageMargin', [
+        $this->addElement('text_float', 'defaultPageMargin', [
             'label'    => 'Default Margin on Pages',
             'required' => true,
         ]);

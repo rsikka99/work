@@ -52,7 +52,7 @@ class QuotePageForm extends FormWithNavigation
             {
                 // quantity_monochrome_<quoteDeviceGroupId>_<quoteDeviceId> : MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceGroupDeviceModel->monochromePagesQuantity
                 // quantity_monochrome_<quoteDeviceGroupId>_<quoteDeviceId> is used to store the amount of pages allocated per device
-                $this->addElement('text', "quantity_monochrome_{$quoteDeviceGroupDevice->quoteDeviceGroupId}_{$quoteDeviceGroupDevice->quoteDeviceId}", [
+                $this->addElement('text_int', "quantity_monochrome_{$quoteDeviceGroupDevice->quoteDeviceGroupId}_{$quoteDeviceGroupDevice->quoteDeviceId}", [
                     'label'      => 'Quantity',
                     'required'   => true,
                     'value'      => $quoteDeviceGroupDevice->monochromePagesQuantity,
@@ -69,7 +69,7 @@ class QuotePageForm extends FormWithNavigation
                 {
                     // quantity_color_<quoteDeviceGroupId>_<quoteDeviceId> : MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceGroupDeviceModel->colorPagesQuantity
                     // quantity_color_<quoteDeviceGroupId>_<quoteDeviceId> is used to store the amount of pages allocated per device
-                    $this->addElement('text', "quantity_color_{$quoteDeviceGroupDevice->quoteDeviceGroupId}_{$quoteDeviceGroupDevice->quoteDeviceId}", [
+                    $this->addElement('text_int', "quantity_color_{$quoteDeviceGroupDevice->quoteDeviceGroupId}_{$quoteDeviceGroupDevice->quoteDeviceId}", [
                         'label'      => 'Quantity',
                         'required'   => true,
                         'value'      => $quoteDeviceGroupDevice->colorPagesQuantity,
@@ -87,7 +87,7 @@ class QuotePageForm extends FormWithNavigation
 
         // monochromePageMargin : MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel->monochromePageMargin
         // monochromePageMargin is used to determine margin on pages for the entire quote
-        $this->addElement('text', 'monochromePageMargin', [
+        $this->addElement('text_float', 'monochromePageMargin', [
             'value'      => $this->_quote->monochromePageMargin,
             'required'   => true,
             'validators' => [
@@ -101,7 +101,7 @@ class QuotePageForm extends FormWithNavigation
 
         // colorPageMargin : MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel->colorPageMargin
         // colorPageMargin is used to set a page margin for all of the color pages on the quote
-        $this->addElement('text', 'colorPageMargin', [
+        $this->addElement('text_float', 'colorPageMargin', [
             'value'      => $this->_quote->colorPageMargin,
             'required'   => true,
             'validators' => [
@@ -115,7 +115,7 @@ class QuotePageForm extends FormWithNavigation
 
         // monochromeOverageMargin : MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel->monochromeOverageMargin
         // monochromeOverageMargin is used for the calcuation of overage rate per page for pages.
-        $this->addElement('text', 'monochromeOverageMargin', [
+        $this->addElement('text_float', 'monochromeOverageMargin', [
             'value'      => $this->_quote->monochromeOverageMargin,
             'required'   => true,
             'validators' => [
@@ -129,7 +129,7 @@ class QuotePageForm extends FormWithNavigation
 
         // colorOverageMargin : MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel->colorOverageMargin
         // colorOverageMargin is used for the calcuation of overage rate per page for pages.
-        $this->addElement('text', 'colorOverageMargin', [
+        $this->addElement('text_float', 'colorOverageMargin', [
             'value'      => $this->_quote->colorOverageMargin,
             'required'   => true,
             'validators' => [
@@ -143,7 +143,7 @@ class QuotePageForm extends FormWithNavigation
 
         // pageCoverageColor : MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel->pageCoverageColor
         // pageCoverageColor is used to set the page coverage amount in the quote
-        $pageCoverageColor = $this->createElement('text', 'pageCoverageColor', [
+        $pageCoverageColor = $this->createElement('text_float', 'pageCoverageColor', [
             'label'      => 'Page Coverage Color:',
             'required'   => true,
             'value'      => $this->_quote->pageCoverageColor,
@@ -160,7 +160,7 @@ class QuotePageForm extends FormWithNavigation
 
         // pageCoverageMonochrome : MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel->pageCoverageMonochrome
         // pageCoverageMonochrome is used to set the page coverage amount in the quote
-        $pageCoverageMonochrome = $this->createElement('text', 'pageCoverageMonochrome', [
+        $pageCoverageMonochrome = $this->createElement('text_float', 'pageCoverageMonochrome', [
             'label'      => 'Page Coverage Monochrome:',
             'required'   => true,
             'value'      => $this->_quote->pageCoverageMonochrome,
@@ -177,11 +177,10 @@ class QuotePageForm extends FormWithNavigation
 
         // adminCostPerPage : MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel->adminCostPerPage
         // adminCostPerPage is a flat CPP that is used to add an additional charge per page to recoup admin related fees
-        $adminCostPerPage = $this->createElement('text', 'adminCostPerPage', [
+        $adminCostPerPage = $this->createElement('text_currency', 'adminCostPerPage', [
             'label'      => 'Admin Cost Per Page:',
             'value'      => $this->_quote->adminCostPerPage,
             'required'   => true,
-            'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [
                 'Float',
                 [

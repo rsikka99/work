@@ -9,7 +9,7 @@ use Zend_Form;
  *
  * @package MPSToolbox\Legacy\Modules\QuoteGenerator\Forms
  */
-class QuoteDeviceGroupPageForm extends Zend_Form
+class QuoteDeviceGroupPageForm extends \My_Form_Form
 {
     public function init ()
     {
@@ -40,10 +40,9 @@ class QuoteDeviceGroupPageForm extends Zend_Form
             ],
         ]);
 
-        $this->addElement('text', 'pricePerPage', [
+        $this->addElement('text_currency', 'pricePerPage', [
             'label'      => 'Price Per Page:',
             'required'   => true,
-            'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [
                 'Float',
                 [
@@ -53,10 +52,9 @@ class QuoteDeviceGroupPageForm extends Zend_Form
             ],
         ]);
 
-        $this->addElement('text', 'includedPrice', [
+        $this->addElement('text_currency', 'includedPrice', [
             'label'      => 'Included Price:',
             'required'   => true,
-            'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [
                 'Float',
                 [
@@ -66,10 +64,9 @@ class QuoteDeviceGroupPageForm extends Zend_Form
             ],
         ]);
 
-        $this->addElement('text', 'includedQuantity', [
+        $this->addElement('text_int', 'includedQuantity', [
             'label'      => 'Included Quantity:',
             'required'   => true,
-            'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [
                 'Int',
                 [

@@ -12,7 +12,7 @@ use MPSToolbox\Settings\Entities\FleetSettingsEntity as FleetSettingsEntity;
  *
  * @package MPSToolbox\Settings\Form
  */
-class CurrentFleetSettingsForm extends \Zend_Form
+class CurrentFleetSettingsForm extends \My_Form_Form
 {
     /**
      * @var array
@@ -44,13 +44,13 @@ class CurrentFleetSettingsForm extends \Zend_Form
             'description' => 'Use the actual page coverage value reported by the RMS.',
         ]);
 
-        $this->addElement('text', 'currentPageCoverageMono', [
+        $this->addElement('text_float', 'currentPageCoverageMono', [
             'label'       => 'Default Monochrome Coverage',
             'description' => 'Apply this coverage to determine the toner costs of all monochrome pages.',
             'required'    => true,
         ]);
 
-        $this->addElement('text', 'currentPageCoverageColor', [
+        $this->addElement('text_float', 'currentPageCoverageColor', [
             'label'       => 'Default Color Coverage',
             'description' => 'Apply this coverage to determine the toner costs of all color (CMYK) pages.',
             'required'    => true,

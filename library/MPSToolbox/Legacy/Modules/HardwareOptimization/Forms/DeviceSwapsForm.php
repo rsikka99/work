@@ -10,7 +10,7 @@ use Zend_Form;
  *
  * @package MPSToolbox\Legacy\Modules\HardwareOptimization\Forms
  */
-class DeviceSwapsForm extends Zend_Form
+class DeviceSwapsForm extends \My_Form_Form
 {
     public function init ()
     {
@@ -25,12 +25,11 @@ class DeviceSwapsForm extends Zend_Form
             "filters"  => ['StringTrim', 'StripTags'],
         ]);
 
-        $maxPageCountElement = $this->createElement("text", "maximumPageCount", [
+        $maxPageCountElement = $this->createElement("text_int", "maximumPageCount", [
             "id"         => 'maximumPageCount',
             "required"   => true,
             "label"      => "Max Page Volume",
             "class"      => "span4",
-            "filters"    => ['StringTrim', 'StripTags'],
             "validators" => [
                 [
                     'validator' => 'Between',
@@ -44,12 +43,11 @@ class DeviceSwapsForm extends Zend_Form
             ],
         ]);
 
-        $minPageCountElement = $this->createElement("text", "minimumPageCount", [
+        $minPageCountElement = $this->createElement("text_int", "minimumPageCount", [
             "id"         => 'minimumPageCount',
             "required"   => true,
             "label"      => "Min Page Volume",
             "class"      => "span4",
-            "filters"    => ['StringTrim', 'StripTags'],
             "validators" => [
                 [
                     'validator' => 'Between',
