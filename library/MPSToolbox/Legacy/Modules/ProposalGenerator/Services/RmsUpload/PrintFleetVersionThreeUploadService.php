@@ -28,6 +28,7 @@ class PrintFleetVersionThreeUploadService extends AbstractRmsUploadService
         'Y-m-d\TH:i:s.u',
         'Y-m-d\TH:i:s.uO',
         DateTime::ISO8601,
+        'm/d/Y',
         'm/d/Y G:i',
         "m/d/Y h:i:s A",
     ];
