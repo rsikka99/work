@@ -10,7 +10,7 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\LeasingSchemaRangeModel;
  *
  * @package MPSToolbox\Legacy\Modules\QuoteGenerator\Forms
  */
-class LeasingSchemaTermForm extends Zend_Form
+class LeasingSchemaTermForm extends \My_Form_Form
 {
 
     /**
@@ -47,10 +47,9 @@ class LeasingSchemaTermForm extends Zend_Form
         {
             $leasingSchemaRangeId = $leasingSchemaRange->id;
 
-            $this->addElement('text', "rate{$leasingSchemaRangeId}", [
+            $this->addElement('text_float', "rate{$leasingSchemaRangeId}", [
                 'label'      => 'Rate:',
                 'required'   => true,
-                'filters'    => ['StringTrim', 'StripTags'],
                 'class'      => 'span2 text-right',
                 'validators' => [
                     [

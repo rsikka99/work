@@ -9,7 +9,7 @@ use Zend_Form;
  *
  * @package MPSToolbox\Legacy\Modules\QuoteGenerator\Forms
  */
-class QuoteDevicePageForm extends Zend_Form
+class QuoteDevicePageForm extends \My_Form_Form
 {
 
     public function init ()
@@ -17,10 +17,9 @@ class QuoteDevicePageForm extends Zend_Form
         // Set the method for the display form to POST
         $this->setMethod('POST');
 
-        $this->addElement('text', 'costPerPageMonochrome', [
+        $this->addElement('text_currency', 'costPerPageMonochrome', [
             'label'      => 'CPP Monochrome:',
             'required'   => true,
-            'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [
                 [
                     'validator' => 'StringLength',
@@ -29,10 +28,9 @@ class QuoteDevicePageForm extends Zend_Form
             ],
         ]);
 
-        $this->addElement('text', 'costPerPageColor', [
+        $this->addElement('text_currency', 'costPerPageColor', [
             'label'      => 'CPP Color:',
             'required'   => true,
-            'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [
                 [
                     'validator' => 'StringLength',
@@ -47,10 +45,9 @@ class QuoteDevicePageForm extends Zend_Form
             'filters'  => ['StringTrim', 'StripTags'],
         ]);
 
-        $this->addElement('text', 'margin', [
+        $this->addElement('text_float', 'margin', [
             'label'      => 'Margin:',
             'required'   => true,
-            'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [
                 [
                     'validator' => 'StringLength',

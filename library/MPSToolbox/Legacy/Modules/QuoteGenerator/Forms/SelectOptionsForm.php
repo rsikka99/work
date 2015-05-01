@@ -11,7 +11,7 @@ use My_Form_Element_Paragraph;
  *
  * @package MPSToolbox\Legacy\Modules\QuoteGenerator\Forms
  */
-class SelectOptionsForm extends Zend_Form
+class SelectOptionsForm extends \My_Form_Form
 {
     /**
      * @var OptionModel[]

@@ -10,7 +10,7 @@ use Zend_Form_Element;
  *
  * @package MPSToolbox\Legacy\Forms
  */
-class FormWithNavigation extends Zend_Form
+class FormWithNavigation extends \My_Form_Form
 {
     const FORM_BUTTON_MODE_DIALOG     = 1;
     const FORM_BUTTON_MODE_NAVIGATION = 2;
