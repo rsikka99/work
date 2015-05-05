@@ -65,6 +65,16 @@ class MasterDeviceModel extends My_Model_Abstract
     public $modelName;
 
     /**
+     * @var string
+     */
+    public $imageUrl;
+
+    /**
+     * @var string
+     */
+    public $imageFile;
+
+    /**
      * @var int
      */
     public $tonerConfigId;
@@ -302,6 +312,16 @@ class MasterDeviceModel extends My_Model_Abstract
             $this->modelName = $params->modelName;
         }
 
+        if (isset($params->imageUrl) && !is_null($params->imageUrl))
+        {
+            $this->imageUrl = $params->imageUrl;
+        }
+
+        if (isset($params->imageFile) && !is_null($params->imageFile))
+        {
+            $this->imageFile = $params->imageFile;
+        }
+
         if (isset($params->tonerConfigId) && !is_null($params->tonerConfigId))
         {
             $this->tonerConfigId = $params->tonerConfigId;
@@ -427,6 +447,8 @@ class MasterDeviceModel extends My_Model_Abstract
             "userId"                              => $this->userId,
             "manufacturerId"                      => $this->manufacturerId,
             "modelName"                           => $this->modelName,
+            "imageUrl"                            => $this->imageUrl,
+            "imageFile"                           => $this->imageFile,
             "tonerConfigId"                       => $this->tonerConfigId,
             "isCopier"                            => $this->isCopier,
             "isFax"                               => $this->isFax,
