@@ -389,6 +389,8 @@ class QuoteDeviceGroupModel extends My_Model_Abstract
         $cost = 0;
         foreach ($this->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
         {
+            $deviceObj = $quoteDeviceGroupDevice->getQuoteDevice()->getDevice();
+            if (!$deviceObj) continue;
             $cost += $quoteDeviceGroupDevice->monochromePagesQuantity * $quoteDeviceGroupDevice->getQuoteDevice()->calculateMonochromeCostPerPage() * $quoteDeviceGroupDevice->quantity;
         }
 

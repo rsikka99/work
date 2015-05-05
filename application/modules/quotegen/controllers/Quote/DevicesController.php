@@ -108,7 +108,19 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         $this->view->addDeviceForm         = $addDeviceForm;
         $this->view->addFavoriteDeviceForm = $addFavoriteDeviceForm;
         $this->view->navigationForm        = new QuoteNavigationForm(QuoteNavigationForm::BUTTONS_NEXT);
-        $this->view->devices               = QuoteDeviceMapper::getInstance()->fetchDevicesForQuote($this->_quoteId);
+        $devices               = QuoteDeviceMapper::getInstance()->fetchDevicesForQuote($this->_quoteId);
+
+        //make sure we don't use devices that are deleted
+        foreach ($devices as $i=>$quoteDevice) {
+            $deviceObj = $quoteDevice->getDevice();
+            if (!$deviceObj) {
+                QuoteDeviceOptionMapper::getInstance()->deleteAllOptionsForQuoteDevice($quoteDevice->id);
+                QuoteDeviceMapper::getInstance()->delete($quoteDevice);
+                $this->saveQuote();
+                unset($devices[$i]);
+            }
+        }
+        $this->view->devices = $devices;
     }
 
     /**

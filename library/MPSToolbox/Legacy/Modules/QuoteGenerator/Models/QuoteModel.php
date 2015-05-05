@@ -876,6 +876,9 @@ class QuoteModel extends My_Model_Abstract
         {
             foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
             {
+                $deviceObj = $quoteDeviceGroupDevice->getQuoteDevice()->getDevice();
+                if (!$deviceObj) continue;
+
                 // Total weight
                 $monochromeTotal += $quoteDeviceGroupDevice->monochromePagesQuantity * $quoteDeviceGroupDevice->quantity;
 
