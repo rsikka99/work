@@ -155,11 +155,17 @@ class TonerService
         {
             if ($this->isMasterHardwareAdministrator || $toner->isSystemDevice == 0)
             {
+                if ($data['imageUrl'] && (0!==strcmp($data['imageUrl'], $toner->imageUrl))) {
+                    $this->downloadImageFromImageUrl($toner, $data['imageUrl']);
+                }
+
                 $toner->sku            = $data['sku'];
                 $toner->cost           = $data['cost'];
                 $toner->yield          = $data['yield'];
                 $toner->tonerColorId   = $data['tonerColorId'];
                 $toner->manufacturerId = $data['manufacturerId'];
+                $toner->imageUrl       = $data['imageUrl'];
+
                 $tonerMapper->save($toner);
             }
 
@@ -167,6 +173,76 @@ class TonerService
         }
 
         return false;
+    }
+
+    public function uploadImage(TonerModel $toner, $upload) {
+        $publicFilePath = '/img/toners/'.$upload['name'];
+        $tmpFilePath       = PUBLIC_PATH . $publicFilePath;
+        move_uploaded_file($upload['tmp_name'], $tmpFilePath);
+
+        $image_info = @getimagesize($tmpFilePath);
+        if (!$image_info || ($image_info[0]<1)) {
+            unlink($tmpFilePath);
+            return;
+        }
+        $ext=null;
+        switch ($image_info['mime']) {
+            case 'image/jpeg' :
+                $ext='jpg';
+                break;
+            case 'image/png' :
+                $ext='png';
+                break;
+            case 'image/gif' :
+                $ext='gif';
+                break;
+        }
+        if (!$ext) {
+            unlink($tmpFilePath);
+            return;
+        }
+
+        if ($toner->imageFile) {
+            $publicFilePath = '/img/toners/'.$toner->imageFile;
+            $filePath       = PUBLIC_PATH . $publicFilePath;
+            unlink($filePath);
+        }
+
+        $toner->imageFile = $toner->id.'_'.time().'.'.$ext;
+        $publicFilePath = '/img/toners/'.$toner->imageFile;
+        $filePath       = PUBLIC_PATH . $publicFilePath;
+        rename($tmpFilePath, $filePath);
+    }
+
+    public function downloadImageFromImageUrl(TonerModel $toner, $url=null) {
+        if (!$url) $url = $toner->imageUrl;
+        if (!$url) return;
+        $image_info = @getimagesize($url);
+        if (!$image_info || ($image_info[0]<1)) return;
+        $ext=null;
+        switch ($image_info['mime']) {
+            case 'image/jpeg' :
+                $ext='jpg';
+                break;
+            case 'image/png' :
+                $ext='png';
+                break;
+            case 'image/gif' :
+                $ext='gif';
+                break;
+        }
+        if (!$ext) return;
+
+        if ($toner->imageFile) {
+            $publicFilePath = '/img/toners/'.$toner->imageFile;
+            $filePath       = PUBLIC_PATH . $publicFilePath;
+            unlink($filePath);
+        }
+
+        $toner->imageFile = $toner->id.'_'.time().'.'.$ext;
+        $publicFilePath = '/img/toners/'.$toner->imageFile;
+        $filePath       = PUBLIC_PATH . $publicFilePath;
+        file_put_contents($filePath, file_get_contents($url));
     }
 
     /**

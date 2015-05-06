@@ -60,13 +60,14 @@ class DeviceImageForm extends \My_Form_Form
         $this->setMethod('post');
         $this->setAttrib('id', 'deviceImage');
 
-        $this->addElement('text', 'id', [
+        $this->addElement('hidden', 'id', [
             'label'    => 'ID',
-            'disabled' => (!$this->_isAllowedToEditFields) ? true : false,
         ]);
         $this->addElement('text', 'imageUrl', [
             'label'    => 'Image URL',
             'disabled' => (!$this->_isAllowedToEditFields) ? true : false,
+            'maxlength'  => 255,
+            'filters'    => ['StringTrim', 'StripTags'],
         ]);
         $this->addElement('text', 'imageFile', [
             'label'    => 'Upload Image',

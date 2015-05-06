@@ -322,6 +322,7 @@ $r->addRoute('hardware-library.all-toners',       new R('hardware-library/all-to
 $r->addRoute('hardware-library.toners.load-form', new R('hardware-library/toners/load-form', ['module' => 'hardware-library', 'controller' => 'toner', 'action' => 'load-form'       ]));
 $r->addRoute('hardware-library.toners.save',      new R('hardware-library/toners/save',      ['module' => 'hardware-library', 'controller' => 'toner', 'action' => 'save'            ]));
 $r->addRoute('hardware-library.all-toners-list',  new R('hardware-library/all-toners-list',  ['module' => 'hardware-library', 'controller' => 'toner', 'action' => 'all-toners-list' ]));
+$r->addRoute('hardware-library.toners.image',     new R('hardware-library/toners/image/:id', ['module' => 'hardware-library', 'controller' => 'toner', 'action' => 'image'           ]));
 //@formatter:on
 
 /**
