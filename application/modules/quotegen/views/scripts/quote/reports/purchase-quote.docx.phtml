@@ -19,6 +19,7 @@ $linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/quote/{$this->
 // This may not need to be removed from here
 // Base path to the files used to render the document
 $basePath            = 'quote/reports/purchase-quote/docx';
+$customPath            = 'quote/reports/custom';
 $commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
 
 $quote = $this->Quote();
@@ -867,7 +868,7 @@ $data = [
 $dealerSettingsService = new DealerSettingsService();
 $dealerSettings = $dealerSettingsService->getDealerSettings(Zend_Auth::getInstance()->getIdentity()->dealerId);
 if ($dealerSettings->quoteCustom) {
-    $path=dirname(__FILE__).'/purchase-quote/custom/purchase-quote-'.$dealerSettings->quoteCustom.'.php';
+    $path=dirname(__FILE__).'/custom/'.$dealerSettings->quoteCustom.'/purchase-quote.php';
     require ($path);
 } else {
     // Actual document pages
