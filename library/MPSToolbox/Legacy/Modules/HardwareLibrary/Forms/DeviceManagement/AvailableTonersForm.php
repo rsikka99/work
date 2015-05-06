@@ -187,6 +187,16 @@ class AvailableTonersForm extends \My_Form_Form
             ]
         ]);
 
+        /* image */
+        $this->addElement('text', 'imageUrl', [
+            'label'    => 'Image URL',
+            'maxlength'  => 255,
+            'filters'    => ['StringTrim', 'StripTags'],
+        ]);
+        $this->addElement('text', 'imageFile', [
+            'label'    => 'Upload Image',
+        ]);
+
         /**
          * Save and approve
          *

@@ -1,0 +1,59 @@
+<?php
+
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeviceImageForm;
+
+/* @var $form DeviceAttributesForm */
+$form = $this->element;
+
+$id = $form->getElement('id')->getValue();
+$filename = $form->getElement('imageFile')->getValue();
+
+?>
+
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
+<div class="clearfix">
+    <fieldset class="col-md-10 col-md-offset-1">
+        <div class="row">
+            <div class="col-md-6">
+
+                <div class="form-group <?= ($form->getElement('imageUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('imageUrl'), ['col-md-4']) ?>
+
+                    <div class="col-md-8">
+                        <?= $this->RenderFormText($form->getElement('imageUrl')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('imageUrl')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('imageUrl')) ?>
+                    </div>
+                </div>
+<?php if ($id) { ?>
+                <div class="form-group">
+                    <?= $this->RenderFormLabel($form->getElement('imageFile'), ['col-md-4']) ?>
+
+                    <div class="col-md-8">
+                        <input id="fileupload" type="file" name="imageFile" data-url="<?= $this->url(['id' => $id], 'hardware-library.devices.image'); ?>">
+                    </div>
+                </div>
+<?php } ?>
+            </div>
+            <div class="col-md-6">
+                <div id="imageDiv">
+                    <?php if ($filename) { ?>
+                        <a href="/img/devices/<?php echo $filename ?>" target="_blank" class="thumbnail">
+                            <img src="/img/devices/<?php echo $filename ?>" style="max-width:300px;max-height:300px">
+                        </a>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+<?= $this->RenderFormClose($form) ?>
+
+<script>
+    $(function () {
+        $('#fileupload').fileupload({
+            dataType: 'json',
+            done: uploadDone
+        });
+    });
+</script>

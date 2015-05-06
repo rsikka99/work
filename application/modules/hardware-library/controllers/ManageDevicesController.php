@@ -3,6 +3,7 @@
 use MPSToolbox\Legacy\Models\Acl\AppAclModel;
 use MPSToolbox\Legacy\Models\Acl\ProposalgenAclModel;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeviceAttributesForm;
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeviceImageForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareConfigurationsForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareOptimizationForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareQuoteForm;
@@ -362,7 +363,7 @@ class HardwareLibrary_ManageDevicesController extends Action
             $this->view->manufacturerId = $masterDevice->manufacturerId;
         }
 
-        $forms = $service->getForms(true, true, true, true, true, true);
+        $forms = $service->getForms(true, true, true, true, true, true, true);
 
         // If we wanted to use custom data we would need to set the views modelName and manufacturerId to the custom data values
         foreach ($forms as $formName => $form)
@@ -375,6 +376,31 @@ class HardwareLibrary_ManageDevicesController extends Action
         $this->view->tonerColors                 = TonerColorMapper::getInstance()->fetchAll();
         $this->view->masterDevice                = $masterDevice;
         $this->view->isMasterDeviceAdministrator = $this->_isAdmin;
+    }
+
+    public function imageAction() {
+        $masterDeviceId = $this->_getParam('id', false);
+        $masterDevice = MasterDeviceMapper::getInstance()->find($masterDeviceId);
+        if (!$masterDevice) {
+            $this->sendJsonError('not found');
+            return;
+        }
+
+        $isAllowed = ((!$masterDevice instanceof MasterDeviceModel || !$masterDevice->isSystemDevice || $this->_isAdmin) ? true : false);
+        if (!$isAllowed) {
+            $this->sendJsonError('not allowed');
+            return;
+        }
+        $manageMasterDeviceService = new ManageMasterDevicesService($masterDeviceId, $this->_identity->dealerId, $isAllowed, $this->_isAdmin);
+        foreach ($_FILES as $upload) {
+            $manageMasterDeviceService->uploadImage($masterDevice, $upload);
+            MasterDeviceMapper::getInstance()->save($masterDevice);
+        }
+
+        $result = array(
+           'filename'=>$masterDevice->imageFile
+        );
+        $this->sendJson($result);
     }
 
     /**
@@ -463,6 +489,14 @@ class HardwareLibrary_ManageDevicesController extends Action
             }
 
             /**
+             * Validate Device Image Form
+             */
+            if (count($postData['deviceImage']) > 0)
+            {
+                $forms['deviceImage'] = new DeviceImageForm(null, $isAllowed);
+            }
+
+            /**
              * Validate Hardware Optimization Form
              */
             if (count($postData['hardwareOptimization']) > 0)
@@ -516,6 +550,7 @@ class HardwareLibrary_ManageDevicesController extends Action
                                 array_merge(
                                     $validData['suppliesAndService'],
                                     $validData['deviceAttributes'],
+                                    $validData['deviceImage'],
                                     [
                                         "manufacturerId" => $manufacturerId,
                                         "modelName"      => $modelName
@@ -625,7 +660,11 @@ class HardwareLibrary_ManageDevicesController extends Action
                     }
 
                     $db->commit();
-                    $this->sendJson(["masterDeviceId" => $manageMasterDeviceService->masterDeviceId, "message" => "Successfully updated master device"]);
+                    $this->sendJson([
+                        "masterDeviceId" => $manageMasterDeviceService->masterDeviceId,
+                        "message" => "Successfully updated master device",
+                        'imageFile' => $masterDevice->imageFile]
+                    );
                 }
                 catch (Exception $e)
                 {

@@ -3,7 +3,10 @@ require([
     'jquery.ui',
     'bootstrap',
     'bootstrap.switch',
-    '/js/app/components/Select2/Country.js'
+    '/js/app/components/Select2/Country.js',
+    'jquery.ui.widget',
+    'jquery.iframe-transport',
+    'jquery.fileupload'
 ], function ($)
 {
     //@formatter:off

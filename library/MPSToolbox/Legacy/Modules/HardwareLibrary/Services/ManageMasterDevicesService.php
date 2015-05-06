@@ -7,6 +7,7 @@ use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\AvailableOp
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\AvailableTonersForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeleteForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeviceAttributesForm;
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeviceImageForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareConfigurationsForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareOptimizationForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareQuoteForm;
@@ -102,7 +103,15 @@ class ManageMasterDevicesService
      *
      * @return array
      */
-    public function getForms ($showSupplies = true, $showDeviceAttributes = true, $showHardwareOptimization = true, $showHardwareQuote = true, $showAvailableOptions = true, $showHardwareConfigurations = true)
+    public function getForms (
+        $showSupplies = true,
+        $showDeviceAttributes = true,
+        $showHardwareOptimization = true,
+        $showHardwareQuote = true,
+        $showAvailableOptions = true,
+        $showHardwareConfigurations = true,
+        $showDeviceImage = true
+    )
     {
         $formsToShow = [];
 
@@ -135,6 +144,11 @@ class ManageMasterDevicesService
         if ($showSupplies)
         {
             $formsToShow['suppliesAndService']  = $this->getSuppliesAndServicesForm();
+        }
+
+        if ($showDeviceImage)
+        {
+            $formsToShow['deviceImage']  = $this->getDeviceImageForm();
         }
 
         $formsToShow['delete'] = new DeleteForm();
@@ -403,6 +417,10 @@ class ManageMasterDevicesService
                         $validatedData['isSystemDevice'] = 1;
                     }
 
+                    if ($validatedData['imageUrl'] && (0!==strcmp($validatedData['imageUrl'], $masterDevice->imageUrl))) {
+                        $this->downloadImageFromImageUrl($masterDevice, $validatedData['imageUrl']);
+                    }
+
                     $masterDevice->populate($validatedData);
                     $masterDevice->recalculateMaximumRecommendedMonthlyPageVolume();
                     $masterDeviceMapper->save($masterDevice);
@@ -446,6 +464,76 @@ class ManageMasterDevicesService
         }
 
         return true;
+    }
+
+    public function uploadImage(MasterDeviceModel $masterDevice, $upload) {
+        $publicFilePath = '/img/devices/'.$upload['name'];
+        $tmpFilePath       = PUBLIC_PATH . $publicFilePath;
+        move_uploaded_file($upload['tmp_name'], $tmpFilePath);
+
+        $image_info = @getimagesize($tmpFilePath);
+        if (!$image_info || ($image_info[0]<1)) {
+            unlink($tmpFilePath);
+            return;
+        }
+        $ext=null;
+        switch ($image_info['mime']) {
+            case 'image/jpeg' :
+                $ext='jpg';
+                break;
+            case 'image/png' :
+                $ext='png';
+                break;
+            case 'image/gif' :
+                $ext='gif';
+                break;
+        }
+        if (!$ext) {
+            unlink($tmpFilePath);
+            return;
+        }
+
+        if ($masterDevice->imageFile) {
+            $publicFilePath = '/img/devices/'.$masterDevice->imageFile;
+            $filePath       = PUBLIC_PATH . $publicFilePath;
+            unlink($filePath);
+        }
+
+        $masterDevice->imageFile = $masterDevice->id.'_'.time().'.'.$ext;
+        $publicFilePath = '/img/devices/'.$masterDevice->imageFile;
+        $filePath       = PUBLIC_PATH . $publicFilePath;
+        rename($tmpFilePath, $filePath);
+    }
+
+    public function downloadImageFromImageUrl(MasterDeviceModel $masterDevice, $url=null) {
+        if (!$url) $url = $masterDevice->imageUrl;
+        if (!$url) return;
+        $image_info = @getimagesize($url);
+        if (!$image_info || ($image_info[0]<1)) return;
+        $ext=null;
+        switch ($image_info['mime']) {
+            case 'image/jpeg' :
+                $ext='jpg';
+                break;
+            case 'image/png' :
+                $ext='png';
+                break;
+            case 'image/gif' :
+                $ext='gif';
+                break;
+        }
+        if (!$ext) return;
+
+        if ($masterDevice->imageFile) {
+            $publicFilePath = '/img/devices/'.$masterDevice->imageFile;
+            $filePath       = PUBLIC_PATH . $publicFilePath;
+            unlink($filePath);
+        }
+
+        $masterDevice->imageFile = $masterDevice->id.'_'.time().'.'.$ext;
+        $publicFilePath = '/img/devices/'.$masterDevice->imageFile;
+        $filePath       = PUBLIC_PATH . $publicFilePath;
+        file_put_contents($filePath, file_get_contents($url));
     }
 
     /**
@@ -585,6 +673,26 @@ class ManageMasterDevicesService
         }
 
         return $this->_deviceAttributesForm;
+    }
+
+    public function getDeviceImageForm ()
+    {
+        if (!isset($this->_deviceImageForm))
+        {
+            $this->_deviceImageForm = new DeviceImageForm(null, $this->_isAllowed);
+            $masterDevice                = MasterDeviceMapper::getInstance()->find($this->masterDeviceId);
+
+            if ($this->data && !$masterDevice)
+            {
+                $this->_deviceImageForm->populate($this->data);
+            }
+            else if ($masterDevice)
+            {
+                $this->_deviceImageForm->populate($masterDevice->toArray());
+            }
+        }
+
+        return $this->_deviceImageForm;
     }
 
     /**
