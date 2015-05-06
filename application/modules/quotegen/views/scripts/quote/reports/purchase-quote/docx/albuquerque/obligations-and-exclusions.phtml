@@ -1,0 +1,75 @@
+<?php
+
+use PhpOffice\PhpWord\Style\ListItem;
+
+// Get the path based on the theme
+$commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
+// Render the elements in the theme
+$this->render("{$commonPartsBasePath}/styles.phtml");
+
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
+$section->addPageBreak();
+$section->addTitle('OFFICE EQUIPMENT');
+$section->addTitle('Obligations and Exclusions');
+
+$section->addTextBreak();
+
+$this->phpword->addNumberingStyle(
+    'my_numbering',
+    array(
+        'type' => 'multilevel',
+        'levels' => array(
+            array('format' => 'lowerLetter', 'text' => '%1)', 'left' => 360, 'hanging' => 360, 'tabPos' => 360),
+        )
+    )
+);
+
+$section->addText('RESPONSE TIMES – 1 hour call back and onsite service response within 4 hours. All calls after 12:00pm will be handled next business day in accordance with 4 business hour response time.');
+$section->addText('CUSTOMER OBLIGATIONS – The customer will provide the following:');
+$section->addListItem('Necessary environmental, electrical, power protection, communications and other necessary conditions for proper installation and operation of the equipment.'
+    ,0,null,'my_numbering');
+$section->addListItem('Full and immediate access of the equipment to AIP representative at the time of maintenance. The customer will be billed for excess waiting time (over 15 minutes) at prevailing rates.'
+    ,0,null,'my_numbering');
+$section->addListItem('Adequate lighting and working space within reasonable distance of the equipment.'
+    ,0,null,'my_numbering');
+$section->addListItem('Ensure all external plugs are in the correct receptacle and equipment has necessary supplies for operation.'
+    ,0,null,'my_numbering');
+$section->addListItem('Back up all software programs and data files including recovery procedures necessary because of equipment failure.'
+    ,0,null,'my_numbering');
+$section->addListItem('Ensure that persons responsible for replacing consumables are adequately trained. Any damage caused by improper replacement will be billed at prevailing rates. Such damage is not covered under the maintenance of the equipment and a trip charge will be assessed.'
+    ,0,null,'my_numbering');
+$section->addListItem('Under the MPS service contract customer is aware that duplex prints count as 2 click charges. 11 x 17 and above count as 2 click charges per side printed.'
+    ,0,null,'my_numbering');
+$section->addText('COVERAGE EXCLUSIONS:');
+$section->addListItem('Service or repair from use not in accordance with AIP/manufacturer, or the use of supplies not meeting or exceeding specifications.'
+    ,0,null,'my_numbering');
+$section->addListItem('Service or repair required as a result of moving, reinstallation, repair or adjustment made by persons other than an AIP representative.'
+    ,0,null,'my_numbering');
+$section->addListItem('Service or repair required as a result of fire, flood, accident, strike, abuse, customer negligence, electrical service interruption or fluctuations, acts of God, foreign material entering the equipment or forced entry.'
+    ,0,null,'my_numbering');
+$section->addListItem('Service or repair required as result of improper installation of consumables.'
+    ,0,null,'my_numbering');
+$section->addListItem('Revisions in programs due to changes in customer requirements or tax laws.'
+    ,0,null,'my_numbering');
+$section->addListItem('Programming and software service/support.'
+    ,0,null,'my_numbering');
+$section->addListItem('Loss of data due to equipment failure.'
+    ,0,null,'my_numbering');
+$section->addListItem('Repair, replacement parts and labor caused by, arising from, related to, or made necessary by operating system or applications software, firmware or other programmed code internal or external to the equipment.'
+    ,0,null,'my_numbering');
+$section->addListItem('Repair or replacement of external panels, cords and trays.'
+    ,0,null,'my_numbering');
+$section->addListItem('Installation covers 4 workstations. More than 4 workstations installed is billed at $110/hour.'
+    ,0,null,'my_numbering');
+$section->addListItem('Installation is considered the time that the equipment is dropped off and installed. Any IT or networking work performed outside of this installation window is billed at $110/hour.'
+    ,0,null,'my_numbering');
+$section->addListItem('Damage to platen glass (flatbed scanner) from user neglect will be replaced at the customer’s expense.'
+    ,0,null,'my_numbering');
+$section->addText('OTHER APPLICABLE ITEMS:');
+$section->addListItem('Service contracts have the ability to be increased automatically by no more than 10% per year.'
+    ,0,null,'my_numbering');
+$section->addListItem('Additions to copier functionality must be paid for by the customer.'
+    ,0,null,'my_numbering');
+$section->addText('Initial ___','','rightalign');
+

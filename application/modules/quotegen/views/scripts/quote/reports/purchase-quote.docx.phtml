@@ -1,6 +1,7 @@
 <?php
 
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+use MPSToolbox\Settings\Service\DealerSettingsService;
 
 $filename = $this->filename;
 $savePath = PUBLIC_PATH . "/downloads/client/{$this->clientId}/quote/{$this->quoteId}/";
@@ -863,10 +864,17 @@ $data = [
     "styles"  => $styles,
 ];
 
-// Actual document pages
-$this->partial("{$commonPartsBasePath}/docx/titlepage.phtml", $titledata);
-$this->partial("{$basePath}/purchasequote.phtml", $data);
-$this->partial("{$basePath}/signatures.phtml", $data);
+$dealerSettingsService = new DealerSettingsService();
+$dealerSettings = $dealerSettingsService->getDealerSettings(Zend_Auth::getInstance()->getIdentity()->dealerId);
+if ($dealerSettings->quoteCustom) {
+    $path=dirname(__FILE__).'/purchase-quote/custom/purchase-quote-'.$dealerSettings->quoteCustom.'.php';
+    require ($path);
+} else {
+    // Actual document pages
+    $this->partial("{$commonPartsBasePath}/docx/titlepage.phtml", $titledata);
+    $this->partial("{$basePath}/purchasequote.phtml", $data);
+    $this->partial("{$basePath}/signatures.phtml", $data);
+}
 
 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpword, 'Word2007');
 
