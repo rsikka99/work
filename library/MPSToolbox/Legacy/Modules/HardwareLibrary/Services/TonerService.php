@@ -157,6 +157,8 @@ class TonerService
             {
                 if ($data['imageUrl'] && (0!==strcmp($data['imageUrl'], $toner->imageUrl))) {
                     $this->downloadImageFromImageUrl($toner, $data['imageUrl']);
+                } else {
+                    $data['imageUrl'] = $toner->imageUrl;
                 }
 
                 $toner->sku            = $data['sku'];

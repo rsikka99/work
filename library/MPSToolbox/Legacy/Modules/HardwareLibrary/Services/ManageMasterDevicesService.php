@@ -419,6 +419,8 @@ class ManageMasterDevicesService
 
                     if ($validatedData['imageUrl'] && (0!==strcmp($validatedData['imageUrl'], $masterDevice->imageUrl))) {
                         $this->downloadImageFromImageUrl($masterDevice, $validatedData['imageUrl']);
+                    } else {
+                        $validatedData['imageUrl'] = $masterDevice->imageUrl;
                     }
 
                     $masterDevice->populate($validatedData);
