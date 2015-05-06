@@ -8,6 +8,8 @@ $form = $this->element;
 $id = $form->getElement('id')->getValue();
 $filename = $form->getElement('imageFile')->getValue();
 
+$form->getElement('imageUrl')->setValue('');
+
 ?>
 
 <?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
