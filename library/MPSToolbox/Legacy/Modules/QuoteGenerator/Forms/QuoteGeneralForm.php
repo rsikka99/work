@@ -11,7 +11,7 @@ use Zend_Form;
  *
  * @package MPSToolbox\Legacy\Modules\QuoteGenerator\Forms
  */
-class QuoteGeneralForm extends Zend_Form
+class QuoteGeneralForm extends \My_Form_Form
 {
     /**
      * This represents the current quote being worked on

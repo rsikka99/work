@@ -11,7 +11,7 @@ use MPSToolbox\Settings\Entities\OptimizationSettingsEntity as OptimizationSetti
  *
  * @package MPSToolbox\Settings\Form
  */
-class OptimizationSettingsForm extends \Zend_Form
+class OptimizationSettingsForm extends \My_Form_Form
 {
     /**
      * @var array
@@ -32,17 +32,17 @@ class OptimizationSettingsForm extends \Zend_Form
         /**
          * Optimization Settings
          */
-        $this->addElement('text', 'optimizedTargetMonochromeCostPerPage', [
+        $this->addElement('text_currency', 'optimizedTargetMonochromeCostPerPage', [
             'label'    => 'Post-Optimized Monochrome CPP',
             'required' => true,
         ]);
 
-        $this->addElement('text', 'optimizedTargetColorCostPerPage', array(
+        $this->addElement('text_currency', 'optimizedTargetColorCostPerPage', array(
             'label'    => 'Post-Optimized Color CPP',
             'required' => true,
         ));
 
-        $this->addElement('text', 'costThreshold', [
+        $this->addElement('text_currency', 'costThreshold', [
             'label'       => 'Minimum Device savings',
             'description' => 'Replace all devices where your proposed <strong>Device Swaps</strong> can save you more than this number <strong>per month</strong>.',
             'required'    => true,
@@ -53,19 +53,19 @@ class OptimizationSettingsForm extends \Zend_Form
             'description' => 'Automatically upgrade devices based on functionality.',
         ]);
 
-        $this->addElement('text', 'lossThreshold', [
+        $this->addElement('text_currency', 'lossThreshold', [
             'label'       => 'Upgrade Loss Threshold',
             'description' => 'Do not upgrade monochrome devices with color devices if they will increase the the monthly cost by more than amount this each month.',
             'required'    => true,
         ]);
 
-        $this->addElement('text', 'blackToColorRatio', [
+        $this->addElement('text_float', 'blackToColorRatio', [
             'label'       => 'Monochrome to Color Ratio',
             'description' => "Assume new color devices that replace monochrome devices will print this percentage of color pages.",
             'required'    => true,
         ]);
 
-        $this->addElement('text', 'minimumPageCount', [
+        $this->addElement('text_int', 'minimumPageCount', [
             'label'       => 'Minimum Monthly Page Count',
             'description' => "The minimum page count a device must be printing in order to be considered for upgrade.",
             'required'    => true,

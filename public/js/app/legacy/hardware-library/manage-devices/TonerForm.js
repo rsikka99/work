@@ -144,7 +144,8 @@ define([
                     $tonerColorElement = that.$tonerForm.find('[name="tonerColorId"]'),
                     $tonerCostElement = that.$tonerForm.find('[name="cost"]'),
                     $tonerYieldElement = that.$tonerForm.find('[name="yield"]'),
-                    $tonerSkuElement = that.$tonerForm.find('[name="sku"]');
+                    $tonerSkuElement = that.$tonerForm.find('[name="sku"]'),
+                    $tonerImageUrlElement = that.$tonerForm.find('[name="imageUrl"]');
 
                 that.tonerModel.tonerId = $tonerIdElement.val();
                 that.tonerModel.manufacturerId = $tonerManufacturerElement.val();
@@ -152,11 +153,16 @@ define([
                 that.tonerModel.cost = $tonerCostElement.val();
                 that.tonerModel.sku = $tonerSkuElement.val();
                 that.tonerModel.yield = $tonerYieldElement.val();
-
+                that.tonerModel.imageUrl = $tonerImageUrlElement.val();
 
                 $tonerIdElement.on('change', function ()
                 {
                     that.tonerModel.tonerId = $(this).val();
+                });
+
+                $tonerImageUrlElement.on('change', function ()
+                {
+                    that.tonerModel.imageUrl = $(this).val();
                 });
 
                 $tonerCostElement.on('change', function ()
@@ -275,3 +281,8 @@ define([
 
     return TonerForm;
 });
+
+function uploadDone (e, result) {
+    var filename = result._response.result.filename;
+    $('#imageDiv').html('<a href="/img/toners/'+filename+'" target="_blank" class="thumbnail"><img src="/img/toners/'+filename+'" style="max-width:300px;max-height:300px"></a>');
+}

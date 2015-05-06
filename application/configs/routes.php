@@ -235,6 +235,7 @@ $r->addRoute('hardware-library.devices.grid-list',             new R('hardware-l
 $r->addRoute('hardware-library.devices.load-forms',            new R('hardware-library/devices/load-forms',            ['module' => 'hardware-library', 'controller' => 'manage-devices', 'action' => 'manage-master-devices']));
 $r->addRoute('hardware-library.devices.update-master-device',  new R('hardware-library/devices/update-master-device',  ['module' => 'hardware-library', 'controller' => 'manage-devices', 'action' => 'update-master-device' ]));
 $r->addRoute('hardware-library.devices.delete',                new R('hardware-library/devices/delete-jqgrid',         ['module' => 'hardware-library', 'controller' => 'manage-devices', 'action' => 'delete'               ]));
+$r->addRoute('hardware-library.devices.image',                 new R('hardware-library/devices/image/:id',             ['module' => 'hardware-library', 'controller' => 'manage-devices', 'action' => 'image'               ]));
 $r->addRoute('hardware-library.devices.delete',                new R('hardware-library/devices/delete',                ['module' => 'quotegen',         'controller' => 'devicesetup',    'action' => 'delete'               ]));
 $r->addRoute('hardware-library.devices.toner-list',            new R('hardware-library/devices/toner-list',            ['module' => 'hardware-library', 'controller' => 'manage-devices', 'action' => 'assigned-toner-list'  ]));
 $r->addRoute('hardware-library.devices.toners',                new R('hardware-library/devices/toners',                ['module' => 'hardware-library', 'controller' => 'devices',        'action' => 'add-toner'            ]));
@@ -321,6 +322,7 @@ $r->addRoute('hardware-library.all-toners',       new R('hardware-library/all-to
 $r->addRoute('hardware-library.toners.load-form', new R('hardware-library/toners/load-form', ['module' => 'hardware-library', 'controller' => 'toner', 'action' => 'load-form'       ]));
 $r->addRoute('hardware-library.toners.save',      new R('hardware-library/toners/save',      ['module' => 'hardware-library', 'controller' => 'toner', 'action' => 'save'            ]));
 $r->addRoute('hardware-library.all-toners-list',  new R('hardware-library/all-toners-list',  ['module' => 'hardware-library', 'controller' => 'toner', 'action' => 'all-toners-list' ]));
+$r->addRoute('hardware-library.toners.image',     new R('hardware-library/toners/image/:id', ['module' => 'hardware-library', 'controller' => 'toner', 'action' => 'image'           ]));
 //@formatter:on
 
 /**

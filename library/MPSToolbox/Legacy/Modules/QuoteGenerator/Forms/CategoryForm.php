@@ -9,7 +9,7 @@ use Zend_Form;
  *
  * @package MPSToolbox\Legacy\Modules\QuoteGenerator\Forms
  */
-class CategoryForm extends Zend_Form
+class CategoryForm extends \My_Form_Form
 {
 
     public function init ()

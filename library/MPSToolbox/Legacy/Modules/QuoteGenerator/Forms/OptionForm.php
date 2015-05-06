@@ -14,7 +14,7 @@ use Zend_Form_Element_MultiCheckbox;
  *
  * @package MPSToolbox\Legacy\Modules\QuoteGenerator\Forms
  */
-class OptionForm extends Zend_Form
+class OptionForm extends \My_Form_Form
 {
 
     public function init ()
@@ -52,15 +52,11 @@ class OptionForm extends Zend_Form
             ],
         ]);
 
-        $this->addElement('text', 'cost', [
+        $this->addElement('text_currency', 'cost', [
             'label'      => 'Price:',
             'class'      => 'span1',
             'required'   => true,
             'maxlength'  => 8,
-            'filters'    => ['StringTrim', 'StripTags'],
-            'validators' => [
-                'Float',
-            ],
         ]);
 
         $this->addElement('text', 'oemSku', [

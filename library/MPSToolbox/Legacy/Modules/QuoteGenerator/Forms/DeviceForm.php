@@ -17,7 +17,7 @@ use Zend_Form_Element;
  *
  * @package MPSToolbox\Legacy\Modules\QuoteGenerator\Forms
  */
-class DeviceForm extends Zend_Form
+class DeviceForm extends \My_Form_Form
 {
     /**
      * Device Id

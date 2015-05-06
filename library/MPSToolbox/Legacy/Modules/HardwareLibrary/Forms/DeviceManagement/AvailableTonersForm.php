@@ -16,7 +16,7 @@ use Zend_Form;
  *
  * @package MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement
  */
-class AvailableTonersForm extends Zend_Form
+class AvailableTonersForm extends \My_Form_Form
 {
     /**
      * @var int
@@ -142,11 +142,10 @@ class AvailableTonersForm extends Zend_Form
         /**
          * Yield
          */
-        $this->addElement('text', 'yield', [
+        $this->addElement('text_int', 'yield', [
             'label'      => 'Yield',
             'required'   => true,
             'maxlength'  => 255,
-            'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [
                 [
                     'validator' => 'greaterThan',
@@ -159,11 +158,10 @@ class AvailableTonersForm extends Zend_Form
         /**
          * Dealer Cost
          */
-        $this->addElement('text', 'dealerCost', [
+        $this->addElement('text_currency', 'dealerCost', [
             'label'      => 'Your Cost',
             'required'   => false,
             'maxlength'  => 255,
-            'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [
                 [
                     'validator' => 'greaterThan',
@@ -176,11 +174,10 @@ class AvailableTonersForm extends Zend_Form
         /**
          * Cost
          */
-        $this->addElement('text', 'cost', [
+        $this->addElement('text_currency', 'cost', [
             'label'      => "Typical Dealer Cost",
             'required'   => true,
             'maxlength'  => 255,
-            'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [
                 [
                     'validator' => 'greaterThan',
@@ -188,6 +185,16 @@ class AvailableTonersForm extends Zend_Form
                 ],
                 'Float',
             ]
+        ]);
+
+        /* image */
+        $this->addElement('text', 'imageUrl', [
+            'label'    => 'Image URL',
+            'maxlength'  => 255,
+            'filters'    => ['StringTrim', 'StripTags'],
+        ]);
+        $this->addElement('text', 'imageFile', [
+            'label'    => 'Upload Image',
         ]);
 
         /**

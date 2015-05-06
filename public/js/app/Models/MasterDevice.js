@@ -67,7 +67,8 @@ define(['riot'], function (riot)
             "userId",
             "isSystemDevice",
             "isA3",
-            "maximumRecommendedMonthlyPageVolume"
+            "maximumRecommendedMonthlyPageVolume",
+            "imageUrl"
         ]));
     };
 

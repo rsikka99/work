@@ -14,7 +14,7 @@ use Zend_Validate_NotEmpty;
  *
  * @package MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement
  */
-class HardwareQuoteForm extends Zend_Form
+class HardwareQuoteForm extends \My_Form_Form
 {
 
     public function init ()
@@ -65,11 +65,10 @@ class HardwareQuoteForm extends Zend_Form
         /*
         * Cost
         */
-        $this->addElement('text', 'cost', [
+        $this->addElement('text_currency', 'cost', [
             'label'      => 'Your cost',
             'maxlength'  => 255,
             'required'   => false,
-            'filters'    => ['StringTrim', 'StripTags'],
             'allowEmpty' => false,
             'validators' => [
                 new FieldDependsOnValue('isSelling', '1', [

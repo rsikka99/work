@@ -62,7 +62,7 @@ class QuoteGroupForm extends FormWithNavigation
         $this->addSubForm($addDeviceToGroupSubForm, 'addDeviceToGroup');
 
         // Quantity of the new device
-        $addDeviceToGroupSubForm->addElement('text', 'quantity', [
+        $addDeviceToGroupSubForm->addElement('text_int', 'quantity', [
             'label'      => 'Quantity',
             'class'      => 'span1',
             'value'      => 1,
@@ -174,7 +174,7 @@ class QuoteGroupForm extends FormWithNavigation
             /* @var $quoteDeviceGroupDevice QuoteDeviceGroupDeviceModel */
             foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
             {
-                $deviceQuantitySubform->addElement('text', "quantity_{$quoteDeviceGroupDevice->quoteDeviceGroupId}_{$quoteDeviceGroupDevice->quoteDeviceId}", [
+                $deviceQuantitySubform->addElement('text_int', "quantity_{$quoteDeviceGroupDevice->quoteDeviceGroupId}_{$quoteDeviceGroupDevice->quoteDeviceId}", [
                     'label'      => 'Quantity',
                     'required'   => true,
                     'class'      => 'span1',

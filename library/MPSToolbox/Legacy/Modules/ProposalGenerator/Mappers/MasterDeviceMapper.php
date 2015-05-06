@@ -879,6 +879,7 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
                                 'ppmColor',
                                 'wattsPowerNormal',
                                 'wattsPowerIdle',
+                                'imageFile',
                                 'IF(jcmd.masterDeviceId IS NULL,0,1) AS jitCompatible',
                             ])
                         ->joinLeft(
@@ -913,6 +914,7 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
                 $value ['wattsPowerNormal'],
                 $value ['wattsPowerIdle'],
                 $value ['jitCompatible'],
+                $value ['imageFile']?'Yes':'No',
             ];
         }
 
