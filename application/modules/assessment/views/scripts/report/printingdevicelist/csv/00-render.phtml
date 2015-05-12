@@ -28,4 +28,7 @@ foreach ($this->excluded_values as $line)
 }
 
 fclose($fh);
-echo $this->baseUrl($this->publicFileName);
+
+if (Zend_Controller_Front::getInstance()->getRequest()->isXmlHttpRequest()) echo $this->baseUrl($this->publicFileName);
+else header('Location: '.$this->baseUrl($this->publicFileName));
+

@@ -43,4 +43,5 @@ $objWriter->save($this->savePath);
 // Dereference the worksheets so they can be freed from memory
 $phpExcel->disconnectWorksheets();
 
-echo $this->baseUrl($this->publicFileName);
+if (Zend_Controller_Front::getInstance()->getRequest()->isXmlHttpRequest()) echo $this->baseUrl($this->publicFileName);
+else header('Location: '.$this->baseUrl($this->publicFileName));

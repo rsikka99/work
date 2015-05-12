@@ -13,7 +13,8 @@ $section->addPageBreak();
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$graphs              = $assessmentViewModel->getGraphs();
+/* The graphs */
+$graphs = $this->graphs;
 
 $section->addTitle("Analysis: Environmental Impact", 1);
 
@@ -69,4 +70,4 @@ $section->addText('If you printed every document on both sides of the page, you 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs [13]);
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs [14]);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs[14]);

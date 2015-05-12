@@ -14,8 +14,6 @@ $section->addPageBreak();
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 
-$graphs = $assessmentViewModel->getGraphs();
-
 $section->addTitle("Analysis: Expense", 1);
 
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
