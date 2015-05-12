@@ -10,6 +10,7 @@
             <blackToColorRatio>50</blackToColorRatio>
             <deviceSwapMonochromeRankSetArray>2</deviceSwapMonochromeRankSetArray>
             <deviceSwapColorRankSetArray>2</deviceSwapColorRankSetArray>
+            <minimumPageCount>100</minimumPageCount>
         </data>
     </testData>
     <testData>
@@ -22,6 +23,7 @@
             <blackToColorRatio>75</blackToColorRatio>
             <deviceSwapMonochromeRankSetArray>1</deviceSwapMonochromeRankSetArray>
             <deviceSwapColorRankSetArray>3</deviceSwapColorRankSetArray>
+            <minimumPageCount>100</minimumPageCount>
         </data>
     </testData>
     <testData>
@@ -34,6 +36,7 @@
             <blackToColorRatio>35</blackToColorRatio>
             <deviceSwapMonochromeRankSetArray>3</deviceSwapMonochromeRankSetArray>
             <deviceSwapColorRankSetArray>3</deviceSwapColorRankSetArray>
+            <minimumPageCount>100</minimumPageCount>
         </data>
     </testData>
 </optimizationSettingsGoodData>

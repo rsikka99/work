@@ -82,6 +82,6 @@ class Hardwareoptimization_Report_IndexController extends Hardwareoptimization_L
             }
         }
         $this->view->form = $form;
-        $this->view->headScript()->appendFile($this->view->baseUrl("/js/app/legacy/HtmlReport.js"));
+        $this->view->headScript()->appendFile($this->view->baseUrl("/js/app/legacy/HtmlReport.js?".date('Ymd')));
     }
 }

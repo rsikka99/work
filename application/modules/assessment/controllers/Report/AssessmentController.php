@@ -14,9 +14,16 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
      */
     public function indexAction ()
     {
+        $png = $this->_getParam('png');
+        if ($png) {
+            $this->_helper->viewRenderer->setNoRender(true);
+            $this->_helper->layout->disableLayout();
+            $this->getAssessmentViewModel()->png($png);
+            return;
+        }
+
         $this->_pageTitle = ['Assessment'];
         $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FINISHED);
-
 
         $this->initReportList();
         $this->initHtmlReport();
@@ -32,8 +39,6 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
         $format = $this->_getParam("format", "html");
         try
         {
-            // Clear the cache for the report before proceeding
-            $this->clearCacheForReport();
             if (false !== ($assessmentViewModel = $this->getAssessmentViewModel()))
             {
                 switch ($format)
@@ -53,9 +58,6 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
                 throw new Exception(sprintf('Assessment View Model is false. ["%s"]', implode(' | ', $this->view->ErrorMessages)));
             }
             $this->view->assessmentViewModel = $assessmentViewModel;
-
-            // New Graphs being passed to view
-            $this->view->theGraphs = $this->cacheNewPNGImages($assessmentViewModel->getTheGraphs(), true);
         }
         catch (Exception $e)
         {
@@ -78,9 +80,6 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
             case "docx" :
                 $this->view->phpword = new \PhpOffice\PhpWord\PhpWord();
                 $assessmentViewModel = $this->getAssessmentViewModel();
-                $graphs              = $this->cachePNGImages($assessmentViewModel->getGraphs(), true);
-                $assessmentViewModel->setGraphs($graphs);
-
                 $this->view->wordStyles = $this->getWordStyles();
                 $this->_helper->layout->disableLayout();
                 break;
@@ -93,6 +92,8 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
 
         $this->initReportVariables($filename);
 
+        // Clear the cache for the report before proceeding
+        $this->clearCacheForReport();
         // New graphs being passed to view
         $this->view->graphs = $this->cacheNewPNGImages($assessmentViewModel->getTheGraphs(), true, true);
 

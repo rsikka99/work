@@ -1,8 +1,7 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$graphs              = $assessmentViewModel->getGraphs();
-$theGraphs           = $this->theGraphs;
+
 ?>
 <div class="h1">Analysis: Printing Hardware Usage</div>
 <table cellspacing="0" class="gradesTable">
@@ -24,9 +23,9 @@ $theGraphs           = $this->theGraphs;
 </p>
 
 <div class="center">
-    <img src="<?= $theGraphs[4]; ?>" /> <!-- Average monthly pages per networked printer -->
-    <img src="<?= $theGraphs[5]; ?>" /> <!-- Average monthly pages per employee -->
-    <img src="<?= $theGraphs[6]; ?>" /> <!-- Employees per printing device -->
+    <img src="?png=AverageMonthlyPagesPerNetworkedPrinter" /> <!-- Average monthly pages per networked printer -->
+    <img src="?png=AverageMonthlyPagesPerEmployee" /> <!-- Average monthly pages per employee -->
+    <img src="?png=EmployeesPerPrintingDevice" /> <!-- Employees per printing device -->
 </div>
 
 <div class="pheader">Underused and Overused Printing Devices</div>
@@ -109,8 +108,8 @@ $theGraphs           = $this->theGraphs;
 </p>
 <br />
 <div class="center">
-    <img src="<?= $theGraphs[7]; ?>" />
-    <img src="<?= $theGraphs[8]; ?>" />
+    <img src="?png=ColorCapablePrintingDevices" />
+    <img src="?png=ColorVsBlackWhitePages" />
 </div>
 <br />
 <p>Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of

@@ -8,7 +8,7 @@ $quote = $this->Quote();
 
 $this->activePage = 'reports';
 echo $this->render('_partials/quoteHeading.phtml');
-$this->headScript()->appendFile($this->baseUrl('/js/app/legacy/HtmlReport.js'));
+$this->headScript()->appendFile($this->baseUrl('/js/app/legacy/HtmlReport.js?'.date('Ymd')));
 
 $contractTemplates = ContractTemplateMapper::getInstance()->fetchAllForDealer($this->Identity()->dealerId);
 ?>

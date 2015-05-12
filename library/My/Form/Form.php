@@ -25,13 +25,13 @@ class My_Form_Form extends Zend_Form
 
     public function addElement($element, $name = null, $options = null)
     {
-        $this->addMyOptions($element, $options);
+        if (is_string($element)) $this->addMyOptions($element, $options);
         return parent::addElement($element, $name, $options);
     }
 
     public function createElement($type, $name, $options = null)
     {
-        $this->addMyOptions($type, $options);
+        if (is_string($type)) $this->addMyOptions($type, $options);
         return parent::createElement($type, $name, $options);
     }
 

@@ -1,9 +1,8 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$graphs              = $assessmentViewModel->getGraphs();
 
-$theGraphs = $this->theGraphs; ?>
+?>
 <div class="h1">Analysis: Environmental Impact</div>
 <table cellspacing="0" class="gradesTable">
     <tr>
@@ -70,6 +69,6 @@ else
 <div class="pheader">Green Features: Duplexing and Scanning</div>
 <p>If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplexing and scanning capabilities:</p>
 <div class="center">
-    <img src="<?= $theGraphs[13]; ?>" /><br>
-    <img src="<?= $theGraphs[14]; ?>" />
+    <img src="?png=DuplexCapablePrintingDevices" /><br>
+    <img src="?png=ScanCapablePrintingDevices" />
 </div>

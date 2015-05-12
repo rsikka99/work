@@ -144,7 +144,7 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
      */
     public function initHtmlReport ()
     {
-        $this->view->headScript()->appendFile($this->view->baseUrl('/js/app/legacy/HtmlReport.js'));
+        $this->view->headScript()->appendFile($this->view->baseUrl('/js/app/legacy/HtmlReport.js?'.date('Ymd')));
 
         if ($this->getHardwareOptimization()->id < 1)
         {
