@@ -517,4 +517,6 @@ $this->partial("report/customer/optimization/docx/08_device_appendix.phtml", $da
 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
 $objWriter->save($this->savePath);
 
-echo $this->baseUrl($this->publicFileName);
+if (Zend_Controller_Front::getInstance()->getRequest()->isXmlHttpRequest()) echo $this->baseUrl($this->publicFileName);
+else header('Location: '.$this->baseUrl($this->publicFileName));
+

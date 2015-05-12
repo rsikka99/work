@@ -21,4 +21,6 @@ fputs($fh, $this->excludedTitles);
 fputs($fh, $this->excludedValues);
 
 fclose($fh);
-echo $this->baseUrl($this->publicFileName);
+
+if (Zend_Controller_Front::getInstance()->getRequest()->isXmlHttpRequest()) echo $this->baseUrl($this->publicFileName);
+else header('Location: '.$this->baseUrl($this->publicFileName));

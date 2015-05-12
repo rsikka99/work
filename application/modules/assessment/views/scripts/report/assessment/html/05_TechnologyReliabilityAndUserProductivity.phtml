@@ -1,8 +1,7 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$graphs              = $assessmentViewModel->getGraphs();
-$theGraphs           = $this->theGraphs;
+
 ?>
 <div class="h1">Analysis: Technology Reliability and User Productivity</div>
 <table cellspacing="0" class="gradesTable">
@@ -22,7 +21,7 @@ $theGraphs           = $this->theGraphs;
 </p>
 <p>The breakdown of the ages of your printing devices is shown below:</p>
 <div class="center">
-    <img src="<?= $theGraphs[9]; ?>" />
+    <img src="?png=AgeOfPrintingDevices" />
 </div>
 <br />
 <p>The devices listed below have a high risk of breaking down, because of a combination of their age and the total amount of pages they have printed throughout
@@ -104,9 +103,9 @@ $theGraphs           = $this->theGraphs;
     amount of pages printed. Color printing capabilities are important if you are generating client-facing or other important documents in-house.</p>
 <p>The charts below show the percent of your printing devices that are capable of scanning, faxing, and color printing.</p>
 <div class="center">
-    <img src="<?= $theGraphs[10]; ?>" /> <!-- Scan capable devices -->
-    <img src="<?= $theGraphs[11]; ?>" /> <!-- Fax capable devices -->
-    <img src="<?= $theGraphs[12]; ?>" /> <!-- Color capable devices -->
+    <img src="?png=ScanCapablePrintingDevicesSmall" /> <!-- Scan capable devices -->
+    <img src="?png=FaxCapablePrintingDevices" /> <!-- Fax capable devices -->
+    <img src="?png=ColorCapablePrintingDevicesSmall" /> <!-- Color capable devices -->
 </div>
 <br />
 <p>If you are in need of additional features and functionality to improve workflow and print quality, <?= $this->companyName; ?> has a variety of
