@@ -67,12 +67,12 @@ class MasterDeviceModel extends My_Model_Abstract
     /**
      * @var string
      */
-    public $imageUrl;
+    public $imageUrl = '';
 
     /**
      * @var string
      */
-    public $imageFile;
+    public $imageFile = '';
 
     /**
      * @var int
