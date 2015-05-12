@@ -12,6 +12,14 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
      */
     public function indexAction ()
     {
+        $png = $this->_getParam('png');
+        if ($png) {
+            $this->_helper->viewRenderer->setNoRender(true);
+            $this->_helper->layout->disableLayout();
+            $this->getHealthcheckViewModel()->png($png);
+            return;
+        }
+
         $this->_pageTitle = ['Healthcheck'];
         $this->_navigation->setActiveStep(HealthCheckStepsModel::STEP_FINISHED);
 
