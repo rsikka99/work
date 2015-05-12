@@ -94,6 +94,16 @@ class TonerModel extends My_Model_Abstract
     public $isUsingDealerPricing = false;
 
     /**
+     * @var string
+     */
+    public $imageUrl = '';
+
+    /**
+     * @var string
+     */
+    public $imageFile = '';
+
+    /**
      * @var ManufacturerModel
      */
     protected $_manufacturer;
@@ -188,6 +198,16 @@ class TonerModel extends My_Model_Abstract
             $this->isUsingDealerPricing = $params->isUsingDealerPricing;
         }
 
+        if (isset($params->imageUrl) && !is_null($params->imageUrl))
+        {
+            $this->imageUrl = $params->imageUrl;
+        }
+
+        if (isset($params->imageFile) && !is_null($params->imageFile))
+        {
+            $this->imageFile = $params->imageFile;
+        }
+
     }
 
     /**
@@ -204,6 +224,8 @@ class TonerModel extends My_Model_Abstract
             "yield"          => $this->yield,
             "manufacturerId" => $this->manufacturerId,
             "tonerColorId"   => $this->tonerColorId,
+            "imageUrl"       => $this->imageUrl,
+            "imageFile"      => $this->imageFile,
         ];
     }
 

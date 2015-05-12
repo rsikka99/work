@@ -127,7 +127,7 @@ class QuoteProfitabilityForm extends FormWithNavigation
                 /**
                  * Package Markup
                  */
-                $this->addElement('text', "packageMarkup_{$quoteDevice->id}", [
+                $this->addElement('text_float', "packageMarkup_{$quoteDevice->id}", [
                     'label'      => 'Markup',
                     'required'   => true,
                     'value'      => $quoteDevice->packageMarkup,
@@ -143,7 +143,7 @@ class QuoteProfitabilityForm extends FormWithNavigation
                 /**
                  * Margin
                  */
-                $this->addElement('text', "margin_{$quoteDevice->id}", [
+                $this->addElement('text_float', "margin_{$quoteDevice->id}", [
                     'label'      => 'Margin',
                     'required'   => true,
                     'value'      => $quoteDevice->margin,
@@ -164,7 +164,7 @@ class QuoteProfitabilityForm extends FormWithNavigation
                     /**
                      * Residual
                      */
-                    $this->addElement('text', "residual_{$quoteDevice->id}", [
+                    $this->addElement('text_float', "residual_{$quoteDevice->id}", [
                         'label'      => 'Residual',
                         'required'   => true,
                         'value'      => $quoteDevice->buyoutValue,

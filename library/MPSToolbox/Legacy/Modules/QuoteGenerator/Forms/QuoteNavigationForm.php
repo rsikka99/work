@@ -12,7 +12,7 @@ use Zend_Form;
  *
  * @package MPSToolbox\Legacy\Modules\QuoteGenerator\Forms
  */
-class QuoteNavigationForm extends Zend_Form
+class QuoteNavigationForm extends \My_Form_Form
 {
     const BUTTONS_ALL       = 1;
     const BUTTONS_SAVE_NEXT = 2;

@@ -11,7 +11,7 @@ use MPSToolbox\Settings\Entities\FleetSettingsEntity as FleetSettingsEntity;
  *
  * @package MPSToolbox\Settings\Form
  */
-class ProposedFleetSettingsForm extends \Zend_Form
+class ProposedFleetSettingsForm extends \My_Form_Form
 {
     /**
      * @var array
@@ -40,43 +40,43 @@ class ProposedFleetSettingsForm extends \Zend_Form
             'description' => 'Use the actual page coverage value reported by the RMS.',
         ]);
 
-        $this->addElement('text', 'proposedPageCoverageMono', [
+        $this->addElement('text_float', 'proposedPageCoverageMono', [
             'label'       => 'Default Monochrome Coverage',
             'description' => 'Apply this coverage to determine the toner costs of all monochrome pages.',
             'required'    => true,
         ]);
 
-        $this->addElement('text', 'proposedPageCoverageColor', [
+        $this->addElement('text_float', 'proposedPageCoverageColor', [
             'label'       => 'Default Color Coverage',
             'description' => 'Apply this coverage to determine the toner costs of all color (CMYK) pages.',
             'required'    => true,
         ]);
 
-        $this->addElement('text', 'proposedDefaultAdminCostPerPage', [
+        $this->addElement('text_currency', 'proposedDefaultAdminCostPerPage', [
             'label'       => 'Admin CPP',
             'description' => 'You can specify an additional cost per page here. It is applied to all devices.',
             'required'    => true,
         ]);
 
-        $this->addElement('text', 'proposedDefaultMonochromeLaborCostPerPage', [
+        $this->addElement('text_currency', 'proposedDefaultMonochromeLaborCostPerPage', [
             'label'       => 'Monochrome Device Labor CPP',
             'description' => 'The default labor cost per page to apply to monochrome devices.',
             'required'    => true,
         ]);
 
-        $this->addElement('text', 'proposedDefaultMonochromePartsCostPerPage', [
+        $this->addElement('text_currency', 'proposedDefaultMonochromePartsCostPerPage', [
             'label'       => 'Monochrome Device Parts CPP',
             'description' => 'The default parts cost per page to apply to monochrome devices.',
             'required'    => true,
         ]);
 
-        $this->addElement('text', 'proposedDefaultColorLaborCostPerPage', [
+        $this->addElement('text_currency', 'proposedDefaultColorLaborCostPerPage', [
             'label'       => 'Color Device Labor CPP',
             'description' => 'The default labor cost per page to apply to color devices.',
             'required'    => true,
         ]);
 
-        $this->addElement('text', 'proposedDefaultColorPartsCostPerPage', [
+        $this->addElement('text_currency', 'proposedDefaultColorPartsCostPerPage', [
             'label'       => 'Color Device Parts CPP',
             'description' => 'The default parts cost per page to apply to color devices.',
             'required'    => true,

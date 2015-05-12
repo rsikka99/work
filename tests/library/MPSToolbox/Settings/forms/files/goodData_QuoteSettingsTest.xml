@@ -12,10 +12,4 @@
             <defaultPageMargin>20</defaultPageMargin>
         </data>
     </testData>
-    <testData>
-        <data>
-            <defaultDeviceMargin>asdf</defaultDeviceMargin>
-            <defaultPageMargin>55</defaultPageMargin>
-        </data>
-    </testData>
 </quoteSettingsGoodData>

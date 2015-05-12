@@ -19,7 +19,7 @@ use Zend_Form;
  *
  * @package MPSToolbox\Legacy\Modules\QuoteGenerator\Forms
  */
-class QuoteDeviceForm extends Zend_Form
+class QuoteDeviceForm extends \My_Form_Form
 {
     /**
      * If this is set to false it the form will display a drop down to select a device.
@@ -85,13 +85,13 @@ class QuoteDeviceForm extends Zend_Form
                 'ignore'   => true,
             ]);
 
-            $this->addElement('text', 'totalPrice', [
+            $this->addElement('text_currency', 'totalPrice', [
                 'label'    => 'Total Package Price',
                 'disabled' => true,
                 'ignore'   => true,
             ]);
 
-            $this->addElement('text', 'margin', [
+            $this->addElement('text_float', 'margin', [
                 'label'      => 'Margin',
                 'class'      => 'span1',
                 'validators' => [
@@ -103,7 +103,7 @@ class QuoteDeviceForm extends Zend_Form
                 ],
             ]);
 
-            $this->addElement('text', 'cost', [
+            $this->addElement('text_currency', 'cost', [
                 'label'    => 'Cost',
                 'disabled' => true,
                 'ignore'   => true,
@@ -163,7 +163,7 @@ class QuoteDeviceForm extends Zend_Form
             ]);
         }
 
-        $this->addElement('text', 'packageCost', [
+        $this->addElement('text_currency', 'packageCost', [
             'label'    => 'Package Cost per Unit',
             'value'    => $this->getQuoteDevice()->calculatePackageCost(),
             'disabled' => true,

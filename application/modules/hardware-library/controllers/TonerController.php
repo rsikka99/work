@@ -165,6 +165,33 @@ class HardwareLibrary_TonerController extends Action
         }
     }
 
+    public function imageAction() {
+        $tonerId = $this->_getParam('id', false);
+        $toner = TonerMapper::getInstance()->find($tonerId);
+        if (!$toner) {
+            $this->sendJsonError('not found');
+            return;
+        }
+
+        $isAllowed = ((!$toner instanceof TonerModel || !$toner->isSystemDevice || $this->isMasterHardwareAdmin) ? true : false);
+        if (!$isAllowed) {
+            $this->sendJsonError('not allowed');
+            return;
+        }
+        $dealerId      = Zend_Auth::getInstance()->getIdentity()->dealerId;
+        $userId        = Zend_Auth::getInstance()->getIdentity()->id;
+        $tonerService = new TonerService($userId, $dealerId, $this->isMasterHardwareAdmin);
+        foreach ($_FILES as $upload) {
+            $tonerService->uploadImage($toner, $upload);
+            TonerMapper::getInstance()->save($toner);
+        }
+
+        $result = array(
+            'filename'=>$toner->imageFile
+        );
+        $this->sendJson($result);
+    }
+
     /**
      * Handles creating and saving dealer toner information
      *
