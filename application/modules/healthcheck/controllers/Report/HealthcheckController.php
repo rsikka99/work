@@ -120,6 +120,13 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
             throw new Exception('Controller caught the exception!', 0, $e);
         }
     }
+
+    public function quadrantAction() {
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout->disableLayout();
+        $this->render('/png/quadrant');
+    }
+
 } // end index controller
 
 
