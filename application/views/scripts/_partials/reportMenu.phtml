@@ -18,7 +18,7 @@
                     </button>
                     <div class="form-group">
                         <label class="sr-only" for="reportNavigator">Select Report</label>
-                        <select id="reportNavigator" class="form-control">
+                        <select id="reportNavigator" class="form-control" onchange="window.location.href=this.value">
                             <?php foreach ($this->availableReports as $report) : ?>
                                 <option value='<?= $report['url']; ?>' <?= ($report['active']) ? "selected='selected'" : ""; ?>><?= $report['pagetitle']; ?></option>
                             <?php endforeach; ?>

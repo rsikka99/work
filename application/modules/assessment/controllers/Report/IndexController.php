@@ -52,7 +52,7 @@ class Assessment_Report_IndexController extends Assessment_Library_Controller_Ac
         }
         $this->initReportList();
 
-        $this->view->headScript()->appendFile($this->view->baseUrl("/js/app/legacy/HtmlReport.js"));
+        $this->view->headScript()->appendFile($this->view->baseUrl("/js/app/legacy/HtmlReport.js?".date('Ymd')));
         $this->view->formTitle = "Report Summary";
 
         $assessment              = $this->getAssessment();
