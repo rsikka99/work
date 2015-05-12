@@ -2,19 +2,19 @@
 <quotesGoodData>
     <testData>
         <data>
-            <clientId>112</clientId>
+            <clientId>1</clientId>
             <quoteType>purchased</quoteType>
         </data>
     </testData>
     <testData>
         <data>
-            <clientId>118</clientId>
+            <clientId>1</clientId>
             <quoteType>leased</quoteType>
         </data>
     </testData>
     <testData>
         <data>
-            <clientId>125</clientId>
+            <clientId>1</clientId>
             <quoteType>leased</quoteType>
         </data>
     </testData>

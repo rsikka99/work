@@ -44,11 +44,11 @@ class Admin_Form_ClientTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 
     public function testDealerFieldExists ()
     {
-        $this->assertInstanceOf('Zend_Form_Element_Select', $this->getForm(false, true)->getElement('dealerId'));
+        $this->assertInstanceOf('Zend_Form_Element_Text', $this->getForm(false, true)->getElement('dealerId'));
     }
 
     public function testDealerFieldDoesNotExist ()
     {
-        $this->assertNotInstanceOf('Zend_Form_Element_Select', $this->getForm()->getElement('dealerId'));
+        $this->assertNotInstanceOf('Zend_Form_Element_Text', $this->getForm()->getElement('dealerId'));
     }
 }
