@@ -6,10 +6,12 @@
             <proposedPageCoverageMono>0</proposedPageCoverageMono>
             <proposedPageCoverageColor>20</proposedPageCoverageColor>
             <proposedDefaultAdminCostPerPage>0.0005</proposedDefaultAdminCostPerPage>
-            <proposedDefaultLaborCostPerPage>0.0015</proposedDefaultLaborCostPerPage>
-            <proposedDefaultPartsCostPerPage>0.0015</proposedDefaultPartsCostPerPage>
             <proposedMonochromeRankSetArray>1</proposedMonochromeRankSetArray>
             <proposedColorRankSetArray>2</proposedColorRankSetArray>
+            <proposedDefaultMonochromeLaborCostPerPage>0.0025</proposedDefaultMonochromeLaborCostPerPage>
+            <proposedDefaultMonochromePartsCostPerPage>0.005</proposedDefaultMonochromePartsCostPerPage>
+            <proposedDefaultColorLaborCostPerPage>0.0025</proposedDefaultColorLaborCostPerPage>
+            <proposedDefaultColorPartsCostPerPage>0.005</proposedDefaultColorPartsCostPerPage>
         </data>
     </testData>
     <testData>
@@ -18,8 +20,10 @@
             <proposedPageCoverageMono>10</proposedPageCoverageMono>
             <proposedPageCoverageColor>30</proposedPageCoverageColor>
             <proposedDefaultAdminCostPerPage>0.0009</proposedDefaultAdminCostPerPage>
-            <proposedDefaultLaborCostPerPage>0.0025</proposedDefaultLaborCostPerPage>
-            <proposedDefaultPartsCostPerPage>0.005</proposedDefaultPartsCostPerPage>
+            <proposedDefaultMonochromeLaborCostPerPage>0.0025</proposedDefaultMonochromeLaborCostPerPage>
+            <proposedDefaultMonochromePartsCostPerPage>0.005</proposedDefaultMonochromePartsCostPerPage>
+            <proposedDefaultColorLaborCostPerPage>0.0025</proposedDefaultColorLaborCostPerPage>
+            <proposedDefaultColorPartsCostPerPage>0.005</proposedDefaultColorPartsCostPerPage>
             <proposedMonochromeRankSetArray>3</proposedMonochromeRankSetArray>
             <proposedColorRankSetArray>2</proposedColorRankSetArray>
         </data>
@@ -30,8 +34,10 @@
             <proposedPageCoverageMono>5</proposedPageCoverageMono>
             <proposedPageCoverageColor>25</proposedPageCoverageColor>
             <proposedDefaultAdminCostPerPage>0.0007</proposedDefaultAdminCostPerPage>
-            <proposedDefaultLaborCostPerPage>0.0019</proposedDefaultLaborCostPerPage>
-            <proposedDefaultPartsCostPerPage>0.0018</proposedDefaultPartsCostPerPage>
+            <proposedDefaultMonochromeLaborCostPerPage>0.0025</proposedDefaultMonochromeLaborCostPerPage>
+            <proposedDefaultMonochromePartsCostPerPage>0.005</proposedDefaultMonochromePartsCostPerPage>
+            <proposedDefaultColorLaborCostPerPage>0.0025</proposedDefaultColorLaborCostPerPage>
+            <proposedDefaultColorPartsCostPerPage>0.005</proposedDefaultColorPartsCostPerPage>
             <proposedMonochromeRankSetArray>2</proposedMonochromeRankSetArray>
             <proposedColorRankSetArray>2</proposedColorRankSetArray>
         </data>

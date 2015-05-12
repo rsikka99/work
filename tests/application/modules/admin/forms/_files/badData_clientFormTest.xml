@@ -16,7 +16,7 @@
             <region>ON</region>
             <postCode>K1K 1K1</postCode>
             <countryId>1</countryId>
-            <dealerId>4</dealerId>
+            <dealerId></dealerId>
         </data>
     </testData>
     <testData>
@@ -34,7 +34,7 @@
             <city>Kingston</city>
             <region>ON</region>
             <postCode>K1K 1K1</postCode>
-            <countryId>1</countryId>
+            <countryId></countryId>
             <dealerId>1</dealerId>
         </data>
     </testData>
@@ -54,7 +54,7 @@
             <region>ON</region>
             <postCode>K1K 1K1</postCode>
             <countryId>1</countryId>
-            <dealerId>6</dealerId>
+            <dealerId>66666</dealerId>
         </data>
     </testData>
     <testData>
@@ -70,7 +70,7 @@
             <city>Kingston</city>
             <region>ON</region>
             <postCode>K1K 1K1</postCode>
-            <countryId>1</countryId>
+            <countryId>11111</countryId>
             <dealerId>1</dealerId>
         </data>
     </testData>
