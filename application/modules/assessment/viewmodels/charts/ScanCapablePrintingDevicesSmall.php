@@ -21,7 +21,7 @@ $graphNotCompatibleDeviceColor = $hexToRGBConverter->hexToRgb($dealerBranding->g
 $copyCapableSetting            = ['R' => $graphCopyCapableDeviceColor['r'], 'G' => $graphCopyCapableDeviceColor['g'], 'B' => $graphCopyCapableDeviceColor['b']];
 $notCompatibleSetting          = ['R' => $graphNotCompatibleDeviceColor['r'], 'G' => $graphNotCompatibleDeviceColor['g'], 'B' => $graphNotCompatibleDeviceColor['b']];
 
-$myPicture = $factory->newImage(200, 160, $MyData, true);
+$myPicture = $factory->newImage(190, 160, $MyData, true);
 $myPicture->setFontProperties(["FontName" => APPLICATION_BASE_PATH."/assets/fonts/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
 $myPicture->drawText(95, 20, "Scan-Capable Printing Devices", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]);
 $PieChart = $factory->newChart("pie", $myPicture, $MyData);

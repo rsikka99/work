@@ -1,0 +1,26 @@
+<?php
+
+$MyData = new \CpChart\Classes\pData();
+$myPicture = new \CpChart\Classes\pImage(400, 400, $MyData);
+$myPicture->setGraphArea(50,50,350,350);
+
+for ($i=0;$i<=360;$i=$i+10) { $myData->addPoints(rand(1,20)*10+rand(0,$i),"Probe 1"); }
+for ($i=0;$i<=360;$i=$i+10) { $myData->addPoints(rand(1,2)*10+rand(0,$i),"Probe 2"); }
+$myData->setAxisName(0,"X-Index");
+$myData->setAxisXY(0,AXIS_X);
+$myData->setAxisPosition(0,AXIS_POSITION_TOP);
+
+
+
+$myScatter = new \CpChart\Classes\pScatter($myPicture,$MyData);
+$myScatter->drawScatterScale(array("XMargin"=>10,"YMargin"=>10,"Floating"=>TRUE));
+
+$myScatter->drawScatterThreshold(0,array("AxisID"=>0,"R"=>0,"G"=>0,"B"=>0,"Ticks"=>10));
+$myScatter->drawScatterThreshold(0,array("AxisID"=>1,"R"=>0,"G"=>0,"B"=>0,"Ticks"=>10));
+
+$myScatter->drawScatterLineChart();
+$myScatter->drawScatterPlotChart();
+
+$myPicture->autoOutput();
+
+//end

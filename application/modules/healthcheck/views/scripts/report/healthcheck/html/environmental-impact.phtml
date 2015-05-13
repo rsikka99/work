@@ -1,7 +1,7 @@
 <?php
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
-$graphs               = $healthcheckViewModel->getGraphs();
+
 ?>
 <div class="h1">Analysis: Environmental Impact</div>
 <div class="pheader">Forest and Water Consumption</div>
@@ -82,6 +82,6 @@ else
 </p>
 <p>The following charts show how many of your printing devices have duplex printing and scanning capabilities:</p>
 <div class="center">
-    <img src="<?= $graphs[13]; ?>" style="width: 270px; height: 175px;" />
-    <img src="<?= $graphs[14]; ?>" style="width: 270px; height: 175px;" />
+    <img src="?png=DuplexCapableDevicesGraphBig" />
+    <img src="?png=ScanCapableDevicesGraphBig" />
 </div>

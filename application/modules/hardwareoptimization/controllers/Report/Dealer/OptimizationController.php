@@ -1,5 +1,5 @@
 <?php
-use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationDealerModel;
+
 use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationStepsModel;
 
 /**
@@ -9,12 +9,19 @@ class Hardwareoptimization_Report_Dealer_OptimizationController extends Hardware
 {
     public function indexAction ()
     {
+        $png = $this->_getParam('png');
+        if ($png) {
+            $this->_helper->viewRenderer->setNoRender(true);
+            $this->_helper->layout->disableLayout();
+            $this->getOptimizationViewModel()->dealer_png($png);
+            return;
+        }
+
         $this->_pageTitle = ['Hardware Optimization', 'Dealer'];
         $this->_navigation->setActiveStep(HardwareOptimizationStepsModel::STEP_FINISHED);
 
         $this->initHtmlReport();
         $this->initReportList();
-
 
         $this->view->formats = [
             "/hardwareoptimization/report_dealer_optimization/generate/format/docx" => $this->_wordFormat
@@ -22,7 +29,6 @@ class Hardwareoptimization_Report_Dealer_OptimizationController extends Hardware
 
         try
         {
-            $this->clearCacheForReport();
             $this->view->optimization                                     = $this->getOptimizationViewModel();
             $this->view->availableReports['DealerOptimization']['active'] = true;
             $this->view->hardwareOptimization                             = $this->_hardwareOptimization;
@@ -46,11 +52,11 @@ class Hardwareoptimization_Report_Dealer_OptimizationController extends Hardware
                 throw new Exception("CSV Format not available through this page yet!");
                 break;
             case "docx" :
-                $dealerOptimization         = new OptimizationDealerModel($this->_hardwareOptimization);
-                $graphs                     = $this->cachePNGImages($dealerOptimization->getGraphs(), true);
+                $this->clearCacheForReport();
+                $this->view->optimization   = $this->getOptimizationViewModel();
                 $this->view->phpword        = new \PhpOffice\PhpWord\PhpWord();
                 $this->view->wordStyles     = $this->getWordStyles();
-                $this->view->graphs         = $graphs;
+                $this->view->graphs         = $this->cachePNGImages($this->view->optimization->getDealerCharts(), true);
                 $this->view->dealerLogoFile = $this->getDealerLogoFile();
 
                 $this->_helper->layout->disableLayout();

@@ -12,6 +12,14 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
      */
     public function indexAction ()
     {
+        $png = $this->_getParam('png');
+        if ($png) {
+            $this->_helper->viewRenderer->setNoRender(true);
+            $this->_helper->layout->disableLayout();
+            $this->getHealthcheckViewModel()->png($png);
+            return;
+        }
+
         $this->_pageTitle = ['Healthcheck'];
         $this->_navigation->setActiveStep(HealthCheckStepsModel::STEP_FINISHED);
 
@@ -62,6 +70,10 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
                 throw new Exception("Healthcheck View Model is false");
             }
             $this->view->healthcheckViewModel = $healthcheckViewModel;
+
+            // New Graphs being passed to view
+            $this->view->theGraphs = $this->cacheNewPNGImages($healthcheckViewModel->getTheGraphs(), true);
+
         }
         catch (Exception $e)
         {
@@ -92,8 +104,10 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
             case 'docx' :
                 $this->view->phpword = new \PhpOffice\PhpWord\PhpWord();
                 $healthcheck         = $this->getHealthcheckViewModel();
-                $graphs              = $this->cachePNGImages($healthcheck->getGraphs(), true);
-                $healthcheck->setGraphs($graphs);
+                // Clear the cache for the report before proceeding
+                $this->clearCacheForReport();
+                // New graphs being passed to view
+                $this->view->graphs = $this->cachePNGImages($healthcheck->getCharts());
                 $this->view->wordStyles = $this->getWordStyles();
                 $this->_helper->layout->disableLayout();
                 $filename = $this->generateReportFilename($this->getHealthcheck()->getClient(), $reportTitle) . ".$format";
@@ -116,6 +130,13 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
             throw new Exception('Controller caught the exception!', 0, $e);
         }
     }
+
+    public function quadrantAction() {
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout->disableLayout();
+        $this->render('/png/quadrant');
+    }
+
 } // end index controller
 
 

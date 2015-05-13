@@ -1,5 +1,5 @@
 <?php
-use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationCustomerModel;
+
 use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationStepsModel;
 
 /**
@@ -9,8 +9,17 @@ class Hardwareoptimization_Report_Customer_OptimizationController extends Hardwa
 {
     public function indexAction ()
     {
+        $png = $this->_getParam('png');
+        if ($png) {
+            $this->_helper->viewRenderer->setNoRender(true);
+            $this->_helper->layout->disableLayout();
+            $this->getOptimizationViewModel()->customer_png($png);
+            return;
+        }
+
         $this->_pageTitle = ['Hardware Optimization', 'Customer'];
         $this->_navigation->setActiveStep(HardwareOptimizationStepsModel::STEP_FINISHED);
+
         $this->initHtmlReport();
         $this->initReportList();
 
@@ -20,11 +29,9 @@ class Hardwareoptimization_Report_Customer_OptimizationController extends Hardwa
 
         try
         {
-            $this->clearCacheForReport();
             $this->view->optimization                                       = $this->getOptimizationViewModel();
             $this->view->availableReports['CustomerOptimization']['active'] = true;
             $this->view->hardwareOptimization                               = $this->_hardwareOptimization;
-
         }
         catch (Exception $e)
         {
@@ -45,11 +52,11 @@ class Hardwareoptimization_Report_Customer_OptimizationController extends Hardwa
                 throw new Exception("CSV Format not available through this page yet!");
                 break;
             case "docx" :
-                $customerOptimization   = new OptimizationCustomerModel($this->_hardwareOptimization);
-                $graphs                 = $this->cachePNGImages($customerOptimization->getGraphs(), true);
+                $this->clearCacheForReport();
+                $this->view->optimization   = $this->getOptimizationViewModel();
                 $this->view->phpword    = new \PhpOffice\PhpWord\PhpWord();
                 $this->view->wordStyles = $this->getWordStyles();
-                $this->view->graphs     = $graphs;
+                $this->view->graphs     = $this->cachePNGImages($this->view->optimization->getCustomerCharts(), true);
 
                 $this->_helper->layout->disableLayout();
                 break;

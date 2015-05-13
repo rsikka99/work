@@ -121,6 +121,7 @@ $r->addRoute('healthcheck.select-upload',  new R('healthcheck/select-upload',   
 $r->addRoute('healthcheck.settings',       new R('healthcheck/settings',                   ['module' => 'healthcheck', 'controller' => 'index',                      'action' => 'settings']));
 $r->addRoute('healthcheck.report',         new R('healthcheck/report-healthcheck',         ['module' => 'healthcheck', 'controller' => 'report_healthcheck',         'action' => 'index']));
 $r->addRoute('healthcheck.report-printiq', new R('healthcheck/printiq-report-healthcheck', ['module' => 'healthcheck', 'controller' => 'report_printiq_healthcheck', 'action' => 'index']));
+$r->addRoute('healthcheck.report.quadrant',new R('healthcheck/report-healthcheck-quadrant',['module' => 'healthcheck', 'controller' => 'report_healthcheck',         'action' => 'quadrant']));
 //@formatter:on
 
 //@formatter:off

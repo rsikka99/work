@@ -18,7 +18,7 @@ $section = $phpWord->addSection([
 
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
-$graphs               = $healthcheckViewModel->getGraphs();
+$graphs = $this->graphs;
 
 $section->addTitle("Fleet Attributes", 1);
 

@@ -46,4 +46,8 @@ class HexToRGB
 
         return $color;
     }
+    function hexToRgb_uppercase($hex) {
+        $result = $this->hexToRgb($hex);
+        return array('R'=>$result['r'],'G'=>$result['g'],'B'=>$result['b']);
+    }
 }

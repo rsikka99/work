@@ -8,10 +8,6 @@ $optimization = $this->optimization;
 /* @var $hardwareOptimization HardwareOptimizationModel */
 $hardwareOptimization = $this->hardwareOptimization;
 
-$customerOptimization = new OptimizationCustomerModel($hardwareOptimization);
-
-$graphs = $customerOptimization->getGraphs();
-
 /* @var $phpWord \PhpOffice\PhpWord\PhpWord */
 $phpWord = $this->phpword;
 

@@ -95,7 +95,7 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
         // Clear the cache for the report before proceeding
         $this->clearCacheForReport();
         // New graphs being passed to view
-        $this->view->graphs = $this->cacheNewPNGImages($assessmentViewModel->getTheGraphs(), true, true);
+        $this->view->graphs = $this->cachePNGImages($assessmentViewModel->getCharts());
 
         // Render early
         try
