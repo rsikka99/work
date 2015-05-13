@@ -12,8 +12,6 @@ $optimization = $this->optimization;
 /* @var $customerOptimization OptimizationCustomerModel */
 $customerOptimization = $this->customerOptimization;
 
-/* @var $graphs array */
-$graphs = $this->graphs;
 ?>
 <div class="pheader" id="hardware-utilization">
     Hardware Utilization and Capacity
@@ -26,7 +24,7 @@ $graphs = $this->graphs;
     chart displays your estimated monthly page volume compared to your maximum monthly page capacity.</p>
 <table class='center'>
     <tr>
-        <td><img src="<?= $graphs[4]; ?>" /></td>
+        <td><img src="?png=HardwareUtilizationCapacityPercent" /></td>
     </tr>
 </table>
 
@@ -43,11 +41,11 @@ $graphs = $this->graphs;
 </p>
 <table class='center'>
     <tr>
-        <td><img src="<?= $graphs[5]; ?>" /></td>
-        <td><img src="<?= $graphs[6]; ?>" /></td>
+        <td><img src="?png=EmployeesPerDevice" /></td>
+        <td><img src="?png=PrintingListJITCompatible" /></td>
         <!--<div class="pheader"> Printing Device Management Breakdown </div>-->
         <!--    <p>Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>-->
-        <td><img src="<?= $graphs[7]; ?>" /></td>
+        <td><img src="?png=LeasedVsPurchasedBarGraph" /></td>
     </tr>
 </table>
 <br />

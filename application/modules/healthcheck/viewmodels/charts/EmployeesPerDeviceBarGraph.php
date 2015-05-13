@@ -20,7 +20,7 @@ $MyData->setPalette($companyName, $customerColorSetting);
 $MyData->setPalette("Average", $averageColorSetting);
 
 $myPicture            = $factory->newImage(175, 300, $MyData);
-$myPicture->Antialias = false;
+#$myPicture->Antialias = false;
 $myPicture->setFontProperties(["FontName" => APPLICATION_BASE_PATH."/assets/fonts/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
 $myPicture->setGraphArea(60, 50, 150, 245);
 $AxisBoundaries = [0 => ["Min" => 0, "Max" => $highest * 1.1]];

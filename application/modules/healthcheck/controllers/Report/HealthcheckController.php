@@ -104,8 +104,10 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
             case 'docx' :
                 $this->view->phpword = new \PhpOffice\PhpWord\PhpWord();
                 $healthcheck         = $this->getHealthcheckViewModel();
-                $graphs              = $this->cachePNGImages($healthcheck->getGraphs(), true);
-                $healthcheck->setGraphs($graphs);
+                // Clear the cache for the report before proceeding
+                $this->clearCacheForReport();
+                // New graphs being passed to view
+                $this->view->graphs = $this->cachePNGImages($healthcheck->getCharts());
                 $this->view->wordStyles = $this->getWordStyles();
                 $this->_helper->layout->disableLayout();
                 $filename = $this->generateReportFilename($this->getHealthcheck()->getClient(), $reportTitle) . ".$format";

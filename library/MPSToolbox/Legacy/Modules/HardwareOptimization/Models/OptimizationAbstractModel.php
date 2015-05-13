@@ -376,7 +376,7 @@ abstract class OptimizationAbstractModel
      *
      * @return MasterDeviceModel [] | bool
      */
-    protected function getUniquePurchasedMasterDevices ($devices)
+    public function getUniquePurchasedMasterDevices ($devices)
     {
         $masterDeviceList = [];
         if (reset($devices) instanceof DeviceInstanceModel)
@@ -418,7 +418,7 @@ abstract class OptimizationAbstractModel
      *
      * @return MasterDeviceModel []
      */
-    protected function getAllMasterDevicesWithReplacements ()
+    public function getAllMasterDevicesWithReplacements ()
     {
         $masterDevices = [];
         /* @var $deviceInstance DeviceInstanceModel */
@@ -480,6 +480,10 @@ abstract class OptimizationAbstractModel
         return $uniqueTonerList;
     }
 
+    public function countUniqueTonerList($masterDevices) {
+        return count($this->getUniqueTonerList($masterDevices));
+    }
+
 
     /**
      * Gets the maximum supply devices for the list of master devices provided.
@@ -488,7 +492,7 @@ abstract class OptimizationAbstractModel
      *
      * @return int
      */
-    protected function getMaximumSupplyCount ($masterDevices)
+    public function getMaximumSupplyCount ($masterDevices)
     {
 
         $maximumSupplyCount = 0;

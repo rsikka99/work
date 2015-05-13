@@ -14,7 +14,7 @@ $tcStyle = $this->styles->tables->fleetattributes;
 
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
-$graphs               = $healthcheckViewModel->getGraphs();
+$graphs = $this->graphs;
 
 $section->addPageBreak();
 $section->addTitle("Analysis: Printing Hardware Usage", 1);

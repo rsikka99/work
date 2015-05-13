@@ -15,7 +15,6 @@
     "illuminate/database"         : "4.2.*",
     "oyejorge/less.php"           : "1.7.0.2",
     "phpoffice/phpexcel"          : "1.8.0",
-    "gChartPhp/gChartPhp"         : "0.6.7",
     "robmorgan/phinx"             : "0.3.8",
     "nesbot/Carbon"               : "1.7.x",
     "michelf/php-markdown"        : "1.4.*",

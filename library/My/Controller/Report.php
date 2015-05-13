@@ -109,8 +109,9 @@ abstract class My_Controller_Report extends Action
      *
      * @throws Exception
      * @return array
+     * @deprecated
      */
-    public function cachePNGImages ($imageArray, $local = true)
+    public function deprecatedCachePNGImages ($imageArray, $local = true)
     {
 
         $cachePath       = $this->_fullCachePath;
@@ -437,7 +438,7 @@ abstract class My_Controller_Report extends Action
      * @return mixed
      * @throws Exception
      */
-    public function cacheNewPNGImages ($imageArray, $local = true, $fullPathRequested = false)
+    public function cachePNGImages ($imageArray, $local = true)
     {
 
         $cachePath       = $this->_fullCachePath;
@@ -471,48 +472,6 @@ abstract class My_Controller_Report extends Action
                 $fullPathNewImages[$i] = $fullImageFileName;
             }
 
-
-//            foreach ($imageArray as $i)
-//            {
-//                $imageFilename = $imagePathAndPrefix . $i . '.png';
-//                if (file_exists($imageFilename)) // Delete file if it already exists
-//                {
-//                    unlink($imageFilename);
-//                }
-//
-//                // Renders the image in the cached image folder
-//                $i->render($imageFilename);
-//                $newImages [] = $imageFilename;
-//            }
-
-            /**
-             * Wait until all threads are finished downloading
-             */
-//            do
-//            {
-//                curl_multi_exec($curlHandle, $active);
-//            } while ($active);
-
-            /**
-             * Update our image array to point to cached images
-             */
-//            foreach ($imageArray as $i => & $imageUrl)
-//            {
-////                curl_multi_remove_handle($curlHandle, $curlConnections [$i]);
-////                curl_close($curlConnections [$i]);
-////                fclose($files [$i]);
-//                if ($local)
-//                {
-//                    $imageUrl = $cachePath . "/{$randomSalt}_{$i}.png";
-//                }
-//                else
-//                {
-//                    $imageUrl = $this->view->FullUrl($imageUrl = $publicCachePath . "/{$randomSalt}_{$i}.png");
-//                }
-//
-//            }
-//            curl_multi_close($curlHandle);
-
             /**
              * Attempt to change permissions on our files
              */
@@ -528,7 +487,7 @@ abstract class My_Controller_Report extends Action
         }
 
         /* Are we rendering a DOCX? If so, we need the full file path */
-        if ($fullPathRequested)
+        if ($local)
         {
             return $fullPathNewImages;
         }

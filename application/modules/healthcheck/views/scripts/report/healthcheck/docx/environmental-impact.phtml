@@ -14,7 +14,7 @@ $tcStyle = $this->styles->tables->fleetattributes;
 
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
-$graphs               = $healthcheckViewModel->getGraphs();
+$graphs = $this->graphs;
 
 
 $section->addPageBreak();
@@ -85,5 +85,5 @@ $section->addText('The following charts show how many of your printing devices h
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs [13]);
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs [14]);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs ['DuplexCapableDevicesGraphBig']);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs ['ScanCapableDevicesGraphBig']);

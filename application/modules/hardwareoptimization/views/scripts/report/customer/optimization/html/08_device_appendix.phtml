@@ -14,9 +14,6 @@ $optimization = $this->optimization;
 /* @var $customerOptimization OptimizationCustomerModel */
 $customerOptimization = $this->customerOptimization;
 
-/* @var $graphs array */
-$graphs = $this->graphs;
-
 $deviceInstances = $optimization->getDevicesGroupedByAction();
 
 $totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->getCount();

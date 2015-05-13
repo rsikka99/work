@@ -19,7 +19,7 @@ $graphMonoDeviceColor  = $hexToRGBConverter->hexToRgb($dealerBranding->graphMono
 $graphColorSetting     = ['R' => $graphColorDeviceColor['r'], 'G' => $graphColorDeviceColor['g'], 'B' => $graphColorDeviceColor['b']];
 $graphMonoSetting      = ['R' => $graphMonoDeviceColor['r'], 'G' => $graphMonoDeviceColor['g'], 'B' => $graphMonoDeviceColor['b']];
 
-$myPicture = $factory->newImage(200, 160, $MyData, true);
+$myPicture = $factory->newImage(190, 160, $MyData, true);
 $myPicture->setFontProperties(["FontName" => APPLICATION_BASE_PATH."/assets/fonts/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
 $myPicture->drawText(95, 40, "Copy-capable\nPrinting Devices", ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]);
 $PieChart = $factory->newChart("pie", $myPicture, $MyData);

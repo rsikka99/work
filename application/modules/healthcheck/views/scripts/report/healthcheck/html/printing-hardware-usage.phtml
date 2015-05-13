@@ -1,8 +1,6 @@
 <?php
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
-$graphs               = $healthcheckViewModel->getGraphs();
-$theGraphs           = $this->theGraphs;
 
 ?>
 <div class="h1">Analysis: Printing Hardware Usage</div>
@@ -16,9 +14,9 @@ $theGraphs           = $this->theGraphs;
 </p>
 <br /> <br />
 <div class="center">
-    <img src="?png=AverageMonthlyPagesBarGraph" style="width: 30%; height: 30%;" /> <!-- Average monthly pages per networked printer -->
-    <img src="?png=AverageMonthlyPagesPerEmployeeBarGraph" style="width: 30%; height: 30%;" /> <!-- Average monthly pages per employee -->
-    <img src="?png=EmployeesPerDeviceBarGraph" style="width: 30%; height: 30%;" /> <!-- Employees per printing device -->
+    <img src="?png=AverageMonthlyPagesBarGraph" /> <!-- Average monthly pages per networked printer -->
+    <img src="?png=AverageMonthlyPagesPerEmployeeBarGraph"  /> <!-- Average monthly pages per employee -->
+    <img src="?png=EmployeesPerDeviceBarGraph" /> <!-- Employees per printing device -->
 </div>
 <br /> <br />
 <div class="pheader">Hardware Utilization and Capacity</div>
@@ -42,8 +40,8 @@ $theGraphs           = $this->theGraphs;
 <p>A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer's stated yield of a single print cartridge. In essence, you should not have to change the same toner cartridge more than once per month.</p>
 <p>Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices. As a guide we suggest that total company printing should range between 30 and 50% of maximum fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets. Most companies find that they have more printing hardware than they need. The following chart displays your estimated monthly page volume compared to your maximum monthly page capacity.</p>
 <div class="center">
-    <img src="<?= $graphs['HardwareUtilizationCapacityBar']; ?>" /> <!-- Monthly Usage compared to maximum fleet capacity -->
-    <img src="<?= $graphs['HardwareUtilizationCapacityPercent']; ?>" /> <!-- Monthly Usage compared to optimal fleet capacity -->
+    <img src="?png=HardwareUtilizationCapacityBar" /> <!-- Monthly Usage compared to maximum fleet capacity -->
+    <img src="?png=HardwareUtilizationCapacityPercent" /> <!-- Monthly Usage compared to optimal fleet capacity -->
 </div>
 <div class="pheader">Underused and Overused Printing Devices</div>
 <p>Currently,

@@ -2020,11 +2020,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
 
-    /**
-     * This function will eventually be renamed getGraphs() and take its place
-     * It will use the new pChart library to create pImages and returns an array
-     */
-    public function getTheGraphs ()
+    public function getCharts ()
     {
         $result=array();
         foreach (array(
@@ -2065,17 +2061,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         $myPicture = null;
         if (file_exists($file = dirname(__FILE__).'/charts/'.$name.'.php')) require $file;
         return $myPicture;
-    }
-
-    /**
-     * @param array $Graphs
-     *
-     * @return Assessment_ViewModel_Assessment
-     */
-    public function setGraphs ($graphs)
-    {
-        $this->graphs = $graphs;
-        return $this;
     }
 
     /**

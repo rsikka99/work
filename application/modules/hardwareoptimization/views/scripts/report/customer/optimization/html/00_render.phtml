@@ -13,8 +13,6 @@ $optimization = $this->optimization;
 
 $customerOptimization = new OptimizationCustomerModel($hardwareOptimization);
 
-$graphs = $customerOptimization->getGraphs();
-
 $titleData = [
     "hardwareOptimization" => $hardwareOptimization,
     "dealerLogoFile"       => $this->dealerLogoFile,
@@ -27,7 +25,6 @@ $data = [
     "hardwareOptimization" => $hardwareOptimization,
     "optimization"         => $optimization,
     "customerOptimization" => $customerOptimization,
-    "graphs"               => $graphs,
     "companyName"          => My_Brand::getDealerBranding()->shortDealerName,
 ];
 ?>

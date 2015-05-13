@@ -17,9 +17,6 @@ $optimization = $this->optimization;
 /* @var $dealerOptimization OptimizationDealerModel */
 $dealerOptimization = new OptimizationDealerModel($hardwareOptimization);
 
-/* @var $graphs array */
-$graphs = $dealerOptimization->getGraphs();
-
 /* @var $deviceInstances DeviceInstanceModel[] */
 $deviceInstances = $optimization->getDevicesGroupedByAction();
 
@@ -40,7 +37,6 @@ $data = [
     "hardwareOptimization" => $hardwareOptimization,
     "optimization"         => $optimization,
     "dealerOptimization"   => $dealerOptimization,
-    "graphs"               => $graphs,
     "companyName"          => My_Brand::getDealerBranding()->shortDealerName,
     "deviceInstances"      => $deviceInstances,
     "totalDevices"         => $totalNumberOfDevices,
