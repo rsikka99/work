@@ -9,7 +9,7 @@ use Tangent\Statsd;
  * Class Bootstrap
  * This class prepares the application with all the needed settings before anything is routed
  */
-class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
+class Bootstrap extends Tangent\Bootstrap
 {
 
     /**
@@ -175,42 +175,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $forceRecompile = (isset($_REQUEST['recompile_less']));
 
-        /**
-         * Site Styles
-         */
-        try
-        {
+        if ($forceRecompile || !file_exists(PUBLIC_PATH . '/css/site/styles.css')) {
             LessCssService::compileSiteStyles($forceRecompile);
-        }
-        catch (Exception $e)
-        {
-            // Retry in case of a directory error.
-            LessCssService::compileSiteStyles($forceRecompile);
-        }
-
-        /**
-         * Theme Styles
-         */
-        try
-        {
             LessCssService::compileSiteThemeStyles($forceRecompile);
-        }
-        catch (Exception $e)
-        {
-            // Retry in case of a directory error.
-            LessCssService::compileSiteThemeStyles($forceRecompile);
-        }
-
-        /**
-         * Report Styles
-         */
-        try
-        {
-            LessCssService::compileReportStyles($forceRecompile);
-        }
-        catch (Exception $e)
-        {
-            // Retry in case of a directory error.
             LessCssService::compileReportStyles($forceRecompile);
         }
 

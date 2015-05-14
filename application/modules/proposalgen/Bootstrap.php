@@ -5,7 +5,7 @@ use MPSToolbox\Legacy\Models\Acl\ProposalgenAclModel;
 /**
  * Class Proposalgen_Bootstrap
  */
-class Proposalgen_Bootstrap extends Zend_Application_Module_Bootstrap
+class Proposalgen_Bootstrap extends Tangent\ModuleBootstrap
 {
     /**
      * @return Zend_Loader_Autoloader

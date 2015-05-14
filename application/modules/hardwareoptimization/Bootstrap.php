@@ -5,7 +5,7 @@ use MPSToolbox\Legacy\Models\Acl\HardwareOptimizationAclModel;
 /**
  * Class Hardwareoptimization_Bootstrap
  */
-class Hardwareoptimization_Bootstrap extends Zend_Application_Module_Bootstrap
+class Hardwareoptimization_Bootstrap extends Tangent\ModuleBootstrap
 {
     /**
      * Sets the paginator view partials

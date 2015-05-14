@@ -5,7 +5,7 @@ use MPSToolbox\Legacy\Models\Acl\HardwareLibraryAclModel;
 /**
  * Class Hardwarelibrary_Bootstrap
  */
-class Hardwarelibrary_Bootstrap extends Zend_Application_Module_Bootstrap
+class Hardwarelibrary_Bootstrap extends Tangent\ModuleBootstrap
 {
     protected function _initAddToAcl ()
     {

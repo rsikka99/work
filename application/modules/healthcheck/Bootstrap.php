@@ -5,7 +5,7 @@ use MPSToolbox\Legacy\Models\Acl\HealthCheckAclModel;
 /**
  * Class Healthcheck_Bootstrap
  */
-class Healthcheck_Bootstrap extends Zend_Application_Module_Bootstrap
+class Healthcheck_Bootstrap extends Tangent\ModuleBootstrap
 {
     /**
      * Sets the paginator view partials
