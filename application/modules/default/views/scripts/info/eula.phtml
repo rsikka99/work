@@ -1,3 +1,5 @@
 <div class="container">
     <textarea readonly="readonly" style='width: 98%; resize: none; margin-top: 10px; margin-bottom: 20px; height: 500px; padding: 5px;' title="End user license agreement"><?= $this->text; ?></textarea>
+    <a href="<?php echo $this->url([],'auth.logout') ?>" class="btn" type="button">I do not Agree</a>
+    <a href="<?php echo $this->url([],'app.eula') ?>?agree"  class="btn btn-primary" type="button" onclick="this.form.action='?agree'; this.form.submit()">I Agree</a>
 </div>
