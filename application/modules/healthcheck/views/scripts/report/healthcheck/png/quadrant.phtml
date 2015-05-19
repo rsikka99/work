@@ -85,6 +85,7 @@ $myPicture->drawFilledRectangle(100+$graph_left,$graph_bottom + 32, 106+$graph_l
 $myPicture->drawFilledRectangle(100+$graph_left,$graph_bottom + 52, 106+$graph_left,$graph_bottom + 58,array("R"=>0,"G"=>255,"B"=>0));
 
 foreach ($healthcheck->getDevices()->allDeviceInstances->getDeviceInstances() as $device) {
+    if (!$device->getMasterDevice()) continue;
     $isColor = $device->getMasterDevice()->isColor();
     $isMfp = $device->getMasterDevice()->isMfp();
     $age = min(12,$device->getAge());
