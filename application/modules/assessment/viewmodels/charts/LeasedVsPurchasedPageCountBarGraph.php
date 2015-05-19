@@ -1,21 +1,25 @@
 <?php
 
-$highest = ($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() > $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) ? $this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() : $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
+$value1 = $this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
+$value2 = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
+$value3 = $this->getPercentageOfInkjetPrintVolume()/100 * ($value1+$value2);
+
+$highest = max($value1,$value2);
 $MyData  = $factory->newData();
-$MyData->addPoints([round($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())], "Monthly pages on leased devices");
-$MyData->addPoints([round($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())], 'Monthly pages on purchased devices');
+$MyData->addPoints([round($value1)], "Leased devices");
+$MyData->addPoints([round($value2)], 'Purchased devices');
+$MyData->addPoints([round($value3)], 'Non-network devices');
+$MyData->setAxisDisplay(0,AXIS_FORMAT_METRIC);
+$MyData->setAxisName(0,'Monthly volume');
 
 //Fixes x access scale appearing - hacky - needs fixing
 $MyData->addPoints([""], "Printer Types");
 $MyData->setSerieDescription("Printer Types", "Type");
 $MyData->setAbscissa("Printer Types");
 
-$leasedRGB             = $hexToRGBConverter->hexToRgb($dealerBranding->graphLeasedDeviceColor);
-$purchasedRGB          = $hexToRGBConverter->hexToRgb($dealerBranding->graphPurchasedDeviceColor);
-$leasedColorSetting    = ['R' => $leasedRGB['r'], 'G' => $leasedRGB['g'], 'B' => $leasedRGB['b']];
-$purchasedColorSetting = ['R' => $purchasedRGB['r'], 'G' => $purchasedRGB['g'], 'B' => $purchasedRGB['b']];
-$MyData->setPalette("Monthly pages on leased devices", $leasedColorSetting);
-$MyData->setPalette("Monthly pages on purchased devices", $purchasedColorSetting);
+$MyData->setPalette("Leased devices", $hexToRGBConverter->hexToRgb_uppercase($dealerBranding->graphLeasedDeviceColor));
+$MyData->setPalette("Purchased devices", $hexToRGBConverter->hexToRgb_uppercase($dealerBranding->graphPurchasedDeviceColor));
+$MyData->setPalette("Non-network devices", $hexToRGBConverter->hexToRgb_uppercase($dealerBranding->graphIndustryAverageColor));
 
 $myPicture            = $factory->newImage(265, 265, $MyData);
 $myPicture->Antialias = false;

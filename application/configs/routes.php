@@ -122,6 +122,7 @@ $r->addRoute('healthcheck.settings',       new R('healthcheck/settings',        
 $r->addRoute('healthcheck.report',         new R('healthcheck/report-healthcheck',         ['module' => 'healthcheck', 'controller' => 'report_healthcheck',         'action' => 'index']));
 $r->addRoute('healthcheck.report-printiq', new R('healthcheck/printiq-report-healthcheck', ['module' => 'healthcheck', 'controller' => 'report_printiq_healthcheck', 'action' => 'index']));
 $r->addRoute('healthcheck.report.quadrant',new R('healthcheck/report-healthcheck-quadrant',['module' => 'healthcheck', 'controller' => 'report_healthcheck',         'action' => 'quadrant']));
+$r->addRoute('healthcheck.device-age',     new R('healthcheck/report-device-age',          ['module' => 'healthcheck', 'controller' => 'report_healthcheck',         'action' => 'age']));
 //@formatter:on
 
 //@formatter:off
