@@ -1630,6 +1630,16 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         return $this->GrossMarginTotalMonthlyRevenue;
     }
 
+    public function getPercentageOfInkjetPrintVolume() {
+        if (!isset($this->percentageOfInkjetPrintVolume)) {
+            $this->percentageOfInkjetPrintVolume = $this->assessment->getClient()->getSurvey()->percentageOfInkjetPrintVolume;
+            if (!$this->percentageOfInkjetPrintVolume) {
+                $this->percentageOfInkjetPrintVolume = 5;
+            }
+        }
+        return $this->percentageOfInkjetPrintVolume;
+    }
+
     /**
      * @return float
      */
