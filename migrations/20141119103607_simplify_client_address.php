@@ -29,7 +29,7 @@ class SimplifyClientAddress extends AbstractMigration
             ->addColumn('iso_numeric', 'string')
             ->addColumn('currency_code', 'string')
             ->addColumn('currency_name', 'string')
-            ->addColumn('currency_symbol', 'string')
+            ->addColumn('currency_symbol', 'string', array('null' => true))
             ->addColumn('flag', 'string')
             ->save();
 

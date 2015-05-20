@@ -13,6 +13,7 @@ class AdminAclModel
      * Admin Constants
      */
     const RESOURCE_API_WILDCARD                 = 'api__%__%';
+    const RESOURCE_DEALERAPI_WILDCARD           = 'dealerapi__%__%';
     const RESOURCE_ADMIN_CLIENT_WILDCARD        = 'admin__client__%';
     const RESOURCE_ADMIN_CLIENT_INDEX           = 'admin__client__index';
     const RESOURCE_ADMIN_DEALER_INDEX           = 'admin__dealer__index';
@@ -45,6 +46,7 @@ class AdminAclModel
     private static function setupAclResources (AppAclModel $acl)
     {
         $acl->addResource(self::RESOURCE_API_WILDCARD);
+        $acl->addResource(self::RESOURCE_DEALERAPI_WILDCARD);
         $acl->addResource(self::RESOURCE_ADMIN_CLIENT_WILDCARD);
         $acl->addResource(self::RESOURCE_ADMIN_CLIENT_INDEX);
         $acl->addResource(self::RESOURCE_ADMIN_DEALER_INDEX);
@@ -65,11 +67,14 @@ class AdminAclModel
      */
     private static function setupAclAccess (AppAclModel $acl)
     {
+        $acl->allow(AppAclModel::ROLE_GUEST, self::RESOURCE_DEALERAPI_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
+
         // Authenticated users
         $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_ADMIN_INDEX_INDEX, AppAclModel::PRIVILEGE_VIEW);
         $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_ADMIN_USER_PROFILE, AppAclModel::PRIVILEGE_VIEW);
 
         $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_API_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
+        $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEALERAPI_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
 
         // System Admin
         $acl->allow(AppAclModel::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_INDEX_INDEX, AppAclModel::PRIVILEGE_VIEW);

@@ -1226,6 +1226,23 @@ class DeviceInstanceModel extends My_Model_Abstract
     }
 
     /**
+     * @return String
+     */
+    public function getDeviceAction()
+    {
+        return $this->_deviceAction;
+    }
+
+    /**
+     * @param String $deviceAction
+     */
+    public function setDeviceAction($deviceAction)
+    {
+        $this->_deviceAction = $deviceAction;
+    }
+
+
+    /**
      * The action of the device
      *
      * @param CostPerPageSettingModel $costPerPageSetting
