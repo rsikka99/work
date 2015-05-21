@@ -68,12 +68,8 @@ class Assessment_ViewModel_Abstract
     {
         if (!isset($this->_devices))
         {
-            $clientSettings = $this->assessment->getClient()->getClientSettings();
             $this->_devices = new Assessment_ViewModel_Devices(
-                $this->assessment->rmsUploadId,
-                $clientSettings->currentFleetSettings->defaultMonochromeLaborCostPerPage,
-                $clientSettings->currentFleetSettings->defaultMonochromePartsCostPerPage,
-                $clientSettings->currentFleetSettings->adminCostPerPage
+                $this->assessment->rmsUploadId
             );
         }
 

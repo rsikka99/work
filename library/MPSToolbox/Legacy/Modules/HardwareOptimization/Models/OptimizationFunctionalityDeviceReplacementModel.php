@@ -126,8 +126,6 @@ class OptimizationFunctionalityDeviceReplacementModel implements OptimizationDev
         $this->_minimumPageCount                   = $minimumPageCount;
         $this->_reportPartsCostPerPage             = $reportPartsCpp;
         $this->_reportLaborCostPerPage             = $reportLaborCpp;
-        MasterDeviceModel::$ReportLaborCostPerPage = $reportLaborCpp;
-        MasterDeviceModel::$ReportPartsCostPerPage = $reportPartsCpp;
 
         /**
          * Convert loss threshold into a negative number for comparison purposes.

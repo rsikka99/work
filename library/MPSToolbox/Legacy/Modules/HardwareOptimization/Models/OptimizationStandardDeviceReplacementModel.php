@@ -110,8 +110,6 @@ class OptimizationStandardDeviceReplacementModel implements OptimizationDeviceRe
         $this->_savingsThreshold                   = $costThreshold;
         $this->_reportPartsCostPerPage             = $reportPartsCostPerPage;
         $this->_reportLaborCostPerPage             = $reportLaborCostPerPage;
-        MasterDeviceModel::$ReportLaborCostPerPage = $reportLaborCostPerPage;
-        MasterDeviceModel::$ReportPartsCostPerPage = $reportPartsCostPerPage;
     }
 
     /**

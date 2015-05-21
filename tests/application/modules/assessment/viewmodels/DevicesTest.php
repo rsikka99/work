@@ -15,7 +15,7 @@ class Assessment_ViewModel_DevicesTest extends PHPUnit_Framework_TestCase
     }
 
     public function testContruct() {
-        $result = new Assessment_ViewModel_Devices(9,1,1,1);
+        $result = new Assessment_ViewModel_Devices(9);
         $this->assertTrue($result instanceof Assessment_ViewModel_Devices);
     }
 

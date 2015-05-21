@@ -35,11 +35,6 @@ class MasterDeviceModel extends My_Model_Abstract
         self::DEVICE_TYPE_COLOR_MFP => "Color MFP",
     ];
 
-
-    static $ReportLaborCostPerPage = 0;
-    static $ReportPartsCostPerPage = 0;
-
-
     /*
      * Database fields
      */
@@ -172,22 +167,12 @@ class MasterDeviceModel extends My_Model_Abstract
     /**
      * @var int
      */
-    public $isUsingReportLaborCostPerPage;
-
-    /**
-     * @var int
-     */
     public $calculatedPartsCostPerPage;
 
     /**
      * @var int
      */
     public $isUsingDealerPartsCostPerPage;
-
-    /**
-     * @var int
-     */
-    public $isUsingReportPartsCostPerPage;
 
     /*
      * Related Objects
@@ -416,11 +401,6 @@ class MasterDeviceModel extends My_Model_Abstract
             $this->isUsingDealerLaborCostPerPage = $params->isUsingDealerLaborCostPerPage;
         }
 
-        if (isset($params->isUsingReportLaborCostPerPage) && !is_null($params->isUsingReportLaborCostPerPage))
-        {
-            $this->isUsingReportLaborCostPerPage = $params->isUsingReportLaborCostPerPage;
-        }
-
         if (isset($params->calculatedPartsCostPerPage) && !is_null($params->calculatedPartsCostPerPage))
         {
             $this->calculatedPartsCostPerPage = $params->calculatedPartsCostPerPage;
@@ -431,10 +411,6 @@ class MasterDeviceModel extends My_Model_Abstract
             $this->isUsingDealerPartsCostPerPage = $params->isUsingDealerPartsCostPerPage;
         }
 
-        if (isset($params->isUsingReportPartsCostPerPage) && !is_null($params->isUsingReportPartsCostPerPage))
-        {
-            $this->isUsingReportPartsCostPerPage = $params->isUsingReportPartsCostPerPage;
-        }
     }
 
     /**

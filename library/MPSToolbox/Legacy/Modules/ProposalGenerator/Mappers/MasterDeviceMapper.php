@@ -777,8 +777,6 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
                            "calculatedLaborCostPerPage"    => "COALESCE(dmda.laborCostPerPage, NULL)",
                            "isUsingDealerPartsCostPerPage" => "(dmda.partsCostPerPage IS NOT NULL)",
                            "isUsingDealerLaborCostPerPage" => "(dmda.laborCostPerPage IS NOT NULL)",
-                           "isUsingReportLaborCostPerPage" => "(dmda.laborCostPerPage IS NULL)",
-                           "isUsingReportPartsCostPerPage" => "(dmda.partsCostPerPage IS NULL)",
                        ])
                        ->where("pmd.id = ? ", $masterDeviceId);
 

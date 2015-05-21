@@ -351,9 +351,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
      */
     public function getDeviceByDeviceInstanceIdAction ()
     {
-        MasterDeviceModel::$ReportLaborCostPerPage = $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromeLaborCostPerPage;
-        MasterDeviceModel::$ReportPartsCostPerPage = $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromePartsCostPerPage;
-
         $optimization                  = $this->getOptimizationViewModel();
         $costPerPageSetting            = $optimization->getCostPerPageSettingForDealer();
         $replacementCostPerPageSetting = $optimization->getCostPerPageSettingForReplacements();
@@ -426,10 +423,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         // Setup the required mappers
         $optimization                = $this->getOptimizationViewModel();
         $deviceInstanceReasonElement = null;
-
-        // Setup the master device labor and parts cost per page
-        MasterDeviceModel::$ReportLaborCostPerPage = $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromeLaborCostPerPage;
-        MasterDeviceModel::$ReportPartsCostPerPage = $this->_hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromePartsCostPerPage;
 
         /**
          * Require a device instance
