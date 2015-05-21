@@ -254,19 +254,18 @@ $r->addRoute('hardware-library.sauron', new R('hardware-library/sauron', ['modul
 
 $r->addRoute('api.devices',           new R('api/v1/devices/:deviceId',        ['module' => 'api', 'controller' => 'devices', 'action' => 'index', 'deviceId' => false]));
 $r->addRoute('api.devices.grid-list', new R('api/v1/devices/grid-list',        ['module' => 'api', 'controller' => 'devices', 'action' => 'grid-list']));
-$r->addRoute('api.devices.create',    new R('api/v1/devices/create',           ['module' => 'api', 'controller' => 'devices', 'action' => 'create']));
-$r->addRoute('api.devices.delete',    new R('api/v1/devices/:deviceId/delete', ['module' => 'api', 'controller' => 'devices', 'action' => 'delete']));
-$r->addRoute('api.devices.save',      new R('api/v1/devices/:deviceId/save',   ['module' => 'api', 'controller' => 'devices', 'action' => 'save']));
+#$r->addRoute('api.devices.create',    new R('api/v1/devices/create',           ['module' => 'api', 'controller' => 'devices', 'action' => 'create']));
+#$r->addRoute('api.devices.delete',    new R('api/v1/devices/:deviceId/delete', ['module' => 'api', 'controller' => 'devices', 'action' => 'delete']));
+#$r->addRoute('api.devices.save',      new R('api/v1/devices/:deviceId/save',   ['module' => 'api', 'controller' => 'devices', 'action' => 'save']));
 
-$r->addRoute('api.devices.toners',        new R('api/v1/devices/:deviceId/toners/:tonerId',        ['module' => 'api', 'controller' => 'devices', 'action' => 'view-toners', 'tonerId' => false]));
-$r->addRoute('api.devices.toners.create', new R('api/v1/devices/:deviceId/toners/create',          ['module' => 'api', 'controller' => 'devices', 'action' => 'add-toner']));
-$r->addRoute('api.devices.toners.delete', new R('api/v1/devices/:deviceId/toners/delete/:tonerId', ['module' => 'api', 'controller' => 'devices', 'action' => 'remove-toner']));
+#$r->addRoute('api.devices.toners',        new R('api/v1/devices/:deviceId/toners/:tonerId',        ['module' => 'api', 'controller' => 'devices', 'action' => 'view-toners', 'tonerId' => false]));
+#$r->addRoute('api.devices.toners.create', new R('api/v1/devices/:deviceId/toners/create',          ['module' => 'api', 'controller' => 'devices', 'action' => 'add-toner']));
+#$r->addRoute('api.devices.toners.delete', new R('api/v1/devices/:deviceId/toners/delete/:tonerId', ['module' => 'api', 'controller' => 'devices', 'action' => 'remove-toner']));
 
-$r->addRoute('api.manufacturers',        new R('api/v1/manufacturers/:manufacturerId',        ['module' => 'api', 'controller' => 'manufacturers', 'action' => 'index', 'manufacturerId' => false]));
-$r->addRoute('api.manufacturers.create', new R('api/v1/manufacturers/create',                 ['module' => 'api', 'controller' => 'manufacturers', 'action' => 'create']));
-$r->addRoute('api.manufacturers.delete', new R('api/v1/manufacturers/:manufacturerId/delete', ['module' => 'api', 'controller' => 'manufacturers', 'action' => 'delete']));
-$r->addRoute('api.manufacturers.save',   new R('api/v1/manufacturers/:manufacturerId/save',   ['module' => 'api', 'controller' => 'manufacturers', 'action' => 'update']));
-
+#$r->addRoute('api.manufacturers',        new R('api/v1/manufacturers/:manufacturerId',        ['module' => 'api', 'controller' => 'manufacturers', 'action' => 'index', 'manufacturerId' => false]));
+#$r->addRoute('api.manufacturers.create', new R('api/v1/manufacturers/create',                 ['module' => 'api', 'controller' => 'manufacturers', 'action' => 'create']));
+#$r->addRoute('api.manufacturers.delete', new R('api/v1/manufacturers/:manufacturerId/delete', ['module' => 'api', 'controller' => 'manufacturers', 'action' => 'delete']));
+#$r->addRoute('api.manufacturers.save',   new R('api/v1/manufacturers/:manufacturerId/save',   ['module' => 'api', 'controller' => 'manufacturers', 'action' => 'update']));
 
 //@formatter:on
 

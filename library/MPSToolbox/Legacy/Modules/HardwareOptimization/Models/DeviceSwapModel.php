@@ -113,42 +113,13 @@ class DeviceSwapModel extends My_Model_Abstract
     }
 
     /**
-     * Gets the device instance
-     *
-     * @return DeviceInstanceModel
-     */
-    public function getDeviceInstance ()
-    {
-        if (!isset($this->_deviceInstance))
-        {
-            $this->_deviceInstance = DeviceInstanceMapper::getInstance()->find($this->deviceInstanceId);
-        }
-
-        return $this->_deviceInstance;
-    }
-
-    /**
-     *  Sets the device instance
-     *
-     * @param DeviceInstanceModel $deviceInstance
-     *
-     * @return DeviceInstanceMasterDeviceModel
-     */
-    public function setDeviceInstance ($deviceInstance)
-    {
-        $this->_deviceInstance = $deviceInstance;
-
-        return $this;
-    }
-
-    /**
      * Gets the master device
      *
      * @return MasterDeviceModel
      */
     public function getMasterDevice ()
     {
-        if (!isset($this->_masterDevice))
+        if (empty($this->_masterDevice))
         {
             $this->_masterDevice = MasterDeviceMapper::getInstance()->find($this->masterDeviceId);
         }

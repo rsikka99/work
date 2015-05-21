@@ -44,10 +44,9 @@ class DeviceInstanceDeviceSwapReasonMapper extends My_Model_Mapper_Abstract
      *
      * @param $object DeviceInstanceDeviceSwapReasonModel
      *                The object to insert
-     *
      * @return int The primary key of the new row
      */
-    public function insert (&$object)
+    public function insert ($object)
     {
         // Get an array of data to save
         $data = $this->unsetNullValues($object->toArray());

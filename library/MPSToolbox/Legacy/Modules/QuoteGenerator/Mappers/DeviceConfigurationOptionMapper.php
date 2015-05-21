@@ -58,10 +58,9 @@ class DeviceConfigurationOptionMapper extends My_Model_Mapper_Abstract
      *
      * @param $object DeviceConfigurationOptionModel
      *                The object to insert
-     *
      * @return int The primary key of the new row
      */
-    public function insert (&$object)
+    public function insert ($object)
     {
         // Get an array of data to save
         $data = $object->toArray();

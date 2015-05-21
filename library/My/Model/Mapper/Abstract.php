@@ -223,6 +223,15 @@ abstract class My_Model_Mapper_Abstract
     }
 
     /**
+     *
+     */
+    public function clearItemCache() {
+        foreach (array_keys($this->_rowHashTable) as $key) {
+            unset($this->_rowHashTable[$key]);
+        }
+    }
+
+    /**
      * Gets the name of the database table
      *
      * @return string
@@ -232,7 +241,7 @@ abstract class My_Model_Mapper_Abstract
         return $this->getDbTable()->info('name');
     }
 
-    abstract public function insert (&$object);
+    abstract public function insert ($object);
 
     /**
      * Takes an object and returns a proper value for the primary key

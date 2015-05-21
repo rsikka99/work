@@ -74,10 +74,9 @@ class DeviceSwapMapper extends My_Model_Mapper_Abstract
      *
      * @param $object DeviceSwapModel
      *                The object to insert
-     *
      * @return int The primary key of the new row
      */
-    public function insert (&$object)
+    public function insert ($object)
     {
         // Get an array of data to save
         $data = $this->unsetNullValues($object->toArray());
@@ -282,64 +281,40 @@ class DeviceSwapMapper extends My_Model_Mapper_Abstract
      *
      * @return array|int
      */
-    public function fetAllForDealer ($dealerId, $costPerPageSetting, $sortOrder, $limit = null, $offset = null, $justCount = false)
+    public function fetAllForDealer ($dealerId, $costPerPageSetting, $sortOrder, $limit = 1000, $offset = 0, $justCount = false)
     {
         $db       = $this->getDbTable()->getAdapter();
-        $dealerId = $db->quote($dealerId, 'INTEGER');
 
         if ($justCount)
         {
-            $select = $db->select()->from("{$this->getTableName()}", "COUNT(*)")->where("{$this->col_dealerId} = ?", $dealerId);
-
+            $select = $db->select()->from("{$this->getTableName()}", "COUNT(*)")->where("{$this->col_dealerId} = ?", intval($dealerId));
             return $db->query($select)->fetchColumn();
         }
-        else
+
+        $manufacturerMapper = ManufacturerMapper::getInstance();
+        $masterDeviceMapper = MasterDeviceMapper::getInstance();
+
+        $select = $db->select()->from($this->getTableName())
+               ->joinLeft(["md" => $masterDeviceMapper->getTableName()], "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", ["{$masterDeviceMapper->col_id}"])
+               ->joinLeft(["m" => $manufacturerMapper->getTableName()], "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", [$manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")])
+               ->where("{$this->getTableName()}.$this->col_dealerId = ?", intval($dealerId))
+               ->limit($limit, $offset)
+               ->order($sortOrder);
+
+        $query = $db->query($select);
+
+        $deviceSwaps = [];
+        foreach ($query->fetchAll() as $row)
         {
-            $manufacturerMapper = ManufacturerMapper::getInstance();
-            $masterDeviceMapper = MasterDeviceMapper::getInstance();
+            $masterDevice         = MasterDeviceMapper::getInstance()->find($row['id']);
+            $row['deviceType']    = MasterDeviceModel::$TonerConfigNames[$masterDevice->getDeviceType()];
+            $row['monochromeCpp'] = $masterDevice->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage()->monochromeCostPerPage;
+            $row['colorCpp']      = $row['monochromeCpp'] + $masterDevice->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage()->colorCostPerPage;
 
-            /**
-             * FIXME lrobert: WHY. WHYYY. Seriously why is this hardcoded in. Investigate why and document it or fix it so it's proper.
-             */
-            $returnLimit = 1000;
-
-            if (!$limit)
-            {
-                $limit  = "1000";
-                $offset = ($offset > 0) ? $offset : 0;
-            }
-
-            $caseStatement = new Zend_Db_Expr("*, CASE WHEN md.isCopier AND md.tonerConfigId = 1 THEN 'Monochrome MFP'
-            WHEN md.isCopier AND md.tonerConfigId > 1 THEN 'Color MFP'
-            WHEN NOT md.isCopier AND md.tonerConfigId > 1 THEN 'Color '
-            WHEN NOT md.isCopier AND md.tonerConfigId = 1 THEN 'Monochrome'
-            END AS deviceType");
-
-
-            $db     = Zend_Db_Table::getDefaultAdapter();
-            $select = $db->select();
-            $select->from([$this->getTableName()], $caseStatement)
-                   ->joinLeft(["md" => $masterDeviceMapper->getTableName()], "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", ["{$masterDeviceMapper->col_id}"])
-                   ->joinLeft(["m" => $manufacturerMapper->getTableName()], "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", [$manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")])
-                   ->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId)
-                   ->limit($returnLimit, $offset)
-                   ->order($sortOrder);
-
-            $query = $db->query($select);
-
-            $deviceSwaps = [];
-            foreach ($query->fetchAll() as $row)
-            {
-                $masterDevice         = MasterDeviceMapper::getInstance()->find($row['id']);
-                $row['deviceType']    = MasterDeviceModel::$TonerConfigNames[$masterDevice->getDeviceType()];
-                $row['monochromeCpp'] = $masterDevice->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage()->monochromeCostPerPage;
-                $row['colorCpp']      = $row['monochromeCpp'] + $masterDevice->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage()->colorCostPerPage;
-
-                $deviceSwaps[] = $row;
-            }
-
-            return $deviceSwaps;
+            $deviceSwaps[] = $row;
         }
+
+        return $deviceSwaps;
     }
 
     /**

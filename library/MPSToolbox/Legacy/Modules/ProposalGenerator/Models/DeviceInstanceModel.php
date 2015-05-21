@@ -1006,7 +1006,7 @@ class DeviceInstanceModel extends My_Model_Abstract
             if ($this->getIsMappedToMasterDevice())
             {
                 $deviceInstanceMasterDevice = $this->getDeviceInstanceMasterDevice();
-                $dealerId                   = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                $dealerId                   = self::getAuthDealerId();
                 $this->_masterDevice        = MasterDeviceMapper::getInstance()->findForReports($deviceInstanceMasterDevice->masterDeviceId, $dealerId);
             }
             else

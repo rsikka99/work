@@ -115,29 +115,11 @@ class Api_DevicesController extends Action
 
     /**
      * Handles creating a new master device
+     * @Deprecated
      */
     public function createAction ()
     {
-        if ($this->getRequest()->isPost())
-        {
-            $postData            = $this->getRequest()->getPost();
-            $masterDeviceService = new MasterDeviceService();
-            $result              = $masterDeviceService->saveMasterDevice($postData);
-
-            if ($result)
-            {
-                $this->sendJson([
-                    'message' => 'Master device saved successfully',
-                    'success' => true,
-                ]);
-            }
-            else
-            {
-                $this->sendJsonError('There was an error saving the master device');
-            }
-        }
-
-        $this->sendJsonError('Invalid GET request. Please use POST.');
+        $this->sendJson(['message' => 'This is action is Deprecated.']);
     }
 
     /**
