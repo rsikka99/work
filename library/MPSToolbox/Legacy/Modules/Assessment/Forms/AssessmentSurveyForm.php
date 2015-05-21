@@ -275,7 +275,7 @@ class AssessmentSurveyForm extends \My_Form_Form
          * Print Volume Question
          */
         $this->addElement('radio', 'printVolume', [
-            'label'        => 'Inkjet print volume',
+            'label'        => 'Non-network print volume',
             'multiOptions' => self::$volumeOptions,
             'required'     => true,
             'filters'      => ['StringTrim']

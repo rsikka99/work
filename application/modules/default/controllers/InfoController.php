@@ -12,6 +12,21 @@ class Default_InfoController extends Action
      */
     public function eulaAction ()
     {
+        if ($_SERVER['QUERY_STRING']=='agree') {
+            $auth   = Zend_Auth::getInstance();
+            $identity = $auth->getIdentity();
+            $userMapper = \MPSToolbox\Legacy\Mappers\UserMapper::getInstance();
+            $user = $userMapper->find($identity->id);
+            if ($user) {
+                $identity->eulaAccepted = $user->eulaAccepted = date('Y-m-d H:i:s');
+                $userMapper->save($user);
+                $auth->getStorage()->write($identity);
+                $this->_helper->viewRenderer->setNoRender(true);
+                $this->_helper->layout->disableLayout();
+                header('Location: /');
+                return;
+            }
+        }
         $this->_pageTitle = ['End User License Agreement'];
         $file             = APPLICATION_PATH . "/../data/info/eula.txt";
         $text             = 'Not Available';

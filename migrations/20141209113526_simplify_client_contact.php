@@ -12,7 +12,7 @@ class SimplifyClientContact extends AbstractMigration
         $contactTable = $this->table('contacts');
 
         $contactTable
-            ->addColumn('phoneNumber', 'string')
+            ->addColumn('phoneNumber', 'string', array('null' => true))
             ->update();
 
         $this->execute('UPDATE contacts SET phoneNumber=CONCAT(countryCode, areaCode, exchangeCode, number, extension) where TRUE');

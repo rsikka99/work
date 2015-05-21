@@ -124,7 +124,7 @@ class AppAclModel extends Zend_Acl
                 $roles[] = self::ROLE_GUEST;
             }
         }
-        else if ($role === null)
+        else if (($role === null) || ($role === ''))
         {
             $roles[] = self::ROLE_GUEST;
         }

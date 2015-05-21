@@ -70,10 +70,6 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
                 throw new Exception("Healthcheck View Model is false");
             }
             $this->view->healthcheckViewModel = $healthcheckViewModel;
-
-            // New Graphs being passed to view
-            $this->view->theGraphs = $this->cacheNewPNGImages($healthcheckViewModel->getTheGraphs(), true);
-
         }
         catch (Exception $e)
         {
@@ -134,7 +130,23 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
     public function quadrantAction() {
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_helper->layout->disableLayout();
+        $this->view->healthcheck = $this->getHealthcheckViewModel();
         $this->render('/png/quadrant');
+    }
+
+    public function ageAction() {
+        $this->_pageTitle = ['Healthcheck'];
+        $this->_navigation->setActiveStep(HealthCheckStepsModel::STEP_FINISHED);
+
+        $this->initReportList();
+        $this->initHtmlReport();
+
+        $this->view->availableReports['Device Age']['active'] = true;
+
+        $this->view->formats = [
+        ];
+
+        $this->view->reportTitle = My_Brand::getDealerBranding()->healthCheckTitle;
     }
 
 } // end index controller

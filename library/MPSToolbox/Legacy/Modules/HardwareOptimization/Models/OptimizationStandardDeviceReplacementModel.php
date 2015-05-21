@@ -115,6 +115,86 @@ class OptimizationStandardDeviceReplacementModel implements OptimizationDeviceRe
     }
 
     /**
+     * @param DeviceSwapModel[] $blackReplacementDevices
+     */
+    public function setBlackReplacementDevices($blackReplacementDevices)
+    {
+        $this->_blackReplacementDevices = $blackReplacementDevices;
+    }
+
+    /**
+     * @param DeviceSwapModel[] $blackMfpReplacementDevices
+     */
+    public function setBlackMfpReplacementDevices($blackMfpReplacementDevices)
+    {
+        $this->_blackMfpReplacementDevices = $blackMfpReplacementDevices;
+    }
+
+    /**
+     * @param DeviceSwapModel[] $colorReplacementDevices
+     */
+    public function setColorReplacementDevices($colorReplacementDevices)
+    {
+        $this->_colorReplacementDevices = $colorReplacementDevices;
+    }
+
+    /**
+     * @param DeviceSwapModel[] $colorMfpReplacementDevices
+     */
+    public function setColorMfpReplacementDevices($colorMfpReplacementDevices)
+    {
+        $this->_colorMfpReplacementDevices = $colorMfpReplacementDevices;
+    }
+
+    /**
+     * @param CostPerPageSettingModel $costPerPageSetting
+     */
+    public function setCostPerPageSetting($costPerPageSetting)
+    {
+        $this->_costPerPageSetting = $costPerPageSetting;
+    }
+
+    /**
+     * @param CostPerPageSettingModel $replacementCostPerPageSetting
+     */
+    public function setReplacementCostPerPageSetting($replacementCostPerPageSetting)
+    {
+        $this->_replacementCostPerPageSetting = $replacementCostPerPageSetting;
+    }
+
+    /**
+     * @param float $savingsThreshold
+     */
+    public function setSavingsThreshold($savingsThreshold)
+    {
+        $this->_savingsThreshold = $savingsThreshold;
+    }
+
+    /**
+     * @param float $reportPartsCostPerPage
+     */
+    public function setReportPartsCostPerPage($reportPartsCostPerPage)
+    {
+        $this->_reportPartsCostPerPage = $reportPartsCostPerPage;
+    }
+
+    /**
+     * @param float $reportLaborCostPerPage
+     */
+    public function setReportLaborCostPerPage($reportLaborCostPerPage)
+    {
+        $this->_reportLaborCostPerPage = $reportLaborCostPerPage;
+    }
+
+    /**
+     * @param int $dealerId
+     */
+    public function setDealerId($dealerId)
+    {
+        $this->_dealerId = $dealerId;
+    }
+
+    /**
      * @param DeviceInstanceModel $deviceInstance
      *
      * @return MasterDeviceModel
@@ -219,7 +299,7 @@ class OptimizationStandardDeviceReplacementModel implements OptimizationDeviceRe
             /**
              * Ensure the replacement does not cost too much
              */
-            $replacementDevice     = $masterDeviceMapper->findForReports($deviceSwap->masterDeviceId, $this->_dealerId, $this->_reportLaborCostPerPage, $this->_reportPartsCostPerPage);
+            $replacementDevice     = $masterDeviceMapper->findForReports($deviceSwap->masterDeviceId, $this->_dealerId);
             $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($this->_replacementCostPerPageSetting, $replacementDevice);
             $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
 
