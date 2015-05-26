@@ -30,7 +30,7 @@ class Dealerapi_AuthControllerTest extends PHPUnit_Framework_TestCase
         $json = $this->response->getBody();
         $this->assertJson($json);
         $arr = json_decode($json,true);
-        $this->assertEquals(['ok'=>'welcome Root Company'], $arr);
+        $this->assertEquals(['ok'=>'Welcome Root Company'], $arr);
     }
 
 
