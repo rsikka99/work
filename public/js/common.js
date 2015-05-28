@@ -34,7 +34,12 @@ requirejs.config({
         'riot'                   : 'lib/riot/riot.min',
         'select2'                : 'lib/select2/select2.min',
         'underscore'             : 'lib/underscore/underscore.min',
-        'uri'                    : 'lib/jqGrid/jquery.jqGrid.min'
+        'uri'                    : 'lib/jqGrid/jquery.jqGrid.min',
+		
+		'jquery.ui.widget' 		 : 'lib/fileupload/vendor/jquery.ui.widget',
+		'jquery.iframe-transport': 'lib/fileupload/jquery.iframe-transport',
+		'jquery.fileupload' 	 : 'lib/fileupload/jquery.fileupload'
+
     },
     'shim'   : {
         'backbone'               : {

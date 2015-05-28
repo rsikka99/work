@@ -109,8 +109,9 @@ abstract class My_Controller_Report extends Action
      *
      * @throws Exception
      * @return array
+     * @deprecated
      */
-    public function cachePNGImages ($imageArray, $local = true)
+    public function deprecatedCachePNGImages ($imageArray, $local = true)
     {
 
         $cachePath       = $this->_fullCachePath;
@@ -383,19 +384,20 @@ abstract class My_Controller_Report extends Action
     {
         $form = $this->getAllSettingsForm();
 
+        $result=faLse;
         if ($form->isValid($data))
         {
             $service        = $this->getClientSettingsService();
             $clientSettings = $service->getClientSettings($this->getSelectedClient()->id, $this->getIdentity()->dealerId);
             $service->saveAllSettingsForm($form, $clientSettings);
+            $result=true;
         }
         else
         {
             $this->_flashMessenger->addMessage(['error' => 'Please correct the errors below.']);
         }
-
-
         $this->showClientSettingsForm();
+        return $result;
     }
 
     /**
@@ -427,5 +429,72 @@ abstract class My_Controller_Report extends Action
 
         return $this->clientSettingsService;
     }
+
+
+    /**
+     * @param \CpChart\Classes\pImage[] $imageArray
+     * @param bool                      $local
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function cachePNGImages ($imageArray, $local = true)
+    {
+
+        $cachePath       = $this->_fullCachePath;
+        $publicCachePath = $this->_relativeCachePath;
+
+        try
+        {
+            // Download files ahead of time
+            $randomSalt = strftime("%s") . mt_rand(10000, 30000);
+
+            $imagePathAndPrefix  = $publicCachePath . '/' . $randomSalt . "_";
+            $fullPathImagePrefix = $cachePath . '/' . $randomSalt . "_";
+
+            $newImages         = [];
+            $fullPathNewImages = [];
+
+            //for ($i = 0; $i < sizeof($imageArray); $i++)
+            foreach ($imageArray as $i=>$obj)
+            {
+                $imageFilename     = $imagePathAndPrefix . $i . '.png';
+                $fullImageFileName = $fullPathImagePrefix . $i . '.png';
+
+                if (file_exists($imageFilename)) // Delete file if it already exists
+                {
+                    unlink($imageFilename);
+                }
+
+                // Renders the image in the cached image folder
+                $obj->render($fullImageFileName);
+                $newImages [$i]        = $imageFilename;
+                $fullPathNewImages[$i] = $fullImageFileName;
+            }
+
+            /**
+             * Attempt to change permissions on our files
+             */
+            chmod($cachePath, 0777);
+            foreach ($fullPathNewImages as $filePath)
+            {
+                chmod($filePath, 0777);
+            }
+        }
+        catch (Exception $e)
+        {
+            throw new Exception("Could not cache image files!", 0, $e);
+        }
+
+        /* Are we rendering a DOCX? If so, we need the full file path */
+        if ($local)
+        {
+            return $fullPathNewImages;
+        }
+
+        return $newImages;
+
+    }
+
 
 }

@@ -14,7 +14,7 @@ use Zend_Validate_Between;
  *
  * @package MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement
  */
-class SuppliesAndServiceForm extends Zend_Form
+class SuppliesAndServiceForm extends \My_Form_Form
 {
     protected $_isAllowed;
     protected $_isQuoteDevice;
@@ -60,11 +60,10 @@ class SuppliesAndServiceForm extends Zend_Form
         /**
          * Leased Toner Yield
          */
-        $this->addElement('text', 'leasedTonerYield', [
+        $this->addElement('text_int', 'leasedTonerYield', [
             'label'       => 'Leased Toner Yield',
             'id'          => 'leasedTonerYield',
             'description' => 'If this device is marked as leased you must fill this out.',
-            'filters'     => ['StringTrim', 'StripTags'],
             'allowEmpty'  => false,
             'disabled'    => (!$this->_isAllowed),
             'validators'  => [
@@ -80,13 +79,12 @@ class SuppliesAndServiceForm extends Zend_Form
         /**
          * Parts Cost Per Page
          */
-        $this->addElement('text', 'dealerPartsCostPerPage', [
+        $this->addElement('text_currency', 'dealerPartsCostPerPage', [
             'label'       => 'Parts CPP',
             'id'          => 'dealerParsCostPerPage',
             'description' => 'Your parts cost per page to manage this device. Overrides the default parts cost per page in reports.',
             'maxlength'   => 8,
             'required'    => $this->_isQuoteDevice,
-            'filters'     => ['StringTrim', 'StripTags'],
             'validators'  => [
                 [
                     'validator' => 'Between',
@@ -98,26 +96,22 @@ class SuppliesAndServiceForm extends Zend_Form
         /**
          * Labor Cost Per Page
          */
-        $this->addElement('text', 'dealerLaborCostPerPage', [
+        $this->addElement('text_currency', 'dealerLaborCostPerPage', [
             'label'       => 'Labor CPP',
             'id'          => 'dealerLaborCostPerPage',
             'description' => 'Your labor cost per page to manage this device. Overrides the default labor cost per page in reports.',
             'maxlength'   => 8,
             'required'    => $this->_isQuoteDevice,
-            'filters'     => ['StringTrim', 'StripTags'],
-            'validators'  => ['float'],
         ]);
 
         /**
          * Lease Buyback
          */
-        $this->addElement('text', 'leaseBuybackPrice', [
+        $this->addElement('text_currency', 'leaseBuybackPrice', [
             'label'       => 'Lease Buyback Price',
             'id'          => 'leaseBuybackPrice',
             'description' => 'Used in calculations for the lease buyback report.',
             'maxlength'   => 8,
-            'filters'     => ['StringTrim', 'StripTags'],
-            'validators'  => ['float'],
         ]);
     }
 

@@ -865,6 +865,7 @@ class Proposalgen_CostsController extends Action
                 $filename             = "system_printer_features_" . date('m_d_Y') . ".csv";
                 $deviceFeatureService = new DeviceFeaturesImportService();
                 $fieldTitles          = $deviceFeatureService->csvHeaders;
+                $fieldTitles[]       = 'Has Image';
                 $fieldRows            = MasterDeviceMapper::getInstance()->getPrinterFeaturesForExport($this->_dealerId);
             }
             else if ($importType == 'toner')
@@ -873,6 +874,7 @@ class Proposalgen_CostsController extends Action
                 $filename            = "system_toner_pricing_" . date('m_d_Y') . ".csv";
                 $tonerPricingService = new TonerPricingImportService();
                 $fieldTitles         = $tonerPricingService->csvHeaders;
+                $fieldTitles[]       = 'Has Image';
                 $fieldRows           = TonerMapper::getInstance()->getTonerPricingForExport($manufacturerId, $this->_dealerId);
             }
             else if ($importType == "matchup")

@@ -530,6 +530,7 @@ $data = [
     "phpword"             => $phpWord,
     "section"             => $section,
     "assessmentViewModel" => $this->assessmentViewModel,
+    "graphs"              => $this->graphs,
     "styles"              => $styles,
     "brandName"           => My_Brand::getDealerBranding()->mpsProgramName,
     "companyName"         => My_Brand::getDealerBranding()->shortDealerName,
@@ -548,4 +549,5 @@ $this->partial("report/assessment/docx/08_summary.phtml", $data);
 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
 $objWriter->save($this->savePath);
 
-echo $this->baseUrl($this->publicFileName);
+if (Zend_Controller_Front::getInstance()->getRequest()->isXmlHttpRequest()) echo $this->baseUrl($this->publicFileName);
+else header('Location: '.$this->baseUrl($this->publicFileName));

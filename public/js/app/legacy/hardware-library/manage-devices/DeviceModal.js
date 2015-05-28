@@ -357,7 +357,8 @@ define([
                 },
                 deviceAttributes    : $("#deviceAttributes").serialize(),
                 hardwareOptimization: $("#hardwareOptimization").serialize(),
-                hardwareQuote       : $("#hardwareQuote").serialize()
+                hardwareQuote       : $("#hardwareQuote").serialize(),
+                deviceImage         : $("#deviceImage").serialize()
             },
             success : function (xhr)
             {
@@ -370,6 +371,10 @@ define([
 
                 // This calls our custom event called saveSuccess
                 deviceModalInstance.displayAlert("success", "Successfully updated device");
+
+                if (xhr.imageFile) {
+                    $('#imageDiv').html('<a href="/img/devices/'+xhr.imageFile+'" target="_blank" class="thumbnail"><img src="/img/devices/'+xhr.imageFile+'" style="max-width:300px;max-height:300px"></a>');
+                }
 
                 var masterDeviceManagement = $("#masterDeviceManagement");
                 masterDeviceManagement.trigger("saveSuccess", [deviceModalInstance.deviceId]);
@@ -814,3 +819,8 @@ define([
 
     return DeviceModal;
 });
+
+function uploadDone (e, result) {
+    var filename = result._response.result.filename;
+    $('#imageDiv').html('<a href="/img/devices/'+filename+'" target="_blank" class="thumbnail"><img src="/img/devices/'+filename+'" style="max-width:300px;max-height:300px"></a>');
+}

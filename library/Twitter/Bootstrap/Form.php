@@ -16,7 +16,7 @@
  * @subpackage Bootstrap
  * @author Christian Soronellas <csoronellas@emagister.com>
  */
-abstract class Twitter_Bootstrap_Form extends Zend_Form
+abstract class Twitter_Bootstrap_Form extends \My_Form_Form
 {
     /**
      * Class constants

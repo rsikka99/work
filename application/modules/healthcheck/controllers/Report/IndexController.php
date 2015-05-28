@@ -45,7 +45,7 @@ class Healthcheck_Report_IndexController extends Healthcheck_Library_Controller_
 
         $this->initReportList();
 
-        $this->view->headScript()->appendFile($this->view->baseUrl("/js/app/legacy/HtmlReport.js"));
+        $this->view->headScript()->appendFile($this->view->baseUrl("/js/app/legacy/HtmlReport.js?".date('Ymd')));
         $this->view->formTitle = "Report Summary";
 
         $healthcheck             = $this->getHealthcheck();

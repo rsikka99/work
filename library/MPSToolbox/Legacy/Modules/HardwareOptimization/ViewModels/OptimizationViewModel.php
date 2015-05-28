@@ -2,6 +2,8 @@
 
 namespace MPSToolbox\Legacy\Modules\HardwareOptimization\ViewModels;
 
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationDealerModel;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationCustomerModel;
 use MPSToolbox\Legacy\Modules\HardwareOptimization\Mappers\HardwareOptimizationMapper;
 use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationDeviceInstanceModel;
 use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
@@ -13,7 +15,9 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\PageCountsModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsExcludedRowModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
+use CpChart\Services\pChartFactory;
 use stdClass;
+use My_Brand;
 
 /**
  * Class OptimizationViewModel
@@ -22,6 +26,10 @@ use stdClass;
  */
 class OptimizationViewModel
 {
+
+    const AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE = 200;
+    const AVERAGE_MONTHLY_PAGES_PER_DEVICE   = 1500;
+    const AVERAGE_EMPLOYEES_PER_DEVICE = 4.4;
 
     /**
      * @var HardwareOptimizationModel
@@ -870,4 +878,86 @@ class OptimizationViewModel
 
         return $this->_devicesGroupedByAction;
     }
+
+    public function dealer_png($name) {
+        $model = new OptimizationDealerModel($this->_optimization);
+        $myPicture = $this->getChart($name, $model);
+        if ($myPicture) {
+            header( 'Expires: Sat, 26 Jul 1997 05:00:00 GMT' );
+            header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' );
+            header( 'Cache-Control: no-store, no-cache, must-revalidate' );
+            header( 'Cache-Control: post-check=0, pre-check=0', false );
+            header( 'Pragma: no-cache' );
+            $myPicture->autoOutput();
+        }
+    }
+
+    public function customer_png($name) {
+        $model = new OptimizationCustomerModel($this->_optimization);
+        $myPicture = $this->getChart($name, $model);
+        if ($myPicture) {
+            header( 'Expires: Sat, 26 Jul 1997 05:00:00 GMT' );
+            header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' );
+            header( 'Cache-Control: no-store, no-cache, must-revalidate' );
+            header( 'Cache-Control: post-check=0, pre-check=0', false );
+            header( 'Pragma: no-cache' );
+            $myPicture->autoOutput();
+        }
+    }
+
+    public function getCustomerCharts()
+    {
+        $model = new OptimizationCustomerModel($this->_optimization);
+        $result=array();
+        foreach (array(
+                     0=>'AverageMonthlyPagesBarGraph',
+                     1=>'AverageMonthlyPagesPerEmployeeBarGraph',
+                     2=>'LeasedVsPurchasedPageCountBarGraph',
+                     3=>'OptimizationChartSummary',
+                     4=>'HardwareUtilizationCapacityPercent',
+                     5=>'EmployeesPerDevice',
+                     6=>'PrintingListJITCompatible',
+                     7=>'LeasedVsPurchasedBarGraph',
+                     8=>'TechnologyFeatures',
+                     9=>'TechnologyFeaturesOptimized',
+                     10=>'AgeOfDevices',
+                     11=>'AgeOfDevicesOptimized',
+                     12=>'UniqueSupplyTypes',
+                     13=>'UniqueSupplyTypesOptimized',
+                     14=>'ColorCapableDevices',
+                     15=>'ColorCapableDevicesOptimized',
+                 ) as $i=>$name) {
+            $result[$i] = $this->getChart($name, $model);
+        }
+        return $result;
+    }
+
+    public function getDealerCharts()
+    {
+        $model = new OptimizationDealerModel($this->_optimization);
+        $result=array();
+        foreach (array(
+                     'OptimizationChartSummary',
+                     'OtherDevicesInFleet',
+                 ) as $name) {
+            $result[$name] = $this->getChart($name, $model);
+        }
+        return $result;
+    }
+
+    public function getChart($name, $model) {
+        $dealerBranding = My_Brand::getDealerBranding();
+        $companyName   = mb_strimwidth($this->_optimization->getClient()->companyName, 0, 23, "...");
+        $employeeCount = $this->_optimization->getClient()->employeeCount;
+
+        $pieChartStyles  = ["SecondPass" => true, "ValuePosition" => PIE_VALUE_INSIDE, "WriteValues" => PIE_VALUE_PERCENTAGE, "SliceHeight" => 10];
+        $pieLegendStyles = ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "BoxSize" => 10];
+
+        $hexToRGBConverter = new \Tangent\Format\HexToRGB();
+        $factory = new pChartFactory();
+        $myPicture = null;
+        if (file_exists($file = dirname(__FILE__).'/charts/'.$name.'.php')) require $file;
+        return $myPicture;
+    }
+
 }

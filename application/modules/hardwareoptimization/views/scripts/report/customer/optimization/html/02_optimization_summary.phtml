@@ -12,8 +12,6 @@ $optimization = $this->optimization;
 /* @var $customerOptimization OptimizationCustomerModel */
 $customerOptimization = $this->customerOptimization;
 
-/* @var $graphs array */
-$graphs = $this->graphs;
 ?>
 <div class="pheader" id="current-fleet-statistics">
     Current Fleet Statistics
@@ -21,9 +19,9 @@ $graphs = $this->graphs;
 
 <table class='center'>
     <tr>
-        <td><img src="<?= $graphs[0]; ?>" /></td>
-        <td><img src="<?= $graphs[1]; ?>" /></td>
-        <td><img src="<?= $graphs[2]; ?>" /></td>
+        <td><img src="?png=AverageMonthlyPagesBarGraph" /></td>
+        <td><img src="?png=AverageMonthlyPagesPerEmployeeBarGraph" /></td>
+        <td><img src="?png=LeasedVsPurchasedPageCountBarGraph" /></td>
     </tr>
 </table>
 
@@ -40,7 +38,7 @@ $graphs = $this->graphs;
 <br />
 <table class='center'>
     <tr>
-        <td><img src="<?= $graphs[3]; ?>" /></td>
+        <td><img src="?png=OptimizationChartSummary" /></td>
     </tr>
 </table>
 <br /><br />

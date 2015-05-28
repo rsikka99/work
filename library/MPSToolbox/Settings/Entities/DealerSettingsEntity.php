@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
  * @property int                        genericSettingsId
  * @property int                        quoteSettingsId
  * @property int                        optimizationSettingsId
+ * @property int                        quoteValid
+ * @property string                     quoteCustom
  *
  * @property FleetSettingsEntity        currentFleetSettings
  * @property FleetSettingsEntity        proposedFleetSettings

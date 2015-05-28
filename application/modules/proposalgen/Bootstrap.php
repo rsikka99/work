@@ -15,7 +15,6 @@ class Proposalgen_Bootstrap extends Zend_Application_Module_Bootstrap
         $autoLoader = Zend_Loader_Autoloader::getInstance();
         $autoLoader->registerNamespace('Custom_');
         $autoLoader->registerNamespace('Tangent_');
-        $autoLoader->registerNamespace('gchart');
 
         return $autoLoader;
     }

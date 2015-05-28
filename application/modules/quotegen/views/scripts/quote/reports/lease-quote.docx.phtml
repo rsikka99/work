@@ -1,6 +1,7 @@
 <?php
 
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+use MPSToolbox\Settings\Service\DealerSettingsService;
 
 $filename = $this->filename;
 $savePath = PUBLIC_PATH . "/downloads/client/{$this->clientId}/quote/{$this->quoteId}/";
@@ -18,6 +19,7 @@ $linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/quote/{$this->
 // This may not need to be removed from here
 // Base path to the files used to render the document
 $basePath            = 'quote/reports/lease-quote/docx';
+$customPath            = 'quote/reports/custom';
 $commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
 
 
@@ -180,6 +182,10 @@ $phpword->addFontStyle('savingsAmountFont', [
     'color' => $this->docStyles->brandBaseColor,
     'bold'  => true,
     'size'  => 11
+]);
+
+$phpword->addFontStyle('italic_text', [
+    'italic' => true,
 ]);
 
 $phpword->addFontStyle('small_italic_text', [
@@ -879,12 +885,19 @@ $data = [
     "styles"  => $styles,
 ];
 
-// Actual document pages
-$this->partial("{$commonPartsBasePath}/docx/titlepage.phtml", $titledata);
-//$this->partial("{$commonPartsBasePath}/01_prependDocuments.phtml", $data);
-$this->partial("{$basePath}/leasedquote.phtml", $data);
-$this->partial("{$basePath}/signatures.phtml", $data);
-//$this->partial("{$commonPartsBasePath}/02_appendDocuments.phtml", $data);
+$dealerSettingsService = new DealerSettingsService();
+$dealerSettings = $dealerSettingsService->getDealerSettings(Zend_Auth::getInstance()->getIdentity()->dealerId);
+if ($dealerSettings->quoteCustom) {
+    $path=dirname(__FILE__).'/custom/'.$dealerSettings->quoteCustom.'/leased-quote.php';
+    require ($path);
+} else {
+    // Actual document pages
+    $this->partial("{$commonPartsBasePath}/docx/titlepage.phtml", $titledata);
+    //$this->partial("{$commonPartsBasePath}/01_prependDocuments.phtml", $data);
+    $this->partial("{$basePath}/leasedquote.phtml", $data);
+    $this->partial("{$basePath}/signatures.phtml", $data);
+    //$this->partial("{$commonPartsBasePath}/02_appendDocuments.phtml", $data);
+}
 
 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpword, 'Word2007');
 

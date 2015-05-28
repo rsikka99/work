@@ -1,4 +1,6 @@
 <?php
+use CpChart\Services\pChartFactory;
+use CpChart\Classes\pPie;
 use MPSToolbox\Legacy\Models\UserModel;
 use MPSToolbox\Legacy\Modules\Assessment\Models\AssessmentModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel;
@@ -165,6 +167,20 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     protected $_totalLeaseBuybackPrice;
 
     public $highCostPurchasedDevices;
+
+    /**
+     * Used for passing to phpWord docs as it requires full path to request image
+     *
+     * @var \PhpOffice\PhpWord\Shared\String
+     */
+    protected $absoluteGraphPaths;
+
+    /**
+     * Likely can get rid of this
+     *
+     * @var
+     */
+    protected $pImageGraphs = [];
 
     /**
      * @param AssessmentModel $report
@@ -1614,6 +1630,16 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         return $this->GrossMarginTotalMonthlyRevenue;
     }
 
+    public function getPercentageOfInkjetPrintVolume() {
+        if (!isset($this->percentageOfInkjetPrintVolume)) {
+            $this->percentageOfInkjetPrintVolume = $this->assessment->getClient()->getSurvey()->percentageOfInkjetPrintVolume;
+            if (!$this->percentageOfInkjetPrintVolume) {
+                $this->percentageOfInkjetPrintVolume = 5;
+            }
+        }
+        return $this->percentageOfInkjetPrintVolume;
+    }
+
     /**
      * @return float
      */
@@ -1940,516 +1966,111 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * @return array
+     * @return \CpChart\Classes\pImage
+     * @throws Exception
      */
-    public function getGraphs ()
+    public function getThisGraph ()
     {
-        if (!isset($this->Graphs))
-        {
-            $dealerBranding = My_Brand::getDealerBranding();
+        $dealerBranding    = My_Brand::getDealerBranding();
+        $hexToRGBConverter = new \Tangent\Format\HexToRGB();
+        $highest           = 100;
+        $factory           = new pChartFactory();
 
-            // Other variables used in several places
-            $companyName   = mb_strimwidth($this->assessment->getClient()->companyName, 0, 23, "...");
-            $employeeCount = $this->assessment->getClient()->employeeCount;
+        $MyData = $factory->newData();
 
-            // Formatting variables
-            $numberValueMarker                          = "N *sz0";
-            $PrintIQSavingsBarGraph_currencyValueMarker = "N $*sz0";
+        $MyData->addPoints([$this->getDevices()->leasedDeviceInstances->getCount()], "Number of leased devices");
+        $MyData->addPoints([$this->getDevices()->purchasedDeviceInstances->getCount()], "Number of purchased devices");
 
-            /**
-             * -- PrintIQSavingsBarGraph
-             */
-            $highest  = ($this->getPrintIQTotalCost() > $this->getTotalPurchasedAnnualCost()) ? $this->getPrintIQTotalCost() : $this->getTotalPurchasedAnnualCost();
-            $barGraph = new gchart\gGroupedBarChart(600, 160);
-            $barGraph->setHorizontal(true);
-            $barGraph->setTitle("Annual Printing Costs for Purchased Hardware");
-            $barGraph->setVisibleAxes([
-                'x'
-            ]);
-            $barGraph->addDataSet([
-                $this->getTotalPurchasedAnnualCost()
-            ]);
-            $barGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphNegativeColor),
-            ]);
-            $barGraph->addDataSet([
-                $this->getPrintIQTotalCost()
-            ]);
-            $barGraph->setLegend([
-                "Current",
-                My_Brand::getDealerBranding()->mpsProgramName
-            ]);
-            $barGraph->addAxisRange(0, 0, $highest * 1.3);
-            $barGraph->setDataRange(0, $highest * 1.3);
-            $barGraph->setBarScale(40, 10);
-            $barGraph->setLegendPosition("b");
-            $barGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphPositiveColor),
-            ]);
-            $barGraph->setProperty('chxs', '0N*sz0*');
-            $barGraph->addValueMarkers($PrintIQSavingsBarGraph_currencyValueMarker, "000000", "0", "-1", "11");
-            $barGraph->addValueMarkers($PrintIQSavingsBarGraph_currencyValueMarker, "000000", "1", "-1", "11");
-            // Graphs[0]
-            $this->Graphs [] = $barGraph->getUrl();
+        //Fixes x access scale appearing - hacky - needs fixing
+        $MyData->addPoints([""], "Printer Types");
+        $MyData->setSerieDescription("Printer Types", "Type");
+        $MyData->setAbscissa("Printer Types");
 
-            /**
-             * -- LeasedVsPurchasedBarGraph
-             */
-            $highest  = ($this->getDevices()->leasedDeviceInstances->getCount() > $this->getDevices()->purchasedDeviceInstances->getCount()) ? $this->getDevices()->leasedDeviceInstances->getCount() : $this->getDevices()->purchasedDeviceInstances->getCount();
-            $barGraph = new gchart\gBarChart(225, 265);
-            $barGraph->setVisibleAxes([
-                'y'
-            ]);
-            $barGraph->addDataSet([
-                $this->getDevices()->leasedDeviceInstances->getCount()
-            ]);
-            $barGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphLeasedDeviceColor),
-            ]);
-            $barGraph->addDataSet([
-                $this->getDevices()->purchasedDeviceInstances->getCount()
-            ]);
-            $barGraph->addAxisRange(0, 0, $highest * 1.1);
-            $barGraph->setDataRange(0, $highest * 1.1);
-            $barGraph->setBarScale(50, 10);
-            $barGraph->setLegendPosition("bv");
-            $barGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphPurchasedDeviceColor),
-            ]);
-            $barGraph->setLegend([
-                "Number of leased devices",
-                "Number of purchased devices"
-            ]);
-            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
-            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
-            // Graphs[1]
-            $this->Graphs [] = $barGraph->getUrl();
+        $leasedColor           = $dealerBranding->graphLeasedDeviceColor;
+        $purchasedColor        = $dealerBranding->graphPurchasedDeviceColor;
+        $leasedRGB             = $hexToRGBConverter->hexToRgb($leasedColor);
+        $purchasedRGB          = $hexToRGBConverter->hexToRgb($purchasedColor);
+        $leasedColorSetting    = ['R' => $leasedRGB['r'], 'G' => $leasedRGB['g'], 'B' => $leasedRGB['b']];
+        $purchasedColorSetting = ['R' => $purchasedRGB['r'], 'G' => $purchasedRGB['g'], 'B' => $purchasedRGB['b']];
+        $MyData->setPalette("Number of leased devices", $leasedColorSetting);
+        $MyData->setPalette("Number of purchased devices", $purchasedColorSetting);
 
-            /**
-             * -- LeasedVsPurchasedPageCountBarGraph
-             */
-            $highest  = ($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() > $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) ? $this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() : $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
-            $barGraph = new gchart\gBarChart(225, 265);
+        $myPicture = $factory->newImage(680, 260, $MyData);
 
-            $barGraph->setVisibleAxes([
-                'y'
-            ]);
-            $barGraph->addDataSet([
-                round($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
-            ]);
-            $barGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphLeasedDeviceColor),
-            ]);
-            $barGraph->addDataSet([
-                round($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
-            ]);
-            $barGraph->addAxisRange(0, 0, $highest * 1.20);
-            $barGraph->setDataRange(0, $highest * 1.20);
-            $barGraph->setBarScale(50, 10);
-            $barGraph->setLegendPosition("bv");
-            $barGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphPurchasedDeviceColor),
-            ]);
-            $barGraph->setLegend([
-                "Monthly pages on leased devices",
-                "Monthly pages on purchased devices"
-            ]);
+        $myPicture->Antialias = false;
 
-            $barGraph->setProperty('chxs', '0N*sz0*');
-            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
-            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
-            // Graphs[2]
-            $this->Graphs [] = $barGraph->getUrl();
+        $myPicture->setFontProperties(["FontName" => APPLICATION_BASE_PATH."/assets/fonts/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
 
-            /**
-             * -- UniqueDevicesGraph
-             */
-            $uniqueModelArray = [];
-            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
-            {
-                if (array_key_exists($device->getMasterDevice()->modelName, $uniqueModelArray))
-                {
-                    $uniqueModelArray [$device->getMasterDevice()->modelName] += 1;
-                }
-                else
-                {
-//                    $labels[$device->getMasterDevice()->modelName]            = $device->getMasterDevice()->modelName;
-                    $uniqueModelArray [$device->getMasterDevice()->modelName] = 1;
-                }
-            }
-            $uniqueDevicesGraph = new gchart\gPie3DChart(700, 270);
-            $uniqueDevicesGraph->addDataSet($uniqueModelArray);
-            $uniqueDevicesGraph->addColors([
-                "E21736",
-                "b0bb21",
-                "5c3f9b",
-                "0191d3",
-                "f89428",
-                "e4858f",
-                "fcc223",
-                "B3C6FF",
-                "ECFFB3",
-                "386AFF",
-                "FFB3EC",
-                "cccccc",
-                "00ff00",
-                "000000"
-            ]);
-//             $uniqueDevicesGraph->setLegend($labels);
-//            $uniqueDevicesGraph->setLabels($labels);
-            // Graphs[3]
-            $this->Graphs [] = $uniqueDevicesGraph->getUrl();
+        $myPicture->setGraphArea(60, 40, 200, 200);
 
-            /**
-             * -- AverageMonthlyPagesBarGraph
-             */
-            $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount(), 0);
-            $highest          = ($averagePageCount > self::AVERAGE_MONTHLY_PAGES_PER_DEVICE) ? $averagePageCount : self::AVERAGE_MONTHLY_PAGES_PER_DEVICE;
-            $barGraph         = new gchart\gBarChart(175, 300);
-            $barGraph->setTitle("Average Monthly Pages|per Networked Printer");
-            $barGraph->setVisibleAxes([
-                'y'
-            ]);
-            $barGraph->addDataSet([
-                $averagePageCount
-            ]);
-            $barGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphCustomerColor),
-            ]);
-            $barGraph->addDataSet([
-                self::AVERAGE_MONTHLY_PAGES_PER_DEVICE
-            ]);
-            $barGraph->addAxisRange(0, 0, $highest * 1.1);
-            $barGraph->setDataRange(0, $highest * 1.1);
-            $barGraph->setBarScale(40, 10);
-            $barGraph->setLegendPosition("bv");
-            $barGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
-            ]);
-            $barGraph->setLegend([
-                $companyName,
-                "Average"
-            ]);
+        $AxisBoundaries = [0 => ["Min" => 0, "Max" => $highest * 1.1]];
+        $ScaleSettings  = ["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "DrawSubTicks" => false, "DrawArrows" => false, "ArrowSize" => 6];
 
-            $barGraph->setProperty('chxs', '0N*sz0*');
-            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
-            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
-            // Graphs[4]
-            $this->Graphs [] = $barGraph->getUrl();
+        $myPicture->drawScale(["Mode" => SCALE_MODE_MANUAL, "ManualScale" => $AxisBoundaries, "AxisR" => 127, "AxisG" => 127, "AxisB" => 127, "InnerTickWidth" => 0, "OuterTickWidth" => 0, "TickR" => 127, "TickG" => 127, "TickB" => 127]);
 
-            /**
-             * -- AverageMonthlyPagesPerEmployeeBarGraph
-             */
-            $pagesPerEmployee = ($employeeCount > 0) ? round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $employeeCount) : 0;
-            $highest          = (Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
-            $barGraph         = new gchart\gBarChart(175, 300);
-            $barGraph->setTitle("Average Monthly Pages|per Employee");
-            $barGraph->setVisibleAxes([
-                'y'
-            ]);
-            $barGraph->addDataSet([
-                $pagesPerEmployee
-            ]);
-            $barGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphCustomerColor),
-            ]);
-            $barGraph->addDataSet([
-                Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE
-            ]);
-            $barGraph->addAxisRange(0, 0, $highest * 1.1);
-            $barGraph->setDataRange(0, $highest * 1.1);
-            $barGraph->setBarScale(40, 10);
-            $barGraph->setLegendPosition("bv");
-            $barGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
-            ]);
-            $barGraph->setLegend([
-                $companyName,
-                "Average"
-            ]);
-            $barGraph->setProperty('chxs', '0N*sz0*');
-            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
-            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
-            // Graphs[5]
-            $this->Graphs [] = $barGraph->getUrl();
+        /* Write the chart legend - this sets the x/y position */
+        $myPicture->drawLegend(60, 220, ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "FontR" => 127, "FontG" => 127, "FontB" => 127]);
 
-            /**
-             * -- AverageMonthlyPagesPerEmployeeBarGraph
-             */
-            $devicesPerEmployee = round($employeeCount / $this->getDevices()->allIncludedDeviceInstances->getCount(), 2);
-            $highest            = ($devicesPerEmployee > self::AVERAGE_EMPLOYEES_PER_DEVICE) ? $devicesPerEmployee : self::AVERAGE_EMPLOYEES_PER_DEVICE;
-            $barGraph           = new gchart\gBarChart(175, 300);
-            $barGraph->setTitle("Employees per|Printing Device");
-            $barGraph->setVisibleAxes([
-                'y'
-            ]);
-            $barGraph->addDataSet([
-                $devicesPerEmployee
-            ]);
-            $barGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphCustomerColor),
-            ]);
-            $barGraph->addDataSet([
-                self::AVERAGE_EMPLOYEES_PER_DEVICE
-            ]);
-            $barGraph->addAxisRange(0, 0, $highest * 1.1);
-            $barGraph->setDataRange(0, $highest * 1.1);
-            $barGraph->setBarScale(40, 10);
-            $barGraph->setLegendPosition("bv");
-            $barGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphIndustryAverageColor),
-            ]);
-            $barGraph->setLegend([
-                $companyName,
-                "Average"
-            ]);
-            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
-            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
-            // Graphs[6]
-            $this->Graphs [] = $barGraph->getUrl();
+        /* Draw the chart */
+        $myPicture->drawBarChart(["DisplayValues" => true, "Surrounding" => -30]);
 
-            /**
-             * -- Color Capable Devices Graph
-             */
-            $colorPercentage = 0;
-            if ($this->getDevices()->allIncludedDeviceInstances->getCount())
-            {
-                $colorPercentage = round((($this->getNumberOfColorCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
-            }
-
-            $notColorPercentage = 100 - $colorPercentage;
-            $colorCapableGraph  = new gchart\gPie3DChart(305, 210);
-            $colorCapableGraph->setTitle("Color-Capable Printing Devices");
-            $colorCapableGraph->addDataSet([
-                $colorPercentage,
-                $notColorPercentage
-            ]);
-            $colorCapableGraph->setLegend([
-                "Color-capable",
-                "Black-and-white only"
-            ]);
-            $colorCapableGraph->setLabels([
-                "$colorPercentage%"
-            ]);
-            $colorCapableGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphColorDeviceColor),
-                str_replace('#', '', $dealerBranding->graphMonoDeviceColor),
-            ]);
-            $colorCapableGraph->setLegendPosition("bv");
-            // Graphs[7]
-            $this->Graphs [] = $colorCapableGraph->getUrl();
-
-            /**
-             * -- ColorVSBWPagesGraph
-             */
-            $colorPercentage = 0;
-            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() > 0)
-            {
-                $colorPercentage = round((($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) * 100), 2);
-            }
-
-            $bwPercentage        = 100 - $colorPercentage;
-            $colorVSBWPagesGraph = new gchart\gPie3DChart(305, 210);
-            $colorVSBWPagesGraph->setTitle("Color vs Black/White Pages");
-            $colorVSBWPagesGraph->addDataSet([
-                $colorPercentage,
-                $bwPercentage
-            ]);
-            $colorVSBWPagesGraph->setLegend([
-                "Color pages printed",
-                "Black-and-white pages printed"
-            ]);
-            $colorVSBWPagesGraph->setLabels([
-                "$colorPercentage%",
-                "$bwPercentage%"
-            ]);
-            $colorVSBWPagesGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphColorDeviceColor),
-                str_replace('#', '', $dealerBranding->graphMonoDeviceColor),
-            ]);
-            $colorVSBWPagesGraph->setLegendPosition("bv");
-            // Graphs[8]
-            $this->Graphs [] = $colorVSBWPagesGraph->getUrl();
-
-            /**
-             * -- Device Ages Graph
-             */
-            $deviceAges = [
-                "Less than 5 years old" => 0,
-                "5-6 years old"         => 0,
-                "7-8 years old"         => 0,
-                "More than 8 years old" => 0
-            ];
-            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
-            {
-                if ($device->getAge() < 5)
-                {
-                    $deviceAges ["Less than 5 years old"]++;
-                }
-                else if ($device->getAge() <= 6)
-                {
-                    $deviceAges ["5-6 years old"]++;
-                }
-                else if ($device->getAge() <= 8)
-                {
-                    $deviceAges ["7-8 years old"]++;
-                }
-                else
-                {
-                    $deviceAges ["More than 8 years old"]++;
-                }
-            }
-            $dataSet     = [];
-            $legendItems = [];
-            $labels      = [];
-
-            foreach ($deviceAges as $legendItem => $count)
-            {
-                $legendItems [] = $legendItem;
-                $dataSet []     = $count;
-                if ($count > 0)
-                {
-                    $percentage = round(($count / $this->getDevices()->purchasedDeviceInstances->getCount()) * 100, 2);
-                    $labels []  = "$percentage%";
-                }
-            }
-            $deviceAgeGraph = new gchart\gPie3DChart(350, 200);
-            $deviceAgeGraph->addDataSet($dataSet);
-            $deviceAgeGraph->setLegend($legendItems);
-            $deviceAgeGraph->setLabels($labels);
-            $deviceAgeGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphAgeOfDevices1),
-                str_replace('#', '', $dealerBranding->graphAgeOfDevices2),
-                str_replace('#', '', $dealerBranding->graphAgeOfDevices3),
-                str_replace('#', '', $dealerBranding->graphAgeOfDevices4),
-            ]);
-            $deviceAgeGraph->setLegendPosition("bv");
-            // Graphs[9]
-            $this->Graphs [] = $deviceAgeGraph->getUrl();
-
-            /**
-             * -- ScanCapableDevicesGraph
-             */
-            if ($this->getDevices()->allIncludedDeviceInstances->getCount())
-            {
-                $scanPercentage = round((($this->getNumberOfScanCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
-            }
-            else
-            {
-                $scanPercentage = 0;
-            }
-            $notScanPercentage = 100 - $scanPercentage;
-            $scanCapableGraph  = new gchart\gPie3DChart(200, 160);
-            $scanCapableGraph->setTitle("Scan-Capable Printing Devices");
-            $scanCapableGraph->addDataSet([
-                $scanPercentage,
-                $notScanPercentage
-            ]);
-            $scanCapableGraph->setLegend([
-                "Scan-capable",
-                "Not scan-capable"
-            ]);
-            $scanCapableGraph->setLabels([
-                "$scanPercentage%"
-            ]);
-            $scanCapableGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphCopyCapableDeviceColor),
-                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
-            ]);
-            $scanCapableGraph->setLegendPosition("bv");
-            // Graphs[10]
-            $this->Graphs [] = $scanCapableGraph->getUrl();
-
-            /**
-             * -- FaxCapableDevicesGraph
-             */
-            $faxPercentage = 0;
-            if ($this->getDevices()->allIncludedDeviceInstances->getCount())
-            {
-                $faxPercentage = round((($this->getNumberOfFaxCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
-            }
-
-            $notFaxPercentage = 100 - $faxPercentage;
-            $faxCapable       = new gchart\gPie3DChart(200, 160);
-            $faxCapable->setTitle("Fax-Capable Printing Devices");
-            $faxCapable->addDataSet([
-                $faxPercentage,
-                $notFaxPercentage
-            ]);
-            $faxCapable->setLegend([
-                "Fax-capable",
-                "Not fax-capable"
-            ]);
-            $faxCapable->setLabels([
-                "$faxPercentage%"
-            ]);
-            $faxCapable->addColors([
-                str_replace('#', '', $dealerBranding->graphFaxCapableDeviceColor),
-                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
-            ]);
-            $faxCapable->setLegendPosition("bv");
-            // Graphs[11]
-            $this->Graphs [] = $faxCapable->getUrl();
-
-            /**
-             * -- SmallColorCapableDevicesGraph
-             */
-            $colorCapableGraph->setDimensions(200, 160);
-            // Graphs[12]
-            $this->Graphs [] = $colorCapableGraph->getUrl();
-
-            /**
-             * -- DuplexCapableDevicesGraph
-             */
-            $duplexPercentage = 0;
-            if ($this->getDevices()->allIncludedDeviceInstances->getCount())
-            {
-                $duplexPercentage = round((($this->getNumberOfDuplexCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
-            }
-
-            $notDuplexPercentage = 100 - $duplexPercentage;
-            $duplexCapableGraph  = new gchart\gPie3DChart(305, 210);
-            $duplexCapableGraph->setTitle("Duplex-Capable Printing Devices");
-            $duplexCapableGraph->addDataSet([
-                $duplexPercentage,
-                $notDuplexPercentage
-            ]);
-            $duplexCapableGraph->setLegend([
-                "Duplex-capable",
-                "Not duplex-capable"
-            ]);
-            $duplexCapableGraph->setLabels([
-                "$duplexPercentage%"
-            ]);
-            $duplexCapableGraph->addColors([
-                str_replace('#', '', $dealerBranding->graphDuplexCapableDeviceColor),
-                str_replace('#', '', $dealerBranding->graphNotCompatibleDeviceColor),
-            ]);
-            $duplexCapableGraph->setLegendPosition("bv");
-            // Graphs[13]
-            $this->Graphs [] = $duplexCapableGraph->getUrl();
-
-            /**
-             * -- BigScanCapableDevicesGraph
-             */
-            $scanCapableGraph->setDimensions(305, 210);
-            // Graphs[14]
-            $this->Graphs [] = $scanCapableGraph->getUrl();
-        }
-
-        return $this->Graphs;
+        return $myPicture;
     }
 
-    /**
-     * @param array $Graphs
-     *
-     * @return Assessment_ViewModel_Assessment
-     */
-    public function setGraphs ($Graphs)
-    {
-        $this->Graphs = $Graphs;
+    public function png($name) {
+        $myPicture = $this->getChart($name);
+        if ($myPicture) {
+            header( 'Expires: Sat, 26 Jul 1997 05:00:00 GMT' );
+            header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' );
+            header( 'Cache-Control: no-store, no-cache, must-revalidate' );
+            header( 'Cache-Control: post-check=0, pre-check=0', false );
+            header( 'Pragma: no-cache' );
+            $myPicture->autoOutput();
+        }
+    }
 
-        return $this;
+
+    public function getCharts ()
+    {
+        $result=array();
+        foreach (array(
+                     0=>'PrintIQSavingsBarGraph',
+                     1=>'LeasedVsPurchasedBarGraph',
+                     2=>'LeasedVsPurchasedPageCountBarGraph',
+                     3=>'NumberOfPrintingDeviceModelsAndSupplyTypes',
+                     4=>'AverageMonthlyPagesPerNetworkedPrinter',
+                     5=>'AverageMonthlyPagesPerEmployee',
+                     6=>'EmployeesPerPrintingDevice',
+                     7=>'ColorCapablePrintingDevices',
+                     8=>'ColorVsBlackWhitePages',
+                     9=>'AgeOfPrintingDevices',
+                     10=>'ScanCapablePrintingDevicesSmall',
+                     11=>'FaxCapablePrintingDevices',
+                     12=>'ColorCapablePrintingDevicesSmall',
+                     13=>'DuplexCapablePrintingDevices',
+                     14=>'ScanCapablePrintingDevices',
+        ) as $i=>$name) {
+            $result[$i] = $this->getChart($name);
+        }
+        return $result;
+    }
+
+    public function getChart($name) {
+        $dealerBranding = My_Brand::getDealerBranding();
+        // Other variables used in several places
+        $companyName   = mb_strimwidth($this->assessment->getClient()->companyName, 0, 23, "...");
+        $employeeCount = $this->assessment->getClient()->employeeCount;
+
+        $hexToRGBConverter = new \Tangent\Format\HexToRGB();
+        $factory           = new pChartFactory();
+
+        // Chart Styles
+        $pieChartStyles  = ["SecondPass" => true, "ValuePosition" => PIE_VALUE_INSIDE, "WriteValues" => PIE_VALUE_PERCENTAGE, "SliceHeight" => 10];
+        $pieLegendStyles = ["Style" => LEGEND_NOBORDER, "Mode" => LEGEND_VERTICAL, "BoxSize" => 10];
+
+        $myPicture = null;
+        if (file_exists($file = dirname(__FILE__).'/charts/'.$name.'.php')) require $file;
+        return $myPicture;
     }
 
     /**
@@ -3226,5 +2847,17 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         }
 
         return $this->_totalLeaseBuybackPrice;
+    }
+
+}
+
+/**
+ * Used by pCharts for formatting axis
+ * @param $value
+ * @return string
+ */
+if (!function_exists('pCharts_formatDisplayCurrency')) {
+    function pCharts_formatDisplayCurrency($value) {
+        return "$" . number_format($value, 0, null, ",");
     }
 }

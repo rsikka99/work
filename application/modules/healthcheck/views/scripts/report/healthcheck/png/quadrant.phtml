@@ -1,0 +1,106 @@
+<?php
+
+$healthcheck = $this->healthcheck;
+/**
+ * @var Healthcheck_ViewModel_Healthcheck $healthcheck
+ */
+
+$picture_size = [800,600];
+$picture_margin = [50,50,10,80];
+$graph_area = [
+    $picture_margin[0],
+    $picture_margin[1],
+    $picture_size[0]-$picture_margin[2],
+    $picture_size[1]-$picture_margin[3]
+];
+$graph_size = [
+    $picture_size[0] - $picture_margin[0] - $picture_margin[2],
+    $picture_size[1] - $picture_margin[1] - $picture_margin[3],
+];
+$graph_top = $picture_margin[1];
+$graph_left = $picture_margin[0];
+$graph_width = $graph_size[0];
+$graph_height = $graph_size[1];
+$graph_right = $graph_left+$graph_width;
+$graph_bottom = $graph_top+$graph_height;
+
+use CpChart\Services\pChartFactory;
+$factory = new pChartFactory();
+
+
+$myData = $factory->newData();
+for ($i=0;$i<=10;$i++) { $myData->addPoints($i*1000,'volume'); }
+$myData->setAxisName(0,'Monthly volume');
+$myData->setAxisDisplay(0,AXIS_FORMAT_METRIC);
+
+for ($i=12;$i>=0;$i--) { $myData->addPoints($i,'years'); }
+$myData->setAxisName(1,'Age (years)');
+$myData->setAxisXY(1,AXIS_X);
+$myData->setAxisUnit(1,"y");
+
+
+
+$myPicture = $factory->newImage($picture_size[0], $picture_size[1], $myData);
+$myPicture->setFontProperties(["FontName" => APPLICATION_BASE_PATH."/assets/fonts/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
+$myPicture->setGraphArea($graph_area[0],$graph_area[1],$graph_area[2],$graph_area[3]);
+
+$myPicture->drawText($picture_size[0]/2,10,"Device Age vs Print Volume",array("FontSize" => 16, "Align"=>TEXT_ALIGN_TOPMIDDLE));
+
+$myPicture->drawText($picture_size[0]/2,$graph_bottom+20,"Age (years)",array("Align"=>TEXT_ALIGN_TOPMIDDLE));
+$axisBoundaries = [0 => ["Min" => 0, "Max" => 10000], 1 => ["Min" => 0, "Max" => 12]];
+$myPicture->drawScale([
+    "Mode" => SCALE_MODE_MANUAL,
+    "ManualScale" => $axisBoundaries,
+    'DrawXLines'=>true,
+    'DrawYLines'=>ALL,
+    'GridR'=>128,
+    'GridG'=>128,
+    'GridB'=>128,
+    'XMargin'=>0,
+]);
+
+$myPicture->drawLine($graph_left+$graph_width/2,$graph_top,$graph_left+$graph_width/2,$graph_bottom ,array("R"=>0,"G"=>0,"B"=>0));
+$myPicture->drawLine($graph_left,$graph_top+$graph_height/2,$graph_right,$graph_top+$graph_height/2 ,array("R"=>0,"G"=>0,"B"=>0));
+$myPicture->drawFilledRectangle($graph_left+$graph_width/2,$graph_top+$graph_height/2,$graph_right,$graph_bottom,array("R"=>196,"G"=>128,"B"=>128,"Surrounding"=>0,"Alpha"=>10));
+
+$myPicture->drawText(10+$graph_left,10+$graph_top,"Quadrant II",array("Align"=>TEXT_ALIGN_TOPLEFT));
+$myPicture->drawText(10+$graph_left+$graph_width/2,10+$graph_top,"Quadrant I",array("Align"=>TEXT_ALIGN_TOPLEFT));
+$myPicture->drawText(10+$graph_left,10+$graph_top+$graph_height/2,"Quadrant III",array("Align"=>TEXT_ALIGN_TOPLEFT));
+$myPicture->drawText(10+$graph_left+$graph_width/2,10+$graph_top+$graph_height/2,"Quadrant IV",array("Align"=>TEXT_ALIGN_TOPLEFT));
+
+$myPicture->drawText(10+$graph_left,$graph_bottom + 30, "SF Mono",array("Align"=>TEXT_ALIGN_TOPLEFT));
+$myPicture->drawText(10+$graph_left,$graph_bottom + 50, "MF Mono",array("Align"=>TEXT_ALIGN_TOPLEFT));
+$myPicture->drawText(110+$graph_left,$graph_bottom + 30, "SF Color",array("Align"=>TEXT_ALIGN_TOPLEFT));
+$myPicture->drawText(110+$graph_left,$graph_bottom + 50, "MF Color",array("Align"=>TEXT_ALIGN_TOPLEFT));
+
+$myPicture->drawText($graph_right-180,$graph_bottom + 30, "I: High volume, old",array("Align"=>TEXT_ALIGN_TOPRIGHT));
+$myPicture->drawText($graph_right-180,$graph_bottom + 50, "II: High volume, new",array("Align"=>TEXT_ALIGN_TOPRIGHT));
+$myPicture->drawText($graph_right-10,$graph_bottom + 30, "III : Low volume, new",array("Align"=>TEXT_ALIGN_TOPRIGHT));
+$myPicture->drawText($graph_right-10,$graph_bottom + 50, "IV : Low volume, old",array("Align"=>TEXT_ALIGN_TOPRIGHT));
+
+$myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>20));
+$myPicture->drawFilledCircle(4+$graph_left,$graph_bottom + 34,4,array("R"=>255,"G"=>0,"B"=>0));
+$myPicture->drawFilledCircle(4+$graph_left,$graph_bottom + 54,4,array("R"=>255,"G"=>0,"B"=>255));
+$myPicture->drawFilledRectangle(100+$graph_left,$graph_bottom + 32, 106+$graph_left,$graph_bottom + 38,array("R"=>0,"G"=>0,"B"=>255));
+$myPicture->drawFilledRectangle(100+$graph_left,$graph_bottom + 52, 106+$graph_left,$graph_bottom + 58,array("R"=>0,"G"=>255,"B"=>0));
+
+foreach ($healthcheck->getDevices()->allDeviceInstances->getDeviceInstances() as $device) {
+    if (!$device->getMasterDevice()) continue;
+    $isColor = $device->getMasterDevice()->isColor();
+    $isMfp = $device->getMasterDevice()->isMfp();
+    $age = min(12,$device->getAge());
+    $volume = min(10000,$device->getPageCounts()->getCombinedPageCount()->getMonthly());
+    $x = $graph_left + ($graph_width/12 * $age);
+    $y = $graph_bottom - ($graph_height/10000 * $volume);
+    if (!$isColor) {
+        if (!$isMfp) $myPicture->drawFilledCircle($x,$y,4,array("R"=>255,"G"=>0,"B"=>0));
+        else $myPicture->drawFilledCircle($x,$y,4,array("R"=>255,"G"=>0,"B"=>255));
+    } else {
+        if (!$isMfp) $myPicture->drawFilledRectangle($x-3,$y-3,$x+3,$y+3,array("R"=>0,"G"=>0,"B"=>255));
+        else $myPicture->drawFilledRectangle($x-3,$y-3,$x+3,$y+3,array("R"=>0,"G"=>2550,"B"=>0));
+    }
+}
+
+$myPicture->autoOutput();
+
+//end

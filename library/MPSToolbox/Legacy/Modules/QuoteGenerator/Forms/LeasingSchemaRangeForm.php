@@ -10,7 +10,7 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\LeasingSchemaTermModel;
  *
  * @package MPSToolbox\Legacy\Modules\QuoteGenerator\Forms
  */
-class LeasingSchemaRangeForm extends Zend_Form
+class LeasingSchemaRangeForm extends \My_Form_Form
 {
 
     /**

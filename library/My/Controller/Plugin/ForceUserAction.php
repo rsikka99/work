@@ -10,10 +10,10 @@ class My_Controller_Plugin_ForceUserAction extends Zend_Controller_Plugin_Abstra
         if ($auth->hasIdentity())
         {
             // Get user data
-            $authSession = $auth->getIdentity();
+            $identity = $auth->getIdentity();
             $currentPage = $request->getModuleName() . '_' . $request->getControllerName() . '_' . $request->getActionName();
             // Send user to specific pages depending on what user data is set.
-            if ($authSession->resetPasswordOnNextLogin)
+            if ($identity->resetPasswordOnNextLogin)
             {
                 if (strcasecmp($currentPage, 'default_auth_changepassword') !== 0)
                 {
@@ -21,9 +21,14 @@ class My_Controller_Plugin_ForceUserAction extends Zend_Controller_Plugin_Abstra
                     $r = new Zend_Controller_Action_Helper_Redirector();
                     $r->gotoRoute([], 'auth.login.change-password');
                 }
+            } else if (empty($identity->eulaAccepted)) {
+                if (strcasecmp($currentPage, 'default_auth_logout') == 0) return;
+                if (strcasecmp($currentPage, 'default_info_eula') !== 0)
+                {
+                    $r = new Zend_Controller_Action_Helper_Redirector();
+                    $r->gotoRoute([], 'app.eula');
+                }
             }
-
-            // Add elseif for eula?
 
 
             // Add elseif for resetPasswordRequest (forgotpassword)?

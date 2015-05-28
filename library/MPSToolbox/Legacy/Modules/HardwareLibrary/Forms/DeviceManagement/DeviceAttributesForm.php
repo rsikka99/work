@@ -11,7 +11,7 @@ use Zend_Form;
  *
  * @package MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement
  */
-class DeviceAttributesForm extends Zend_Form
+class DeviceAttributesForm extends \My_Form_Form
 {
     protected $_isAllowedToEditFields = false;
 
@@ -62,44 +62,44 @@ class DeviceAttributesForm extends Zend_Form
 
         $this->addElement('checkbox', 'isCopier', [
             'label'    => 'Can Copy/Scan',
-            'disabled' => (!$this->_isAllowedToEditFields) ? true : false,
+            'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
 
         $this->addElement('checkbox', 'isDuplex', [
             'label'    => 'Can Duplex',
-            'disabled' => (!$this->_isAllowedToEditFields) ? true : false,
+            'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
         $this->addElement('checkbox', 'isFax', [
             'label'    => 'Can Fax',
-            'disabled' => (!$this->_isAllowedToEditFields) ? true : false,
+            'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
 
         $this->addElement('checkbox', 'isCapableOfReportingTonerLevels', [
             'label'    => 'Capable of Reporting Toner Levels',
-            'disabled' => (!$this->_isAllowedToEditFields) ? true : false,
+            'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
         $this->addElement('checkbox', 'isA3', [
             'label'    => 'Can Print A3',
-            'disabled' => (!$this->_isAllowedToEditFields) ? true : false,
+            'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
         $this->addElement('checkbox', 'jitCompatibleMasterDevice', [
             'label' => My_Brand::$jit . ' Compatible',
+            'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
         /*
          * Print Speed Monochrome
          */
-        $this->addElement('text', 'ppmBlack', [
+        $this->addElement('text_int', 'ppmBlack', [
             'label'      => 'Print Speed Mono',
-            'disabled'   => (!$this->_isAllowedToEditFields) ? true : false,
+            'disabled'   => !$this->_isAllowedToEditFields,
             'maxlength'  => 8,
             'allowEmpty' => true,
-            'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [
                 'Int',
                 [
@@ -112,13 +112,12 @@ class DeviceAttributesForm extends Zend_Form
         /*
          * Print Speed Color
          */
-        $this->addElement('text', 'ppmColor', [
+        $this->addElement('text_int', 'ppmColor', [
             'label'      => 'Print Speed Color',
             'id'         => 'ppmColor',
-            'disabled'   => (!$this->_isAllowedToEditFields) ? true : false,
+            'disabled'   => !$this->_isAllowedToEditFields,
             'maxlength'  => 8,
             'allowEmpty' => true,
-            'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [
                 'Int',
                 [
@@ -136,7 +135,7 @@ class DeviceAttributesForm extends Zend_Form
         $launchDateElement = $this->createElement('DatePicker', 'launchDate', [
             'label'      => 'Launch Date',
             'decorators' => ['UiWidgetElement'],
-            'required'   => ($this->_isAllowedToEditFields) ? true : false,
+            'required'   => $this->_isAllowedToEditFields,
             'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [
                 new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'),
@@ -159,19 +158,18 @@ class DeviceAttributesForm extends Zend_Form
         /*
          * Operating Wattage
          */
-        $this->addElement('text', 'wattsPowerNormal', [
+        $this->addElement('text_float', 'wattsPowerNormal', [
             'label'      => 'Operating Wattage',
             'id'         => 'wattsPowerNormal',
             'maxlength'  => 8,
-            'disabled'   => (!$this->_isAllowedToEditFields) ? true : false,
+            'disabled'   => !$this->_isAllowedToEditFields,
             'allowEmpty' => !$this->_isAllowedToEditFields,
             'required'   => $this->_isAllowedToEditFields,
-            'filters'    => ['StringTrim', 'StripTags'],
         ]);
 
         if ($this->_isAllowedToEditFields)
         {
-            $this->getElement('wattsPowerNormal')->addValidators([
+            $this->getElement('wattsPowerNormal')->setValidators([
                 'float',
                 [
                     'validator' => 'Between',
@@ -183,20 +181,19 @@ class DeviceAttributesForm extends Zend_Form
         /*
          * Idle/Sleep Wattage
          */
-        $this->addElement('text', 'wattsPowerIdle', [
+        $this->addElement('text_float', 'wattsPowerIdle', [
             'label'      => 'Idle/Sleep Wattage',
             'id'         => 'wattsPowerIdle',
-            'disabled'   => (!$this->_isAllowedToEditFields) ? true : false,
             'maxlength'  => 8,
-            'allowEmpty' => false,
+            'disabled'   => !$this->_isAllowedToEditFields,
+            'allowEmpty' => !$this->_isAllowedToEditFields,
             'required'   => $this->_isAllowedToEditFields,
-            'filters'    => ['StringTrim', 'StripTags'],
         ]);
 
         if ($this->_isAllowedToEditFields)
         {
 
-            $this->getElement('wattsPowerIdle')->addValidators([
+            $this->getElement('wattsPowerIdle')->setValidators([
                 'float',
                 [
                     'validator' => 'Between',

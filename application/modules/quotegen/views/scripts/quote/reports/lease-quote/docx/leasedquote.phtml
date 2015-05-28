@@ -4,6 +4,7 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceOptionModel;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceGroupDeviceModel;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteDeviceGroupModel;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\QuoteModel;
+use MPSToolbox\Settings\Service\DealerSettingsService;
 
 $quote = $this->quote;
 // Get the path based on the theme
@@ -19,6 +20,9 @@ $section->addText('Below is a quote for the requested hardware:');
 $quoteDeviceGroups = $quote->getQuoteDeviceGroups();
 $groupCount        = 0;
 $tcStyle           = $this->styles->tables->quoteTable;
+
+$dealerSettingsService = new DealerSettingsService();
+$dealerSettings = $dealerSettingsService->getDealerSettings(Zend_Auth::getInstance()->getIdentity()->dealerId);
 
 /* @var $quoteDeviceGroup QuoteDeviceGroupModel */
 foreach ($this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
@@ -104,4 +108,9 @@ $table->addCell($tcStyle->span123Width, $tcStyle->monthlyTotal->cell1->cellStyle
 $table->addCell($tcStyle->col4Width, $tcStyle->monthlyTotal->cell2->cellStyle)->addText($this->currency($quote->calculateQuoteMonthlyLeaseSubtotal()), $tcStyle->monthlyTotal->cell2->fontStyle, $tcStyle->monthlyTotal->cell2->paragraphStyle);
 
 $section->addTextBreak();
-$section->addText('This quote is net of taxes and valid for 7 days from the date on the cover of this document. Depending on your requirements, you may be subject to additional charges for installation, insurance, and documentation fees. Please review the contract for details.');
+$section->addText('This quote is net of taxes and valid for '.$dealerSettings->quoteValid.' days from the date on the cover of this document. Depending on your requirements, you may be subject to additional charges for installation, insurance, and documentation fees. Please review the contract for details.');
+$section->addTextBreak();
+$section->addText(
+    'The contents of this proposal and any attachments or addendums are confidential and are intended solely for the recipient. The information may also be legally privileged.',
+    'italic_text'
+);

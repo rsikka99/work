@@ -94,8 +94,8 @@ class RenderFormSelect extends RenderFormAbstract
 
                 foreach ($orderedValues as $value => $option)
                 {
-                    $selected = ($value !== false && in_array($value, $element->getValue())) ? 'selected' : '';
-
+                    $element_value = $element->getValue();
+                    $selected = ($value !== false && is_array($element_value) && in_array($value, $element_value)) ? 'selected' : '';
                     $html[] = sprintf('<option value="%1$s" %2$s>%3$s</option>', $value, $selected, $option);
                 }
             }

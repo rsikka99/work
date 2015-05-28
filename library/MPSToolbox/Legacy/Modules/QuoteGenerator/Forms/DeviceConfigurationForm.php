@@ -15,7 +15,7 @@ use Zend_Form_Element;
  *
  * @package MPSToolbox\Legacy\Modules\QuoteGenerator\Forms
  */
-class DeviceConfigurationForm extends Zend_Form
+class DeviceConfigurationForm extends \My_Form_Form
 {
     /**
      * If this is set to false it the form will display a dropdown to select a device.

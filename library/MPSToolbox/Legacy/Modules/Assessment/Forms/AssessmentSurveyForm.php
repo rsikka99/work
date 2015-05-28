@@ -9,12 +9,13 @@ use Zend_Validate_Digits;
 use Zend_Validate_Float;
 use Zend_Validate_NotEmpty;
 
+
 /**
  * Class AssessmentSurveyForm
  *
  * @package MPSToolbox\Legacy\Modules\Assessment\Forms
  */
-class AssessmentSurveyForm extends Zend_Form
+class AssessmentSurveyForm extends \My_Form_Form
 {
     protected $currency;
     protected $currencyRegex;
@@ -66,7 +67,7 @@ class AssessmentSurveyForm extends Zend_Form
             'value'        => $multiOptions['exact'],
         ]);
 
-        $this->addElement('text', 'toner_cost', [
+        $this->addElement('text_currency', 'toner_cost', [
             'label'       => 'Cost of ink and toner last year',
             'placeholder' => 'Enter amount...',
             'allowEmpty'  => false,
@@ -86,7 +87,7 @@ class AssessmentSurveyForm extends Zend_Form
             'value'        => $multiOptions['exact'],
         ]);
 
-        $this->addElement('text', 'labor_cost', [
+        $this->addElement('text_currency', 'labor_cost', [
             'label'       => 'Cost of parts and labor last year',
             'placeholder' => 'Enter amount...',
             'allowEmpty'  => false,
@@ -101,7 +102,7 @@ class AssessmentSurveyForm extends Zend_Form
         /*
          * Average Purchase
          */
-        $this->addElement('text', 'avg_purchase', [
+        $this->addElement('text_currency', 'avg_purchase', [
             'label'       => 'Average supply purchase order amount',
             'placeholder' => 'Enter amount...',
             'value'       => number_format(50, 2),
@@ -125,7 +126,7 @@ class AssessmentSurveyForm extends Zend_Form
         /*
          * Hourly Rate
          */
-        $this->addElement('text', 'it_hourlyRate', [
+        $this->addElement('text_currency', 'it_hourlyRate', [
             'label'       => 'Average IT hourly rate',
             'placeholder' => 'Enter amount...',
             'value'       => number_format(40, 2),
@@ -161,7 +162,7 @@ class AssessmentSurveyForm extends Zend_Form
             'value'        => $inkTonerOrderOptions['Daily'],
         ]);
 
-        $this->addElement('text', 'numb_monthlyOrders', [
+        $this->addElement('text_int', 'numb_monthlyOrders', [
             'label'       => 'Supply orders per month',
             'placeholder' => 'Enter amount...',
             'allowEmpty'  => false,
@@ -181,7 +182,7 @@ class AssessmentSurveyForm extends Zend_Form
             'value'        => $multiOptions['exact'],
         ]);
 
-        $this->addElement('text', 'itHours', [
+        $this->addElement('text_int', 'itHours', [
             'label'       => 'IT hours spent per month',
             'placeholder' => 'Enter amount...',
             'allowEmpty'  => false,
@@ -201,7 +202,7 @@ class AssessmentSurveyForm extends Zend_Form
             'value'        => $multiOptions['exact'],
         ]);
 
-        $this->addElement('text', 'monthlyBreakdown', [
+        $this->addElement('text_int', 'monthlyBreakdown', [
             'label'      => 'Average breakdowns per month',
             'allowEmpty' => false,
             'validators' => [
@@ -215,7 +216,7 @@ class AssessmentSurveyForm extends Zend_Form
         /**
          * Page Coverage Mono
          */
-        $this->addElement('text', 'pageCoverage_BW', [
+        $this->addElement('text_float', 'pageCoverage_BW', [
             'label'      => 'Monochrome Page Coverage',
             'required'   => true,
             'validators' => [
@@ -244,7 +245,7 @@ class AssessmentSurveyForm extends Zend_Form
         /**
          * Page Coverage Color
          */
-        $this->addElement('text', 'pageCoverage_Color', [
+        $this->addElement('text_float', 'pageCoverage_Color', [
             'label'      => 'Color Page Coverage',
             'required'   => true,
             'validators' => [
@@ -274,7 +275,7 @@ class AssessmentSurveyForm extends Zend_Form
          * Print Volume Question
          */
         $this->addElement('radio', 'printVolume', [
-            'label'        => 'Inkjet print volume',
+            'label'        => 'Non-network print volume',
             'multiOptions' => self::$volumeOptions,
             'required'     => true,
             'filters'      => ['StringTrim']

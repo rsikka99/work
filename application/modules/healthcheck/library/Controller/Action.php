@@ -130,6 +130,12 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
                 "active"    => false,
                 "url"       => $this->view->url([], 'healthcheck.report')
             ];
+
+            $availableReports['Device Age'] = [
+                "pagetitle" => "Device Age",
+                "active"    => false,
+                "url"       => $this->view->url([], 'healthcheck.device-age')
+            ];
         }
         $this->view->availableReports = $availableReports;
     }
@@ -141,7 +147,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
      */
     public function initHtmlReport ()
     {
-        $this->view->headScript()->appendFile($this->view->baseUrl('/js/app/legacy/HtmlReport.js'));
+        $this->view->headScript()->appendFile($this->view->baseUrl('/js/app/legacy/HtmlReport.js?'.date('Ymd')));
 
         if ($this->getHealthcheck()->id < 1)
         {

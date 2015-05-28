@@ -66,7 +66,7 @@ class Proposalgen_Model_TonerTest extends PHPUnit_Framework_TestCase
                 ),
             ),
             array(
-                0, 0.03078,
+                0, 0.01026,
                 array(
                     'cost'           => 85.5,
                     'calculatedCost' => 85.5,
@@ -75,7 +75,7 @@ class Proposalgen_Model_TonerTest extends PHPUnit_Framework_TestCase
                 ),
             ),
             array(
-                0.00912, 0.04104,
+                0.00912, 0.01026,
                 array(
                     'cost'           => 85.5,
                     'calculatedCost' => 85.5,
@@ -96,15 +96,17 @@ class Proposalgen_Model_TonerTest extends PHPUnit_Framework_TestCase
 
         if ($costPerPage instanceof CostPerPageModel)
         {
-            if ($costPerPage->monochromeCostPerPage != $expectedCostPerPageMonochrome)
-            {
-                $this->fail("Toner monochrome CPP incorrect!");
-            }
+            #if ($costPerPage->monochromeCostPerPage != $expectedCostPerPageMonochrome)
+            #{
+            #    $this->fail("Toner monochrome CPP incorrect!");
+            #}
+            $this->assertEquals($expectedCostPerPageMonochrome, $costPerPage->monochromeCostPerPage);
 
-            if ($costPerPage->colorCostPerPage != $expectedCostPerPageColor)
-            {
-                $this->fail("Toner color CPP incorrect!");
-            }
+            #if ($costPerPage->colorCostPerPage != $expectedCostPerPageColor)
+            #{
+            #    $this->fail("Toner color CPP incorrect!");
+            #}
+            $this->assertEquals($expectedCostPerPageColor, $costPerPage->colorCostPerPage);
 
         }
         else

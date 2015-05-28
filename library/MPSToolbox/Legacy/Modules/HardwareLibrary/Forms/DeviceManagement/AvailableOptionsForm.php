@@ -10,7 +10,7 @@ use Zend_Form;
  *
  * @package MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement
  */
-class AvailableOptionsForm extends Zend_Form
+class AvailableOptionsForm extends \My_Form_Form
 {
     public function init ()
     {
@@ -31,11 +31,9 @@ class AvailableOptionsForm extends Zend_Form
             'validators' => [['validator' => 'StringLength', 'options' => [1, 255],],],
         ]);
 
-        $this->addElement('text', 'cost', [
+        $this->addElement('text_currency', 'cost', [
             'label'      => 'Cost',
             'required'   => true,
-            'filters'    => ['StringTrim', 'StripTags'],
-            'validators' => ['Float'],
         ]);
 
         $this->addElement('text', 'oemSku', [

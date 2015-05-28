@@ -9,6 +9,7 @@ use Zend_Form_Element_Text;
 /**
  * Class ClientSettingsForm
  *
+ * @deprecated this form is not used
  * @package MPSToolbox\Legacy\Modules\Preferences\Forms
  */
 class ClientSettingsForm extends Zend_Form

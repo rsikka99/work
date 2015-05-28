@@ -21,7 +21,7 @@ use ZendX_JQuery_Form_Element_DatePicker;
  *
  * @package MPSToolbox\Legacy\Modules\QuoteGenerator\Forms
  */
-class DeviceSetupForm extends Zend_Form
+class DeviceSetupForm extends \My_Form_Form
 {
 
     public function init ()

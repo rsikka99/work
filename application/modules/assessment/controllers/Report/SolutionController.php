@@ -70,10 +70,7 @@ class Assessment_Report_SolutionController extends Assessment_Library_Controller
                 break;
             case "docx" :
                 $this->view->phpword    = new \PhpOffice\PhpWord\PhpWord();
-                $assessmentViewModel    = $this->getAssessmentViewModel();
-                $graphs                 = $this->cachePNGImages($assessmentViewModel->getGraphs(), true);
                 $this->view->wordStyles = $this->getWordStyles();
-                $assessmentViewModel->setGraphs($graphs);
                 $this->_helper->layout->disableLayout();
                 break;
             default :

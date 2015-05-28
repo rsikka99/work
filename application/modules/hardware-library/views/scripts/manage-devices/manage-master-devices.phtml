@@ -84,6 +84,14 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
                                 <a href="#hardwareConfigurationsTab" id="hardwareConfigurationsTopTab" data-toggle="tab">Favorite Configurations</a>
                             </li>
                         <?php endif; ?>
+
+                        <?php if ($this->deviceImage) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#deviceImageTab" id="deviceImageTopTab" data-toggle="tab">Image</a>
+                            </li>
+                        <?php endif; ?>
+
                     </ul>
                 </div>
             </div>
@@ -353,6 +361,12 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
                     </div>
                 <?php endif; ?>
 
+                <?php if ($this->deviceImage) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="deviceImageTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->deviceImage ?>
+                    </div>
+                <?php endif ?>
 
                 <div id="loadingDiv" class="modal" data-backdrop="static" data-keyboard="false">
                     <div class="spinner64"></div>

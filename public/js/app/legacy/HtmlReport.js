@@ -10,14 +10,6 @@ require(['jquery', 'app/plugins/DownloadManager', 'bootstrap'], function ($, req
         }
 
         /**
-         * The report navigation drop down
-         */
-        $("#reportNavigator").change(function (e)
-        {
-            window.location.href = this.value;
-        });
-
-        /**
          * Handles the view report button
          */
         $("#viewReportButton").click(function (e)

@@ -1,0 +1,72 @@
+<?php
+
+// Get the path based on the theme
+$commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
+// Render the elements in the theme
+$this->render("{$commonPartsBasePath}/styles.phtml");
+
+/* @var $section \PhpOffice\PhpWord\Element\Section */
+$section = $this->section;
+$section->addPageBreak();
+$section->addTitle('Scope of Work');
+$section->addTitle('Networking Information',2);
+
+$section->addText('All Color / Black &amp; White Connected Installations As Follows','bold_text');
+$section->addText('1. AIP will assist with Printer Driver software installation on up to 4 workstations.');
+$section->addText('2. AIP will provide training for the Network Administrator or Key Operator (if present) on the installation of driver and scan options.');
+$section->addText('3. Additional Workstations are charge at $50.00 each (negotiable).');
+$section->addText('4. AIP will NOT install software or make modifications on a customer\'s server without the Network Administrator or a representative of the customer\'s IT Department present.');
+$section->addText('5. When configuring Scan to Email the preferred method is scanning to a Microsoft Exchange Server. When using an outside ISP for Scan to Email AIP will configure on a "best efforts" basis and can only guarantee the functionality of the MFP and not the outside ISP.');
+$section->addText('6. Scanning to an FTP folder will always be your BEST way of scanning large amounts of Data and/or Files.');
+
+$section->addText('Work Will Be Completed As Follows','bold_text');
+$section->addText('Network Services, beyond those provided and described above, will be charged at
+AIP\'s normal networking rate of $110 per hour during normal business hours (8 a.m.
+to 5 p.m. weekdays). AIP does not perform services on weekends or holidays. These
+professional services are performed under your ultimate direction and are provided
+on a "Best Efforts" basis. You are responsible for evaluating our work and its results,
+and for determining the suitability of resulting products or recommendations to your
+business environment.');
+$section->addText('Albuquerque Image Products makes no warranties, expressed or implied, concerning
+existing computer hardware, software, systems, or programs, or other products of
+any type, which may be produced or procured as a result of these services.
+Albuquerque Image Products is not responsible for any actual or consequential
+damages that may arise from these professional services. In no case shall
+Albuquerque Image Products liabilities exceed the sum of the monies received from
+the customer.');
+
+$section->addCheckBox('read',' I have read and accept Albuquerque Image Products terms of network installation.','bold_text');
+
+$section->addTextBreak();
+
+$tcStyle    = $this->styles->tables->quoteTable;
+
+$table = $section->addTable();
+$table->addRow(550);
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('Customer Signature');
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('');
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('');
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('');
+
+$table->addRow(550);
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('Printed Name');
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('');
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('Title');
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('');
+
+$table->addRow(550);
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('Date');
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('');
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('');
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('');
+
+$table->addRow(550);
+$cell=$table->addCell($tcStyle->col1Width*4, $tcStyle->signature->cell1->cellStyle);
+$cell->addText('Albuquerque Image Products Representative');
+$cell->getStyle()->setGridSpan(4);
+
+$table->addRow(550);
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('Printed Name');
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('');
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('Title');
+$table->addCell($tcStyle->col1Width, $tcStyle->signature->cell1->cellStyle)->addText('');

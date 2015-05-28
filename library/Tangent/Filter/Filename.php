@@ -50,8 +50,10 @@ class Filename implements \Zend_Filter_Interface
             $filename = trim($filename, ' ');
 
             // Transliterate to ASCII.
-            $transliterator = \Transliterator::create("Any-Latin; Latin-ASCII");
-            $filename       = transliterator_transliterate($transliterator, $filename);
+            if (class_exists('Transliterator',false)) {
+                $transliterator = \Transliterator::create("Any-Latin; Latin-ASCII");
+                $filename = transliterator_transliterate($transliterator, $filename);
+            }
 
             // Replace whitespace
             $filename = preg_replace('/\s+/', '_', $filename);
