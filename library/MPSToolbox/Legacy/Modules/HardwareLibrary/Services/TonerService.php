@@ -167,6 +167,7 @@ class TonerService
                 $toner->tonerColorId   = $data['tonerColorId'];
                 $toner->manufacturerId = $data['manufacturerId'];
                 $toner->imageUrl       = $data['imageUrl'];
+                $toner->name           = $data['name'];
 
                 $tonerMapper->save($toner);
             }
