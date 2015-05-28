@@ -12,9 +12,12 @@ use MPSToolbox\Legacy\Entities\UserEntity;
  *
  * @property int                id
  * @property string             sku
+ * @property string             name
  * @property float              cost
  * @property int                yield
  * @property bool               isSystemDevice
+ * @property string             imageFile
+ * @property string             imageUrl
  *
  * @property int                manufacturerId
  * @property int                tonerColorId

@@ -139,6 +139,19 @@ class AvailableTonersForm extends \My_Form_Form
             ],
         ]);
 
+        $this->addElement('text', 'name', [
+            'label'      => 'Product Name',
+            'required'   => false,
+            'maxlength'  => 255,
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
+                    'validator' => 'StringLength',
+                    'options'   => [1, 255],
+                ]
+            ],
+        ]);
+
         /**
          * Yield
          */
