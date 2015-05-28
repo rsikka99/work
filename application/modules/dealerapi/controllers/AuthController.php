@@ -27,21 +27,27 @@ class Dealerapi_AuthController extends Dealerapi_IndexController
             }
             $auth   = Zend_Auth::getInstance();
             $user = new UserModel([
-                'id'=>null,
+                'id'=>-1,
                 'eulaAccepted'=>true,
                 'firstname'=>$dealer->dealerName,
                 'dealerId'=>$dealer->id,
             ]);
             $auth->getStorage()->write($user);
-            $this->outputJson(['ok'=>'welcome '.$dealer->dealerName]);
+            $this->outputJson(['ok'=>'Welcome '.$dealer->dealerName]);
             return;
         }
         $auth   = Zend_Auth::getInstance();
         if ($auth->hasIdentity()) {
             $user = $auth->getIdentity();
-            $this->outputJson(['ok'=>'welcome '.$user->firstname]);
+            $this->outputJson(['ok'=>'Welcome '.$user->firstname]);
         } else {
             $this->outputJson(['error'=>'not authenticated']);
         }
+    }
+
+    public function logoutAction() {
+        $auth   = Zend_Auth::getInstance();
+        $auth->getStorage()->write(null);
+        $this->outputJson(['ok'=>'logged out']);
     }
 }

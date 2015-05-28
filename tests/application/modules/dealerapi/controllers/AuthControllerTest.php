@@ -30,7 +30,7 @@ class Dealerapi_AuthControllerTest extends My_DatabaseTestCase
         $json = $this->response->getBody();
         $this->assertJson($json);
         $arr = json_decode($json,true);
-        $this->assertEquals(['ok'=>'welcome Root Company'], $arr);
+        $this->assertEquals(['ok'=>'Welcome Root Company'], $arr);
     }
 
 

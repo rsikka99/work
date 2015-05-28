@@ -21,6 +21,7 @@ class AppAclModel extends Zend_Acl
     /**
      * Roles
      */
+    const ROLE_DEALERAPI                          = '-2';
     const ROLE_GUEST                              = '-1';
     const ROLE_AUTHENTICATED_USER                 = '0';
     const ROLE_SYSTEM_ADMIN                       = '1';
@@ -83,6 +84,7 @@ class AppAclModel extends Zend_Acl
         /**
          * Add our various roles
          */
+        $this->addRole(self::ROLE_DEALERAPI);
         $this->addRole(self::ROLE_GUEST);
         $this->addRole(self::ROLE_AUTHENTICATED_USER);
         $this->addRole(self::ROLE_SYSTEM_ADMIN);
@@ -124,6 +126,10 @@ class AppAclModel extends Zend_Acl
                 $roles[] = self::ROLE_GUEST;
             }
         }
+        else if (intval($role) === -1)
+        {
+            $roles[] = self::ROLE_DEALERAPI;
+        }
         else if (($role === null) || ($role === ''))
         {
             $roles[] = self::ROLE_GUEST;
@@ -163,7 +169,6 @@ class AppAclModel extends Zend_Acl
         {
             $roles[] = $role;
         }
-
 
         /**
          * Massage our resource into a list of resources to test
