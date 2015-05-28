@@ -7,6 +7,8 @@ use MPSToolbox\Legacy\Modules\Admin\Forms\ClientForm;
 class Admin_Form_ClientTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
 
+    public $fixtures = ['countries'];
+
     /**
      * Builds the form to be used for testing
      *

@@ -31,7 +31,7 @@ class AddScriptPath extends Zend_Controller_Plugin_Abstract
         $view         = $viewRenderer->view;
         $scriptPath   = sprintf('%s/views/scripts', APPLICATION_PATH);
 
-        if (file_exists($scriptPath))
+        if ($view && file_exists($scriptPath))
         {
             $view->addScriptPath($scriptPath);
         }

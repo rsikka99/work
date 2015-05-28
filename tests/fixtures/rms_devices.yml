@@ -1,0 +1,24 @@
+rms_devices:
+    - { rmsProviderId: '1', rmsModelId: '11451', manufacturer: Hewlett-Packard, modelName: 'LaserJet 4100', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '16460', manufacturer: Brother, modelName: HL-6050D, dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '17670', manufacturer: Hewlett-Packard, modelName: 'LaserJet 1320', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '19420', manufacturer: 'Konica Minolta', modelName: 'Bizhub 161f', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '19582', manufacturer: Dell, modelName: 'Laser Printer 1710n', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '19657', manufacturer: 'Konica Minolta', modelName: 'Bizhub 200', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '19734', manufacturer: 'Konica Minolta', modelName: 'Bizhub 750', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '19927', manufacturer: Hewlett-Packard, modelName: 'Deskjet 6940', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '200020', manufacturer: 'Konica Minolta', modelName: 'Bizhub 283', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '21076', manufacturer: Dell, modelName: 'Color Laser Printer 3010CN', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '21527', manufacturer: 'Konica Minolta', modelName: 'Bizhub C252', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '22841', manufacturer: Dell, modelName: 'Laser Printer 1720dn', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '23294', manufacturer: Hewlett-Packard, modelName: 'LaserJet P4014', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '23590', manufacturer: 'Konica Minolta', modelName: 'Bizhub 421', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '23886', manufacturer: 'Konica Minolta', modelName: 'Bizhub 361', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '24009', manufacturer: Hewlett-Packard, modelName: 'LaserJet P2055dn', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '24750', manufacturer: Hewlett-Packard, modelName: 'OfficeJet Pro 8500 AIO', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '24764', manufacturer: Brother, modelName: HL-5370DW, dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '25175', manufacturer: Brother, modelName: MFC-6890CDW, dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '25592', manufacturer: 'Konica Minolta', modelName: 'Bizhub C452', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '5898', manufacturer: Hewlett-Packard, modelName: 'DeskJet 1000Cse', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '6335', manufacturer: Hewlett-Packard, modelName: 'LaserJet 4000', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }
+    - { rmsProviderId: '1', rmsModelId: '8346', manufacturer: Hewlett-Packard, modelName: 'LaserJet 2100', dateCreated: '2015-05-21 15:22:00', userId: '2', isGeneric: '0' }

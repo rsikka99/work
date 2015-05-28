@@ -33,6 +33,11 @@ class TonerColorModel extends My_Model_Abstract
         self::FOUR_COLOR  => "Four Color",
     ];
 
+    public static function getColorName($id) {
+        if (isset(self::$ColorNames[$id])) return self::$ColorNames[$id];
+        return 'UNKNOWN';
+    }
+
     /**
      * @var int
      */

@@ -1,0 +1,5 @@
+device_swap_reasons:
+    - { id: '1', dealerId: '1', deviceSwapReasonCategoryId: '1', reason: 'Device not consistent with MPS program.  AMPV is significant.' }
+    - { id: '2', dealerId: '1', deviceSwapReasonCategoryId: '2', reason: 'Device has a high cost per page.' }
+    - { id: '3', dealerId: '2', deviceSwapReasonCategoryId: '1', reason: 'Device not consistent with MPS program.  AMPV is significant.' }
+    - { id: '4', dealerId: '2', deviceSwapReasonCategoryId: '2', reason: 'Device has a high cost per page.' }

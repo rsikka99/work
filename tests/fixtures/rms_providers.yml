@@ -1,0 +1,9 @@
+rms_providers:
+    - { id: '1', name: 'PrintFleet 2.x' }
+    - { id: '2', name: 'FM Audit' }
+    - { id: '3', name: Xerox }
+    - { id: '4', name: 'Print Audit' }
+    - { id: '5', name: 'NER Data' }
+    - { id: '6', name: 'PrintFleet 3.x' }
+    - { id: '7', name: 'Print Tracker' }
+    - { id: '8', name: 'FM Audit 4.x' }

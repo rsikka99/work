@@ -57,7 +57,8 @@ class My_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
                     $session->params     = $request->getParams();
 
                     // Redirect to the login page
-                    $r = new Zend_Controller_Action_Helper_Redirector();
+                    #$r = new Zend_Controller_Action_Helper_Redirector();
+                    $r = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
                     $r->gotoRoute([], 'auth.login');
                     break;
                 default :

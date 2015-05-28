@@ -1,0 +1,18 @@
+device_instance_master_devices:
+    - { deviceInstanceId: '2', masterDeviceId: '2' }
+    - { deviceInstanceId: '3', masterDeviceId: '3' }
+    - { deviceInstanceId: '4', masterDeviceId: '3' }
+    - { deviceInstanceId: '6', masterDeviceId: '11' }
+    - { deviceInstanceId: '8', masterDeviceId: '13' }
+    - { deviceInstanceId: '9', masterDeviceId: '13' }
+    - { deviceInstanceId: '11', masterDeviceId: '31' }
+    - { deviceInstanceId: '12', masterDeviceId: '32' }
+    - { deviceInstanceId: '13', masterDeviceId: '32' }
+    - { deviceInstanceId: '14', masterDeviceId: '37' }
+    - { deviceInstanceId: '15', masterDeviceId: '39' }
+    - { deviceInstanceId: '16', masterDeviceId: '57' }
+    - { deviceInstanceId: '17', masterDeviceId: '60' }
+    - { deviceInstanceId: '18', masterDeviceId: '60' }
+    - { deviceInstanceId: '7', masterDeviceId: '248' }
+    - { deviceInstanceId: '23', masterDeviceId: '442' }
+    - { deviceInstanceId: '25', masterDeviceId: '443' }

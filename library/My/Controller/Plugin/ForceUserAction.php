@@ -18,14 +18,16 @@ class My_Controller_Plugin_ForceUserAction extends Zend_Controller_Plugin_Abstra
                 if (strcasecmp($currentPage, 'default_auth_changepassword') !== 0)
                 {
                     // Redirect to the login page
-                    $r = new Zend_Controller_Action_Helper_Redirector();
+                    #$r = new Zend_Controller_Action_Helper_Redirector();
+                    $r = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
                     $r->gotoRoute([], 'auth.login.change-password');
                 }
             } else if (empty($identity->eulaAccepted)) {
                 if (strcasecmp($currentPage, 'default_auth_logout') == 0) return;
                 if (strcasecmp($currentPage, 'default_info_eula') !== 0)
                 {
-                    $r = new Zend_Controller_Action_Helper_Redirector();
+                    #$r = new Zend_Controller_Action_Helper_Redirector();
+                    $r = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
                     $r->gotoRoute([], 'app.eula');
                 }
             }

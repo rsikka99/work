@@ -46,49 +46,10 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
     /**
      * Handles selecting a RMS upload
+     * @Depreacted not used anyware
      */
-    public function selectUploadAction ()
-    {
-        $this->_pageTitle = ['Hardware Optimization', 'Select Upload'];
-
-        $this->_navigation->setActiveStep(HardwareOptimizationStepsModel::STEP_FLEET_UPLOAD);
-
-        if ($this->getRequest()->isPost())
-        {
-            $postData = $this->getRequest()->getPost();
-
-            if (isset($postData['selectRmsUploadId']))
-            {
-                $selectRmsUploadService = new SelectRmsUploadService($this->_mpsSession->selectedClientId);
-                $rmsUpload              = $selectRmsUploadService->validateRmsUploadId($postData['selectRmsUploadId']);
-                if ($rmsUpload instanceof RmsUploadModel)
-                {
-                    $this->getHardwareOptimization()->rmsUploadId = $rmsUpload->id;
-                    $this->updateStepName();
-                    $this->saveHardwareOptimization();
-                    $this->gotoNextNavigationStep($this->_navigation);
-                }
-                else
-                {
-                    $this->_flashMessenger->addMessage(['danger' => 'The upload you selected is not valid.']);
-                }
-            }
-            else if (isset($postData['noUploads']))
-            {
-                $this->redirectToRoute('rms-upload.upload-file');
-            }
-            if ($this->getHardwareOptimization()->rmsUploadId > 0)
-            {
-                if (isset($postData['saveAndContinue']))
-                {
-                    $this->gotoNextNavigationStep($this->_navigation);
-                }
-            }
-        }
-
-        $this->view->numberOfUploads = count(RmsUploadMapper::getInstance()->fetchAllForClient($this->getHardwareOptimization()->clientId));
-        $this->view->rmsUpload       = $this->getHardwareOptimization()->getRmsUpload();
-        $this->view->navigationForm  = new HardwareOptimizationNavigationForm(HardwareOptimizationNavigationForm::BUTTONS_NEXT);
+    public function selectuploadAction () {
+        throw new Exception('Depreacted');
     }
 
     /**

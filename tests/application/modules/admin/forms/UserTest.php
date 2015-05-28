@@ -4,8 +4,11 @@ use MPSToolbox\Legacy\Modules\Admin\Forms\UserForm;
 /**
  * Class Admin_Form_UserTest
  */
-class Admin_Form_UserTest extends PHPUnit_Framework_TestCase
+class Admin_Form_UserTest extends My_DatabaseTestCase
 {
+
+    public $fixtures = ['dealers'];
+
     /**
      * @var array
      */

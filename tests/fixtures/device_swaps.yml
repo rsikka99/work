@@ -1,0 +1,9 @@
+device_swaps:
+    - { masterDeviceId: '42', dealerId: '2', minimumPageCount: '0', maximumPageCount: '20000' }
+    - { masterDeviceId: '79', dealerId: '2', minimumPageCount: '4000', maximumPageCount: '12000' }
+    - { masterDeviceId: '95', dealerId: '2', minimumPageCount: '0', maximumPageCount: '30000' }
+    - { masterDeviceId: '401', dealerId: '2', minimumPageCount: '0', maximumPageCount: '23000' }
+    - { masterDeviceId: '445', dealerId: '2', minimumPageCount: '0', maximumPageCount: '4000' }
+    - { masterDeviceId: '471', dealerId: '2', minimumPageCount: '0', maximumPageCount: '240000' }
+    - { masterDeviceId: '478', dealerId: '2', minimumPageCount: '0', maximumPageCount: '24000' }
+    - { masterDeviceId: '484', dealerId: '2', minimumPageCount: '1000', maximumPageCount: '5200' }

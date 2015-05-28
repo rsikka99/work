@@ -464,10 +464,10 @@ class MasterDeviceModel extends My_Model_Abstract
      *
      * @return MasterDeviceModel
      */
-    public function setManufacturer ($Manufacturer)
+    public function setManufacturer (ManufacturerModel $manufacturer)
     {
-        $this->_manufacturer = $Manufacturer;
-
+        $this->_manufacturer = $manufacturer;
+        $this->manufacturerId = $manufacturer->id;
         return $this;
     }
 
@@ -594,18 +594,6 @@ class MasterDeviceModel extends My_Model_Abstract
     }
 
     /**
-     * @param bool $HasValidMonoGrossMarginToners
-     *
-     * @return MasterDeviceModel
-     */
-    public function setHasValidMonoGrossMarginToners ($HasValidMonoGrossMarginToners)
-    {
-        $this->_hasValidMonoGrossMarginToners = $HasValidMonoGrossMarginToners;
-
-        return $this;
-    }
-
-    /**
      * @param CostPerPageSettingModel $costPerPageSetting
      *
      * @return bool
@@ -649,18 +637,6 @@ class MasterDeviceModel extends My_Model_Abstract
         }
 
         return $this->_hasValidColorGrossMarginToners[$cacheKey];
-    }
-
-    /**
-     * @param bool $HasValidColorGrossMarginToners
-     *
-     * @return MasterDeviceModel
-     */
-    public function setHasValidColorGrossMarginToners ($HasValidColorGrossMarginToners)
-    {
-        $this->_hasValidColorGrossMarginToners = $HasValidColorGrossMarginToners;
-
-        return $this;
     }
 
     /**
@@ -965,6 +941,9 @@ class MasterDeviceModel extends My_Model_Abstract
      * @param int $clientId
      *
      * @return int
+     * ********************************************
+     * @deprecated this method is not used anywhere
+     * ********************************************
      */
     public function hasValidToners ($dealerId, $clientId = null)
     {

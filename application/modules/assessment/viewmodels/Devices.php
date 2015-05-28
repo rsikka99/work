@@ -47,11 +47,6 @@ class Assessment_ViewModel_Devices
     public $allDevicesWithShortMonitorInterval;
 
     /**
-     * @var float
-     */
-    protected $_adminCostPerPage;
-
-    /**
      * Constructor
      *
      * @param int   $rmsUploadId

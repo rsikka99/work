@@ -1,0 +1,5 @@
+toner_configs:
+    - { id: '3', name: '3 COLOR - COMBINED' }
+    - { id: '2', name: '3 COLOR - SEPARATED' }
+    - { id: '4', name: '4 COLOR - COMBINED' }
+    - { id: '1', name: 'BLACK ONLY' }

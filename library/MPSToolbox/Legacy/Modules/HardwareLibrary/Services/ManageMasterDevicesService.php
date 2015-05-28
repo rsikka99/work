@@ -296,7 +296,7 @@ class ManageMasterDevicesService
             if (!$assignedOemTonerColors[$requiredTonerColorId])
             {
                 // Missing a required toner color
-                $validationErrorMessages[] = sprintf('Missing %1$s OEM Toner.', TonerColorModel::$ColorNames[$requiredTonerColorId]);
+                $validationErrorMessages[] = sprintf('Missing %1$s OEM Toner.', TonerColorModel::getColorName($requiredTonerColorId));
             }
         }
 
@@ -308,7 +308,7 @@ class ManageMasterDevicesService
             if ($isAssigned && !in_array($assignedTonerColorId, $tonerConfigurationColors))
             {
                 // Invalid Toner Color assigned to the device
-                $validationErrorMessages[] = sprintf('%1$s Toners cannot be assigned to this device.', TonerColorModel::$ColorNames[$assignedTonerColorId]);
+                $validationErrorMessages[] = sprintf('%1$s Toners cannot be assigned to this device.', TonerColorModel::getColorName($assignedTonerColorId));
             }
         }
 
@@ -1124,6 +1124,7 @@ class ManageMasterDevicesService
      * Must be called before getForms or else it will have no affect
      *
      * @param array $data
+     * @todo is this method needed?
      */
     public function populate ($data)
     {

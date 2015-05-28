@@ -1,4 +1,9 @@
 <?php
+
+require 'MY_DatabaseTestCase.php';
+require 'MY_ControllerTestCase.php';
+
+define('UNIT_TESTING',true);
 defined('APPLICATION_BASE_PATH') || define('APPLICATION_BASE_PATH', realpath(dirname(__FILE__) . '/..'));
 
 // Define the paths
@@ -24,6 +29,7 @@ error_reporting(E_ALL);
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
 // Create application, bootstrap, and run
+global $application;
 $application = new Zend_Application('production', array(
     'config' => array(
         APPLICATION_PATH . '/configs/global.php',

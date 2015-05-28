@@ -1,0 +1,31 @@
+manufacturers:
+    - { id: '1', fullname: Brother, displayname: Brother, isDeleted: '0' }
+    - { id: '3', fullname: 'Compatible Vendor 1', displayname: 'Comp. Vendor 1', isDeleted: '0' }
+    - { id: '4', fullname: Dell, displayname: Dell, isDeleted: '0' }
+    - { id: '5', fullname: Hewlett-Packard, displayname: HP, isDeleted: '0' }
+    - { id: '6', fullname: 'Image Projections West Inc', displayname: 'Image Projections West Inc', isDeleted: '0' }
+    - { id: '7', fullname: Lexmark, displayname: Lexmark, isDeleted: '0' }
+    - { id: '8', fullname: 'Horizon USA', displayname: 'Horizon USA', isDeleted: '0' }
+    - { id: '9', fullname: 'Tech Optics Inc', displayname: 'Tech Optics Inc', isDeleted: '0' }
+    - { id: '10', fullname: Xerox, displayname: Xerox, isDeleted: '0' }
+    - { id: '11', fullname: Canon, displayname: Canon, isDeleted: '0' }
+    - { id: '12', fullname: Imagistics, displayname: Imagistics, isDeleted: '0' }
+    - { id: '13', fullname: Oce, displayname: Oce, isDeleted: '0' }
+    - { id: '14', fullname: 'Oce Imagistics', displayname: 'Oce Imagistics', isDeleted: '0' }
+    - { id: '15', fullname: Ricoh, displayname: Ricoh, isDeleted: '0' }
+    - { id: '16', fullname: Savin, displayname: Savin, isDeleted: '0' }
+    - { id: '17', fullname: 'Konica Minolta', displayname: Konica, isDeleted: '0' }
+    - { id: '18', fullname: 'Kyocera Mita', displayname: Kyocera, isDeleted: '0' }
+    - { id: '19', fullname: Minolta, displayname: Minolta, isDeleted: '0' }
+    - { id: '20', fullname: 'Fuji Xerox', displayname: 'Fuji Xerox', isDeleted: '0' }
+    - { id: '21', fullname: Oki, displayname: Oki, isDeleted: '0' }
+    - { id: '22', fullname: Samsung, displayname: Samsung, isDeleted: '0' }
+    - { id: '23', fullname: Toshiba, displayname: Toshiba, isDeleted: '0' }
+    - { id: '24', fullname: Sharp, displayname: Sharp, isDeleted: '0' }
+    - { id: '25', fullname: IBM, displayname: IBM, isDeleted: '0' }
+    - { id: '26', fullname: Panasonic, displayname: Panasonic, isDeleted: '0' }
+    - { id: '27', fullname: Copystar, displayname: Copystar, isDeleted: '0' }
+    - { id: '28', fullname: Lanier, displayname: Lanier, isDeleted: '0' }
+    - { id: '29', fullname: 'Media Science', displayname: 'Media Science', isDeleted: '0' }
+    - { id: '30', fullname: 'Print Rite', displayname: 'Print Rite', isDeleted: '0' }
+    - { id: '31', fullname: Memjet, displayname: Memjet, isDeleted: '0' }

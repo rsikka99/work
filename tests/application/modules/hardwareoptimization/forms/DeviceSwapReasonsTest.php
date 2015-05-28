@@ -7,6 +7,8 @@ use MPSToolbox\Legacy\Modules\HardwareOptimization\Forms\DeviceSwapReasonsForm;
 class Hardwareoptimization_Form_DeviceSwapReasonsTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
 
+    public $fixtures = ['device_swap_reason_categories'];
+
     /**
      * @return DeviceSwapReasonsForm
      */
