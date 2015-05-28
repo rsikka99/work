@@ -29,7 +29,9 @@ class Dealerapi_AuthController extends Dealerapi_IndexController
             $user = new UserModel([
                 'id'=>-1,
                 'eulaAccepted'=>true,
-                'firstname'=>$dealer->dealerName,
+                'firstname'=>'',
+                'lastname'=>$dealer->dealerName,
+                'email'=>'',
                 'dealerId'=>$dealer->id,
             ]);
             $auth->getStorage()->write($user);
