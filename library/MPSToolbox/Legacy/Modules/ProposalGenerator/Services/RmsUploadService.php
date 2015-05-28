@@ -218,6 +218,7 @@ class RmsUploadService
 
                         if ($this->rmsUpload->validRowCount < 2)
                         {
+                            $db->rollBack();
                             $this->errorMessages = "Your file had less than 2 valid rows in it. We require that you have 2 or more valid rows to upload a file";
                         }
                         else
@@ -540,6 +541,7 @@ class RmsUploadService
                     }
                     else
                     {
+                        $db->rollBack();
                         $this->errorMessages = "There was an error importing your file. $processCsvMessage";
                     }
                 }
