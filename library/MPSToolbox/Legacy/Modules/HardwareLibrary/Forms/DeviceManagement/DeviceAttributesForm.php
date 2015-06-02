@@ -78,7 +78,7 @@ class DeviceAttributesForm extends \My_Form_Form
 
 
         $this->addElement('checkbox', 'isCapableOfReportingTonerLevels', [
-            'label'    => 'Capable of Reporting Toner Levels',
+            'label'    => 'Can Report Toner Levels',
             'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
@@ -89,6 +89,58 @@ class DeviceAttributesForm extends \My_Form_Form
 
         $this->addElement('checkbox', 'jitCompatibleMasterDevice', [
             'label' => My_Brand::$jit . ' Compatible',
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
+        $this->addElement('checkbox', 'isSmartphone', [
+            'label'    => 'Smartphone/tablet printing',
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
+        $this->addElement('text_int', 'additionalTrays', [
+            'label'    => 'Additional paper trays available',
+            'disabled' => !$this->_isAllowedToEditFields,
+            'validators' => [
+                'Int',
+                [
+                    'validator' => 'Between',
+                    'options'   => ['min' => 0, 'max' => 10],
+                ],
+            ],
+        ]);
+
+        $this->addElement('checkbox', 'isPIN', [
+            'label'    => 'PIN Printing',
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
+        $this->addElement('checkbox', 'isAccessCard', [
+            'label'    => 'Access Card Printing',
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
+        $this->addElement('checkbox', 'isWalkup', [
+            'label'    => 'Walk-up USB Printing',
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
+        $this->addElement('checkbox', 'isStapling', [
+            'label'    => 'Stapling',
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
+        $this->addElement('checkbox', 'isBinding', [
+            'label'    => 'Binding',
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
+        $this->addElement('checkbox', 'isTouchscreen', [
+            'label'    => 'Has Touchscreen',
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
+        $this->addElement('checkbox', 'isADF', [
+            'label'    => 'ADF scan possible',
             'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
