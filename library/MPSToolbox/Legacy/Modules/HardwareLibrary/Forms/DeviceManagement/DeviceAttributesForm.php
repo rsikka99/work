@@ -144,6 +144,21 @@ class DeviceAttributesForm extends \My_Form_Form
             'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
+        $this->addElement('checkbox', 'isUSB', [
+            'label'    => 'USB Connectivity',
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
+        $this->addElement('checkbox', 'isWired', [
+            'label'    => 'Wired (Ethernet) Connectivity',
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
+        $this->addElement('checkbox', 'isWireless', [
+            'label'    => 'Wireless (WiFi) Connectivity',
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
         /*
          * Print Speed Monochrome
          */
