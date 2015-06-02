@@ -247,4 +247,24 @@ $form = $this->element;
         </div>
     </fieldset>
 </div>
+
+<script>
+    function bbb() {
+        var state = $('input[name="isCopier"].js-yes-no-switch').bootstrapSwitch('state');
+        if (state) {
+            $('input[name="isADF"].js-yes-no-switch').bootstrapSwitch('disabled', false);
+        } else {
+            $('input[name="isADF"].js-yes-no-switch').bootstrapSwitch('state', false);
+            $('input[name="isADF"].js-yes-no-switch').bootstrapSwitch('disabled', true);
+        }
+    }
+    function aaa() {
+        $('input[name="isCopier"].js-yes-no-switch').on('switchChange.bootstrapSwitch', bbb);
+        bbb();
+    }
+    $(document).ready(function() {
+        window.setTimeout('aaa()',500);
+    });
+</script>
+
 <?= $this->RenderFormClose($form) ?>
