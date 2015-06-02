@@ -372,6 +372,10 @@ class MasterDeviceModel extends My_Model_Abstract
         if (isset($params->isTouchscreen) && !is_null($params->isTouchscreen)) $this->isTouchscreen = $params->isTouchscreen;
         if (isset($params->isADF) && !is_null($params->isADF)) $this->isADF = $params->isADF;
 
+        if (isset($params->isUSB) && !is_null($params->isUSB)) $this->isUSB = $params->isUSB;
+        if (isset($params->isWired) && !is_null($params->isWired)) $this->isWired = $params->isWired;
+        if (isset($params->isWireless) && !is_null($params->isWireless)) $this->isWireless = $params->isWireless;
+
 
         if (isset($params->maximumRecommendedMonthlyPageVolume) && !is_null($params->maximumRecommendedMonthlyPageVolume))
         {
@@ -485,6 +489,9 @@ class MasterDeviceModel extends My_Model_Abstract
             "isBinding"                                => $this->isBinding,
             "isTouchscreen"                                => $this->isTouchscreen,
             "isADF"                                => $this->isADF,
+            "isUSB"                                => $this->isUSB,
+            "isWired"                                => $this->isWired,
+            "isWireless"                                => $this->isWireless,
             "maximumRecommendedMonthlyPageVolume" => $this->maximumRecommendedMonthlyPageVolume,
             "isReplacementDevice"                 => $this->isReplacementDevice,
             "wattsPowerNormal"                    => $this->wattsPowerNormal,
