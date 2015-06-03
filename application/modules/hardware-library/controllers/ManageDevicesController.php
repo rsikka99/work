@@ -544,7 +544,8 @@ class HardwareLibrary_ManageDevicesController extends Action
                     $db->beginTransaction();
                     if (count($validData['suppliesAndService']) > 0)
                     {
-
+                        if (!isset($validData['deviceAttributes'])) $validData['deviceAttributes'] = [];
+                        if (!isset($validData['deviceImage'])) $validData['deviceImage'] = [];
                         $saveSuppliesAndServiceResult = $manageMasterDeviceService
                             ->saveSuppliesAndDeviceAttributes(
                                 array_merge(

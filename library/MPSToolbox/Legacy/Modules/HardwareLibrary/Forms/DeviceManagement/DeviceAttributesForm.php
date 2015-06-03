@@ -97,16 +97,9 @@ class DeviceAttributesForm extends \My_Form_Form
             'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
-        $this->addElement('text_int', 'additionalTrays', [
-            'label'    => 'Additional paper trays available',
+        $this->addElement('checkbox', 'additionalTrays', [
+            'label'    => 'Supports additional paper trays',
             'disabled' => !$this->_isAllowedToEditFields,
-            'validators' => [
-                'Int',
-                [
-                    'validator' => 'Between',
-                    'options'   => ['min' => 0, 'max' => 10],
-                ],
-            ],
         ]);
 
         $this->addElement('checkbox', 'isPIN', [
@@ -123,7 +116,7 @@ class DeviceAttributesForm extends \My_Form_Form
             'label'    => 'Walk-up USB Printing',
             'disabled' => !$this->_isAllowedToEditFields,
         ]);
-
+/**
         $this->addElement('checkbox', 'isStapling', [
             'label'    => 'Stapling',
             'disabled' => !$this->_isAllowedToEditFields,
@@ -143,7 +136,7 @@ class DeviceAttributesForm extends \My_Form_Form
             'label'    => 'ADF scan possible',
             'disabled' => !$this->_isAllowedToEditFields,
         ]);
-
+**/
         $this->addElement('checkbox', 'isUSB', [
             'label'    => 'USB Connectivity',
             'disabled' => !$this->_isAllowedToEditFields,
