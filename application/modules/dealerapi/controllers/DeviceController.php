@@ -2,6 +2,14 @@
 
 require 'IndexController.php';
 
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Mappers\DeviceSwapMapper;
+use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationStandardDeviceReplacementModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceMeterModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel;
+
 /**
  * Class Api_IndexController
  */
@@ -53,6 +61,61 @@ class Dealerapi_DeviceController extends Dealerapi_IndexController
             ];
         }
         $this->outputJson(['manufacturer'=>$manufacturer_row['fullname'],'models'=>$result]);
+    }
+
+    public function swapAction() {
+        $id = intval($this->getParam('id'));
+        if (!$id) {
+            $this->outputJson(['error'=>'id not provided']);
+            return;
+        }
+        $masterDevice = MasterDeviceMapper::getInstance()->find($id);
+        if (!$masterDevice) {
+            $this->outputJson(['error'=>"device {$id} not found"]);
+            return;
+        }
+
+        $result=array();
+
+        $replacementDevices = [];
+        $dealerId = 2;
+        $costThreshold = 0;
+        $dealerCostPerPageSetting = new CostPerPageSettingModel(['dealerId'=>$dealerId]);
+        $replacementsCostPerPageSetting = new CostPerPageSettingModel(['dealerId'=>$dealerId]);
+        $reportLaborCostPerPage = 0;
+        $reportPartsCostPerPage = 0;
+
+        $doFunctionalityUpgrade = false;
+
+        $blackReplacementDevices    = DeviceSwapMapper::getInstance()->getBlackReplacementDevices($dealerId, true, $doFunctionalityUpgrade);
+        $blackMfpReplacementDevices = DeviceSwapMapper::getInstance()->getBlackMfpReplacementDevices($dealerId, $doFunctionalityUpgrade);
+        $colorReplacementDevices    = DeviceSwapMapper::getInstance()->getColorReplacementDevices($dealerId, true);
+        $colorMfpReplacementDevices = DeviceSwapMapper::getInstance()->getColorMfpReplacementDevices($dealerId);
+
+
+        $model = new OptimizationStandardDeviceReplacementModel(
+            [
+                'black'    => $blackReplacementDevices,
+                'blackmfp' => $blackMfpReplacementDevices,
+                'color'    => $colorReplacementDevices,
+                'colormfp' => $colorMfpReplacementDevices
+            ],
+            $dealerId,
+            $costThreshold,
+            $dealerCostPerPageSetting,
+            $replacementsCostPerPageSetting,
+            $reportLaborCostPerPage,
+            $reportPartsCostPerPage
+        );
+
+        $deviceInstance = new DeviceInstanceModel();
+        $deviceInstance->setMasterDevice($masterDevice);
+        $deviceInstance->setDeviceAction(DeviceInstanceModel::ACTION_REPLACE);
+        $meter = new DeviceInstanceMeterModel();
+        $deviceInstance->setMeter($meter);
+        $result = $model->findReplacement($deviceInstance);
+
+        $this->outputJson(['result'=>$result]);
     }
 }
 

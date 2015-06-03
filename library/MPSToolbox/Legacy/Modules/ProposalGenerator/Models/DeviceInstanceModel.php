@@ -609,10 +609,9 @@ class DeviceInstanceModel extends My_Model_Abstract
      *
      * @return DeviceInstanceModel
      */
-    public function setMeters ($Meters)
+    public function setMeter(DeviceInstanceMeterModel $meter)
     {
-        $this->_meters = $Meters;
-
+        $this->_meter = $meter;
         return $this;
     }
 
