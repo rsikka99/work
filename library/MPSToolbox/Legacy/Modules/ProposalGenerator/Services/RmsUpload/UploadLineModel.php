@@ -101,6 +101,11 @@ class UploadLineModel extends My_Model_Abstract
     public $launchDate;
 
     /**
+     * @var int
+     */
+    public $leasedTonerYield;
+
+    /**
      * @var string
      */
     public $ipAddress;
@@ -156,6 +161,16 @@ class UploadLineModel extends My_Model_Abstract
     public $ppmColor;
 
     /**
+     * @var float
+     */
+    public $partsCostPerPage;
+
+    /**
+     * @var float
+     */
+    public $laborCostPerPage;
+
+    /**
      * @var string
      */
     public $serialNumber;
@@ -163,102 +178,193 @@ class UploadLineModel extends My_Model_Abstract
     /**
      * @var int
      */
-    public $wattsOperating;
+    //public $wattsOperating;
+    public $wattsPowerNormal;
 
     /**
      * @var int
      */
-    public $wattsIdle;
+    //public $wattsIdle;
+    public $wattsPowerIdle;
 
     /**
      * @var string
      */
-    public $blackTonerSku;
+    public $oemBlackTonerSku;
 
     /**
      * @var int
      */
-    public $blackTonerYield;
+    public $oemBlackTonerYield;
 
     /**
      * @var float
      */
-    public $blackTonerCost;
+    public $oemBlackTonerCost;
 
     /**
      * @var string
      */
-    public $cyanTonerSku;
+    public $oemCyanTonerSku;
 
     /**
      * @var int
      */
-    public $cyanTonerYield;
+    public $oemCyanTonerYield;
 
     /**
      * @var float
      */
-    public $cyanTonerCost;
+    public $oemCyanTonerCost;
 
     /**
      * @var string
      */
-    public $magentaTonerSku;
+    public $oemMagentaTonerSku;
 
     /**
      * @var int
      */
-    public $magentaTonerYield;
+    public $oemMagentaTonerYield;
 
     /**
      * @var float
      */
-    public $magentaTonerCost;
+    public $oemMagentaTonerCost;
 
     /**
      * @var string
      */
-    public $yellowTonerSku;
+    public $oemYellowTonerSku;
 
     /**
      * @var int
      */
-    public $yellowTonerYield;
+    public $oemYellowTonerYield;
 
     /**
      * @var float
      */
-    public $yellowTonerCost;
+    public $oemYellowTonerCost;
 
     /**
      * @var string
      */
-    public $threeColorTonerSku;
+    public $oemThreeColorTonerSku;
 
     /**
      * @var int
      */
-    public $threeColorTonerYield;
+    public $oemThreeColorTonerYield;
 
     /**
      * @var float
      */
-    public $threeColorTonerCost;
+    public $oemThreeColorTonerCost;
 
     /**
      * @var string
      */
-    public $fourColorTonerSku;
+    public $oemFourColorTonerSku;
 
     /**
      * @var int
      */
-    public $fourColorTonerYield;
+    public $oemFourColorTonerYield;
 
     /**
      * @var float
      */
-    public $fourColorTonerCost;
+    public $oemFourColorTonerCost;
+    /**
+     * @var string
+     */
+    public $compBlackTonerSku;
+
+    /**
+     * @var int
+     */
+    public $compBlackTonerYield;
+
+    /**
+     * @var float
+     */
+    public $compBlackTonerCost;
+
+    /**
+     * @var string
+     */
+    public $compCyanTonerSku;
+
+    /**
+     * @var int
+     */
+    public $compCyanTonerYield;
+
+    /**
+     * @var float
+     */
+    public $compCyanTonerCost;
+
+    /**
+     * @var string
+     */
+    public $compMagentaTonerSku;
+
+    /**
+     * @var int
+     */
+    public $compMagentaTonerYield;
+
+    /**
+     * @var float
+     */
+    public $compMagentaTonerCost;
+
+    /**
+     * @var string
+     */
+    public $compYellowTonerSku;
+
+    /**
+     * @var int
+     */
+    public $compYellowTonerYield;
+
+    /**
+     * @var float
+     */
+    public $compYellowTonerCost;
+
+    /**
+     * @var string
+     */
+    public $compThreeColorTonerSku;
+
+    /**
+     * @var int
+     */
+    public $compThreeColorTonerYield;
+
+    /**
+     * @var float
+     */
+    public $compThreeColorTonerCost;
+
+    /**
+     * @var string
+     */
+    public $compFourColorTonerSku;
+
+    /**
+     * @var int
+     */
+    public $compFourColorTonerYield;
+
+    /**
+     * @var float
+     */
+    public $compFourColorTonerCost;
 
     /**
      * @var int
@@ -510,6 +616,11 @@ class UploadLineModel extends My_Model_Abstract
             $this->launchDate = $params->launchDate;
         }
 
+        if (isset($params->leasedTonerYield) && !is_null($params->leasedTonerYield))
+        {
+            $this->leasedTonerYield = $params->leasedTonerYield;
+        }
+
         if (isset($params->ipAddress) && !is_null($params->ipAddress))
         {
             $this->ipAddress = $params->ipAddress;
@@ -565,110 +676,335 @@ class UploadLineModel extends My_Model_Abstract
             $this->ppmColor = $params->ppmColor;
         }
 
+        if (isset($params->partsCostPerPage) && !is_null($params->partsCostPerPage))
+        {
+            $this->partsCostPerPage = $params->partsCostPerPage;
+        }
+
+        if (isset($params->laborCostPerPage) && !is_null($params->laborCostPerPage))
+        {
+            $this->laborCostPerPage = $params->laborCostPerPage;
+        }
+
         if (isset($params->serialNumber) && !is_null($params->serialNumber))
         {
             $this->serialNumber = $params->serialNumber;
         }
 
+        //fix inconsistency
         if (isset($params->wattsOperating) && !is_null($params->wattsOperating))
         {
-            $this->wattsOperating = $params->wattsOperating;
+            //$this->wattsOperating = $params->wattsOperating;
+            $this->wattsPowerNormal = $params->wattsOperating;
         }
 
+        //fix inconsistency
         if (isset($params->wattsIdle) && !is_null($params->wattsIdle))
         {
-            $this->wattsIdle = $params->wattsIdle;
+            //$this->wattsIdle = $params->wattsIdle;
+            $this->wattsPowerIdle = $params->wattsIdle;
         }
 
+        if (isset($params->wattsPowerNormal) && !is_null($params->wattsPowerNormal))
+        {
+            $this->wattsPowerNormal = $params->wattsPowerNormal;
+        }
+
+        if (isset($params->wattsPowerIdle) && !is_null($params->wattsPowerIdle))
+        {
+            $this->wattsPowerIdle = $params->wattsPowerIdle;
+        }
+
+        /* === */
+        //fix inconsistency
         if (isset($params->blackTonerSku) && !is_null($params->blackTonerSku))
         {
-            $this->blackTonerSku = $params->blackTonerSku;
+            //$this->blackTonerSku = $params->blackTonerSku;
+            $this->oemBlackTonerSku = $params->blackTonerSku;
         }
 
         if (isset($params->blackTonerYield) && !is_null($params->blackTonerYield))
         {
-            $this->blackTonerYield = $params->blackTonerYield;
+            //$this->blackTonerYield = $params->blackTonerYield;
+            $this->oemBlackTonerYield = $params->blackTonerYield;
         }
 
         if (isset($params->blackTonerCost) && !is_null($params->blackTonerCost))
         {
-            $this->blackTonerCost = $params->blackTonerCost;
+            //$this->blackTonerCost = $params->blackTonerCost;
+            $this->oemBlackTonerCost = $params->blackTonerCost;
         }
 
         if (isset($params->cyanTonerSku) && !is_null($params->cyanTonerSku))
         {
-            $this->cyanTonerSku = $params->cyanTonerSku;
+            //$this->cyanTonerSku = $params->cyanTonerSku;
+            $this->oemCyanTonerSku = $params->cyanTonerSku;
         }
 
         if (isset($params->cyanTonerYield) && !is_null($params->cyanTonerYield))
         {
-            $this->cyanTonerYield = $params->cyanTonerYield;
+            //$this->cyanTonerYield = $params->cyanTonerYield;
+            $this->oemCyanTonerYield = $params->cyanTonerYield;
         }
 
         if (isset($params->cyanTonerCost) && !is_null($params->cyanTonerCost))
         {
-            $this->cyanTonerCost = $params->cyanTonerCost;
+            //$this->cyanTonerCost = $params->cyanTonerCost;
+            $this->oemCyanTonerCost = $params->cyanTonerCost;
         }
 
         if (isset($params->magentaTonerSku) && !is_null($params->magentaTonerSku))
         {
-            $this->magentaTonerSku = $params->magentaTonerSku;
+            //$this->magentaTonerSku = $params->magentaTonerSku;
+            $this->oemMagentaTonerSku = $params->magentaTonerSku;
         }
 
         if (isset($params->magentaTonerYield) && !is_null($params->magentaTonerYield))
         {
-            $this->magentaTonerYield = $params->magentaTonerYield;
+            //$this->magentaTonerYield = $params->magentaTonerYield;
+            $this->oemMagentaTonerYield = $params->magentaTonerYield;
         }
 
         if (isset($params->magentaTonerCost) && !is_null($params->magentaTonerCost))
         {
-            $this->magentaTonerCost = $params->magentaTonerCost;
+            //$this->magentaTonerCost = $params->magentaTonerCost;
+            $this->oemMagentaTonerCost = $params->magentaTonerCost;
         }
 
         if (isset($params->yellowTonerSku) && !is_null($params->yellowTonerSku))
         {
-            $this->yellowTonerSku = $params->yellowTonerSku;
+            //$this->yellowTonerSku = $params->yellowTonerSku;
+            $this->oemYellowTonerSku = $params->yellowTonerSku;
         }
 
         if (isset($params->yellowTonerYield) && !is_null($params->yellowTonerYield))
         {
-            $this->yellowTonerYield = $params->yellowTonerYield;
+            //$this->yellowTonerYield = $params->yellowTonerYield;
+            $this->oemYellowTonerYield = $params->yellowTonerYield;
         }
 
         if (isset($params->yellowTonerCost) && !is_null($params->yellowTonerCost))
         {
-            $this->yellowTonerCost = $params->yellowTonerCost;
+            //$this->yellowTonerCost = $params->yellowTonerCost;
+            $this->oemYellowTonerCost = $params->yellowTonerCost;
         }
 
         if (isset($params->threeColorTonerSku) && !is_null($params->threeColorTonerSku))
         {
-            $this->threeColorTonerSku = $params->threeColorTonerSku;
+            //$this->threeColorTonerSku = $params->threeColorTonerSku;
+            $this->oemThreeColorTonerSku = $params->threeColorTonerSku;
         }
 
         if (isset($params->threeColorTonerYield) && !is_null($params->threeColorTonerYield))
         {
-            $this->threeColorTonerYield = $params->threeColorTonerYield;
+            //$this->threeColorTonerYield = $params->threeColorTonerYield;
+            $this->oemThreeColorTonerYield = $params->threeColorTonerYield;
         }
 
         if (isset($params->threeColorTonerCost) && !is_null($params->threeColorTonerCost))
         {
-            $this->threeColorTonerCost = $params->threeColorTonerCost;
+            //$this->threeColorTonerCost = $params->threeColorTonerCost;
+            $this->oemThreeColorTonerCost = $params->threeColorTonerCost;
         }
 
         if (isset($params->fourColorTonerSku) && !is_null($params->fourColorTonerSku))
         {
-            $this->fourColorTonerSku = $params->fourColorTonerSku;
+            //$this->fourColorTonerSku = $params->fourColorTonerSku;
+            $this->oemFourColorTonerSku = $params->fourColorTonerSku;
         }
 
         if (isset($params->fourColorTonerYield) && !is_null($params->fourColorTonerYield))
         {
-            $this->fourColorTonerYield = $params->fourColorTonerYield;
+            //$this->fourColorTonerYield = $params->fourColorTonerYield;
+            $this->oemFourColorTonerYield = $params->fourColorTonerYield;
         }
 
         if (isset($params->fourColorTonerCost) && !is_null($params->fourColorTonerCost))
         {
-            $this->fourColorTonerCost = $params->fourColorTonerCost;
+            //$this->fourColorTonerCost = $params->fourColorTonerCost;
+            $this->oemFourColorTonerCost = $params->fourColorTonerCost;
         }
+        /* === */
+        if (isset($params->oemBlackTonerSku) && !is_null($params->oemBlackTonerSku))
+        {
+            $this->oemBlackTonerSku = $params->oemBlackTonerSku;
+        }
+
+        if (isset($params->oemBlackTonerYield) && !is_null($params->oemBlackTonerYield))
+        {
+            $this->oemBlackTonerYield = $params->oemBlackTonerYield;
+        }
+
+        if (isset($params->oemBlackTonerCost) && !is_null($params->oemBlackTonerCost))
+        {
+            $this->oemBlackTonerCost = $params->oemBlackTonerCost;
+        }
+
+        if (isset($params->oemCyanTonerSku) && !is_null($params->oemCyanTonerSku))
+        {
+            $this->oemCyanTonerSku = $params->oemCyanTonerSku;
+        }
+
+        if (isset($params->oemCyanTonerYield) && !is_null($params->oemCyanTonerYield))
+        {
+            $this->oemCyanTonerYield = $params->oemCyanTonerYield;
+        }
+
+        if (isset($params->oemCyanTonerCost) && !is_null($params->oemCyanTonerCost))
+        {
+            $this->oemCyanTonerCost = $params->oemCyanTonerCost;
+        }
+
+        if (isset($params->oemMagentaTonerSku) && !is_null($params->oemMagentaTonerSku))
+        {
+            $this->oemMagentaTonerSku = $params->oemMagentaTonerSku;
+        }
+
+        if (isset($params->oemMagentaTonerYield) && !is_null($params->oemMagentaTonerYield))
+        {
+            $this->oemMagentaTonerYield = $params->oemMagentaTonerYield;
+        }
+
+        if (isset($params->oemMagentaTonerCost) && !is_null($params->oemMagentaTonerCost))
+        {
+            $this->oemMagentaTonerCost = $params->oemMagentaTonerCost;
+        }
+
+        if (isset($params->oemYellowTonerSku) && !is_null($params->oemYellowTonerSku))
+        {
+            $this->oemYellowTonerSku = $params->oemYellowTonerSku;
+        }
+
+        if (isset($params->oemYellowTonerYield) && !is_null($params->oemYellowTonerYield))
+        {
+            $this->oemYellowTonerYield = $params->oemYellowTonerYield;
+        }
+
+        if (isset($params->oemYellowTonerCost) && !is_null($params->oemYellowTonerCost))
+        {
+            $this->oemYellowTonerCost = $params->oemYellowTonerCost;
+        }
+
+        if (isset($params->oemThreeColorTonerSku) && !is_null($params->oemThreeColorTonerSku))
+        {
+            $this->oemThreeColorTonerSku = $params->oemThreeColorTonerSku;
+        }
+
+        if (isset($params->oemThreeColorTonerYield) && !is_null($params->oemThreeColorTonerYield))
+        {
+            $this->oemThreeColorTonerYield = $params->oemThreeColorTonerYield;
+        }
+
+        if (isset($params->oemThreeColorTonerCost) && !is_null($params->oemThreeColorTonerCost))
+        {
+            $this->oemThreeColorTonerCost = $params->oemThreeColorTonerCost;
+        }
+
+        if (isset($params->oemFourColorTonerSku) && !is_null($params->oemFourColorTonerSku))
+        {
+            $this->oemFourColorTonerSku = $params->oemFourColorTonerSku;
+        }
+
+        if (isset($params->oemFourColorTonerYield) && !is_null($params->oemFourColorTonerYield))
+        {
+            $this->oemFourColorTonerYield = $params->oemFourColorTonerYield;
+        }
+
+        if (isset($params->oemFourColorTonerCost) && !is_null($params->oemFourColorTonerCost))
+        {
+            $this->oemFourColorTonerCost = $params->oemFourColorTonerCost;
+        }
+        /* === */
+        if (isset($params->compBlackTonerSku) && !is_null($params->compBlackTonerSku))
+        {
+            $this->compBlackTonerSku = $params->compBlackTonerSku;
+        }
+
+        if (isset($params->compBlackTonerYield) && !is_null($params->compBlackTonerYield))
+        {
+            $this->compBlackTonerYield = $params->compBlackTonerYield;
+        }
+
+        if (isset($params->compBlackTonerCost) && !is_null($params->compBlackTonerCost))
+        {
+            $this->compBlackTonerCost = $params->compBlackTonerCost;
+        }
+
+        if (isset($params->compCyanTonerSku) && !is_null($params->compCyanTonerSku))
+        {
+            $this->compCyanTonerSku = $params->compCyanTonerSku;
+        }
+
+        if (isset($params->compCyanTonerYield) && !is_null($params->compCyanTonerYield))
+        {
+            $this->compCyanTonerYield = $params->compCyanTonerYield;
+        }
+
+        if (isset($params->compCyanTonerCost) && !is_null($params->compCyanTonerCost))
+        {
+            $this->compCyanTonerCost = $params->compCyanTonerCost;
+        }
+
+        if (isset($params->compMagentaTonerSku) && !is_null($params->compMagentaTonerSku))
+        {
+            $this->compMagentaTonerSku = $params->compMagentaTonerSku;
+        }
+
+        if (isset($params->compMagentaTonerYield) && !is_null($params->compMagentaTonerYield))
+        {
+            $this->compMagentaTonerYield = $params->compMagentaTonerYield;
+        }
+
+        if (isset($params->compMagentaTonerCost) && !is_null($params->compMagentaTonerCost))
+        {
+            $this->compMagentaTonerCost = $params->compMagentaTonerCost;
+        }
+
+        if (isset($params->compYellowTonerSku) && !is_null($params->compYellowTonerSku))
+        {
+            $this->compYellowTonerSku = $params->compYellowTonerSku;
+        }
+
+        if (isset($params->compYellowTonerYield) && !is_null($params->compYellowTonerYield))
+        {
+            $this->compYellowTonerYield = $params->compYellowTonerYield;
+        }
+
+        if (isset($params->compYellowTonerCost) && !is_null($params->compYellowTonerCost))
+        {
+            $this->compYellowTonerCost = $params->compYellowTonerCost;
+        }
+
+        if (isset($params->compThreeColorTonerSku) && !is_null($params->compThreeColorTonerSku))
+        {
+            $this->compThreeColorTonerSku = $params->compThreeColorTonerSku;
+        }
+
+        if (isset($params->compThreeColorTonerYield) && !is_null($params->compThreeColorTonerYield))
+        {
+            $this->compThreeColorTonerYield = $params->compThreeColorTonerYield;
+        }
+
+        if (isset($params->compThreeColorTonerCost) && !is_null($params->compThreeColorTonerCost))
+        {
+            $this->compThreeColorTonerCost = $params->compThreeColorTonerCost;
+        }
+
+        if (isset($params->compFourColorTonerSku) && !is_null($params->compFourColorTonerSku))
+        {
+            $this->compFourColorTonerSku = $params->compFourColorTonerSku;
+        }
+
+        if (isset($params->compFourColorTonerYield) && !is_null($params->compFourColorTonerYield))
+        {
+            $this->compFourColorTonerYield = $params->compFourColorTonerYield;
+        }
+
+        if (isset($params->compFourColorTonerCost) && !is_null($params->compFourColorTonerCost))
+        {
+            $this->compFourColorTonerCost = $params->compFourColorTonerCost;
+        }
+        /* === */
 
         if (isset($params->startMeterBlack) && !is_null($params->startMeterBlack))
         {
@@ -886,86 +1222,7 @@ class UploadLineModel extends My_Model_Abstract
      */
     public function toArray ()
     {
-        return [
-            "rmsVendorName"          => $this->rmsVendorName,
-            "rmsReportVersion"       => $this->rmsReportVersion,
-            "rmsModelId"             => $this->rmsModelId,
-            "assetId"                => $this->assetId,
-            "monitorStartDate"       => $this->monitorStartDate,
-            "monitorEndDate"         => $this->monitorEndDate,
-            "adoptionDate"           => $this->adoptionDate,
-            "cost"                   => $this->cost,
-            "discoveryDate"          => $this->discoveryDate,
-            "launchDate"             => $this->launchDate,
-            "ipAddress"              => $this->ipAddress,
-            "isColor"                => $this->isColor,
-            "isCopier"               => $this->isCopier,
-            "isFax"                  => $this->isFax,
-            "isA3"                   => $this->isA3,
-            "isDuplex"               => $this->isDuplex,
-            "isManaged"              => $this->isManaged,
-            "managementProgram"      => $this->managementProgram,
-            "manufacturer"           => $this->manufacturer,
-            "rawDeviceName"          => $this->rawDeviceName,
-            "modelName"              => $this->modelName,
-            "ppmBlack"               => $this->ppmBlack,
-            "ppmColor"               => $this->ppmColor,
-            "serialNumber"           => $this->serialNumber,
-            "wattsOperating"         => $this->wattsOperating,
-            "wattsIdle"              => $this->wattsIdle,
-            "blackTonerSku"          => $this->blackTonerSku,
-            "blackTonerYield"        => $this->blackTonerYield,
-            "blackTonerCost"         => $this->blackTonerCost,
-            "cyanTonerSku"           => $this->cyanTonerSku,
-            "cyanTonerYield"         => $this->cyanTonerYield,
-            "cyanTonerCost"          => $this->cyanTonerCost,
-            "magentaTonerSku"        => $this->magentaTonerSku,
-            "magentaTonerYield"      => $this->magentaTonerYield,
-            "magentaTonerCost"       => $this->magentaTonerCost,
-            "yellowTonerSku"         => $this->yellowTonerSku,
-            "yellowTonerYield"       => $this->yellowTonerYield,
-            "yellowTonerCost"        => $this->yellowTonerCost,
-            "threeColorTonerSku"     => $this->threeColorTonerSku,
-            "threeColorTonerYield"   => $this->threeColorTonerYield,
-            "threeColorTonerCost"    => $this->threeColorTonerCost,
-            "fourColorTonerSku"      => $this->fourColorTonerSku,
-            "fourColorTonerYield"    => $this->fourColorTonerYield,
-            "fourColorTonerCost"     => $this->fourColorTonerCost,
-            "startMeterBlack"        => $this->startMeterBlack,
-            "endMeterBlack"          => $this->endMeterBlack,
-            "startMeterColor"        => $this->startMeterColor,
-            "endMeterColor"          => $this->endMeterColor,
-            "startMeterLife"         => $this->startMeterLife,
-            "endMeterLife"           => $this->endMeterLife,
-            "startMeterPrintBlack"   => $this->startMeterPrintBlack,
-            "endMeterPrintBlack"     => $this->endMeterPrintBlack,
-            "startMeterPrintColor"   => $this->startMeterPrintColor,
-            "endMeterPrintColor"     => $this->endMeterPrintColor,
-            "startMeterCopyBlack"    => $this->startMeterCopyBlack,
-            "endMeterCopyBlack"      => $this->endMeterCopyBlack,
-            "startMeterCopyColor"    => $this->startMeterCopyColor,
-            "endMeterCopyColor"      => $this->endMeterCopyColor,
-            "startMeterScan"         => $this->startMeterScan,
-            "endMeterScan"           => $this->endMeterScan,
-            "startMeterFax"          => $this->startMeterFax,
-            "endMeterFax"            => $this->endMeterFax,
-            "reportsTonerLevels"     => $this->reportsTonerLevels,
-            "tonerLevelBlack"        => $this->tonerLevelBlack,
-            "tonerLevelCyan"         => $this->tonerLevelCyan,
-            "tonerLevelMagenta"      => $this->tonerLevelMagenta,
-            "tonerLevelYellow"       => $this->tonerLevelYellow,
-            "isValid"                => $this->isValid,
-            "validationErrorMessage" => $this->validationErrorMessage,
-            "hasCompleteInformation" => $this->hasCompleteInformation,
-            "csvLineNumber"          => $this->csvLineNumber,
-            "tonerConfigId"          => $this->tonerConfigId,
-            "pageCoverageMonochrome" => $this->pageCoverageMonochrome,
-            "pageCoverageColor"      => $this->pageCoverageColor,
-            "pageCoverageCyan"       => $this->pageCoverageCyan,
-            "pageCoverageMagenta"    => $this->pageCoverageMagenta,
-            "pageCoverageYellow"     => $this->pageCoverageYellow,
-            "location"               => $this->location,
-        ];
+        return get_object_vars($this);
     }
 
     /**
@@ -1251,11 +1508,11 @@ class UploadLineModel extends My_Model_Abstract
         if ($colorMeterStatus === self::METER_IS_VALID)
         {
             // What type of color are we?
-            if ($this->fourColorTonerCost !== null || $this->fourColorTonerSku !== null || $this->fourColorTonerSku !== null)
+            if ($this->oemFourColorTonerCost !== null || $this->oemFourColorTonerSku !== null || $this->oemFourColorTonerSku !== null)
             {
                 $this->tonerConfigId = TonerConfigModel::FOUR_COLOR_COMBINED;
             }
-            else if ($this->threeColorTonerCost !== null || $this->threeColorTonerSku !== null || $this->threeColorTonerSku !== null)
+            else if ($this->oemThreeColorTonerCost !== null || $this->oemThreeColorTonerSku !== null || $this->oemThreeColorTonerSku !== null)
             {
                 $this->tonerConfigId = TonerConfigModel::THREE_COLOR_COMBINED;
             }

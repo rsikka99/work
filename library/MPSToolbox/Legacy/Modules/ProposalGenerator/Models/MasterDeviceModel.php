@@ -104,6 +104,16 @@ class MasterDeviceModel extends My_Model_Abstract
      */
     public $isA3;
 
+    public $isSmartphone;
+    public $additionalTrays;
+    public $isPIN;
+    public $isAccessCard;
+    public $isWalkup;
+    public $isStapling;
+    public $isBinding;
+    public $isTouchscreen;
+    public $isADF;
+
     /**
      * @var int
      */
@@ -352,6 +362,21 @@ class MasterDeviceModel extends My_Model_Abstract
             $this->isA3 = $params->isA3;
         }
 
+        if (isset($params->isSmartphone) && !is_null($params->isSmartphone)) $this->isSmartphone = $params->isSmartphone;
+        if (isset($params->additionalTrays) && !is_null($params->additionalTrays)) $this->additionalTrays = $params->additionalTrays;
+        if (isset($params->isPIN) && !is_null($params->isPIN)) $this->isPIN = $params->isPIN;
+        if (isset($params->isAccessCard) && !is_null($params->isAccessCard)) $this->isAccessCard = $params->isAccessCard;
+        if (isset($params->isWalkup) && !is_null($params->isWalkup)) $this->isWalkup = $params->isWalkup;
+        if (isset($params->isStapling) && !is_null($params->isStapling)) $this->isStapling = $params->isStapling;
+        if (isset($params->isBinding) && !is_null($params->isBinding)) $this->isBinding = $params->isBinding;
+        if (isset($params->isTouchscreen) && !is_null($params->isTouchscreen)) $this->isTouchscreen = $params->isTouchscreen;
+        if (isset($params->isADF) && !is_null($params->isADF)) $this->isADF = $params->isADF;
+
+        if (isset($params->isUSB) && !is_null($params->isUSB)) $this->isUSB = $params->isUSB;
+        if (isset($params->isWired) && !is_null($params->isWired)) $this->isWired = $params->isWired;
+        if (isset($params->isWireless) && !is_null($params->isWireless)) $this->isWireless = $params->isWireless;
+
+
         if (isset($params->maximumRecommendedMonthlyPageVolume) && !is_null($params->maximumRecommendedMonthlyPageVolume))
         {
             $this->maximumRecommendedMonthlyPageVolume = $params->maximumRecommendedMonthlyPageVolume;
@@ -455,6 +480,18 @@ class MasterDeviceModel extends My_Model_Abstract
             "isDuplex"                            => $this->isDuplex,
             "isSystemDevice"                      => $this->isSystemDevice,
             "isA3"                                => $this->isA3,
+            "isSmartphone"                                => $this->isSmartphone,
+            "additionalTrays"                                => $this->additionalTrays,
+            "isPIN"                                => $this->isPIN,
+            "isAccessCard"                                => $this->isAccessCard,
+            "isWalkup"                                => $this->isWalkup,
+            "isStapling"                                => $this->isStapling,
+            "isBinding"                                => $this->isBinding,
+            "isTouchscreen"                                => $this->isTouchscreen,
+            "isADF"                                => $this->isADF,
+            "isUSB"                                => $this->isUSB,
+            "isWired"                                => $this->isWired,
+            "isWireless"                                => $this->isWireless,
             "maximumRecommendedMonthlyPageVolume" => $this->maximumRecommendedMonthlyPageVolume,
             "isReplacementDevice"                 => $this->isReplacementDevice,
             "wattsPowerNormal"                    => $this->wattsPowerNormal,

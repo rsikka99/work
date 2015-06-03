@@ -289,6 +289,44 @@ abstract class AbstractRmsUploadService
     }
 
     /**
+     * @return array
+     */
+    public function getColumnMapping()
+    {
+        return $this->_columnMapping;
+    }
+
+    /**
+     * @param array $columnMapping
+     */
+    public function setColumnMapping($columnMapping)
+    {
+        $this->_columnMapping = $columnMapping;
+    }
+
+    protected function mapColumn($lowerCaseHeader) {
+        $map = $this->getColumnMapping();
+        /*
+         * The idea here is to take an array of headers and turn them into our normalized headers. They need to
+         * be in the right order so that the values get mapped accordingly. This takes a header such as
+         * 'colorprintspeed' and turns it into 'ppm_color' so that it's normalized.
+         */
+        if (array_key_exists($lowerCaseHeader, $map))
+        {
+            /*
+             * Add to the fields present array so that we know that the column actually exists as not all
+             * columns are required to be present.
+             */
+            $this->_fieldsPresent [] = $map[$lowerCaseHeader];
+            $this->_mappedHeaders [] = $map[$lowerCaseHeader];
+        }
+        else
+        {
+            $this->_mappedHeaders [] = $lowerCaseHeader;
+        }
+    }
+
+    /**
      * Processes the CSV file and inserts the data into the database
      *
      * @param     $filename
@@ -336,6 +374,7 @@ abstract class AbstractRmsUploadService
                     $fileLines[] = $line;
                 }
             } else {
+                ini_set("auto_detect_line_endings", true);
                 $fileLines = file($filename, FILE_IGNORE_NEW_LINES);
             }
             $lineCount = count($fileLines) - 1 - $this->_linesToTrim;
@@ -372,25 +411,7 @@ abstract class AbstractRmsUploadService
                  * We could map column names here for different reports
                 */
                 $this->_csvHeaders [] = $lowerCaseHeader;
-
-                /*
-                 * The idea here is to take an array of headers and turn them into our normalized headers. They need to
-                 * be in the right order so that the values get mapped accordingly. This takes a header such as
-                 * 'colorprintspeed' and turns it into 'ppm_color' so that it's normalized.
-                 */
-                if (array_key_exists($lowerCaseHeader, $this->_columnMapping))
-                {
-                    /*
-                     * Add to the fields present array so that we know that the column actually exists as not all
-                     * columns are required to be present.
-                     */
-                    $this->_fieldsPresent [] = $this->_columnMapping [$lowerCaseHeader];
-                    $this->_mappedHeaders [] = $this->_columnMapping [$lowerCaseHeader];
-                }
-                else
-                {
-                    $this->_mappedHeaders [] = $lowerCaseHeader;
-                }
+                $this->mapColumn($lowerCaseHeader);
             }
 
             /*
@@ -404,7 +425,16 @@ abstract class AbstractRmsUploadService
                 foreach ($fileLines as $line)
                 {
                     // Turn the line into an assoc array for us
-                    $csvLine = array_combine($this->_mappedHeaders, str_getcsv($line));
+                    $csvLine = false;
+                    $csv_values = str_getcsv($line);
+                    if (count($csv_values)==count($this->_mappedHeaders)) {
+                        $csvLine = array_combine($this->_mappedHeaders, $csv_values);
+                    } else if (count($csv_values)>count($this->_mappedHeaders)) {
+                        $csvLine = [];
+                        foreach ($this->_mappedHeaders as $i=>$key) {
+                            $csvLine[$key] = empty($csv_values[$i])?'':$csv_values[$i];
+                        }
+                    }
 
                     // Only validate lines that were combined properly (meaning they weren't empty and had the same column count as the headers)
                     if ($csvLine !== false)
@@ -465,9 +495,10 @@ abstract class AbstractRmsUploadService
         if (count($requiredHeadersMissing) > 0)
         {
             $vendorHeadings = [];
+            $map = $this->getColumnMapping();
             foreach ($requiredHeadersMissing as $header)
             {
-                $vendorHeadings[] = array_search($header, $this->_columnMapping);
+                $vendorHeadings[] = array_search($header, $map);
             }
 
             return "File is missing required these headers: [" . implode(',', $vendorHeadings) . "]. Are you sure you selected the right RMS Vendor?";

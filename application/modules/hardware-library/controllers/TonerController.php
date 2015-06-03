@@ -301,6 +301,7 @@ class HardwareLibrary_TonerController extends Action
             'id',
             'tonerColorId',
             'sku',
+            'name',
             'dealerSku',
             'manufacturer',
             'yield',

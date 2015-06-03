@@ -43,7 +43,11 @@ class NameBasedMappingService extends AbstractDeviceMappingService
          */
         $manufacturerId = ($deviceInstance->getRmsUploadRow()->manufacturerId > 0) ? $deviceInstance->getRmsUploadRow()->manufacturerId : null;
 
-        $masterDevices = $this->_masterDeviceMapper->searchByModelName($deviceInstance->getRmsUploadRow()->modelName, $manufacturerId, false);
+        $name=$deviceInstance->getRmsUploadRow()->modelName;
+        if (preg_match('#(.+) Series#i',$name,$match)) {
+            $name=$match[1];
+        }
+        $masterDevices = $this->_masterDeviceMapper->searchByModelName($name, $manufacturerId, false);
         if (count($masterDevices) === 1)
         {
             $masterDeviceId = $masterDevices[0]->id;
