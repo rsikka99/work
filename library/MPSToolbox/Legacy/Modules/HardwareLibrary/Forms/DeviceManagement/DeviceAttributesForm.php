@@ -140,7 +140,7 @@ class DeviceAttributesForm extends \My_Form_Form
         ]);
 
         $this->addElement('checkbox', 'isADF', [
-            'label'    => 'ADF scan possible',
+            'label'    => 'Auto duplex scan possible',
             'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
