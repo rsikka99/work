@@ -53,7 +53,7 @@ $textRun->addText('Based on your questionnaire, ');
 $textRun->addText(sprintf('%1$s of your printing is done on non-network devices. ', $inkJetString), [
     'bold' => true
 ]);
-$textRun->addText('We did not monitor inkjet machines that are not connected to the network, and on average, pages printed to inkjet printers cost three times more than pages printed to laser devices. Without being on the network, users also cannot share these devices. There are some instances where desktop printers are appropriate, for instance, if a single user requires confidential, high-convenience printing. We can help you consolidate desktop hardware where appropriate, and where desktop printing is required, we can help you select network-capable equipment so your desktop printing can be managed with the rest of your office print.');
+$textRun->addText('We did not monitor locally connected printers machines that are not connected to the network, and on average, pages printed to locally connected printers cost three times more than pages printed to network devices. Without being on the network, users also cannot share these devices. There are some instances where desktop printers are appropriate, for instance, if a single user requires confidential, high-convenience printing. We can help you consolidate desktop hardware where appropriate, and where desktop printing is required, we can help you select network-capable equipment so your desktop printing can be managed with the rest of your office print.');
 $excludedDeviceCount = count($assessmentViewModel->getExcludedDevices());
 if ($excludedDeviceCount > 0)
 {
