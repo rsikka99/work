@@ -7,7 +7,9 @@ use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationStandardDe
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceMeterModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerVendorRankingSetModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerVendorRankingSetMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel;
 
 /**
@@ -77,13 +79,28 @@ class Dealerapi_DeviceController extends Dealerapi_IndexController
 
         $result=array();
 
-        $replacementDevices = [];
         $dealerId = 2;
         $costThreshold = 0;
-        $dealerCostPerPageSetting = new CostPerPageSettingModel(['dealerId'=>$dealerId]);
-        $replacementsCostPerPageSetting = new CostPerPageSettingModel(['dealerId'=>$dealerId]);
-        $reportLaborCostPerPage = 0;
-        $reportPartsCostPerPage = 0;
+        $dealerCostPerPageSetting = new CostPerPageSettingModel([
+            "adminCostPerPage"              => 0.001,
+            "monochromePartsCostPerPage"    => 0.001,
+            "monochromeLaborCostPerPage"    => 0.001,
+            "colorPartsCostPerPage"         => 0.001,
+            "colorLaborCostPerPage"         => 0.001,
+            "pageCoverageMonochrome"        => 6,
+            "pageCoverageColor"             => 24,
+            "monochromeTonerRankSet"        => TonerVendorRankingSetMapper::getInstance()->find(1),
+            "colorTonerRankSet"             => TonerVendorRankingSetMapper::getInstance()->find(2),
+            "useDevicePageCoverages"        => 0,
+            "customerMonochromeCostPerPage" => 0.001,
+            "customerColorCostPerPage"      => 0.001,
+            "clientId"                      => 1,
+            "dealerId"                      => $dealerId,
+            "pricingMargin"                 => 0,
+        ]);
+        $replacementsCostPerPageSetting = clone $dealerCostPerPageSetting;
+        $reportLaborCostPerPage = 0.001;
+        $reportPartsCostPerPage = 0.001;
 
         $doFunctionalityUpgrade = false;
 
@@ -113,6 +130,9 @@ class Dealerapi_DeviceController extends Dealerapi_IndexController
         $deviceInstance->setDeviceAction(DeviceInstanceModel::ACTION_REPLACE);
         $meter = new DeviceInstanceMeterModel();
         $deviceInstance->setMeter($meter);
+        $deviceInstance->setCombinedMonthlyPageCount(6000);
+        $deviceInstance->setBlackMonthlyPageCount(6000);
+        $deviceInstance->setColorMonthlyPageCount(0);
         $result = $model->findReplacement($deviceInstance);
 
         $this->outputJson(['result'=>$result]);

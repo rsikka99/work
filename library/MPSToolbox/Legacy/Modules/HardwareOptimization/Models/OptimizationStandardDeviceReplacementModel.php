@@ -287,11 +287,11 @@ class OptimizationStandardDeviceReplacementModel implements OptimizationDeviceRe
             /**
              * Ensure we are within the page counts
              */
-            if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < $deviceSwap->minimumPageCount)
+            if ($deviceInstance->getCombinedMonthlyPageCount() < $deviceSwap->minimumPageCount)
             {
                 continue;
             }
-            else if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() > $deviceSwap->maximumPageCount)
+            else if ($deviceInstance->getCombinedMonthlyPageCount() > $deviceSwap->maximumPageCount)
             {
                 continue;
             }

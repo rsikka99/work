@@ -306,6 +306,21 @@ class DeviceInstanceModel extends My_Model_Abstract
      */
     protected $_averageDailyPowerCost;
 
+    /**
+     * @var float
+     */
+    protected $_combinedMonthlyPageCount;
+
+    /**
+     * @var float
+     */
+    protected $_blackMonthlyPageCount;
+
+    /**
+     * @var float
+     */
+    protected $_colorMonthlyPageCount;
+
     /*
      * ********************************************************************************
      * Non calculated fields
@@ -735,8 +750,8 @@ class DeviceInstanceModel extends My_Model_Abstract
 
     /**
      * @param CostPerPageSettingModel $costPerPageSetting
-     *
      * @return float
+     * @todo why is $costPerPageSetting not used here?
      */
     public function getUsage ($costPerPageSetting)
     {
@@ -1303,6 +1318,62 @@ class DeviceInstanceModel extends My_Model_Abstract
         return $this->_reason->reason;
     }
 
+    public function getCombinedMonthlyPageCount() {
+        if (!isset($this->_combinedMonthlyPageCount)) {
+            $this->_combinedMonthlyPageCount = $this->getPageCounts()->getCombinedPageCount()->getMonthly();
+        }
+        return $this->_combinedMonthlyPageCount;
+    }
+
+    /**
+     * @param int $combinedMonthlyPageCount
+     */
+    public function setCombinedMonthlyPageCount($combinedMonthlyPageCount)
+    {
+        $this->_combinedMonthlyPageCount = $combinedMonthlyPageCount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getColorMonthlyPageCount()
+    {
+        if (!isset($this->_colorMonthlyPageCount)) {
+            $this->_colorMonthlyPageCount = $this->getPageCounts()->getColorPageCount()->getMonthly();
+        }
+        return $this->_colorMonthlyPageCount;
+    }
+
+    /**
+     * @param float $colorMonthlyPageCount
+     */
+    public function setColorMonthlyPageCount($colorMonthlyPageCount)
+    {
+        $this->_colorMonthlyPageCount = $colorMonthlyPageCount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBlackMonthlyPageCount()
+    {
+        if (!isset($this->_blackMonthlyPageCount)) {
+            $this->_blackMonthlyPageCount = $this->getPageCounts()->getBlackPageCount()->getMonthly();
+        }
+        return $this->_blackMonthlyPageCount;
+    }
+
+    /**
+     * @param float $blackMonthlyPageCount
+     */
+    public function setBlackMonthlyPageCount($blackMonthlyPageCount)
+    {
+        $this->_blackMonthlyPageCount = $blackMonthlyPageCount;
+    }
+
+
+
+
     /**
      * Gets this device instance's page counts
      *
@@ -1506,8 +1577,10 @@ class DeviceInstanceModel extends My_Model_Abstract
     public function calculateMonthlyMonoCost (CostPerPageSettingModel $costPerPageSetting, $masterDevice = null, $blackToColorRatio = 0)
     {
         $monoCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->getCostPerPage()->monochromeCostPerPage;
-
-        return $monoCostPerPage * $this->getPageCounts($blackToColorRatio)->getBlackPageCount()->getMonthly();
+        if ($blackToColorRatio) {
+            return $monoCostPerPage * $this->getPageCounts($blackToColorRatio)->getBlackPageCount()->getMonthly();
+        }
+        return $monoCostPerPage * $this->getBlackMonthlyPageCount();
     }
 
     /**
@@ -1525,8 +1598,10 @@ class DeviceInstanceModel extends My_Model_Abstract
     public function calculateMonthlyColorCost (CostPerPageSettingModel $costPerPageSetting, $masterDevice = null, $blackToColorRatio = 0)
     {
         $colorCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->getCostPerPage()->colorCostPerPage;
-
-        return $colorCostPerPage * $this->getPageCounts($blackToColorRatio)->getColorPageCount()->getMonthly();
+        if ($blackToColorRatio) {
+            return $colorCostPerPage * $this->getPageCounts($blackToColorRatio)->getColorPageCount()->getMonthly();
+        }
+        return $colorCostPerPage * $this->getColorMonthlyPageCount();
     }
 
     /**
