@@ -74,6 +74,11 @@ class OptimizationStandardDeviceReplacementModel implements OptimizationDeviceRe
     protected $_dealerId;
 
     /**
+     * @var array
+     */
+    protected $_allReplacementOptions;
+
+    /**
      * @param DeviceSwapModel[]                        $replacementDevices
      * @param                                          $dealerId
      * @param                                          $costThreshold
@@ -112,6 +117,86 @@ class OptimizationStandardDeviceReplacementModel implements OptimizationDeviceRe
         $this->_reportLaborCostPerPage             = $reportLaborCostPerPage;
         MasterDeviceModel::$ReportLaborCostPerPage = $reportLaborCostPerPage;
         MasterDeviceModel::$ReportPartsCostPerPage = $reportPartsCostPerPage;
+    }
+
+    /**
+     * @param DeviceSwapModel[] $blackReplacementDevices
+     */
+    public function setBlackReplacementDevices($blackReplacementDevices)
+    {
+        $this->_blackReplacementDevices = $blackReplacementDevices;
+    }
+
+    /**
+     * @param DeviceSwapModel[] $blackMfpReplacementDevices
+     */
+    public function setBlackMfpReplacementDevices($blackMfpReplacementDevices)
+    {
+        $this->_blackMfpReplacementDevices = $blackMfpReplacementDevices;
+    }
+
+    /**
+     * @param DeviceSwapModel[] $colorReplacementDevices
+     */
+    public function setColorReplacementDevices($colorReplacementDevices)
+    {
+        $this->_colorReplacementDevices = $colorReplacementDevices;
+    }
+
+    /**
+     * @param DeviceSwapModel[] $colorMfpReplacementDevices
+     */
+    public function setColorMfpReplacementDevices($colorMfpReplacementDevices)
+    {
+        $this->_colorMfpReplacementDevices = $colorMfpReplacementDevices;
+    }
+
+    /**
+     * @param CostPerPageSettingModel $costPerPageSetting
+     */
+    public function setCostPerPageSetting($costPerPageSetting)
+    {
+        $this->_costPerPageSetting = $costPerPageSetting;
+    }
+
+    /**
+     * @param CostPerPageSettingModel $replacementCostPerPageSetting
+     */
+    public function setReplacementCostPerPageSetting($replacementCostPerPageSetting)
+    {
+        $this->_replacementCostPerPageSetting = $replacementCostPerPageSetting;
+    }
+
+    /**
+     * @param float $savingsThreshold
+     */
+    public function setSavingsThreshold($savingsThreshold)
+    {
+        $this->_savingsThreshold = $savingsThreshold;
+    }
+
+    /**
+     * @param float $reportPartsCostPerPage
+     */
+    public function setReportPartsCostPerPage($reportPartsCostPerPage)
+    {
+        $this->_reportPartsCostPerPage = $reportPartsCostPerPage;
+    }
+
+    /**
+     * @param float $reportLaborCostPerPage
+     */
+    public function setReportLaborCostPerPage($reportLaborCostPerPage)
+    {
+        $this->_reportLaborCostPerPage = $reportLaborCostPerPage;
+    }
+
+    /**
+     * @param int $dealerId
+     */
+    public function setDealerId($dealerId)
+    {
+        $this->_dealerId = $dealerId;
     }
 
     /**
@@ -162,6 +247,8 @@ class OptimizationStandardDeviceReplacementModel implements OptimizationDeviceRe
      */
     protected function _findReplacement (DeviceInstanceModel $deviceInstance, $replacementDevices)
     {
+        $this->_allReplacementOptions = [];
+
         $suggestedDeviceSwap       = null;
         $greatestSavings           = 0;
         $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($this->_costPerPageSetting);
@@ -207,11 +294,11 @@ class OptimizationStandardDeviceReplacementModel implements OptimizationDeviceRe
             /**
              * Ensure we are within the page counts
              */
-            if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < $deviceSwap->minimumPageCount)
+            if ($deviceInstance->getCombinedMonthlyPageCount() < $deviceSwap->minimumPageCount)
             {
                 continue;
             }
-            else if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() > $deviceSwap->maximumPageCount)
+            else if ($deviceInstance->getCombinedMonthlyPageCount() > $deviceSwap->maximumPageCount)
             {
                 continue;
             }
@@ -219,12 +306,23 @@ class OptimizationStandardDeviceReplacementModel implements OptimizationDeviceRe
             /**
              * Ensure the replacement does not cost too much
              */
-            $replacementDevice     = $masterDeviceMapper->findForReports($deviceSwap->masterDeviceId, $this->_dealerId, $this->_reportLaborCostPerPage, $this->_reportPartsCostPerPage);
+            $replacementDevice     = $masterDeviceMapper->findForReports($deviceSwap->masterDeviceId, $this->_dealerId);
             $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($this->_replacementCostPerPageSetting, $replacementDevice);
             $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
 
+            $this->_allReplacementOptions[] = [
+                'replacementDevice' => $replacementDevice,
+                'deviceReplacementCost' => $deviceReplacementCost,
+                'costDelta' => $costDelta
+            ];
+
             if ($costDelta <= $this->_savingsThreshold)
             {
+                continue;
+            }
+
+            // this device is not cheaper
+            if ($suggestedDeviceSwap instanceof DeviceSwapModel && ($greatestSavings>$costDelta)) {
                 continue;
             }
 
@@ -258,10 +356,20 @@ class OptimizationStandardDeviceReplacementModel implements OptimizationDeviceRe
             /**
              * If we've made it all the way here we can set the suggested device.
              */
-            $suggestedDeviceSwap = $deviceSwap->getMasterDevice();
+            $suggestedDeviceSwap = $deviceSwap;
             $greatestSavings     = $costDelta;
         }
 
-        return $suggestedDeviceSwap;
+        return $suggestedDeviceSwap ? $suggestedDeviceSwap->getMasterDevice() : null;
     }
+
+    /**
+     * @return array
+     */
+    public function getAllReplacementOptions()
+    {
+        return $this->_allReplacementOptions;
+    }
+
+
 }

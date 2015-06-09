@@ -555,10 +555,12 @@ class MasterDeviceModel extends My_Model_Abstract
      *
      * @return \Proposalgen_Model_MasterDevice
      */
-    public function setTonerConfig ($TonerConfig)
+    public function setTonerConfig ($tonerConfig)
     {
-        $this->_tonerConfig = $TonerConfig;
-
+        $this->_tonerConfig = $tonerConfig;
+        if ($tonerConfig instanceof TonerConfigModel) {
+            $this->tonerConfigId = $tonerConfig->id;
+        }
         return $this;
     }
 
@@ -590,6 +592,24 @@ class MasterDeviceModel extends My_Model_Abstract
 
         return $this;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isCopier()
+    {
+        return $this->isCopier;
+    }
+
+    /**
+     * @param boolean $isCopier
+     */
+    public function setCopier($isCopier)
+    {
+        $this->isCopier = $isCopier;
+    }
+
+
 
     /**
      * @param CostPerPageSettingModel $costPerPageSetting
