@@ -23,9 +23,39 @@ class My_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
             {
                 /* @var $acl AppAclModel */
                 $acl = Zend_Registry::get('Zend_Acl');
-
                 $userId = null;
                 $auth   = Zend_Auth::getInstance();
+
+                if (!$auth->hasIdentity()) {
+
+                    $client_id = $request->getParam('client_id');
+                    $hmac = $request->getParam('hmac');
+                    $nonce = $request->getParam('nonce');
+                    if (!empty($client_id) && !empty($hmac) && !empty($nonce)) {
+
+                        $mapper = MPSToolbox\Legacy\Mappers\DealerMapper::getInstance();
+                        $dealer = $mapper->fetch([
+                            "api_key = ?" => $client_id
+                        ]);
+                        if ($dealer) {
+                            $params = $_GET + $_POST;
+                            unset($params['hmac']);
+                            $check = hash_hmac('sha256', http_build_query($params), $dealer->getApiSecret());
+                            if ($check === $hmac) {
+                                $user = new \MPSToolbox\Legacy\Models\UserModel([
+                                    'id' => -1,
+                                    'eulaAccepted' => true,
+                                    'firstname' => '',
+                                    'lastname' => $dealer->dealerName,
+                                    'email' => '',
+                                    'dealerId' => $dealer->id,
+                                ]);
+                                $auth->getStorage()->write($user);
+                            }
+                        }
+                    }
+                }
+
                 if ($auth->hasIdentity())
                 {
                     $userId = (string)$auth->getIdentity()->id;
