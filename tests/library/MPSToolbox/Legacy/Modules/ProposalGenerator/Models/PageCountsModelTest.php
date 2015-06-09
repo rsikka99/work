@@ -7,7 +7,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceMeterModel;
  * @property PageCountsModel blackModel
  * @property PageCountsModel colorModel
  */
-class MPSToolbox_Legacy_Modules_ProposalGenerator_Services_RmsUploadServiceTest extends PHPUnit_Framework_TestCase
+class MPSToolbox_Legacy_Modules_ProposalGenerator_Models_PageCountsModelTest extends PHPUnit_Framework_TestCase
 {
     public function setUp() {
         $this->blackModel = new PageCountsModel();

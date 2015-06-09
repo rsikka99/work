@@ -17,6 +17,7 @@ class Dealerapi_AuthControllerTest extends PHPUnit_Framework_TestCase
         Zend_Controller_Front::getInstance()->setRequest($this->request);
         Zend_Controller_Front::getInstance()->setResponse($this->response);
         $this->controller = new Dealerapi_DeviceController($this->request,$this->response);
+        $this->controller->dealerId = 2;
     }
 
     protected function tearDown()
@@ -25,6 +26,7 @@ class Dealerapi_AuthControllerTest extends PHPUnit_Framework_TestCase
 
     public function testSwap() {
         $this->request->setParam('id',1);
+        $this->request->setParam('ampv',1000);
         $this->controller->swapAction();
         $json = $this->response->getBody();
         $this->assertJson($json);
