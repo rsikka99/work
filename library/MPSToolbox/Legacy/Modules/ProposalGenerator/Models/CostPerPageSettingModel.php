@@ -239,6 +239,10 @@ class CostPerPageSettingModel extends My_Model_Abstract
         {
             $this->pricingMargin = $params->pricingMargin;
         }
+
+        if (isset($params->useCustomerCostPerPageForManagedDevices) && !is_null($params->useCustomerCostPerPageForManagedDevices)) {
+            $this->useCustomerCostPerPageForManagedDevices = $params->useCustomerCostPerPageForManagedDevices;
+        }
     }
 
     /**
@@ -262,6 +266,7 @@ class CostPerPageSettingModel extends My_Model_Abstract
             "clientId"                      => $this->clientId,
             "dealerId"                      => $this->dealerId,
             "pricingMargin"                 => $this->pricingMargin,
+            'useCustomerCostPerPageForManagedDevices' => $this->useCustomerCostPerPageForManagedDevices,
         ];
     }
 

@@ -17,7 +17,22 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel;
  */
 class Dealerapi_DeviceController extends Dealerapi_IndexController
 {
+    /**
+     * @var int
+     */
+    public $dealerId;
+
     public function indexAction() {
+    }
+
+    public function getDealerId() {
+        if (empty($this->dealerId)) {
+            $auth   = Zend_Auth::getInstance();
+            $identity = $auth->getIdentity();
+            if (empty($identity->dealerId)) throw new RuntimeException('dealer auth not found');
+            $this->dealerId = $identity->dealerId;
+        }
+        return $this->dealerId;
     }
 
     public function manufacturersAction() {
@@ -66,41 +81,61 @@ class Dealerapi_DeviceController extends Dealerapi_IndexController
     }
 
     public function swapAction() {
+        $dealerId = $this->getDealerId();
+
         $id = intval($this->getParam('id'));
         if (!$id) {
             $this->outputJson(['error'=>'id not provided']);
             return;
         }
+
+        $ampv = max(100,intval($this->getParam('ampv')));
+
         $masterDevice = MasterDeviceMapper::getInstance()->find($id);
         if (!$masterDevice) {
             $this->outputJson(['error'=>"device {$id} not found"]);
             return;
         }
 
-        $result=array();
+        $service = new \MPSToolbox\Settings\Service\DealerSettingsService();
+        $settings = $service->getDealerSettings($dealerId);
 
-        $dealerId = 2;
         $costThreshold = 0;
         $dealerCostPerPageSetting = new CostPerPageSettingModel([
-            "adminCostPerPage"              => 0.001,
-            "monochromePartsCostPerPage"    => 0.001,
-            "monochromeLaborCostPerPage"    => 0.001,
-            "colorPartsCostPerPage"         => 0.001,
-            "colorLaborCostPerPage"         => 0.001,
-            "pageCoverageMonochrome"        => 6,
-            "pageCoverageColor"             => 24,
+            "adminCostPerPage"              => $settings->currentFleetSettings->adminCostPerPage,
+            "monochromePartsCostPerPage"    => $settings->currentFleetSettings->defaultMonochromePartsCostPerPage,
+            "monochromeLaborCostPerPage"    => $settings->currentFleetSettings->defaultMonochromeLaborCostPerPage,
+            "colorPartsCostPerPage"         => $settings->currentFleetSettings->defaultColorPartsCostPerPage,
+            "colorLaborCostPerPage"         => $settings->currentFleetSettings->defaultColorLaborCostPerPage,
+            "pageCoverageMonochrome"        => $settings->currentFleetSettings->defaultMonochromeCoverage,
+            "pageCoverageColor"             => $settings->currentFleetSettings->defaultColorCoverage,
             "monochromeTonerRankSet"        => TonerVendorRankingSetMapper::getInstance()->find(1),
             "colorTonerRankSet"             => TonerVendorRankingSetMapper::getInstance()->find(2),
             "useDevicePageCoverages"        => 0,
-            "customerMonochromeCostPerPage" => 0.001,
-            "customerColorCostPerPage"      => 0.001,
+            "customerMonochromeCostPerPage" => 0,
+            "customerColorCostPerPage"      => 0,
             "clientId"                      => 1,
             "dealerId"                      => $dealerId,
-            "pricingMargin"                 => 0,
+            "pricingMargin"                 => $settings->currentFleetSettings->tonerPricingMargin,
         ]);
-        $replacementsCostPerPageSetting = clone $dealerCostPerPageSetting;
-        $reportLaborCostPerPage = 0.001;
-        $reportPartsCostPerPage = 0.001;
+
+        $replacementsCostPerPageSetting = new CostPerPageSettingModel([
+            "adminCostPerPage"              => $settings->proposedFleetSettings->adminCostPerPage,
+            "monochromePartsCostPerPage"    => $settings->proposedFleetSettings->defaultMonochromePartsCostPerPage,
+            "monochromeLaborCostPerPage"    => $settings->proposedFleetSettings->defaultMonochromeLaborCostPerPage,
+            "colorPartsCostPerPage"         => $settings->proposedFleetSettings->defaultColorPartsCostPerPage,
+            "colorLaborCostPerPage"         => $settings->proposedFleetSettings->defaultColorLaborCostPerPage,
+            "pageCoverageMonochrome"        => $settings->proposedFleetSettings->defaultMonochromeCoverage,
+            "pageCoverageColor"             => $settings->proposedFleetSettings->defaultColorCoverage,
+            "monochromeTonerRankSet"        => TonerVendorRankingSetMapper::getInstance()->find(1),
+            "colorTonerRankSet"             => TonerVendorRankingSetMapper::getInstance()->find(2),
+            "useDevicePageCoverages"        => 0,
+            "customerMonochromeCostPerPage" => 0,
+            "customerColorCostPerPage"      => 0,
+            "clientId"                      => 1,
+            "dealerId"                      => $dealerId,
+            "pricingMargin"                 => $settings->proposedFleetSettings->tonerPricingMargin,
+        ]);
 
         $doFunctionalityUpgrade = false;
 
@@ -108,7 +143,6 @@ class Dealerapi_DeviceController extends Dealerapi_IndexController
         $blackMfpReplacementDevices = DeviceSwapMapper::getInstance()->getBlackMfpReplacementDevices($dealerId, $doFunctionalityUpgrade);
         $colorReplacementDevices    = DeviceSwapMapper::getInstance()->getColorReplacementDevices($dealerId, true);
         $colorMfpReplacementDevices = DeviceSwapMapper::getInstance()->getColorMfpReplacementDevices($dealerId);
-
 
         $model = new OptimizationStandardDeviceReplacementModel(
             [
@@ -121,8 +155,8 @@ class Dealerapi_DeviceController extends Dealerapi_IndexController
             $costThreshold,
             $dealerCostPerPageSetting,
             $replacementsCostPerPageSetting,
-            $reportLaborCostPerPage,
-            $reportPartsCostPerPage
+            0,
+            0
         );
 
         $deviceInstance = new DeviceInstanceModel();
@@ -130,11 +164,36 @@ class Dealerapi_DeviceController extends Dealerapi_IndexController
         $deviceInstance->setDeviceAction(DeviceInstanceModel::ACTION_REPLACE);
         $meter = new DeviceInstanceMeterModel();
         $deviceInstance->setMeter($meter);
-        $deviceInstance->setCombinedMonthlyPageCount(6000);
-        $deviceInstance->setBlackMonthlyPageCount(6000);
-        $deviceInstance->setColorMonthlyPageCount(0);
-        $result = $model->findReplacement($deviceInstance);
+        if ($masterDevice->isColor()) {
+            $deviceInstance->setCombinedMonthlyPageCount($ampv);
+            $deviceInstance->setBlackMonthlyPageCount($ampv/2);
+            $deviceInstance->setColorMonthlyPageCount($ampv/2);
+        } else {
+            $deviceInstance->setCombinedMonthlyPageCount($ampv);
+            $deviceInstance->setBlackMonthlyPageCount($ampv);
+            $deviceInstance->setColorMonthlyPageCount(0);
+        }
+        $model->findReplacement($deviceInstance);
 
+        $options = $model->getAllReplacementOptions();
+        usort($options, function($a,$b) {
+            if ($a['deviceReplacementCost']>$b['deviceReplacementCost']) return 1;
+            if ($a['deviceReplacementCost']<$b['deviceReplacementCost']) return -1;
+            return 0;
+        });
+
+        $result = [];
+        foreach($options as $option) {
+            $replacementDevice = $option['replacementDevice'];
+            $deviceReplacementCost = $option['deviceReplacementCost'];
+            $costDelta = $option['costDelta'];
+            $item = [
+                'id'=>$replacementDevice->id,
+                'monthly'=>$deviceReplacementCost,
+                'delta'=>$costDelta,
+            ];
+            $result[] = $item;
+        }
         $this->outputJson(['result'=>$result]);
     }
 }

@@ -74,6 +74,11 @@ class OptimizationStandardDeviceReplacementModel implements OptimizationDeviceRe
     protected $_dealerId;
 
     /**
+     * @var array
+     */
+    protected $_allReplacementOptions;
+
+    /**
      * @param DeviceSwapModel[]                        $replacementDevices
      * @param                                          $dealerId
      * @param                                          $costThreshold
@@ -242,6 +247,8 @@ class OptimizationStandardDeviceReplacementModel implements OptimizationDeviceRe
      */
     protected function _findReplacement (DeviceInstanceModel $deviceInstance, $replacementDevices)
     {
+        $this->_allReplacementOptions = [];
+
         $suggestedDeviceSwap       = null;
         $greatestSavings           = 0;
         $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($this->_costPerPageSetting);
@@ -303,8 +310,19 @@ class OptimizationStandardDeviceReplacementModel implements OptimizationDeviceRe
             $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($this->_replacementCostPerPageSetting, $replacementDevice);
             $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
 
+            $this->_allReplacementOptions[] = [
+                'replacementDevice' => $replacementDevice,
+                'deviceReplacementCost' => $deviceReplacementCost,
+                'costDelta' => $costDelta
+            ];
+
             if ($costDelta <= $this->_savingsThreshold)
             {
+                continue;
+            }
+
+            // this device is not cheaper
+            if ($suggestedDeviceSwap instanceof DeviceSwapModel && ($greatestSavings>$costDelta)) {
                 continue;
             }
 
@@ -338,10 +356,20 @@ class OptimizationStandardDeviceReplacementModel implements OptimizationDeviceRe
             /**
              * If we've made it all the way here we can set the suggested device.
              */
-            $suggestedDeviceSwap = $deviceSwap->getMasterDevice();
+            $suggestedDeviceSwap = $deviceSwap;
             $greatestSavings     = $costDelta;
         }
 
-        return $suggestedDeviceSwap;
+        return $suggestedDeviceSwap ? $suggestedDeviceSwap->getMasterDevice() : null;
     }
+
+    /**
+     * @return array
+     */
+    public function getAllReplacementOptions()
+    {
+        return $this->_allReplacementOptions;
+    }
+
+
 }
