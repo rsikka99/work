@@ -239,6 +239,12 @@ class Action extends \Zend_Controller_Action
         }
     }
 
+    public function outputJson(array $array) {
+        $data = $this->safe_json_encode($array);
+        $this->getResponse()->setHeader('Content-Type', 'application/json', true);
+        $this->getResponse()->setBody($data);
+    }
+
     protected function  safe_json_encode ($value)
     {
         if (version_compare(PHP_VERSION, '5.4.0') >= 0)

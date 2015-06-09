@@ -22,6 +22,8 @@ class My_Controller_Plugin_UserActivity extends Zend_Controller_Plugin_Abstract
             if ($auth->hasIdentity())
             {
                 $userIdentity = $auth->getIdentity();
+                if ($userIdentity->id<1) return;
+
                 $uri          = Zend_Controller_Front::getInstance()->getRequest()->getRequestUri();
                 $currentTime  = date('Y-m-d H:i:s');
 

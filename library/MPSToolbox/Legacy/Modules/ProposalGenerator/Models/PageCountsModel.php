@@ -342,6 +342,9 @@ class PageCountsModel
         return $this->_lifePageCount;
     }
 
+    /**
+     * @param float $blackToColorRatio percentage
+     */
     public function processPageRatio ($blackToColorRatio)
     {
         $blackRatio = 1 - ($blackToColorRatio / 100);

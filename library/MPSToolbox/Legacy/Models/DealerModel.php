@@ -55,6 +55,9 @@ class DealerModel extends My_Model_Abstract
      */
     public $dealerLogoImageId;
 
+    public $api_key;
+    public $api_secret;
+
     /**
      * @var DealerSettingModel
      */
@@ -105,6 +108,14 @@ class DealerModel extends My_Model_Abstract
         {
             $this->dealerLogoImageId = $params->dealerLogoImageId;
         }
+        if (isset($params->api_key) && !is_null($params->api_key))
+        {
+            $this->api_key = $params->api_key;
+        }
+        if (isset($params->api_secret) && !is_null($params->api_secret))
+        {
+            $this->api_secret = $params->api_secret;
+        }
     }
 
     /**
@@ -118,6 +129,8 @@ class DealerModel extends My_Model_Abstract
             'dealerName'        => $this->dealerName,
             'dateCreated'       => $this->dateCreated,
             'dealerLogoImageId' => $this->dealerLogoImageId,
+            'api_key'           => $this->api_key,
+            'api_secret'        => $this->api_secret,
         ];
     }
 
@@ -260,6 +273,40 @@ class DealerModel extends My_Model_Abstract
     {
         $this->_tonerVendors = $tonerVendors;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getApiKey()
+    {
+        return $this->api_key;
+    }
+
+    /**
+     * @param mixed $api_key
+     */
+    public function setApiKey($api_key)
+    {
+        $this->api_key = $api_key;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApiSecret()
+    {
+        return $this->api_secret;
+    }
+
+    /**
+     * @param mixed $api_secret
+     */
+    public function setApiSecret($api_secret)
+    {
+        $this->api_secret = $api_secret;
+    }
+
+
 
 
 }
