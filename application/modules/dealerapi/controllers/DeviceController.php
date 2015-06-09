@@ -184,13 +184,14 @@ class Dealerapi_DeviceController extends Dealerapi_IndexController
 
         $result = [];
         foreach($options as $option) {
+            if (count($result)>=3) break;
             $replacementDevice = $option['replacementDevice'];
             $deviceReplacementCost = $option['deviceReplacementCost'];
             $costDelta = $option['costDelta'];
             $item = [
                 'id'=>$replacementDevice->id,
-                'monthly'=>$deviceReplacementCost,
-                'delta'=>$costDelta,
+                'monthly'=>number_format($deviceReplacementCost,2),
+                'delta'=>number_format($costDelta,2),
             ];
             $result[] = $item;
         }
