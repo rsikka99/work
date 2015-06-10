@@ -25,7 +25,7 @@ $form = $this->element;
                 <?= $this->RenderFormLabel($form->getElement('dealerPartsCostPerPage'), ['col-md-4']) ?>
 
                 <div class="col-md-8">
-                    <?= $this->RenderFormText($form->getElement('dealerPartsCostPerPage')) ?>
+                    <?= $this->RenderFormText($form->getElement('dealerPartsCostPerPage'), null, '$') ?>
                     <?= $this->RenderFormDescription($form->getElement('dealerPartsCostPerPage')) ?>
                     <?= $this->RenderFormElementErrors($form->getElement('dealerPartsCostPerPage')) ?>
                 </div>
@@ -35,7 +35,7 @@ $form = $this->element;
                 <?= $this->RenderFormLabel($form->getElement('dealerLaborCostPerPage'), ['col-md-4']) ?>
 
                 <div class="col-md-8">
-                    <?= $this->RenderFormText($form->getElement('dealerLaborCostPerPage')) ?>
+                    <?= $this->RenderFormText($form->getElement('dealerLaborCostPerPage'), null, '$') ?>
                     <?= $this->RenderFormDescription($form->getElement('dealerLaborCostPerPage')) ?>
                     <?= $this->RenderFormElementErrors($form->getElement('dealerLaborCostPerPage')) ?>
                 </div>
@@ -66,7 +66,7 @@ $form = $this->element;
                 <?= $this->RenderFormLabel($form->getElement('leaseBuybackPrice'), ['col-md-4']) ?>
 
                 <div class="col-md-8">
-                    <?= $this->RenderFormText($form->getElement('leaseBuybackPrice')) ?>
+                    <?= $this->RenderFormText($form->getElement('leaseBuybackPrice'), null, '$') ?>
                     <?= $this->RenderFormDescription($form->getElement('leaseBuybackPrice')) ?>
                     <?= $this->RenderFormElementErrors($form->getElement('leaseBuybackPrice')) ?>
                 </div>
