@@ -78,6 +78,19 @@ class HardwareQuoteForm extends \My_Form_Form
                 ]),
             ],
         ]);
+        $this->addElement('text_currency', 'srp', [
+            'label'      => 'SRP',
+            'maxlength'  => 255,
+            'required'   => false,
+            'allowEmpty' => false,
+            'validators' => [
+                new FieldDependsOnValue('isSelling', '1', [
+                    new Zend_Validate_NotEmpty(),
+                    new Zend_Validate_Float(),
+                    new Zend_Validate_GreaterThan(0),
+                ]),
+            ],
+        ]);
         /*
          * Description of standard features
          */
