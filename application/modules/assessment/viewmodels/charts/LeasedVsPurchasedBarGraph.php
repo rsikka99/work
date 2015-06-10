@@ -2,20 +2,23 @@
 
 $highest = ($this->getDevices()->leasedDeviceInstances->getCount() > $this->getDevices()->purchasedDeviceInstances->getCount()) ? $this->getDevices()->leasedDeviceInstances->getCount() : $this->getDevices()->purchasedDeviceInstances->getCount();
 $MyData  = $factory->newData();
-$MyData->addPoints([$this->getDevices()->leasedDeviceInstances->getCount()], "Number of leased devices");
-$MyData->addPoints([$this->getDevices()->purchasedDeviceInstances->getCount()], "Number of purchased devices");
+$MyData->addPoints([$this->getDevices()->leasedDeviceInstances->getCount()], "Future Consideration");
+$MyData->addPoints([$this->getDevices()->purchasedDeviceInstances->getCount()], "Purchased devices");
 
 //Fixes x access scale appearing - hacky - needs fixing
 $MyData->addPoints([""], "Printer Types");
 $MyData->setSerieDescription("Printer Types", "Type");
 $MyData->setAbscissa("Printer Types");
 
+$MyData->setAxisDisplay(0,AXIS_FORMAT_METRIC);
+$MyData->setAxisName(0,'Number of devices');
+
 $leasedRGB             = $hexToRGBConverter->hexToRgb($dealerBranding->graphLeasedDeviceColor);
 $purchasedRGB          = $hexToRGBConverter->hexToRgb($dealerBranding->graphPurchasedDeviceColor);
 $leasedColorSetting    = ['R' => $leasedRGB['r'], 'G' => $leasedRGB['g'], 'B' => $leasedRGB['b']];
 $purchasedColorSetting = ['R' => $purchasedRGB['r'], 'G' => $purchasedRGB['g'], 'B' => $purchasedRGB['b']];
-$MyData->setPalette("Number of leased devices", $leasedColorSetting);
-$MyData->setPalette("Number of purchased devices", $purchasedColorSetting);
+$MyData->setPalette("Future Consideration", $leasedColorSetting);
+$MyData->setPalette("Purchased devices", $purchasedColorSetting);
 
 $myPicture            = $factory->newImage(265, 265, $MyData);
 $myPicture->Antialias = false;

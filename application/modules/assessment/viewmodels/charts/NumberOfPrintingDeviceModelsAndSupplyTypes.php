@@ -1,38 +1,39 @@
 <?php
 
-$uniqueModelArray = [];
+$deviceVendorCount = [];
 foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
 {
-    if (array_key_exists($device->getMasterDevice()->modelName, $uniqueModelArray))
+    if (array_key_exists($device->getMasterDevice()->modelName, $deviceVendorCount))
     {
-        $uniqueModelArray [$device->getMasterDevice()->modelName] += 1;
+        $deviceVendorCount [$device->getMasterDevice()->modelName] += 1;
     }
     else
     {
-        $uniqueModelArray [$device->getMasterDevice()->modelName] = 1;
+        $deviceVendorCount [$device->getMasterDevice()->modelName] = 1;
     }
-    $abscissaArray[] = $device->assetId;
 }
+arsort($deviceVendorCount);
+
 $MyData = $factory->newData();
-$MyData->addPoints($uniqueModelArray, 'Unique models');
+$MyData->addPoints($deviceVendorCount, 'Unique models');
 $MyData->setSerieDescription("ScoreA", "Application A");
 
 /* Define the absissa serie */
-$MyData->addPoints($uniqueModelArray, "Labels");
+$MyData->addPoints($deviceVendorCount, "Labels");
 $MyData->setAbscissa("Labels");
 
-$myPicture = $factory->newImage(700, 270, $MyData, true);
+$myPicture = $factory->newImage(625, 270, $MyData, true);
 $myPicture->setFontProperties(["FontName" => APPLICATION_BASE_PATH."/assets/fonts/DejaVuSans.ttf", "FontSize" => 8, "R" => 127, "G" => 127, "B" => 127]);
-
-$colorArray = ["E21736", "b0bb21", "5c3f9b", "0191d3", "f89428", "e4858f", "fcc223", "B3C6FF", "ECFFB3", "386AFF", "FFB3EC", "cccccc", "00ff00", "000000", "E21736", "b0bb21", "5c3f9b", "0191d3", "f89428",
-    "e4858f", "fcc223", "B3C6FF", "ECFFB3", "386AFF", "FFB3EC", "cccccc", "00ff00", "000000"];
 
 $PieChart = $factory->newChart("pie", $myPicture, $MyData);
 
-for ($i = 0; $i < count($uniqueModelArray); $i++)
+for ($i = 0; $i < count($deviceVendorCount); $i++)
 {
-    $hexColor = $hexToRGBConverter->hexToRgb($colorArray[$i]);
-    $PieChart->setSliceColor(0, ["R" => $hexColor['r'], "G" => $hexColor['g'], "B" => $hexColor['b']]);
+    $hexColor = $hexToRGBConverter->hexToRgb_uppercase(Healthcheck_ViewModel_Healthcheck::$COLOR_ARRAY[$i]);
+    $PieChart->setSliceColor($i, $hexColor);
 }
 
-$PieChart->draw3DPie(280, 125, ["SecondPass" => true, "Radius" => 170]);
+$numberOfIncludedDevices = $this->getDevices()->allIncludedDeviceInstances->getCount();
+$myPicture->drawText(10, 30, "Percent per Printing Device Model on your Network\nTotal Devices - " . $numberOfIncludedDevices, ["FontSize" => 9, "R" => 0, "G" => 0, "B" => 0]);
+
+$PieChart->draw3DPie(280, 150, ["SecondPass" => true, "Radius" => 170]);

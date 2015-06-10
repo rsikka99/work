@@ -2540,6 +2540,18 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         return ($this->getEstimatedAnnualCostOfLeaseMachines() + $this->getTotalPurchasedAnnualCost()) / 12;
     }
 
+    public function getNumberOfVendors()
+    {
+        $arr=[];
+        foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance) {
+            /**
+             * @var DeviceInstanceModel $deviceInstance
+             */
+            $arr[$deviceInstance->getMasterDevice()->manufacturerId] = true;
+        }
+        return count($arr);
+    }
+
     /**
      * Calculates the percentage of the fleet which is capable of reporting toner levels. This includes both purchased and leased devices.
      *
