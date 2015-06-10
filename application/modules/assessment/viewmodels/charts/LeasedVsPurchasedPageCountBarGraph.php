@@ -6,18 +6,18 @@ $value3 = $this->getPercentageOfInkjetPrintVolume()/100 * ($value1+$value2);
 
 $highest = max($value1,$value2);
 $MyData  = $factory->newData();
-$MyData->addPoints([round($value1)], "Leased devices");
+$MyData->addPoints([round($value1)], "Future Consideration devices");
 $MyData->addPoints([round($value2)], 'Purchased devices');
 $MyData->addPoints([round($value3)], 'Non-network devices');
 $MyData->setAxisDisplay(0,AXIS_FORMAT_METRIC);
-$MyData->setAxisName(0,'Monthly volume');
+$MyData->setAxisName(0,'Monthly page volume');
 
 //Fixes x access scale appearing - hacky - needs fixing
 $MyData->addPoints([""], "Printer Types");
 $MyData->setSerieDescription("Printer Types", "Type");
 $MyData->setAbscissa("Printer Types");
 
-$MyData->setPalette("Leased devices", $hexToRGBConverter->hexToRgb_uppercase($dealerBranding->graphLeasedDeviceColor));
+$MyData->setPalette("Future Consideration devices", $hexToRGBConverter->hexToRgb_uppercase($dealerBranding->graphLeasedDeviceColor));
 $MyData->setPalette("Purchased devices", $hexToRGBConverter->hexToRgb_uppercase($dealerBranding->graphPurchasedDeviceColor));
 $MyData->setPalette("Non-network devices", $hexToRGBConverter->hexToRgb_uppercase($dealerBranding->graphIndustryAverageColor));
 
