@@ -187,10 +187,12 @@ define([
                 });
 
                 var $tonerDealerSkuElement = that.$tonerForm.find('[name="dealerSku"]'),
+                    $tonerDealerSrpElement = that.$tonerForm.find('[name="dealerSrp"]'),
                     $tonerDealerCostElement = that.$tonerForm.find('[name="dealerCost"]');
 
                 that.tonerModel.dealerCost = $tonerDealerCostElement.val();
                 that.tonerModel.dealerSku = $tonerDealerSkuElement.val();
+                that.tonerModel.dealerSrp = $tonerDealerSrpElement.val();
 
                 $tonerDealerCostElement.on('change', function ()
                 {
@@ -200,6 +202,11 @@ define([
                 $tonerDealerSkuElement.on('change', function ()
                 {
                     that.tonerModel.dealerSku = $(this).val();
+                });
+
+                $tonerDealerSrpElement.on('change', function ()
+                {
+                    that.tonerModel.dealerSrp = $(this).val();
                 });
 
                 /**

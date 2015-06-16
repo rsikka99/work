@@ -80,6 +80,55 @@ class Dealerapi_DeviceController extends Dealerapi_IndexController
         $this->outputJson(['manufacturer'=>$manufacturer_row['fullname'],'models'=>$result]);
     }
 
+    public function featuresAction() {
+        $page_volume = intval($this->getParam('page_volume'));
+        if (!$page_volume) {
+            $this->outputJson(['error'=>'page_volume not provided']);
+            return;
+        }
+
+        $dealerId = $this->getDealerId();
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $zendDbSelect = $db
+            ->select()
+            ->from('master_devices',['*'])
+            ->join('device_swaps','master_devices.id = device_swaps.masterDeviceId', ['minimumPageCount', 'maximumPageCount'])
+            ->where('device_swaps.dealerId=?', $dealerId);
+        $zendDbStatement = $db->query($zendDbSelect);
+        $result = [];
+        foreach ($zendDbStatement->fetchAll() as $line) {
+
+            //filter color
+            if ($this->getParam('isColor')) {
+                if ($line['tonerConfigId'] == \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel::BLACK_ONLY) continue;
+            } else {
+                if ($line['tonerConfigId'] != \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel::BLACK_ONLY) continue;
+            }
+
+            //filter mfp
+            if ($this->getParam('isScan')) {
+                if (!$line['isCopier']) continue;
+            }
+
+            //filter other properties
+            foreach (array('isFax','additionalTrays','isWalkup','isPIN') as $k) {
+                if ($this->getParam($k)) {
+                    if (!$line[$k]) continue 2;
+                }
+            }
+
+            if (!$this->getParam('additionalTrays')) {
+                if ($page_volume > $line['maximumPageCount']) continue;
+                if ($page_volume < $line['minimumPageCount']) continue;
+            }
+
+            $result[] = $line['id'];
+        }
+
+        $this->outputJson(['result'=>$result]);
+    }
+
     public function swapAction() {
         $dealerId = $this->getDealerId();
 

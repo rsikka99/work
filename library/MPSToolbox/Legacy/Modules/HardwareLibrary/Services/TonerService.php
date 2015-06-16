@@ -56,6 +56,7 @@ class TonerService
      */
     public function saveDealerAttributes ($toner, $data)
     {
+
         $dealerTonerAttributesMapper = DealerTonerAttributeMapper::getInstance();
 
         // Save to dealer Toner Attributes
@@ -66,6 +67,7 @@ class TonerService
             // This allows null to be saved to the database.
             $dealerTonerAttributes->cost      = ($data['dealerCost'] == '' ? new Zend_Db_Expr("NULL") : $data['dealerCost']);
             $dealerTonerAttributes->dealerSku = ($data['dealerSku'] == '' ? new Zend_Db_Expr("NULL") : $data['dealerSku']);
+            $dealerTonerAttributes->dealerSrp = ($data['dealerSrp'] == '' ? new Zend_Db_Expr("NULL") : $data['dealerSrp']);
 
             // If these are NULL we want to remove it from the database
             if ($dealerTonerAttributes->cost == new Zend_Db_Expr("NULL") && $dealerTonerAttributes->dealerSku == new Zend_Db_Expr("NULL"))
@@ -85,6 +87,7 @@ class TonerService
             $dealerTonerAttributes->dealerId  = $this->dealerId;
             $dealerTonerAttributes->cost      = ($data['dealerCost'] == '' ? new Zend_Db_Expr("NULL") : $data['dealerCost']);
             $dealerTonerAttributes->dealerSku = ($data['dealerSku'] == '' ? new Zend_Db_Expr("NULL") : $data['dealerSku']);
+            $dealerTonerAttributes->dealerSrp = ($data['dealerSrp'] == '' ? new Zend_Db_Expr("NULL") : $data['dealerSrp']);
             $dealerTonerAttributesMapper->insert($dealerTonerAttributes);
         }
     }
