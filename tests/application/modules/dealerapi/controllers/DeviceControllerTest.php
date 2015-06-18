@@ -1,6 +1,6 @@
 <?php
 
-require APPLICATION_BASE_PATH.'/application/modules/dealerapi/controllers/DeviceController.php';
+require_once APPLICATION_BASE_PATH.'/application/modules/dealerapi/controllers/DeviceController.php';
 
 /**
  * Class MPSToolbox_Settings_Form_AllSettingsTest
@@ -8,9 +8,18 @@ require APPLICATION_BASE_PATH.'/application/modules/dealerapi/controllers/Device
  * @property Zend_Controller_Request_HttpTestCase $request
  * @property Zend_Controller_Response_HttpTestCase $response
  */
-class Dealerapi_AuthControllerTest extends PHPUnit_Framework_TestCase
+class Dealerapi_DeviceControllerTest extends My_DatabaseTestCase
 {
-    protected function setUp()
+
+    public $fixtures = [
+        'images','dealers','clients','users',
+        'toner_configs','manufacturers',
+        'master_devices',
+        'rms_providers','rms_devices','rms_uploads','rms_upload_rows',
+        'device_instances','device_instance_meters','device_instance_master_devices'
+    ];
+
+    public function setUp()
     {
         $this->request = new Zend_Controller_Request_HttpTestCase();
         $this->response = new Zend_Controller_Response_HttpTestCase();
@@ -18,10 +27,7 @@ class Dealerapi_AuthControllerTest extends PHPUnit_Framework_TestCase
         Zend_Controller_Front::getInstance()->setResponse($this->response);
         $this->controller = new Dealerapi_DeviceController($this->request,$this->response);
         $this->controller->dealerId = 2;
-    }
-
-    protected function tearDown()
-    {
+        parent::setUp();
     }
 
     public function testSwap() {
