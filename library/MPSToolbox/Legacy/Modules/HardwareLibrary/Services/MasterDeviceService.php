@@ -5,7 +5,7 @@ namespace MPSToolbox\Legacy\Modules\HardwareLibrary\Services;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Validators\MasterDeviceValidator;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
-use PhpOffice\PhpWord\Exception\Exception;
+use \Exception;
 
 /**
  * Class MasterDeviceService
