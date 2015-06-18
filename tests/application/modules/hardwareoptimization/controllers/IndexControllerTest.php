@@ -20,7 +20,7 @@ class Hardwareoptimization_IndexControllerTest extends My_ControllerTestCase
     {
         parent::setUp();
         $auth   = Zend_Auth::getInstance();
-        $user = json_decode(json_encode(['id'=>1, 'eulaAccepted'=>true, 'firstname'=>'unit testing', 'dealerId'=>1, 'resetPasswordOnNextLogin'=>false]));
+        $user = json_decode(json_encode(['id'=>1, 'eulaAccepted'=>true, 'firstname'=>'unit', 'lastname'=>'testing', 'dealerId'=>1, 'resetPasswordOnNextLogin'=>false, 'email'=>'it@tangentmtw.com']));
         $auth->getStorage()->write($user);
         $mpsSession = new Zend_Session_Namespace('mps-tools');
         $mpsSession->selectedClientId = 1;

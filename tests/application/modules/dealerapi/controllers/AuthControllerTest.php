@@ -8,7 +8,7 @@ require_once APPLICATION_BASE_PATH.'/application/modules/dealerapi/controllers/A
  * @property Zend_Controller_Request_HttpTestCase $request
  * @property Zend_Controller_Response_HttpTestCase $response
  */
-class Dealerapi_AuthControllerTest extends My_DatabaseTestCase
+class Dealerapi_AuthControllerTest extends My_ControllerTestCase
 {
 
     public $fixtures = ['dealers'];
@@ -16,17 +16,12 @@ class Dealerapi_AuthControllerTest extends My_DatabaseTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->request = new Zend_Controller_Request_HttpTestCase();
-        $this->response = new Zend_Controller_Response_HttpTestCase();
-        Zend_Controller_Front::getInstance()->setRequest($this->request);
-        Zend_Controller_Front::getInstance()->setResponse($this->response);
-        $this->controller = new Dealerapi_AuthController($this->request,$this->response);
     }
 
     public function testAuth() {
         $this->request->setParam('key','123');
         $this->request->setParam('secret','abc');
-        $this->controller->indexAction();
+        $this->dispatch('dealerapi/auth/index');
         $json = $this->response->getBody();
         $this->assertJson($json);
         $arr = json_decode($json,true);

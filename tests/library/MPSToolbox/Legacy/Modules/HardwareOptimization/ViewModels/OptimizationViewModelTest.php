@@ -19,7 +19,8 @@ class MPSToolbox_Legacy_Modules_HardwareOptimization_ViewModels_OptimizationView
         'rms_providers','rms_devices','rms_uploads','rms_upload_rows',
         'device_instances','device_instance_meters','device_instance_master_devices',
         'device_swap_reason_categories','device_swap_reasons',
-        'device_swaps','hardware_optimizations','hardware_optimization_device_instances'
+        'device_swaps','hardware_optimizations','hardware_optimization_device_instances',
+        'toner_vendor_ranking_sets','fleet_settings','generic_settings','optimization_settings','quote_settings','dealer_settings'
     ];
 
     public function setUp()

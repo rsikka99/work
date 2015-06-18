@@ -7,11 +7,17 @@ use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\DeviceSwapModel;
  *
  * @property DeviceSwapMapper deviceSwapMapper
  */
-class MPSToolbox_Legacy_Modules_HardwareOptimization_Mappers_DeviceSwapMapper extends PHPUnit_Framework_TestCase
+class MPSToolbox_Legacy_Modules_HardwareOptimization_Mappers_DeviceSwapMapper extends My_DatabaseTestCase
 {
+
+    public $fixtures = [
+        'dealers','toner_configs','manufacturers','users','master_devices','toner_colors','toners','device_toners'
+    ];
+
     public function setUp()
     {
         $this->deviceSwapMapper = DeviceSwapMapper::getInstance();
+        parent::setup();
     }
 
     public function tearDown()
@@ -20,6 +26,7 @@ class MPSToolbox_Legacy_Modules_HardwareOptimization_Mappers_DeviceSwapMapper ex
         DeviceSwapMapper::getInstance()->delete(array(1,1));
         DeviceSwapMapper::getInstance()->delete(array(2,1));
         DeviceSwapMapper::getInstance()->delete(array(3,1));
+        parent::tearDown();
     }
 
     public function testInsert() {

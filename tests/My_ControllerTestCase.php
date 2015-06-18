@@ -17,6 +17,7 @@ abstract class My_ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCas
         parent::setUp();
         $this->_application->getBootstrap()->getPluginResource('frontcontroller')->init();
         $this->_application->getBootstrap()->getPluginResource('view')->init();
+        Zend_Layout::startMvc(['layoutPath'=>APPLICATION_PATH.'/layouts/scripts']);
         include APPLICATION_PATH . '/configs/routes.php';
 
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();

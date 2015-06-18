@@ -27,6 +27,7 @@ class MPSToolbox_Legacy_Modules_HardwareOptimization_Models_OptimizationAbstract
     }
 
     public function testContructor() {
+        /**
         $this->hardwareOptimizationModel = new HardwareOptimizationModel([
             "id"           => 1,
             "clientId"     => 2,
@@ -41,6 +42,7 @@ class MPSToolbox_Legacy_Modules_HardwareOptimization_Models_OptimizationAbstract
         $this->hardwareOptimizationModel->setDealer(new DealerModel());
         $this->hardwareOptimizationModel->setRmsUpload(new RmsUploadModel());
         $this->model = new TestOptimizationModel($this->hardwareOptimizationModel);
+         **/
         $this->assertTrue(true);
     }
 
