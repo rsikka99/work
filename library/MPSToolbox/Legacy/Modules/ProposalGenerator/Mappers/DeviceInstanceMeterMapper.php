@@ -258,6 +258,9 @@ class DeviceInstanceMeterMapper extends My_Model_Mapper_Abstract
         if (!isset($this->_deviceInstanceMeterCache[$deviceInstanceId]))
         {
             $meters                                             = $this->fetch(["{$this->col_deviceInstanceId} = ?" => $deviceInstanceId]);
+            if (!$meters instanceof DeviceInstanceMeterModel) {
+                return false;
+            }
             $this->_deviceInstanceMeterCache[$deviceInstanceId] = $meters;
         }
 

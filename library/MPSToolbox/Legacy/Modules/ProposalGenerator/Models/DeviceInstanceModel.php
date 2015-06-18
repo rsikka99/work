@@ -596,7 +596,7 @@ class DeviceInstanceModel extends My_Model_Abstract
      */
     public function getMeter ()
     {
-        if (!isset($this->_meter))
+        if (!$this->_meter instanceof DeviceInstanceMeterModel)
         {
             $this->_meter = DeviceInstanceMeterMapper::getInstance()->fetchForDeviceInstance($this->id);
         }
@@ -605,14 +605,10 @@ class DeviceInstanceModel extends My_Model_Abstract
     }
 
     /**
-     * @param DeviceInstanceMeterModel $Meters
-     *
-     * @return DeviceInstanceModel
      */
-    public function setMeters ($Meters)
+    public function setMeter ($meter)
     {
-        $this->_meters = $Meters;
-
+        $this->_meter = $meter;
         return $this;
     }
 
