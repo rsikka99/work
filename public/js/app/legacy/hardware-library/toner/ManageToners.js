@@ -117,6 +117,7 @@ require([
 { width: 120, name: 'systemCost',                 index: 'systemCost',                 label: 'systemCost',                         hidden: true },
 { width: 70,  name: 'tonerColorIdModified',       index: 'tonerColorId',               label: 'Color',                                 align: 'center', sortable: true },
 { width: 120, name: 'skuModified',                index: 'dealerSku',                  label: '(' + dealerSkuName + ')<br/>OEM SKU' },
+{ width: 120, name: 'toner_name',                 index: 'toner_name',                 label: 'Product Name',                                           sortable: true },
 { width: 213, name: 'manufacturer',               index: 'manufacturer',               label: 'Manufacturer',                                           sortable: true },
 { width: 300, name: 'device_list',                index: 'device_list',                label: 'Machine Compatibility' },
 { width: 60,  name: 'yield',                      index: 'yield',                      label: 'Yield',                                 align: 'right',  sortable: true },

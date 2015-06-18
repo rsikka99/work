@@ -98,9 +98,14 @@ class PrintAuditUploadService extends AbstractRmsUploadService
     {
         if (isset($csvData['monitorStartDate']))
         {
-            $monitorDates                = explode(' - ', $csvData['monitorStartDate']);
-            $csvData['monitorStartDate'] = $monitorDates[0];
-            $csvData['monitorEndDate']   = $monitorDates[1];
+            $monitorDates                = explode(' - ', $csvData['monitorStartDate'],2);
+            if (count($monitorDates)==2) {
+                $csvData['monitorStartDate'] = $monitorDates[0];
+                $csvData['monitorEndDate'] = $monitorDates[1];
+            } else {
+                $csvData['monitorStartDate'] = '';
+                $csvData['monitorEndDate'] = '';
+            }
         }
 
         return parent::processData($csvData);

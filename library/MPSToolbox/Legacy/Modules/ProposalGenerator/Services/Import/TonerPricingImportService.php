@@ -15,6 +15,7 @@ class TonerPricingImportService extends AbstractImportService
     const TONER_PRICING_TONER_ID     = "Toner ID";
     const TONER_PRICING_MANUFACTURER = "Manufacturer";
     const TONER_PRICING_SKU          = "SKU";
+    const TONER_PRICING_NAME         = "Name";
     const TONER_PRICING_COLOR        = "Color";
     const TONER_PRICING_YIELD        = "Yield";
     const TONER_PRICING_SYSTEM_PRICE = "System Price";
@@ -25,6 +26,7 @@ class TonerPricingImportService extends AbstractImportService
         self::TONER_PRICING_TONER_ID,
         self::TONER_PRICING_MANUFACTURER,
         self::TONER_PRICING_SKU,
+        self::TONER_PRICING_NAME,
         self::TONER_PRICING_COLOR,
         self::TONER_PRICING_YIELD,
         self::TONER_PRICING_SYSTEM_PRICE,

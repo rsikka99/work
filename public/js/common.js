@@ -5,6 +5,10 @@
 //Configure loading modules from the lib directory,
 //except for 'app' ones, which are in a sibling
 //directory.
+
+var require_cache_date = new Date();
+var require_cache_arg = require_cache_date.getDate() +''+ require_cache_date.getMonth() +''+ require_cache_date.getYear();
+
 requirejs.config({
     'baseUrl': '/js',
     'paths'  : {
@@ -74,7 +78,8 @@ requirejs.config({
             }
         },
         'select2'                : ['jquery']
-    }
+    },
+	'urlArgs' : '_=' + require_cache_arg
 });
 
 require(['./main']);

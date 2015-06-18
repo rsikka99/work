@@ -40,17 +40,6 @@ define([
 
         /**
          * Toner Model
-         *
-         * @type {{
-     *     tonerId: number,
-     *     cost: number,
-     *     dealerCost: number,
-     *     sku: string,
-     *     dealerSku: string,
-     *     yield: number,
-     *     tonerColorId: number,
-     *     manufacturerId: number
-     *     }}
          */
         this.tonerModel = {};
 
@@ -145,6 +134,7 @@ define([
                     $tonerCostElement = that.$tonerForm.find('[name="cost"]'),
                     $tonerYieldElement = that.$tonerForm.find('[name="yield"]'),
                     $tonerSkuElement = that.$tonerForm.find('[name="sku"]'),
+                    $tonerNameElement = that.$tonerForm.find('[name="name"]'),
                     $tonerImageUrlElement = that.$tonerForm.find('[name="imageUrl"]');
 
                 that.tonerModel.tonerId = $tonerIdElement.val();
@@ -152,6 +142,7 @@ define([
                 that.tonerModel.tonerColorId = $tonerColorElement.val();
                 that.tonerModel.cost = $tonerCostElement.val();
                 that.tonerModel.sku = $tonerSkuElement.val();
+                that.tonerModel.name = $tonerNameElement.val();
                 that.tonerModel.yield = $tonerYieldElement.val();
                 that.tonerModel.imageUrl = $tonerImageUrlElement.val();
 
@@ -175,6 +166,11 @@ define([
                     that.tonerModel.sku = $(this).val();
                 });
 
+                $tonerNameElement.on('change', function ()
+                {
+                    that.tonerModel.name = $(this).val();
+                });
+
                 $tonerYieldElement.on('change', function ()
                 {
                     that.tonerModel.yield = $(this).val();
@@ -191,10 +187,12 @@ define([
                 });
 
                 var $tonerDealerSkuElement = that.$tonerForm.find('[name="dealerSku"]'),
+                    $tonerDealerSrpElement = that.$tonerForm.find('[name="dealerSrp"]'),
                     $tonerDealerCostElement = that.$tonerForm.find('[name="dealerCost"]');
 
                 that.tonerModel.dealerCost = $tonerDealerCostElement.val();
                 that.tonerModel.dealerSku = $tonerDealerSkuElement.val();
+                that.tonerModel.dealerSrp = $tonerDealerSrpElement.val();
 
                 $tonerDealerCostElement.on('change', function ()
                 {
@@ -204,6 +202,11 @@ define([
                 $tonerDealerSkuElement.on('change', function ()
                 {
                     that.tonerModel.dealerSku = $(this).val();
+                });
+
+                $tonerDealerSrpElement.on('change', function ()
+                {
+                    that.tonerModel.dealerSrp = $(this).val();
                 });
 
                 /**

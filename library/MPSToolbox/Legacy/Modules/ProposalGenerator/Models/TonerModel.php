@@ -104,6 +104,11 @@ class TonerModel extends My_Model_Abstract
     public $imageFile = '';
 
     /**
+     * @var string
+     */
+    public $name = '';
+
+    /**
      * @var ManufacturerModel
      */
     protected $_manufacturer;
@@ -208,6 +213,14 @@ class TonerModel extends My_Model_Abstract
             $this->imageFile = $params->imageFile;
         }
 
+        if (isset($params->name) && !is_null($params->name))
+        {
+            $this->name = $params->name;
+        }
+        else if (isset($params->sku) && !is_null($params->sku))
+        {
+            $this->name = $params->sku;
+        }
     }
 
     /**
@@ -220,6 +233,7 @@ class TonerModel extends My_Model_Abstract
             "userId"         => $this->userId,
             "isSystemDevice" => $this->isSystemDevice,
             "sku"            => $this->sku,
+            "name"           => $this->name,
             "cost"           => $this->cost,
             "yield"          => $this->yield,
             "manufacturerId" => $this->manufacturerId,

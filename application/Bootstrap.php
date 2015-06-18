@@ -191,7 +191,7 @@ class Bootstrap extends Tangent\Bootstrap
         /**
          * Common.js used for require.js setup
          */
-        $view->headScript()->prependFile($view->baseUrl('/js/common.js'));
+        $view->headScript()->prependFile($view->baseUrl('/js/common.js?_='.date('dmY')));
     }
 
     /**

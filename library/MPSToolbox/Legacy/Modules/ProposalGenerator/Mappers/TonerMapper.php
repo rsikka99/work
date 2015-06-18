@@ -595,6 +595,7 @@ FROM toners
     manufacturers.fullname              AS manufacturer,
     toners.sku                          AS systemSku,
     dealer_toner_attributes.dealerSku   AS dealerSku,
+    toners.name                         AS toner_name,
     toners.cost                         AS systemCost,
     dealer_toner_attributes.cost        AS dealerCost,
     toners.yield,
@@ -869,7 +870,7 @@ WHERE `toners`.`id` IN ({$tonerIdList})
         $db->beginTransaction();
 
         $select = $db->select()
-                     ->from(['t' => 'toners'], ['toners_id' => 'id', 'sku', 'yield', 'imageFile', "systemCost" => "cost"])
+                     ->from(['t' => 'toners'], ['toners_id' => 'id', 'sku', 'name', 'yield', 'imageFile', "systemCost" => "cost"])
                      ->joinLeft(['dt' => 'device_toners'], 'dt.toner_id = t.id', ['master_device_id'])
                      ->joinLeft(['tm' => 'manufacturers'], 'tm.id = t.manufacturerId', ['fullname'])
                      ->joinLeft(['tc' => 'toner_colors'], 'tc.id = t.tonerColorId', ['name AS toner_color'])
@@ -893,6 +894,7 @@ WHERE `toners`.`id` IN ({$tonerIdList})
                 $value ['toners_id'],
                 $value ['fullname'],
                 $value ['sku'],
+                $value ['name'],
                 $value ['toner_color'],
                 $value ['yield'],
                 $value ['systemCost'],

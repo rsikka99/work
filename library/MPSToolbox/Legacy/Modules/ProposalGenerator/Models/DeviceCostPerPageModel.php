@@ -106,7 +106,7 @@ class DeviceCostPerPageModel extends My_Model_Abstract
     {
         return [
             "costPerPageSetting" => $this->costPerPageSetting,
-            "toners"             => $this->costPerPageSetting,
+            "toners"             => $this->toners,
             "laborCostPerPage"   => $this->laborCostPerPage,
             "partsCostPerPage"   => $this->partsCostPerPage,
             "isManaged"          => $this->isManaged,

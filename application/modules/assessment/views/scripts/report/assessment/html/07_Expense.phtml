@@ -17,7 +17,7 @@ $assessmentViewModel = $this->assessmentViewModel;
 <br />
 <p>Gartner Group called office printing the last great hidden expense in the office. They estimate the companies spend 1% to 3% of their revenue on office
     printing. Based on data collected from your printing devices and your questionnaire responses, we have estimated your annual printing expenses. We have
-    separated your expenses into the cost of your leased printing devices and the cost of your purchased devices. Your leased devices are typically large
+    separated your expenses into the cost of your printing devices designated as "Future Consideration" and the cost of your purchased devices. Your devices designated as "Future Consideration" are typically large
     multifunction devices and are assumed to be on an existing service contract. Your purchased devices are ones that can typically be transferred to
     our <?= $this->brandName; ?> program and be managed by <?= $this->companyName; ?>.</p>
 <br />
@@ -28,11 +28,11 @@ $assessmentViewModel = $this->assessmentViewModel;
 <br />
 <table cellspacing="0" style="font-size: 10.5pt;">
     <tr>
-        <td style="width: 565px;">Annual cost of hardware on leases</td>
+        <td style="width: 565px;">Annual cost of hardware designated as "Future Consideration"</td>
         <td style="width: 80px;" class="right"><?= $this->currency($assessmentViewModel->getEstimatedAnnualCostOfLeaseMachines()); ?></td>
     </tr>
     <tr>
-        <td class="bottomborder">Annual cost of hardware not on leases</td>
+        <td class="bottomborder">Annual cost of all other networked printing hardware</td>
         <td class="right bottomborder"><?= $this->currency($assessmentViewModel->getTotalPurchasedAnnualCost()); ?></td>
     </tr>
     <tr>
@@ -42,21 +42,21 @@ $assessmentViewModel = $this->assessmentViewModel;
 </table>
 <br />
 
-<div class="pheader">Cost of Hardware Assumed to be Leased</div>
+<div class="pheader">Cost of Hardware designated as "Future Consideration"</div>
 <p>To calculate your cost of leased printing devices, we assumed that you are paying a monthly lease rate in addition to a per-page cost, which includes
     supplies and service for each device.</p>
 <br />
 <table cellspacing="0" style="font-size: 10.5pt">
     <tr>
-        <td style="width: 565px;">Number of printing devices assumed to be on a lease</td>
+        <td style="width: 565px;">Number of printing devices designated as "Future Consideration"</td>
         <td style="width: 80px;" class="right"><?= count($assessmentViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances()); ?></td>
     </tr>
     <tr>
-        <td>Predicted average annual monochrome prints on leased machines</td>
+        <td>Predicted average annual monochrome prints on machines designated as "Future Consideration"</td>
         <td class="right"><?= $this->formatPageVolume($assessmentViewModel->getDevices()->leasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly()); ?></td>
     </tr>
     <tr>
-        <td></td>
+        <td>Predicted average annual color prints on machines designated as "Future Consideration"</td>
         <td class="right"><?= $this->formatPageVolume($assessmentViewModel->getDevices()->leasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly()); ?></td>
     </tr>
     <tr>
@@ -97,13 +97,13 @@ $assessmentViewModel = $this->assessmentViewModel;
     <strong><?= count($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances()); ?></strong> print devices that are assumed to not be attached to leases may be
     suitable for transfer to a managed print program. Currently, you are paying for supplies and service separately for these devices and your internal IT staff
     spends time servicing them when they break down.</p>
-<p>The costs below are based on data collected using remote monitoring software and your questionnaire responses. It also assumes a monochrome page coverage of
+<p>The costs below are based on data collected using remote support software and your questionnaire responses. It also assumes a monochrome page coverage of
     <strong><?= number_format($assessmentViewModel->getPageCoverageBlackAndWhite()); ?>%</strong> and color coverage of
     <strong><?= number_format($assessmentViewModel->getPageCoverageColor()); ?>%</strong>.
 </p>
 <table cellspacing="0" style="font-size: 10pt;">
     <tr>
-        <td style="width: 565px;" class="bold">Supplies</td>
+        <td style="width: 565px;" class="bold">Supplies and Order Processing Costs</td>
         <td style="width: 80px;" class="right">&nbsp;</td>
     </tr>
     <tr>
@@ -113,7 +113,7 @@ $assessmentViewModel = $this->assessmentViewModel;
             <?= $this->currency($assessmentViewModel->getCostOfInkAndToner($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></td>
     </tr>
     <tr>
-        <td>Annual administration cost of executing supplies orders<br /><em>Based on your questionnaire responses.</em>
+        <td>Annual administration cost of executing orders<br /><em>Based on your questionnaire responses.</em>
         </td>
         <td class="right"><?= $this->currency($assessmentViewModel->getCostOfExecutingSuppliesOrders()); ?></td>
     </tr>

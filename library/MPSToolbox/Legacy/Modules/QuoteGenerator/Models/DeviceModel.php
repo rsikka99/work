@@ -52,6 +52,11 @@ class DeviceModel extends My_Model_Abstract
     public $cost;
 
     /**
+     * @var float
+     */
+    public $srp;
+
+    /**
      * @var DeviceOptionModel[]
      */
     protected $_options;
@@ -96,6 +101,11 @@ class DeviceModel extends My_Model_Abstract
         {
             $this->cost = $params->cost;
         }
+
+        if (isset($params->srp) && !is_null($params->srp))
+        {
+            $this->srp = $params->srp;
+        }
     }
 
     /**
@@ -110,6 +120,7 @@ class DeviceModel extends My_Model_Abstract
             "dealerSku"      => $this->dealerSku,
             "description"    => $this->description,
             "cost"           => $this->cost,
+            "srp"            => $this->srp,
         ];
     }
 

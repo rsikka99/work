@@ -21,7 +21,7 @@ class Dealerapi_SupplyController extends Dealerapi_IndexController
         $zendDbSelect =
             $db->select()
                 ->from('toners',['id','sku','imageFile'])
-                ->joinLeft('manufacturers','toners.manufacturerId=manufacturers.id',['fullname'])
+                ->joinLeft('manufacturers','toners.manufacturerId=manufacturers.id',['displayname','fullname'])
                 ->where('sku like ?',"%$keyword%");
         $zendDbStatement = $db->query($zendDbSelect);
         $result = [];
@@ -33,14 +33,14 @@ class Dealerapi_SupplyController extends Dealerapi_IndexController
                 'id'=>$line['id'],
                 'manufacturer'=>$line['fullname'],
                 'sku'=>$line['sku'],
-                'name'=>$line['fullname'].' '.$line['sku'],
+                'name'=>$line['displayname'].' '.$line['sku'],
                 'image'=>$image_url,
             ];
         }
         $zendDbSelect =
             $db->select()
                 ->from('master_devices',['id','modelName','imageFile'])
-                ->joinLeft('manufacturers','master_devices.manufacturerId=manufacturers.id',['fullname'])
+                ->joinLeft('manufacturers','master_devices.manufacturerId=manufacturers.id',['displayname','fullname'])
                 ->where('modelName like ?',"%$keyword%");
         $zendDbStatement = $db->query($zendDbSelect);
         foreach ($zendDbStatement->fetchAll() as $line) {
@@ -51,7 +51,7 @@ class Dealerapi_SupplyController extends Dealerapi_IndexController
                 'id'=>$line['id'],
                 'manufacturer'=>$line['fullname'],
                 'model'=>$line['modelName'],
-                'name'=>$line['fullname'].' '.$line['modelName'],
+                'name'=>$line['displayname'].' '.$line['modelName'],
                 'image'=>$image_url,
             ];
         }

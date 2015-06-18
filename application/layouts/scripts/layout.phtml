@@ -17,7 +17,7 @@
     <meta name="author" content="Tangent MTW">
     <?= $this->headLink(); ?>
 
-    <script src="<?= $this->baseUrl('js/lib/require/require.min.js') ?>"></script>
+    <script src="<?= $this->baseUrl('js/lib/require/'.(file_exists('c:')?'require.js':'require.min.js')) ?>"></script>
 </head>
 <body>
 <?= $this->partial('partials/main-navigation.phtml') ?>

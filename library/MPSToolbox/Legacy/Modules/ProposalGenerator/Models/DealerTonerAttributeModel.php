@@ -33,6 +33,11 @@ class DealerTonerAttributeModel extends My_Model_Abstract
     public $dealerSku;
 
     /**
+     * @var string
+     */
+    public $dealerSrp;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
@@ -61,6 +66,11 @@ class DealerTonerAttributeModel extends My_Model_Abstract
         {
             $this->dealerSku = $params->dealerSku;
         }
+
+        if (isset($params->dealerSrp) && !is_null($params->dealerSrp))
+        {
+            $this->dealerSrp = $params->dealerSrp;
+        }
     }
 
     /**
@@ -73,6 +83,7 @@ class DealerTonerAttributeModel extends My_Model_Abstract
             "dealerId"  => $this->dealerId,
             "cost"      => $this->cost,
             "dealerSku" => $this->dealerSku,
+            "dealerSrp" => $this->dealerSrp,
         ];
     }
 }

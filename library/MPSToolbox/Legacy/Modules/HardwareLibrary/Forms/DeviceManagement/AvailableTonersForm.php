@@ -52,6 +52,7 @@ class AvailableTonersForm extends \My_Form_Form
             $data               = $tonerModel->toArray();
             $data['dealerSku']  = $tonerModel->getDealerTonerAttribute($dealerId)->dealerSku;
             $data['dealerCost'] = $tonerModel->getDealerTonerAttribute($dealerId)->cost;
+            $data['dealerSrp'] = $tonerModel->getDealerTonerAttribute($dealerId)->dealerSrp;
 
             $this->setDefaults($data);
         }
@@ -116,6 +117,22 @@ class AvailableTonersForm extends \My_Form_Form
         ]);
 
         /**
+         * Dealer SRP
+         */
+        $this->addElement('text_currency', 'dealerSrp', [
+            'label'      => 'SRP',
+            'required'   => false,
+            'maxlength'  => 255,
+            'validators' => [
+                [
+                    'validator' => 'greaterThan',
+                    'options'   => ['min' => 0],
+                ],
+                'Float',
+            ]
+        ]);
+
+        /**
          * OEM SKU
          */
         $tonerMapper = TonerMapper::getInstance();
@@ -136,6 +153,19 @@ class AvailableTonersForm extends \My_Form_Form
                     'options'   => [1, 255],
                 ],
                 $dbNoRecordExistsValidator
+            ],
+        ]);
+
+        $this->addElement('text', 'name', [
+            'label'      => 'Product Name',
+            'required'   => false,
+            'maxlength'  => 255,
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
+                    'validator' => 'StringLength',
+                    'options'   => [1, 255],
+                ]
             ],
         ]);
 

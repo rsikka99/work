@@ -240,11 +240,12 @@ class OptimizationFunctionalityDeviceReplacementModel implements OptimizationDev
             /**
              * Ensure we are within the page counts
              */
-            if ($deviceInstance->getPageCounts($blackToColorRatio)->getCombinedPageCount()->getMonthly() < $deviceSwap->minimumPageCount)
+            //if ($deviceInstance->getPageCounts($blackToColorRatio)->getCombinedPageCount()->getMonthly() < $deviceSwap->minimumPageCount)
+            if ($deviceInstance->getCombinedMonthlyPageCount() < $deviceSwap->minimumPageCount)
             {
                 continue;
             }
-            else if ($deviceInstance->getPageCounts($blackToColorRatio)->getCombinedPageCount()->getMonthly() > $deviceSwap->maximumPageCount)
+            else if ($deviceInstance->getCombinedMonthlyPageCount() > $deviceSwap->maximumPageCount)
             {
                 continue;
             }

@@ -15,9 +15,7 @@ $assessmentViewModel = $this->assessmentViewModel;
 </table>
 <br />
 <div class="pheader">Printing Device Management Breakdown</div>
-<p>Different types of printing devices are managed in different ways. Newer networked printers can be managed with remote monitoring software; leased
-    multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older
-    printers, are difficult to manage because you cannot monitor them with software.</p>
+<p>Different types of printing devices are managed in different ways. Newer networked printers can be managed remotely. Devices designated as “Future Consideration” are assumed to be managed by the vendor who sold the machine and therefore will be considered separately within this report. Print volumes for Non-networked devices have been estimated based on your response in the Assessment Questionnaire.</p>
 <br />
 <div class="center">
     <img src="?png=LeasedVsPurchasedBarGraph" /> <!-- Devices leased/Devices Purchased -->
@@ -40,13 +38,12 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
 }
 ?>
 <p>Based on your questionnaire,
-    <strong><?= $inkjetString; ?> of your printing is done on non-network devices</strong>. We did not monitor inkjet machines
-    that are not connected to the network, and on average, pages printed to inkjet printers cost three times more than pages printed to laser devices. Without
+    <strong><?= $inkjetString; ?> of your printing is done on non-network devices</strong>. We did not monitor locally connected printers
+    that are not connected to the network, and on average, pages printed to locally connected printers cost three times more than pages printed to network devices. Without
     being on the network, users also cannot share these devices. There are some instances where desktop printers are appropriate, for instance, if a single user
     requires confidential, high-convenience printing. We can help you consolidate desktop hardware where appropriate, and where desktop printing is required, we
     can help you select network-capable equipment so your desktop printing can be managed with the rest of your office print.
 </p>
-<br />
 <?php if (count($assessmentViewModel->getExcludedDevices()) > 0) : ?>
     <p>There are <?= count($assessmentViewModel->getExcludedDevices()) ?> devices were not included in the analysis due to lack of data or model information.
         See the Appendix in the <?= $this->brandName ?> Your Solution document for details regarding the excluded device(s).</p>
@@ -56,7 +53,7 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
 <table cellspacing="0" class="bold" style="font-size: 10.5pt; margin: 6pt 0;">
     <tr>
         <td style="width: 470px;">Number of printer repairs per month</td>
-        <td style="width: 175px;" class="right"><?= number_format($assessmentViewModel->getNumberOfRepairs()); ?></td>
+        <td style="width: 175px;" class="right"><?= number_format($assessmentViewModel->getNumberOfRepairs(),1); ?></td>
     </tr>
     <tr>
         <td>Average time between printer breaking down and printer being fixed</td>
@@ -71,33 +68,37 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
 <br />
 <p><?= $this->companyName; ?> can provide next-day service for your printer fleet.</p>
 <br />
-<div class="pheader">Number of Vendors</div>
+<div class="pheader">Managing Supplies and Service</div>
 <p>Based on your questionnaire responses, we discovered the following:</p>
 <table cellspacing="0" class="bold" style="font-size: 10.5pt">
+    <tr>
+        <td>Number of Vendors</td>
+        <td class="right"><?= $assessmentViewModel->getNumberOfVendors(); ?></td>
+    </tr>
+
     <tr>
         <td style="width: 500px;">Percentage of fleet capable of report toner levels</td>
         <td style="width: 145px;" class="right"><?= number_format($assessmentViewModel->calculatePercentageOfFleetReportingTonerLevels(), 2); ?>%</td>
     </tr>
     <tr>
-        <td>Number of orders for ink and toner executed annually</td>
+        <td>Number of annual invoices processed for supplies and service management</td>
         <td class="right"><?= $assessmentViewModel->getNumberOfAnnualInkTonerOrders(); ?></td>
     </tr>
     <tr>
-        <td>Estimated annual cost to execute ink and toner orders</td>
+        <td>Estimated annual administrative cost for supplies and service orders</td>
         <td class="right"><?= $this->currency($assessmentViewModel->getCostOfExecutingSuppliesOrders()); ?></td>
     </tr>
 </table>
 <br />
-<p>Time spent dealing with multiple vendors could be better spent focusing on your core business tasks. <?= $this->companyName; ?> can bundle your
-    supplies and service into a single invoice - and if you need new hardware, that can be included too.</p>
+<p>Time spent dealing with multiple vendors could be better spent focusing on your core business tasks. <?= $this->companyName; ?> can combine all of your purchase orders into a single monthly invoice.</p>
 <br />
 <div class="pheader">Number of Printing Device Models and Supply Types</div>
 <p>Out of your
     <strong><?= $assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have
     <strong><?= $assessmentViewModel->getNumberOfUniqueModels(); ?></strong> unique models. Each section of the chart below represents a single model
-    type. We estimate that
-    <strong><?= count($assessmentViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances()); ?></strong> of your printing devices are leased machines, for
-    which supplies are included in your contract. The
+    type. We assume that
+    <strong><?= count($assessmentViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances()); ?></strong>
+    of your printing have supplies and service included. The
     <strong><?= count($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances()); ?></strong> remaining machines
     consist of
     <strong><?= $assessmentViewModel->getNumberOfUniquePurchasedModels(); ?></strong> different models and use
@@ -108,6 +109,81 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
 <div class="center">
     <img src="?png=NumberOfPrintingDeviceModelsAndSupplyTypes" /> <!--  Giant pie chart -->
 </div>
-<p>By using printing devices with supplies in common, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space
+
+<?php
+
+$deviceVendorCount = [];
+foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device) {
+    if (array_key_exists($device->getMasterDevice()->modelName, $deviceVendorCount))  {
+        $deviceVendorCount [$device->getMasterDevice()->modelName] += 1;
+    } else {
+        $deviceVendorCount [$device->getMasterDevice()->modelName] = 1;
+    }
+}
+arsort($deviceVendorCount);
+
+$totalAmount       = $assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount();
+$amountOfRows      = ceil(count($deviceVendorCount) / 2);
+
+//FirstHalf is whether we are writing to the left side of the table or the right side.
+$firstColumn  = true;
+$colorCounter = 0;
+
+$tableData = [];
+
+?>
+<table class="table-bordered" style="border-collapse: collapse; width:100%">
+    <?php
+
+    $counter = 0;
+    foreach ($deviceVendorCount as $key => $deviceCount)
+    {
+        if ($counter < $amountOfRows)
+        {
+            $tableData[$counter]["column1"] = [
+                "color"   => Healthcheck_ViewModel_Healthcheck::$COLOR_ARRAY[$counter],
+                "name"    => $key . " (" . $deviceCount . ")",
+                "percent" => number_format(($deviceCount / $totalAmount) * 100, 1) . "%",
+            ];
+        }
+        else
+        {
+            $tableData[$counter - $amountOfRows]["column2"] = [
+                "color"   => Healthcheck_ViewModel_Healthcheck::$COLOR_ARRAY[$counter],
+                "name"    => $key . " (" . $deviceCount . ")",
+                "percent" => number_format(($deviceCount / $totalAmount) * 100, 1) . "%",
+            ];
+
+        }
+        $counter++;
+    }
+    ?>
+    <?php foreach ($tableData as $row) : ?>
+        <tr>
+            <?php if (array_key_exists("column1", $row)) : ?>
+                <td style="border:1px solid">
+                    <div style="width:20px;height:20px;margin: auto;background-color:#<?= $row["column1"]["color"]; ?>"></div>
+                </td>
+                <td style="border:1px solid"><?= $row["column1"]["name"]; ?></td>
+                <td style="border:1px solid"><?= $row["column1"]["percent"] ?></td>
+            <?php else : ?>
+                <td colspan="3">&nbsp;</td>
+            <?php endif; ?>
+
+
+            <?php if (array_key_exists("column2", $row)) : ?>
+                <td style="border:1px solid">
+                    <div style="width:20px;height:20px;margin: auto;background-color:#<?= $row["column2"]["color"]; ?>"></div>
+                </td>
+                <td style="border:1px solid"><?= $row["column2"]["name"]; ?></td>
+                <td style="border:1px solid"><?= $row["column2"]["percent"] ?></td>
+            <?php else : ?>
+                <td colspan="3">&nbsp;</td>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+</table>
+
+<p><br>By reducing the number of suppliers and the number of unique printing devices, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space
     required. <?= $this->companyName; ?> can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and
     emergency supply orders.</p>
