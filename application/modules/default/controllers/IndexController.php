@@ -554,144 +554,39 @@ class Default_IndexController extends Action
 
     /**
      * Allows a user to create a new client
+     * @deprecated
      */
     public function createClientAction ()
     {
-        $this->_pageTitle = ['Create Client'];
-        $clientService    = new ClientService();
-
-        if ($this->getRequest()->isPost())
-        {
-            $values = $this->getRequest()->getPost();
-            if (isset($values ['Cancel']))
-            {
-                $this->redirectToRoute('app.dashboard');
-            }
-
-            // Create Client
-            $values['dealerId'] = $this->getIdentity()->dealerId;
-            $clientId           = $clientService->create($values);
-
-            if ($clientId)
-            {
-                $userViewedClient = UserViewedClientMapper::getInstance()->find([$this->getIdentity()->id, $clientId]);
-                if ($userViewedClient instanceof UserViewedClientModel)
-                {
-                    $userViewedClient->dateViewed = new Zend_Db_Expr("NOW()");
-                    UserViewedClientMapper::getInstance()->save($userViewedClient);
-                }
-                else
-                {
-                    $userViewedClient             = new UserViewedClientModel();
-                    $userViewedClient->clientId   = $clientId;
-                    $userViewedClient->userId     = $this->getIdentity()->id;
-                    $userViewedClient->dateViewed = new Zend_Db_Expr("NOW()");
-                    UserViewedClientMapper::getInstance()->insert($userViewedClient);
-                }
-
-                $this->_flashMessenger->addMessage(['success' => "Client was successfully created."]);
-
-                $this->getMpsSession()->selectedClientId = $clientId;
-
-                // Redirect with client id so that the client is preselected
-                $this->redirectToRoute('app.dashboard');
-            }
-        }
-
-        $this->view->form = $clientService->getForm();
+        throw new Exception('deprecated');
     }
 
     /**
      * Action to handle editing a client
+     * @deprecated
      */
     public function editClientAction ()
     {
-        $this->_pageTitle = ['Edit Client'];
-        // Get the passed client id
-        $clientId = $this->getSelectedClient()->id;
-        // Get the client object from the database
-        $client = ClientMapper::getInstance()->find($clientId);
-
-        if (!$client)
-        {
-            $this->_flashMessenger->addMessage(['warning' => 'Please select a client first.']);
-            $this->redirectToRoute('company.clients');
-        }
-
-        // Start the client service
-        $clientService = new ClientService();
-
-        $clientService->populateForm($clientId);
-        if ($this->getRequest()->isPost())
-        {
-            $values = $this->getRequest()->getPost();
-            if (isset($values ['Cancel']))
-            {
-                $this->redirectToRoute('company.clients');
-            }
-
-            try
-            {
-                // Update Client
-                $clientId = $clientService->update($values, $clientId);
-            }
-            catch (Exception $e)
-            {
-                $clientId = false;
-            }
-
-            if ($clientId)
-            {
-                $this->_flashMessenger->addMessage([
-                    'success' => "Client {$client->companyName} successfully updated."
-                ]);
-                // Redirect with client id so that the client is preselected
-                $this->redirectToRoute('company.clients', [
-                    'clientId' => $clientId
-                ]);
-            }
-            else
-            {
-                $this->_flashMessenger->addMessage([
-                    'danger' => "Please correct the errors below."
-                ]);
-            }
-        }
-        $this->view->form = $clientService->getForm();
+        throw new Exception('deprecated');
     }
 
 
     /**
      * JSON ACTION: Handles searching for a client by name and dealerId
+     * @deprecated
      */
     public function searchForClientAction ()
     {
-
-        $this->_pageTitle = ['Client Search'];
-        $searchTerm       = $this->getParam('query', false);
-        $results          = [];
-        if ($searchTerm !== false)
-        {
-            $clients = ClientMapper::getInstance()->searchForClientByCompanyNameAndDealer($searchTerm, $this->getIdentity()->dealerId);
-            foreach ($clients as $client)
-            {
-                $results[] = [
-                    "id"          => $client->id,
-                    "companyName" => $client->companyName
-                ];
-            }
-        }
-
-        $this->sendJson($results);
+        throw new Exception('deprecated');
     }
 
     /**
      * Allows a user to view all of the clients available
+     * @deprecated
      */
     public function viewAllClientsAction ()
     {
-        $this->_pageTitle    = ['Select Client'];
-        $this->view->clients = ClientMapper::getInstance()->fetchClientListForDealer($this->getIdentity()->dealerId);
+        throw new Exception('deprecated');
     }
 
     /**
