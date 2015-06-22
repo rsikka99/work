@@ -31,26 +31,11 @@ class Default_AuthController extends Action
     }
 
     /**
-     * Gets the auth adapter to use for authentication
-     *
-     * @return My_Auth_Adapter
-     */
-    function getAuthAdapter ()
-    {
-        $authAdapter = new My_Auth_Adapter();
-        $authAdapter->setTableName('users');
-        $authAdapter->setIdentityColumn('email');
-        $authAdapter->setCredentialColumn('password');
-
-        return $authAdapter;
-    }
-
-    /**
      * The login action authenticates a user with our system.
      * After a successful authentication we should send them back to the page
      * that they were trying to access.
      */
-    function loginAction ()
+    public function loginAction ()
     {
         $this->_pageTitle = ['Login'];
 
@@ -66,14 +51,16 @@ class Default_AuthController extends Action
             {
                 $this->redirectToRoute('auth.login.forgotPassword', ['email' => $this->getParam('email')]);
             }
-            if ($form->isValid($request->getPost()))
+            if ($form->isValid($request->getParams()))
             {
                 $auth        = Zend_Auth::getInstance();
-                $authAdapter = $this->getAuthAdapter();
-                $authAdapter->setIdentity($form->getValue("email"));
 
-                $password = $form->getValue("password");
-                $authAdapter->setCredential($password);
+                $authAdapter = new My_Auth_Adapter();
+                $authAdapter->setTableName('users');
+                $authAdapter->setIdentityColumn('email');
+                $authAdapter->setCredentialColumn('password');
+                $authAdapter->setIdentity($form->getValue("email"));
+                $authAdapter->setCredential($form->getValue("password"));
 
                 // Authenticate against the database
                 $result = $auth->authenticate($authAdapter);
@@ -112,7 +99,7 @@ class Default_AuthController extends Action
 
                         $userSession = $userSessionMapper->find($currentSessionId);
                         // Do we have a session id that matches our current session
-                        if ($userSession->sessionId == $currentSessionId)
+                        if ($userSession && $userSession->sessionId == $currentSessionId)
                         {
                             // If it's a new userId with this current session, update the userId for this sessionId
                             if ($userInfo->id != $userSession->userId)
@@ -194,7 +181,7 @@ class Default_AuthController extends Action
      * We should persist all other session data as it can help keep a user
      * friendly experience
      */
-    public function doLogout ()
+    private function doLogout ()
     {
         if ($this->isLoggedIn())
         {
@@ -234,7 +221,7 @@ class Default_AuthController extends Action
 
         if ($this->getRequest()->isPost())
         {
-            $postData = $this->getRequest()->getPost();
+            $postData = $this->getRequest()->getParams();
             if (isset($postData['cancel']))
             {
                 $this->redirectToRoute('auth.login');
@@ -300,7 +287,7 @@ class Default_AuthController extends Action
      *
      * @return int
      */
-    function getRandom ($min, $max)
+    private function getRandom ($min, $max)
     {
         $bits = '';
 
@@ -343,13 +330,13 @@ class Default_AuthController extends Action
 
         if ($request->isPost())
         {
-            $values = $request->getPost();
+            $values = $request->getParams();
             if (isset($values ['submit']))
             {
                 if ($form->isValid($values))
                 {
 
-                    $userMapper = new UserMapper();
+                    $userMapper = UserMapper::getInstance();
 
                     $user     = $userMapper->find($identity->id);
                     $password = crypt($form->getValue("current_password"), $user->password);
@@ -405,7 +392,7 @@ class Default_AuthController extends Action
      * This function takes care of verifying the users reset token and
      * providing them with a form to reset their password.
      */
-    function forgotPasswordResetAction ()
+    public function forgotPasswordResetAction ()
     {
         $this->_pageTitle = ['Reset Password'];
 
@@ -433,10 +420,10 @@ class Default_AuthController extends Action
         if ($this->getRequest()->isPost())
         {
             // Step 1. Get the reset id
-            $postData = $this->getRequest()->getPost();
+            $postData = $this->getRequest()->getParams();
             if (isset($postData ['cancel']))
             {
-                $this->redirectToRoute('app.dashboard');
+                $this->redirectToRoute('auth.login');
             }
             else
             {
@@ -455,7 +442,7 @@ class Default_AuthController extends Action
 
                     $this->_flashMessenger->addMessage(["success" => 'Password has been updated. You can now log in using your new password.']);
 
-                    $this->redirectToRoute('app.dashboard');
+                    $this->redirectToRoute('auth.login');
                 }
             }
         }
@@ -469,7 +456,7 @@ class Default_AuthController extends Action
      *
      * @return UserPasswordResetRequestModel
      */
-    function verifyPasswordReset ($resetUid)
+    private function verifyPasswordReset ($resetUid)
     {
         $passwordResetRequest = false;
         if ($resetUid !== null)
@@ -522,24 +509,13 @@ class Default_AuthController extends Action
      * @param $user  UserModel
      * @param $token String
      */
-    public function sendForgotPasswordEmail ($user, $token)
+    private function sendForgotPasswordEmail ($user, $token)
     {
-        $config = Zend_Registry::get('config');
+
+        Zend_Mail::setDefaultTransport(self::getMailTransport());
+
+        $config = \Zend_Registry::get('config');
         $email  = $config->email;
-
-        //grab the email configuration settings from application.ini
-        $emailConfig = [
-            'auth'     => 'login',
-            'username' => $email->username,
-            'password' => $email->password,
-            'ssl'      => $email->ssl,
-            'port'     => $email->port,
-            'host'     => $email->host
-        ];
-
-        //grab the email host from application.ini
-        $mailTransport = new Zend_Mail_Transport_Smtp($emailConfig['host'], $emailConfig);
-        Zend_Mail::setDefaultTransport($mailTransport);
 
         $mail = new Zend_Mail ();
         $mail->setFrom($email->username, 'Forgot Password');

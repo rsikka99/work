@@ -69,6 +69,11 @@ class Action extends \Zend_Controller_Action
     protected $selectedRmsUpload;
 
     /**
+     * @var \Zend_Mail_Transport_Abstract
+     */
+    protected static $mailTransport;
+
+    /**
      * Helper Broker to assist in routing help requests to the proper object
      *
      * @var \Zend_Controller_Action_HelperBroker
@@ -384,4 +389,39 @@ class Action extends \Zend_Controller_Action
     {
         return $this->_helper->layout();
     }
+
+    /**
+     * @return \Zend_Mail_Transport_Abstract
+     */
+    public static function getMailTransport()
+    {
+        if (null === self::$mailTransport) {
+            $config = \Zend_Registry::get('config');
+            $email  = $config->email;
+
+            //grab the email configuration settings from application.ini
+            $emailConfig = [
+                'auth'     => 'login',
+                'username' => $email->username,
+                'password' => $email->password,
+                'ssl'      => $email->ssl,
+                'port'     => $email->port,
+                'host'     => $email->host
+            ];
+
+            //grab the email host from application.ini
+            self::$mailTransport = new \Zend_Mail_Transport_Smtp($emailConfig['host'], $emailConfig);
+        }
+        return self::$mailTransport;
+    }
+
+    /**
+     * @param \Zend_Mail_Transport_Abstract $mailTransport
+     */
+    public static function setMailTransport($mailTransport)
+    {
+        self::$mailTransport = $mailTransport;
+    }
+
+
 }

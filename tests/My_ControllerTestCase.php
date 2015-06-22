@@ -1,8 +1,12 @@
 <?php
 abstract class My_ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
 {
+    public $fixture_fk = [
+        'users'=>['dealers'],
+        'clients'=>['dealers'],
+    ];
 
-    public $fixtures = ['dealers','users','clients'];
+    public $fixtures = ['users','clients'];
 
     public function appBootstrap()
     {
@@ -12,12 +16,16 @@ abstract class My_ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCas
 
     public function setUp()
     {
+        $_SERVER['HTTP_HOST'] = 'localhost';
+        $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+
         $this->bootstrap = array($this, 'appBootstrap');
 
         parent::setUp();
         $this->_application->getBootstrap()->getPluginResource('frontcontroller')->init();
         $this->_application->getBootstrap()->getPluginResource('view')->init();
         Zend_Layout::startMvc(['layoutPath'=>APPLICATION_PATH.'/layouts/scripts']);
+        Zend_Layout::getMvcInstance()->disableLayout();
         include APPLICATION_PATH . '/configs/routes.php';
 
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
@@ -31,17 +39,30 @@ abstract class My_ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCas
         }
     }
 
+    private function loadFixture($name) {
+        if (isset($this->fixture_fk[$name])) {
+            foreach ($this->fixture_fk[$name] as $fk) {
+                if (!isset($this->_fixturesLoaded[$fk])) {
+                    $this->loadFixture($fk);
+                }
+            }
+        }
+        $path = APPLICATION_BASE_PATH . '/tests/fixtures/' . $name . '.yml';
+        if ($this->_fixtureDataset === null) {
+            $this->_fixtureDataset = new PHPUnit_Extensions_Database_DataSet_YamlDataSet($path);
+        } else {
+            $this->_fixtureDataset->addYamlFile($path);
+        }
+        $this->_fixturesLoaded[$name] = true;
+    }
+
     protected function getDataSet()
     {
         if (!isset($this->_fixtureDataset)) {
             $this->_fixtureDataset = null;
+            $this->_fixturesLoaded = [];
             foreach ($this->fixtures as $name) {
-                $path = APPLICATION_BASE_PATH . '/tests/fixtures/' . $name . '.yml';
-                if ($this->_fixtureDataset === null) {
-                    $this->_fixtureDataset = new PHPUnit_Extensions_Database_DataSet_YamlDataSet($path);
-                } else {
-                    $this->_fixtureDataset->addYamlFile($path);
-                }
+                $this->loadFixture($name);
             }
         }
         return $this->_fixtureDataset;

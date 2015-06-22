@@ -73,6 +73,11 @@ abstract class My_Model_Mapper_Abstract
      */
     public function setDbTable ($dbTable)
     {
+        if (null === $dbTable) {
+            $this->_dbTable = null;
+            return $this;
+        }
+
         if (is_string($dbTable))
         {
             $dbTable = new $dbTable();
