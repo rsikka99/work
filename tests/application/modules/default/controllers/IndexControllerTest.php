@@ -1,30 +1,31 @@
 <?php
 
-class Default_IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
+class Default_IndexControllerTest extends My_ControllerTestCase
 {
 
-    public function setUp ()
-    {
+    public $fixtures = ['users','clients'];
+
+    public function setUp() {
         parent::setUp();
+        $user = \MPSToolbox\Legacy\Mappers\UserMapper::getInstance()->find(2);
+        Zend_Auth::getInstance()->getStorage()->write($user);
     }
 
+    public function tearDown() {
+        Zend_Auth::getInstance()->getStorage()->write(null);
+        parent::tearDown();
+    }
 
-    public function testCanRunPHPUNIT ()
+    public function test_indexAction()
     {
-        $this->assertTrue(true, "This should never fail unless unit testing is broken");
+        $this->dispatch('/');
+
+        $this->assertModule('default');
+        $this->assertController('index');
+        $this->assertAction('index');
+
+        $this->assertRedirectTo('/select-client');
     }
 
-
-//     public function testCanDisplayHomePage ()
-//     {
-//         // Go to the index
-//         $this->dispatch('/');
-
-//         // Make sure we didn't end up on an error page
-//         $this->assertModule('default');
-//         $this->assertController('index');
-//         $this->assertAction('index');
-//         $this->assertResponseCode(200);
-//     }
 }
 

@@ -377,46 +377,6 @@
                         </viewAndPrintReports>
                     </pages>
                 </quotemenu>
-                <clients>
-                    <label>Clients</label>
-                    <route>clients</route>
-                    <resource>default__index__view-all-clients</resource>
-                    <visible>0</visible>
-                    <pages>
-                        <viewallclients>
-                            <label>All Clients</label>
-                            <route>clients</route>
-                            <resource>default__index__view-all-clients</resource>
-                            <visible>0</visible>
-                        </viewallclients>
-                        <createNewClient>
-                            <label>Create Clients</label>
-                            <route>clients.create-clients-dashboard</route>
-                            <resource>default__index__create-client</resource>
-                            <visible>0</visible>
-                        </createNewClient>
-                        <editClient>
-                            <label>Edit Clients</label>
-                            <route>client.edit-clients-dashboard</route>
-                            <resource>default__index__edit-client</resource>
-                            <visible>0</visible>
-                        </editClient>
-                    </pages>
-                </clients>
-                <clientpricing>
-                    <label>Client Pricing</label>
-                    <route>client.edit-clients-dashboard</route>
-                    <resource>proposalgen__client-pricing__index</resource>
-                    <visible>0</visible>
-                    <pages>
-                        <client-pricing-upload>
-                            <label>Client Pricing</label>
-                            <route>client.edit-clients-dashboard</route>
-                            <resource>proposalgen__client-pricing__upload</resource>
-                            <visible>0</visible>
-                        </client-pricing-upload>
-                    </pages>
-                </clientpricing>
             </pages>
         </homemenu>
         <hardwarelibrary>
