@@ -3,7 +3,7 @@ abstract class My_ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCas
 {
     public $fixture_fk = [
         'users'=>['dealers'],
-        'clients'=>['dealers'],
+        'clients'=>['countries','dealers'],
     ];
 
     public $fixtures = ['users','clients'];

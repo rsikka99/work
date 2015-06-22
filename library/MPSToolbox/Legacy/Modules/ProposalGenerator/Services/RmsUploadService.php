@@ -15,6 +15,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\RmsUploadRowMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceMasterDeviceModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceMeterModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsDeviceModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsExcludedRowModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsProviderModel;
@@ -183,6 +184,10 @@ class RmsUploadService
                     $rmsExcludedRowMapper      = RmsExcludedRowMapper::getInstance();
                     $deviceInstanceMeterMapper = DeviceInstanceMeterMapper::getInstance();
                     $rmsDeviceMapper           = RmsDeviceMapper::getInstance();
+                    $rmsUploadRowMapper->clearItemCache();
+                    $rmsExcludedRowMapper->clearItemCache();
+                    $deviceInstanceMeterMapper->clearItemCache();
+                    $rmsDeviceMapper->clearItemCache();
 
                     /**
                      * Store our old upload in case we need it.
@@ -505,7 +510,6 @@ class RmsUploadService
 
                                 // Set values that are none existent in $line
                                 $rmsExcludedRow->rmsProviderId = $uploadProviderId;
-
                                 RmsExcludedRowMapper::getInstance()->insert($rmsExcludedRow);
                             }
 
@@ -527,15 +531,16 @@ class RmsUploadService
                                 if ($deviceInstanceMasterDevice instanceof DeviceInstanceMasterDeviceModel)
                                 {
                                     $masterDevice                             = $deviceInstanceMasterDevice->getMasterDevice();
-                                    $deviceInstance->isLeased                 = $masterDevice->isLeased;
-                                    $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($dealerId);
+                                    if ($masterDevice instanceof MasterDeviceModel) {
+                                        $deviceInstance->isLeased = $masterDevice->isLeased;
+                                        $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($dealerId);
+                                    }
                                     DeviceInstanceMapper::getInstance()->save($deviceInstance);
                                 }
                             }
 
 
                             $db->commit();
-
                             $importSuccessful = true;
                         }
                     }

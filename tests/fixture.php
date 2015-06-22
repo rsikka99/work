@@ -1,6 +1,6 @@
 <?php
 
-define('UNIT_TESTING',true);
+#define('UNIT_TESTING',true);
 
 parse_str(implode('&', array_slice($argv, 1)), $_GET);
 if (!isset($_GET['table'])) die('table not defined');

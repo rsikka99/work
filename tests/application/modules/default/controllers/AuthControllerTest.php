@@ -92,12 +92,29 @@ class Default_AuthControllerTest extends My_ControllerTestCase
         $identity = Zend_Auth::getInstance()->getIdentity();
         $this->assertInstanceOf('stdClass', $identity);
 
+        $mock = $this->getMock('Zend_Db_Table_Abstract');
+        $mock
+            ->expects($this->once())
+            ->method('insert')
+            ->will($this->returnValue(1));
+        \MPSToolbox\Legacy\Mappers\UserEventLogMapper::getInstance()->setDbTable($mock);
+
+        $mock = $this->getMock('Zend_Db_Table_Abstract');
+        $mock
+            ->expects($this->once())
+            ->method('insert')
+            ->will($this->returnValue(1));
+        \MPSToolbox\Legacy\Mappers\EventLogMapper::getInstance()->setDbTable($mock);
+
         $this->dispatch('logout');
         $this->assertAction('logout');
 
         $this->assertRedirectTo('/login');
         $identity = Zend_Auth::getInstance()->getIdentity();
         $this->assertEquals(null, $identity);
+
+        \MPSToolbox\Legacy\Mappers\UserEventLogMapper::getInstance()->setDbTable(null);
+        \MPSToolbox\Legacy\Mappers\EventLogMapper::getInstance()->setDbTable(null);
     }
 
     public function test_forgotPasswordAction() {

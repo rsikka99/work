@@ -1,6 +1,12 @@
 <?php
 
 class My_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTestCase {
+
+    public $fixture_fk = [
+        'users'=>['dealers'],
+        'clients'=>['dealers'],
+    ];
+
     public $fixtures = [];
     private $_connectionMock;
 
@@ -15,17 +21,31 @@ class My_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTestCase {
         }
         return $this->_connectionMock;
     }
+
+    private function loadFixture($name) {
+        if (isset($this->fixture_fk[$name])) {
+            foreach ($this->fixture_fk[$name] as $fk) {
+                if (!isset($this->_fixturesLoaded[$fk])) {
+                    $this->loadFixture($fk);
+                }
+            }
+        }
+        $path = APPLICATION_BASE_PATH . '/tests/fixtures/' . $name . '.yml';
+        if ($this->_fixtureDataset === null) {
+            $this->_fixtureDataset = new PHPUnit_Extensions_Database_DataSet_YamlDataSet($path);
+        } else {
+            $this->_fixtureDataset->addYamlFile($path);
+        }
+        $this->_fixturesLoaded[$name] = true;
+    }
+
     protected function getDataSet()
     {
         if (!isset($this->_fixtureDataset)) {
             $this->_fixtureDataset = null;
+            $this->_fixturesLoaded = [];
             foreach ($this->fixtures as $name) {
-                $path = APPLICATION_BASE_PATH . '/tests/fixtures/' . $name . '.yml';
-                if ($this->_fixtureDataset === null) {
-                    $this->_fixtureDataset = new PHPUnit_Extensions_Database_DataSet_YamlDataSet($path);
-                } else {
-                    $this->_fixtureDataset->addYamlFile($path);
-                }
+                $this->loadFixture($name);
             }
             if (!$this->_fixtureDataset) $this->_fixtureDataset = new PHPUnit_Extensions_Database_DataSet_CsvDataSet();
         }

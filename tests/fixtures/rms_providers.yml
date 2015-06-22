@@ -7,3 +7,4 @@ rms_providers:
     - { id: '6', name: 'PrintFleet 3.x' }
     - { id: '7', name: 'Print Tracker' }
     - { id: '8', name: 'FM Audit 4.x' }
+    - { id: '9', name: 'Lexmark' }
