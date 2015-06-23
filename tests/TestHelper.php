@@ -33,6 +33,6 @@ global $application;
 $application = new Zend_Application('production', array(
     'config' => array(
         APPLICATION_PATH . '/configs/global.php',
-        APPLICATION_PATH . '/configs/local.php',
+        APPLICATION_PATH . '/configs/testing.local.php',
     )));
 $application->bootstrap();
