@@ -9,12 +9,14 @@ use MPSToolbox\Settings\Entities\FleetSettingsEntity;
 use MPSToolbox\Settings\Entities\GenericSettingsEntity;
 use MPSToolbox\Settings\Entities\OptimizationSettingsEntity;
 use MPSToolbox\Settings\Entities\QuoteSettingsEntity;
+use MPSToolbox\Settings\Entities\ShopSettingsEntity;
 use MPSToolbox\Settings\Form\AllSettingsForm as AllSettingsForm;
 use MPSToolbox\Settings\Form\CurrentFleetSettingsForm;
 use MPSToolbox\Settings\Form\GenericSettingsForm;
 use MPSToolbox\Settings\Form\OptimizationSettingsForm;
 use MPSToolbox\Settings\Form\ProposedFleetSettingsForm;
 use MPSToolbox\Settings\Form\QuoteSettingsForm as QuoteSettingsForm;
+use MPSToolbox\Settings\Form\ShopSettingsForm as ShopSettingsForm;
 
 /**
  * Class DealerSettingsService
@@ -283,17 +285,25 @@ class DealerSettingsService
         $quoteSettings->defaultDeviceMargin = 15;
         $quoteSettings->defaultPageMargin   = 45;
 
+        $shopSettings                      = new ShopSettingsEntity();
+        $shopSettings->shopifyName = '';
+        $shopSettings->hardwareMargin = 30;
+        $shopSettings->oemTonerMargin = 30;
+        $shopSettings->compatibleTonerMargin = 30;
+
         $currentFleetSetting->save();
         $proposedFleetSetting->save();
         $genericSettings->save();
         $optimizationSettings->save();
         $quoteSettings->save();
+        $shopSettings->save();
 
         $dealerSettings->currentFleetSettings()->associate($currentFleetSetting);
         $dealerSettings->proposedFleetSettings()->associate($proposedFleetSetting);
         $dealerSettings->genericSettings()->associate($genericSettings);
         $dealerSettings->optimizationSettings()->associate($optimizationSettings);
         $dealerSettings->quoteSettings()->associate($quoteSettings);
+        $dealerSettings->shopSettings()->associate($shopSettings);
     }
 
     /**
@@ -310,7 +320,8 @@ class DealerSettingsService
             'ProposedFleetSettings',
             'GenericSettings',
             'QuoteSettings',
-            'OptimizationSettings'
+            'OptimizationSettings',
+            'ShopSettings'
         )->find($dealerId);
 
         if (!$dealerSettings instanceof DealerSettingsEntity)
@@ -324,4 +335,28 @@ class DealerSettingsService
 
         return $dealerSettings;
     }
+
+    /**
+     * @param \Zend_Form|ShopSettingsForm $form
+     * @param DealerSettingsEntity         $dealerSettings
+     */
+    public function saveShopSettingsForm ($form, $dealerSettings)
+    {
+        if (count($dealerSettings->shopSettings))
+        {
+            $shopSettings = $form->getShopSettings($dealerSettings->shopSettings);
+            if ($shopSettings->isDirty())
+            {
+                $shopSettings->save();
+            }
+        }
+        else
+        {
+            $shopSettings = $form->getShopSettings();
+            $shopSettings->save();
+            $dealerSettings->shopSettings()->associate($shopSettings);
+            $dealerSettings->push();
+        }
+    }
+
 }
