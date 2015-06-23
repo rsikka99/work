@@ -54,6 +54,17 @@ use MPSToolbox\Legacy\Models\Acl\PreferencesAclModel;
                     <br />
                 </a>
             </div>
+
+            <div class="col-sm-3 col-md-2 col-lg-2">
+                <a class="btn btn-default btn-block" href="<?= $this->url([], 'company.shop-settings'); ?>">
+                    <i class="fa fa-shopping-cart fa-4x fa-fw"></i>
+                    <br />
+                    <br />
+                    E-commerce
+                    <br />
+                    <br />
+                </a>
+            </div>
         <?php endif; ?>
 
         <?php if ($this->isAllowed(DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD)) : ?>
