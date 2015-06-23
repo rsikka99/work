@@ -109,6 +109,10 @@ class MasterDeviceModel extends My_Model_Abstract
     public $isTouchscreen;
     public $isADF;
 
+    public $isUSB;
+    public $isWired;
+    public $isWireless;
+
     /**
      * @var int
      */
@@ -978,9 +982,6 @@ class MasterDeviceModel extends My_Model_Abstract
      * @param int $clientId
      *
      * @return int
-     * ********************************************
-     * @deprecated this method is not used anywhere
-     * ********************************************
      */
     public function hasValidToners ($dealerId, $clientId = null)
     {

@@ -29,6 +29,30 @@ use Tangent\Service\JQGrid;
  */
 class Proposalgen_FleetController extends Action
 {
+
+    /**
+     * @var RmsUploadService
+     */
+    protected $uploadService;
+
+    /**
+     * @return RmsUploadService
+     */
+    public function getRmsUploadService()
+    {
+        return $this->uploadService;
+    }
+
+    /**
+     * @param RmsUploadService $rmsUploadService
+     */
+    public function setRmsUploadService($rmsUploadService)
+    {
+        $this->uploadService = $rmsUploadService;
+    }
+
+
+
     /**
      * @var FleetStepsModel
      */
@@ -52,6 +76,7 @@ class Proposalgen_FleetController extends Action
 
     /**
      * Users can upload/see uploaded data on this step
+     * $r->addRoute('rms-upload',                            new R('rms-uploads/:rmsUploadId',                            ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'index',                'rmsUploadId' => false]));
      */
     public function indexAction ()
     {
@@ -76,9 +101,11 @@ class Proposalgen_FleetController extends Action
             $this->_navigation->updateAccessibleSteps(FleetStepsModel::STEP_FLEET_UPLOAD);
         }
 
-        $uploadService = new RmsUploadService($this->getIdentity()->id, $this->getIdentity()->dealerId, $this->getSelectedClient()->id, $rmsUpload);
+        if (!$this->uploadService) {
+            $this->uploadService = new RmsUploadService($this->getIdentity()->id, $this->getIdentity()->dealerId, $this->getSelectedClient()->id, $rmsUpload);
+        }
 
-        $form = $uploadService->getForm();
+        $form = $this->uploadService->getForm();
 
         if (isset($this->getMpsSession()->lastSelectedRmsProviderId))
         {
@@ -87,7 +114,7 @@ class Proposalgen_FleetController extends Action
 
         if ($this->getRequest()->isPost())
         {
-            $values = $this->getRequest()->getPost();
+            $values = $this->getRequest()->getParams();
             if (isset($values ["goBack"]))
             {
                 // Bring the user back to the home page
@@ -102,30 +129,30 @@ class Proposalgen_FleetController extends Action
                  */
                 if ($form->isValid($values))
                 {
-                    $success = $uploadService->processUpload($values, $this->getIdentity()->dealerId);
+                    $success = $this->uploadService->processUpload($values, $this->getIdentity()->dealerId);
 
                     /**
                      * Log how much time it took
                      */
                     $time += microtime(true);
-                    $filename = $uploadService->getFileName();
+                    $filename = $this->uploadService->getFileName();
 
                     \Tangent\Logger\Logger::debug("It took {$time} seconds to process the CSV upload ({$filename}). ");
 
                     if ($success)
                     {
                         $timeElapsed    = number_format($time, 4);
-                        $validDevices   = number_format($uploadService->rmsUpload->validRowCount);
-                        $invalidDevices = number_format($uploadService->rmsUpload->invalidRowCount);
+                        $validDevices   = number_format($this->uploadService->rmsUpload->validRowCount);
+                        $invalidDevices = number_format($this->uploadService->rmsUpload->invalidRowCount);
                         $this->_flashMessenger->addMessage(["success" => "Processed {$validDevices} valid devices and {$invalidDevices} invalid devices in {$timeElapsed} seconds."]);
 
-                        $this->getMpsSession()->selectedRmsUploadId = $uploadService->rmsUpload->id;
-                        $this->redirectToRoute(null, ["rmsUploadId" => $uploadService->rmsUpload->id]);
+                        $this->getMpsSession()->selectedRmsUploadId = $this->uploadService->rmsUpload->id;
+                        $this->redirectToRoute(null, ["rmsUploadId" => $this->uploadService->rmsUpload->id]);
                     }
                     else
                     {
-                        $this->view->invalidDevices = $uploadService->invalidRows;
-                        $this->_flashMessenger->addMessage(["danger" => $uploadService->errorMessages]);
+                        $this->view->invalidDevices = $this->uploadService->invalidRows;
+                        $this->_flashMessenger->addMessage(["danger" => $this->uploadService->errorMessages]);
                     }
 
                 }
@@ -136,88 +163,30 @@ class Proposalgen_FleetController extends Action
             }
             else if (isset($values ["saveAndContinue"]))
             {
-                $this->redirectToRoute('rms-upload.mapping', ["rmsUploadId" => $uploadService->rmsUpload->id]);
+                $this->redirectToRoute('rms-upload.mapping', ["rmsUploadId" => $this->uploadService->rmsUpload->id]);
             }
         }
 
         $this->view->form = $form;
 
-        $this->view->rmsUpload = $uploadService->rmsUpload;
+        $this->view->rmsUpload = $this->uploadService->rmsUpload;
 
-        $navigationButtons          = ($uploadService->rmsUpload instanceof RmsUploadModel) ? AssessmentNavigationForm::BUTTONS_BACK_NEXT : AssessmentNavigationForm::BUTTONS_BACK;
+        $navigationButtons          = ($this->uploadService->rmsUpload instanceof RmsUploadModel) ? AssessmentNavigationForm::BUTTONS_BACK_NEXT : AssessmentNavigationForm::BUTTONS_BACK;
         $this->view->navigationForm = new AssessmentNavigationForm($navigationButtons);
 
     }
 
+    /**
+     * @deprecated
+     */
     public function rmsUploadListAction ()
     {
-        $clientId     = $this->getMpsSession()->selectedClientId;
-        $jqGrid       = new JQGrid();
-        $uploadMapper = RmsUploadMapper::getInstance();
-        /*
-         * Grab the incoming parameters
-         */
-        $jqGridParameters = [
-            'sidx' => $this->_getParam('sidx', 'deviceCount'),
-            'sord' => $this->_getParam('sord', 'desc'),
-            'page' => $this->_getParam('page', 1),
-            'rows' => $this->_getParam('rows', 10)
-        ];
-
-        // Set up validation arrays
-        $blankModel  = new RmsUploadModel();
-        $sortColumns = array_keys($blankModel->toArray());
-
-        $jqGrid->parseJQGridPagingRequest($jqGridParameters);
-        $jqGrid->setValidSortColumns($sortColumns);
-
-
-        if ($jqGrid->sortingIsValid())
-        {
-            $jqGrid->setRecordCount($uploadMapper->fetchAllForClient($clientId, null, null, null, true));
-
-
-            // Validate current page number since we don't want to be out of bounds
-            if ($jqGrid->getCurrentPage() < 1)
-            {
-                $jqGrid->setCurrentPage(1);
-            }
-            else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
-            {
-                $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
-            }
-
-            // Return a small subset of the results based on the jqGrid parameters
-            $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
-
-            if ($startRecord < 0)
-            {
-                $startRecord = 0;
-            }
-            $rmsUploads = $uploadMapper->fetchAllForClient($clientId, $jqGrid->getSortColumn() . " " . $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
-
-            foreach ($rmsUploads as $rmsUpload)
-            {
-
-                $rmsUpload->providerName = $rmsUpload->getRmsProvider()->name;
-            }
-
-            $jqGrid->setRows($rmsUploads);
-
-            // Send back jqGrid JSON data
-            $this->sendJson($jqGrid->createPagerResponseArray());
-        }
-        else
-        {
-            $this->_response->setHttpResponseCode(500);
-            $this->sendJson([
-                'error' => 'Sorting parameters are invalid'
-            ]);
-        }
+        throw new Exception('Deprecated');
     }
 
     /**
      * This handles the mapping of devices to our master devices
+     * $r->addRoute('rms-upload.mapping',                    new R('rms-uploads/mapping/:rmsUploadId',                    ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'mapping',              'rmsUploadId' => false]));
      */
     public function mappingAction ()
     {
@@ -225,17 +194,19 @@ class Proposalgen_FleetController extends Action
         $this->_navigation->setActiveStep(FleetStepsModel::STEP_FLEET_MAPPING);
         $this->_navigation->updateAccessibleSteps(FleetStepsModel::STEP_FLEET_SUMMARY);
 
-        $rmsUploadId = $this->_getParam('rmsUploadId', false);
+        $rmsUploadId = intval($this->_getParam('rmsUploadId', false));
 
         $rmsUpload = null;
-        if ($rmsUploadId > 0)
-        {
+        if ($rmsUploadId) {
             $rmsUpload = RmsUploadMapper::getInstance()->find($rmsUploadId);
+            if ($rmsUpload) {
+                $client = ClientMapper::getInstance()->find($rmsUpload->clientId);
+                if ($client->dealerId !== $this->getIdentity()->dealerId) $rmsUpload = null;
+            }
         }
 
-        if (!$rmsUpload instanceof RmsUploadModel)
-        {
-            $this->redirectToRoute('rms-upload.upload-file');
+        if (!$rmsUpload instanceof RmsUploadModel) {
+            $this->redirectToRoute('rms-upload');
         }
 
         $this->view->rmsUpload = $rmsUpload;
@@ -250,7 +221,7 @@ class Proposalgen_FleetController extends Action
             else if (isset($postData['goBack']))
             {
                 // Call the base controller to send us to the next logical step in the proposal.
-                $this->redirectToRoute('rms-upload.upload-file', ["rmsUploadId" => $rmsUploadId]);
+                $this->redirectToRoute('rms-upload', ["rmsUploadId" => $rmsUploadId]);
             }
         }
 
@@ -259,72 +230,82 @@ class Proposalgen_FleetController extends Action
 
     /**
      * Generates a list of devices that were not mapped automatically
+     * $r->addRoute('rms-upload.mapping.list',               new R('rms-uploads/mapping/list',                            ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'device-mapping-list'                         ]));
      */
     public function deviceMappingListAction ()
     {
-        $rmsUploadId = $this->_getParam('rmsUploadId', false);
+        $rmsUploadId = intval($this->_getParam('rmsUploadId', false));
 
-        if ($rmsUploadId > 0)
+        $rmsUpload = null;
+        if ($rmsUploadId) {
+            $rmsUpload = RmsUploadMapper::getInstance()->find($rmsUploadId);
+            if ($rmsUpload) {
+                $client = ClientMapper::getInstance()->find($rmsUpload->clientId);
+                if ($client->dealerId !== $this->getIdentity()->dealerId) $rmsUpload = null;
+            }
+        }
+        if (empty($rmsUpload)) {
+            $this->_response->setHttpResponseCode(500);
+            $this->sendJson([
+                'error' => 'RmsUpload not found'
+            ]);
+            return;
+        }
+
+        $jqGrid                  = new JQGrid();
+        $mapDeviceInstanceMapper = MapDeviceInstanceMapper::getInstance();
+
+        /*
+         * Grab the incoming parameters
+         */
+        $jqGridParameters = [
+            'sidx' => $this->_getParam('sidx', 'deviceCount'),
+            'sord' => $this->_getParam('sord', 'desc'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10)
+        ];
+
+        // Set up validation arrays
+        $blankModel  = new MapDeviceInstanceModel();
+        $sortColumns = array_keys($blankModel->toArray());
+
+        $jqGrid->parseJQGridPagingRequest($jqGridParameters);
+        $jqGrid->setValidSortColumns($sortColumns);
+
+
+        if ($jqGrid->sortingIsValid())
         {
-            $jqGrid                  = new JQGrid();
-            $mapDeviceInstanceMapper = MapDeviceInstanceMapper::getInstance();
+            $jqGrid->setRecordCount($mapDeviceInstanceMapper->fetchAllForRmsUpload($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true));
 
-            /*
-             * Grab the incoming parameters
-             */
-            $jqGridParameters = [
-                'sidx' => $this->_getParam('sidx', 'deviceCount'),
-                'sord' => $this->_getParam('sord', 'desc'),
-                'page' => $this->_getParam('page', 1),
-                'rows' => $this->_getParam('rows', 10)
-            ];
-
-            // Set up validation arrays
-            $blankModel  = new MapDeviceInstanceModel();
-            $sortColumns = array_keys($blankModel->toArray());
-
-            $jqGrid->parseJQGridPagingRequest($jqGridParameters);
-            $jqGrid->setValidSortColumns($sortColumns);
-
-
-            if ($jqGrid->sortingIsValid())
+            // Validate current page number since we don't want to be out of bounds
+            if ($jqGrid->getCurrentPage() < 1)
             {
-                $jqGrid->setRecordCount($mapDeviceInstanceMapper->fetchAllForRmsUpload($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true));
-
-                // Validate current page number since we don't want to be out of bounds
-                if ($jqGrid->getCurrentPage() < 1)
-                {
-                    $jqGrid->setCurrentPage(1);
-                }
-                else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
-                {
-                    $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
-                }
-
-                // Return a small subset of the results based on the jqGrid parameters
-                $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
-                $jqGrid->setRows($mapDeviceInstanceMapper->fetchAllForRmsUpload($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord));
-
-                // Send back jqGrid JSON data
-                $this->sendJson($jqGrid->createPagerResponseArray());
+                $jqGrid->setCurrentPage(1);
             }
-            else
+            else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
             {
-                $this->_response->setHttpResponseCode(500);
-                $this->sendJson([
-                    'error' => 'Sorting parameters are invalid'
-                ]);
+                $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
             }
+
+            // Return a small subset of the results based on the jqGrid parameters
+            $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
+            $jqGrid->setRows($mapDeviceInstanceMapper->fetchAllForRmsUpload($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord));
+
+            // Send back jqGrid JSON data
+            $this->sendJson($jqGrid->createPagerResponseArray());
         }
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(['error' => 'Invalid RMS Upload Id']);
+            $this->sendJson([
+                'error' => 'Sorting parameters are invalid'
+            ]);
         }
     }
 
     /**
      * Generates a list of devices that were not mapped automatically
+     *$r->addRoute('rms-upload.excluded-list',              new R('rms-uploads/excluded-list',                           ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'excluded-list',                              ]));
      */
     public function excludedListAction ()
     {
@@ -396,6 +377,7 @@ class Proposalgen_FleetController extends Action
 
     /**
      * Handles mapping a device
+     * $r->addRoute('rms-upload.mapping.set-mapped-to',      new R('rms-uploads/mapping/set-mapped-to',                   ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'set-mapped-to'                               ]));
      *
      * @throws Exception
      */
@@ -505,6 +487,7 @@ class Proposalgen_FleetController extends Action
 
     /**
      * This is the device summary page
+     * $r->addRoute('rms-upload.summary',                    new R('rms-uploads/summary/:rmsUploadId',                    ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'summary',              'rmsUploadId' => false]));
      */
     public function summaryAction ()
     {
@@ -520,14 +503,14 @@ class Proposalgen_FleetController extends Action
 
         if (!$rmsUpload instanceof RmsUploadModel)
         {
-            $this->redirectToRoute('rms-upload.upload-file');
+            $this->redirectToRoute('rms-upload');
         }
 
         $this->view->rmsUpload = $rmsUpload;
 
         if (!$rmsUpload instanceof RmsUploadModel)
         {
-            $this->redirectToRoute('rms-upload.upload-file');
+            $this->redirectToRoute('rms-upload');
         }
 
         if ($this->getRequest()->isPost())
@@ -549,280 +532,129 @@ class Proposalgen_FleetController extends Action
 
     /**
      * The list of devices that are mapped in the report. It's used on the summary page
+     * $r->addRoute('rms-upload.summary.device-list',        new R('rms-uploads/summary/device-list',                     ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'device-summary-list',                        ]));
      */
     public function deviceSummaryListAction ()
     {
-        $rmsUploadId = $this->_getParam('rmsUploadId', false);
+        $rmsUploadId = intval($this->_getParam('rmsUploadId', false));
 
-        if ($rmsUploadId > 0)
+        $rmsUpload = null;
+        if ($rmsUploadId) {
+            $rmsUpload = RmsUploadMapper::getInstance()->find($rmsUploadId);
+            if ($rmsUpload) {
+                $client = ClientMapper::getInstance()->find($rmsUpload->clientId);
+                if ($client->dealerId !== $this->getIdentity()->dealerId) $rmsUpload = null;
+            }
+        }
+        if (empty($rmsUpload)) {
+            $this->sendJson(['error' => 'Invalid RMS Upload Id']);
+            return;
+        }
+
+        $jqGrid               = new JQGrid();
+        $deviceInstanceMapper = DeviceInstanceMapper::getInstance();
+
+        /*
+         * Grab the incoming parameters
+         */
+        $jqGridParameters = [
+            'sidx' => $this->_getParam('sidx', 'id'),
+            'sord' => $this->_getParam('sord', 'ASC'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10)
+        ];
+
+        // Set up validation arrays
+        $validSortColumns = ['id'];
+        $sortColumns      = array_keys($validSortColumns);
+
+        $jqGrid->parseJQGridPagingRequest($jqGridParameters);
+        $jqGrid->setValidSortColumns($sortColumns);
+
+
+        if ($jqGrid->sortingIsValid())
         {
-            $jqGrid               = new JQGrid();
-            $deviceInstanceMapper = DeviceInstanceMapper::getInstance();
+            $jqGrid->setRecordCount($deviceInstanceMapper->getMappedDeviceInstances($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true));
 
-            /*
-             * Grab the incoming parameters
-             */
-            $jqGridParameters = [
-                'sidx' => $this->_getParam('sidx', 'id'),
-                'sord' => $this->_getParam('sord', 'ASC'),
-                'page' => $this->_getParam('page', 1),
-                'rows' => $this->_getParam('rows', 10)
-            ];
-
-            // Set up validation arrays
-            $validSortColumns = ['id'];
-            $sortColumns      = array_keys($validSortColumns);
-
-            $jqGrid->parseJQGridPagingRequest($jqGridParameters);
-            $jqGrid->setValidSortColumns($sortColumns);
-
-
-            if ($jqGrid->sortingIsValid())
+            // Validate current page number since we don't want to be out of bounds
+            if ($jqGrid->getCurrentPage() < 1)
             {
-                $jqGrid->setRecordCount($deviceInstanceMapper->getMappedDeviceInstances($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true));
-
-                // Validate current page number since we don't want to be out of bounds
-                if ($jqGrid->getCurrentPage() < 1)
-                {
-                    $jqGrid->setCurrentPage(1);
-                }
-                else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
-                {
-                    $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
-                }
-
-                // Return a small subset of the results based on the jqGrid parameters
-                $startRecord     = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
-                $deviceInstances = $deviceInstanceMapper->getMappedDeviceInstances($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
-
-                $rows = [];
-                foreach ($deviceInstances as $deviceInstance)
-                {
-                    $row = [
-                        "id"                       => $deviceInstance->id,
-                        "isExcluded"               => $deviceInstance->isExcluded,
-                        "isManaged"                => $deviceInstance->isManaged,
-                        "compatibleWithJitProgram" => $deviceInstance->compatibleWithJitProgram,
-                        "ampv"                     => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()),
-                        "reportsTonerLevels"       => $deviceInstance->isCapableOfReportingTonerLevels ? "Yes" : "No",
-                        "isLeased"                 => $deviceInstance->isLeased,
-                        "validToners"              => ($deviceInstance->hasValidToners($this->getIdentity()->dealerId, $this->getSelectedClient()->id)),
-                    ];
-
-                    $row["deviceName"] = $deviceInstance->getRmsUploadRow()->manufacturer . " " . $deviceInstance->getRmsUploadRow()->modelName . "<br>" . $deviceInstance->ipAddress . "; " . $deviceInstance->serialNumber;
-
-                    if ($deviceInstance->getMasterDevice() instanceof MasterDeviceModel)
-                    {
-                        $row["mappedToDeviceName"]              = $deviceInstance->getMasterDevice()->getManufacturer()->fullname . " " . $deviceInstance->getMasterDevice()->modelName;
-                        $row["isCapableOfReportingTonerLevels"] = $deviceInstance->getMasterDevice()->isCapableOfReportingTonerLevels ? "Yes" : "No";
-                    }
-                    else
-                    {
-                        $row["mappedToDeviceName"]              = $deviceInstance->getRmsUploadRow()->getManufacturer()->fullname . " " . $deviceInstance->getRmsUploadRow()->modelName;
-                        $row["isCapableOfReportingTonerLevels"] = "No";
-                    }
-
-                    $rows[] = $row;
-
-                }
-
-                $jqGrid->setRows($rows);
-
-                // Send back jqGrid JSON data
-                $this->sendJson($jqGrid->createPagerResponseArray());
+                $jqGrid->setCurrentPage(1);
             }
-            else
+            else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
             {
-                $this->_response->setHttpResponseCode(500);
-                $this->sendJson(['error' => 'Sorting parameters are invalid']);
+                $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
             }
+
+            // Return a small subset of the results based on the jqGrid parameters
+            $startRecord     = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
+            $deviceInstances = $deviceInstanceMapper->getMappedDeviceInstances($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
+
+            $rows = [];
+            foreach ($deviceInstances as $deviceInstance)
+            {
+                $row = [
+                    "id"                       => $deviceInstance->id,
+                    "isExcluded"               => $deviceInstance->isExcluded,
+                    "isManaged"                => $deviceInstance->isManaged,
+                    "compatibleWithJitProgram" => $deviceInstance->compatibleWithJitProgram,
+                    "ampv"                     => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()),
+                    "reportsTonerLevels"       => $deviceInstance->isCapableOfReportingTonerLevels ? "Yes" : "No",
+                    "isLeased"                 => $deviceInstance->isLeased,
+                    "validToners"              => ($deviceInstance->hasValidToners($this->getIdentity()->dealerId, $this->getSelectedClient()->id)),
+                ];
+
+                $row["deviceName"] = $deviceInstance->getRmsUploadRow()->manufacturer . " " . $deviceInstance->getRmsUploadRow()->modelName . "<br>" . $deviceInstance->ipAddress . "; " . $deviceInstance->serialNumber;
+
+                if ($deviceInstance->getMasterDevice() instanceof MasterDeviceModel)
+                {
+                    $row["mappedToDeviceName"]              = $deviceInstance->getMasterDevice()->getManufacturer()->fullname . " " . $deviceInstance->getMasterDevice()->modelName;
+                    $row["isCapableOfReportingTonerLevels"] = $deviceInstance->getMasterDevice()->isCapableOfReportingTonerLevels ? "Yes" : "No";
+                }
+                else
+                {
+                    $row["mappedToDeviceName"]              = $deviceInstance->getRmsUploadRow()->getManufacturer()->fullname . " " . $deviceInstance->getRmsUploadRow()->modelName;
+                    $row["isCapableOfReportingTonerLevels"] = "No";
+                }
+
+                $rows[] = $row;
+
+            }
+
+            $jqGrid->setRows($rows);
+
+            // Send back jqGrid JSON data
+            $this->sendJson($jqGrid->createPagerResponseArray());
         }
         else
         {
-            $this->sendJson(['error' => 'Invalid RMS Upload Id']);
+            $this->_response->setHttpResponseCode(500);
+            $this->sendJson(['error' => 'Sorting parameters are invalid']);
         }
     }
 
     /**
      * This is where a user can modify the properties of an RMS upload row in a way that will make it valid
+     * @deprecated
      */
     public function editUnknownDeviceAction ()
     {
-        $rmsUploadId               = $this->_getParam('rmsUploadId', false);
-        $deviceInstanceIdsAsString = $this->_getParam("deviceInstanceIds", false);
-        $db                        = Zend_Db_Table_Abstract::getDefaultAdapter();
-
-
-        if ($deviceInstanceIdsAsString !== false && $rmsUploadId > 0)
-        {
-            $deviceInstanceIds             = explode(",", $deviceInstanceIdsAsString);
-            $this->view->deviceInstanceIds = $deviceInstanceIds;
-
-            $form = new AddDeviceForm();
-            $form->deviceInstanceIds->setValue($deviceInstanceIdsAsString);
-
-            $rmsUploadRowMapper   = RmsUploadRowMapper::getInstance();
-            $deviceInstanceMapper = DeviceInstanceMapper::getInstance();
-            $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceIds[0]);
-            if (!$deviceInstance instanceof DeviceInstanceModel)
-            {
-                $this->_flashMessenger->addMessage(['danger' => 'There was an error selecting the device you wanted to add.']);
-
-                // Send back to the mapping page
-                $this->redirectToRoute('rms-upload.mapping', ['rmsUploadId' => $rmsUploadId]);
-            }
-
-            $rmsUploadRow             = $deviceInstance->getRmsUploadRow();
-            $this->view->rmsUploadRow = $rmsUploadRow;
-            $form->populate(['reportsTonerLevels' => $deviceInstance->isCapableOfReportingTonerLevels]);
-            $form->populate($rmsUploadRow->toArray());
-
-
-            /*
-             * Received a POST
-             */
-            if ($this->getRequest()->isPost())
-            {
-                $postData = $this->getRequest()->getPost();
-                if (isset($postData['submit']))
-                {
-                    /*
-                     * POST was a submit from our form
-                     */
-                    $form->setValidationOnToners($postData['tonerConfigId']);
-                    if ($form->isValid($postData))
-                    {
-
-                        /*
-                         * Form is VALID
-                         */
-                        $formValues = $form->getValues();
-                        $db->beginTransaction();
-
-                        try
-                        {
-                            /**
-                             * Here we need to set any blank fields to NULL
-                             */
-                            foreach ($formValues as &$formValue)
-                            {
-                                if (is_string($formValue) && strlen($formValue) < 1)
-                                {
-                                    $formValue = new Zend_Db_Expr("NULL");
-                                }
-                            }
-
-                            /**
-                             * Save each of our devices
-                             */
-                            foreach ($deviceInstanceIds as $deviceInstanceId)
-                            {
-                                $deviceInstance = $deviceInstanceMapper->find($deviceInstanceId);
-
-                                // Update the RMS upload row
-                                $rmsUploadRow = $deviceInstance->getRmsUploadRow();
-                                $rmsUploadRow->populate($formValues);
-                                $rmsUploadRow->hasCompleteInformation = true;
-                                $rmsUploadRowMapper->save($rmsUploadRow);
-
-
-                                $deviceInstance->useUserData                     = true;
-                                $deviceInstance->isCapableOfReportingTonerLevels = $formValues['reportsTonerLevels'];
-                                $deviceInstanceMapper->save($deviceInstance);
-                            }
-                            $db->commit();
-
-                            $this->_flashMessenger->addMessage(["success" => "Device successfully mapped!"]);
-                            $this->redirectToRoute('rms-upload.mapping', ['rmsUploadId' => $rmsUploadId]);
-                        }
-                        catch (Exception $e)
-                        {
-                            /**
-                             * Error Saving
-                             */
-                            $db->rollBack();
-                            \Tangent\Logger\Logger::logException($e);
-                            $this->_flashMessenger->addMessage(["danger" => "There was a system error while saving your device. Please try again. Reference #" . \Tangent\Logger\Logger::getUniqueId()]);
-                        }
-                    }
-                    else
-                    {
-                        /**
-                         * Form is INVALID
-                         */
-                        $this->_flashMessenger->addMessage(["danger" => "Please check the errors below and resubmit your request."]);
-                    }
-                }
-                else
-                {
-                    if (isset($postData['cancel']))
-                    {
-                        $this->redirectToRoute('rms-upload.mapping', ['rmsUploadId' => $rmsUploadId]);
-                    }
-                }
-            }
-            $this->view->form = $form;
-        }
-        else
-        {
-            $this->_flashMessenger->addMessage(["warning" => "Invalid Device Specified."]);
-            $this->redirectToRoute('rms-upload.mapping', ['rmsUploadId' => $rmsUploadId]);
-        }
+        throw new Exception('deprecated');
     }
 
     /*
      * Handles removing an unknown device.
      * This is a JSON function
+     * @deprecated
      */
     public function removeUnknownDeviceAction ()
     {
-        $rmsUploadId = $this->_getParam('rmsUploadId', false);
-        if ($rmsUploadId > 0)
-        {
-            $db                        = Zend_Db_Table_Abstract::getDefaultAdapter();
-            $deviceInstanceIdsAsString = $this->_getParam("deviceInstanceIds", false);
-
-            $deviceInstanceIds    = explode(",", $deviceInstanceIdsAsString);
-            $deviceInstanceMapper = DeviceInstanceMapper::getInstance();
-
-            $jsonResponse = ["success" => true, "message" => "Unknown Device successfully removed."];
-
-            $db->beginTransaction();
-            try
-            {
-                /*
-                 * Loop through all the device instance ids and set the useUserDate to false
-                 */
-                foreach ($deviceInstanceIds as $deviceInstanceId)
-                {
-                    $deviceInstance = $deviceInstanceMapper->find($deviceInstanceId);
-                    if ($deviceInstance && $rmsUploadId == $deviceInstance->rmsUploadId)
-                    {
-
-                        $deviceInstance->useUserData = false;
-                        $deviceInstanceMapper->save($deviceInstance);
-                    }
-
-                }
-                $db->commit();
-            }
-            catch (Exception $e)
-            {
-                $db->rollBack();
-                \Tangent\Logger\Logger::logException($e);
-                $this->getResponse()->setHttpResponseCode(500);
-                $jsonResponse = ["error" => true, "message" => "There was an error removing the unknown device. Reference #" . \Tangent\Logger\Logger::getUniqueId()];
-            }
-        }
-        else
-        {
-            $jsonResponse = ["error" => true, "message" => "No RMS Upload ID provided. Cannot remove the device."];
-        }
-        $this->sendJson($jsonResponse);
+        throw new Exception('Deprecated');
     }
 
     /**
      * Handles excluding/including devices
+     * @see FleetDeviceSummary.js
      */
     public function toggleExcludedFlagAction ()
     {
@@ -892,6 +724,7 @@ class Proposalgen_FleetController extends Action
             {
                 $this->getResponse()->setHttpResponseCode(500);
                 $this->sendJson(["error" => true, "message" => $errorMessage]);
+                return;
             }
 
             if ($isExcluded)
@@ -912,6 +745,7 @@ class Proposalgen_FleetController extends Action
 
     /**
      * Handles Toggling of the isLeased flag
+     * @see FleetDeviceSummary.js
      */
     public function toggleLeasedFlagAction ()
     {
@@ -989,6 +823,7 @@ class Proposalgen_FleetController extends Action
             {
                 $this->getResponse()->setHttpResponseCode(500);
                 $this->sendJson(["error" => true, "message" => $errorMessage]);
+                return;
             }
 
             if ($isLeased)
@@ -1009,6 +844,7 @@ class Proposalgen_FleetController extends Action
 
     /**
      * Handles Toggling of the isManaged flag
+     * @see FleetDeviceSummary.js
      */
     public function toggleManagedFlagAction ()
     {
@@ -1081,6 +917,7 @@ class Proposalgen_FleetController extends Action
             {
                 $this->getResponse()->setHttpResponseCode(500);
                 $this->sendJson(["error" => true, "message" => $errorMessage]);
+                return;
             }
 
             if ($isManaged)
@@ -1101,6 +938,7 @@ class Proposalgen_FleetController extends Action
 
     /**
      * Handles Toggling the JIT Compatibility of devices
+     * @see FleetDeviceSummary.js
      */
     public function toggleJitFlagAction ()
     {
@@ -1170,6 +1008,7 @@ class Proposalgen_FleetController extends Action
             {
                 $this->getResponse()->setHttpResponseCode(500);
                 $this->sendJson(["error" => true, "message" => $errorMessage]);
+                return;
             }
 
             if ($isJitCompatible)
@@ -1190,6 +1029,7 @@ class Proposalgen_FleetController extends Action
 
     /**
      * Gets all the details for a device instance
+     * @see FleetDeviceSummary.js
      */
     public function deviceInstanceDetailsAction ()
     {
@@ -1227,7 +1067,7 @@ class Proposalgen_FleetController extends Action
                         $launchDate                                         = new Zend_Date($jsonResponse['masterDevice']['launchDate']);
                         $jsonResponse['masterDevice']['launchDate']         = $launchDate->toString(Zend_Date::DATE_MEDIUM);
                         $jsonResponse['masterDevice']['age']                = $deviceInstance->getAge();
-                        $jsonResponse['masterDevice']['cost']               = ($jsonResponse['cost'] > 0) ? $this->view->currency((float)$jsonResponse['cost']) : '';
+                        $jsonResponse['masterDevice']['cost']               = ''; //($jsonResponse['cost'] > 0) ? $this->view->currency((float)$jsonResponse['cost']) : '';
                         $jsonResponse['masterDevice']['ppmBlack']           = ($jsonResponse['masterDevice']['ppmBlack'] > 0) ? number_format($jsonResponse['masterDevice']['ppmBlack']) : '';
                         $jsonResponse['masterDevice']['ppmColor']           = ($jsonResponse['masterDevice']['ppmColor'] > 0) ? number_format($jsonResponse['masterDevice']['ppmColor']) : '';
                         $jsonResponse['masterDevice']['wattsPowerNormal']   = number_format($jsonResponse['masterDevice']['wattsPowerNormal']);
@@ -1302,38 +1142,11 @@ class Proposalgen_FleetController extends Action
 
     /**
      * Deletes an RMS Upload
+     * @Deprecated
      */
     public function deleteAction ()
     {
-        $rmsUploadId = $this->getParam('rmsUploadId', false);
-        $rmsUpload   = RmsUploadEntity::find($rmsUploadId);
-        if ($rmsUpload instanceof RmsUploadEntity)
-        {
-            $client = $this->getSelectedClient();
-            if ($rmsUpload->clientId != $client->id)
-            {
-                $this->sendJsonError('Invalid RMS Upload ID');
-            }
-            try
-            {
-                if ($rmsUpload->delete())
-                {
-                    $this->sendJson(['message' => 'RMS Upload successfully deleted']);
-                }
-                else
-                {
-                    $this->sendJsonError('An error occurred while deleting this upload');
-                }
-            }
-            catch (Exception $e)
-            {
-                \Tangent\Logger\Logger::logException($e);
-            }
-        }
-        else
-        {
-            $this->sendJsonError('Invalid RMS Upload ID');
-        }
+        throw new Exception('Deprecated');
     }
 
     /**

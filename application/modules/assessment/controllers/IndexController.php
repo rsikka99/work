@@ -25,48 +25,11 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
 
     /**
      * Handles selecting an RMS upload
+     * @deprecated
      */
     public function selectUploadAction ()
     {
-        $this->_pageTitle = ['Assessment', 'Select Upload'];
-        $this->_navigation->setActiveStep(AssessmentStepsModel::STEP_FLEET_UPLOAD);
-
-        if ($this->getRequest()->isPost())
-        {
-            $postData = $this->getRequest()->getPost();
-
-            if (isset($postData['selectRmsUploadId']))
-            {
-                $selectRmsUploadService = new SelectRmsUploadService($this->_mpsSession->selectedClientId);
-                $rmsUpload              = $selectRmsUploadService->validateRmsUploadId($postData['selectRmsUploadId']);
-                if ($rmsUpload instanceof RmsUploadModel)
-                {
-                    $this->getAssessment()->rmsUploadId = $rmsUpload->id;
-                    $this->updateAssessmentStepName();
-                    $this->saveAssessment();
-                    $this->gotoNextNavigationStep($this->_navigation);
-                }
-                else
-                {
-                    $this->_flashMessenger->addMessage(['danger' => 'The Upload you selected is not valid.']);
-                }
-            }
-            else if (isset($postData['noUploads']))
-            {
-                $this->redirectToRoute('rms-upload.upload-file');
-            }
-
-            if ($this->getAssessment()->rmsUploadId > 0)
-            {
-                if (isset($postData['saveAndContinue']))
-                {
-                    $this->gotoNextNavigationStep($this->_navigation);
-                }
-            }
-        }
-        $this->view->numberOfUploads = count(RmsUploadMapper::getInstance()->fetchAllForClient($this->getAssessment()->clientId));
-        $this->view->rmsUpload       = $this->getAssessment()->getRmsUpload();
-        $this->view->navigationForm  = new AssessmentNavigationForm(AssessmentNavigationForm::BUTTONS_NEXT);
+        throw new Exception('Deprecated');
     }
 
     /**

@@ -180,6 +180,18 @@ class Action extends \Zend_Controller_Action
     }
 
     /**
+     * @param $client \MPSToolbox\Legacy\Entities\ClientEntity
+     */
+    public function setSelectedClient($client) {
+        $this->selectedClient = $client;
+        if ($client instanceof ClientEntity) {
+            $this->getMpsSession()->selectedClientId = $client->id;
+        } else {
+            $this->getMpsSession()->selectedClientId = null;
+        }
+    }
+
+    /**
      * Gets the currently selected upload
      *
      * @return RmsUploadEntity

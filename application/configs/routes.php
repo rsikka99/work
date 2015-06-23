@@ -36,19 +36,17 @@ $r->addRoute('auth.login.reset-password',        new R('login/reset-password',  
  */
 
 $r->addRoute('rms-upload',                            new R('rms-uploads/:rmsUploadId',                            ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'index',                'rmsUploadId' => false]));
-$r->addRoute('rms-upload.upload-file',                new R('rms-uploads/upload-file/:rmsUploadId',                ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'index',                'rmsUploadId' => false]));
 $r->addRoute('rms-upload.mapping',                    new R('rms-uploads/mapping/:rmsUploadId',                    ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'mapping',              'rmsUploadId' => false]));
 $r->addRoute('rms-upload.mapping.list',               new R('rms-uploads/mapping/list',                            ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'device-mapping-list'                         ]));
 $r->addRoute('rms-upload.mapping.set-mapped-to',      new R('rms-uploads/mapping/set-mapped-to',                   ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'set-mapped-to'                               ]));
 
-// TODO kmccully: no managemappingdevicesAction in managedevices controller
-$r->addRoute('rms-upload.mapping.admin-edit-mapping', new R('rms-uploads/mapping/admin-edit-mapping',              ['module' => 'proposalgen', 'controller' => 'managedevices', 'action' => 'managemappingdevices', 'rmsUploadId' => false]));
+#$r->addRoute('rms-upload.mapping.admin-edit-mapping', new R('rms-uploads/mapping/admin-edit-mapping',              ['module' => 'proposalgen', 'controller' => 'managedevices', 'action' => 'managemappingdevices', 'rmsUploadId' => false]));
+#$r->addRoute('rms-upload.mapping.user-edit-mapping',  new R('rms-uploads/mapping/user-edit-mapping/:rmsUploadId',  ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'edit-unknown-device',  'rmsUploadId' => false]));
 
-// TODO kmccully: edit/create buttons don't work
-$r->addRoute('rms-upload.mapping.user-edit-mapping',  new R('rms-uploads/mapping/user-edit-mapping/:rmsUploadId',  ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'edit-unknown-device',  'rmsUploadId' => false]));
 $r->addRoute('rms-upload.summary',                    new R('rms-uploads/summary/:rmsUploadId',                    ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'summary',              'rmsUploadId' => false]));
 $r->addRoute('rms-upload.summary.device-list',        new R('rms-uploads/summary/device-list',                     ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'device-summary-list',                        ]));
 $r->addRoute('rms-upload.excluded-list',              new R('rms-uploads/excluded-list',                           ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'excluded-list',                              ]));
+//missing routes: toggle-excluded-flag, toggle-leased-flag, toggle-managed-flag, device-instance-details
 
 /**
  * Home Route
@@ -56,7 +54,7 @@ $r->addRoute('rms-upload.excluded-list',              new R('rms-uploads/exclude
 
 $r->addRoute('app.dashboard',                     new R('/',                                            ['module' => 'default', 'controller' => 'index', 'action' => 'index'             ]));
 $r->addRoute('app.dashboard.change-client',       new R('/clients/change',                              ['module' => 'default', 'controller' => 'index', 'action' => 'change-client'     ]));
-$r->addRoute('app.dashboard.new-client',          new R('/clients/new',                                 ['module' => 'default', 'controller' => 'index', 'action' => 'create-client'    ]));
+#$r->addRoute('app.dashboard.new-client',          new R('/clients/new',                                 ['module' => 'default', 'controller' => 'index', 'action' => 'create-client'    ]));
 $r->addRoute('app.dashboard.change-upload',       new R('/rms-uploads/change',                          ['module' => 'default', 'controller' => 'index', 'action' => 'change-upload'     ]));
 $r->addRoute('app.dashboard.delete-rms-upload',   new R('/rms-uploads/delete/:rmsUploadId',             ['module' => 'default', 'controller' => 'index', 'action' => 'delete-rms-upload' ]));
 $r->addRoute('app.dashboard.select-client',       new R('/select-client',                               ['module' => 'default', 'controller' => 'index', 'action' => 'select-client'     ]));
@@ -76,7 +74,7 @@ $r->addRoute('app.dashboard.no-uploads',          new R('/first-upload',        
  */
 
 $r->addRoute('assessment',                                  new R('assessment',                                  ['module' => 'assessment', 'controller' => 'index',                         'action' => 'index']));
-$r->addRoute('assessment.select-upload',                    new R('assessment/select-upload',                    ['module' => 'assessment', 'controller' => 'index',                         'action' => 'select-upload']));
+#$r->addRoute('assessment.select-upload',                    new R('assessment/select-upload',                    ['module' => 'assessment', 'controller' => 'index',                         'action' => 'select-upload']));
 $r->addRoute('assessment.survey',                           new R('assessment/survey',                           ['module' => 'assessment', 'controller' => 'index',                         'action' => 'survey']));
 $r->addRoute('assessment.settings',                         new R('assessment/settings',                         ['module' => 'assessment', 'controller' => 'index',                         'action' => 'settings']));
 $r->addRoute('assessment.report-index',                     new R('assessment/report-index',                     ['module' => 'assessment', 'controller' => 'report_index',                  'action' => 'index']));
@@ -97,7 +95,7 @@ $r->addRoute('assessment.report-utilization',               new R('assessment/re
  */
 
 $r->addRoute('hardwareoptimization',                              new R('hardwareoptimization',                              ['module' => 'hardwareoptimization', 'controller' => 'index',                        'action' => 'index']));
-$r->addRoute('hardwareoptimization.select-upload',                new R('hardwareoptimization/select-upload',                ['module' => 'hardwareoptimization', 'controller' => 'index',                        'action' => 'select-upload']));
+#$r->addRoute('hardwareoptimization.select-upload',                new R('hardwareoptimization/select-upload',                ['module' => 'hardwareoptimization', 'controller' => 'index',                        'action' => 'select-upload']));
 $r->addRoute('hardwareoptimization.settings',                     new R('hardwareoptimization/settings',                     ['module' => 'hardwareoptimization', 'controller' => 'index',                        'action' => 'settings']));
 $r->addRoute('hardwareoptimization.optimization',                 new R('hardwareoptimization/optimization',                 ['module' => 'hardwareoptimization', 'controller' => 'index',                        'action' => 'optimize']));
 $r->addRoute('hardwareoptimization.report-index',                 new R('hardwareoptimization/report-index',                 ['module' => 'hardwareoptimization', 'controller' => 'report_index',                 'action' => 'index']));
@@ -109,7 +107,7 @@ $r->addRoute('hardwareoptimization.report-dealer-optimization',   new R('hardwar
  */
 
 $r->addRoute('healthcheck',                new R('healthcheck',                            ['module' => 'healthcheck', 'controller' => 'index',                      'action' => 'index']));
-$r->addRoute('healthcheck.select-upload',  new R('healthcheck/select-upload',              ['module' => 'healthcheck', 'controller' => 'index',                      'action' => 'select-upload']));
+#$r->addRoute('healthcheck.select-upload',  new R('healthcheck/select-upload',              ['module' => 'healthcheck', 'controller' => 'index',                      'action' => 'select-upload']));
 $r->addRoute('healthcheck.settings',       new R('healthcheck/settings',                   ['module' => 'healthcheck', 'controller' => 'index',                      'action' => 'settings']));
 $r->addRoute('healthcheck.report',         new R('healthcheck/report-healthcheck',         ['module' => 'healthcheck', 'controller' => 'report_healthcheck',         'action' => 'index']));
 $r->addRoute('healthcheck.report-printiq', new R('healthcheck/printiq-report-healthcheck', ['module' => 'healthcheck', 'controller' => 'report_printiq_healthcheck', 'action' => 'index']));

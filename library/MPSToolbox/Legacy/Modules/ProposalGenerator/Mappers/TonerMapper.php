@@ -346,7 +346,7 @@ class TonerMapper extends My_Model_Mapper_Abstract
         $stmt = $db->query($select, [$dealerId, $clientId]);
 
         $result     = $stmt->fetchAll();
-        $tonerArray = false;
+        $tonerArray = [];
 
         foreach ($result as $row)
         {

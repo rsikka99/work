@@ -61,7 +61,7 @@
                     <pages>
                         <uploadFile>
                             <label>Upload File</label>
-                            <route>rms-upload.upload-file</route>
+                            <route>rms-upload</route>
                             <resource>proposalgen__fleet__index</resource>
                             <params>
                                 <rmsUploadId>0</rmsUploadId>
@@ -74,24 +74,6 @@
                             <params>
                                 <rmsUploadId>0</rmsUploadId>
                             </params>
-                            <pages>
-                                <adminMapping>
-                                    <label>Edit Mapping</label>
-                                    <route>rms-upload.mapping.admin-edit-mapping</route>
-                                    <resource>propolsagen__managedevices__managemappingdevices</resource>
-                                    <params>
-                                        <rmsUploadId>0</rmsUploadId>
-                                    </params>
-                                </adminMapping>
-                                <userMapping>
-                                    <label>Edit Mapping</label>
-                                    <route>rms-upload.mapping.user-edit-mapping</route>
-                                    <resource>propolsagen__fleet__edit-unknown-device</resource>
-                                    <params>
-                                        <rmsUploadId>0</rmsUploadId>
-                                    </params>
-                                </userMapping>
-                            </pages>
                         </mapping>
                         <summary>
                             <label>Summary</label>
@@ -109,11 +91,6 @@
                     <resource>assessment__index__index</resource>
                     <visible>0</visible>
                     <pages>
-                        <selectUpload>
-                            <label>Select Upload</label>
-                            <route>assessment.select-upload</route>
-                            <resource>assessment__index__select-upload</resource>
-                        </selectUpload>
                         <survey>
                             <label>Survey</label>
                             <route>assessment.survey</route>
@@ -192,11 +169,6 @@
                     <resource>hardwareoptimization__index__index</resource>
                     <visible>0</visible>
                     <pages>
-                        <select-upload>
-                            <label>Select Upload</label>
-                            <route>hardwareoptimization.select-upload</route>
-                            <resource>hardwareoptimization__index__select-upload</resource>
-                        </select-upload>
                         <settings>
                             <label>Settings</label>
                             <route>hardwareoptimization.settings</route>
@@ -230,11 +202,6 @@
                     <resource>healthcheck__index__index</resource>
                     <visible>0</visible>
                     <pages>
-                        <select-upload>
-                            <label>Select Upload</label>
-                            <route>healthcheck.select-upload</route>
-                            <resource>healthcheck__index__select-upload</resource>
-                        </select-upload>
                         <settings>
                             <label>Settings</label>
                             <route>healthcheck.settings</route>

@@ -4,6 +4,11 @@ abstract class My_ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCas
     public $fixture_fk = [
         'users'=>['dealers'],
         'clients'=>['countries','dealers'],
+        'rms_uploads'=>['rms_providers','dealers','dealer_rms_providers','rms_devices', 'rms_upload_rows' ],
+        'device_instances'=>['rms_uploads','rms_devices'],
+        'rms_devices'=>['manufacturers'],
+        'master_devices'=>['toner_configs','toners'],
+        'toners'=>['toner_configs','toner_colors'],
     ];
 
     public $fixtures = ['users','clients'];

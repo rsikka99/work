@@ -1661,6 +1661,8 @@ class DeviceInstanceModel extends My_Model_Abstract
      */
     public function hasValidToners ($dealerId, $clientId = null)
     {
-        return $this->getMasterDevice()->hasValidToners($dealerId, $clientId);
+        $device = $this->getMasterDevice();
+        if (empty($device)) return false;
+        return $device->hasValidToners($dealerId, $clientId);
     }
 }

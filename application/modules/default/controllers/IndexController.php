@@ -37,6 +37,7 @@ class Default_IndexController extends Action
 
     /**
      * Handles the main workflow once a user logs in or deselects/reselects a client/upload
+     * $r->addRoute('app.dashboard',                     new R('/',                                            ['module' => 'default', 'controller' => 'index', 'action' => 'index'             ]));
      */
     public function indexAction ()
     {
@@ -81,7 +82,7 @@ class Default_IndexController extends Action
 
         if ($this->getRequest()->isPost())
         {
-            $postData             = $this->getRequest()->getPost();
+            $postData             = $this->getRequest()->getParams();
             $postData['dealerId'] = $this->getIdentity()->dealerId;
             $newClientId          = $clientService->create($postData);
             if ($newClientId !== false)
@@ -111,13 +112,14 @@ class Default_IndexController extends Action
         $form = $uploadService->getForm();
         $form->removeElement('goBack');
 
-        $form->setAction($this->view->url([], 'rms-upload.upload-file'));
+        $form->setAction($this->view->url([], 'rms-upload'));
 
         $this->view->form = $form;
     }
 
     /**
      * Lets a user select an upload
+     * $r->addRoute('app.dashboard.select-upload',       new R('/select-upload',                               ['module' => 'default', 'controller' => 'index', 'action' => 'select-upload'     ]));
      */
     public function selectUploadAction ()
     {
@@ -159,6 +161,7 @@ class Default_IndexController extends Action
 
     /**
      * Unsets the selected client
+     * $r->addRoute('app.dashboard.change-client',       new R('/clients/change',                              ['module' => 'default', 'controller' => 'index', 'action' => 'change-client'     ]));
      */
     public function changeClientAction ()
     {
@@ -171,6 +174,7 @@ class Default_IndexController extends Action
 
     /**
      * Unsets the selected RMS upload
+     * $r->addRoute('app.dashboard.change-upload',       new R('/rms-uploads/change',                          ['module' => 'default', 'controller' => 'index', 'action' => 'change-upload'     ]));
      */
     public function changeUploadAction ()
     {
@@ -182,6 +186,13 @@ class Default_IndexController extends Action
 
     /**
      * Handles the deletion of reports
+     *
+$r->addRoute('app.dashboard.delete-assessment',   new R('/delete-assessment/:assessmentId',             ['module' => 'default', 'controller' => 'index', 'action' => 'delete-report'     ]));
+$r->addRoute('app.dashboard.delete-optimization', new R('/delete-optimization/:hardwareOptimizationId', ['module' => 'default', 'controller' => 'index', 'action' => 'delete-report'     ]));
+$r->addRoute('app.dashboard.delete-healthcheck',  new R('/delete-healthcheck/:healthcheckId',           ['module' => 'default', 'controller' => 'index', 'action' => 'delete-report'     ]));
+$r->addRoute('app.dashboard.delete-quote',        new R('/delete-quote/:quoteId',                       ['module' => 'default', 'controller' => 'index', 'action' => 'delete-report'     ]));
+
+     *
      *
      * FIXME lrobert: Move this to the api instead.
      */
@@ -249,8 +260,7 @@ class Default_IndexController extends Action
 
     /**
      * Handles the deletion of rms uploads
-     *
-     * FIXME lrobert: Move this to the api instead.
+     *$r->addRoute('app.dashboard.delete-rms-upload',   new R('/rms-uploads/delete/:rmsUploadId',             ['module' => 'default', 'controller' => 'index', 'action' => 'delete-rms-upload' ]));
      */
     public function deleteRmsUploadAction ()
     {
@@ -300,7 +310,7 @@ class Default_IndexController extends Action
     /**
      * Main landing page
      */
-    public function showDashboard ()
+    protected function showDashboard ()
     {
         $this->_pageTitle   = ['Dashboard'];
         $this->view->userId = $this->getIdentity()->id;
@@ -512,7 +522,7 @@ class Default_IndexController extends Action
 
                 if ($rmsUploadId === 0)
                 {
-                    $this->redirectToRoute('rms-upload.upload-file');
+                    $this->redirectToRoute('rms-upload');
                 }
                 else
                 {
@@ -591,6 +601,7 @@ class Default_IndexController extends Action
 
     /**
      * Allows a user to view all of the clients available
+     * $r->addRoute('app.dashboard.select-client',       new R('/select-client',                               ['module' => 'default', 'controller' => 'index', 'action' => 'select-client'     ]));
      */
     public function selectClientAction ()
     {

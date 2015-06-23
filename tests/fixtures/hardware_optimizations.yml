@@ -1,2 +1,2 @@
 hardware_optimizations:
-    - { id: '1', clientId: '7', dealerId: '2', dateCreated: '2015-05-21 15:22:30', lastModified: '2015-05-21 15:22:30', name: 'Hardware Optimization 2015/05/21', rmsUploadId: '1', stepName: null }
+    - { id: '1', clientId: '5', dealerId: '2', dateCreated: '2015-05-21 15:22:30', lastModified: '2015-05-21 15:22:30', name: 'Hardware Optimization 2015/05/21', rmsUploadId: '2', stepName: null }

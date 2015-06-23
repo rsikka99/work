@@ -49,7 +49,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
      * @Depreacted not used anyware
      */
     public function selectuploadAction () {
-        throw new Exception('Depreacted');
+        throw new Exception('Deprecated');
     }
 
     /**
