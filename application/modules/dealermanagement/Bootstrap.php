@@ -5,7 +5,7 @@ use MPSToolbox\Legacy\Models\Acl\DealerManagementAclModel;
 /**
  * Class Dealermanagement_Bootstrap
  */
-class Dealermanagement_Bootstrap extends Zend_Application_Module_Bootstrap
+class Dealermanagement_Bootstrap extends Tangent\ModuleBootstrap
 {
     protected function _initAddToAcl ()
     {

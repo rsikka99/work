@@ -50,6 +50,7 @@ class DealerForm extends Zend_Form
          * File element. Can only upload a single file. Max size is 16mb.
          */
         $this->addElement('file', 'dealerLogoImage', [
+            'required'    => false,
             'label'       => 'Dealer Logo',
             'description' => 'An image to use for customer facing output. 595px by 300px max. Must be jpg or png.',
             'filters'     => ['StringTrim', 'StripTags'],

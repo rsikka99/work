@@ -3,8 +3,10 @@
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\AvailableTonersForm;
 
 class Proposalgen_Form_MasterDeviceManagement_AvailableTonersFormTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
-
 {
+
+    public $fixtures = ['manufacturers','toner_colors'];
+
     /**
      * @return AvailableTonersForm
      */

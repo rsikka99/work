@@ -37,6 +37,7 @@ class Default_IndexController extends Action
 
     /**
      * Handles the main workflow once a user logs in or deselects/reselects a client/upload
+     * $r->addRoute('app.dashboard',                     new R('/',                                            ['module' => 'default', 'controller' => 'index', 'action' => 'index'             ]));
      */
     public function indexAction ()
     {
@@ -81,7 +82,7 @@ class Default_IndexController extends Action
 
         if ($this->getRequest()->isPost())
         {
-            $postData             = $this->getRequest()->getPost();
+            $postData             = $this->getRequest()->getParams();
             $postData['dealerId'] = $this->getIdentity()->dealerId;
             $newClientId          = $clientService->create($postData);
             if ($newClientId !== false)
@@ -111,13 +112,14 @@ class Default_IndexController extends Action
         $form = $uploadService->getForm();
         $form->removeElement('goBack');
 
-        $form->setAction($this->view->url([], 'rms-upload.upload-file'));
+        $form->setAction($this->view->url([], 'rms-upload'));
 
         $this->view->form = $form;
     }
 
     /**
      * Lets a user select an upload
+     * $r->addRoute('app.dashboard.select-upload',       new R('/select-upload',                               ['module' => 'default', 'controller' => 'index', 'action' => 'select-upload'     ]));
      */
     public function selectUploadAction ()
     {
@@ -159,6 +161,7 @@ class Default_IndexController extends Action
 
     /**
      * Unsets the selected client
+     * $r->addRoute('app.dashboard.change-client',       new R('/clients/change',                              ['module' => 'default', 'controller' => 'index', 'action' => 'change-client'     ]));
      */
     public function changeClientAction ()
     {
@@ -171,6 +174,7 @@ class Default_IndexController extends Action
 
     /**
      * Unsets the selected RMS upload
+     * $r->addRoute('app.dashboard.change-upload',       new R('/rms-uploads/change',                          ['module' => 'default', 'controller' => 'index', 'action' => 'change-upload'     ]));
      */
     public function changeUploadAction ()
     {
@@ -182,6 +186,13 @@ class Default_IndexController extends Action
 
     /**
      * Handles the deletion of reports
+     *
+$r->addRoute('app.dashboard.delete-assessment',   new R('/delete-assessment/:assessmentId',             ['module' => 'default', 'controller' => 'index', 'action' => 'delete-report'     ]));
+$r->addRoute('app.dashboard.delete-optimization', new R('/delete-optimization/:hardwareOptimizationId', ['module' => 'default', 'controller' => 'index', 'action' => 'delete-report'     ]));
+$r->addRoute('app.dashboard.delete-healthcheck',  new R('/delete-healthcheck/:healthcheckId',           ['module' => 'default', 'controller' => 'index', 'action' => 'delete-report'     ]));
+$r->addRoute('app.dashboard.delete-quote',        new R('/delete-quote/:quoteId',                       ['module' => 'default', 'controller' => 'index', 'action' => 'delete-report'     ]));
+
+     *
      *
      * FIXME lrobert: Move this to the api instead.
      */
@@ -249,8 +260,7 @@ class Default_IndexController extends Action
 
     /**
      * Handles the deletion of rms uploads
-     *
-     * FIXME lrobert: Move this to the api instead.
+     *$r->addRoute('app.dashboard.delete-rms-upload',   new R('/rms-uploads/delete/:rmsUploadId',             ['module' => 'default', 'controller' => 'index', 'action' => 'delete-rms-upload' ]));
      */
     public function deleteRmsUploadAction ()
     {
@@ -300,7 +310,7 @@ class Default_IndexController extends Action
     /**
      * Main landing page
      */
-    public function showDashboard ()
+    protected function showDashboard ()
     {
         $this->_pageTitle   = ['Dashboard'];
         $this->view->userId = $this->getIdentity()->id;
@@ -512,7 +522,7 @@ class Default_IndexController extends Action
 
                 if ($rmsUploadId === 0)
                 {
-                    $this->redirectToRoute('rms-upload.upload-file');
+                    $this->redirectToRoute('rms-upload');
                 }
                 else
                 {
@@ -554,148 +564,44 @@ class Default_IndexController extends Action
 
     /**
      * Allows a user to create a new client
+     * @deprecated
      */
     public function createClientAction ()
     {
-        $this->_pageTitle = ['Create Client'];
-        $clientService    = new ClientService();
-
-        if ($this->getRequest()->isPost())
-        {
-            $values = $this->getRequest()->getPost();
-            if (isset($values ['Cancel']))
-            {
-                $this->redirectToRoute('app.dashboard');
-            }
-
-            // Create Client
-            $values['dealerId'] = $this->getIdentity()->dealerId;
-            $clientId           = $clientService->create($values);
-
-            if ($clientId)
-            {
-                $userViewedClient = UserViewedClientMapper::getInstance()->find([$this->getIdentity()->id, $clientId]);
-                if ($userViewedClient instanceof UserViewedClientModel)
-                {
-                    $userViewedClient->dateViewed = new Zend_Db_Expr("NOW()");
-                    UserViewedClientMapper::getInstance()->save($userViewedClient);
-                }
-                else
-                {
-                    $userViewedClient             = new UserViewedClientModel();
-                    $userViewedClient->clientId   = $clientId;
-                    $userViewedClient->userId     = $this->getIdentity()->id;
-                    $userViewedClient->dateViewed = new Zend_Db_Expr("NOW()");
-                    UserViewedClientMapper::getInstance()->insert($userViewedClient);
-                }
-
-                $this->_flashMessenger->addMessage(['success' => "Client was successfully created."]);
-
-                $this->getMpsSession()->selectedClientId = $clientId;
-
-                // Redirect with client id so that the client is preselected
-                $this->redirectToRoute('app.dashboard');
-            }
-        }
-
-        $this->view->form = $clientService->getForm();
+        throw new Exception('deprecated');
     }
 
     /**
      * Action to handle editing a client
+     * @deprecated
      */
     public function editClientAction ()
     {
-        $this->_pageTitle = ['Edit Client'];
-        // Get the passed client id
-        $clientId = $this->getSelectedClient()->id;
-        // Get the client object from the database
-        $client = ClientMapper::getInstance()->find($clientId);
-
-        if (!$client)
-        {
-            $this->_flashMessenger->addMessage(['warning' => 'Please select a client first.']);
-            $this->redirectToRoute('company.clients');
-        }
-
-        // Start the client service
-        $clientService = new ClientService();
-
-        $clientService->populateForm($clientId);
-        if ($this->getRequest()->isPost())
-        {
-            $values = $this->getRequest()->getPost();
-            if (isset($values ['Cancel']))
-            {
-                $this->redirectToRoute('company.clients');
-            }
-
-            try
-            {
-                // Update Client
-                $clientId = $clientService->update($values, $clientId);
-            }
-            catch (Exception $e)
-            {
-                $clientId = false;
-            }
-
-            if ($clientId)
-            {
-                $this->_flashMessenger->addMessage([
-                    'success' => "Client {$client->companyName} successfully updated."
-                ]);
-                // Redirect with client id so that the client is preselected
-                $this->redirectToRoute('company.clients', [
-                    'clientId' => $clientId
-                ]);
-            }
-            else
-            {
-                $this->_flashMessenger->addMessage([
-                    'danger' => "Please correct the errors below."
-                ]);
-            }
-        }
-        $this->view->form = $clientService->getForm();
+        throw new Exception('deprecated');
     }
 
 
     /**
      * JSON ACTION: Handles searching for a client by name and dealerId
+     * @deprecated
      */
     public function searchForClientAction ()
     {
-
-        $this->_pageTitle = ['Client Search'];
-        $searchTerm       = $this->getParam('query', false);
-        $results          = [];
-        if ($searchTerm !== false)
-        {
-            $clients = ClientMapper::getInstance()->searchForClientByCompanyNameAndDealer($searchTerm, $this->getIdentity()->dealerId);
-            foreach ($clients as $client)
-            {
-                $results[] = [
-                    "id"          => $client->id,
-                    "companyName" => $client->companyName
-                ];
-            }
-        }
-
-        $this->sendJson($results);
+        throw new Exception('deprecated');
     }
 
     /**
      * Allows a user to view all of the clients available
+     * @deprecated
      */
     public function viewAllClientsAction ()
     {
-        $this->_pageTitle    = ['Select Client'];
-        $this->view->clients = ClientMapper::getInstance()->fetchClientListForDealer($this->getIdentity()->dealerId);
+        throw new Exception('deprecated');
     }
 
     /**
      * Allows a user to view all of the clients available
+     * $r->addRoute('app.dashboard.select-client',       new R('/select-client',                               ['module' => 'default', 'controller' => 'index', 'action' => 'select-client'     ]));
      */
     public function selectClientAction ()
     {

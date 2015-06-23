@@ -1,0 +1,9 @@
+clients:
+    - { id: '1', dealerId: '1', accountNumber: '0000001', companyName: 'Tangent MTW', legalName: 'Tangent MTW Incorporated', employeeCount: '12' }
+    - { id: '2', dealerId: '1', accountNumber: '0000002', companyName: Starbucks, legalName: Starbucks, employeeCount: '12000' }
+    - { id: '3', dealerId: '1', accountNumber: '0000003', companyName: Novellis, legalName: 'Novellis co-operatives', employeeCount: '1200' }
+    - { id: '4', dealerId: '1', accountNumber: '0000004', companyName: Samsung, legalName: 'Samsung Incorporated', employeeCount: '9800' }
+    - { id: '5', dealerId: '2', accountNumber: '0000001', companyName: 'Tangent MTW', legalName: 'Tangent MTW Incorporated', employeeCount: '12' }
+    - { id: '6', dealerId: '2', accountNumber: '0000002', companyName: Starbucks, legalName: Starbucks, employeeCount: '12000' }
+    - { id: '7', dealerId: '2', accountNumber: '0000003', companyName: Novellis, legalName: 'Novellis co-operatives', employeeCount: '1200' }
+    - { id: '8', dealerId: '2', accountNumber: '0000004', companyName: Samsung, legalName: 'Samsung Incorporated', employeeCount: '9800' }

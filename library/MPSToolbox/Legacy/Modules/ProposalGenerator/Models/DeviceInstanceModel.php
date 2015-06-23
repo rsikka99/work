@@ -1020,7 +1020,7 @@ class DeviceInstanceModel extends My_Model_Abstract
             if ($this->getIsMappedToMasterDevice())
             {
                 $deviceInstanceMasterDevice = $this->getDeviceInstanceMasterDevice();
-                $dealerId                   = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                $dealerId                   = self::getAuthDealerId();
                 $this->_masterDevice        = MasterDeviceMapper::getInstance()->findForReports($deviceInstanceMasterDevice->masterDeviceId, $dealerId);
             }
             else
@@ -1661,6 +1661,8 @@ class DeviceInstanceModel extends My_Model_Abstract
      */
     public function hasValidToners ($dealerId, $clientId = null)
     {
-        return $this->getMasterDevice()->hasValidToners($dealerId, $clientId);
+        $device = $this->getMasterDevice();
+        if (empty($device)) return false;
+        return $device->hasValidToners($dealerId, $clientId);
     }
 }

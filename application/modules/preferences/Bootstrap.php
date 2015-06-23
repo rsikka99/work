@@ -5,7 +5,7 @@ use MPSToolbox\Legacy\Models\Acl\PreferencesAclModel;
 /**
  * Class Preferences_Bootstrap
  */
-class Preferences_Bootstrap extends Zend_Application_Module_Bootstrap
+class Preferences_Bootstrap extends Tangent\ModuleBootstrap
 {
     protected function _initAddToAcl ()
     {

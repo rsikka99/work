@@ -23,7 +23,7 @@ class FleetStepsModel extends My_Navigation_Abstract
     private static $stepNames = [
         self::STEP_FLEET_UPLOAD  => [
             'name'  => 'Upload',
-            'route' => 'rms-upload.upload-file',
+            'route' => 'rms-upload',
         ],
         self::STEP_FLEET_MAPPING => [
             'name'  => 'Mapping',

@@ -5,7 +5,7 @@ use MPSToolbox\Legacy\Models\Acl\AdminAclModel;
 /**
  * Class Admin_Bootstrap
  */
-class Admin_Bootstrap extends Zend_Application_Module_Bootstrap
+class Admin_Bootstrap extends Tangent\ModuleBootstrap
 {
     protected function _initAddToAcl ()
     {

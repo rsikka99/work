@@ -47,24 +47,12 @@ class Assessment_ViewModel_Devices
     public $allDevicesWithShortMonitorInterval;
 
     /**
-     * @var float
-     */
-    protected $_adminCostPerPage;
-
-    /**
      * Constructor
      *
      * @param int   $rmsUploadId
-     * @param float $laborCostPerPage
-     * @param float $partsCostPerPage
-     * @param float $adminCostPerPage
      */
-    public function __construct ($rmsUploadId, $laborCostPerPage, $partsCostPerPage, $adminCostPerPage)
+    public function __construct ($rmsUploadId)
     {
-        $this->_adminCostPerPage                   = $adminCostPerPage;
-        MasterDeviceModel::$ReportLaborCostPerPage = $laborCostPerPage;
-        MasterDeviceModel::$ReportPartsCostPerPage = $partsCostPerPage;
-
         /**
          * Initialize groups
          */

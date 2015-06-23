@@ -1,6 +1,6 @@
 <?php
 
-require 'IndexController.php';
+require_once 'IndexController.php';
 
 use MPSToolbox\Legacy\Modules\HardwareOptimization\Mappers\DeviceSwapMapper;
 use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\OptimizationStandardDeviceReplacementModel;

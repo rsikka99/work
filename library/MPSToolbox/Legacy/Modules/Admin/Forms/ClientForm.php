@@ -17,7 +17,7 @@ use Zend_Validate_StringLength;
  *
  * @package MPSToolbox\Legacy\Modules\Admin\Forms
  */
-class ClientForm extends Zend_Form
+class ClientForm extends \My_Form_Form
 {
     /**
      * @var bool
@@ -77,7 +77,7 @@ class ClientForm extends Zend_Form
         /**
          * Number of employees
          */
-        $this->addElement('text', 'employeeCount', [
+        $this->addElement('text_int', 'employeeCount', [
             'label'    => '# of employees',
             'required' => 'true',
             'filters'  => ['StringTrim'],

@@ -1,0 +1,16 @@
+hardware_optimization_device_instances:
+    - { deviceInstanceId: '2', hardwareOptimizationId: '1', action: 'Do Not Repair', masterDeviceId: null, deviceSwapReasonId: '3' }
+    - { deviceInstanceId: '3', hardwareOptimizationId: '1', action: 'Do Not Repair', masterDeviceId: null, deviceSwapReasonId: '3' }
+    - { deviceInstanceId: '4', hardwareOptimizationId: '1', action: 'Do Not Repair', masterDeviceId: null, deviceSwapReasonId: '3' }
+    - { deviceInstanceId: '6', hardwareOptimizationId: '1', action: Retire, masterDeviceId: null, deviceSwapReasonId: null }
+    - { deviceInstanceId: '7', hardwareOptimizationId: '1', action: Replace, masterDeviceId: '478', deviceSwapReasonId: '4' }
+    - { deviceInstanceId: '8', hardwareOptimizationId: '1', action: Keep, masterDeviceId: null, deviceSwapReasonId: null }
+    - { deviceInstanceId: '9', hardwareOptimizationId: '1', action: Keep, masterDeviceId: null, deviceSwapReasonId: null }
+    - { deviceInstanceId: '11', hardwareOptimizationId: '1', action: Retire, masterDeviceId: null, deviceSwapReasonId: null }
+    - { deviceInstanceId: '12', hardwareOptimizationId: '1', action: Retire, masterDeviceId: null, deviceSwapReasonId: null }
+    - { deviceInstanceId: '13', hardwareOptimizationId: '1', action: Replace, masterDeviceId: '478', deviceSwapReasonId: '4' }
+    - { deviceInstanceId: '14', hardwareOptimizationId: '1', action: Retire, masterDeviceId: null, deviceSwapReasonId: null }
+    - { deviceInstanceId: '15', hardwareOptimizationId: '1', action: Replace, masterDeviceId: '478', deviceSwapReasonId: '4' }
+    - { deviceInstanceId: '16', hardwareOptimizationId: '1', action: Keep, masterDeviceId: null, deviceSwapReasonId: null }
+    - { deviceInstanceId: '17', hardwareOptimizationId: '1', action: Replace, masterDeviceId: '478', deviceSwapReasonId: '4' }
+    - { deviceInstanceId: '18', hardwareOptimizationId: '1', action: Keep, masterDeviceId: null, deviceSwapReasonId: null }

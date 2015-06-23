@@ -15,8 +15,8 @@
             <city>Kingston</city>
             <region>ON</region>
             <postCode>K1K 1K1</postCode>
-            <countryId>1</countryId>
-            <dealerId></dealerId>
+            <countryId>9999999999999</countryId>
+            <dealerId>9999999999999</dealerId>
         </data>
     </testData>
     <testData>
@@ -53,8 +53,8 @@
             <city>Kingston</city>
             <region>ON</region>
             <postCode>K1K 1K1</postCode>
-            <countryId>1</countryId>
-            <dealerId>66666</dealerId>
+            <countryId>9999999999999</countryId>
+            <dealerId>9999999999999</dealerId>
         </data>
     </testData>
     <testData>

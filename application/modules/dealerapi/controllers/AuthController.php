@@ -2,7 +2,7 @@
 
 use MPSToolbox\Legacy\Models\UserModel;
 
-require 'IndexController.php';
+require_once 'IndexController.php';
 
 /**
  * Class Api_IndexController

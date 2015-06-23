@@ -22,8 +22,11 @@ class Zend_Form_Element_FileMock extends Zend_Form_Element_File {
  * Class MPSToolbox_Legacy_Modules_ProposalGenerator_Services_RmsUploadServiceTest
  * @property RmsUploadService service
  */
-class MPSToolbox_Legacy_Modules_ProposalGenerator_Services_RmsUploadServiceTest extends PHPUnit_Framework_TestCase
+class MPSToolbox_Legacy_Modules_ProposalGenerator_Services_RmsUploadServiceTest extends My_DatabaseTestCase
 {
+
+    public $fixtures = ['users', 'clients', 'rms_providers', 'dealer_rms_providers', 'manufacturers', 'rms_devices', 'rms_upload_rows'];
+
     public function setUp() {
         $userId = 2;
         $dealerId = 2;
@@ -32,37 +35,35 @@ class MPSToolbox_Legacy_Modules_ProposalGenerator_Services_RmsUploadServiceTest 
         $this->service = new RmsUploadService(
             $userId, $dealerId, $clientId, $rmsUpload
         );
-    }
-    public function tearDown() {
-
+        parent::setUp();
     }
 
     public function processUpload_files() {
         return [
-            [RmsProviderModel::RMS_PROVIDER_FMAUDIT, 'FMAudit/FMAudExport-partial.csv'],
+            [RmsProviderModel::RMS_PROVIDER_FMAUDIT, 'FMAudit/FMAudExport-partial.csv'], //0
 
-            [RmsProviderModel::RMS_PROVIDER_PRINT_AUDIT, 'Print Audit/Flying Disc Manufacturing.csv'],
-            [RmsProviderModel::RMS_PROVIDER_PRINT_AUDIT, 'Print Audit/Oceanview Landscape Companies.csv'],
-            [RmsProviderModel::RMS_PROVIDER_PRINT_AUDIT, 'Print Audit/Ottawa Valley Water District.csv'],
-            [RmsProviderModel::RMS_PROVIDER_PRINT_AUDIT, 'Print Audit/Sonic Avionics.csv'],
+            [RmsProviderModel::RMS_PROVIDER_PRINT_AUDIT, 'Print Audit/Flying Disc Manufacturing.csv'], //1
+            [RmsProviderModel::RMS_PROVIDER_PRINT_AUDIT, 'Print Audit/Oceanview Landscape Companies.csv'],  //2
+            [RmsProviderModel::RMS_PROVIDER_PRINT_AUDIT, 'Print Audit/Ottawa Valley Water District.csv'], //3
+            [RmsProviderModel::RMS_PROVIDER_PRINT_AUDIT, 'Print Audit/Sonic Avionics.csv'], //4
 
-            [RmsProviderModel::RMS_PROVIDER_PRINTFLEET_TWO, 'PrintFleet/OD  Custom Device Report Sample.csv'],
-            [RmsProviderModel::RMS_PROVIDER_PRINTFLEET_TWO, 'PrintFleet 2/OD - Covan (94 Rows).csv'],
-            [RmsProviderModel::RMS_PROVIDER_PRINTFLEET_TWO, 'PrintFleet 2/OD - One Three Television (14 Rows).csv'],
+            [RmsProviderModel::RMS_PROVIDER_PRINTFLEET_TWO, 'PrintFleet/OD  Custom Device Report Sample.csv'], //5
+            [RmsProviderModel::RMS_PROVIDER_PRINTFLEET_TWO, 'PrintFleet 2/OD - Covan (94 Rows).csv'], //6
+            [RmsProviderModel::RMS_PROVIDER_PRINTFLEET_TWO, 'PrintFleet 2/OD - One Three Television (14 Rows).csv'], //7
 
-            [RmsProviderModel::RMS_PROVIDER_PRINTFLEET_THREE, 'PrintFleet 3/2014_04_15 - Custom Report 2.csv'],
-            [RmsProviderModel::RMS_PROVIDER_PRINTFLEET_THREE, 'PrintFleet 3/small - Custom Report 2.csv'],
+            [RmsProviderModel::RMS_PROVIDER_PRINTFLEET_THREE, 'PrintFleet 3/2014_04_15 - Custom Report 2.csv'], //8
+            [RmsProviderModel::RMS_PROVIDER_PRINTFLEET_THREE, 'PrintFleet 3/small - Custom Report 2.csv'], //9
 
-            [RmsProviderModel::RMS_PROVIDER_XEROX, 'Xerox/Sample2.csv'],
-            [RmsProviderModel::RMS_PROVIDER_XEROX, 'Xerox/XOPA_Export-92fbe.csv'],
+            [RmsProviderModel::RMS_PROVIDER_XEROX, 'Xerox/Sample2.csv'], //10
+            [RmsProviderModel::RMS_PROVIDER_XEROX, 'Xerox/XOPA_Export-92fbe.csv'], //11
 
-            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/denver.csv'],
-            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/pittsburgh.csv'],
-            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/seattle.csv'],
-            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/philadelphia.csv'],
-            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/dallas.csv'],
+            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/denver.csv'], //12
+            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/pittsburgh.csv'], //13
+            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/seattle.csv'], //14
+            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/philadelphia.csv'], //15
+            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/dallas.csv'], //16
 
-            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/corporate.csv'],
+            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/corporate.csv'], //17
         ];
     }
 

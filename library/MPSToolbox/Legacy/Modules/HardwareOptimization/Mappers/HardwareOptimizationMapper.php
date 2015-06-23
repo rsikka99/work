@@ -58,10 +58,9 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
      *
      * @param $object HardwareOptimizationModel
      *                The object to insert
-     *
      * @return int The primary key of the new row
      */
-    public function insert (&$object)
+    public function insert ($object)
     {
         // Get an array of data to save
         $data = $this->unsetNullValues($object->toArray());
@@ -303,10 +302,6 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
     {
         $db                     = $this->getDbTable()->getAdapter();
         $hardwareOptimizationId = $db->quote($hardwareOptimizationId, 'INTEGER');
-
-        $hardwareOptimization                      = HardwareOptimizationMapper::getInstance()->find($hardwareOptimizationId);
-        MasterDeviceModel::$ReportLaborCostPerPage = $hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromeLaborCostPerPage;
-        MasterDeviceModel::$ReportPartsCostPerPage = $hardwareOptimization->getClient()->getClientSettings()->proposedFleetSettings->defaultMonochromePartsCostPerPage;
 
         $deviceInstanceMapper             = DeviceInstanceMapper::getInstance();
         $deviceInstanceMasterDeviceMapper = DeviceInstanceMasterDeviceMapper::getInstance();

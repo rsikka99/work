@@ -9,8 +9,9 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageModel;
  * @property DeviceInstanceModel model
  * @property CostPerPageSettingModel cppSetting
  */
-class MPSToolbox_Legacy_Modules_ProposalGenerator_Models_DeviceInstanceModelTest extends PHPUnit_Framework_TestCase
+class MPSToolbox_Legacy_Modules_ProposalGenerator_Models_DeviceInstanceModelTest extends My_DatabaseTestCase
 {
+
     public function setUp() {
         $this->model = new DeviceInstanceModel([
             'isManaged' => false,
@@ -23,8 +24,6 @@ class MPSToolbox_Legacy_Modules_ProposalGenerator_Models_DeviceInstanceModelTest
             "colorLaborCostPerPage"         => 0.005,
             "pageCoverageMonochrome"        => 6,
             "pageCoverageColor"             => 24,
-            "monochromeTonerRankSet"        => \MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerVendorRankingSetMapper::getInstance()->find(1),
-            "colorTonerRankSet"             => \MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerVendorRankingSetMapper::getInstance()->find(2),
             "useDevicePageCoverages"        => 0,
             "customerMonochromeCostPerPage" => 0.007,
             "customerColorCostPerPage"      => 0.008,

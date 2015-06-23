@@ -42,10 +42,9 @@ class LogMapper extends My_Model_Mapper_Abstract
      *
      * @param $object LogModel
      *                The object to insert
-     *
      * @return mixed The primary key of the new row
      */
-    public function insert (&$object)
+    public function insert ($object)
     {
         // Get an array of data to save
         $data = $object->toArray();

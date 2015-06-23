@@ -39,14 +39,13 @@ class UserSurveySettingMapper extends My_Model_Mapper_Abstract
      * Saves an instance of MPSToolbox\Legacy\Modules\ProposalGenerator\Models\UserSurveySettingModel to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $user_survey_setting UserSurveySettingModel
+     * @param $object UserSurveySettingModel
      *                             The object to insert
-     *
      * @return int The primary key of the new row
      */
-    public function insert (&$user_survey_setting)
+    public function insert ($object)
     {
-        $data = $user_survey_setting->toArray();
+        $data = $object->toArray();
         $id   = $this->getDbTable()->insert($data);
 
         return $id;

@@ -1,0 +1,7 @@
+toner_colors:
+    - { id: '1', name: BLACK }
+    - { id: '2', name: CYAN }
+    - { id: '3', name: MAGENTA }
+    - { id: '4', name: YELLOW }
+    - { id: '5', name: '3 COLOR' }
+    - { id: '6', name: '4 COLOR' }

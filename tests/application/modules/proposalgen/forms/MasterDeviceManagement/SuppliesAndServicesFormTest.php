@@ -3,8 +3,10 @@
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\SuppliesAndServiceForm;
 
 class Proposalgen_Form_MasterDeviceManagement_SuppliesAndServicesFormTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
-
 {
+
+    public $fixtures = ['toner_configs'];
+
     /**
      * @return SuppliesAndServiceForm
      */

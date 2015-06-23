@@ -4,18 +4,21 @@
         <data>
             <dealerName>Bo</dealerName>
             <userLicenses>432</userLicenses>
+            <dealerLogoImage></dealerLogoImage>
         </data>
     </testData>
     <testData>
         <data>
             <dealerName>Boundary</dealerName>
             <userLicenses>2</userLicenses>
+            <dealerLogoImage></dealerLogoImage>
         </data>
     </testData>
     <testData>
         <data>
             <dealerName>Boundary</dealerName>
             <userLicenses>999</userLicenses>
+            <dealerLogoImage></dealerLogoImage>
         </data>
     </testData>
 </dealerGoodData>

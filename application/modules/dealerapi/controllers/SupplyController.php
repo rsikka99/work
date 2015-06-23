@@ -1,6 +1,6 @@
 <?php
 
-require 'IndexController.php';
+require_once 'IndexController.php';
 
 /**
  * Class Api_IndexController

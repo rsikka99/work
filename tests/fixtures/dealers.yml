@@ -1,0 +1,5 @@
+dealers:
+    - { id: '1', dealerName: 'Root Company', userLicenses: '25', dateCreated: '2013-03-12', dealerLogoImageId: null, api_key: '123', api_secret: 'abc' }
+    - { id: '2', dealerName: 'Tangent MTW', userLicenses: '25', dateCreated: '2013-03-12', dealerLogoImageId: null, api_key: null, api_secret: null }
+    - { id: '3', dealerName: 'Office Depot', userLicenses: '25', dateCreated: '2013-04-05', dealerLogoImageId: null, api_key: null, api_secret: null }
+    - { id: '4', dealerName: 'Canon USA', userLicenses: '5', dateCreated: '2013-04-05', dealerLogoImageId: null, api_key: null, api_secret: null }

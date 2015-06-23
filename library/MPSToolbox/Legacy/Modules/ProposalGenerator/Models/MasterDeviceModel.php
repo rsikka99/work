@@ -35,11 +35,6 @@ class MasterDeviceModel extends My_Model_Abstract
         self::DEVICE_TYPE_COLOR_MFP => "Color MFP",
     ];
 
-
-    static $ReportLaborCostPerPage = 0;
-    static $ReportPartsCostPerPage = 0;
-
-
     /*
      * Database fields
      */
@@ -114,6 +109,10 @@ class MasterDeviceModel extends My_Model_Abstract
     public $isTouchscreen;
     public $isADF;
 
+    public $isUSB;
+    public $isWired;
+    public $isWireless;
+
     /**
      * @var int
      */
@@ -182,22 +181,12 @@ class MasterDeviceModel extends My_Model_Abstract
     /**
      * @var int
      */
-    public $isUsingReportLaborCostPerPage;
-
-    /**
-     * @var int
-     */
     public $calculatedPartsCostPerPage;
 
     /**
      * @var int
      */
     public $isUsingDealerPartsCostPerPage;
-
-    /**
-     * @var int
-     */
-    public $isUsingReportPartsCostPerPage;
 
     /*
      * Related Objects
@@ -441,11 +430,6 @@ class MasterDeviceModel extends My_Model_Abstract
             $this->isUsingDealerLaborCostPerPage = $params->isUsingDealerLaborCostPerPage;
         }
 
-        if (isset($params->isUsingReportLaborCostPerPage) && !is_null($params->isUsingReportLaborCostPerPage))
-        {
-            $this->isUsingReportLaborCostPerPage = $params->isUsingReportLaborCostPerPage;
-        }
-
         if (isset($params->calculatedPartsCostPerPage) && !is_null($params->calculatedPartsCostPerPage))
         {
             $this->calculatedPartsCostPerPage = $params->calculatedPartsCostPerPage;
@@ -456,10 +440,6 @@ class MasterDeviceModel extends My_Model_Abstract
             $this->isUsingDealerPartsCostPerPage = $params->isUsingDealerPartsCostPerPage;
         }
 
-        if (isset($params->isUsingReportPartsCostPerPage) && !is_null($params->isUsingReportPartsCostPerPage))
-        {
-            $this->isUsingReportPartsCostPerPage = $params->isUsingReportPartsCostPerPage;
-        }
     }
 
     /**
@@ -525,10 +505,10 @@ class MasterDeviceModel extends My_Model_Abstract
      *
      * @return MasterDeviceModel
      */
-    public function setManufacturer ($Manufacturer)
+    public function setManufacturer (ManufacturerModel $manufacturer)
     {
-        $this->_manufacturer = $Manufacturer;
-
+        $this->_manufacturer = $manufacturer;
+        $this->manufacturerId = $manufacturer->id;
         return $this;
     }
 
@@ -655,18 +635,6 @@ class MasterDeviceModel extends My_Model_Abstract
     }
 
     /**
-     * @param bool $HasValidMonoGrossMarginToners
-     *
-     * @return MasterDeviceModel
-     */
-    public function setHasValidMonoGrossMarginToners ($HasValidMonoGrossMarginToners)
-    {
-        $this->_hasValidMonoGrossMarginToners = $HasValidMonoGrossMarginToners;
-
-        return $this;
-    }
-
-    /**
      * @param CostPerPageSettingModel $costPerPageSetting
      *
      * @return bool
@@ -710,18 +678,6 @@ class MasterDeviceModel extends My_Model_Abstract
         }
 
         return $this->_hasValidColorGrossMarginToners[$cacheKey];
-    }
-
-    /**
-     * @param bool $HasValidColorGrossMarginToners
-     *
-     * @return MasterDeviceModel
-     */
-    public function setHasValidColorGrossMarginToners ($HasValidColorGrossMarginToners)
-    {
-        $this->_hasValidColorGrossMarginToners = $HasValidColorGrossMarginToners;
-
-        return $this;
     }
 
     /**

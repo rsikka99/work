@@ -5,11 +5,13 @@ namespace MPSToolbox\Legacy\Modules\HardwareLibrary\Services;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Validators\MasterDeviceValidator;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
+use \Exception;
 
 /**
  * Class MasterDeviceService
  *
  * @package MPSToolbox\Legacy\Modules\HardwareLibrary\Services
+ * @Deprecated
  */
 class MasterDeviceService
 {
@@ -19,10 +21,11 @@ class MasterDeviceService
      * @param $masterDeviceId
      *
      * @return int
+     * @Deprecated
      */
     public function deleteMasterDevice ($masterDeviceId)
     {
-        return MasterDeviceMapper::getInstance()->delete($masterDeviceId);
+        throw new Exception('Deprecated');
     }
 
     /**
@@ -31,10 +34,11 @@ class MasterDeviceService
      * @param $id
      *
      * @return MasterDeviceModel
+     * @Deprecated
      */
     public function findMasterDevice ($id)
     {
-        return MasterDeviceMapper::getInstance()->find($id);
+        throw new Exception('Deprecated');
     }
 
     /**
@@ -42,29 +46,11 @@ class MasterDeviceService
      * @param null $id
      *
      * @return int|string
+     * @Deprecated
      */
     public function saveMasterDevice ($data, $id = null)
     {
-        $masterDeviceModel = new MasterDeviceModel();
-        $masterDeviceModel->populate($data);
-
-        $validator = new MasterDeviceValidator();
-        if ($validator->validate($masterDeviceModel))
-        {
-            if ($validator->validateAssignedToners($masterDeviceModel, $toners))
-            {
-                if ($id > 0)
-                {
-                    $masterDeviceModel->id = $id;
-
-                    return MasterDeviceMapper::getInstance()->save($masterDeviceModel);
-                }
-                else
-                {
-                    return MasterDeviceMapper::getInstance()->insert($masterDeviceModel);
-                }
-            }
-        }
+        throw new Exception('Deprecated');
     }
 
     /**
@@ -73,23 +59,10 @@ class MasterDeviceService
      * @param $searchTerm
      *
      * @return array
+     * @Deprecated
      */
     public function searchForMasterDevice ($searchTerm)
     {
-        $results            = [];
-        $masterDeviceMapper = MasterDeviceMapper::getInstance();
-
-        if ($searchTerm !== false)
-        {
-            foreach ($masterDeviceMapper->searchByName($searchTerm) as $masterDeviceSearchResult)
-            {
-                $results[] = [
-                    "id"   => $masterDeviceSearchResult->masterDeviceId,
-                    "text" => $masterDeviceSearchResult->masterDeviceFullDeviceName
-                ];
-            }
-        }
-
-        return $results;
+        throw new Exception('Deprecated');
     }
 }

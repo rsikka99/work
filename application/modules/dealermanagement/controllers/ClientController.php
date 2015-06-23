@@ -123,7 +123,7 @@ class Dealermanagement_ClientController extends Action
         $clientService    = new ClientService();
         if ($this->getRequest()->isPost())
         {
-            $values = $this->getRequest()->getPost();
+            $values = $this->getRequest()->getParams();
             if (isset($values ['Cancel']))
             {
                 $this->redirectToRoute('company.clients');
@@ -189,7 +189,7 @@ class Dealermanagement_ClientController extends Action
         }
         if ($this->getRequest()->isPost())
         {
-            $values = $this->getRequest()->getPost();
+            $values = $this->getRequest()->getParams();
             if (isset($values ['Cancel']))
             {
                 $this->redirectToRoute('company.clients');

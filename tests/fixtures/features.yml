@@ -1,0 +1,18 @@
+features:
+    - { id: assessment, name: Assessment }
+    - { id: assessment_customer_cost_analysis, name: 'Assessment Customer Cost Analysys' }
+    - { id: assessment_fleet_attributes, name: 'Assessment Fleet Attributes' }
+    - { id: assessment_gross_margin, name: 'Assessment Gross Margin' }
+    - { id: assessment_jit_supply_and_toner_sku_report, name: 'Assessment JIT Supply And Toner Sku Report' }
+    - { id: assessment_lease_buyback, name: 'Assessment Lease Buyback' }
+    - { id: assessment_old_device_list, name: 'Assessment Old Device List' }
+    - { id: assessment_printing_device_list, name: 'Assessment Printing Device list' }
+    - { id: assessment_solution, name: 'Assessment Solution' }
+    - { id: assessment_toner_vendor_gross_margin, name: 'Assessment Toner Vendor Gross Margin' }
+    - { id: assessment_utilization, name: 'Assessment Utilization' }
+    - { id: client_pricing, name: 'Client Pricing Uploads' }
+    - { id: hardware_optimization, name: 'Hardware Optimization' }
+    - { id: hardware_optimization_memjet, name: 'Memjet Optimization' }
+    - { id: hardware_quote, name: 'Hardware Quote' }
+    - { id: healthcheck, name: 'Health Check' }
+    - { id: healthcheck_printiq, name: 'Health Check PrintIQ (Overrides standard Health Check)' }

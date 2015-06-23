@@ -77,11 +77,8 @@ class Healthcheck_ViewModel_Devices extends Assessment_ViewModel_Devices
 
     /**
      * @param int   $rmsUploadId
-     * @param float $laborCostPerPage
-     * @param float $partsCostPerPage
-     * @param float $adminCostPerPage
      */
-    public function __construct ($rmsUploadId, $laborCostPerPage, $partsCostPerPage, $adminCostPerPage)
+    public function __construct ($rmsUploadId)
     {
         $this->a3DeviceInstances                   = new DeviceInstancesGroupModel();
         $this->reportingTonerLevelsDeviceInstances = new DeviceInstancesGroupModel();
@@ -97,7 +94,7 @@ class Healthcheck_ViewModel_Devices extends Assessment_ViewModel_Devices
         $this->faxCapableDeviceInstances           = new DeviceInstancesGroupModel();
         $this->colorCapableDeviceInstances         = new DeviceInstancesGroupModel();
 
-        parent::__construct($rmsUploadId, $laborCostPerPage, $partsCostPerPage, $adminCostPerPage);
+        parent::__construct($rmsUploadId);
     }
 
 

@@ -42,7 +42,7 @@ class HardwareOptimizationModel extends My_Model_Abstract
     /**
      * @var string
      */
-    public $dateReportPrepared;
+    protected $_dateReportPrepared;
 
     /**
      * @var int
@@ -148,6 +148,11 @@ class HardwareOptimizationModel extends My_Model_Abstract
         ];
     }
 
+    public function setClient(ClientModel $client) {
+        $this->_client = $client;
+        $this->clientId = $client->id;
+    }
+
     /**
      * Gets the client
      *
@@ -163,6 +168,10 @@ class HardwareOptimizationModel extends My_Model_Abstract
         return $this->_client;
     }
 
+    public function setDealer(DealerModel $dealer) {
+        $this->_dealer = $dealer;
+        $this->dealerId = $dealer->id;
+    }
     /**
      * Gets the dealer
      *
@@ -179,8 +188,12 @@ class HardwareOptimizationModel extends My_Model_Abstract
     }
 
 
+    public function setRmsUpload(RmsUploadModel $rmsUpload) {
+        $this->_rmsUpload = $rmsUpload;
+        $this->rmsUploadId = $rmsUpload->id;
+    }
+
     /**
-     * Gets the dealer
      *
      * @return RmsUploadModel
      */
@@ -201,12 +214,12 @@ class HardwareOptimizationModel extends My_Model_Abstract
      */
     public function getFormattedDatePrepared ()
     {
-        if (!isset($this->dateReportPrepared))
+        if (!isset($this->_dateReportPrepared))
         {
             $report_date              = new DateTime($this->dateCreated);
-            $this->dateReportPrepared = date_format($report_date, 'F jS, Y');
+            $this->_dateReportPrepared = date_format($report_date, 'F jS, Y');
         }
 
-        return $this->dateReportPrepared;
+        return $this->_dateReportPrepared;
     }
 }

@@ -3,7 +3,7 @@
 /**
  * Class Api_Bootstrap
  */
-class Api_Bootstrap extends Zend_Application_Module_Bootstrap
+class Api_Bootstrap extends Tangent\ModuleBootstrap
 {
 //    protected function _initAddToAcl ()
 //    {

@@ -5,7 +5,7 @@ use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
 /**
  * Class Quotegen_Bootstrap
  */
-class Quotegen_Bootstrap extends Zend_Application_Module_Bootstrap
+class Quotegen_Bootstrap extends Tangent\ModuleBootstrap
 {
     /**
      * Sets the paginator view partials

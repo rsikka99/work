@@ -1,0 +1,4 @@
+countries:
+    - { country_id: '1', name: Afghanistan, iso_alpha2: AF, iso_alpha3: AFG, iso_numeric: '4', currency_code: AFN, currency_name: Afghani, currency_symbol: ؋, flag: AF.png }
+    - { country_id: '39', name: Canada, iso_alpha2: CA, iso_alpha3: CAN, iso_numeric: '124', currency_code: CAD, currency_name: Dollar, currency_symbol: $, flag: CA.png }
+    - { country_id: '227', name: 'United States', iso_alpha2: US, iso_alpha3: USA, iso_numeric: '840', currency_code: USD, currency_name: Dollar, currency_symbol: $, flag: US.png }

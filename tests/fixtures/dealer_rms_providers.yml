@@ -1,0 +1,10 @@
+dealer_rms_providers:
+    - { dealerId: '2', rmsProviderId: '1' }
+    - { dealerId: '2', rmsProviderId: '2' }
+    - { dealerId: '2', rmsProviderId: '3' }
+    - { dealerId: '2', rmsProviderId: '4' }
+    - { dealerId: '2', rmsProviderId: '5' }
+    - { dealerId: '2', rmsProviderId: '6' }
+    - { dealerId: '2', rmsProviderId: '7' }
+    - { dealerId: '2', rmsProviderId: '8' }
+    - { dealerId: '2', rmsProviderId: '9' }

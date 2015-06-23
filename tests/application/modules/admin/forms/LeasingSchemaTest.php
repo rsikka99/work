@@ -6,6 +6,9 @@ use MPSToolbox\Legacy\Modules\Admin\Forms\LeasingSchemaForm;
  */
 class Admin_Form_LeasingSchemaTest extends Tangent_PHPUnit_Framework_ZendFormTestCase
 {
+
+    public $fixtures = ['dealers'];
+
     /**
      * @var LeasingSchemaForm
      */

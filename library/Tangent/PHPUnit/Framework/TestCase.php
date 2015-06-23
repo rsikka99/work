@@ -1,6 +1,6 @@
 <?php
 
-abstract class Tangent_PHPUnit_Framework_TestCase extends PHPUnit_Framework_TestCase
+abstract class Tangent_PHPUnit_Framework_TestCase extends My_DatabaseTestCase
 {
     /**
      * Loads test data from an xml file. Expects a key called testData

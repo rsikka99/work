@@ -62,10 +62,9 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
      *
      * @param $object MasterDeviceModel
      *                The object to insert
-     *
      * @return int The primary key of the new row
      */
-    public function insert (&$object)
+    public function insert ($object)
     {
         // Get an array of data to save
         $data = $this->unsetNullValues($object->toArray());
@@ -768,7 +767,7 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
         }
 
         $db       = Zend_Db_Table::getDefaultAdapter();
-        $dealerId = $db->quote($dealerId, 'INT');
+        $dealerId = intval($dealerId);
         $select   = $db->select()
                        ->from(['pmd' => 'master_devices'], [
                            'pmd.*',
@@ -778,8 +777,6 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
                            "calculatedLaborCostPerPage"    => "COALESCE(dmda.laborCostPerPage, NULL)",
                            "isUsingDealerPartsCostPerPage" => "(dmda.partsCostPerPage IS NOT NULL)",
                            "isUsingDealerLaborCostPerPage" => "(dmda.laborCostPerPage IS NOT NULL)",
-                           "isUsingReportLaborCostPerPage" => "(dmda.laborCostPerPage IS NULL)",
-                           "isUsingReportPartsCostPerPage" => "(dmda.partsCostPerPage IS NULL)",
                        ])
                        ->where("pmd.id = ? ", $masterDeviceId);
 

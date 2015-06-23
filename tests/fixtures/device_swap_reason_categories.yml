@@ -1,0 +1,4 @@
+device_swap_reason_categories:
+    - { id: '1', name: 'Flagged Devices' }
+    - { id: '2', name: 'Device Has Replacement Device' }
+    - { id: '3', name: 'Device has been upgraded' }
