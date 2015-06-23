@@ -391,6 +391,7 @@ $r->addRoute('settings', new R('settings', ['module' => 'preferences', 'controll
 //@formatter:off
 $r->addRoute('report-settings',         new R('client/settings',         ['module' => 'preferences', 'controller' => 'client', 'action' => 'index']));
 $r->addRoute('company.report-settings', new R('company/report-settings', ['module' => 'preferences', 'controller' => 'dealer', 'action' => 'index']));
+$r->addRoute('company.shop-settings',   new R('company/shop-settings',   ['module' => 'preferences', 'controller' => 'dealer', 'action' => 'shop']));
 //@formatter:on
 
 /**

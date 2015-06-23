@@ -1,0 +1,90 @@
+<?php
+use MPSToolbox\Settings\Form\ShopSettingsForm;
+
+/* @var $form ShopSettingsForm */
+$form    = $this->element;
+
+$dealerId = \Zend_Auth::getInstance()->getIdentity()->dealerId;
+$dealer = \MPSToolbox\Legacy\Mappers\DealerMapper::getInstance()->find($dealerId);
+
+if ('' == $dealer->api_key) {
+    $dealer->api_key = md5(uniqid().time());
+    $dealer->api_secret = sha1(uniqid().time());
+    \MPSToolbox\Legacy\Mappers\DealerMapper::getInstance()->save($dealer);
+}
+
+?>
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
+
+<div class="row">
+    <div class="col-sm-12 col-md-6">
+        <fieldset>
+            <legend>General</legend>
+            <div class="form-group <?= ($form->getElement('hardwareMargin')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('hardwareMargin'), ['col-md-6']) ?>
+
+                <div class="col-md-6">
+                    <?= $this->RenderFormText($form->getElement('hardwareMargin'), null, '%') ?>
+                    <?= $this->RenderFormDescription($form->getElement('hardwareMargin')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('hardwareMargin')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('oemTonerMargin')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('oemTonerMargin'), ['col-md-6']) ?>
+
+                <div class="col-md-6">
+                    <?= $this->RenderFormText($form->getElement('oemTonerMargin'), null, '%') ?>
+                    <?= $this->RenderFormDescription($form->getElement('oemTonerMargin')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('oemTonerMargin')) ?>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('compatibleTonerMargin')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('compatibleTonerMargin'), ['col-md-6']) ?>
+
+                <div class="col-md-6">
+                    <?= $this->RenderFormText($form->getElement('compatibleTonerMargin'), null, '%') ?>
+                    <?= $this->RenderFormDescription($form->getElement('compatibleTonerMargin')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('compatibleTonerMargin')) ?>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Shopify</legend>
+            <div class="form-group <?= ($form->getElement('shopifyName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('shopifyName'), ['col-md-6']) ?>
+
+                <div class="col-md-6">
+                    <?= $this->RenderFormText($form->getElement('shopifyName')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('shopifyName')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('shopifyName')) ?>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>MPS Toolbox API</legend>
+            <div class="form-group <?= ($form->getElement('api_key')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('api_key'), ['col-md-6']) ?>
+
+                <div class="col-md-6">
+                    <input type="text" style="width:400px; background-color: #ccc" value="<?php echo $dealer->api_key ?>" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group <?= ($form->getElement('api_secret')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('api_secret'), ['col-md-6']) ?>
+
+                <div class="col-md-6">
+                    <input type="text" style="width:400px; background-color: #ccc" value="<?php echo $dealer->api_secret ?>" class="form-control"/>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<fieldset>
+    <hr>
+    <?= $this->RenderFormSubmit($form->getElement('submit'), ['btn', 'btn-primary']) ?>
+    <?= $this->RenderFormSubmit($form->getElement('cancel'), ['btn', 'btn-default']) ?>
+</fieldset>
+
+
+<?= $this->RenderFormClose($form) ?>

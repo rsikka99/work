@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
  * @property int                        genericSettingsId
  * @property int                        quoteSettingsId
  * @property int                        optimizationSettingsId
+ * @property int                        shopSettingsId
  * @property int                        quoteValid
  * @property string                     quoteCustom
  *
@@ -60,6 +61,14 @@ class DealerSettingsEntity extends EloquentModel
     public function quoteSettings ()
     {
         return $this->belongsTo('\MPSToolbox\Settings\Entities\QuoteSettingsEntity', 'quoteSettingsId');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function shopSettings ()
+    {
+        return $this->belongsTo('\MPSToolbox\Settings\Entities\ShopSettingsEntity', 'shopSettingsId');
     }
 
     /**
