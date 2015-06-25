@@ -10,6 +10,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel;
 use My_Brand;
 use My_Validate_DateTime;
 use Tangent\Validate\FieldDependsOnValue;
+use Zend_Validate_GreaterThan;
 use Zend_Validate_Between;
 use Zend_Validate_Float;
 use Zend_Validate_Int;
@@ -140,7 +141,7 @@ class DeviceSetupForm extends \My_Form_Form
                 new FieldDependsOnValue('can_sell', '1', [
                     new Zend_Validate_NotEmpty(),
                     new Zend_Validate_Float(),
-                    new Zend_Validate_Between(['min' => 1, 'max' => 30000]),
+                    new Zend_Validate_GreaterThan(['min' => 0]),
                 ]),
             ],
         ]);
@@ -347,7 +348,7 @@ class DeviceSetupForm extends \My_Form_Form
                 new FieldDependsOnValue('isLeased', '1', [
                     new Zend_Validate_NotEmpty(),
                     new Zend_Validate_Int(),
-                    new Zend_Validate_Between(['min' => 0, 'max' => 100000]),
+                    new Zend_Validate_GreaterThan(['min' => 0]),
                 ]),
             ],
         ]);

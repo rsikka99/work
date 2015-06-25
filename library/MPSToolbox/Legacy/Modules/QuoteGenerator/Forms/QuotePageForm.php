@@ -41,7 +41,7 @@ class QuotePageForm extends FormWithNavigation
 
         // Validation variables
         $minQuantityPages = 0;
-        $maxQuantityPages = 100000;
+        $maxQuantityPages = 500000;
 
         /* @var $quoteDeviceGroup QuoteDeviceGroupModel */
         foreach ($this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup)

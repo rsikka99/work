@@ -64,8 +64,6 @@ $r->addRoute('app.dashboard.delete-optimization', new R('/delete-optimization/:h
 $r->addRoute('app.dashboard.delete-healthcheck',  new R('/delete-healthcheck/:healthcheckId',           ['module' => 'default', 'controller' => 'index', 'action' => 'delete-report'     ]));
 $r->addRoute('app.dashboard.delete-quote',        new R('/delete-quote/:quoteId',                       ['module' => 'default', 'controller' => 'index', 'action' => 'delete-report'     ]));
 $r->addRoute('app.dashboard.no-clients',          new R('/first-client',                                ['module' => 'default', 'controller' => 'index', 'action' => 'no-clients'        ]));
-
-$r->addRoute('app.dashboard.no-uploads',          new R('/first-upload',                                ['module' => 'default', 'controller' => 'index', 'action' => 'no-uploads'        ]));
 $r->addRoute('app.dashboard.no-uploads',          new R('/first-upload',                                ['module' => 'default', 'controller' => 'index', 'action' => 'no-uploads'        ]));
 
 

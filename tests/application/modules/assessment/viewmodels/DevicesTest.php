@@ -36,7 +36,7 @@ TRUNCATE TABLE `device_instance_master_devices`;
     }
 
     public function testConstruct() {
-        $result = new Assessment_ViewModel_Devices(1);
+        $result = new Assessment_ViewModel_Devices(2);
         $this->assertTrue($result instanceof Assessment_ViewModel_Devices);
         $this->assertEquals(28, $result->allDeviceInstances->getCount());
         $this->assertEquals(1, $result->allDevicesWithShortMonitorInterval->getCount());

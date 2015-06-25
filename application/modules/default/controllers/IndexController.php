@@ -73,10 +73,15 @@ class Default_IndexController extends Action
 
     /**
      * Helps a user create their first client
+     * $r->addRoute('app.dashboard.no-clients',          new R('/first-client',                                ['module' => 'default', 'controller' => 'index', 'action' => 'no-clients'        ]));
      */
     public function noClientsAction ()
     {
         $this->_pageTitle = ['Your first client'];
+
+        if (ClientRepository::countForDealer($this->getIdentity()->dealerId) >0) {
+            $this->redirectToRoute('app.dashboard.select-client');
+        }
 
         $clientService = new ClientService();
 
@@ -102,10 +107,26 @@ class Default_IndexController extends Action
 
     /**
      * Helps a user create their first upload
+     * $r->addRoute('app.dashboard.no-uploads',          new R('/first-upload',                                ['module' => 'default', 'controller' => 'index', 'action' => 'no-uploads'        ]));
      */
     public function noUploadsAction ()
     {
         $this->_pageTitle = ['Upload fleet data'];
+
+        $arr=$this->getSelectedClient()->rmsUploads();
+        if (count($arr->getResults())>0) {
+            $this->redirectToRoute('app.dashboard.select-upload');
+            return;
+        }
+
+        if (!$this->getSelectedClient()->id) {
+            if (ClientRepository::countForDealer($this->getIdentity()->dealerId) < 1) {
+                $this->redirectToRoute('app.dashboard.no-clients');
+            } else {
+                $this->redirectToRoute('app.dashboard.select-client');
+            }
+            return;
+        }
 
         $uploadService = new RmsUploadService($this->getIdentity()->id, $this->getIdentity()->dealerId, $this->getSelectedClient()->id);
 
