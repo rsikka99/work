@@ -114,10 +114,13 @@ class TonerService
             $toner->cost = static::obfuscateTonerCost($toner->cost);
         }
 
-        // FIXME lrobert: Change cost to MSRP/Market Price?
         $toner->userId = $this->userId;
-
         $tonerMapper->insert($toner);
+
+        if ($data['imageUrl']) {
+            $this->downloadImageFromImageUrl($toner, $data['imageUrl']);
+            $tonerMapper->save($toner);
+        }
 
         return $toner;
     }
