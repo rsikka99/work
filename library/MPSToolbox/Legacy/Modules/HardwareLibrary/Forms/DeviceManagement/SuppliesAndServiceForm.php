@@ -7,7 +7,7 @@ use Tangent\Validate\FieldDependsOnValue;
 use Zend_Form;
 use Zend_Validate_Int;
 use Zend_Validate_NotEmpty;
-use Zend_Validate_Between;
+use Zend_Validate_GreaterThan;
 
 /**
  * Class SuppliesAndServiceForm
@@ -70,7 +70,7 @@ class SuppliesAndServiceForm extends \My_Form_Form
                 new FieldDependsOnValue('isLeased', '1', [
                         new Zend_Validate_NotEmpty(),
                         new Zend_Validate_Int(),
-                        new Zend_Validate_Between(['min' => 0, 'max' => 100000])
+                        new Zend_Validate_GreaterThan(['min' => 0])
                     ]
                 ),
             ],
