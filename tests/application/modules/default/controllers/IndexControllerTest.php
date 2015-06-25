@@ -40,7 +40,8 @@ class Default_IndexControllerTest extends My_ControllerTestCase
         $this->assertController('index');
         $this->assertAction('index');
         $this->assertNotRedirect();
-        $this->assertQueryCount('a[@href="/select-upload"]',1);
+
+        $this->assertQueryCount('div[@class="tab-content"]',1);
     }
 
     public function test_changeClientAction() {
@@ -93,6 +94,7 @@ class Default_IndexControllerTest extends My_ControllerTestCase
     }
 
     public function test_noClientsAction() {
+        Zend_Db_Table::getDefaultAdapter()->query('truncate clients');
         $this->dispatch('/first-client');
         $this->assertModule('default');
         $this->assertController('index');
@@ -100,8 +102,19 @@ class Default_IndexControllerTest extends My_ControllerTestCase
         $this->assertNotRedirect();
     }
 
+    public function test_noUploadsAction() {
+        Zend_Db_Table::getDefaultAdapter()->query('truncate rms_uploads');
+        $this->dispatch('/first-upload');
+        $this->assertModule('default');
+        $this->assertController('index');
+        $this->assertAction('no-uploads');
+        $this->assertNotRedirect();
+    }
 
 
 
+
+
+//echo $this->getResponse()->getBody();
 }
 
