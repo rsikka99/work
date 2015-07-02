@@ -77,6 +77,15 @@ class Default_IndexControllerTest extends My_ControllerTestCase
         $this->assertNotRedirect();
     }
 
+    public function test_selectClientAction_post() {
+        $this->getRequest()->setParam('selectClient',1);
+        $this->dispatch('/select-client');
+        $this->assertModule('default');
+        $this->assertController('index');
+        $this->assertAction('select-client');
+        $this->assertRedirectTo('/');
+    }
+
     public function test_selectUploadAction() {
         $this->dispatch('/select-upload');
         $this->assertModule('default');

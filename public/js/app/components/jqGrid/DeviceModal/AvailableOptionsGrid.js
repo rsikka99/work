@@ -26,8 +26,9 @@ define([
             deviceId        : false,
             filterOptionSku : false,
             filterOptionText: false,
+            filterAssigned: false,
             url             : '#'
-        }, _.pick(options || {}, ['deviceId', 'filterOptionSku', 'filterOptionText', 'url']));
+        }, _.pick(options || {}, ['deviceId', 'filterOptionSku', 'filterOptionText', 'filterAssigned', 'url']));
 
         var that = this;
         this.instanceId = instanceCounter++;
@@ -52,6 +53,11 @@ define([
         if (_.isFunction(settings.filterOptionText))
         {
             postData.filterOptionText = settings.filterOptionText;
+        }
+
+        if (_.isFunction(settings.filterAssigned))
+        {
+            postData.filterAssigned = settings.filterAssigned;
         }
 
         /**

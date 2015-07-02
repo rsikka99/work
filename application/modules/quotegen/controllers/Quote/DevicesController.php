@@ -204,6 +204,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
      */
     public function editQuoteDeviceAction ()
     {
+        $this->_pageTitle           = ['Quote', 'Add Hardware'];
         // Require that we have a quote object in the database to use this page
         $this->requireQuote();
         // Get the quote device (Also does validation)

@@ -146,10 +146,16 @@ class Dealermanagement_ClientController extends Action
                 $this->_flashMessenger->addMessage([
                     'success' => "Client successfully created."
                 ]);
+                if (isset($_GET['select'])) {
+                    $url = $this->getFrontController()->getRouter()->assemble([],'app.dashboard.select-client');
+                    $this->redirect($url.'?selectClient='.$clientId);
+                    return;
+                }
                 // Redirect with client id so that the client is preselected
                 $this->redirectToRoute('company.clients', [
                     'clientId' => $clientId
                 ]);
+                return;
             }
             else
             {
