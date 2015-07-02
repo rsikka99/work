@@ -238,6 +238,7 @@ class HardwareLibrary_OptionController extends Action
         {
             $filterOptionSku  = $this->getParam('filterOptionSku', false);
             $filterOptionText = $this->getParam('filterOptionText', false);
+            $filterAssigned = $this->getParam('filterAssigned', false);
 
             $searchCriteria = null;
             $searchValue    = null;
@@ -253,7 +254,7 @@ class HardwareLibrary_OptionController extends Action
                 $searchValue    = $filterOptionText;
             }
 
-            $options = $optionMapper->fetchAllOptionsWithDeviceOptions($masterDeviceId, $dealerId, null, $searchCriteria, $searchValue, 1000, 0);
+            $options = $optionMapper->fetchAllOptionsWithDeviceOptions($masterDeviceId, $dealerId, null, $searchCriteria, $searchValue, 1000, 0, $filterAssigned);
             $jqGridService->setRecordCount(count($options));
 
             // Validate current page number since we don't want to be out of bounds
@@ -283,7 +284,7 @@ class HardwareLibrary_OptionController extends Action
             {
                 $sortOrder[] = $jqGridService->getSortColumn() . ' ' . $jqGridService->getSortDirection();
             }
-            $options = $optionMapper->fetchAllOptionsWithDeviceOptions($masterDeviceId, $dealerId, $sortOrder, $searchCriteria, $searchValue, $jqGridService->getRecordsPerPage(), $startRecord);
+            $options = $optionMapper->fetchAllOptionsWithDeviceOptions($masterDeviceId, $dealerId, $sortOrder, $searchCriteria, $searchValue, $jqGridService->getRecordsPerPage(), $startRecord, $filterAssigned);
             $jqGridService->setRows($options);
 
             // Send back jqGrid JSON data

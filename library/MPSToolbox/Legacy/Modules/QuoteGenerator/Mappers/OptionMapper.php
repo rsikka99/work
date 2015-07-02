@@ -468,7 +468,17 @@ class OptionMapper extends My_Model_Mapper_Abstract
         return $options;
     }
 
-    public function fetchAllOptionsWithDeviceOptions ($masterDeviceId, $dealerId, $sortColumn = null, $filterByColumn = null, $filterValue = null, $limit = null, $offset = null)
+    /**
+     * @param $masterDeviceId
+     * @param $dealerId
+     * @param null $sortColumn
+     * @param null $filterByColumn
+     * @param null $filterValue
+     * @param null $limit
+     * @param null $offset
+     * @return array
+     */
+    public function fetchAllOptionsWithDeviceOptions ($masterDeviceId, $dealerId, $sortColumn = null, $filterByColumn = null, $filterValue = null, $limit = null, $offset = null, $filterAssigned=null)
     {
         $dbTable            = $this->getDbTable();
         $db = $dbTable->getAdapter();
@@ -505,6 +515,14 @@ class OptionMapper extends My_Model_Mapper_Abstract
             }
             $select->where("{$filterByColumn} LIKE '%{$filterValue}%'");
         }
+
+        switch ($filterAssigned) {
+            case '1': $select->where('do.masterDeviceId IS NOT NULL');
+                break;
+            case '2': $select->where('do.masterDeviceId IS NULL');
+                break;
+        }
+
         $select->order($sortColumn);
 
         $select->setIntegrityCheck(false);

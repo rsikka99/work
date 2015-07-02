@@ -546,6 +546,16 @@ define([
             var $availableOptions = $('.js-available-options-grid');
             var $availableOptionFilterSku = $('.js-filter-options-sku');
             var $availableOptionFilterText = $('.js-filter-options-text');
+            var $availableOptionFilterAssigned = $('.js-filter-options-assigned');
+            var $resetFilterButton = $('.js-reset-filter');
+
+            $resetFilterButton.on("click",function (e)
+            {
+                $availableOptionFilterSku.val('');
+                $availableOptionFilterText.val('');
+                $availableOptionFilterAssigned.val('');
+                $availableOptions.availableOptionGrid('reloadGrid');
+            });
 
             var $availableOptionsModal = $('#available-options-gridModal');
 
@@ -561,6 +571,9 @@ define([
                 "filterOptionSku" : function ()
                 {
                     return $availableOptionFilterSku.val();
+                },
+                "filterAssigned" : function () {
+                    return $availableOptionFilterAssigned.val();
                 },
                 url               : TMTW_BASEURL + "hardware-library/options"
             });
@@ -581,6 +594,10 @@ define([
 
             $availableOptionFilterSku.typeWatch(typeWatchOptions);
             $availableOptionFilterText.typeWatch(typeWatchOptions);
+
+            $availableOptionFilterAssigned.change(function() {
+                $availableOptions.availableOptionGrid('reloadGrid');
+            });
 
             $availableOptions.on('assign-option', {"deviceModalInstance": deviceModalInstance}, function (event, optionId, $button)
             {
