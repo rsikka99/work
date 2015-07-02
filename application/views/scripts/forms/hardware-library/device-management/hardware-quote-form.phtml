@@ -4,6 +4,10 @@ use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareQuo
 
 /* @var $form HardwareQuoteForm */
 $form = $this->element;
+
+$dealerSettings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::with('ShopSettings')->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+$shopSettings = $dealerSettings->shopSettings;
+
 ?>
 
 <?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
@@ -49,6 +53,7 @@ $form = $this->element;
             </div>
         </div>
 
+        <?php if ($shopSettings->shopifyName!='') { ?>
         <div class="form-group <?= ($form->getElement('srp')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
             <?= $this->RenderFormLabel($form->getElement('srp'), ['col-md-4']) ?>
 
@@ -58,6 +63,7 @@ $form = $this->element;
                 <?= $this->RenderFormElementErrors($form->getElement('srp')) ?>
             </div>
         </div>
+        <?php } ?>
 
         <div class="form-group <?= ($form->getElement('description')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
             <?= $this->RenderFormLabel($form->getElement('description'), ['col-md-4']) ?>
