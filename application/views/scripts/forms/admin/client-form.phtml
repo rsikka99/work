@@ -3,9 +3,12 @@ use MPSToolbox\Legacy\Modules\Admin\Forms\ClientForm;
 
 /* @var $form ClientForm */
 $form = $this->element;
+$action = $form->getAction();
+if (isset($_GET['select'])) $action .= '?select';
+
 ?>
 
-<form class="form-horizontal" method="<?= $form->getMethod() ?>" accept-charset="UTF-8" action="<?= $form->getAction() ?>">
+<form class="form-horizontal" method="<?= $form->getMethod() ?>" accept-charset="UTF-8" action="<?= $action ?>">
     <div class="row">
         <div class="col-sm-6">
             <?php if ($form->getElement('dealerId') instanceof Zend_Form_Element) : ?>
@@ -172,3 +175,4 @@ $form = $this->element;
         </ul>
     </fieldset>
 </form>
+

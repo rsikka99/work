@@ -59,10 +59,12 @@ class Dealermanagement_ClientControllerTest extends My_ControllerTestCase
             'postCode'=>'1',
             'region'=>'1',
         ]);
+
+        $_GET['select']=true;
         $request->setMethod('POST');
         $this->dispatch('company/clients/create');
         echo $this->getResponse()->getBody();
-        $this->assertRedirectTo('/company/clients');
+        $this->assertRedirectTo('/select-client?selectClient=1');
     }
 
     public function test_editClientAction() {

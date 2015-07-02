@@ -629,13 +629,12 @@ $r->addRoute('app.dashboard.delete-quote',        new R('/delete-quote/:quoteId'
         $this->_pageTitle   = ['Select Client'];
         $this->view->userId = $this->getIdentity()->id;
 
-        if ($this->getRequest()->isPost())
+        $selectClient = intval($this->getParam('selectClient'));
+
+        if ($selectClient>0)
         {
-            $postData = $this->getRequest()->getPost();
-            if (isset($postData['selectClient']))
-            {
-                $this->selectClient($postData['selectClient']);
-            }
+            $this->selectClient($selectClient);
+            return;
         }
 
         $this->view->headScript()->appendFile($this->view->baseUrl('/js/app/legacy/default/ClientSearch.js'));
