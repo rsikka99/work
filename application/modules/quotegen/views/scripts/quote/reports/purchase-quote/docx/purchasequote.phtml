@@ -80,12 +80,21 @@ foreach ($quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
 $table = $section->addTable($tcStyle->tablestyle);
 
 // Show page overage rate for monochrome and color
-$table->addRow($tcStyle->pages->rowheight);
-$table->addCell($tcStyle->span123Width, $tcStyle->pages->cell1->cellStyle)->addText('Monochrome Page Overage Rate', $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->pages->cell2->cellStyle)->addText($this->formatCostPerPage($quote->calculateMonochromeOverageRatePerPage()), $tcStyle->pages->cell2->fontStyle, $tcStyle->pages->cell2->paragraphStyle);
-$table->addRow($tcStyle->pages->rowheight);
-$table->addCell($tcStyle->span123Width, $tcStyle->pages->cell1->cellStyle)->addText('Color Page Overage Rate', $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->pages->cell2->cellStyle)->addText($this->formatCostPerPage($quote->calculateColorOverageRatePerPage()), $tcStyle->pages->cell2->fontStyle, $tcStyle->pages->cell2->paragraphStyle);
+$table->addRow($tcStyle->cpp->rowheight);
+$cell = $table->addCell($tcStyle->span123Width, $tcStyle->pages->cell1->cellStyle);
+$cell->addText('Monochrome Pages Included Per Month - '.$quote->calculateTotalMonochromePages(), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
+$cell->addText('Monochrome Page Overage Rate', $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
+$cell = $table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell2->cellStyle);
+$cell->addText($this->currency($quote->calculateMonochromePageRevenue()), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
+$cell->addText($this->formatCostPerPage($quote->calculateMonochromeOverageRatePerPage()), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
+
+$table->addRow($tcStyle->cpp->rowheight);
+$cell = $table->addCell($tcStyle->span123Width, $tcStyle->pages->cell1->cellStyle);
+$cell->addText('Color Pages Included Per Month - '.$quote->calculateTotalColorPages(), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
+$cell->addText('Color Page Overage Rate', $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
+$cell = $table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell2->cellStyle);
+$cell->addText($this->currency($quote->calculateColorPageRevenue()), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
+$cell->addText($this->formatCostPerPage($quote->calculateColorOverageRatePerPage()), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
 
 // Show monthly total
 $table->addRow($tcStyle->monthlyTotal->rowheight);
