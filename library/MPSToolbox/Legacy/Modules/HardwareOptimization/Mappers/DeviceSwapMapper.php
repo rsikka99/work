@@ -294,7 +294,14 @@ class DeviceSwapMapper extends My_Model_Mapper_Abstract
         $manufacturerMapper = ManufacturerMapper::getInstance();
         $masterDeviceMapper = MasterDeviceMapper::getInstance();
 
-        $select = $db->select()->from($this->getTableName())
+        $caseStatement = new Zend_Db_Expr("*, CASE WHEN md.isCopier AND md.tonerConfigId = 1 THEN 'Monochrome MFP'
+            WHEN md.isCopier AND md.tonerConfigId > 1 THEN 'Color MFP'
+            WHEN NOT md.isCopier AND md.tonerConfigId > 1 THEN 'Color '
+            WHEN NOT md.isCopier AND md.tonerConfigId = 1 THEN 'Monochrome'
+            END AS deviceType");
+
+        $select = $db->select();
+        $select->from([$this->getTableName()], $caseStatement)
                ->joinLeft(["md" => $masterDeviceMapper->getTableName()], "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", ["{$masterDeviceMapper->col_id}"])
                ->joinLeft(["m" => $manufacturerMapper->getTableName()], "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", [$manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")])
                ->where("{$this->getTableName()}.$this->col_dealerId = ?", intval($dealerId))

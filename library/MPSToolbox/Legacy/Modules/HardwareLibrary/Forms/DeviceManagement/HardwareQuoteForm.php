@@ -82,14 +82,7 @@ class HardwareQuoteForm extends \My_Form_Form
             'label'      => 'SRP',
             'maxlength'  => 255,
             'required'   => false,
-            'allowEmpty' => false,
-            'validators' => [
-                new FieldDependsOnValue('isSelling', '1', [
-                    new Zend_Validate_NotEmpty(),
-                    new Zend_Validate_Float(),
-                    new Zend_Validate_GreaterThan(0),
-                ]),
-            ],
+            'allowEmpty' => true,
         ]);
         /*
          * Description of standard features
