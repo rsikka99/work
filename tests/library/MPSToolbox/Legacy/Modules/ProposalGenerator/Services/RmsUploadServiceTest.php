@@ -57,13 +57,13 @@ class MPSToolbox_Legacy_Modules_ProposalGenerator_Services_RmsUploadServiceTest 
             [RmsProviderModel::RMS_PROVIDER_XEROX, 'Xerox/Sample2.csv'], //10
             [RmsProviderModel::RMS_PROVIDER_XEROX, 'Xerox/XOPA_Export-92fbe.csv'], //11
 
-            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/denver.csv'], //12
-            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/pittsburgh.csv'], //13
-            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/seattle.csv'], //14
-            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/philadelphia.csv'], //15
-            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/dallas.csv'], //16
+            #[RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/denver.csv'], //12
+            #[RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/pittsburgh.csv'], //13
+            #[RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/seattle.csv'], //14
+            #[RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/philadelphia.csv'], //15
+            #[RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/dallas.csv'], //16
 
-            [RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/corporate.csv'], //17
+            #[RmsProviderModel::RMS_PROVIDER_LEXMARK, 'Lexmark/corporate.csv'], //17
         ];
     }
 

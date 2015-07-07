@@ -26,6 +26,7 @@ class UploadLineModel extends My_Model_Abstract
     const ERROR_BAD_START_DATE       = "Invalid Monitor Start Date";
     const ERROR_BAD_END_DATE         = "Invalid Monitor End Date";
     const ERROR_BAD_INTERVAL         = "Monitoring dates are incorrect.";
+    const ERROR_COLOR_ON_MONOCHROME  = "Color meter values must be zero for Monochrome devices";
 
 
     /**
@@ -1284,6 +1285,13 @@ class UploadLineModel extends My_Model_Abstract
         if ($checkMetersValidation !== true)
         {
             return $checkMetersValidation;
+        }
+
+        // Monochrome device cannot have color readings
+        if (!$this->isColor) {
+            if (($this->startMeterColor>0) || ($this->endMeterColor>0)) {
+                return self::ERROR_COLOR_ON_MONOCHROME;
+            }
         }
 
         // Turn all the dates into objects
