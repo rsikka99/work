@@ -4,6 +4,9 @@ use MPSToolbox\Legacy\Models\Acl\AppAclModel;
 use MPSToolbox\Legacy\Models\Acl\HardwareLibraryAclModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
 
+$dealerSettings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::with('ShopSettings')->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+$shopSettings = $dealerSettings->shopSettings;
+
 ?>
 <div class="modal-dialog">
     <div class="modal-content">
@@ -400,6 +403,17 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
         </div>
     </div>
 </div>
+
+<?php if ($shopSettings->shopifyName!='') { ?>
+<script>
+    function sync_shopify() {
+        $.get('http://proxy.mpstoolbox.com/shopify/sync_device.php?id=<?= $this->masterDevice->id ?>&dealerId=<?= Zend_Auth::getInstance()->getIdentity()->dealerId ?>');
+    }
+    $('.js-save-device-modal').click(function() {
+        window.setTimeout(sync_shopify,1000);
+    });
+</script>
+<?php } ?>
 
 <div class="modal fade" id="alertMessageModal">
     <div class="modal-dialog">
