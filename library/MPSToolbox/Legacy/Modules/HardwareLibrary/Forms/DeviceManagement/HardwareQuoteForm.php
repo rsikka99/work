@@ -84,6 +84,30 @@ class HardwareQuoteForm extends \My_Form_Form
             'required'   => false,
             'allowEmpty' => true,
         ]);
+        $this->addElement('text_currency', 'rent', [
+            'label'      => 'Rent per month',
+            'maxlength'  => 255,
+            'required'   => false,
+            'allowEmpty' => true,
+        ]);
+        $this->addElement('text_int', 'pagesPerMonth', [
+            'label'      => 'Pages per month',
+            'maxlength'  => 255,
+            'required'   => false,
+            'allowEmpty' => true,
+        ]);
+        $this->addElement('text', 'dataSheetUrl', [
+            'label'      => 'Data Sheet URL',
+            'maxlength'  => 255,
+            'required'   => false,
+            'allowEmpty' => true,
+        ]);
+        $this->addElement('text', 'reviewsUrl', [
+            'label'      => 'Reviews URL',
+            'maxlength'  => 255,
+            'required'   => false,
+            'allowEmpty' => true,
+        ]);
         /*
          * Description of standard features
          */

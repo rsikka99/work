@@ -24,6 +24,7 @@ $this->jit         = My_Brand::$jit;
         <th>Age (Years)</th>
         <th>Purchased or Leased</th>
         <th>AMPV</th>
+        <th>(Monochrome/Color)</th>
         <th><?= $this->jit; ?> Comp.</th>
     </tr>
     </thead>
@@ -36,7 +37,15 @@ $this->jit         = My_Brand::$jit;
             <td class="ip-address"><?= ($deviceInstance->ipAddress) ?: "Unknown"; ?></td>
             <td class="age"><?= ($deviceInstance->getAge()) ?: "Unknown"; ?></td>
             <td class="is-leased"><?= ($deviceInstance->isLeased) ? "Leased" : "Purchased"; ?></td>
-            <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></td>
+            <td class="page-volume">
+                <?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?>
+            </td><td class="age">
+                (
+                <?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?>
+                /
+                <?= $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()); ?>
+                )
+            </td>
             <td class="reports-toner-levels"><?= ($deviceInstance->isCapableOfReportingTonerLevels) ? "Yes" : "No"; ?></td>
         </tr>
     <?php endforeach; ?>

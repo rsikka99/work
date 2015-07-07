@@ -349,6 +349,7 @@ abstract class AbstractRmsUploadService
                 $sheet = $obj->getSheet(0);
                 $maxCol = $sheet->getHighestDataColumn();
                 $maxRow = $sheet->getHighestDataRow();
+                $fileLines = [];
                 for($row = 1; $row <= $maxRow; ++$row) {
                     // Convert the row to an array...
                     $cellsArray = $sheet->rangeToArray('A'.$row.':'.$maxCol.$row,'', true);
@@ -479,7 +480,7 @@ abstract class AbstractRmsUploadService
      *
      * @return boolean True if all required headers exist
      */
-    public function validateHeaders ($csvHeaders)
+    protected function validateHeaders ($csvHeaders)
     {
         $requiredHeadersMissing = [];
         // Loop through our standard headers
@@ -498,7 +499,7 @@ abstract class AbstractRmsUploadService
             $map = $this->getColumnMapping();
             foreach ($requiredHeadersMissing as $header)
             {
-                $vendorHeadings[] = array_search($header, $map);
+                $vendorHeadings[] = array_search(strtolower($header),array_map('strtolower',$map)); //array_search($header, $map);
             }
 
             return "File is missing required these headers: [" . implode(',', $vendorHeadings) . "]. Are you sure you selected the right RMS Vendor?";
@@ -527,4 +528,56 @@ abstract class AbstractRmsUploadService
 
         return $csvData;
     }
+
+    /**
+     * @return array
+     */
+    public function getMappedHeaders()
+    {
+        return $this->_mappedHeaders;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCsvHeaders()
+    {
+        return $this->_csvHeaders;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFieldsPresent()
+    {
+        return $this->_fieldsPresent;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRequiredHeaders()
+    {
+        return $this->_requiredHeaders;
+    }
+
+    /**
+     * @param string $incomingDateFormat
+     */
+    public function setIncomingDateFormat($incomingDateFormat)
+    {
+        $this->_incomingDateFormat = $incomingDateFormat;
+    }
+
+    /**
+     * @param array $requiredHeaders
+     */
+    public function setRequiredHeaders($requiredHeaders)
+    {
+        $this->_requiredHeaders = $requiredHeaders;
+    }
+
+
+
+
 }

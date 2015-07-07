@@ -57,6 +57,26 @@ class DeviceModel extends My_Model_Abstract
     public $srp;
 
     /**
+     * @var float
+     */
+    public $rent;
+
+    /**
+     * @var int
+     */
+    public $pagesPerMonth;
+
+    /**
+     * @var string
+     */
+    public $dataSheetUrl;
+
+    /**
+     * @var string
+     */
+    public $reviewsUrl;
+
+    /**
      * @var DeviceOptionModel[]
      */
     protected $_options;
@@ -102,10 +122,14 @@ class DeviceModel extends My_Model_Abstract
             $this->cost = $params->cost;
         }
 
-        if (isset($params->srp) && !is_null($params->srp))
-        {
-            $this->srp = $params->srp;
-        }
+        if (isset($params->srp) && !is_null($params->srp)) $this->srp = $params->srp;
+
+        if (isset($params->srp) && !is_null($params->srp)) $this->srp = $params->srp;
+        if (isset($params->rent) && !is_null($params->rent)) $this->rent = $params->rent;
+        if (isset($params->pagesPerMonth) && !is_null($params->pagesPerMonth)) $this->pagesPerMonth = $params->pagesPerMonth;
+        if (isset($params->dataSheetUrl) && !is_null($params->dataSheetUrl)) $this->dataSheetUrl = $params->dataSheetUrl;
+        if (isset($params->reviewsUrl) && !is_null($params->reviewsUrl)) $this->reviewsUrl = $params->reviewsUrl;
+
     }
 
     /**
@@ -121,6 +145,10 @@ class DeviceModel extends My_Model_Abstract
             "description"    => $this->description,
             "cost"           => $this->cost,
             "srp"            => $this->srp,
+            "rent"           => $this->rent,
+            "pagesPerMonth"  => $this->pagesPerMonth,
+            "dataSheetUrl"   => $this->dataSheetUrl,
+            "reviewsUrl"     => $this->reviewsUrl,
         ];
     }
 
