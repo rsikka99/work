@@ -62,7 +62,9 @@ class DeviceMapper extends My_Model_Mapper_Abstract
 
         #--
         //synchronize with shopify
-        file_get_contents('http://proxy.mpstoolbox.com/shopify/sync_device.php?id='.$data['masterDeviceId'].'&dealerId='.\Zend_Auth::getInstance()->getIdentity()->dealerId);
+        if ($_SERVER['HTTP_HOST']=='staging.mpstoolbox.com') {
+            file_get_contents('http://proxy.mpstoolbox.com/shopify/sync_device.php?id=' . $data['masterDeviceId'] . '&dealerId=' . \Zend_Auth::getInstance()->getIdentity()->dealerId);
+        }
         #--
 
         return $id;
@@ -99,7 +101,9 @@ class DeviceMapper extends My_Model_Mapper_Abstract
 
         #--
         //synchronize with shopify
-        file_get_contents('http://proxy.mpstoolbox.com/shopify/sync_device.php?id='.$data['masterDeviceId'].'&dealerId='.\Zend_Auth::getInstance()->getIdentity()->dealerId);
+        if ($_SERVER['HTTP_HOST']=='staging.mpstoolbox.com') {
+            file_get_contents('http://proxy.mpstoolbox.com/shopify/sync_device.php?id=' . $data['masterDeviceId'] . '&dealerId=' . \Zend_Auth::getInstance()->getIdentity()->dealerId);
+        }
         #--
 
         return $rowsAffected;
