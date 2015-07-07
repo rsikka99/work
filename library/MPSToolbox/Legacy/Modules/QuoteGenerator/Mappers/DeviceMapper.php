@@ -41,6 +41,17 @@ class DeviceMapper extends My_Model_Mapper_Abstract
         return self::getCachedInstance();
     }
 
+    private function curl_wget($url) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
+    }
+
     /**
      * Saves an instance of MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceModel to the database.
      * If the id is null then it will insert a new row
@@ -63,7 +74,7 @@ class DeviceMapper extends My_Model_Mapper_Abstract
         #--
         //synchronize with shopify
         if ($_SERVER['HTTP_HOST']=='staging.mpstoolbox.com') {
-            file_get_contents('http://proxy.mpstoolbox.com/shopify/sync_device.php?id=' . $data['masterDeviceId'] . '&dealerId=' . \Zend_Auth::getInstance()->getIdentity()->dealerId);
+            $this->curl_wget('http://proxy.mpstoolbox.com/shopify/sync_device.php?id=' . $data['masterDeviceId'] . '&dealerId=' . \Zend_Auth::getInstance()->getIdentity()->dealerId);
         }
         #--
 
@@ -102,7 +113,7 @@ class DeviceMapper extends My_Model_Mapper_Abstract
         #--
         //synchronize with shopify
         if ($_SERVER['HTTP_HOST']=='staging.mpstoolbox.com') {
-            file_get_contents('http://proxy.mpstoolbox.com/shopify/sync_device.php?id=' . $data['masterDeviceId'] . '&dealerId=' . \Zend_Auth::getInstance()->getIdentity()->dealerId);
+            $this->curl_wget('http://proxy.mpstoolbox.com/shopify/sync_device.php?id=' . $data['masterDeviceId'] . '&dealerId=' . \Zend_Auth::getInstance()->getIdentity()->dealerId);
         }
         #--
 
