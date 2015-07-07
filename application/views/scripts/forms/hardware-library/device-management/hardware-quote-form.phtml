@@ -54,15 +54,55 @@ $shopSettings = $dealerSettings->shopSettings;
         </div>
 
         <?php if ($shopSettings->shopifyName!='') { ?>
-        <div class="form-group <?= ($form->getElement('srp')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('srp'), ['col-md-4']) ?>
+            <div class="form-group <?= ($form->getElement('srp')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('srp'), ['col-md-4']) ?>
 
-            <div class="col-md-6">
-                <?= $this->RenderFormText($form->getElement('srp'), null, '$') ?>
-                <?= $this->RenderFormDescription($form->getElement('srp')) ?>
-                <?= $this->RenderFormElementErrors($form->getElement('srp')) ?>
+                <div class="col-md-6">
+                    <?= $this->RenderFormText($form->getElement('srp'), null, '$') ?>
+                    <?= $this->RenderFormDescription($form->getElement('srp')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('srp')) ?>
+                </div>
             </div>
-        </div>
+
+            <div class="form-group <?= ($form->getElement('rent')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('rent'), ['col-md-4']) ?>
+
+                <div class="col-md-6">
+                    <?= $this->RenderFormText($form->getElement('rent'), null, '$') ?>
+                    <?= $this->RenderFormDescription($form->getElement('rent')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('rent')) ?>
+                </div>
+            </div>
+
+            <div class="form-group <?= ($form->getElement('pagesPerMonth')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('pagesPerMonth'), ['col-md-4']) ?>
+
+                <div class="col-md-6">
+                    <?= $this->RenderFormText($form->getElement('pagesPerMonth')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('pagesPerMonth')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('pagesPerMonth')) ?>
+                </div>
+            </div>
+
+            <div class="form-group <?= ($form->getElement('dataSheetUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('dataSheetUrl'), ['col-md-4']) ?>
+
+                <div class="col-md-6">
+                    <?= $this->RenderFormText($form->getElement('dataSheetUrl')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('dataSheetUrl')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('dataSheetUrl')) ?>
+                </div>
+            </div>
+
+            <div class="form-group <?= ($form->getElement('reviewsUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('reviewsUrl'), ['col-md-4']) ?>
+
+                <div class="col-md-6">
+                    <?= $this->RenderFormText($form->getElement('reviewsUrl')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('reviewsUrl')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('reviewsUrl')) ?>
+                </div>
+            </div>
         <?php } ?>
 
         <div class="form-group <?= ($form->getElement('description')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
