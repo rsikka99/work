@@ -53,7 +53,27 @@ $shopSettings = $dealerSettings->shopSettings;
             </div>
         </div>
 
+        <div class="form-group <?= ($form->getElement('description')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('description'), ['col-md-4']) ?>
+
+            <div class="col-md-6">
+                <?= $this->RenderFormTextArea($form->getElement('description')) ?>
+                <?= $this->RenderFormDescription($form->getElement('description')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('description')) ?>
+            </div>
+        </div>
+
         <?php if ($shopSettings->shopifyName!='') { ?>
+            <div class="form-group <?= ($form->getElement('online')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('online'), ['col-md-4']) ?>
+
+                <div class="col-md-6">
+                    <?= $this->RenderFormBootstrapSwitch($form->getElement('online'), ['js-yes-no-switch']) ?>
+                    <?= $this->RenderFormDescription($form->getElement('online')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('online')) ?>
+                </div>
+            </div>
+
             <div class="form-group <?= ($form->getElement('srp')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                 <?= $this->RenderFormLabel($form->getElement('srp'), ['col-md-4']) ?>
 
@@ -103,17 +123,18 @@ $shopSettings = $dealerSettings->shopSettings;
                     <?= $this->RenderFormElementErrors($form->getElement('reviewsUrl')) ?>
                 </div>
             </div>
+
+            <div class="form-group <?= ($form->getElement('onlineDescription')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('onlineDescription'), ['col-md-4']) ?>
+
+                <div class="col-md-6">
+                    <?= $this->RenderFormTextArea($form->getElement('onlineDescription')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('onlineDescription')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('onlineDescription')) ?>
+                </div>
+            </div>
         <?php } ?>
 
-        <div class="form-group <?= ($form->getElement('description')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('description'), ['col-md-4']) ?>
-
-            <div class="col-md-6">
-                <?= $this->RenderFormTextArea($form->getElement('description')) ?>
-                <?= $this->RenderFormDescription($form->getElement('description')) ?>
-                <?= $this->RenderFormElementErrors($form->getElement('description')) ?>
-            </div>
-        </div>
     </fieldset>
 </div>
 <?= $this->RenderFormClose($form) ?>

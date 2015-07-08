@@ -58,6 +58,16 @@ class Api_DevicesController extends Action
         }
     }
 
+    public function onlineAction() {
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $db->query('update devices set `online`=? where dealerId=? and masterDeviceId=?', [
+            $this->getParam('online')=='true'?'1':'0',
+            \Zend_Auth::getInstance()->getIdentity()->dealerId,
+            intval($this->getParam('id'))
+        ])->execute();
+        $this->sendJson(array('ok'));
+    }
+
     /**
      * Handles listing all the devices for a given jQuery Grid
      *
