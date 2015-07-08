@@ -243,12 +243,13 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
 
 function online_click(that, id, dealerId) {
     $(that).parent().css('background-color','#00ae5a');
-    sync_shopify(id, dealerId);
     $.get('/api/devices/online', {id:id, online:that.checked}, function () {
-        $(that).parent().animate({backgroundColor:'#ffffff'});
+        $(that).parent().animate({backgroundColor:'#ffffff'}, function() {
+            sync_shopify(id, dealerId);
+        });
     });
-
 }
+
 function sync_shopify(id, dealerId) {
     $('body').append('' +
         '<img ' +
