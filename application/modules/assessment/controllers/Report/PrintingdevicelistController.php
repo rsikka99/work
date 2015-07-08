@@ -109,7 +109,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
 
         $justInTimeCompatibleTitle = My_Brand::$jit . ' Compatible';
 
-        $this->view->appendix_titles = ["Manufacturer", "Model", "IP Address", "Serial", "Age (Years)", "Purchased or Leased", "AMPV", $justInTimeCompatibleTitle];
+        $this->view->appendix_titles = ["Manufacturer", "Model", "IP Address", "Serial", "Age (Years)", "Purchased or Leased", "AMPV Mono", "AMPV Color", "AMPV", $justInTimeCompatibleTitle];
 
         $appendix_values = "";
         try
@@ -124,6 +124,8 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
                 $row []            = ($device->serialNumber) ? $device->serialNumber : "Unknown";
                 $row []            = $device->getAge();
                 $row []            = ($device->isLeased) ? "Leased" : "Purchased";
+                $row []            = $this->view->formatPageVolume($device->getPageCounts()->getBlackPageCount()->getMonthly());
+                $row []            = $this->view->formatPageVolume($device->getPageCounts()->getColorPageCount()->getMonthly());
                 $row []            = $this->view->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly());
                 $row []            = ($device->isCapableOfReportingTonerLevels) ? "Yes" : "No";
                 $appendix_values[] = $row;
