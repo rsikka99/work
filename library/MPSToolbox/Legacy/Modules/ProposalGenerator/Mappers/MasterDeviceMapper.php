@@ -397,6 +397,9 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
             $deviceColumns       = [
                 'oemSku',
                 'dealerSku',
+                'online',
+                'rent',
+                'srp'
             ];
             $manufacturerColumns = [
                 'displayname',

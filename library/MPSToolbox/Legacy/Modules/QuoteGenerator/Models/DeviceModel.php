@@ -77,6 +77,16 @@ class DeviceModel extends My_Model_Abstract
     public $reviewsUrl;
 
     /**
+     * @var boolean
+     */
+    public $online;
+
+    /**
+     * @var string
+     */
+    public $onlineDescription;
+
+    /**
      * @var DeviceOptionModel[]
      */
     protected $_options;
@@ -129,7 +139,8 @@ class DeviceModel extends My_Model_Abstract
         if (isset($params->pagesPerMonth) && !is_null($params->pagesPerMonth)) $this->pagesPerMonth = $params->pagesPerMonth;
         if (isset($params->dataSheetUrl) && !is_null($params->dataSheetUrl)) $this->dataSheetUrl = $params->dataSheetUrl;
         if (isset($params->reviewsUrl) && !is_null($params->reviewsUrl)) $this->reviewsUrl = $params->reviewsUrl;
-
+        if (isset($params->online) && !is_null($params->online)) $this->online = $params->online;
+        if (isset($params->onlineDescription) && !is_null($params->onlineDescription)) $this->onlineDescription = $params->onlineDescription;
     }
 
     /**
@@ -149,6 +160,8 @@ class DeviceModel extends My_Model_Abstract
             "pagesPerMonth"  => $this->pagesPerMonth,
             "dataSheetUrl"   => $this->dataSheetUrl,
             "reviewsUrl"     => $this->reviewsUrl,
+            "online"         => $this->online,
+            "onlineDescription"     => $this->onlineDescription,
         ];
     }
 

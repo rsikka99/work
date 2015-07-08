@@ -128,6 +128,7 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
 { width: 460, name: 'modelName',      index: 'deviceName',     label: 'Full Device Name',  hidden: false, sortable: true, firstsortorder: 'asc' },
 { width: 150, name: 'oemSku',         index: 'oemSku',         label: 'OEM SKU',           hidden: false, sortable: false                       },
 { width: 150, name: 'dealerSku',      index: 'dealerSku',      label: 'Dealer SKU Name',   hidden: false, sortable: false                       },
+{ width: 50,  name: 'online',         index: 'online',         label: 'Online',            hidden: false, sortable: false                       },
 { width: 99,  name: 'action',         index: 'action',         label: 'Action',            hidden: false, sortable: false                       }
 //@formatter:on
         ],
@@ -239,3 +240,19 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
             $("#manageMasterDeviceModal").modal("hide");
         });
 });
+
+function online_click(that, id, dealerId) {
+    $(that).parent().css('background-color','#00ae5a');
+    sync_shopify(id, dealerId);
+    $.get('/api/devices/online', {id:id, online:that.checked}, function () {
+        $(that).parent().animate({backgroundColor:'#ffffff'});
+    });
+
+}
+function sync_shopify(id, dealerId) {
+    $('body').append('' +
+        '<img ' +
+        'style="display:none" ' +
+        'src="http://proxy.mpstoolbox.com/shopify/sync_device.php?origin='+window.location.hostname+'&id='+id+'&dealerId='+dealerId+'&_='+$.now()+'">'
+    );
+}

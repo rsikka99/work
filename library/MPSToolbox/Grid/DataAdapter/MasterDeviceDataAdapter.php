@@ -117,7 +117,20 @@ class MasterDeviceDataAdapter implements DataAdapterInterface
      */
     public function fetchAll ()
     {
-        return $this->mapper->getCanSellMasterDevices($this->getOrderBy(), $this->filters, $this->limit, $this->startRecord, $this->onlyQuoteDevices);
+        $result = $this->mapper->getCanSellMasterDevices($this->getOrderBy(), $this->filters, $this->limit, $this->startRecord, $this->onlyQuoteDevices);
+        foreach ($result as $i=>$line) {
+            if (empty($line['rent']) && empty($line['srp'])) {
+                $result[$i]['online'] = '<input type="checkbox" disabled="disabled">';
+                continue;
+            }
+            $dealerId = \Zend_Auth::getInstance()->getIdentity()->dealerId;
+            if ($line['online']) {
+                $result[$i]['online'] = '<input type="checkbox" checked="checked" onclick="online_click(this, '.$line['id'].', '.$dealerId.')">';
+            } else {
+                $result[$i]['online'] = '<input type="checkbox" onclick="online_click(this, '.$line['id'].', '.$dealerId.')">';
+            }
+        }
+        return $result;
     }
 
     /**
