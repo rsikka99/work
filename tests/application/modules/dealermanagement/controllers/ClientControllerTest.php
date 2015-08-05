@@ -35,6 +35,7 @@ class Dealermanagement_ClientControllerTest extends My_ControllerTestCase
     }
 
     public function test_createClientAction_post() {
+        \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->clearItemCache();
         $mock = $this->getMock('Zend_Db_Table_Abstract');
         $mock
             ->expects($this->once())
@@ -68,6 +69,15 @@ class Dealermanagement_ClientControllerTest extends My_ControllerTestCase
     }
 
     public function test_editClientAction() {
+        \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->clearItemCache();
+        $mock = $this->getMock('Zend_Db_Table_Abstract');
+        $mock
+            ->expects($this->exactly(1))
+            ->method('find')
+            ->will($this->returnValue(
+                new Row_editClientAction_post(['data'=>[['id'=>5, 'dealerId'=>2]]])
+            ));
+        \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->setDbTable($mock);
         $this->dispatch('company/clients/edit/5');
         $this->assertNotRedirect();
         $this->assertModule('dealermanagement');
@@ -77,12 +87,13 @@ class Dealermanagement_ClientControllerTest extends My_ControllerTestCase
     }
 
     public function test_editClientAction_post() {
+        \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->clearItemCache();
         $mock = $this->getMock('Zend_Db_Table_Abstract');
         $mock
             ->expects($this->exactly(1))
             ->method('find')
             ->will($this->returnValue(
-                new Row_editClientAction_post(['data'=>[['id'=>5]]])
+                new Row_editClientAction_post(['data'=>[['id'=>5, 'dealerId'=>2]]])
             ));
         $mock
             ->expects($this->once())

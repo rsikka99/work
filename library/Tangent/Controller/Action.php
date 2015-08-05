@@ -435,5 +435,23 @@ class Action extends \Zend_Controller_Action
         self::$mailTransport = $mailTransport;
     }
 
+    /**
+     * @return \Zend_Controller_Action_Helper_FlashMessenger
+     */
+    public function getFlashMessenger()
+    {
+        return $this->_flashMessenger;
+    }
+
+    /**
+     * @param \Zend_Controller_Action_Helper_FlashMessenger $flashMessenger
+     */
+    public function setFlashMessenger($flashMessenger)
+    {
+        $this->_flashMessenger = $flashMessenger;
+    }
+
+
+
 
 }
