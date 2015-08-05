@@ -3,7 +3,7 @@ require(['jquery', 'select2', 'app/components/Select2/Manufacturer'], function (
     // Setup auto complete for our text box
     var $manufacturerSelect = $("#manufacturers");
     $manufacturerSelect.selectManufacturer({
-        'placeholder': 'Export By Manufacturer'
+        'placeholder': 'Select Manufacturer'
     });
 
     var $importLink = $('#importLink');
