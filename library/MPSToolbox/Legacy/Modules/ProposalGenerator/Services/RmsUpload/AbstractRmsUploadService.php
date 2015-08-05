@@ -442,6 +442,12 @@ abstract class AbstractRmsUploadService
                     {
                         $csvLine["csvLineNumber"] = $csvLineNumber;
 
+                        if (empty($csvLine['isColor'])) {
+                            $csvLine['isColor'] =
+                                empty($csvLine['startMeterColor']) && empty($csvLine['endMeterColor']) ?
+                                    'FALSE':'TRUE';
+                        }
+
                         /*
                          * Process our data and massage it into our upload line
                          */
