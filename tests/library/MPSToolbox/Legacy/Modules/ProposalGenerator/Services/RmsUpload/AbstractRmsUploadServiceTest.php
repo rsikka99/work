@@ -63,12 +63,18 @@ class MPSToolbox_Legacy_Modules_ProposalGenerator_Services_RmsUpload_AbstractRms
         ]);
 
         $tmp=array_search('uri', @array_flip(stream_get_meta_data($fp=tmpfile())));
-        file_put_contents($tmp, "b,c,d,e,f,g,h,i,j\n1,2,1/1/2010,1/2/2010,100,1000,200,2000,TRUE\n");
+        file_put_contents($tmp,
+"b,c,d,e,f,g,h,i,j\n1,2,1/1/2010,1/2/2010,100,1000,200,2000,TRUE
+1,2,1/1/2010,1/2/2010,100,1000,,,FALSE
+1,2,1/1/2010,1/2/2010,100,1000,200,2000,
+1,2,1/1/2010,1/2/2010,100,1000,,,
+1,2,1/1/2010,1/2/2010,100,1000,200,2000,FALSE
+");
         $this->service->setIncomingDateFormat('d/m/Y');
         $result = $this->service->processCsvFile($tmp);
         $this->assertEquals(true, $result);
-        $this->assertEquals(1,count($this->service->validCsvLines));
-        $this->assertEquals(0,count($this->service->invalidCsvLines));
+        $this->assertEquals(4,count($this->service->validCsvLines));
+        $this->assertEquals(1,count($this->service->invalidCsvLines));
     }
 
     public function test_processCsvFile_validate() {

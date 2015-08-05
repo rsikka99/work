@@ -56,6 +56,32 @@ class Proposalgen_CostsController extends Action
      */
     protected $_userId;
 
+    /**
+     * @var TonerMatchupImportService
+     */
+    protected $matchupService;
+
+    /**
+     * @return TonerMatchupImportService
+     */
+    public function getMatchupService()
+    {
+        if (empty($this->matchupService)) {
+            $this->matchupService = new TonerMatchupImportService();
+        }
+        return $this->matchupService;
+    }
+
+    /**
+     * @param TonerMatchupImportService $matchupService
+     */
+    public function setMatchupService($matchupService)
+    {
+        $this->matchupService = $matchupService;
+    }
+
+
+
     public function init ()
     {
         $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
@@ -383,6 +409,8 @@ class Proposalgen_CostsController extends Action
      */
     public function bulkFileDeviceFeaturesAction ()
     {
+        $this->_pageTitle        = ['File Import/Exports'];
+
         $db                    = Zend_Db_Table::getDefaultAdapter();
         $errorMessages         = [];
         $deviceFeaturesService = new DeviceFeaturesImportService();
@@ -477,9 +505,13 @@ class Proposalgen_CostsController extends Action
      */
     public function bulkFileTonerPricingAction ()
     {
+        $this->_pageTitle        = ['File Import/Exports'];
         $db                  = Zend_Db_Table::getDefaultAdapter();
         $errorMessages       = [];
         $tonerPricingService = new TonerPricingImportService();
+        $canApprove             = $this->_canApprove();
+
+        $manufacturer_id = $this->getRequest()->getParam('manufacturers');
 
         if ($this->_request->isPost())
         {
@@ -491,10 +523,12 @@ class Proposalgen_CostsController extends Action
                     if ($tonerPricingService->validatedHeaders())
                     {
                         $lineCounter = 2;
+                        $skus = [];
                         while (($value = fgetcsv($tonerPricingService->importFile)) !== false)
                         {
                             $value     = array_combine($tonerPricingService->importHeaders, $value);
                             $validData = $tonerPricingService->processValidation($value);
+                            $sku       = $validData[$tonerPricingService::TONER_PRICING_SKU];
 
                             if (!isset($validData['error']))
                             {
@@ -505,35 +539,106 @@ class Proposalgen_CostsController extends Action
                                     'dealerId'  => $this->_dealerId,
                                 ];
 
-                                $toner = TonerMapper::getInstance()->find($validData ['Toner ID']);
-                                if ($toner instanceof TonerModel)
-                                {
-                                    $tonerAttribute = DealerTonerAttributeMapper::getInstance()->find([$dataArray['tonerId'], $this->_dealerId]);
-                                    // Does the toner attribute exists ?
-                                    if ($tonerAttribute instanceof DealerTonerAttributeModel)
-                                    {
-                                        // If cost && SKU are empty  or cost = 0 -> delete.
-                                        // Delete
-                                        if (empty($dataArray['cost']) && empty($dataArray['dealerSku']))
-                                        {
-                                            // If the attributes are empty after being found, delete them.
-                                            DealerTonerAttributeMapper::getInstance()->delete($tonerAttribute);
+                                $toner = TonerMapper::getInstance()->find($validData['Toner ID']);
+
+                                if ($manufacturer_id) {
+                                    if ($toner instanceof TonerModel) {
+
+                                        $comp = TonerMapper::getInstance()->findCompatibleToners($validData['Toner ID']);
+                                        $found = false;
+                                        foreach ($comp as $comp_toner) {
+                                            if ($comp_toner->manufacturerId == $manufacturer_id) $found = $comp_toner;
                                         }
-                                        else
-                                        {
-                                            if ($this->_compareData($dataArray, $tonerAttribute))
-                                            {
-                                                DealerTonerAttributeMapper::getInstance()->save($tonerAttribute);
+
+                                        if ($found) {
+                                            $skus[$sku] = $validData[$sku];
+                                            $comp_dataArray = [
+                                                'tonerId'   => $found->id,
+                                                'dealerSku' => $validData[$tonerPricingService::TONER_PRICING_DEALER_SKU],
+                                                'cost'      => $validData[$tonerPricingService::TONER_PRICING_NEW_PRICE],
+                                                'dealerId'  => $this->_dealerId,
+                                            ];
+                                            $tonerAttribute = DealerTonerAttributeMapper::getInstance()->find([$comp_dataArray['tonerId'], $this->_dealerId]);
+                                            if ($tonerAttribute instanceof DealerTonerAttributeModel) {
+                                                if (empty($dataArray['cost']) && empty($dataArray['dealerSku'])) {
+                                                    DealerTonerAttributeMapper::getInstance()->delete($tonerAttribute);
+                                                } else {
+                                                    if ($this->_compareData($comp_dataArray, $tonerAttribute)) {
+                                                        DealerTonerAttributeMapper::getInstance()->save($tonerAttribute);
+                                                    }
+                                                }
+                                            } else {
+                                                if ($comp_dataArray['cost'] > 0 || !empty($comp_dataArray['dealerSku'])) {
+                                                    $tonerAttribute = new DealerTonerAttributeModel();
+                                                    $tonerAttribute->populate($comp_dataArray);
+                                                    DealerTonerAttributeMapper::getInstance()->insert($tonerAttribute);
+                                                }
+                                            }
+                                        } else {
+                                            if ($dataArray['cost'] > 0 || !empty($dataArray['dealerSku'])) {
+                                                if (isset($skus[$sku])) {
+                                                    $this->_flashMessenger->addMessage(["error" => "Duplicate SKU found on line {$lineCounter}: {$sku}"]);
+                                                    throw new RuntimeException();
+                                                }
+                                                $new_toner = new TonerModel([
+                                                    'sku'           =>$validData[$tonerPricingService::TONER_PRICING_DEALER_SKU],
+                                                    'cost'          =>$validData[$tonerPricingService::TONER_PRICING_SYSTEM_PRICE],
+                                                    'yield'         =>$validData[$tonerPricingService::TONER_PRICING_YIELD],
+                                                    'manufacturerId'=>$manufacturer_id,
+                                                    'tonerColorId'  =>$toner->tonerColorId,
+                                                    'userId'        =>$this->_userId,
+                                                    'isSystemDevice'=>$canApprove,
+                                                ]);
+                                                $comp_id = TonerMapper::getInstance()->insert($new_toner);
+                                                $skus[$sku] = $sku;
+
+                                                $comp_dataArray = [
+                                                    'tonerId'   => $comp_id,
+                                                    'dealerSku' => $validData[$tonerPricingService::TONER_PRICING_DEALER_SKU],
+                                                    'cost'      => $validData[$tonerPricingService::TONER_PRICING_NEW_PRICE],
+                                                    'dealerId'  => $this->_dealerId,
+                                                ];
+                                                $tonerAttribute = new DealerTonerAttributeModel();
+                                                $tonerAttribute->populate($comp_dataArray);
+                                                DealerTonerAttributeMapper::getInstance()->insert($tonerAttribute);
+
+                                                foreach (DeviceTonerMapper::getInstance()->fetchDeviceTonersByTonerId($toner->id) as $deviceToner) {
+                                                    /** @var DeviceTonerModel $deviceToner */
+                                                    $new_deviceToner = new DeviceTonerModel([
+                                                        'toner_id'=>$comp_id,
+                                                        'master_device_id'=>$deviceToner->master_device_id,
+                                                        'userId'=>$this->_userId,
+                                                        'isSystemDevice'=>$canApprove,
+                                                    ]);
+                                                    DeviceTonerMapper::getInstance()->insert($new_deviceToner);
+                                                }
                                             }
                                         }
+
+                                    } else {
+                                        //noop
                                     }
-                                    else
-                                    {
-                                        if ($dataArray['cost'] > 0 || !empty($dataArray['dealerSku']))
-                                        {
-                                            $tonerAttribute = new DealerTonerAttributeModel();
-                                            $tonerAttribute->populate($dataArray);
-                                            DealerTonerAttributeMapper::getInstance()->insert($tonerAttribute);
+                                } else {
+                                    if ($toner instanceof TonerModel) {
+                                        $tonerAttribute = DealerTonerAttributeMapper::getInstance()->find([$dataArray['tonerId'], $this->_dealerId]);
+                                        // Does the toner attribute exists ?
+                                        if ($tonerAttribute instanceof DealerTonerAttributeModel) {
+                                            // If cost && SKU are empty  or cost = 0 -> delete.
+                                            // Delete
+                                            if (empty($dataArray['cost']) && empty($dataArray['dealerSku'])) {
+                                                // If the attributes are empty after being found, delete them.
+                                                DealerTonerAttributeMapper::getInstance()->delete($tonerAttribute);
+                                            } else {
+                                                if ($this->_compareData($dataArray, $tonerAttribute)) {
+                                                    DealerTonerAttributeMapper::getInstance()->save($tonerAttribute);
+                                                }
+                                            }
+                                        } else {
+                                            if ($dataArray['cost'] > 0 || !empty($dataArray['dealerSku'])) {
+                                                $tonerAttribute = new DealerTonerAttributeModel();
+                                                $tonerAttribute->populate($dataArray);
+                                                DealerTonerAttributeMapper::getInstance()->insert($tonerAttribute);
+                                            }
                                         }
                                     }
                                 }
@@ -574,9 +679,11 @@ class Proposalgen_CostsController extends Action
      */
     public function bulkFileTonerMatchupAction ()
     {
+        $this->_pageTitle        = ['File Import/Exports'];
+
         $db             = Zend_Db_Table::getDefaultAdapter();
         $errorMessages  = [];
-        $matchupService = new TonerMatchupImportService();
+        $matchupService = $this->getMatchupService();
 
         $canApprove             = $this->_canApprove();
         $this->view->canApprove = $canApprove;
@@ -593,7 +700,7 @@ class Proposalgen_CostsController extends Action
                         $lineCounter = 2;
                         while (($value = fgetcsv($matchupService->importFile)) !== false)
                         {
-                            $value     = array_combine($matchupService->importHeaders, $value);
+                            $value     = @array_combine($matchupService->importHeaders, $value);
                             $validData = $matchupService->processValidation($value);
                             $tonerId   = false;
 
@@ -713,6 +820,8 @@ class Proposalgen_CostsController extends Action
      */
     public function bulkFileDevicePricingAction ()
     {
+        $this->_pageTitle        = ['File Import/Exports'];
+
         $db                   = Zend_Db_Table::getDefaultAdapter();
         $errorMessages        = [];
         $devicePricingService = new DevicePricingImportService();
