@@ -1,4 +1,5 @@
 # Ignore specific configuration files
+.idea/
 application/configs/*local.php
 phinx.yml
 
