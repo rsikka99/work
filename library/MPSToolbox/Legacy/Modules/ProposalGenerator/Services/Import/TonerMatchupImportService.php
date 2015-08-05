@@ -112,6 +112,7 @@ class TonerMatchupImportService extends AbstractImportService
                 $oemTonerData                           = [
                     'sku'              => $this->_inputFilter->getUnescaped(self::TONER_MATCHUP_OEM_TONER_SKU),
                     'manufacturerName' => $this->_inputFilter->getUnescaped(self::TONER_MATCHUP_MANUFACTURER),
+                    'colorName'        => $this->_inputFilter->getUnescaped(self::TONER_MATCHUP_COLOR),
                 ];
                 $parsedTonerData['parsedToners']['oem'] = $this->_parseTonerData($oemTonerData);
 
@@ -121,6 +122,7 @@ class TonerMatchupImportService extends AbstractImportService
                     'yield'            => $this->_inputFilter->getUnescaped(self::TONER_MATCHUP_COMPATIBLE_YIELD),
                     'manufacturerName' => $this->_inputFilter->getUnescaped(self::TONER_MATCHUP_COMPATIBLE_VENDOR_NAME),
                     'dealerSku'        => $this->_inputFilter->getUnescaped(self::TONER_MATCHUP_COMPATIBLE_DEALER_SKU),
+                    'colorName'        => $this->_inputFilter->getUnescaped(self::TONER_MATCHUP_COLOR),
                 ];
                 $parsedTonerData['parsedToners']['comp'] = $this->_parseTonerData($compTonerData);
             }
@@ -136,12 +138,12 @@ class TonerMatchupImportService extends AbstractImportService
             // Is our parsed data valid if we got a valid manufacturer id we know its valid
             if (!isset($parsedTonerData['parsedToners']['comp']['manufacturerId']))
             {
-                $errors ['parseError'][self::TONER_MATCHUP_COMPATIBLE_VENDOR_NAME] = ['Could not find manufacturer with the name of ' . $parsedTonerData['parsedToners']['comp']['manufacturerName']];
+                $errors ['parseError'][self::TONER_MATCHUP_COMPATIBLE_VENDOR_NAME] = ['Could not find manufacturer with the name of ' . $data[self::TONER_MATCHUP_COMPATIBLE_VENDOR_NAME]];
             }
 
             if (!isset($parsedTonerData['parsedToners']['oem']['manufacturerId']))
             {
-                $errors ['parseError'][self::TONER_MATCHUP_MANUFACTURER] = ['Could not find manufacturer with the name of ' . $parsedTonerData['parsedToners']['oem']['manufacturerName']];
+                $errors ['parseError'][self::TONER_MATCHUP_MANUFACTURER] = ['Could not find manufacturer with the name of ' . $data[self::TONER_MATCHUP_MANUFACTURER]];
             }
 
             if (isset($errors['parseError']))
@@ -193,7 +195,8 @@ class TonerMatchupImportService extends AbstractImportService
 
                 if (strlen($tonerData['colorName']) > 0)
                 {
-                    $tonerColorId = array_search($tonerData['colorName'], TonerColorModel::$ColorNames);
+                    //$tonerColorId = array_search($tonerData['colorName'], TonerColorModel::$ColorNames);
+                    $tonerColorId = array_search(strtoupper($tonerData['colorName']),array_map('strtoupper',TonerColorModel::$ColorNames));
 
                     if ($tonerColorId)
                     {

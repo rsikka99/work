@@ -56,6 +56,32 @@ class Proposalgen_CostsController extends Action
      */
     protected $_userId;
 
+    /**
+     * @var TonerMatchupImportService
+     */
+    protected $matchupService;
+
+    /**
+     * @return TonerMatchupImportService
+     */
+    public function getMatchupService()
+    {
+        if (empty($this->matchupService)) {
+            $this->matchupService = new TonerMatchupImportService();
+        }
+        return $this->matchupService;
+    }
+
+    /**
+     * @param TonerMatchupImportService $matchupService
+     */
+    public function setMatchupService($matchupService)
+    {
+        $this->matchupService = $matchupService;
+    }
+
+
+
     public function init ()
     {
         $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
@@ -576,7 +602,7 @@ class Proposalgen_CostsController extends Action
     {
         $db             = Zend_Db_Table::getDefaultAdapter();
         $errorMessages  = [];
-        $matchupService = new TonerMatchupImportService();
+        $matchupService = $this->getMatchupService();
 
         $canApprove             = $this->_canApprove();
         $this->view->canApprove = $canApprove;
@@ -593,7 +619,7 @@ class Proposalgen_CostsController extends Action
                         $lineCounter = 2;
                         while (($value = fgetcsv($matchupService->importFile)) !== false)
                         {
-                            $value     = array_combine($matchupService->importHeaders, $value);
+                            $value     = @array_combine($matchupService->importHeaders, $value);
                             $validData = $matchupService->processValidation($value);
                             $tonerId   = false;
 
