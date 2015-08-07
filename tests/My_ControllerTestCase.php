@@ -1,14 +1,23 @@
 <?php
+
+/**
+ * Class My_ControllerTestCase
+ * @property Zend_Application _application
+ */
+
 abstract class My_ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
 {
     public $fixture_fk = [
+        'dealer_features'=>['features'],
         'users'=>['dealers'],
-        'clients'=>['countries','dealers'],
+        'clients'=>['addresses','dealers'],
+        'addresses'=>['countries'],
         'rms_uploads'=>['rms_providers','dealers','dealer_rms_providers','rms_devices', 'rms_upload_rows' ],
         'device_instances'=>['rms_uploads','rms_devices'],
         'rms_devices'=>['manufacturers'],
         'master_devices'=>['toner_configs','toners','manufacturers'],
         'toners'=>['manufacturers','toner_configs','toner_colors'],
+        'device_swap_reasons'=>['dealers','device_swap_reason_categories'],
     ];
 
     public $fixtures = ['users','clients'];
@@ -29,9 +38,18 @@ abstract class My_ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCas
         parent::setUp();
         $this->_application->getBootstrap()->getPluginResource('frontcontroller')->init();
         $this->_application->getBootstrap()->getPluginResource('view')->init();
+        $this->_application->getBootstrap()->getPluginResource('cachemanager')->init();
+        $this->_application->getBootstrap()->getPluginResource('session')->init();
+        $this->_application->getBootstrap()->getPluginResource('log')->init();
+        $this->_application->getBootstrap()->getPluginResource('layout')->init();
         Zend_Layout::startMvc(['layoutPath'=>APPLICATION_PATH.'/layouts/scripts']);
         Zend_Layout::getMvcInstance()->disableLayout();
         include APPLICATION_PATH . '/configs/routes.php';
+
+        /** @var Zend_Controller_Action_Helper_ViewRenderer $viewRenderer */
+        $viewRenderer = Zend_Controller_Action_HelperBroker::getExistingHelper('ViewRenderer');
+        $viewRenderer->init();
+        $viewRenderer->view->setScriptPath(null);
 
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
         $connection = new PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection($db->getConnection());
@@ -45,6 +63,8 @@ abstract class My_ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCas
     }
 
     private function loadFixture($name) {
+        if (isset($this->_fixturesLoaded[$name])) return;
+
         if (isset($this->fixture_fk[$name])) {
             foreach ($this->fixture_fk[$name] as $fk) {
                 if (!isset($this->_fixturesLoaded[$fk])) {
@@ -81,13 +101,9 @@ abstract class My_ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCas
     }
 
     public function tearDown() {
-        /**
-         * @var PHPUnit_Extensions_Database_DataSet_ITable $tableName
-         */
         $db = Zend_Db_Table::getDefaultAdapter();
-        $dataSet=$this->getDataSet();
-        if ($dataSet) foreach ($dataSet->getReverseIterator() as $tableName) {
-            $db->query('TRUNCATE '.$tableName->getTableMetaData()->getTableName());
+        foreach (array_reverse($this->_fixturesLoaded) as $name=>$dummy) {
+            $db->query('TRUNCATE '.$name);
         }
     }
 }

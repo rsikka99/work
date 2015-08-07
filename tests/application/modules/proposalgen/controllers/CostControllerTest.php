@@ -1,25 +1,9 @@
 <?php
 
-class Proposalgen_CostController_FileMock extends Zend_Form_Element_File {
-    public $filename = 'unit_test.csv';
-    public function isUploaded() {
-        return true;
-    }
-    public function receive() {
-        return true;
-    }
-    public function isValid($value, $context = null) {
-        return true;
-    }
-    public function getFileName($value=null, $path=true) {
-        return $this->filename;
-    }
-}
-
 class Proposalgen_CostControllerTest extends My_ControllerTestCase {
 
     public $fixtures = [
-        'users', 'clients', 'master_devices', 'device_toners'
+        'users', 'clients', 'toners', 'master_devices', 'device_toners', 'manufacturers'
     ];
 
     /**
@@ -45,15 +29,9 @@ class Proposalgen_CostControllerTest extends My_ControllerTestCase {
         $this->dispatch('/hardware-library/bulk-file-toner-matchup');
 
         require_once APPLICATION_BASE_PATH.'/application/modules/proposalgen/controllers/CostsController.php';
+        $this->getRequest()->setMethod('POST');
         $controller = new Proposalgen_CostsController($this->getRequest(), $this->getResponse());
 
-        $this->getRequest()->setMethod('POST');
-        $this->getRequest()->setParams([''=>'']);
-
-        #$matchupService = $this->getMock('\MPSToolbox\Legacy\Modules\ProposalGenerator\Services\Import\TonerMatchupImportService');
-        #$matchupService->expects($this->once())->method('validatedHeaders')->will($this->returnValue(true));
-        #$matchupService->importFile = fopen(APPLICATION_BASE_PATH.'/docs/Sample Import Files/matchup/test.csv','rb');
-        #$matchupService->importHeaders = fgetcsv($matchupService->importFile);
         $matchupService = new MyTonerMatchupImportService();
         $controller->setMatchupService($matchupService);
 
@@ -61,16 +39,71 @@ class Proposalgen_CostControllerTest extends My_ControllerTestCase {
         $controller->bulkFileTonerMatchupAction();
         $result = $controller->getFlashMessenger()->getCurrentMessages();
         $this->assertEquals([['success' => 'Your pricing updates have been applied successfully.']], $result);
+        $this->assertEquals(array(), $controller->view->errorMessages);
     }
 
+    public function test_bulkFileTonerPricingAction() {
+        $this->dispatch('/hardware-library/bulk-file-toner-pricing');
 
+        require_once APPLICATION_BASE_PATH.'/application/modules/proposalgen/controllers/CostsController.php';
+        $this->getRequest()->setMethod('POST');
+        $controller = new Proposalgen_CostsController($this->getRequest(), $this->getResponse());
+
+        $pricingService = new MyTonerPricingImportService();
+        $controller->setTonerPricingService($pricingService);
+
+        $controller->getFlashMessenger()->clearMessages();
+        $controller->bulkFileTonerPricingAction();
+        $result = $controller->getFlashMessenger()->getCurrentMessages();
+        $this->assertEquals([['success' => 'Your pricing updates have been applied successfully.']], $result);
+        $this->assertEquals([3=>['invalid'=>['New Price'=>['notFloat'=>"'#N/A' does not appear to be a float", 'notGreaterThan'=>"'#N/A' is not greater than '0'"]]]], $controller->view->errorMessages);
+    }
+
+    public function test_bulkFileTonerPricingAction_comp_manufacturer() {
+        $this->dispatch('/hardware-library/bulk-file-toner-pricing');
+
+        require_once APPLICATION_BASE_PATH.'/application/modules/proposalgen/controllers/CostsController.php';
+        $this->getRequest()->setMethod('POST');
+        $this->getRequest()->setParam('manufacturers',3);
+        $controller = new Proposalgen_CostsController($this->getRequest(), $this->getResponse());
+
+        $pricingService = new MyTonerPricingImportService();
+        $controller->setTonerPricingService($pricingService);
+
+        $controller->getFlashMessenger()->clearMessages();
+        $controller->bulkFileTonerPricingAction();
+        $result = $controller->getFlashMessenger()->getCurrentMessages();
+        $this->assertEquals([['success' => 'Your pricing updates have been applied successfully.']], $result);
+        $this->assertEquals([3=>['invalid'=>['New Price'=>['notFloat'=>"'#N/A' does not appear to be a float", 'notGreaterThan'=>"'#N/A' is not greater than '0'"]]]], $controller->view->errorMessages);
+    }
+
+    public function test_bulkFileTonerPricingAction_comp_matchup() {
+        $this->dispatch('/hardware-library/bulk-file-toner-pricing');
+
+        require_once APPLICATION_BASE_PATH.'/application/modules/proposalgen/controllers/CostsController.php';
+        $this->getRequest()->setMethod('POST');
+        $this->getRequest()->setParam('manufacturers',30);
+        $controller = new Proposalgen_CostsController($this->getRequest(), $this->getResponse());
+
+        $pricingService = new MyTonerPricingImportService();
+        $controller->setTonerPricingService($pricingService);
+
+        $controller->getFlashMessenger()->clearMessages();
+        $controller->bulkFileTonerPricingAction();
+        $result = $controller->getFlashMessenger()->getCurrentMessages();
+        $this->assertEquals([['success' => 'Your pricing updates have been applied successfully.']], $result);
+        $this->assertEquals(
+            [3=>['invalid'=>['New Price'=>['notFloat'=>"'#N/A' does not appear to be a float", 'notGreaterThan'=>"'#N/A' is not greater than '0'"]]]],
+            $controller->view->errorMessages
+        );
+    }
 }
 
 class MyTonerMatchupImportService extends \MPSToolbox\Legacy\Modules\ProposalGenerator\Services\Import\TonerMatchupImportService {
     /** @override */
     public function getValidFile ($config)
     {
-        $this->importFile    = fopen(APPLICATION_BASE_PATH.'/docs/Sample Import Files/matchup/test.csv','rb');
+        $this->importFile    = fopen(APPLICATION_BASE_PATH.'/docs/Sample Import Files/toner/matchup.csv','rb');
         $this->importHeaders = fgetcsv($this->importFile);
 
         return null;
@@ -80,4 +113,19 @@ class MyTonerMatchupImportService extends \MPSToolbox\Legacy\Modules\ProposalGen
         //noop
     }
 
+}
+
+class MyTonerPricingImportService extends \MPSToolbox\Legacy\Modules\ProposalGenerator\Services\Import\TonerPricingImportService {
+    /** @override */
+    public function getValidFile ($config)
+    {
+        $this->importFile    = fopen(APPLICATION_BASE_PATH.'/docs/Sample Import Files/toner/pricing.csv','rb');
+        $this->importHeaders = fgetcsv($this->importFile);
+
+        return null;
+    }
+    /** @override */
+    public function closeFiles () {
+        //noop
+    }
 }

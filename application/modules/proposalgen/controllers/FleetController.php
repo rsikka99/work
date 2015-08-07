@@ -201,7 +201,7 @@ class Proposalgen_FleetController extends Action
             $rmsUpload = RmsUploadMapper::getInstance()->find($rmsUploadId);
             if ($rmsUpload) {
                 $client = ClientMapper::getInstance()->find($rmsUpload->clientId);
-                if ($client->dealerId !== $this->getIdentity()->dealerId) $rmsUpload = null;
+                if ($client->dealerId != $this->getIdentity()->dealerId) $rmsUpload = null;
             }
         }
 
@@ -241,7 +241,7 @@ class Proposalgen_FleetController extends Action
             $rmsUpload = RmsUploadMapper::getInstance()->find($rmsUploadId);
             if ($rmsUpload) {
                 $client = ClientMapper::getInstance()->find($rmsUpload->clientId);
-                if ($client->dealerId !== $this->getIdentity()->dealerId) $rmsUpload = null;
+                if ($client->dealerId != $this->getIdentity()->dealerId) $rmsUpload = null;
             }
         }
         if (empty($rmsUpload)) {
@@ -543,7 +543,7 @@ class Proposalgen_FleetController extends Action
             $rmsUpload = RmsUploadMapper::getInstance()->find($rmsUploadId);
             if ($rmsUpload) {
                 $client = ClientMapper::getInstance()->find($rmsUpload->clientId);
-                if ($client->dealerId !== $this->getIdentity()->dealerId) $rmsUpload = null;
+                if ($client->dealerId != $this->getIdentity()->dealerId) $rmsUpload = null;
             }
         }
         if (empty($rmsUpload)) {

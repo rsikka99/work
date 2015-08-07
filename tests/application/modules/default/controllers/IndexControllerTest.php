@@ -3,7 +3,7 @@
 class Default_IndexControllerTest extends My_ControllerTestCase
 {
 
-    public $fixtures = ['users','clients','device_instances'];
+    public $fixtures = ['users','clients','device_instances','dealers','dealer_features'];
 
     public function setUp() {
         parent::setUp();

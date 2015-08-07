@@ -2,14 +2,14 @@
 <devicesGoodData>
     <testData>
         <data>
-            <manufacturerId>1</manufacturerId>
+            <manufacturerId>10001</manufacturerId>
             <modelName>GHz</modelName>
             <can_sell>1</can_sell>
             <oemSku>joeBob</oemSku>
             <dealerSku>jimmy</dealerSku>
             <description>stuff goes here</description>
             <cost>1000</cost>
-            <tonerConfigId>1</tonerConfigId>
+            <tonerConfigId>10001</tonerConfigId>
             <isCopier>true</isCopier>
             <isFax>true</isFax>
             <isDuplex>true</isDuplex>
@@ -26,14 +26,14 @@
     </testData>
     <testData>
         <data>
-            <manufacturerId>1</manufacturerId>
+            <manufacturerId>10001</manufacturerId>
             <modelName>GHz</modelName>
             <can_sell>1</can_sell>
             <oemSku>joeBob</oemSku>
             <dealerSku>jimmy</dealerSku>
             <description>stuff goes here</description>
             <cost>1000</cost>
-            <tonerConfigId>1</tonerConfigId>
+            <tonerConfigId>10001</tonerConfigId>
             <wattsPowerNormal>1000</wattsPowerNormal>
             <wattsPowerIdle>1000</wattsPowerIdle>
             <partsCostPerPage>2</partsCostPerPage>
@@ -46,11 +46,11 @@
     </testData>
     <testData>
         <data>
-            <manufacturerId>1</manufacturerId>
+            <manufacturerId>10001</manufacturerId>
             <modelName>GHz</modelName>
             <can_sell>0</can_sell>
             <description>stuff goes here</description>
-            <tonerConfigId>1</tonerConfigId>
+            <tonerConfigId>10001</tonerConfigId>
             <wattsPowerNormal>1000</wattsPowerNormal>
             <wattsPowerIdle>1000</wattsPowerIdle>
             <partsCostPerPage>2</partsCostPerPage>

@@ -6,11 +6,12 @@ class Hardwareoptimization_IndexControllerTest extends My_ControllerTestCase
 {
 
     public $fixtures = [
-        'images','dealers','features','dealer_features','clients','users',
+        'images','dealers','clients','users',
+        'dealer_features',
         'master_devices',
         'rms_uploads',
         'device_instances','device_instance_meters','device_instance_master_devices',
-        'device_swap_reason_categories','device_swap_reasons',
+        'device_swap_reasons',
         'device_swaps','hardware_optimizations','hardware_optimization_device_instances',
         'toner_vendor_ranking_sets','fleet_settings','generic_settings','optimization_settings','quote_settings','dealer_settings'
     ];
@@ -33,7 +34,7 @@ class Hardwareoptimization_IndexControllerTest extends My_ControllerTestCase
 
     public function test_indexAction()
     {
-        $this->dispatch('/hardwareoptimization/index');
+        $this->dispatch('/hardwareoptimization');
         $this->assertRedirect();
         $this->assertRedirectTo('/hardwareoptimization/optimization');
     }

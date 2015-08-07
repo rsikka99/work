@@ -62,6 +62,11 @@ class Proposalgen_CostsController extends Action
     protected $matchupService;
 
     /**
+     * @var TonerPricingImportService
+     */
+    protected $tonerPricingService;
+
+    /**
      * @return TonerMatchupImportService
      */
     public function getMatchupService()
@@ -79,6 +84,27 @@ class Proposalgen_CostsController extends Action
     {
         $this->matchupService = $matchupService;
     }
+
+    /**
+     * @return TonerPricingImportService
+     */
+    public function getTonerPricingService()
+    {
+        if (empty($this->tonerPricingService)) {
+            $this->tonerPricingService = new TonerPricingImportService();
+        }
+        return $this->tonerPricingService;
+    }
+
+    /**
+     * @param TonerPricingImportService $tonerPricingService
+     */
+    public function setTonerPricingService($tonerPricingService)
+    {
+        $this->tonerPricingService = $tonerPricingService;
+    }
+
+
 
 
 
@@ -508,7 +534,7 @@ class Proposalgen_CostsController extends Action
         $this->_pageTitle        = ['File Import/Exports'];
         $db                  = Zend_Db_Table::getDefaultAdapter();
         $errorMessages       = [];
-        $tonerPricingService = new TonerPricingImportService();
+        $tonerPricingService = $this->getTonerPricingService();
         $canApprove             = $this->_canApprove();
 
         $manufacturer_id = $this->getRequest()->getParam('manufacturers');
@@ -528,10 +554,10 @@ class Proposalgen_CostsController extends Action
                         {
                             $value     = array_combine($tonerPricingService->importHeaders, $value);
                             $validData = $tonerPricingService->processValidation($value);
-                            $sku       = $validData[$tonerPricingService::TONER_PRICING_SKU];
-
                             if (!isset($validData['error']))
                             {
+                                $sku       = $validData[$tonerPricingService::TONER_PRICING_SKU];
+
                                 $dataArray = [
                                     'tonerId'   => $validData[$tonerPricingService::TONER_PRICING_TONER_ID],
                                     'dealerSku' => $validData[$tonerPricingService::TONER_PRICING_DEALER_SKU],
@@ -547,11 +573,14 @@ class Proposalgen_CostsController extends Action
                                         $comp = TonerMapper::getInstance()->findCompatibleToners($validData['Toner ID']);
                                         $found = false;
                                         foreach ($comp as $comp_toner) {
-                                            if ($comp_toner->manufacturerId == $manufacturer_id) $found = $comp_toner;
+                                            if (
+                                                ($comp_toner->manufacturerId == $manufacturer_id) &&
+                                                ($comp_toner->sku == $sku)
+                                            ) $found = $comp_toner;
                                         }
 
                                         if ($found) {
-                                            $skus[$sku] = $validData[$sku];
+                                            $skus[$sku] = $sku;
                                             $comp_dataArray = [
                                                 'tonerId'   => $found->id,
                                                 'dealerSku' => $validData[$tonerPricingService::TONER_PRICING_DEALER_SKU],
@@ -577,8 +606,8 @@ class Proposalgen_CostsController extends Action
                                         } else {
                                             if ($dataArray['cost'] > 0 || !empty($dataArray['dealerSku'])) {
                                                 if (isset($skus[$sku])) {
-                                                    $this->_flashMessenger->addMessage(["error" => "Duplicate SKU found on line {$lineCounter}: {$sku}"]);
-                                                    throw new RuntimeException();
+                                                    $errorMessages [$lineCounter++]['invalid']['dealerSku']['invalid'] = 'Duplicate SKU found: '.$sku;
+                                                    continue;
                                                 }
                                                 $new_toner = new TonerModel([
                                                     'sku'           =>$validData[$tonerPricingService::TONER_PRICING_DEALER_SKU],
@@ -640,6 +669,8 @@ class Proposalgen_CostsController extends Action
                                                 DealerTonerAttributeMapper::getInstance()->insert($tonerAttribute);
                                             }
                                         }
+                                    } else {
+                                        $errorMessages [$lineCounter] = 'Unknown Toner ID: '.$validData[$tonerPricingService::TONER_PRICING_TONER_ID];
                                     }
                                 }
                             }

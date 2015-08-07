@@ -5,6 +5,12 @@ class Default_AuthControllerTest extends My_ControllerTestCase
 
     public $fixtures = ['users'];
 
+    public function tearDown() {
+        parent::tearDown();
+        \MPSToolbox\Legacy\Mappers\EventLogMapper::getInstance()->setDbTable(null);
+        \MPSToolbox\Legacy\Mappers\UserEventLogMapper::getInstance()->setDbTable(null);
+    }
+
     public function test_loginAction() {
         $this->dispatch('login');
         $this->assertModule('default');

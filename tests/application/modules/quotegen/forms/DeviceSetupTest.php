@@ -9,16 +9,16 @@ class Quotegen_Form_DeviceSetupTest extends Tangent_PHPUnit_Framework_ZendFormTe
     public function setUp()
     {
         $db = Zend_Db_Table::getDefaultAdapter();
-        $db->query('replace into manufacturers set id=1');
-        $db->query('replace into toner_configs set id=1');
+        $db->query('replace into manufacturers set id=10001');
+        $db->query('replace into toner_configs set id=10001');
         parent::setUp();
     }
 
     public function tearDown()
     {
         $db = Zend_Db_Table::getDefaultAdapter();
-        $db->query('delete from manufacturers where id=1');
-        $db->query('delete from toner_configs where id=1');
+        $db->query('delete from manufacturers where id=10001');
+        $db->query('delete from toner_configs where id=10001');
         parent::tearDown();
     }
 

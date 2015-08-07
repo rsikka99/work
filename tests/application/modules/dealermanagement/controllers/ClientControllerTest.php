@@ -64,7 +64,10 @@ class Dealermanagement_ClientControllerTest extends My_ControllerTestCase
         $_GET['select']=true;
         $request->setMethod('POST');
         $this->dispatch('company/clients/create');
-        echo $this->getResponse()->getBody();
+
+        #echo $this->getResponse()->getBody();
+        \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->setDbTable(null);
+
         $this->assertRedirectTo('/select-client?selectClient=1');
     }
 
@@ -79,6 +82,8 @@ class Dealermanagement_ClientControllerTest extends My_ControllerTestCase
             ));
         \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->setDbTable($mock);
         $this->dispatch('company/clients/edit/5');
+
+        \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->setDbTable(null);
         $this->assertNotRedirect();
         $this->assertModule('dealermanagement');
         $this->assertController('client');
@@ -120,6 +125,8 @@ class Dealermanagement_ClientControllerTest extends My_ControllerTestCase
         ]);
         $request->setMethod('POST');
         $this->dispatch('company/clients/edit/5');
+
+        \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->setDbTable(null);
         $this->assertRedirectTo('/company/clients');
     }
 
