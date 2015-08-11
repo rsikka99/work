@@ -1,0 +1,9 @@
+ext_dealer_hardware:
+    - { id: '1', dealerId: '1', cost: '1.23', dealerSku: '123', oemSku: '321', description: '', srp: '3.21' }
+    - { id: '2', dealerId: '1', cost: '2.23', dealerSku: '223', oemSku: '221', description: '', srp: '2.21' }
+    - { id: '1', dealerId: '2', cost: '2.23', dealerSku: '223', oemSku: '221', description: '', srp: '2.21' }
+    - { id: '2', dealerId: '2', cost: '2.23', dealerSku: '223', oemSku: '221', description: '', srp: '2.21' }
+    - { id: '1', dealerId: '3', cost: '2.23', dealerSku: '223', oemSku: '221', description: '', srp: '2.21' }
+    - { id: '2', dealerId: '3', cost: '2.23', dealerSku: '223', oemSku: '221', description: '', srp: '2.21' }
+    - { id: '1', dealerId: '4', cost: '2.23', dealerSku: '223', oemSku: '221', description: '', srp: '2.21' }
+    - { id: '2', dealerId: '4', cost: '2.23', dealerSku: '223', oemSku: '221', description: '', srp: '2.21' }

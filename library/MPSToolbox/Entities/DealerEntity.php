@@ -1,0 +1,54 @@
+<?php
+
+namespace MPSToolbox\Entities;
+
+/**
+ * Class DealerEntity
+ * @package MPSToolbox\Entities
+ *
+ * @property int         id
+ * @property string      dealerName
+ *
+ * @Entity
+ * @Table(name="dealers")
+ */
+class DealerEntity {
+
+    use EntityTrait;
+
+    /**
+     * @Id @Column(type="integer")
+     * @GeneratedValue
+     */
+    private $id;
+
+    /** @Column(type="string") */
+    private $dealerName;
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDealerName()
+    {
+        return $this->dealerName;
+    }
+
+    /**
+     * @param string $dealerName
+     */
+    public function setDealerName($dealerName)
+    {
+        $this->dealerName = $dealerName;
+    }
+
+
+
+}

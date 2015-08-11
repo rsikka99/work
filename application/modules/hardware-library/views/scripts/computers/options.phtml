@@ -1,0 +1,103 @@
+<?php
+
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\OptionModel;
+
+$id      = $this->id;
+$isAdmin = $this->isAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, AppAclModel::PRIVILEGE_ADMIN);
+?>
+<div class="container">
+    <div class="tabbable"> <!-- Only required for left/right tabs -->
+        <ul class="nav nav-tabs">
+            <li>
+                <a href="<?= $this->url(['id' => $id], 'hardware-library.all-devices.edit', true); ?>">Details</a>
+            </li>
+            <?php
+            if ($isAdmin) : ?>
+                <li>
+                    <a href="<?= $this->url(['id' => $id], 'hardware-library.all-devices.toners', true); ?>">Toners</a>
+                </li>
+            <?php endif ?>
+            <li class="active">
+                <a href="#tab3" data-toggle="tab">Available Options</a></li>
+            <li>
+                <a href="<?= $this->url(['id' => $id], 'hardware-library.all-devices.configurations', true); ?>">Hardware Configurations</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <form name="frmOptions" id="frmOptions" action="" method="post">
+                <input type="hidden" name="optionid" id="optionid" value="" />
+
+                <div id="filter" class="well">
+                    <p id="view_filter">
+                        <label for="cboView" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">View:</label>
+                        <select name="cboView" id="cboView" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
+                            <option value="all" <?= ($this->view_filter == "all") ? 'selected' : '' ?>>All</option>
+                            <option value="assigned" <?= ($this->view_filter == "assigned") ? 'selected' : '' ?>>Assigned</option>
+                            <option value="unassigned" <?= ($this->view_filter == "unassigned") ? 'selected' : '' ?>>Unassigned</option>
+                        </select>
+                    </p>
+                    <p id="search_filter">
+                        <label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
+                        <select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
+                            <option value="oemSku" <?= ($this->search_filter == "oemSku") ? 'selected' : '' ?>>OEM SKU</option>
+                            <option value="oemSku" <?= ($this->search_filter == "oemSku") ? 'selected' : '' ?>><?php My_Brand::$dealerSku; ?></option>
+                            <option value="name" <?= ($this->search_filter == "name") ? 'selected' : '' ?>>Option</option>
+                        </select>
+                        <label for="txtCriteria" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">for</label>
+                        <input type="text" name="txtCriteria" style="width: 152px; margin: 0px 10px 0px 0px;" id="txtCriteria" <?= ($this->search_criteria != '') ? sprintf('value="%s"', $this->search_critera) : '' ?> />
+                    </p>
+                    <input type="submit" name="btnSearch" id="btnSearch" value="Search" class="btn btn-default" />
+                    <input type="submit" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn btn-default" />
+                </div>
+
+                <div class="clearfix">
+                    <a class="btn btn-success btn-sm pull-right create-button" href="<?= $this->url(['id' => $id, 'page' => 'options'], 'quotes.options.create') ?>">
+                        <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
+                </div>
+
+                <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
+                    <table class="table table-bordered table-striped table-condensed">
+                        <tr>
+                            <th style="width: 120px;">OEM SKU</th>
+                            <th style="width: 120px;"><?php My_Brand::$dealerSku; ?></th>
+                            <th style="width: 220px;">Option</th>
+                            <th>Description</th>
+                            <th style="width: 85px; text-align: center;">Action</th>
+                        </tr>
+                        <?php /* @var $option OptionModel */ ?>
+                        <?php foreach ($this->paginator as $option) : ?>
+                            <tr>
+                                <td><?= $option->oemSku; ?></td>
+                                <td><?= $option->dealerSku; ?></td>
+                                <td><?= $option->name; ?></td>
+                                <td><?= $option->description; ?></td>
+                                <td style="text-align: center;">
+                                    <div class="" style="text-align: center;">
+                                        <?php if (in_array($option->id, $this->assignedOptions)) : ?>
+                                            <button type="submit" name="btnUnassign" id="btnUnassign" class="btn btn-danger btn-xs" onclick="javascript: $('#optionid').val(<?= $option->id; ?>);">
+                                                <i class="glyphicon glyphicon-minus-sign icon-white"></i> Unassign
+                                            </button>
+                                        <?php else : ?>
+                                            <button type="submit" name="btnAssign" id="btnAssign" class="btn btn-success btn-xs" onclick="javascript: $('#optionid').val(<?= $option->id; ?>);">
+                                                <i class="glyphicon glyphicon-plus-sign icon-white"></i> Assign
+                                            </button>
+                                        <?php endif ?>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </table>
+                    <?= $this->paginationControl($this->paginator); ?>
+                <?php else : ?>
+                    <h4>There are no options currently associated with this device.</h4>
+                <?php endif; ?>
+
+                <div style="text-align: center;">
+                    <a class="btn btn-default" title="Done" href="<?= $this->url([], 'hardware-library.all-devices', true); ?>">Done</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

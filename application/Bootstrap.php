@@ -73,6 +73,30 @@ class Bootstrap extends Tangent\Bootstrap
     }
 
     /**
+     * Initializes Doctrine ORM
+     */
+    protected function _initDoctrine()
+    {
+        $options = $this->getOptions();
+
+        $paths = array(APPLICATION_BASE_PATH.'/library/MPSToolbox/Entities');
+        $isDevMode = true;
+
+        $dbParams = array(
+            'driver'   => 'pdo_mysql',
+            'host'     => $options['resources']['db']['params']['host'],
+            'user'     => $options['resources']['db']['params']['username'],
+            'password' => $options['resources']['db']['params']['password'],
+            'dbname'   => $options['resources']['db']['params']['dbname'],
+        );
+
+        $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
+        $entityManager = Doctrine\ORM\EntityManager::create($dbParams, $config);
+
+        Zend_Registry::set('Doctrine\ORM\EntityManager', $entityManager);
+    }
+
+    /**
      * Initializes the routing
      */
     protected function _initRoutes ()
