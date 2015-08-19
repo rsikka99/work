@@ -1,0 +1,47 @@
+<?php
+
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Models\Acl\ProposalgenAclModel;
+use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
+
+$this->headScript()->appendFile($this->baseUrl('js/app/legacy/hardware-library/ManageHardware.js'));
+?>
+<div class="container">
+    <script>
+        var isSaveAndApproveAdmin = <?=($this->IsAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, AppAclModel::PRIVILEGE_ADMIN) ? 'true' : 'false'); ?>,
+            canDelete             = <?=($this->IsAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETUP_DELETE, AppAclModel::PRIVILEGE_VIEW) ? 'true' : 'false'); ?>,
+            dealerSkuName         = '<?= My_Brand::$dealerSku; ?>';
+    </script>
+
+    <input type="hidden" id="isAdmin" value="<?= $this->isAdmin; ?>" />
+
+    <div class="well">
+        <form id="editHardwareForm" class="form-inline" onsubmit="return false">
+            <div class="form-group">
+                <label class="control-label" for="filter-index">Filter:</label>
+                <select class="form-control" name="filter-index" id="filter-index">
+                    <option value="name">Name</option>
+                    <option value="oemSku">OEM SKU</option>
+                    <option value="dealerSku"><?= My_Brand::$dealerSku; ?></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="filter-value">for</label>
+                <input class="form-control" type="text" name="filter-value" id="filter-value" />
+                <button class='btn btn-info form-control js-perform-search'>Search</button>
+                <button class='btn btn-default form-control js-clear-search' type="button">Clear</button>
+            </div>
+
+            <div class="pull-right">
+                <button class="btn btn-xs btn-success js-create-new" type="button">
+                    <i class="glyphicon glyphicon-plus-sign"></i> Create new
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <table id="hardwareGrid"></table>
+    <div id="hardwareGridPager"></div>
+</div>

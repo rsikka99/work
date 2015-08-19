@@ -1,0 +1,64 @@
+<?php
+
+/* @var $form \MPSToolbox\Forms\ComputersAttributesForm */
+$form = $this->element;
+
+if (!function_exists('output_ComputersAttributesForm_col')) {
+    function output_ComputersAttributesForm_col($that, $col) {
+        $form = $that->element;
+        $booleans = ['webcam','mediaDrive','usb3','hdDisplay','ledDisplay'];
+        $isBool = in_array($col,$booleans);
+?>
+        <div class="form-group <?= ($form->getElement($col)->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $that->RenderFormLabel($form->getElement($col), ['col-md-4']) ?>
+            <div class="col-md-6">
+                <?= $isBool?$that->RenderFormCheckbox($form->getElement($col)):$that->RenderFormText($form->getElement($col)) ?>
+                <?= $that->RenderFormDescription($form->getElement($col)) ?>
+                <?= $that->RenderFormElementErrors($form->getElement($col)) ?>
+            </div>
+        </div>
+
+    <?php
+    }
+}
+
+?>
+
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
+
+<div class="clearfix">
+    <fieldset class="col-md-12">
+        <div class="row">
+            <!-- -->
+            <div class="col-md-4">
+                <div class="form-group <?= ($form->getElement('launchDate')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('launchDate'), ['col-md-4']) ?>
+
+                    <div class="col-md-6">
+                        <?= $this->RenderFormDatePicker($form->getElement('launchDate'), ['js-date-picker']) ?>
+                        <?= $this->RenderFormDescription($form->getElement('launchDate')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('launchDate')) ?>
+                    </div>
+                </div>
+
+                <?php foreach (['webcam','mediaDrive','usb3','usbDescription','os'] as $col) output_ComputersAttributesForm_col($this, $col) ?>
+
+            </div>
+            <!-- -->
+            <div class="col-md-4">
+
+                <?php foreach (['ram','hdd','screenSize','hdDisplay','ledDisplay'] as $col) output_ComputersAttributesForm_col($this, $col) ?>
+
+            </div>
+            <!-- -->
+            <div class="col-md-4">
+
+                <?php foreach (['weight','processorName','processorSpeed','service'] as $col) output_ComputersAttributesForm_col($this, $col) ?>
+
+            </div>
+            <!-- -->
+        </div>
+    </fieldset>
+</div>
+
+<?= $this->RenderFormClose($form) ?>

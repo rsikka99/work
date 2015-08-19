@@ -1,0 +1,38 @@
+<?php
+
+/* @var $form \MPSToolbox\Forms\HardwareAttributesForm */
+$form = $this->element;
+?>
+
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
+
+<div class="clearfix">
+    <fieldset class="col-md-12">
+        <div class="row">
+            <!-- -->
+            <div class="col-md-4">
+                <div class="form-group <?= ($form->getElement('launchDate')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('launchDate'), ['col-md-6']) ?>
+
+                    <div class="col-md-6">
+                        <?= $this->RenderFormDatePicker($form->getElement('launchDate'), ['js-date-picker']) ?>
+                        <?= $this->RenderFormDescription($form->getElement('launchDate')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('launchDate')) ?>
+                    </div>
+                </div>
+
+            </div>
+            <!-- -->
+            <div class="col-md-4">
+
+            </div>
+            <!-- -->
+            <div class="col-md-4">
+
+            </div>
+            <!-- -->
+        </div>
+    </fieldset>
+</div>
+
+<?= $this->RenderFormClose($form) ?>

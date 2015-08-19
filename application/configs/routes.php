@@ -230,7 +230,6 @@ $r->addRoute('hardware-library.toners.colors-for-configuration', new R('hardware
 $r->addRoute('hardware-library.configurations.list',        new R('hardware-library/configurations/list',        ['module' => 'hardware-library', 'controller' => 'manage-devices', 'action' => 'hardware-configuration-list']));
 $r->addRoute('hardware-library.configurations.reload-form', new R('hardware-library/configurations/reload-form', ['module' => 'hardware-library', 'controller' => 'manage-devices', 'action' => 'reload-hardware-configurations-form']));
 
-
 // FIXME lrobert: Fix this damn function to be a properly separated api
 $r->addRoute('hardware-library.sauron', new R('hardware-library/sauron', ['module' => 'hardware-library', 'controller' => 'manage-devices', 'action' => 'sauron']));
 
@@ -248,6 +247,9 @@ $r->addRoute('api.devices.grid-list', new R('api/v1/devices/grid-list',        [
 #$r->addRoute('api.manufacturers.create', new R('api/v1/manufacturers/create',                 ['module' => 'api', 'controller' => 'manufacturers', 'action' => 'create']));
 #$r->addRoute('api.manufacturers.delete', new R('api/v1/manufacturers/:manufacturerId/delete', ['module' => 'api', 'controller' => 'manufacturers', 'action' => 'delete']));
 #$r->addRoute('api.manufacturers.save',   new R('api/v1/manufacturers/:manufacturerId/save',   ['module' => 'api', 'controller' => 'manufacturers', 'action' => 'update']));
+
+$r->addRoute('api.computers',           new R('api/v1/computers/:deviceId',        ['module' => 'api', 'controller' => 'computers', 'action' => 'index', 'deviceId' => false]));
+$r->addRoute('api.computers.grid-list', new R('api/v1/computers/grid-list',        ['module' => 'api', 'controller' => 'computers', 'action' => 'grid-list']));
 
 
 // API for clients

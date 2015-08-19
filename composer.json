@@ -22,7 +22,8 @@
     "yzalis/identicon"            : "1.1.*",
     "lrobert/gravatar"            : "0.1.*",
     "rediska/rediska"             : "0.5.10",
-    "szymach/c-pchart"            : "1.*"
+    "szymach/c-pchart"            : "1.*",
+    "doctrine/orm"                : "*"
   },
   "require-dev": {
     "phpunit/phpunit": "3.7.x",
