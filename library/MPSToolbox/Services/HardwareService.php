@@ -2,27 +2,22 @@
 
 namespace MPSToolbox\Services;
 
+use MPSToolbox\Entities\DealerEntity;
 use MPSToolbox\Entities\ExtComputerEntity;
+use MPSToolbox\Entities\ExtDealerHardwareEntity;
 use MPSToolbox\Entities\ExtHardwareEntity;
 use MPSToolbox\Forms\HardwareImageForm;
-use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeviceAttributesForm;
-use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareQuoteForm;
-use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
-use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\DeviceMapper;
+use MPSToolbox\Forms\HardwareAttributesForm;
+use MPSToolbox\Forms\HardwareQuoteForm;
+use Tangent\Logger\Logger;
 use Zend_Form;
 
 /**
- * Class ManageMasterDevicesService
- *
- * @package MPSToolbox\Legacy\Modules\HardwareLibrary\Services
+ * Class HardwareService
+ * @package MPSToolbox\Services
  */
 class HardwareService
 {
-    /**
-     * @var int
-     */
-    public $hardwareId;
-
     /** @var  ExtHardwareEntity */
     public $hardware;
 
@@ -30,51 +25,41 @@ class HardwareService
      * @var array
      */
     public $data;
+    public $type;
 
     protected $_dealerId;
     protected $_isAllowed;
     protected $_isAdmin;
-    public    $isQuoteDevice = false;
 
 
     /**
-     * @param int  $hardwareId The id of the Master Device
+     * @param int  $hardwareId
      * @param int  $dealerId
      * @param bool $isAllowed
      * @param bool $isAdmin
      */
-    public function __construct ($hardwareId, $dealerId, $isAllowed = false, $isAdmin = false)
+    public function __construct ($hardware, $dealerId, $isAllowed = false, $isAdmin = false, $type = 'computers')
     {
-        $this->hardwareId     = $hardwareId;
         $this->_dealerId      = $dealerId;
         $this->_isAllowed     = $isAllowed;
         $this->_isAdmin       = $isAdmin;
-
-        if ($hardwareId) $this->hardware = ExtComputerEntity::find($hardwareId);
+        $this->type = $type;
+        $this->hardware = $hardware;
     }
 
     /**
      * Shows the forms
-     *
-     * @param bool $showSupplies
-     * @param bool $showDeviceAttributes
-     * @param bool $showHardwareOptimization
-     * @param bool $showHardwareQuote
-     * @param bool $showAvailableOptions
-     * @param bool $showHardwareConfigurations
-     *
      * @return array
      */
 
     public function getForms ()
     {
         $formsToShow = [];
-        #$formsToShow['deviceAttributes'] = $this->getDeviceAttributesForm();
-        #$formsToShow['hardwareQuote'] = $this->getHardwareQuoteForm();
+        $formsToShow['hardwareAttributes'] = $this->getHardwareAttributesForm();
+        $formsToShow['hardwareQuote'] = $this->getHardwareQuoteForm();
         $formsToShow['hardwareImage']  = $this->getHardwareImageForm();
         return $formsToShow;
     }
-
 
     /**
      * @param Zend_Form $form
@@ -112,15 +97,26 @@ class HardwareService
         return $json;
     }
 
+    public function save($validData) {
+        try
+        {
+            $dealer = DealerEntity::find($this->_dealerId);
+            $dealerHardware = ExtDealerHardwareEntity::findExtDealerHardware($this->hardware,$dealer);
+            if (!$dealerHardware) {
+                $dealerHardware = new ExtDealerHardwareEntity();
+                $dealerHardware->setHardware($this->hardware);
+                $dealerHardware->setDealer($dealer);
+            }
 
-    /**
-     * @param array $validatedData
-     * @param bool  $approved
-     *
-     * @return bool|string
-     */
-    public function saveAttributes ($validatedData, $approved = false)
-    {
+            $dealerHardware->populate($validData['hardwareQuote']);
+            $dealerHardware->save();
+        }
+        catch (\Exception $e)
+        {
+            Logger::logException($e);
+            return false;
+        }
+
         return true;
     }
 
@@ -153,13 +149,13 @@ class HardwareService
 
         $file = $this->hardware->getImageFile();
         if ($file) {
-            $publicFilePath = '/img/devices/'.$file;
+            $publicFilePath = '/img/hardware/'.$file;
             $filePath       = PUBLIC_PATH . $publicFilePath;
             unlink($filePath);
         }
 
         $file = $this->hardware->getId().'_'.time().'.'.$ext;
-        $publicFilePath = '/img/devices/'.$file;
+        $publicFilePath = '/img/hardware/'.$file;
         $filePath       = PUBLIC_PATH . $publicFilePath;
         rename($tmpFilePath, $filePath);
         $this->hardware->setImageFile($file);
@@ -186,54 +182,39 @@ class HardwareService
 
         $file = $this->hardware->getImageFile();
         if ($file) {
-            $publicFilePath = '/img/devices/'.$file;
+            $publicFilePath = '/img/hardware/'.$file;
             $filePath       = PUBLIC_PATH . $publicFilePath;
             unlink($filePath);
         }
 
         $file = $this->hardware->getId().'_'.time().'.'.$ext;
-        $publicFilePath = '/img/devices/'.$file;
+        $publicFilePath = '/img/hardware/'.$file;
         $filePath       = PUBLIC_PATH . $publicFilePath;
         file_put_contents($filePath, file_get_contents($url));
         $this->hardware->setImageFile($file);
     }
 
     /**
-     * This saves a hardware quote
-     *
-     * @param $validatedData
-     *
-     * @return boolean
+     * @return HardwareAttributesForm
      */
-    public function saveHardwareQuote ($validatedData)
+    public function getHardwareAttributesForm ()
     {
-        return true;
-    }
-
-
-    /**
-     * Gets the Device Attributes Form
-     *
-     * @return DeviceAttributesForm
-     */
-    public function getDeviceAttributesForm ()
-    {
-        if (!isset($this->_deviceAttributesForm))
+        if (!isset($this->_hardwareAttributesForm))
         {
-            $this->_deviceAttributesForm = new DeviceAttributesForm(null, $this->_isAllowed);
-            $masterDevice                = MasterDeviceMapper::getInstance()->find($this->masterDeviceId);
+            $cls = "MPSToolbox\\Forms\\".ucfirst($this->type).'AttributesForm';
+            $this->_hardwareAttributesForm = new $cls(null, $this->_isAllowed);
 
-            if ($this->data && !$masterDevice)
+            if ($this->data && !$this->hardware)
             {
-                $this->_deviceAttributesForm->populate($this->data);
+                $this->_hardwareAttributesForm->populate($this->data);
             }
-            else if ($masterDevice)
+            else if ($this->hardware)
             {
-                $this->_deviceAttributesForm->populate($masterDevice->toArray());
+                $this->_hardwareAttributesForm->populate($this->hardware->toArray());
             }
         }
 
-        return $this->_deviceAttributesForm;
+        return $this->_hardwareAttributesForm;
     }
 
     public function getHardwareImageForm () {
@@ -256,13 +237,15 @@ class HardwareService
         if (!isset($this->_hardwareQuoteForm))
         {
             $this->_hardwareQuoteForm = new HardwareQuoteForm();
-            $device                   = DeviceMapper::getInstance()->find([$this->masterDeviceId, $this->_dealerId]);
-
-            if ($device)
+            if ($this->data && !$this->hardware)
             {
-                $this->_hardwareQuoteForm->populate($device->toArray());
-                $this->_hardwareQuoteForm->populate(['isSelling' => true]);
-                $this->isQuoteDevice = true;
+                $this->_hardwareQuoteForm->populate($this->data);
+            }
+            else if ($this->hardware)
+            {
+                $dealer = DealerEntity::find($this->_dealerId);
+                $dealerHardware = ExtDealerHardwareEntity::findExtDealerHardware($this->hardware,$dealer);
+                $this->_hardwareQuoteForm->populate($dealerHardware->toArray());
             }
         }
 

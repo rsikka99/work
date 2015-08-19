@@ -1,3 +1,7 @@
+if (!window.hardware_type) {
+    window.hardware_type = 'computers';
+}
+
 define([
     'jquery',
     'underscore',
@@ -84,7 +88,6 @@ define([
     HardwareModal.prototype.show = function ()
     {
         var hardwareModalInstance = this;
-        hardwareModalInstance.updateTabs();
         var $modal = this.$modal;
         var windowWidth = $(window).width();
         var modalOptions = {
@@ -125,6 +128,14 @@ define([
                         });
                     }
                 });
+
+                $modal.find('#manufacturerId').selectManufacturer();
+
+                $modal.find('.js-save-hardware-modal').on('click', function ()
+                {
+                    hardwareModalInstance.saveChanges(false);
+                });
+
 
             }
         );
@@ -245,7 +256,7 @@ define([
     {
         var hardwareModalInstance = this;
         $.ajax({
-            url     : "/hardware-library/hardware/update",
+            url     : "/hardware-library/"+window.hardware_type+"/update",
             type    : "post",
             dataType: "json",
             data    : {
@@ -255,13 +266,8 @@ define([
                 },
                 manufacturerId      : $("#manufacturerId").val(),
                 modelName           : $("#modelName").val(),
-                approve             : approve,
-                suppliesAndService  : function ()
-                {
-                    return $("#suppliesAndService").serialize();
-                },
+                category           : $("#category").val(),
                 hardwareAttributes    : $("#hardwareAttributes").serialize(),
-                hardwareOptimization: $("#hardwareOptimization").serialize(),
                 hardwareQuote       : $("#hardwareQuote").serialize(),
                 hardwareImage         : $("#hardwareImage").serialize()
             },
@@ -269,8 +275,6 @@ define([
             {
                 hardwareModalInstance.hardwareId = xhr.hardwareId;
                 hardwareModalInstance.clearErrors();
-
-                hardwareModalInstance.updateTabs();
 
                 hardwareModalInstance.displayAlert("success", "Successfully updated hardware");
 
@@ -280,12 +284,6 @@ define([
 
                 var hardwareManagement = $("#hardwareManagement");
                 hardwareManagement.trigger("saveSuccess", [hardwareModalInstance.hardwareId]);
-                if (approve)
-                {
-                    hardwareManagement.trigger("approveSuccess", [hardwareModalInstance.hardwareId]);
-                }
-
-                $(hardwareModalInstance).trigger('DeviceModal.saved', [hardwareModalInstance.hardwareId])
             },
             error   : function (xhr)
             {
@@ -305,7 +303,7 @@ define([
                     //Lets loop through and display the errors
                     $.each(data['error']['modelAndManufacturer']['errorMessages'], function (key, value)
                     {
-                        var $formControl = hardwareModalInstance.$modal.find('input[name="' + key + '"]');
+                        var $formControl = hardwareModalInstance.$modal.find('input[name="' + key + '"], select[name="' + key + '"]');
                         var $formControlParent = $formControl.parent();
                         var $formGroup = $formControlParent.parent();
 
@@ -378,64 +376,6 @@ define([
             .attr("class", "alert alert-" + type)
             .html("<span>" + message + "</span>")
             .show();
-    };
-
-    /**
-     * Handles updating the tabs
-     */
-    HardwareModal.prototype.updateTabs = function ()
-    {
-        var $hardwareOptimizationTab = $("#hardwareOptimizationTopTab");
-        var $hardwareQuoteTab = $("#hardwareQuoteTopTab");
-        var $availableOptionsTab = $("#availableOptionsTopTab");
-        var $hardwareConfigurationsTab = $("#hardwareConfigurationsTopTab");
-
-        if (this.hardwareId > 0)
-        {
-            var $isSellingElement = this.$modal.find('input[type="checkbox"][name="isSelling"]');
-            var isSelling = false;
-            if ($isSellingElement.length > 0)
-            {
-                isSelling = $isSellingElement[0].checked;
-            }
-
-            if ($hardwareOptimizationTab && isSelling)
-            {
-                $hardwareOptimizationTab.show();
-            }
-            else
-            {
-                $hardwareOptimizationTab.hide();
-            }
-
-            if ($hardwareQuoteTab)
-            {
-                $hardwareQuoteTab.show();
-            }
-
-            if ($availableOptionsTab)
-            {
-                if (isSelling)
-                {
-                    $availableOptionsTab.show();
-                    $hardwareConfigurationsTab.show();
-                    $("#hardwareConfigurations").trigger('reloadGrid');
-                    $("#availableOptions").trigger('reloadGrid');
-                }
-                else
-                {
-                    $availableOptionsTab.hide();
-                    $hardwareConfigurationsTab.hide();
-                }
-            }
-        }
-        else
-        {
-            $hardwareOptimizationTab.hide();
-            $hardwareQuoteTab.hide();
-            $availableOptionsTab.hide();
-            $hardwareConfigurationsTab.hide();
-        }
     };
 
     return HardwareModal;

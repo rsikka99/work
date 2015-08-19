@@ -2,12 +2,11 @@
 
 namespace MPSToolbox\Entities;
 
-use Illuminate\Database\Eloquent\Model as EloquentModel;
-
 /**
  * Class ExtHardware
  *
  * @property int    id
+ * @property string category
  * @property string modelName
  * @property \DateTime dateCreated
  * @property \DateTime dateUpdated
@@ -24,14 +23,16 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
  * @DiscriminatorColumn(name="hardware_type", type="string")
  * @DiscriminatorMap({"computer" = "ExtComputerEntity"})
  */
-abstract class ExtHardwareEntity
-{
+abstract class ExtHardwareEntity extends BaseEntity {
 
     /**
      * @Id @Column(type="integer")
      * @GeneratedValue
      */
     private $id;
+
+    /** @Column(type="string") */
+    private $category;
 
     /** @Column(type="string") */
     private $modelName;
@@ -84,6 +85,22 @@ abstract class ExtHardwareEntity
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param string $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
     }
 
     /**
@@ -230,9 +247,30 @@ abstract class ExtHardwareEntity
      */
     public function setLaunchDate($launchDate)
     {
+        if (is_string($launchDate)) $launchDate=new \DateTime($launchDate);
         $this->launchDate = $launchDate;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getDealerHardware()
+    {
+        return $this->dealerHardware;
+    }
+
+    /**
+     * @param mixed $dealerHardware
+     */
+    public function setDealerHardware($dealerHardware)
+    {
+        $this->dealerHardware = $dealerHardware;
+    }
+
+    public function save() {
+        $this->dateUpdated = new \DateTime();
+        parent::save();
+    }
 
 
 }

@@ -32,7 +32,7 @@ $form->getElement('imageUrl')->setValue('');
                     <?= $this->RenderFormLabel($form->getElement('imageFile'), ['col-md-4']) ?>
 
                     <div class="col-md-8">
-                        <input id="fileupload" type="file" name="imageFile" data-url="<?= $this->url(['id' => $id], 'hardware-library.devices.image'); ?>">
+                        <input id="fileupload" type="file" name="imageFile" data-url="<?= $this->url(['id' => $id]); ?>">
                     </div>
                 </div>
 <?php } ?>
@@ -40,8 +40,8 @@ $form->getElement('imageUrl')->setValue('');
             <div class="col-md-6">
                 <div id="imageDiv">
                     <?php if ($filename) { ?>
-                        <a href="/img/devices/<?php echo $filename ?>" target="_blank" class="thumbnail">
-                            <img src="/img/devices/<?php echo $filename ?>" style="max-width:300px;max-height:300px">
+                        <a href="/img/hardware/<?php echo $filename ?>" target="_blank" class="thumbnail">
+                            <img src="/img/hardware/<?php echo $filename ?>" style="max-width:300px;max-height:300px">
                         </a>
                     <?php } ?>
                 </div>

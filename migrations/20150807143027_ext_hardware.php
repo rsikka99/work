@@ -14,6 +14,7 @@ class ExtHardware extends AbstractMigration
 drop table if EXISTS ext_hardware;
 CREATE TABLE IF NOT EXISTS `ext_hardware` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `category` varchar(255) NULL,
   `modelName` varchar(255) NOT NULL,
   `dateCreated` timestamp NOT NULL default current_timestamp,
   `dateUpdated` timestamp NULL,
@@ -42,6 +43,12 @@ create table if not exists `ext_dealer_hardware` (
   `oemSku` varchar(255),
   `description` varchar(255),
   `srp` decimal(10,2),
+  `rent` decimal(10,2),
+  `webId` int,
+  `dataSheetUrl` varchar(255),
+  `reviewsUrl` varchar(255),
+  `online` tinyint,
+  `onlineDescription` text,
   PRIMARY KEY (`id`, `dealerId`)
 ) ENGINE=InnoDB;
 
@@ -52,9 +59,26 @@ ALTER TABLE `ext_dealer_hardware`
 drop table if exists `ext_computer`;
 create table if not exists `ext_computer` (
   `id` int(11) not null auto_increment,
-  `ram` float NOT NULL DEFAULT '0',
+  `webcam` tinyint NULL DEFAULT '0',
+  `mediaDrive` tinyint NULL DEFAULT '0',
+  `usb3` tinyint NULL DEFAULT '0',
+  `usbDescription` varchar(255) NULL,
+  `os` varchar(255) NULL,
+  `ram` int NULL DEFAULT '0',
+  `hdd` int NULL DEFAULT '0',
+  `screenSize` float NULL DEFAULT '0',
+  `hdDisplay` tinyint NULL DEFAULT '0',
+  `ledDisplay` tinyint NULL DEFAULT '0',
+  `weight` float NULL DEFAULT '0',
+  `processorName` varchar(255) NULL,
+  `processorSpeed` float NULL DEFAULT '0',
+  `service` varchar(255) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+
+ALTER TABLE `ext_computer`
+  ADD CONSTRAINT FOREIGN KEY (`id`) REFERENCES `ext_hardware` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 "
         );
     }
@@ -65,9 +89,9 @@ create table if not exists `ext_computer` (
     public function down()
     {
         $this->execute('
-drop table ext_hardware;
-drop table ext_dealer_hardware;
 drop table ext_computer;
+drop table ext_dealer_hardware;
+drop table ext_hardware;
 ');
     }
 }

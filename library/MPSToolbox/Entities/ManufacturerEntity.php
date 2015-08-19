@@ -14,9 +14,7 @@ namespace MPSToolbox\Entities;
  * @Entity
  * @Table(name="manufacturers")
  */
-class ManufacturerEntity {
-
-    use EntityTrait;
+class ManufacturerEntity extends BaseEntity {
 
     /**
      * @Id @Column(type="integer")

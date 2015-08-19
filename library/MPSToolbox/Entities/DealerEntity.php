@@ -12,9 +12,7 @@ namespace MPSToolbox\Entities;
  * @Entity
  * @Table(name="dealers")
  */
-class DealerEntity {
-
-    use EntityTrait;
+class DealerEntity extends BaseEntity {
 
     /**
      * @Id @Column(type="integer")

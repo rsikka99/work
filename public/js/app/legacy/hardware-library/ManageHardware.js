@@ -57,10 +57,10 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
         $(".js-edit").prop('disabled', true);
         var hardwareId = $thisElement.attr('data-id');
         var isAllowed = $thisElement.attr('data-is-allowed');
-        require(['app/legacy/hardware-library/HardwareModal'], function ()
+        require(['app/legacy/hardware-library/HardwareModal'], function (HardwareModal)
         {
             var editModal = new HardwareModal({
-                "deviceId"      : deviceId,
+                "hardwareId"      : hardwareId,
                 "isAllowed"     : isAllowed,
                 "onModalClose"  : function ()
                 {
@@ -204,6 +204,11 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
         $hardwareListGrid.trigger("reloadGrid");
     });
 
+    $("#hardwareManagement")
+        .bind("saveSuccess", function (e, myName, myValue)
+        {
+            $("#devicesGrid").trigger("reloadGrid");
+        });
 });
 
 function online_click(that, id, dealerId) {
