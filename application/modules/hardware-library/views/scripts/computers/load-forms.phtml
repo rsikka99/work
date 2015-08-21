@@ -127,7 +127,7 @@ $shopSettings = $dealerSettings->shopSettings;
 <?php if ($shopSettings->shopifyName!='') { ?>
     <script>
         $('.js-save-hardware-modal').click(function() {
-            window.setTimeout('sync_shopify(<?= $this->masterDevice->id ?>, <?= Zend_Auth::getInstance()->getIdentity()->dealerId ?>)',1000);
+            window.setTimeout('sync_shopify(<?= $this->hardware->id ?>, <?= Zend_Auth::getInstance()->getIdentity()->dealerId ?>)',1000);
         });
     </script>
 <?php } ?>

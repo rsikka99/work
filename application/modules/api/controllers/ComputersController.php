@@ -114,6 +114,8 @@ class Api_ComputersController extends Action implements \Tangent\Grid\DataAdapte
 
     public function fetchAll()
     {
+        $dealerId = \Zend_Auth::getInstance()->getIdentity()->dealerId;
+
         $result = [];
         foreach ($this->qb->getQuery()->getArrayResult() as $line) {
             if (!isset($line['dealerHardware'][0])) $line['dealerHardware'][0] = ['dealerSku'=>'', 'oemSku'=>''];
@@ -127,9 +129,9 @@ class Api_ComputersController extends Action implements \Tangent\Grid\DataAdapte
             ];
 
             if ($row['online']) {
-                $row['online'] = '<input type="checkbox" checked="checked" onclick="online_click(this, '.$line['id'].')">';
+                $row['online'] = '<input type="checkbox" checked="checked" onclick="online_click(this, '.$line['id'].', '.$dealerId.')">';
             } else {
-                $row['online'] = '<input type="checkbox" onclick="online_click(this, '.$line['id'].')">';
+                $row['online'] = '<input type="checkbox" onclick="online_click(this, '.$line['id'].', '.$dealerId.')">';
             }
 
             $result[] = $row;
