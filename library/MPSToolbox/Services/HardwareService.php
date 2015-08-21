@@ -245,7 +245,9 @@ class HardwareService
             {
                 $dealer = DealerEntity::find($this->_dealerId);
                 $dealerHardware = ExtDealerHardwareEntity::findExtDealerHardware($this->hardware,$dealer);
-                $this->_hardwareQuoteForm->populate($dealerHardware->toArray());
+                if ($dealerHardware) {
+                    $this->_hardwareQuoteForm->populate($dealerHardware->toArray());
+                }
             }
         }
 
