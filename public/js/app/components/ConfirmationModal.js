@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'bootstrap', 'bootstrap-modal'], function ($, _)
+define(['jquery', 'underscore', 'bootstrap'], function ($, _)
 {
     'use strict';
     var ConfirmationModal_InstanceIdCounter = 0;

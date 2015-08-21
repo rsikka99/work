@@ -65,7 +65,7 @@ class Api_ComputersController extends Action implements \Tangent\Grid\DataAdapte
 
     public function onlineAction() {
         $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $db->query('update devices set `online`=? where dealerId=? and masterDeviceId=?', [
+        $db->query('update ext_dealer_hardware set `online`=? where dealerId=? and id=?', [
             $this->getParam('online')=='true'?'1':'0',
             \Zend_Auth::getInstance()->getIdentity()->dealerId,
             intval($this->getParam('id'))
@@ -81,13 +81,13 @@ class Api_ComputersController extends Action implements \Tangent\Grid\DataAdapte
 
 
         $columnFactory = new \Tangent\Grid\Order\ColumnFactory([
-            'modelName', 'oemSku', 'dealerSku', 'isSystemDevice'
+            'category', 'modelName', 'oemSku', 'dealerSku', 'online', 'isSystemDevice'
         ]);
 
         $gridRequest  = new \Tangent\Grid\Request\JqGridRequest($postData, $columnFactory, 1, 50);
         $gridResponse = new \Tangent\Grid\Response\JqGridResponse($gridRequest);
 
-        $filterCriteriaValidator = new Zend_Validate_InArray(['haystack' => ['modelName', 'oemSku', 'dealerSku']]);
+        $filterCriteriaValidator = new Zend_Validate_InArray(['haystack' => ['category', 'modelName', 'oemSku', 'dealerSku', 'online']]);
 
         if ($filterSearchIndex !== null && $filterSearchValue !== null && $filterCriteriaValidator->isValid($filterSearchIndex))
         {
@@ -98,6 +98,11 @@ class Api_ComputersController extends Action implements \Tangent\Grid\DataAdapte
         $this->sendJson($gridService->getGridResponseAsArray());
     }
 
+    /*
+    =====================================
+     DataAdapterInterface implementation
+    =====================================
+    */
     public function addFilter(\Tangent\Grid\Filter\AbstractFilter $filter)
     {
         $this->qb->where('c.modelName like :q')->setParameter('q', '%'.trim($filter->getFilterValue()).'%');
@@ -117,7 +122,16 @@ class Api_ComputersController extends Action implements \Tangent\Grid\DataAdapte
                 'name'=>$line['manufacturer']['displayname'].' '.$line['modelName'],
                 'dealerSku'=>$line['dealerHardware'][0]['dealerSku'],
                 'oemSku'=>$line['dealerHardware'][0]['oemSku'],
+                'category'=>$line['category'],
+                'online'=>$line['dealerHardware'][0]['online'],
             ];
+
+            if ($row['online']) {
+                $row['online'] = '<input type="checkbox" checked="checked" onclick="online_click(this, '.$line['id'].')">';
+            } else {
+                $row['online'] = '<input type="checkbox" onclick="online_click(this, '.$line['id'].')">';
+            }
+
             $result[] = $row;
         }
         return $result;

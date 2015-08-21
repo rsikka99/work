@@ -6,13 +6,19 @@ $form = $this->element;
 if (!function_exists('output_ComputersAttributesForm_col')) {
     function output_ComputersAttributesForm_col($that, $col) {
         $form = $that->element;
-        $booleans = ['webcam','mediaDrive','usb3','hdDisplay','ledDisplay'];
+        $booleans = ['webcam','mediaDrive','hdDisplay'];
+        $selects = ['os','usb','displayType'];
         $isBool = in_array($col,$booleans);
+        $isSelect = in_array($col,$selects);
 ?>
         <div class="form-group <?= ($form->getElement($col)->hasErrors()) ? 'has-error has-feedback' : '' ?>">
             <?= $that->RenderFormLabel($form->getElement($col), ['col-md-4']) ?>
             <div class="col-md-6">
-                <?= $isBool?$that->RenderFormCheckbox($form->getElement($col)):$that->RenderFormText($form->getElement($col)) ?>
+                <?php
+                    if ($isBool) echo $that->RenderFormBootstrapSwitch($form->getElement($col), ['js-yes-no-switch']);
+                    else if ($isSelect) echo $that->RenderFormSelect($form->getElement($col));
+                    else echo $that->RenderFormText($form->getElement($col));
+                ?>
                 <?= $that->RenderFormDescription($form->getElement($col)) ?>
                 <?= $that->RenderFormElementErrors($form->getElement($col)) ?>
             </div>
@@ -41,13 +47,13 @@ if (!function_exists('output_ComputersAttributesForm_col')) {
                     </div>
                 </div>
 
-                <?php foreach (['webcam','mediaDrive','usb3','usbDescription','os'] as $col) output_ComputersAttributesForm_col($this, $col) ?>
+                <?php foreach (['webcam','mediaDrive','usb','os'] as $col) output_ComputersAttributesForm_col($this, $col) ?>
 
             </div>
             <!-- -->
             <div class="col-md-4">
 
-                <?php foreach (['ram','hdd','screenSize','hdDisplay','ledDisplay'] as $col) output_ComputersAttributesForm_col($this, $col) ?>
+                <?php foreach (['ram','hdd','screenSize','hdDisplay','displayType'] as $col) output_ComputersAttributesForm_col($this, $col) ?>
 
             </div>
             <!-- -->

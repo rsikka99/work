@@ -5,6 +5,12 @@ namespace MPSToolbox\Forms;
 class ComputersAttributesForm extends HardwareAttributesForm
 {
 
+    private function arrToMulti($arr) {
+        $result = [];
+        foreach ($arr as $value) $result[$value] = $value;
+        return $result;
+    }
+
     public function init ()
     {
         parent::init();
@@ -17,22 +23,22 @@ class ComputersAttributesForm extends HardwareAttributesForm
             'label'      => 'CD/DVD Drive',
         ]);
 
-        $this->addElement('checkbox', 'usb3', [
-            'label'      => 'USB3',
-        ]);
-
-        $this->addElement('text', 'usbDescription', [
-            'label'      => 'USB Description',
-            'maxlength'  => 255,
+        $this->addElement('select', 'usb', [
+            'label'      => 'USB Version',
             'required'   => false,
             'allowEmpty' => true,
+            'multiOptions' => $this->arrToMulti([
+                '','USB 1.x', 'USB 2.0','USB 3.0', 'USB 3.1', 'USB Type-C'
+            ])
         ]);
 
-        $this->addElement('text', 'os', [
+        $this->addElement('select', 'os', [
             'label'      => 'OS',
-            'maxlength'  => 255,
             'required'   => false,
             'allowEmpty' => true,
+            'multiOptions' => $this->arrToMulti([
+                '','Windows 7','Windows 8','Windows 10','Mac OS X','Linux','Windows Phone','iOS','Android','Windows Server 2008','Windows Server 2012','Windows Server 2016'
+            ])
         ]);
 
         $this->addElement('text_int', 'ram', [
@@ -57,8 +63,13 @@ class ComputersAttributesForm extends HardwareAttributesForm
             'label'      => 'HD Display',
         ]);
 
-        $this->addElement('checkbox', 'ledDisplay', [
-            'label'      => 'LED Display',
+        $this->addElement('select', 'displayType', [
+            'label'      => 'Display Type',
+            'required'   => false,
+            'allowEmpty' => true,
+            'multiOptions' => $this->arrToMulti([
+                '','TFT-LCD','LED','IPS','VA','Plasma'
+            ])
         ]);
 
         $this->addElement('text_float', 'weight', [
@@ -69,6 +80,7 @@ class ComputersAttributesForm extends HardwareAttributesForm
 
         $this->addElement('text', 'processorName', [
             'label'      => 'Processor Name',
+            'minlength'  => 3,
             'maxlength'  => 255,
             'required'   => false,
             'allowEmpty' => true,
@@ -82,6 +94,7 @@ class ComputersAttributesForm extends HardwareAttributesForm
 
         $this->addElement('text', 'service', [
             'label'      => 'Service',
+            'minlength'  => 3,
             'maxlength'  => 255,
             'required'   => false,
             'allowEmpty' => true,

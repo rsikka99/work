@@ -68,7 +68,7 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
                 }
             });
 
-            $(editModal).on('HardwareModal.saved', function ()
+            $(window).on('hardwareSaveSuccess', function ()
             {
                 $hardwareListGrid.trigger("reloadGrid");
             });
@@ -80,27 +80,26 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
     $(document).on("click", ".js-delete", function (event)
     {
         var hardwareId = $(this).data('id');
-        var confirmationModal = new ConfirmationModal(
-            {
-                "title"  : 'Delete',
+        require(['app/components/ConfirmationModal'], function (ConfirmationModal) {
+            var confirmationModal = new ConfirmationModal({
+                "title": 'Delete',
                 "message": 'Are you sure you want to delete this hardware?',
-                "cancel" : false,
-                "confirm": function ()
-                {
+                "cancel": false,
+                "confirm": function () {
                     $.ajax({
-                        url     : '/hardware-library/hardware/delete',
+                        url: '/hardware-library/' + window.hardware_type + '/delete',
+                        type    : "post",
                         dataType: "json",
-                        data    : {
+                        data: {
                             "hardwareId": hardwareId
                         },
-                        success : function (data)
-                        {
+                        success: function (data) {
                             $hardwareListGrid.trigger("reloadGrid");
                         }
                     });
                 }
-            }
-        );
+            });
+        });
     });
 
     $hardwareListGrid.jqGrid({
@@ -112,7 +111,8 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
 
 { width: 0,  name: 'id',             index: 'id',             label: 'Ids', hidden: true,  sortable: false                       },
 
-{ width: 460, name: 'name',           index: 'name',           label: 'Name',  hidden: false, sortable: true, firstsortorder: 'asc' },
+{ width: 80, name: 'category',       index: 'category',       label: 'Category',  hidden: false, sortable: true, firstsortorder: 'asc' },
+{ width: 380, name: 'name',           index: 'name',           label: 'Name',  hidden: false, sortable: true, firstsortorder: 'asc' },
 { width: 150, name: 'oemSku',         index: 'oemSku',         label: 'OEM SKU',           hidden: false, sortable: false                       },
 { width: 150, name: 'dealerSku',      index: 'dealerSku',      label: 'Dealer SKU Name',   hidden: false, sortable: false                       },
 { width: 50,  name: 'online',         index: 'online',         label: 'Online',            hidden: false, sortable: false                       },
@@ -213,7 +213,7 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
 
 function online_click(that, id, dealerId) {
     $(that).parent().css('background-color','#00ae5a');
-    $.get('/api/devices/online', {id:id, online:that.checked}, function () {
+    $.get('/api/'+window.hardware_type+'/online', {id:id, online:that.checked}, function () {
         $(that).parent().animate({backgroundColor:'#ffffff'}, function() {
             sync_shopify(id, dealerId);
         });
@@ -224,6 +224,6 @@ function sync_shopify(id, dealerId) {
     $('body').append('' +
         '<img ' +
         'style="display:none" ' +
-        'src="http://proxy.mpstoolbox.com/shopify/sync_device.php?origin='+window.location.hostname+'&id='+id+'&dealerId='+dealerId+'&_='+$.now()+'">'
+        'src="http://proxy.mpstoolbox.com/shopify/sync_'+window.hardware_type+'.php?origin='+window.location.hostname+'&id='+id+'&dealerId='+dealerId+'&_='+$.now()+'">'
     );
 }
