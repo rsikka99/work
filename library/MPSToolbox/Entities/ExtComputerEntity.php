@@ -26,15 +26,10 @@ class ExtComputerEntity extends ExtHardwareEntity {
      */
     private $mediaDrive = false;
 
-    /** @Column(type="boolean")
-     * @var boolean
-     */
-    private $usb3 = false;
-
     /** @Column(type="string")
      * @var string
      */
-    private $usbDescription = false;
+    private $usb = false;
 
     /** @Column(type="string")
      * @var string
@@ -59,15 +54,15 @@ class ExtComputerEntity extends ExtHardwareEntity {
     /** @Column(type="float")
      * @var float
      */
-    private $ledDisplay = false;
+    private $displayType = false;
 
     /** @Column(type="float")
      * @var float
      */
     private $weight = 0;
 
-    /** @Column(type="float")
-     * @var float
+    /** @Column(type="string")
+     * @var string
      */
     private $processorName = '';
 
@@ -130,35 +125,19 @@ class ExtComputerEntity extends ExtHardwareEntity {
     }
 
     /**
-     * @return boolean
-     */
-    public function isUsb3()
-    {
-        return $this->usb3;
-    }
-
-    /**
-     * @param boolean $usb3
-     */
-    public function setUsb3($usb3)
-    {
-        $this->usb3 = $usb3;
-    }
-
-    /**
      * @return string
      */
-    public function getUsbDescription()
+    public function getUsb()
     {
-        return $this->usbDescription;
+        return $this->usb;
     }
 
     /**
-     * @param string $usbDescription
+     * @param string $usb
      */
-    public function setUsbDescription($usbDescription)
+    public function setUsb($usb)
     {
-        $this->usbDescription = $usbDescription;
+        $this->usb = $usb;
     }
 
     /**
@@ -228,17 +207,17 @@ class ExtComputerEntity extends ExtHardwareEntity {
     /**
      * @return float
      */
-    public function getLedDisplay()
+    public function getDisplayType()
     {
-        return $this->ledDisplay;
+        return $this->displayType;
     }
 
     /**
-     * @param float $ledDisplay
+     * @param float $displayType
      */
-    public function setLedDisplay($ledDisplay)
+    public function setDisplayType($displayType)
     {
-        $this->ledDisplay = $ledDisplay;
+        $this->displayType = $displayType;
     }
 
     /**
@@ -258,7 +237,7 @@ class ExtComputerEntity extends ExtHardwareEntity {
     }
 
     /**
-     * @return float
+     * @return string
      */
     public function getProcessorName()
     {
@@ -266,7 +245,7 @@ class ExtComputerEntity extends ExtHardwareEntity {
     }
 
     /**
-     * @param float $processorName
+     * @param string $processorName
      */
     public function setProcessorName($processorName)
     {

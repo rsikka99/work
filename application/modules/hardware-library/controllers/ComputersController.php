@@ -174,5 +174,16 @@ class HardwareLibrary_ComputersController extends Action
 
         $this->sendJsonError('This method only accepts POST');
     }
-
+    public function deleteAction ()
+    {
+        if ($this->_request->isPost()) {
+            $hardwareId = intval($this->getRequest()->getParam('hardwareId'));
+            if ($this->isAdmin && $hardwareId) {
+                $computer = \MPSToolbox\Entities\ExtComputerEntity::find($hardwareId);
+                $computer->delete();
+            }
+            $this->sendJson(['ok']);
+        }
+        $this->sendJsonError('This method only accepts POST');
+    }
 }

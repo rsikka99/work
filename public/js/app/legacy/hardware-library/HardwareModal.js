@@ -283,7 +283,7 @@ define([
                 }
 
                 var hardwareManagement = $("#hardwareManagement");
-                hardwareManagement.trigger("saveSuccess", [hardwareModalInstance.hardwareId]);
+                $(window).trigger("hardwareSaveSuccess", [hardwareModalInstance.hardwareId]);
             },
             error   : function (xhr)
             {
