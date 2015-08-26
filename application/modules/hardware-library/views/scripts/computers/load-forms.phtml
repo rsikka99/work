@@ -24,7 +24,8 @@ $shopSettings = $dealerSettings->shopSettings;
                     <label class="control-label col-md-2" for="manufacturerId">Manufacturer</label>
 
                     <div class="col-md-6">
-                        <input class="form-control" type="text" id="manufacturerId" name="manufacturerId" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?> value="<?= $this->manufacturerId ?>">
+                        <select class="form-control" type="text" id="manufacturerId" name="manufacturerId" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?> value="<?= $this->manufacturerId ?>"><option></option><?php foreach ($this->manufacturers as $line) { ?><option value="<?php echo $line->id ?>" <?= $this->manufacturerId==$line->id?'selected="selected"':'' ?>><?php echo $line->fullname==$line->displayname?$line->fullname:$line->displayname." ({$line->fullname})" ?></option><?php } ?></select>
+                        <script> $(document).ready(function() { $('#manufacturerId').select2({}); }); </script>
                     </div>
                 </div>
                 <div class="form-group">

@@ -9,8 +9,7 @@ define([
     'app/Templates',
     'accounting',
     'jqgrid',
-    'bootstrap.modal.manager',
-    '../../components/Select2/Manufacturer'
+    'bootstrap.modal.manager'
 ], function ($, _, require, AssignTonersModal, Template, accounting)
 {
     'use strict';
@@ -128,8 +127,6 @@ define([
                         });
                     }
                 });
-
-                $modal.find('#manufacturerId').selectManufacturer();
 
                 $modal.find('.js-save-hardware-modal').on('click', function ()
                 {

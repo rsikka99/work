@@ -6,8 +6,7 @@ define([
     'app/Templates',
     'accounting',
     'jqgrid',
-    'bootstrap.modal.manager',
-    '../../../components/Select2/Manufacturer'
+    'bootstrap.modal.manager'
 ], function ($, _, require, AssignTonersModal, Template, accounting)
 {
     'use strict';
@@ -144,11 +143,6 @@ define([
                         });
                     }
                 });
-
-                /**
-                 * Available Toners Manufacturer search
-                 */
-                $modal.find('#manufacturerId').selectManufacturer();
 
                 require(['app/components/jqGrid/DeviceModal/AssignedTonersGrid'], function (AssignedTonersGrid)
                 {

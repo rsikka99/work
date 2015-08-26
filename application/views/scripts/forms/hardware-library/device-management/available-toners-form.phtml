@@ -18,11 +18,16 @@ $form->getElement('imageUrl')->setValue('');
             <div class="row">
                 <div class="col-md-4 col-md-push-1">
                     <div class="form-group <?= ($form->getElement('manufacturerId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+
                         <?= $this->RenderFormLabel($form->getElement('manufacturerId')) ?>
-                        <?= $this->RenderFormText($form->getElement('manufacturerId')) ?>
+
+                        <select class="form-control" type="text" id="manufacturerId" name="manufacturerId"><option></option><?php foreach (\MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper::getInstance()->fetchAllAvailableManufacturers() as $line) { ?><option value="<?= $line->id ?>" <?= $form->getElement('manufacturerId')->getValue()==$line->id?'selected="selected"':'' ?>><?php echo $line->fullname==$line->displayname?$line->fullname:$line->displayname." ({$line->fullname})" ?></option><?php } ?></select>
+                        <script> require(['jquery', 'select2'], function ($) { $('#manufacturerId').select2(); }); </script>
+
                         <?= $this->RenderFormDescription($form->getElement('manufacturerId')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('manufacturerId')) ?>
                     </div>
+
 
                 </div>
                 <div class="col-md-4 col-md-push-3">

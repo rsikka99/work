@@ -5,7 +5,6 @@ require([
     'accounting',
     'jqgrid',
     'jquery.typewatch',
-    'app/components/Select2/Manufacturer',
     'app/components/Select2/TonerColor',
     'bootstrap.modal.manager'
 ], function ($, require, Template, accounting)
@@ -19,13 +18,6 @@ require([
         var $filterTonerColor = $(".js-filter-toner-color");
         var $filterTonerSku = $(".js-filter-toner-sku");
         var $resetFilterButton = $(".js-reset-filter");
-
-        /**
-         * Available Toners Manufacturer search
-         */
-        $filterManufacturer.selectManufacturer({
-            placeholder: "Any manufacturer. Type to search."
-        });
 
         /**
          * Toner Color Filter
@@ -93,7 +85,7 @@ require([
                 postData    : {
                     filterManufacturerId: function ()
                     {
-                        return $filterManufacturer.val();
+                        return $filterManufacturer.select2("val");
                     },
                     filterTonerColorId  : function ()
                     {
