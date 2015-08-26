@@ -44,7 +44,7 @@ create table if not exists `ext_dealer_hardware` (
   `description` varchar(255),
   `srp` decimal(10,2),
   `rent` decimal(10,2),
-  `webId` int,
+  `webId` bigint,
   `dataSheetUrl` varchar(255),
   `reviewsUrl` varchar(255),
   `online` tinyint,
