@@ -202,7 +202,7 @@ define([
             "url"                 : assignTonersModalInstance.urls.tonerList,
             "filterManufacturerId": function ()
             {
-                return $filterManufacturer.val();
+                return $filterManufacturer.select2("val");
             },
             "filterTonerColorId"  : function ()
             {
@@ -245,7 +245,7 @@ define([
                 postData    : {
                     filterManufacturerId: function ()
                     {
-                        return $filterManufacturer.val();
+                        return $filterManufacturer.select2("val", '');
                     },
                     filterTonerColorId  : function ()
                     {

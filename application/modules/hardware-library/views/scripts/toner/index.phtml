@@ -28,7 +28,6 @@ $this->headScript()->appendFile($this->baseUrl('js/app/legacy/hardware-library/t
                                 <div class="col-lg-10 col-md-9 col-sm-8">
                                     <select onchange="$('#toners-grid').trigger('reloadGrid');" class="form-control js-filter-manufacturer" type="text" id="assign-toners-manufacturer-filter" name="assign-toners-manufacturer-filter"><option></option><?php foreach (\MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper::getInstance()->fetchAllAvailableManufacturers() as $line) { ?><option value="<?php echo $line->id ?>"><?php echo $line->fullname==$line->displayname?$line->fullname:$line->displayname." ({$line->fullname})" ?></option><?php } ?></select>
                                     <script> require(['jquery', 'select2'], function ($) { $('#assign-toners-manufacturer-filter').select2({allowClear: true, placeholder:'select' }); }); </script>
-
                                 </div>
                             </div>
 
