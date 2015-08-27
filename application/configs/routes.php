@@ -251,6 +251,8 @@ $r->addRoute('api.devices.grid-list', new R('api/v1/devices/grid-list',        [
 $r->addRoute('api.computers',           new R('api/v1/computers/:deviceId',        ['module' => 'api', 'controller' => 'computers', 'action' => 'index', 'deviceId' => false]));
 $r->addRoute('api.computers.grid-list', new R('api/v1/computers/grid-list',        ['module' => 'api', 'controller' => 'computers', 'action' => 'grid-list']));
 
+$r->addRoute('api.peripherals',           new R('api/v1/peripherals/:deviceId',        ['module' => 'api', 'controller' => 'peripherals', 'action' => 'index', 'deviceId' => false]));
+$r->addRoute('api.peripherals.grid-list', new R('api/v1/peripherals/grid-list',        ['module' => 'api', 'controller' => 'peripherals', 'action' => 'grid-list']));
 
 // API for clients
 

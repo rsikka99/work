@@ -21,7 +21,7 @@ namespace MPSToolbox\Entities;
  * @Table(name="ext_hardware")
  * @InheritanceType("JOINED")
  * @DiscriminatorColumn(name="hardware_type", type="string")
- * @DiscriminatorMap({"computer" = "ExtComputerEntity"})
+ * @DiscriminatorMap({"computer" = "ExtComputerEntity", "peripheral" = "ExtPeripheralEntity"})
  */
 abstract class ExtHardwareEntity extends BaseEntity {
 
