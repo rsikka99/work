@@ -24,44 +24,7 @@ define(['jquery', 'select2'], function ($)
             $element.select2({
                 placeholder  : settings.placeholder,
                 allowClear   : true,
-                ajax         : {
-                    url     : settings.url,
-                    dataType: 'json',
-                    data    : function (term, page)
-                    {
-                        return {
-                            tonerConfigId: settings.tonerConfigId(),
-                            page_limit   : 10
-                        };
-                    },
-                    results : function (data, page)
-                    {
-                        return {results: data};
-                    }
-                },
-                initSelection: function (element, callback)
-                {
-                    $.ajax({
-                        url      : settings.url,
-                        type     : "post",
-                        dataType : "json",
-                        data     : {
-                            tonerColorId: element.val()
-                        },
-                        'success': function (data)
-                        {
-                            callback(data);
-                        }
-                    });
-                },
-                escapeMarkup : function (m)
-                {
-                    /**
-                     * We do not want to escape markup since we are
-                     * displaying html in results
-                     */
-                    return m;
-                }
+                data         : [{id:1,text:'BLACK'},{id:2,text:'CYAN'},{id:3,text:'MAGENTA'},{id:4,text:'YELLOW'},{id:5,text:'3 COLOR'},{id:5,text:'4 COLOR'}]
             });
         }
         else

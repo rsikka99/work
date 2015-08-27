@@ -1,11 +1,5 @@
-require(['jquery', 'select2', 'app/components/Select2/Manufacturer'], function ($)
+require(['jquery', 'select2'], function ($)
 {
-    // Setup auto complete for our text box
-    var $manufacturerSelect = $("#manufacturers");
-    $manufacturerSelect.selectManufacturer({
-        'placeholder': 'Select Manufacturer'
-    });
-
     var $importLink = $('#importLink');
     var $exportLink = $('#exportLink');
 
@@ -24,9 +18,9 @@ require(['jquery', 'select2', 'app/components/Select2/Manufacturer'], function (
         event.preventDefault();
 
         // Do we have a manufacturer element
-        if ($manufacturerSelect.length > 0 && $manufacturerSelect.val())
+        if ($('#manufacturerId').val())
         {
-            document.location.href = "export-pricing?type=" + $(this).data('type') + "&manufacturer=" + $manufacturerSelect.val();
+            document.location.href = "export-pricing?type=" + $(this).data('type') + "&manufacturer=" + $('#manufacturerId').val();
         }
         else
         {

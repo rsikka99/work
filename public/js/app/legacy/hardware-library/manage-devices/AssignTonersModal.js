@@ -7,7 +7,6 @@ define([
     'app/components/jqGrid/DeviceModal/AssignTonersGrid',
     'bootstrap.modal.manager',
     'jquery.typewatch',
-    '../../../components/Select2/Manufacturer',
     '../../../components/Select2/TonerColor'
 ], function ($, _, accounting, Template, TonerService, AssignTonersGrid)
 {
@@ -115,13 +114,6 @@ define([
         var $resetFilterButton = this.$modal.find(".js-reset-filter");
 
         /**
-         * Available Toners Manufacturer search
-         */
-        $filterManufacturer.selectManufacturer({
-            placeholder: "Any manufacturer. Type to search."
-        });
-
-        /**
          * Toner Color Filter
          */
         $filterTonerColor.selectTonerColor({
@@ -210,7 +202,7 @@ define([
             "url"                 : assignTonersModalInstance.urls.tonerList,
             "filterManufacturerId": function ()
             {
-                return $filterManufacturer.val();
+                return $filterManufacturer.select2("val");
             },
             "filterTonerColorId"  : function ()
             {
@@ -253,7 +245,7 @@ define([
                 postData    : {
                     filterManufacturerId: function ()
                     {
-                        return $filterManufacturer.val();
+                        return $filterManufacturer.select2("val", '');
                     },
                     filterTonerColorId  : function ()
                     {

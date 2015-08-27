@@ -2,8 +2,7 @@ define([
     'jquery',
     './TonerService',
     'bootstrap.modal.manager',
-    '../../../components/Select2/Manufacturer',
-    '../../../components/Select2/TonerColor'
+     '../../../components/Select2/TonerColor'
 ], function ($, TonerService)
 {
     'use strict';
@@ -110,8 +109,6 @@ define([
                     $(that).trigger('toner-form.cancelled');
                     $modal.modal('hide');
                 });
-
-                $modal.find('[name="manufacturerId"]').selectManufacturer();
 
                 var tonerColorIdOptions = {};
                 if (that.tonerConfigId)
