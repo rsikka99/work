@@ -1,0 +1,134 @@
+<?php
+
+use MPSToolbox\Legacy\Models\Acl\AppAclModel;
+use MPSToolbox\Legacy\Models\Acl\HardwareLibraryAclModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
+
+$dealerSettings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::with('ShopSettings')->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+$shopSettings = $dealerSettings->shopSettings;
+
+?>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h1 class="modal-title text-center">Hardware Management</h1>
+        </div>
+        <div class="modal-body">
+
+
+            <div id="alertMessage"></div>
+            <!-- Hardware Details -->
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="manufacturerId">Manufacturer</label>
+
+                    <div class="col-md-6">
+                        <select class="form-control" type="text" id="manufacturerId" name="manufacturerId" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?> value="<?= $this->manufacturerId ?>"><option></option><?php foreach ($this->manufacturers as $line) { ?><option value="<?php echo $line->id ?>" <?= $this->manufacturerId==$line->id?'selected="selected"':'' ?>><?php echo $line->fullname==$line->displayname?$line->fullname:$line->displayname." ({$line->fullname})" ?></option><?php } ?></select>
+                        <script> $(document).ready(function() { $('#manufacturerId').select2({}); }); </script>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="modelName">Model Name</label>
+
+                    <div class="col-md-6">
+                        <input class="form-control" type="text" id="modelName" value="<?= $this->modelName; ?>" name="modelName" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="category">Category</label>
+                    <div class="col-md-6">
+                        <select class="form-control" id="category" value="<?= $this->category; ?>" name="category" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                        <?php foreach ($this->categories as $option) { ?><option value="<?= $option ?>"><?= $option ?></option><?php } ?>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <?php $first = true; ?>
+
+                        <?php if ($this->hardwareAttributes) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#hardwareAttributesTab" id="hardwareAttributesTopTab" data-toggle="tab">Attributes</a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($this->hardwareQuote) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#hardwareQuoteTab" id="hardwareQuoteTopTab" data-toggle="tab">Quote</a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($this->hardwareImage) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#hardwareImageTab" id="hardwareImageTopTab" data-toggle="tab">Image</a>
+                            </li>
+                        <?php endif; ?>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="modal-body">
+
+            <!-- End Of hardware Details -->
+
+
+            <div class="tab-content">
+                <?php $first = true; ?>
+
+                <?php if ($this->hardwareAttributes) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="hardwareAttributesTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->hardwareAttributes ?>
+                    </div>
+                <?php endif ?>
+
+                <?php if ($this->hardwareQuote) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="hardwareQuoteTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->hardwareQuote ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($this->hardwareImage) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="hardwareImageTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->hardwareImage ?>
+                    </div>
+                <?php endif ?>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <ul class="pager">
+                <li class="next">
+                    <a href="#" data-dismiss="modal">Close</a>
+                    <span class="divider-vertical"></span>
+                    <button class="btn btn-primary js-save-hardware-modal" type="button">Save</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<?php if (($shopSettings->shopifyName!='') && ($this->hardware)) { ?>
+    <script>
+        $('.js-save-hardware-modal').click(function() {
+            window.setTimeout('sync_shopify(<?= $this->hardware->getId() ?>, <?= Zend_Auth::getInstance()->getIdentity()->dealerId ?>)',1000);
+        });
+    </script>
+<?php } ?>
