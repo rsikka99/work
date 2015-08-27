@@ -7,7 +7,7 @@ if (!function_exists('output_ComputersAttributesForm_col')) {
     function output_ComputersAttributesForm_col($that, $col) {
         $form = $that->element;
         $booleans = ['webcam','mediaDrive','hdDisplay'];
-        $selects = ['os','usb','displayType'];
+        $selects = ['grade','os','usb','displayType'];
         $isBool = in_array($col,$booleans);
         $isSelect = in_array($col,$selects);
 ?>
@@ -47,7 +47,7 @@ if (!function_exists('output_ComputersAttributesForm_col')) {
                     </div>
                 </div>
 
-                <?php foreach (['webcam','mediaDrive','usb','os'] as $col) output_ComputersAttributesForm_col($this, $col) ?>
+                <?php foreach (['grade','webcam','mediaDrive','usb','os'] as $col) output_ComputersAttributesForm_col($this, $col) ?>
 
             </div>
             <!-- -->

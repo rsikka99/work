@@ -5,12 +5,6 @@ namespace MPSToolbox\Forms;
 class ComputersAttributesForm extends HardwareAttributesForm
 {
 
-    private function arrToMulti($arr) {
-        $result = [];
-        foreach ($arr as $value) $result[$value] = $value;
-        return $result;
-    }
-
     public function init ()
     {
         parent::init();

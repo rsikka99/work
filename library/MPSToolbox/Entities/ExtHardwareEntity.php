@@ -64,6 +64,9 @@ abstract class ExtHardwareEntity extends BaseEntity {
     /** @Column(type="string") */
     private $imageUrl;
 
+    /** @Column(type="string") */
+    private $grade;
+
     /**
      * @OneToMany(targetEntity="ExtDealerHardwareEntity", mappedBy="hardware")
      **/
@@ -249,6 +252,22 @@ abstract class ExtHardwareEntity extends BaseEntity {
     {
         if (is_string($launchDate)) $launchDate=new \DateTime($launchDate);
         $this->launchDate = $launchDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGrade()
+    {
+        return $this->grade;
+    }
+
+    /**
+     * @param mixed $grade
+     */
+    public function setGrade($grade)
+    {
+        $this->grade = $grade;
     }
 
     /**
