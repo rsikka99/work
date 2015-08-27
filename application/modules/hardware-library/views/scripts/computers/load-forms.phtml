@@ -39,7 +39,9 @@ $shopSettings = $dealerSettings->shopSettings;
                     <label class="control-label col-md-2" for="category">Category</label>
                     <div class="col-md-6">
                         <select class="form-control" id="category" value="<?= $this->category; ?>" name="category" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
-                        <?php foreach ($this->categories as $option) { ?><option value="<?= $option ?>"><?= $option ?></option><?php } ?>
+                        <?php foreach ($this->categories as $option) { ?>
+                            <option <?= ($this->hardware && ($option==$this->hardware->getCategory()))?'selected="selected"':'' ?> value="<?= $option ?>"><?= $option ?></option>
+                        <?php } ?>
                         </select>
                     </div>
                 </div>

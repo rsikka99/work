@@ -51,8 +51,8 @@ class ExtComputerEntity extends ExtHardwareEntity {
      */
     private $hdDisplay = false;
 
-    /** @Column(type="float")
-     * @var float
+    /** @Column(type="string")
+     * @var string
      */
     private $displayType = false;
 
@@ -205,7 +205,7 @@ class ExtComputerEntity extends ExtHardwareEntity {
     }
 
     /**
-     * @return float
+     * @return string
      */
     public function getDisplayType()
     {
@@ -213,7 +213,7 @@ class ExtComputerEntity extends ExtHardwareEntity {
     }
 
     /**
-     * @param float $displayType
+     * @param string $displayType
      */
     public function setDisplayType($displayType)
     {

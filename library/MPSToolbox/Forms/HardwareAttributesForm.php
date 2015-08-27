@@ -13,6 +13,13 @@ use Zend_Form;
  */
 class HardwareAttributesForm extends \My_Form_Form
 {
+
+    protected function arrToMulti($arr) {
+        $result = [];
+        foreach ($arr as $value) $result[$value] = $value;
+        return $result;
+    }
+
     protected $_isAllowedToEditFields = false;
 
     /**
@@ -54,6 +61,15 @@ class HardwareAttributesForm extends \My_Form_Form
     {
         $this->setMethod('post');
         $this->setAttrib('id', 'hardwareAttributes');
+
+        $this->addElement('select', 'grade', [
+            'label'      => 'Grade',
+            'required'   => false,
+            'allowEmpty' => true,
+            'multiOptions' => $this->arrToMulti([
+                '','Good','Better','Best'
+            ])
+        ]);
 
         /*
         * Launch Date
