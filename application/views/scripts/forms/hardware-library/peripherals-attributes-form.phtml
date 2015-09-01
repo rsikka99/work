@@ -6,8 +6,8 @@ $form = $this->element;
 if (!function_exists('output_ComputersAttributesForm_col')) {
     function output_ComputersAttributesForm_col($that, $col) {
         $form = $that->element;
-        $booleans = ['webcam','mediaDrive','hdDisplay'];
-        $selects = ['os','usb','displayType'];
+        $booleans = [];
+        $selects = [];
         $isBool = in_array($col,$booleans);
         $isSelect = in_array($col,$selects);
 ?>
@@ -44,6 +44,16 @@ if (!function_exists('output_ComputersAttributesForm_col')) {
                         <?= $this->RenderFormDatePicker($form->getElement('launchDate'), ['js-date-picker']) ?>
                         <?= $this->RenderFormDescription($form->getElement('launchDate')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('launchDate')) ?>
+                    </div>
+                </div>
+
+                <div class="form-group <?= ($form->getElement('appliesTo')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('appliesTo'), ['col-md-4']) ?>
+
+                    <div class="col-md-6">
+                        <?= $this->RenderFormSelect($form->getElement('appliesTo')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('appliesTo')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('appliesTo')) ?>
                     </div>
                 </div>
 

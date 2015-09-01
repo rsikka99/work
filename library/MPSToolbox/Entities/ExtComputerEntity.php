@@ -41,6 +41,12 @@ class ExtComputerEntity extends ExtHardwareEntity {
      */
     private $hdd = 0;
 
+    /** @Column(type="boolean")
+     * @var boolean
+     */
+    private $ssd = false;
+
+
     /** @Column(type="float")
      * @var float
      */
@@ -284,9 +290,20 @@ class ExtComputerEntity extends ExtHardwareEntity {
         $this->service = $service;
     }
 
+    /**
+     * @return boolean
+     */
+    public function isSsd()
+    {
+        return $this->ssd;
+    }
 
-
-
-
+    /**
+     * @param boolean $ssd
+     */
+    public function setSsd($ssd)
+    {
+        $this->ssd = $ssd;
+    }
 
 }

@@ -113,7 +113,7 @@ abstract class Hardware_Action extends Action
 
             // Are they allowed to modify data? If they are creating yes, if its not a system device then yes, otherwise use their admin privilege
             $isAllowed                 = ((!$hardware->getId() || !$hardware->isSystemDevice || $this->isAdmin) ? true : false);
-            $service = new HardwareService($hardware, $this->identity->dealerId, $isAllowed, $this->isAdmin);
+            $service = new HardwareService($hardware, $this->identity->dealerId, $isAllowed, $this->isAdmin, $this->hardware_type);
 
             $forms                      = $service->getForms();
             $modelAndManufacturerErrors = [];
