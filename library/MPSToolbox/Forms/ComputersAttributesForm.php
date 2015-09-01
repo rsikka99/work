@@ -47,6 +47,10 @@ class ComputersAttributesForm extends HardwareAttributesForm
             'allowEmpty' => true,
         ]);
 
+        $this->addElement('checkbox', 'ssd', [
+            'label'      => 'SSD',
+        ]);
+
         $this->addElement('text_float', 'screenSize', [
             'label'      => 'Screen Size (Inch)',
             'required'   => false,

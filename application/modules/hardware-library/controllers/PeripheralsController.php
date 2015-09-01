@@ -9,7 +9,7 @@ class HardwareLibrary_PeripheralsController extends \Tangent\Controller\Hardware
 {
 
     protected $hardware_type = 'Peripherals';
-    protected $hardware_categories = ['Monitor','External Drive'];
+    protected $hardware_categories = ['Monitor','External Drive','Software','Flash Memory','Keyboard and Mouse','Networking','Power protection','Speakers','Webcam'];
 
     /**
      * @param $hardwareId
