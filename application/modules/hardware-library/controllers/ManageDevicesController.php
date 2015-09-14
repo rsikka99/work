@@ -297,6 +297,9 @@ class HardwareLibrary_ManageDevicesController extends Action
      */
     public function assignAvailableOptionAction ()
     {
+        $identity = \Zend_Auth::getInstance()->getIdentity();
+        $db = \Zend_Db_Table::getDefaultAdapter();
+
         $json = "Failed to assign or unassign option";
         if ($this->_request->isPost())
         {
@@ -305,7 +308,8 @@ class HardwareLibrary_ManageDevicesController extends Action
             if ($optionId && $masterDeviceId)
             {
                 $device = DeviceMapper::getInstance()->find([$masterDeviceId, $this->_identity->dealerId]);
-                if ($device)
+                $option = OptionMapper::getInstance()->find($optionId);
+                if ($device && $option)
                 {
                     $deviceOptionMapper = DeviceOptionMapper::getInstance();
                     $deviceOption       = $deviceOptionMapper->find([$masterDeviceId, $optionId]);
@@ -313,6 +317,9 @@ class HardwareLibrary_ManageDevicesController extends Action
                     {
                         $deviceOptionMapper->delete($deviceOption);
                         $json = "Successfully unassigned option";
+
+                        $sql = "insert into `history` set `userId`={$identity->id}, `masterDeviceId`={$masterDeviceId}, `action`='Unassigned Option: {$option->name}'";
+                        $db->query($sql);
                     }
                     else
                     {
@@ -323,6 +330,9 @@ class HardwareLibrary_ManageDevicesController extends Action
                         $deviceOption->includedQuantity = 0;
                         $deviceOptionMapper->insert($deviceOption);
                         $json = "Successfully assigned option";
+
+                        $sql = "insert into `history` set `userId`={$identity->id}, `masterDeviceId`={$masterDeviceId}, `action`='Assigned Option: {$option->name}'";
+                        $db->query($sql);
                     }
                 }
             }
@@ -578,7 +588,8 @@ class HardwareLibrary_ManageDevicesController extends Action
                                 $newTonerIds[(int)$toner->id] = $toner;
                             }
 
-                            foreach (TonerMapper::getInstance()->fetchTonersAssignedToDevice($masterDeviceId) as $toner)
+                            //foreach (TonerMapper::getInstance()->fetchTonersAssignedToDevice($masterDeviceId) as $toner)
+                            foreach (TonerMapper::getInstance()->fetchTonersAssignedToDeviceWithMachineCompatibility($masterDeviceId) as $toner)
                             {
 
                                 $currentToners[(int)$toner->id] = $toner;
@@ -661,11 +672,14 @@ class HardwareLibrary_ManageDevicesController extends Action
                     }
 
                     $db->commit();
+
+                    /** @var \MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HistoryForm $historyForm */
                     $this->sendJson([
                         "masterDeviceId" => $manageMasterDeviceService->masterDeviceId,
                         "message" => "Successfully updated master device",
-                        'imageFile' => $masterDevice->imageFile]
-                    );
+                        'imageFile' => $masterDevice->imageFile,
+                        'history' => \MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HistoryForm::getHistory($masterDevice)
+                    ]);
                 }
                 catch (Exception $e)
                 {

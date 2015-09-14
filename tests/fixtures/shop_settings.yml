@@ -1,0 +1,2 @@
+shop_settings:
+    - { id: '1', 'shopifyName': 'unit-test' }

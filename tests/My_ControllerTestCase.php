@@ -16,9 +16,10 @@ abstract class My_ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCas
         'device_instances'=>['rms_uploads','rms_devices'],
         'rms_devices'=>['manufacturers'],
         'master_devices'=>['toner_configs','toners','manufacturers'],
-        'toners'=>['manufacturers','toner_configs','toner_colors'],
+        'toners'=>['users','manufacturers','toner_configs','toner_colors'],
         'device_swap_reasons'=>['dealers','device_swap_reason_categories'],
         'ext_computer'=>['ext_hardware','dealers','ext_dealer_hardware'],
+        'dealer_settings'=>['toner_vendor_ranking_sets','fleet_settings','quote_settings','generic_settings','optimization_settings','shop_settings'],
     ];
 
     public $fixtures = ['users','clients'];

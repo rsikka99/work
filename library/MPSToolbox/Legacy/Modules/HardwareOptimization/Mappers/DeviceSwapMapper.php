@@ -109,11 +109,24 @@ class DeviceSwapMapper extends My_Model_Mapper_Abstract
             $primaryKey = $this->getPrimaryKeyValueForObject($object);
         }
 
+        $changed_fields = $this->changed_fields($this->getDbTable()->find($data[$this->col_masterDeviceId], $data[$this->col_dealerId])->current(), $object);
+
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_masterDeviceId} = ?" => $primaryKey[0],
             "{$this->col_dealerId} = ?"       => $primaryKey[1]
         ]);
+
+        if ($rowsAffected) {
+            $identity = \Zend_Auth::getInstance()->getIdentity();
+            $db = \Zend_Db_Table::getDefaultAdapter();
+
+            foreach ($changed_fields as $key=>$value) {
+                $sql = "insert into `history` set `userId`={$identity->id}, `masterDeviceId`={$data[$this->col_masterDeviceId]}, `action`='Changed `{$key}` to: ".addslashes($value)."'";
+                $sql .= ", dealerId={$data[$this->col_dealerId]}";
+                $db->query($sql);
+            }
+        }
 
         // Save the object into the cache
         $this->saveItemToCache($object);

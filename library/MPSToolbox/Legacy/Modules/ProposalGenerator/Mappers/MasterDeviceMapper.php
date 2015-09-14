@@ -80,6 +80,14 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
         // Save the object into the cache
         $this->saveItemToCache($object);
 
+        #--
+        $identity = \Zend_Auth::getInstance()->getIdentity();
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $sql = "insert into `history` set userId={$identity->id}, masterDeviceId={$object->id}, action='Created'";
+        if (!$object->isSystemDevice) $sql.=", dealerId={$identity->dealerId}";
+        $db->query($sql);
+        #--
+
         return $id;
     }
 
@@ -102,14 +110,31 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
             $primaryKey = $data [$this->col_id];
         }
 
+        $changed_fields = $this->changed_fields($this->getDbTable()->find($data [$this->col_id])->current(), $object);
+
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_id} = ?" => $primaryKey,
         ]);
 
+        if ($rowsAffected) {
+            $identity = \Zend_Auth::getInstance()->getIdentity();
+            $db = \Zend_Db_Table::getDefaultAdapter();
+
+            foreach ($changed_fields as $key=>$value) {
+                if ($key=='imageUrl') continue;
+                if (preg_match('#^is([A-Z].*)$#',$key,$match)) {
+                    $key=$match[1];
+                    $value = $value?'Yes':'No';
+                }
+                $sql = "insert into `history` set `userId`={$identity->id}, `masterDeviceId`={$object->id}, `action`='Changed `{$key}` to: ".addslashes($value)."'";
+                if (!$object->isSystemDevice) $sql .= ", dealerId={$identity->dealerId}";
+                $db->query($sql);
+            }
+        }
+
         // Save the object into the cache
         $this->saveItemToCache($object);
-
         return $rowsAffected;
     }
 

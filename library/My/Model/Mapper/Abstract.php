@@ -262,4 +262,21 @@ abstract class My_Model_Mapper_Abstract
     abstract public function fetch ($where = null, $order = null, $offset = null);
 
     abstract public function fetchAll ($where = null, $order = null, $count = 25, $offset = null);
+
+    public function changed_fields($old_object, $new_object) {
+        $changed_fields = [];
+        foreach ($old_object as $key=>$old_value) {
+            /** @var Zend_Db_Expr $new_value */
+            $new_value = $new_object->$key;
+            if ($new_value instanceof Zend_Db_Expr) {
+                $new_value = $new_value->__toString();
+                if ($new_value=='NULL') $new_value=null;
+            }
+            if ($new_value != $old_value) {
+                $changed_fields[$key] = $new_value;
+            }
+        }
+        return $changed_fields;
+    }
+
 }
