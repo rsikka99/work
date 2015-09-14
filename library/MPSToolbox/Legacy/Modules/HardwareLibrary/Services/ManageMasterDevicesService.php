@@ -8,6 +8,7 @@ use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\AvailableTo
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeleteForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeviceAttributesForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeviceImageForm;
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HistoryForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareConfigurationsForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareOptimizationForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareQuoteForm;
@@ -71,6 +72,7 @@ class ManageMasterDevicesService
     protected $_hardwareQuoteForm;
     protected $_availableOptionsForm;
     protected $_availableTonersForm;
+    protected $_historyForm;
     protected $_dealerId;
     protected $_isAllowed;
     protected $_isAdmin;
@@ -110,7 +112,8 @@ class ManageMasterDevicesService
         $showHardwareQuote = true,
         $showAvailableOptions = true,
         $showHardwareConfigurations = true,
-        $showDeviceImage = true
+        $showDeviceImage = true,
+        $showHistory = true
     )
     {
         $formsToShow = [];
@@ -149,6 +152,11 @@ class ManageMasterDevicesService
         if ($showDeviceImage)
         {
             $formsToShow['deviceImage']  = $this->getDeviceImageForm();
+        }
+
+        if ($showDeviceImage)
+        {
+            $formsToShow['history']  = $this->getHistoryForm();
         }
 
         $formsToShow['delete'] = new DeleteForm();
@@ -789,6 +797,15 @@ class ManageMasterDevicesService
         return $this->_availableTonersForm;
     }
 
+    public function getHistoryForm($id = null) {
+        if (!isset($this->_historyForm))
+        {
+            $this->_historyForm = new HistoryForm($id, null);
+        }
+
+        return $this->_historyForm;
+    }
+
     /**
      * This creates, saves and deletes for the buttons inside the available toners jqGrid
      *
@@ -1143,6 +1160,9 @@ class ManageMasterDevicesService
      */
     public function addToners ($masterDeviceId, $tonerIds, $approve = false)
     {
+        $identity = \Zend_Auth::getInstance()->getIdentity();
+        $db = \Zend_Db_Table::getDefaultAdapter();
+
         $deviceTonerMapper = DeviceTonerMapper::getInstance();
 
         $toners         = [];
@@ -1176,6 +1196,9 @@ class ManageMasterDevicesService
         {
             $deviceTonerModel->toner_id = $toner->id;
             $deviceTonerMapper->insert($deviceTonerModel);
+
+            $sql = "insert into `history` set `userId`={$identity->id}, `masterDeviceId`={$masterDeviceId}, `action`='Assigned Toner: {$toner->sku}'";
+            $db->query($sql);
         }
 
         return true;
@@ -1191,6 +1214,9 @@ class ManageMasterDevicesService
      */
     public function removeToners ($masterDeviceId, $tonerIds)
     {
+        $identity = \Zend_Auth::getInstance()->getIdentity();
+        $db = \Zend_Db_Table::getDefaultAdapter();
+
         $deviceTonerMapper = DeviceTonerMapper::getInstance();
 
         $toners         = [];
@@ -1220,8 +1246,12 @@ class ManageMasterDevicesService
         $deviceTonerModel->master_device_id = $masterDeviceId;
         foreach ($affectedToners as $toner)
         {
+            /** @var TonerModel $toner */
             $deviceTonerModel->toner_id = $toner->id;
             $deviceTonerMapper->delete($deviceTonerModel);
+
+            $sql = "insert into `history` set `userId`={$identity->id}, `masterDeviceId`={$masterDeviceId}, `action`='Unassigned Toner: {$toner->sku}'";
+            $db->query($sql);
         }
 
         return true;

@@ -96,6 +96,13 @@ $shopSettings = $dealerSettings->shopSettings;
                             </li>
                         <?php endif; ?>
 
+                        <?php if ($this->history) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#historyTab" id="historyTopTab" data-toggle="tab">History</a>
+                            </li>
+                        <?php endif; ?>
+
                     </ul>
                 </div>
             </div>
@@ -382,6 +389,13 @@ $shopSettings = $dealerSettings->shopSettings;
                     <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="deviceImageTab">
                         <?php $first = ($first) ? false : $first ?>
                         <?= $this->deviceImage ?>
+                    </div>
+                <?php endif ?>
+
+                <?php if ($this->history) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="historyTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->history ?>
                     </div>
                 <?php endif ?>
 

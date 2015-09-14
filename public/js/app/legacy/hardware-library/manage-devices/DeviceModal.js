@@ -378,6 +378,15 @@ define([
                 }
 
                 $(deviceModalInstance).trigger('DeviceModal.saved', [deviceModalInstance.deviceId])
+
+                if (xhr.history) {
+                    var str='';
+                    $.each(xhr.history, function(i,e) {
+                        str+= '<tr><td>'+ e.date +'</td><td>'+ e.user +'</td><td>'+ e.action +'</td></tr>';
+                    });
+                    $('#historyTab tbody').html(str);
+                }
+
             },
             error   : function (xhr)
             {
