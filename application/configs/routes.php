@@ -268,6 +268,8 @@ $r->addRoute('api.countries.country',   new R('api/v1/countries/:countryId',   [
  */
 
 $r->addRoute('hardware-library.all-devices',                new R('hardware-library/all-devices',                    ['module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index'                      ]));
+$r->addRoute('hardware-library.computers',                  new R('hardware-library/computers',                      ['module' => 'hardware-library', 'controller' => 'computers', 'action' => 'index'                      ]));
+$r->addRoute('hardware-library.peripherals',                new R('hardware-library/peripherals',                    ['module' => 'hardware-library', 'controller' => 'peripherals', 'action' => 'index'                      ]));
 
 // TODO kmccully: blank page
 $r->addRoute('hardware-library.all-devices.create',         new R('hardware-library/all-devices/create',             ['module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'create'                     ]));
