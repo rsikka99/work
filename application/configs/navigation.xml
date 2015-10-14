@@ -355,10 +355,20 @@
             <class>dropdown</class>
             <pages>
                 <viewalldevices>
-                    <label>All Devices</label>
+                    <label>Printing Devices</label>
                     <route>hardware-library.all-devices</route>
                     <resource>quotegen__devicesetup__index</resource>
                 </viewalldevices>
+                <computers>
+                    <label>Computers</label>
+                    <route>hardware-library.computers</route>
+                    <resource>hardware-library__computers__index</resource>
+                </computers>
+                <peripherals>
+                    <label>Peripherals</label>
+                    <route>hardware-library.peripherals</route>
+                    <resource>hardware-library__peripherals__index</resource>
+                </peripherals>
                 <alldevices>
                     <label>All Devices</label>
                     <route>hardware-library.devices</route>
