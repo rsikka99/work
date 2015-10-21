@@ -118,6 +118,12 @@ class ClientForm extends \My_Form_Form
             'filters'     => ['StringTrim'],
         ]);
 
+        $this->addElement('text', 'email', [
+            'label'       => 'E-mail address',
+            'placeholder' => '',
+            'filters'     => ['StringTrim'],
+        ]);
+
         /**
          * Address Line 1
          */

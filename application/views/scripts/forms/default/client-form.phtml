@@ -96,6 +96,15 @@ $form = $this->element;
                         <?= $this->RenderFormElementErrors($form->getElement('phoneNumber')) ?>
                     </div>
                 </div>
+                <div class="form-group <?= ($form->getElement('email')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('email'), ['col-md-3']) ?>
+
+                    <div class="col-md-9">
+                        <?= $this->RenderFormText($form->getElement('email')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('email')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('email')) ?>
+                    </div>
+                </div>
             </fieldset>
 
             <fieldset>

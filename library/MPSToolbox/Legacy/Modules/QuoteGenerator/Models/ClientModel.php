@@ -63,6 +63,9 @@ class ClientModel extends My_Model_Abstract
      */
     protected $survey;
 
+    /** @var  int */
+    protected $webId;
+
     /**
      * @param array $params An array of data to populate the model with
      */
@@ -103,6 +106,11 @@ class ClientModel extends My_Model_Abstract
             $this->employeeCount = $params->employeeCount;
         }
 
+        if (isset($params->webId) && !is_null($params->webId))
+        {
+            $this->webId = $params->webId;
+        }
+
     }
 
     /**
@@ -117,6 +125,7 @@ class ClientModel extends My_Model_Abstract
             "companyName"   => $this->companyName,
             "legalName"     => $this->legalName,
             "employeeCount" => $this->employeeCount,
+            "webId" => $this->webId,
         ];
     }
 
