@@ -142,6 +142,7 @@ class ClientService
                 }
                 else
                 {
+                    $data['id'] = $contact->id;
                     $contact->populate($data);
                     if ($contact->isEmpty())
                     {
@@ -162,6 +163,7 @@ class ClientService
                 }
                 else
                 {
+                    $data['id'] = $address->id;
                     $address->populate($data);
                     AddressMapper::getInstance()->save($address);
                 }

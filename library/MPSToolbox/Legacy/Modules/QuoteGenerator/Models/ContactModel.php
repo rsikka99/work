@@ -38,6 +38,8 @@ class ContactModel extends My_Model_Abstract
      */
     public $phoneNumber;
 
+    public $email;
+
     /**
      * @param array $params An array of data to populate the model with
      */
@@ -72,6 +74,10 @@ class ContactModel extends My_Model_Abstract
         {
             $this->phoneNumber = $params->phoneNumber;
         }
+        if (isset($params->email) && !is_null($params->email))
+        {
+            $this->email = $params->email;
+        }
     }
 
     /**
@@ -85,6 +91,7 @@ class ContactModel extends My_Model_Abstract
             "firstName"   => $this->firstName,
             "lastName"    => $this->lastName,
             "phoneNumber" => $this->phoneNumber,
+            "email" => $this->email,
         ];
     }
 
@@ -101,6 +108,11 @@ class ContactModel extends My_Model_Abstract
         }
 
         if (strcmp($this->lastName, ""))
+        {
+            return false;
+        }
+
+        if (strcmp($this->email, ""))
         {
             return false;
         }

@@ -254,6 +254,9 @@ $r->addRoute('api.computers.grid-list', new R('api/v1/computers/grid-list',     
 $r->addRoute('api.peripherals',           new R('api/v1/peripherals/:deviceId',        ['module' => 'api', 'controller' => 'peripherals', 'action' => 'index', 'deviceId' => false]));
 $r->addRoute('api.peripherals.grid-list', new R('api/v1/peripherals/grid-list',        ['module' => 'api', 'controller' => 'peripherals', 'action' => 'grid-list']));
 
+$r->addRoute('api.rms',                     new R('api/v1/rms/:rmsId',                   ['module' => 'api', 'controller' => 'rms', 'action' => 'index', 'rmsId' => false]));
+$r->addRoute('api.rms.to-shopify',          new R('api/v1/rms/to-shopify/:rmsId',        ['module' => 'api', 'controller' => 'rms', 'action' => 'to-shopify', 'rmsId' => false]));
+
 // API for clients
 
 $r->addRoute('api.clients',           new R('api/v1/clients/:clientId', ['module' => 'api', 'controller' => 'client', 'action' => 'index', 'clientId' => false]));

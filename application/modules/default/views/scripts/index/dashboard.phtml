@@ -18,8 +18,11 @@ $client = $this->client;
 
 /* @var $rmsUpload RmsUploadEntity */
 $rmsUpload = $this->SelectedRmsUpload();
-
 $hasRmsUpload = $rmsUpload instanceof RmsUploadEntity;
+
+$dealerSettings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::with('ShopSettings')->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+$shopSettings = $dealerSettings->shopSettings;
+$hasShopify = $shopSettings->shopifyName!='';
 
 ?>
 <div class="container">
@@ -99,12 +102,33 @@ $hasRmsUpload = $rmsUpload instanceof RmsUploadEntity;
                 </li>
             <?php endif ?>
 
+            <?php if ($hasRmsUpload && $hasShopify) { ?>
+                <li role="presentation">
+                    <a href="#shopify" aria-controls="messages" role="tab" data-toggle="tab">Shopify</a>
+                </li>
+            <?php } ?>
+
         </ul>
         <div class="panel panel-default">
             <div class="panel-body">
 
                 <div class="tab-content">
                     <?php if ($hasRmsUpload) : ?>
+                        <?php if ($hasShopify) { ?>
+                            <div role="tabpanel" class="tab-pane" id="shopify">
+                                <button type="button" class="btn btn-primary" onclick="toShopify(this);">Export Supplies for this RMS upload to Shopify</button>
+                                <div id="shopify-result" style="display:none"></div>
+                            </div>
+                            <script>
+                                function toShopify(btn) {
+                                    //btn.hide();
+                                    $('#shopify-result').text('exporting...').show();
+                                    $.post('/api/v1/rms/to-shopify/<?= $rmsUpload->id ?>', [], function(response) {
+                                        $('#shopify-result').html(response.message);
+                                    }, 'json');
+                                }
+                            </script>
+                        <?php } ?>
                         <?php if (My_Feature::canAccess(My_Feature::ASSESSMENT)) : ?>
                             <div role="tabpanel" class="tab-pane active" id="assessments">
                                 <h3>Assess</h3>
