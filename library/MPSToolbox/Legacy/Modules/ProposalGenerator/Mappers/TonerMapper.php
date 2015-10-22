@@ -867,7 +867,6 @@ WHERE `toners`.`id` IN ({$tonerIdList})
     public function getTonerPricingForExport ($manufacturerId, $dealerId)
     {
         $db = Zend_Db_Table::getDefaultAdapter();
-        $db->beginTransaction();
 
         $select = $db->select()
                      ->from(['t' => 'toners'], ['toners_id' => 'id', 'sku', 'name', 'yield', 'imageFile', "systemCost" => "cost"])
@@ -905,6 +904,66 @@ WHERE `toners`.`id` IN ({$tonerIdList})
         }
 
         return $fieldList;
+    }
+
+    public function getTonerMatchupForExport($manufacturerId, $dealerId)
+    {
+        $db = Zend_Db_Table::getDefaultAdapter();
+
+        $select = $db->select()
+            ->from(['t' => 'toners'], ['toners_id' => 'id', 'sku'])
+            ->joinLeft(['dt' => 'device_toners'], 'dt.toner_id = t.id', ['master_device_id'])
+            ->joinLeft(['md' => 'master_devices'], 'dt.master_device_id = md.id', ['modelName'])
+            ->joinLeft(['tm' => 'manufacturers'], 'tm.id = t.manufacturerId', ['fullname'])
+            ->joinLeft(['tc' => 'toner_colors'], 'tc.id = t.tonerColorId', ['name AS toner_color'])
+            ->joinLeft(['dta' => 'dealer_toner_attributes'], "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", ['cost', 'dealerSku'])
+            ->where("t.manufacturerId in (select manufacturerId from master_devices where isSystemDevice=1)")
+            ->group('t.id')
+            ->order(['tm.fullname', 't.sku']);
+
+        if ($manufacturerId > 0)
+        {
+            $select->where("manufacturerId = ?", $manufacturerId);
+        }
+
+        $stmt   = $db->query($select);
+        $result = $stmt->fetchAll();
+
+        $fieldList = [];
+        foreach ($result as $value)
+        {
+
+/*
+        self::TONER_MATCHUP_DEVICE_NAME,
+        self::TONER_MATCHUP_MANUFACTURER,
+        self::TONER_MATCHUP_OEM_TONER_SKU,
+        self::TONER_MATCHUP_OEM_DEALER_TONER_SKU,
+        self::TONER_MATCHUP_OEM_DEALER_COST,
+        self::TONER_MATCHUP_COLOR,
+        self::TONER_MATCHUP_COMPATIBLE_VENDOR_NAME,
+        self::TONER_MATCHUP_COMPATIBLE_VENDOR_SKU,
+        self::TONER_MATCHUP_COMPATIBLE_DEALER_SKU,
+        self::TONER_MATCHUP_COMPATIBLE_YIELD,
+        self::TONER_MATCHUP_COMPATIBLE_DEALER_COST,
+*/
+
+            $fieldList [] = [
+                $value ['modelName'],
+                $value ['fullname'],
+                $value ['sku'],
+                $value ['dealerSku'],
+                $value ['cost'],
+                $value ['toner_color'],
+                '',
+                '',
+                '',
+                '',
+                ''
+            ];
+        }
+
+        return $fieldList;
+
     }
 
     /**

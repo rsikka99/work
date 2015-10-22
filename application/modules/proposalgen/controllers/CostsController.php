@@ -1019,10 +1019,11 @@ class Proposalgen_CostsController extends Action
             }
             else if ($importType == "matchup")
             {
+                $manufacturerId      = $this->_getParam('manufacturer', false);
                 $filename            = "system_toner_matchup.csv";
                 $tonerMatchupService = new TonerMatchupImportService();
                 $fieldTitles         = $tonerMatchupService->csvHeaders;
-                $fieldRows           = [];
+                $fieldRows           = TonerMapper::getInstance()->getTonerMatchupForExport($manufacturerId, $this->_dealerId);
             }
         }
         catch (Exception $e)
