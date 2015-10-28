@@ -273,9 +273,7 @@ class Admin_DealerController extends Action
                 if ($form->isValid($postData))
                 {
                     $formValues = $form->getValues($postData);
-
                     $dealerRmsProviderService->updateDealerRmsProviders($dealerId, $formValues);
-
                     $this->_flashMessenger->addMessage(['success' => "Dealer RMS Providers successfully updated"]);
                     $this->redirectToRoute('admin.dealers.view', ['id' => $dealerId]);
                 }
@@ -283,7 +281,12 @@ class Admin_DealerController extends Action
         }
         else
         {
-            $form->populate(['rmsProviderIds' => $dealerRmsProviderService->getDealerRmsProvidersAsArray($dealerId)]);
+            $arr=['rmsProviderIds' => $dealerRmsProviderService->getDealerRmsProvidersAsArray($dealerId)];
+            $dealerSettings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings($dealerId);
+            if ($dealerSettings && $dealerSettings->shopSettings) {
+                $arr['rmsUri'] = $dealerSettings->shopSettings->rmsUri;
+            }
+            $form->populate($arr);
         }
 
         $this->_pageTitle = ['Edit RMS Providers for: ' . $dealer->dealerName, 'Dealers', 'System'];

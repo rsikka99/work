@@ -3,6 +3,7 @@ namespace MPSToolbox\Legacy\Modules\Admin\Services;
 
 use MPSToolbox\Legacy\Modules\Admin\Mappers\DealerRmsProviderMapper;
 use MPSToolbox\Legacy\Modules\Admin\Models\DealerRmsProviderModel;
+use MPSToolbox\Settings\Entities\DealerSettingsEntity;
 use Tangent\Service\BaseService;
 
 /**
@@ -25,6 +26,14 @@ class DealerRmsProvidersService extends BaseService
     {
         $currentRmsProviderRmsProviderIds = $this->getDealerRmsProvidersAsArray($dealerId);
         $dealerRmsProviderMapper          = DealerRmsProviderMapper::getInstance();
+
+        if (isset($data['rmsUri'])) {
+            $dealerSettings = DealerSettingsEntity::getDealerSettings($dealerId);
+            if ($dealerSettings && $dealerSettings->shopSettings) {
+                $dealerSettings->shopSettings->rmsUri = $data['rmsUri'];
+                $dealerSettings->shopSettings->save();
+            }
+        }
 
         if (isset($data['rmsProviderIds']))
         {

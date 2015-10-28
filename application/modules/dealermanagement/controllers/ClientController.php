@@ -114,6 +114,10 @@ class Dealermanagement_ClientController extends Action
         $this->view->form = $form;
     }
 
+    public function ordersAction() {
+        $this->_pageTitle = ['Supply Orders', 'Your Clients', 'Company'];
+    }
+
     /**
      * Create a client
      */

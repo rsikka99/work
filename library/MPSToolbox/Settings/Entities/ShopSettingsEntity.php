@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
  * @property float hardwareMargin
  * @property float oemTonerMargin
  * @property float compatibleTonerMargin
+ * @property string rmsUri
  */
 class ShopSettingsEntity extends EloquentModel
 {

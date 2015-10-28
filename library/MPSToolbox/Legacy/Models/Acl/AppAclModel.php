@@ -93,6 +93,17 @@ class AppAclModel extends Zend_Acl
         $this->addRole(self::ROLE_MASTER_DEVICE_ADMINISTRATOR);
     }
 
+    //override for a faster implementation, the original method takes a lot of wall time
+    public function get($resource)
+    {
+        if (is_object($resource)) {
+            $resource=$resource->getResourceId();
+        }
+        $isset = isset($this->_resources[$resource]['instance']);
+        if ($isset) return $this->_resources[$resource]['instance'];
+        return null;
+    }
+
     /**
      * Returns true if and only if the Role has access to the Resource
      *

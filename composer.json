@@ -23,7 +23,9 @@
     "lrobert/gravatar"            : "0.1.*",
     "rediska/rediska"             : "0.5.10",
     "szymach/c-pchart"            : "1.*",
-    "doctrine/orm"                : "*"
+    "doctrine/orm"                : "*",
+    "guzzlehttp/guzzle"           : "~6.0",
+    "cdyweb/http-adapter"         : ">=0.2.1"
   },
   "require-dev": {
     "phpunit/phpunit": "3.7.x",
