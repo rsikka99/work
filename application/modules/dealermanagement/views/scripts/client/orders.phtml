@@ -1,0 +1,94 @@
+<div class="container">
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Number of supplies</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><a href="javascript:" onclick="toggleMe(this)" data-id="123"><i class="fa fa-fw fa-chevron-right ahref-chevron"></i> Monday, October 26, 2015</a></td>
+            <td>[PFE Supply Request] test csv</td>
+            <td>3</td>
+        </tr>
+        <tr style="display:none" id="tr-123" class="tr-details">
+            <td colspan="3">
+                <table class="table table-striped table-hover">
+                    <colgroup>
+                        <col width="20%">
+                        <col width="15%">
+                        <col width="15%">
+                        <col width="10%">
+                        <col width="20%">
+                        <col width="10%">
+                        <col width="10%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Raw device name</th>
+                            <th>Serial number</th>
+                            <th>Location</th>
+                            <th>Color</th>
+                            <th>Printer model</th>
+                            <th>Supply</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Brother HL-4150CDN series 641E</td>
+                        <td>U62499M1J242080</td>
+                        <td>Lobby</td>
+                        <td>Black</td>
+                        <td><select class="form-control"><option>Brother HL-4150CDN</option></select></td>
+                        <td><select class="form-control"><option>TN310BK</option></select></td>
+                        <td><input class="form-control" type="number" value="1"></td>
+                    </tr>
+                    <tr>
+                        <td>HP LaserJet 4345 MFP</td>
+                        <td>JPCFL00150</td>
+                        <td>Lobby</td>
+                        <td>Black</td>
+                        <td><select class="form-control"><option>HP LaserJet 4345 MFP</option></select></td>
+                        <td><select class="form-control"><option>Q5945A</option></select></td>
+                        <td><input class="form-control" type="number" value="1"></td>
+                    </tr>
+                    <tr>
+                        <td>HP LaserJet Professional M1212nf MFP</td>
+                        <td>CNJ8F53879</td>
+                        <td>HP ETHERNET MULTI-ENVIRONMENT</td>
+                        <td>Black</td>
+                        <td><select class="form-control"><option>HP LaserJet Pro M1212nf</option></select></td>
+                        <td><select class="form-control"><option>Q5945A</option></select></td>
+                        <td><input class="form-control" type="number" value="1"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p class="text-right">
+                    <button class="btn btn-primary">
+                        Go
+                    </button>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<script>
+    function toggleMe(ahref) {
+        var $el = $(ahref);
+        var id = $el.attr('data-id');
+        var $chevron = $el.find('.ahref-chevron');
+        var isExpanded = $chevron.hasClass('fa-chevron-down');
+
+        $('.tr-details').hide();
+        $('.ahref-chevron').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+
+        if (!isExpanded) {
+            $('#tr-' + id).fadeIn();
+            $chevron.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+        }
+    }
+</script>

@@ -66,6 +66,12 @@ class ClientModel extends My_Model_Abstract
     /** @var  int */
     protected $webId;
 
+    /** @var  string */
+    protected $notSupportedMasterDevices;
+
+    /** @var  string */
+    protected $deviceGroup;
+
     /**
      * @param array $params An array of data to populate the model with
      */
@@ -111,6 +117,16 @@ class ClientModel extends My_Model_Abstract
             $this->webId = $params->webId;
         }
 
+        if (isset($params->notSupportedMasterDevices) && !is_null($params->notSupportedMasterDevices))
+        {
+            if (is_array($params->notSupportedMasterDevices)) $params->notSupportedMasterDevices = trim(str_replace(',,',',',implode(',', $params->notSupportedMasterDevices)),',');
+            $this->notSupportedMasterDevices = $params->notSupportedMasterDevices;
+        }
+        if (isset($params->deviceGroup) && !is_null($params->deviceGroup))
+        {
+            $this->deviceGroup = $params->deviceGroup;
+        }
+
     }
 
     /**
@@ -126,6 +142,8 @@ class ClientModel extends My_Model_Abstract
             "legalName"     => $this->legalName,
             "employeeCount" => $this->employeeCount,
             "webId" => $this->webId,
+            "notSupportedMasterDevices" => $this->notSupportedMasterDevices,
+            "deviceGroup" => $this->deviceGroup,
         ];
     }
 

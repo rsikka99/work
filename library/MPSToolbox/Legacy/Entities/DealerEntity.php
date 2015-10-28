@@ -27,6 +27,10 @@ class DealerEntity extends EloquentModel
     protected $table      = 'dealers';
     public $timestamps = false;
 
+    public static function getDealerId() {
+        return \Zend_Auth::getInstance()->getIdentity()->dealerId;
+    }
+
     /**
      * Additional date fields that should be mutated
      *

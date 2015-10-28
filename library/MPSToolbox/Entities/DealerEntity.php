@@ -23,6 +23,10 @@ class DealerEntity extends BaseEntity {
     /** @Column(type="string") */
     private $dealerName;
 
+    public static function getDealerId() {
+        return \Zend_Auth::getInstance()->getIdentity()->dealerId;
+    }
+
     /**
      * @return int
      */

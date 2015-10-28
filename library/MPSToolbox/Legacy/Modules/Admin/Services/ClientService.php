@@ -230,17 +230,14 @@ class ClientService
     {
         $client  = ClientMapper::getInstance()->find($clientId);
         $address = AddressMapper::getInstance()->getAddressByClientId($clientId);
-
-        $contact            = ContactMapper::getInstance()->getContactByClientId($clientId);
+        $contact = ContactMapper::getInstance()->getContactByClientId($clientId);
 
         $combinedClientData = $client->toArray();
-        if ($address)
-        {
-            $combinedClientData = array_merge($combinedClientData, $address->toArray());
+        if ($address) {
+            $combinedClientData = array_merge($address->toArray(), $combinedClientData);
         }
-        if ($contact)
-        {
-            $combinedClientData = array_merge($combinedClientData, $contact->toArray());
+        if ($contact) {
+            $combinedClientData = array_merge($contact->toArray(), $combinedClientData);
         }
         $this->getForm()->populate($combinedClientData);
     }

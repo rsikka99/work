@@ -27,6 +27,11 @@ class DealerRmsProvidersForm extends Zend_Form
             'multiOptions' => $rmsProviderRmsProviders,
         ]);
 
+        $this->addElement('text', 'rmsUri', [
+            'label'       => 'RMS API URL',
+            'filters'     => ['StringTrim'],
+        ]);
+
         /**
          * Form Actions
          */

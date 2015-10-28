@@ -3,6 +3,7 @@
 namespace MPSToolbox\Settings\Entities;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use MPSToolbox\Entities\DealerEntity;
 
 /**
  * Class DealerSettingsEntity
@@ -30,6 +31,24 @@ class DealerSettingsEntity extends EloquentModel
     protected $primaryKey = 'dealerId';
     protected $table      = 'dealer_settings';
     public    $timestamps = false;
+
+    public static function getDealerSettings($dealerId=null) {
+        if (!$dealerId) {
+            $dealerId = DealerEntity::getDealerId();
+        }
+        if (!$dealerId) return false;
+        $settings = static::with('ShopSettings');
+        if (!$settings) return false;
+        $dealerSettings = $settings->find($dealerId);
+        return $dealerSettings;
+    }
+
+    public static function hasShopify() {
+        $dealerSettings = self::getDealerSettings();
+        if (!$dealerSettings) return false;
+        $shopSettings = $dealerSettings->shopSettings;
+        return $shopSettings->shopifyName!='';
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
