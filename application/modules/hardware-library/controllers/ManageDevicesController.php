@@ -122,7 +122,8 @@ class HardwareLibrary_ManageDevicesController extends Action
             }
             else if ($masterDeviceId !== false && $masterDeviceId !== 0 && $firstLoad)
             {
-                $tonerCount = TonerMapper::getInstance()->fetchTonersAssignedToDeviceWithMachineCompatibility($masterDeviceId, null, true);
+                //$tonerCount = TonerMapper::getInstance()->fetchTonersAssignedToDeviceWithMachineCompatibility($masterDeviceId, null, true);
+                $tonerCount = TonerMapper::getInstance()->fetchTonersAssignedToDeviceForCurrentDealer($masterDeviceId, true);
             }
 
             $jqGridService->setRecordCount($tonerCount);
@@ -137,7 +138,8 @@ class HardwareLibrary_ManageDevicesController extends Action
             }
             else if ($masterDeviceId !== false && $masterDeviceId !== 0 && $firstLoad)
             {
-                $toners = TonerMapper::getInstance()->fetchTonersAssignedToDeviceWithMachineCompatibility($masterDeviceId, $sortOrder);
+                //$toners = TonerMapper::getInstance()->fetchTonersAssignedToDeviceWithMachineCompatibility($masterDeviceId, $sortOrder);
+                $toners = TonerMapper::getInstance()->fetchTonersAssignedToDeviceForCurrentDealer($masterDeviceId);
             }
 
             $jqGridService->setRows($toners);
@@ -585,36 +587,35 @@ class HardwareLibrary_ManageDevicesController extends Action
 
                             foreach (TonerMapper::getInstance()->find($tonerIds) as $toner)
                             {
-                                $newTonerIds[(int)$toner->id] = $toner;
+                                $newTonerIds[(int)$toner->id] = true;
                             }
 
                             //foreach (TonerMapper::getInstance()->fetchTonersAssignedToDevice($masterDeviceId) as $toner)
-                            foreach (TonerMapper::getInstance()->fetchTonersAssignedToDeviceWithMachineCompatibility($masterDeviceId) as $toner)
+                            foreach (TonerMapper::getInstance()->fetchTonersAssignedToDeviceForCurrentDealer($masterDeviceId) as $line)
                             {
-
-                                $currentToners[(int)$toner->id] = $toner;
+                                $currentToners[$line['id']] = true;
                             }
 
                             // Existing Toners
-                            foreach ($currentToners as $toner)
+                            foreach (array_keys($currentToners) as $id)
                             {
-                                if (isset($newTonerIds[(int)$toner->id]))
+                                if (isset($newTonerIds[$id]))
                                 {
-                                    $finalTonerIdList[(int)$toner->id] = true;
+                                    $finalTonerIdList[$id] = true;
                                 }
                                 else
                                 {
-                                    $tonerIdsToDelete[(int)$toner->id] = true;
+                                    $tonerIdsToDelete[$id] = true;
                                 }
                             }
 
                             // Toners being added
-                            foreach ($newTonerIds as $toner)
+                            foreach (array_keys($newTonerIds) as $id)
                             {
-                                if (!isset($finalTonerIdList[(int)$toner->id]))
+                                if (!isset($finalTonerIdList[$id]))
                                 {
-                                    $tonerIdsToAdd[(int)$toner->id]    = true;
-                                    $finalTonerIdList[(int)$toner->id] = true;
+                                    $tonerIdsToAdd[$id]    = true;
+                                    $finalTonerIdList[$id] = true;
                                 }
                             }
 
