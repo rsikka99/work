@@ -1,0 +1,9 @@
+toner_vendor_rankings:
+    - { tonerVendorRankingSetId: '3', manufacturerId: '3', rank: '0' }
+    - { tonerVendorRankingSetId: '4', manufacturerId: '3', rank: '0' }
+    - { tonerVendorRankingSetId: '9', manufacturerId: '3', rank: '0' }
+    - { tonerVendorRankingSetId: '10', manufacturerId: '3', rank: '0' }
+    - { tonerVendorRankingSetId: '1108', manufacturerId: '43', rank: '0' }
+    - { tonerVendorRankingSetId: '1108', manufacturerId: '3', rank: '1' }
+    - { tonerVendorRankingSetId: '1108', manufacturerId: '46', rank: '2' }
+    - { tonerVendorRankingSetId: '1108', manufacturerId: '47', rank: '3' }

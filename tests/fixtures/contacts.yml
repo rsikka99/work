@@ -1,0 +1,2 @@
+contacts:
+    - { id: '86', clientId: '5', firstName: John, lastName: Smith, phoneNumber: '123', email: john@smith.com }

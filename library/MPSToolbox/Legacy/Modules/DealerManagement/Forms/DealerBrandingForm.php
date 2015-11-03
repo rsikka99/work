@@ -46,6 +46,15 @@ class DealerBrandingForm extends Zend_Form
             ],
         ]);
 
+        $this->addElement('text', 'dealerEmail', [
+            'label'      => 'Dealer E-mail:',
+            'required'   => true,
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                ['validator' => 'StringLength', 'options' => [2, 255]],
+            ],
+        ]);
+
         $this->addElement('text', 'shortDealerName', [
             'label'      => 'Shortened Dealer Name:',
             'required'   => true,

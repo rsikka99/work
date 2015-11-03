@@ -3,11 +3,25 @@
 class My_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTestCase {
 
     public $fixture_fk = [
+        'dealer_features'=>['features'],
         'users'=>['dealers'],
-        'clients'=>['dealers'],
+        'clients'=>['addresses','dealers'],
+        'addresses'=>['countries'],
+        'rms_uploads'=>['users', 'rms_providers','dealers','dealer_rms_providers','rms_devices', 'rms_upload_rows' ],
+        'device_instances'=>['rms_uploads','rms_devices'],
+        'rms_devices'=>['manufacturers'],
+        'master_devices'=>['toner_configs','toners','manufacturers'],
+        'toners'=>['users','manufacturers','toner_configs','toner_colors'],
+        'device_swap_reasons'=>['dealers','device_swap_reason_categories'],
+        'ext_computer'=>['ext_hardware','dealers','ext_dealer_hardware'],
+        'dealer_settings'=>['toner_vendor_ranking_sets','fleet_settings','quote_settings','generic_settings','optimization_settings','shop_settings'],
     ];
 
     public $fixtures = [];
+    private $_fixturesLoaded = [];
+
+    /** @var PHPUnit_Extensions_Database_DataSet_YamlDataSet */
+    private $_fixtureDataset = null;
     private $_connectionMock;
 
     protected function getConnection()
@@ -23,6 +37,8 @@ class My_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTestCase {
     }
 
     private function loadFixture($name) {
+        if (isset($this->_fixturesLoaded[$name])) return;
+
         if (isset($this->fixture_fk[$name])) {
             foreach ($this->fixture_fk[$name] as $fk) {
                 if (!isset($this->_fixturesLoaded[$fk])) {

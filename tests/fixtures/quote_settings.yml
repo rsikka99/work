@@ -1,3 +1,4 @@
 quote_settings:
-    - { id: '1', defaultDeviceMargin: '15.000000000', defaultPageMargin: '45.000000000' }
+    - { id: '1', defaultDeviceMargin: '25.000000000', defaultPageMargin: '50.000000000' }
     - { id: '2', defaultDeviceMargin: '15.000000000', defaultPageMargin: '45.000000000' }
+    - { id: '3', defaultDeviceMargin: '15.000000000', defaultPageMargin: '45.000000000' }

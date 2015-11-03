@@ -24,7 +24,7 @@ class DefaultAclModel
     const RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD      = 'default__auth__forgot-password';
     const RESOURCE_DEFAULT_AUTH_FORGOTPASSWORDRESET = 'default__auth__forgot-password-reset';
     const RESOURCE_DEFAULT_AUTH_RESETPASSWORD       = 'default__auth__reset-password';
-
+    const RESOURCE_DEFAULT_CRON_WILDCARD            = 'default__cron__%';
 
     /**
      * Sets up ACL resources and access for a module
@@ -59,6 +59,7 @@ class DefaultAclModel
         $acl->addResource(self::RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD);
         $acl->addResource(self::RESOURCE_DEFAULT_AUTH_FORGOTPASSWORDRESET);
         $acl->addResource(self::RESOURCE_DEFAULT_AUTH_RESETPASSWORD);
+        $acl->addResource(self::RESOURCE_DEFAULT_CRON_WILDCARD);
     }
 
     /**
@@ -83,6 +84,8 @@ class DefaultAclModel
         $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEFAULT_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
         $acl->allow(AppAclModel::ROLE_COMPANY_ADMINISTRATOR, self::RESOURCE_DEFAULT_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
         $acl->allow(AppAclModel::ROLE_SYSTEM_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
+
+        $acl->allow(AppAclModel::ROLE_GUEST, self::RESOURCE_DEFAULT_CRON_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
     }
 
 }

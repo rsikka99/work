@@ -26,11 +26,11 @@ ini_set("display_errors", 1);
 error_reporting(E_ALL);
 
 // Define application environment.
-defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'testing'));
 
 // Create application, bootstrap, and run
 global $application;
-$application = new Zend_Application('production', array(
+$application = new Zend_Application('testing', array(
     'config' => array(
         APPLICATION_PATH . '/configs/global.php',
         APPLICATION_PATH . '/configs/testing.local.php',

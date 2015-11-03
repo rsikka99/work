@@ -1,0 +1,2 @@
+client_settings:
+    - { clientId: '5', currentFleetSettingsId: '5', proposedFleetSettingsId: '6', genericSettingsId: '3', optimizationSettingsId: '3', quoteSettingsId: '3' }
