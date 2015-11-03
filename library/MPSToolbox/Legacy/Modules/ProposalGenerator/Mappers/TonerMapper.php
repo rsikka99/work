@@ -430,7 +430,7 @@ SELECT
     dealer_toner_attributes.cost        AS dealerCost,
     toners.yield,
     toners.tonerColorId,
-    device_toners.isSystemDevice,
+    device_toners.isSystemDevice       AS deviceTonersIsSystemDevice,
     (SELECT GROUP_CONCAT(CONCAT(manufacturers.fullname, ' ', master_devices.modelName) SEPARATOR ';,')
      FROM device_toners AS dt2
          LEFT JOIN master_devices ON master_devices.id = dt2.master_device_id
