@@ -132,7 +132,9 @@ foreach ($db->fetchAll("
                 function shopifySync(btn) {
                     $(btn).attr('disabled','disabled').text('Busy...');
                     var url = 'http://proxy.mpstoolbox.com/shopify/sync_customer.php?id=<?= $client_id ?>&dealerId=<?= \MPSToolbox\Entities\DealerEntity::getDealerId() ?>&origin=<?= $_SERVER['HTTP_HOST'] ?>';
-                    $.getScript(url, function() {});
+                    //$.getScript(url, function() {});
+                    $('body').append('<img style="display:none" src="'+url+'">');
+                    window.setTimeout(sync_customer_done, 1000);
                 }
             </script>
 <?php } ?>

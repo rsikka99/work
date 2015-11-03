@@ -3,10 +3,10 @@ device_toners:
     - { toner_id: '2', master_device_id: '1', userId: '1', isSystemDevice: '1' }
     - { toner_id: '3', master_device_id: '1', userId: '1', isSystemDevice: '1' }
     - { toner_id: '4', master_device_id: '1', userId: '1', isSystemDevice: '1' }
-    - { toner_id: '5', master_device_id: '2', userId: '1', isSystemDevice: '1' }
-    - { toner_id: '6', master_device_id: '3', userId: '1', isSystemDevice: '1' }
-    - { toner_id: '7', master_device_id: '3', userId: '1', isSystemDevice: '1' }
-    - { toner_id: '8', master_device_id: '4', userId: '1', isSystemDevice: '1' }
+    - { toner_id: '132', master_device_id: '1', userId: '1', isSystemDevice: '1' }
+    - { toner_id: '374', master_device_id: '1', userId: '1', isSystemDevice: '1' }
+    - { toner_id: '375', master_device_id: '1', userId: '1', isSystemDevice: '1' }
+    - { toner_id: '376', master_device_id: '1', userId: '1', isSystemDevice: '1' }
     - { toner_id: '9', master_device_id: '4', userId: '1', isSystemDevice: '1' }
     - { toner_id: '10', master_device_id: '5', userId: '1', isSystemDevice: '1' }
     - { toner_id: '11', master_device_id: '6', userId: '1', isSystemDevice: '1' }

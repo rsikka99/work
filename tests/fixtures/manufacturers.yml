@@ -1,12 +1,10 @@
 manufacturers:
     - { id: '1', fullname: Brother, displayname: Brother, isDeleted: '0' }
-    - { id: '3', fullname: 'Compatible Vendor 1', displayname: 'Comp. Vendor 1', isDeleted: '0' }
+    - { id: '3', fullname: 'Example Compatible Vendor 1', displayname: 'Example Comp. Vendor 1', isDeleted: '0' }
     - { id: '4', fullname: Dell, displayname: Dell, isDeleted: '0' }
     - { id: '5', fullname: Hewlett-Packard, displayname: HP, isDeleted: '0' }
-    - { id: '6', fullname: 'Image Projections West Inc', displayname: 'Image Projections West Inc', isDeleted: '0' }
+    - { id: '6', fullname: 'Example Compatible Vendor 2', displayname: 'Example Comp. Vendor 2', isDeleted: '0' }
     - { id: '7', fullname: Lexmark, displayname: Lexmark, isDeleted: '0' }
-    - { id: '8', fullname: 'Horizon USA', displayname: 'Horizon USA', isDeleted: '0' }
-    - { id: '9', fullname: 'Tech Optics Inc', displayname: 'Tech Optics Inc', isDeleted: '0' }
     - { id: '10', fullname: Xerox, displayname: Xerox, isDeleted: '0' }
     - { id: '11', fullname: Canon, displayname: Canon, isDeleted: '0' }
     - { id: '12', fullname: Imagistics, displayname: Imagistics, isDeleted: '0' }
@@ -26,6 +24,32 @@ manufacturers:
     - { id: '26', fullname: Panasonic, displayname: Panasonic, isDeleted: '0' }
     - { id: '27', fullname: Copystar, displayname: Copystar, isDeleted: '0' }
     - { id: '28', fullname: Lanier, displayname: Lanier, isDeleted: '0' }
-    - { id: '29', fullname: 'Media Science', displayname: 'Media Science', isDeleted: '0' }
-    - { id: '30', fullname: 'Print Rite', displayname: 'Print Rite', isDeleted: '0' }
     - { id: '31', fullname: Memjet, displayname: Memjet, isDeleted: '0' }
+    - { id: '35', fullname: Muratech, displayname: Muratech, isDeleted: '0' }
+    - { id: '36', fullname: 'Source Technologies', displayname: 'Source Technologies', isDeleted: '0' }
+    - { id: '37', fullname: 'M&A GLOBAL CARTRIDGES', displayname: 'M&A GLOBAL CARTRIDGES', isDeleted: '0' }
+    - { id: '38', fullname: 'Premium Compatibles Brand', displayname: 'Premium Compatibles Brand', isDeleted: '0' }
+    - { id: '39', fullname: 'PITNEY BOWES', displayname: 'PITNEY BOWES', isDeleted: '0' }
+    - { id: '40', fullname: 'United Stationers', displayname: 'United Stationers', isDeleted: '0' }
+    - { id: '41', fullname: Rhinotek, displayname: Rhinotek, isDeleted: '0' }
+    - { id: '42', fullname: NEC, displayname: NEC, isDeleted: '0' }
+    - { id: '43', fullname: MSE, displayname: MSE, isDeleted: '0' }
+    - { id: '44', fullname: 'Print-Rite N.A., Inc.', displayname: Print-Rite, isDeleted: '0' }
+    - { id: '45', fullname: 'Clarity Imaging Technologies', displayname: 'Clarity Imaging Technologies', isDeleted: '0' }
+    - { id: '46', fullname: 'Parts Now', displayname: 'Parts Now', isDeleted: '0' }
+    - { id: '47', fullname: 'LMI Solutions', displayname: LMI, isDeleted: '0' }
+    - { id: '48', fullname: RTP, displayname: RTP, isDeleted: '0' }
+    - { id: '54', fullname: Phillips, displayname: Phillips, isDeleted: '0' }
+    - { id: '55', fullname: 'Multitech Office Machines', displayname: Multitech, isDeleted: '0' }
+    - { id: '56', fullname: 'International Laser Group', displayname: ILG, isDeleted: '0' }
+    - { id: '57', fullname: 'Print Logic', displayname: 'Print Logic', isDeleted: '0' }
+    - { id: '58', fullname: Synnex, displayname: Synnex, isDeleted: '0' }
+    - { id: '59', fullname: '500 Series', displayname: '500 Series', isDeleted: '0' }
+    - { id: '60', fullname: 'Test Vendor', displayname: Test, isDeleted: '0' }
+    - { id: '61', fullname: 'Zero Waste', displayname: 'Zero Waste', isDeleted: '0' }
+    - { id: '62', fullname: 'Evergreen Imaging Solutions', displayname: Evergreen, isDeleted: '0' }
+    - { id: '63', fullname: 'Clover Technologies', displayname: Clover, isDeleted: '0' }
+    - { id: '64', fullname: Epson, displayname: Epson, isDeleted: '0' }
+    - { id: '65', fullname: 'Printer Essentials Tier T', displayname: 'PE TT', isDeleted: '0' }
+    - { id: '66', fullname: 'Printer Essentials Tier Z', displayname: 'PE TZ', isDeleted: '0' }
+    - { id: '67', fullname: 'Printer Essentials Tier Q', displayname: 'PE TQ', isDeleted: '0' }

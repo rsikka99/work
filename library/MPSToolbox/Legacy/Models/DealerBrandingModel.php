@@ -25,6 +25,11 @@ class DealerBrandingModel extends My_Model_Abstract
     /**
      * @var string
      */
+    public $dealerEmail;
+
+    /**
+     * @var string
+     */
     public $shortDealerName;
 
     /**
@@ -298,6 +303,11 @@ class DealerBrandingModel extends My_Model_Abstract
             $this->dealerName = $params->dealerName;
         }
 
+        if (isset($params->dealerEmail) && !is_null($params->dealerEmail))
+        {
+            $this->dealerEmail = $params->dealerEmail;
+        }
+
         if (isset($params->shortDealerName) && !is_null($params->shortDealerName))
         {
             $this->shortDealerName = $params->shortDealerName;
@@ -553,6 +563,7 @@ class DealerBrandingModel extends My_Model_Abstract
         return [
             'dealerId'                            => $this->dealerId,
             'dealerName'                          => $this->dealerName,
+            'dealerEmail'                          => $this->dealerEmail,
             'shortDealerName'                     => $this->shortDealerName,
             'mpsProgramName'                      => $this->mpsProgramName,
             'shortMpsProgramName'                 => $this->shortMpsProgramName,

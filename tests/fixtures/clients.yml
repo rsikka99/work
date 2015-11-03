@@ -1,9 +1,9 @@
 clients:
-    - { id: '1', dealerId: '1', accountNumber: '0000001', companyName: 'Tangent MTW', legalName: 'Tangent MTW Incorporated', employeeCount: '12' }
-    - { id: '2', dealerId: '1', accountNumber: '0000002', companyName: Starbucks, legalName: Starbucks, employeeCount: '12000' }
-    - { id: '3', dealerId: '1', accountNumber: '0000003', companyName: Novellis, legalName: 'Novellis co-operatives', employeeCount: '1200' }
-    - { id: '4', dealerId: '1', accountNumber: '0000004', companyName: Samsung, legalName: 'Samsung Incorporated', employeeCount: '9800' }
-    - { id: '5', dealerId: '2', accountNumber: '0000001', companyName: 'Tangent MTW', legalName: 'Tangent MTW Incorporated', employeeCount: '12' }
-    - { id: '6', dealerId: '2', accountNumber: '0000002', companyName: Starbucks, legalName: Starbucks, employeeCount: '12000' }
-    - { id: '7', dealerId: '2', accountNumber: '0000003', companyName: Novellis, legalName: 'Novellis co-operatives', employeeCount: '1200' }
-    - { id: '8', dealerId: '2', accountNumber: '0000004', companyName: Samsung, legalName: 'Samsung Incorporated', employeeCount: '9800' }
+    - { id: '1', dealerId: '1', accountNumber: '', companyName: 'Kawartha Child Care Services', legalName: '', employeeCount: '10', webId: null, notSupportedMasterDevices: null, deviceGroup: null }
+    - { id: '2', dealerId: '1', accountNumber: '', companyName: 'Sample Company', legalName: '', employeeCount: '20', webId: null, notSupportedMasterDevices: null, deviceGroup: null }
+    - { id: '3', dealerId: '1', accountNumber: '', companyName: LIAT, legalName: '', employeeCount: '50', webId: null, notSupportedMasterDevices: null, deviceGroup: null }
+    - { id: '4', dealerId: '1', accountNumber: '', companyName: 'West Jefferson Medical Clinic', legalName: '', employeeCount: '3000', webId: null, notSupportedMasterDevices: null, deviceGroup: null }
+    - { id: '5', dealerId: '2', accountNumber: '', companyName: 'Unicomer Barbados Ltd', legalName: '', employeeCount: '250', webId: null, notSupportedMasterDevices: '123,321', deviceGroup: '14f27877-e667-42b0-a2de-06d17f1173a0' }
+    - { id: '6', dealerId: '2', accountNumber: '', companyName: 'Beneke Welding', legalName: '', employeeCount: '200', webId: null, notSupportedMasterDevices: null, deviceGroup: null }
+    - { id: '7', dealerId: '2', accountNumber: '', companyName: 'Beneke Welding', legalName: '', employeeCount: '200', webId: null, notSupportedMasterDevices: null, deviceGroup: null }
+    - { id: '8', dealerId: '2', accountNumber: '', companyName: 'Fuccillo Auto', legalName: '', employeeCount: '250', webId: null, notSupportedMasterDevices: null, deviceGroup: null }

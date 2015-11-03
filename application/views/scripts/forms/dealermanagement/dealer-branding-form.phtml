@@ -25,6 +25,14 @@ $form = $this->element;
                 <?= $this->RenderFormElementErrors($form->getElement('shortDealerName')) ?>
             </div>
         </div>
+        <div class="form-group <?= ($form->getElement('dealerEmail')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('dealerEmail'), ['col-sm-3']) ?>
+            <div class="col-sm-6 col-md-5 col-lg-4">
+                <?= $this->RenderFormText($form->getElement('dealerEmail')) ?>
+                <?= $this->RenderFormDescription($form->getElement('dealerEmail')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('dealerEmail')) ?>
+            </div>
+        </div>
         <div class="form-group <?= ($form->getElement('mpsProgramName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
             <?= $this->RenderFormLabel($form->getElement('mpsProgramName'), ['col-sm-3']) ?>
             <div class="col-sm-6 col-md-5 col-lg-4">

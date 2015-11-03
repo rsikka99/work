@@ -264,4 +264,20 @@ class Bootstrap extends Tangent\Bootstrap
             My_Feature::setAdapter($adapter);
         }
     }
+
+    protected function _initMailTransport()
+    {
+        //change the mail transport only if dev or test
+        //if (APPLICATION_ENV <> 'production') {
+        if (file_exists('c:')) {
+            $callback = function() {
+                return 'ZendMail_' . microtime(true) .'.tmp';
+            };
+            $fileTransport = new Zend_Mail_Transport_File([
+                'path' => APPLICATION_BASE_PATH . '/data/temp',
+                'callback'=>$callback
+            ]);
+            Zend_Mail::setDefaultTransport($fileTransport);
+        }
+    }
 }

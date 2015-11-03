@@ -1,2 +1,3 @@
 dealer_settings:
     - { dealerId: '1', currentFleetSettingsId: '1', proposedFleetSettingsId: '2', genericSettingsId: '1', optimizationSettingsId: '1', quoteSettingsId: '1', quoteValid: '7', quoteCustom: '', shopSettingsId: '1' }
+    - { dealerId: '2', currentFleetSettingsId: '2', proposedFleetSettingsId: '3', genericSettingsId: '2', optimizationSettingsId: '2', quoteSettingsId: '2', quoteValid: '7', quoteCustom: '', shopSettingsId: '2' }
