@@ -2,6 +2,7 @@
 namespace MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers;
 
 use Exception;
+use MPSToolbox\Legacy\Entities\DealerEntity;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
@@ -409,6 +410,49 @@ WHERE `device_toners`.`master_device_id` = ?';
         }
 
         return $toners;
+    }
+
+    public function fetchTonersAssignedToDeviceForCurrentDealer($masterDeviceId, $justCount=false)
+    {
+        $db = $this->getDbTable()->getAdapter();
+
+        $dealerId = intval(DealerEntity::getDealerId());
+
+        $sql = "
+SELECT
+    toners.id                           AS id,
+    toners.isSystemDevice               AS isSystemDevice,
+    manufacturers.id                    AS manufacturerId,
+    manufacturers.fullname              AS manufacturer,
+    toners.sku                          AS systemSku,
+    dealer_toner_attributes.dealerSku   AS dealerSku,
+    toners.cost                         AS systemCost,
+    dealer_toner_attributes.cost        AS dealerCost,
+    toners.yield,
+    toners.tonerColorId,
+    device_toners.isSystemDevice,
+    (SELECT GROUP_CONCAT(CONCAT(manufacturers.fullname, ' ', master_devices.modelName) SEPARATOR ';,')
+     FROM device_toners AS dt2
+         LEFT JOIN master_devices ON master_devices.id = dt2.master_device_id
+         LEFT JOIN manufacturers ON manufacturers.id = master_devices.manufacturerId
+     WHERE dt2.toner_id = device_toners.toner_id) AS device_list
+FROM `toners`
+    LEFT JOIN `device_toners` ON `device_toners`.`toner_id` = `toners`.`id`
+    LEFT JOIN `toner_colors` ON `toner_colors`.`id` = `toners`.`tonerColorId`
+    LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `toners`.`manufacturerId`
+    LEFT JOIN dealer_toner_attributes ON (dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId})
+WHERE (device_toners.isSystemDevice=1 or device_toners.userId in (select id from `users` where dealerId = {$dealerId}))
+    AND `device_toners`.`master_device_id` = ?";
+        $sql = $db->quoteInto($sql, $masterDeviceId);
+
+        $query = $db->query($sql);
+
+        $arr = $query->fetchAll();
+        if ($justCount) {
+            return count($arr);
+        }
+
+        return $arr;
     }
 
     /**
