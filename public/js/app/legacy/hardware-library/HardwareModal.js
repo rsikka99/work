@@ -43,7 +43,7 @@ define([
          */
         this.$modal = $modal;
         this.hardwareId = settings.hardwareId;
-        this.isAllowed = !(settings.isAllowed == 'undefined' || settings.isAllowed == 'false');
+        this.isAllowed = (settings.isAllowed == 'true' || settings.isAllowed == '1'); //!(settings.isAllowed == 'undefined' || settings.isAllowed == 'false');
         this.isCreatingNewHardware = (this.hardwareId === 0);
 
         /**

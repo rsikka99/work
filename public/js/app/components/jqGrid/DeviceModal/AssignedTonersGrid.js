@@ -124,6 +124,13 @@ define([
                             .attr('data-toner-id', currentRow.id)
                             .html('Unassign');
                         currentRow.action = $unassignButton.prop('outerHTML');
+                    } else {
+                        var $unassignButton = $(document.createElement('button'));
+                        $unassignButton
+                            .addClass('btn btn-xs btn-block')
+                            .attr('disabled', 'disabled')
+                            .html('Unassign');
+                        currentRow.action = $unassignButton.prop('outerHTML');
                     }
 
                     /**

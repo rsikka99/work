@@ -42,7 +42,7 @@ define([
         this.$modal = $modal;
         this.rmsUploadRowId = settings.rmsUploadRowId;
         this.deviceId = settings.deviceId;
-        this.isAllowed = !(settings.isAllowed == 'undefined' || settings.isAllowed == 'false');
+        this.isAllowed = (settings.isAllowed == 'true' || settings.isAllowed == '1'); //!(settings.isAllowed == 'undefined' || settings.isAllowed == 'false');
         this.isCreatingNewDevice = (this.deviceId === 0);
 
         /**
