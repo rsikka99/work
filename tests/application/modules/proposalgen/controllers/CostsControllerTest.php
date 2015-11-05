@@ -1,6 +1,6 @@
 <?php
 
-class Proposalgen_CostControllerTest extends My_ControllerTestCase {
+class Proposalgen_CostsControllerTest extends My_ControllerTestCase {
 
     public $fixtures = [
         'users', 'clients', 'toners', 'master_devices', 'device_toners', 'manufacturers'
@@ -56,7 +56,7 @@ class Proposalgen_CostControllerTest extends My_ControllerTestCase {
         $controller->bulkFileTonerPricingAction();
         $result = $controller->getFlashMessenger()->getCurrentMessages();
         $this->assertEquals([['success' => 'Your pricing updates have been applied successfully.']], $result);
-        $this->assertEquals([3=>['invalid'=>['New Price'=>['notFloat'=>"'#N/A' does not appear to be a float", 'notGreaterThan'=>"'#N/A' is not greater than '0'"]]]], $controller->view->errorMessages);
+        $this->assertEquals([4=>['invalid'=>['New Price'=>['notFloat'=>"'#N/A' does not appear to be a float", 'notGreaterThan'=>"'#N/A' is not greater than '0'"]]]], $controller->view->errorMessages);
     }
 
     public function test_bulkFileTonerPricingAction_comp_manufacturer() {
@@ -74,7 +74,13 @@ class Proposalgen_CostControllerTest extends My_ControllerTestCase {
         $controller->bulkFileTonerPricingAction();
         $result = $controller->getFlashMessenger()->getCurrentMessages();
         $this->assertEquals([['success' => 'Your pricing updates have been applied successfully.']], $result);
-        $this->assertEquals([3=>['invalid'=>['New Price'=>['notFloat'=>"'#N/A' does not appear to be a float", 'notGreaterThan'=>"'#N/A' is not greater than '0'"]]]], $controller->view->errorMessages);
+        $this->assertEquals(
+            [
+                3=>['invalid'=>['dealerSku'=>['invalid'=>"Duplicate SKU found: TN670"]]],
+                4=>['invalid'=>['New Price'=>['notFloat'=>"'#N/A' does not appear to be a float", 'notGreaterThan'=>"'#N/A' is not greater than '0'"]]]
+            ],
+            $controller->view->errorMessages
+        );
     }
 
     public function test_bulkFileTonerPricingAction_comp_matchup() {

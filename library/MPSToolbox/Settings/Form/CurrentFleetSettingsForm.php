@@ -56,6 +56,11 @@ class CurrentFleetSettingsForm extends \My_Form_Form
             'required'    => true,
         ]);
 
+        $this->addElement('select', 'currentLevel', [
+            'label'        => 'Pricing Level',
+            'multiOptions' => [''=>'Standard', 'level1'=>'Level 1', 'level2'=>'Level 2', 'level3'=>'Level 3', 'level4'=>'Level 4', 'level5'=>'Level 5'],
+        ]);
+
         $this->addElement('multiselect', 'currentMonochromeRankSetArray', [
             'label'        => 'Monochrome Toner Vendors',
             'description'  => 'Which supply vendor(s) is the customer currently using for <strong>monochrome devices</strong>?<br><em>Note: The system always uses OEM as the <strong>last</strong> option. If you leave this blank then it will use <strong>only OEM</strong> supplies.</em>',
@@ -97,6 +102,7 @@ class CurrentFleetSettingsForm extends \My_Form_Form
                 'currentPageCoverageColor'      => $fleetSettings->defaultColorCoverage,
                 'currentMonochromeRankSetArray' => $fleetSettings->getMonochromeRankSet()->getRanksAsArray(),
                 'currentColorRankSetArray'      => $fleetSettings->getColorRankSet()->getRanksAsArray(),
+                'currentLevel'                  => $fleetSettings->level,
             ];
         }
 
@@ -123,6 +129,7 @@ class CurrentFleetSettingsForm extends \My_Form_Form
         $model->useDevicePageCoverages    = $this->getValue('currentUseDevicePageCoverages');
         $model->defaultMonochromeCoverage = $this->getValue('currentPageCoverageMono');
         $model->defaultColorCoverage      = $this->getValue('currentPageCoverageColor');
+        $model->level                     = $this->getValue('currentLevel');
 
         return $model;
     }

@@ -82,6 +82,11 @@ class ProposedFleetSettingsForm extends \My_Form_Form
             'required'    => true,
         ]);
 
+        $this->addElement('select', 'proposedLevel', [
+            'label'        => 'Pricing Level',
+            'multiOptions' => [''=>'Standard', 'level1'=>'Level 1', 'level2'=>'Level 2', 'level3'=>'Level 3', 'level4'=>'Level 4', 'level5'=>'Level 5'],
+        ]);
+
         $this->addElement('multiselect', 'proposedMonochromeRankSetArray', [
             'label'        => 'Monochrome Toner Vendors',
             'description'  => 'Which supply vendor(s) would you like to use for <strong>monochrome devices</strong>?<br><em>Note: The system always uses OEM as the <strong>last</strong> option. If you leave this blank then it will use <strong>only OEM</strong> supplies.</em>',
@@ -128,6 +133,7 @@ class ProposedFleetSettingsForm extends \My_Form_Form
                 'proposedDefaultColorPartsCostPerPage'      => $fleetSettings->defaultColorPartsCostPerPage,
                 'proposedMonochromeRankSetArray'            => $fleetSettings->getMonochromeRankSet()->getRanksAsArray(),
                 'proposedColorRankSetArray'                 => $fleetSettings->getColorRankSet()->getRanksAsArray(),
+                'proposedLevel'                             => $fleetSettings->level,
             ];
         }
 
@@ -159,6 +165,7 @@ class ProposedFleetSettingsForm extends \My_Form_Form
         $model->defaultMonochromePartsCostPerPage = $this->getValue('proposedDefaultMonochromePartsCostPerPage');
         $model->defaultColorLaborCostPerPage      = $this->getValue('proposedDefaultColorLaborCostPerPage');
         $model->defaultColorPartsCostPerPage      = $this->getValue('proposedDefaultColorPartsCostPerPage');
+        $model->level                             = $this->getValue('proposedLevel');
 
         return $model;
     }

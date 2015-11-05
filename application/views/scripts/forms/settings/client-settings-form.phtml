@@ -10,6 +10,15 @@ $proposedFleetSettingsForm = $form->getSubForm('proposedFleetSettingsForm');
 $genericSettingsForm       = $form->getSubForm('genericSettingsForm');
 $quoteSettingsForm         = $form->getSubForm('quoteSettingsForm');
 $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
+
+$is_pricing_administrator=false;
+$roles = \MPSToolbox\Legacy\Mappers\UserMapper::getInstance()->findCurrent()->getUserRoles();
+foreach ($roles as $role) {
+    if ($role->roleId==3) {
+        $is_pricing_administrator=true;
+    }
+}
+
 ?>
 
 <?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
@@ -48,6 +57,17 @@ $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
                         <?= $this->RenderFormElementErrors($currentFleetSettingsForm->getElement('currentPageCoverageColor')) ?>
                     </div>
                 </div>
+
+<? if ($is_pricing_administrator) { ?>
+                <div class="form-group <?= ($currentFleetSettingsForm->getElement('currentLevel')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($currentFleetSettingsForm->getElement('currentLevel'), ['col-md-6']) ?>
+
+                    <div class="col-md-6">
+                        <?= $this->RenderFormSelect($currentFleetSettingsForm->getElement('currentLevel')) ?>
+                        <?= $this->RenderFormElementErrors($currentFleetSettingsForm->getElement('currentLevel')) ?>
+                    </div>
+                </div>
+<? } ?>
 
                 <div class="form-group <?= ($currentFleetSettingsForm->getElement('currentMonochromeRankSetArray')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                     <?= $this->RenderFormLabel($currentFleetSettingsForm->getElement('currentMonochromeRankSetArray'), ['col-md-6']) ?>
@@ -106,6 +126,17 @@ $optimizationSettingsForm  = $form->getSubForm('optimizationSettingsForm');
                         <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedPageCoverageColor')) ?>
                     </div>
                 </div>
+
+<? if ($is_pricing_administrator) { ?>
+                <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedLevel')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedLevel'), ['col-md-6']) ?>
+
+                    <div class="col-md-6">
+                        <?= $this->RenderFormSelect($proposedFleetSettingsForm->getElement('proposedLevel')) ?>
+                        <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedLevel')) ?>
+                    </div>
+                </div>
+<? } ?>
 
                 <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedMonochromeRankSetArray')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                     <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedMonochromeRankSetArray'), ['col-md-6']) ?>

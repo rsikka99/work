@@ -550,15 +550,16 @@ class MasterDeviceModel extends My_Model_Abstract
      *
      * @return TonerModel[]
      */
-    public function getToners ($dealerId, $clientId = null)
+    public function getToners($dealerId, $clientId = null, $level = null)
     {
-        if (!isset($this->_toners))
+        $key = sprintf("%s_%s_%s", $dealerId, $clientId, $level);
+        if (!isset($this->_toners[$key]))
         {
             // Get the toners for the device
-            $this->_toners = TonerMapper::getInstance()->getReportToners($this->id, $dealerId, $clientId);
+            $this->_toners[$key] = TonerMapper::getInstance()->getReportToners($this->id, $dealerId, $clientId, $level);
         }
 
-        return $this->_toners;
+        return $this->_toners[$key];
     }
 
     /**
@@ -833,7 +834,14 @@ class MasterDeviceModel extends My_Model_Abstract
         {
             $monochromeManufacturerPreference               = implode(',', $costPerPageSetting->monochromeTonerRankSet->getRanksAsArray());
             $colorManufacturerPreference                    = implode(',', $costPerPageSetting->colorTonerRankSet->getRanksAsArray());
-            $this->_cachedCheapestTonerVendorSet[$cacheKey] = TonerMapper::getInstance()->getCheapestTonersForDevice($this->id, $costPerPageSetting->dealerId, $monochromeManufacturerPreference, $colorManufacturerPreference, $costPerPageSetting->clientId);
+            $this->_cachedCheapestTonerVendorSet[$cacheKey] = TonerMapper::getInstance()->getCheapestTonersForDevice(
+                $this->id,
+                $costPerPageSetting->dealerId,
+                $monochromeManufacturerPreference,
+                $colorManufacturerPreference,
+                $costPerPageSetting->clientId,
+                $costPerPageSetting->level
+            );
         }
 
         return $this->_cachedCheapestTonerVendorSet[$cacheKey];

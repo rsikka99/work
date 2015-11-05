@@ -216,6 +216,7 @@ class OptimizationViewModel
             $this->_costPerPageSettingForDealer->monochromeTonerRankSet = $clientSettings->proposedFleetSettings->getMonochromeRankSet();
             $this->_costPerPageSettingForDealer->colorTonerRankSet      = $clientSettings->proposedFleetSettings->getColorRankSet();
             $this->_costPerPageSettingForDealer->useDevicePageCoverages = $clientSettings->proposedFleetSettings->useDevicePageCoverages;
+            $this->_costPerPageSettingForDealer->level                  = $clientSettings->proposedFleetSettings->level;
         }
 
         return $this->_costPerPageSettingForDealer;
@@ -244,6 +245,7 @@ class OptimizationViewModel
             $this->_costPerPageSettingForReplacements->monochromeTonerRankSet     = $clientSettings->proposedFleetSettings->getMonochromeRankSet();
             $this->_costPerPageSettingForReplacements->colorTonerRankSet          = $clientSettings->proposedFleetSettings->getColorRankSet();
             $this->_costPerPageSettingForReplacements->useDevicePageCoverages     = $clientSettings->proposedFleetSettings->useDevicePageCoverages;
+            $this->_costPerPageSettingForReplacements->level                      = $clientSettings->proposedFleetSettings->level;
         }
 
         return $this->_costPerPageSettingForReplacements;
