@@ -1032,7 +1032,6 @@ class Proposalgen_CostsController extends Action
                 $tonerPricingService = new TonerPricingImportService();
                 $fieldTitles         = $tonerPricingService->csvHeaders;
                 //$fieldTitles[]       = 'Has Image';
-                for ($i=1;$i<=5;$i++) $fieldTitles[]       = 'Price Level '.$i;
                 $fieldRows           = TonerMapper::getInstance()->getTonerPricingForExport($manufacturerId, $this->_dealerId);
             }
             else if ($importType == "matchup")
