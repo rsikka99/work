@@ -95,6 +95,7 @@ class Assessment_ViewModel_Abstract
 
             $this->_costPerPageSettingForCustomer->monochromeTonerRankSet = $clientSettings->currentFleetSettings->getMonochromeRankSet();
             $this->_costPerPageSettingForCustomer->colorTonerRankSet      = $clientSettings->currentFleetSettings->getColorRankSet();
+            $this->_costPerPageSettingForCustomer->level                  = $clientSettings->currentFleetSettings->level;
 
             $this->_costPerPageSettingForCustomer->useCustomerCostPerPageForManagedDevices = true;
 
@@ -124,6 +125,7 @@ class Assessment_ViewModel_Abstract
             $this->_costPerPageSettingForDealer->monochromePartsCostPerPage = $clientSettings->proposedFleetSettings->defaultMonochromePartsCostPerPage;
             $this->_costPerPageSettingForDealer->colorLaborCostPerPage      = $clientSettings->proposedFleetSettings->defaultColorLaborCostPerPage;
             $this->_costPerPageSettingForDealer->colorPartsCostPerPage      = $clientSettings->proposedFleetSettings->defaultColorPartsCostPerPage;
+            $this->_costPerPageSettingForDealer->level                      = $clientSettings->proposedFleetSettings->level;
 
             $this->_costPerPageSettingForDealer->monochromeTonerRankSet = $clientSettings->proposedFleetSettings->getMonochromeRankSet();
             $this->_costPerPageSettingForDealer->colorTonerRankSet      = $clientSettings->proposedFleetSettings->getColorRankSet();

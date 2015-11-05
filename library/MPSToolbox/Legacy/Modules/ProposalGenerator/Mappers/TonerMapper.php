@@ -326,27 +326,27 @@ class TonerMapper extends My_Model_Mapper_Abstract
      *
      * @return TonerModel []
      */
-    public function getReportToners ($masterDeviceId, $dealerId, $clientId = null)
+    public function getReportToners($masterDeviceId, $dealerId, $clientId = null, $level = null)
     {
         $db = Zend_Db_Table::getDefaultAdapter();
+
+        $c = "COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost)";
+        if ($level) $c = "COALESCE(client_toner_orders.cost, dealer_toner_attributes.{$level}, dealer_toner_attributes.cost, toners.cost)";
 
         $select = $db->select()
                      ->from('toners', ['*'])
                      ->joinLeft('device_toners', 'toner_id = toners.id', [null])
-                     ->joinLeft('dealer_toner_attributes', "dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = ?", [
-                         "dealerSku",
-                     ])
+                     ->joinLeft('dealer_toner_attributes', "dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = ?", ["dealerSku"])
                      ->joinLeft('client_toner_orders', "client_toner_orders.tonerId = toners.id AND client_toner_orders.clientId = ?", [
-                         "calculatedCost"         => "COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost)",
+                         "calculatedCost"         => $c,
                          "isUsingCustomerPricing" => "IF(client_toner_orders.cost IS NOT NULL, TRUE, FALSE)",
                          "isUsingDealerPricing"   => "IF(client_toner_orders.cost IS NULL AND dealer_toner_attributes.cost IS NOT NULL, TRUE, FALSE)",
                      ])
                      ->where('master_device_id = ?', $masterDeviceId);
 
-
         $stmt = $db->query($select, [$dealerId, $clientId]);
-
         $result     = $stmt->fetchAll();
+
         $tonerArray = [];
 
         foreach ($result as $row)
@@ -851,7 +851,7 @@ WHERE `toners`.`id` IN ({$tonerIdList})
      *
      * @return array
      */
-    public function getCheapestTonersForDevice ($masterDeviceId, $dealerId, $monochromeManufacturerPreference, $colorManufacturerPreference, $clientId = null)
+    public function getCheapestTonersForDevice ($masterDeviceId, $dealerId, $monochromeManufacturerPreference, $colorManufacturerPreference, $clientId = null, $level = null)
     {
         $db                               = $this->getDbTable()->getDefaultAdapter();
         $masterDeviceId                   = $db->quoteInto($masterDeviceId, "INTEGER");
@@ -867,6 +867,20 @@ WHERE `toners`.`id` IN ({$tonerIdList})
         foreach ($results as $row)
         {
             $toners [$row[$this->col_tonerColorId]] = new TonerModel($row);
+        }
+        $query->closeCursor();
+
+        if ($level) {
+            $st = $db->query("select tonerId, {$level} from dealer_toner_attributes where {$level}>0 and dealerId={$dealerId} and tonerId in (select toner_id from device_toners where master_device_id={$masterDeviceId})");
+            $arr = $st->fetchAll();
+            foreach ($toners as $color=>$toner) {
+                /** @var TonerModel $toner */
+                foreach ($arr as $line) {
+                    if ($toner->id == $line['tonerId']) {
+                        $toner->calculatedCost = $line[$level];
+                    }
+                }
+            }
         }
 
         return $toners;
@@ -917,7 +931,7 @@ WHERE `toners`.`id` IN ({$tonerIdList})
                      ->joinLeft(['dt' => 'device_toners'], 'dt.toner_id = t.id', ['master_device_id'])
                      ->joinLeft(['tm' => 'manufacturers'], 'tm.id = t.manufacturerId', ['fullname'])
                      ->joinLeft(['tc' => 'toner_colors'], 'tc.id = t.tonerColorId', ['name AS toner_color'])
-                     ->joinLeft(['dta' => 'dealer_toner_attributes'], "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", ['cost', 'dealerSku'])
+                     ->joinLeft(['dta' => 'dealer_toner_attributes'], "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", ['cost', 'dealerSku','level1','level2','level3','level4','level5'])
                      ->where("t.id > 0")
                      ->group('t.id')
                      ->order(['tm.fullname']);
@@ -943,7 +957,12 @@ WHERE `toners`.`id` IN ({$tonerIdList})
                 $value ['systemCost'],
                 $value ['dealerSku'],
                 $value ['cost'],
-                $value ['imageFile']?'Yes':'No',
+                //$value ['imageFile']?'Yes':'No',
+                $value ['level1'],
+                $value ['level2'],
+                $value ['level3'],
+                $value ['level4'],
+                $value ['level5'],
             ];
         }
 

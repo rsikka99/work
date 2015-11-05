@@ -87,6 +87,7 @@ class Healthcheck_ViewModel_Abstract
             $this->_costPerPageSettingForCustomer->adminCostPerPage       = $clientSettings->currentFleetSettings->adminCostPerPage;
             $this->_costPerPageSettingForCustomer->pageCoverageMonochrome = $clientSettings->currentFleetSettings->defaultMonochromeCoverage;
             $this->_costPerPageSettingForCustomer->pageCoverageColor      = $clientSettings->currentFleetSettings->defaultColorCoverage;
+            $this->_costPerPageSettingForCustomer->level                  = $clientSettings->currentFleetSettings->level;
 
             $this->_costPerPageSettingForCustomer->monochromeTonerRankSet        = $clientSettings->currentFleetSettings->getMonochromeRankSet();
             $this->_costPerPageSettingForCustomer->colorTonerRankSet             = $clientSettings->currentFleetSettings->getColorRankSet();

@@ -1,0 +1,14 @@
+dealer_toner_attributes:
+    - { tonerId: '1', dealerId: '1', cost: '92.44', dealerSku: null, dealerSrp: null, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '1', dealerId: '2', cost: '92.44', dealerSku: TN670, dealerSrp: null, webId: null, level1: '21.00', level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '34', dealerId: '1', cost: null, dealerSku: null, dealerSrp: null, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '34', dealerId: '2', cost: '80.53', dealerSku: null, dealerSrp: null, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '34', dealerId: '3', cost: '66.2', dealerSku: Q6000A, dealerSrp: null, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '34', dealerId: '4', cost: '65.42', dealerSku: null, dealerSrp: null, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '35', dealerId: '1', cost: null, dealerSku: null, dealerSrp: null, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '35', dealerId: '2', cost: '87.9', dealerSku: null, dealerSrp: null, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '35', dealerId: '3', cost: '72.26', dealerSku: Q6001A, dealerSrp: null, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '35', dealerId: '4', cost: '69.6', dealerSku: null, dealerSrp: null, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '36', dealerId: '1', cost: null, dealerSku: null, dealerSrp: null, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '36', dealerId: '2', cost: '87.9', dealerSku: null, dealerSrp: null, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '36', dealerId: '3', cost: '72.26', dealerSku: Q6003A, dealerSrp: null, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }

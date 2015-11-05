@@ -124,6 +124,13 @@ class UserMapper extends My_Model_Mapper_Abstract
     }
 
     /**
+     * @return UserModel
+     */
+    public function findCurrent() {
+        return $this->find(\Zend_Auth::getInstance()->getIdentity()->id);
+    }
+
+    /**
      * Finds a user based on it's primaryKey
      *
      * @param $id int

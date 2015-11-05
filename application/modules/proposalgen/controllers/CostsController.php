@@ -550,19 +550,26 @@ class Proposalgen_CostsController extends Action
                     {
                         $lineCounter = 2;
                         $skus = [];
-                        while (($value = fgetcsv($tonerPricingService->importFile)) !== false)
+                        while (($row = fgetcsv($tonerPricingService->importFile)) !== false)
                         {
-                            $value     = array_combine($tonerPricingService->importHeaders, $value);
-                            $validData = $tonerPricingService->processValidation($value);
+                            if (count($row)==0) continue;
+                            while (count($row)<count($tonerPricingService->importHeaders)) $row[]=null;
+                            $row = array_combine($tonerPricingService->importHeaders, $row);
+                            $validData = $tonerPricingService->processValidation($row);
                             if (!isset($validData['error']))
                             {
                                 $sku       = $validData[$tonerPricingService::TONER_PRICING_SKU];
 
                                 $dataArray = [
+                                    'dealerId'  => $this->_dealerId,
                                     'tonerId'   => $validData[$tonerPricingService::TONER_PRICING_TONER_ID],
                                     'dealerSku' => $validData[$tonerPricingService::TONER_PRICING_DEALER_SKU],
                                     'cost'      => $validData[$tonerPricingService::TONER_PRICING_NEW_PRICE],
-                                    'dealerId'  => $this->_dealerId,
+                                    'level1'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_1],
+                                    'level2'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_2],
+                                    'level3'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_3],
+                                    'level4'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_4],
+                                    'level5'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_5],
                                 ];
 
                                 $toner = TonerMapper::getInstance()->find($validData['Toner ID']);
@@ -582,10 +589,15 @@ class Proposalgen_CostsController extends Action
                                         if ($found) {
                                             $skus[$sku] = $sku;
                                             $comp_dataArray = [
+                                                'dealerId'  => $this->_dealerId,
                                                 'tonerId'   => $found->id,
                                                 'dealerSku' => $validData[$tonerPricingService::TONER_PRICING_DEALER_SKU],
                                                 'cost'      => $validData[$tonerPricingService::TONER_PRICING_NEW_PRICE],
-                                                'dealerId'  => $this->_dealerId,
+                                                'level1'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_1],
+                                                'level2'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_2],
+                                                'level3'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_3],
+                                                'level4'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_4],
+                                                'level5'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_5],
                                             ];
                                             $tonerAttribute = DealerTonerAttributeMapper::getInstance()->find([$comp_dataArray['tonerId'], $this->_dealerId]);
                                             if ($tonerAttribute instanceof DealerTonerAttributeModel) {
@@ -622,10 +634,15 @@ class Proposalgen_CostsController extends Action
                                                 $skus[$sku] = $sku;
 
                                                 $comp_dataArray = [
+                                                    'dealerId'  => $this->_dealerId,
                                                     'tonerId'   => $comp_id,
                                                     'dealerSku' => $validData[$tonerPricingService::TONER_PRICING_DEALER_SKU],
                                                     'cost'      => $validData[$tonerPricingService::TONER_PRICING_NEW_PRICE],
-                                                    'dealerId'  => $this->_dealerId,
+                                                    'level1'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_1],
+                                                    'level2'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_2],
+                                                    'level3'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_3],
+                                                    'level4'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_4],
+                                                    'level5'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_5],
                                                 ];
                                                 $tonerAttribute = new DealerTonerAttributeModel();
                                                 $tonerAttribute->populate($comp_dataArray);
@@ -691,7 +708,7 @@ class Proposalgen_CostsController extends Action
                 catch (Exception $e)
                 {
                     $db->rollback();
-                    $this->_flashMessenger->addMessage(["error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."]);
+                    $this->_flashMessenger->addMessage(["error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again. ".$e->getMessage()]);
                 }
                 $tonerPricingService->closeFiles();
             }
@@ -1014,7 +1031,8 @@ class Proposalgen_CostsController extends Action
                 $filename            = "system_toner_pricing_" . date('m_d_Y') . ".csv";
                 $tonerPricingService = new TonerPricingImportService();
                 $fieldTitles         = $tonerPricingService->csvHeaders;
-                $fieldTitles[]       = 'Has Image';
+                //$fieldTitles[]       = 'Has Image';
+                for ($i=1;$i<=5;$i++) $fieldTitles[]       = 'Price Level '.$i;
                 $fieldRows           = TonerMapper::getInstance()->getTonerPricingForExport($manufacturerId, $this->_dealerId);
             }
             else if ($importType == "matchup")

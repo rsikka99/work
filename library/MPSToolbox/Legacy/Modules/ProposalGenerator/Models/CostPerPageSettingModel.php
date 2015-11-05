@@ -126,6 +126,11 @@ class CostPerPageSettingModel extends My_Model_Abstract
      */
     public $useCustomerCostPerPageForManagedDevices = false;
 
+
+    /** @var string */
+    public $level = null;
+
+
     /**
      * @param null|array $options
      */
@@ -242,6 +247,10 @@ class CostPerPageSettingModel extends My_Model_Abstract
 
         if (isset($params->useCustomerCostPerPageForManagedDevices) && !is_null($params->useCustomerCostPerPageForManagedDevices)) {
             $this->useCustomerCostPerPageForManagedDevices = $params->useCustomerCostPerPageForManagedDevices;
+        }
+
+        if (isset($params->level) && !is_null($params->level)) {
+            $this->level = $params->level;
         }
     }
 

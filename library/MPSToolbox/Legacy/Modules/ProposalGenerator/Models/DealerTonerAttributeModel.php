@@ -37,6 +37,17 @@ class DealerTonerAttributeModel extends My_Model_Abstract
      */
     public $dealerSrp;
 
+    /** @var float */
+    public $level1;
+    /** @var float */
+    public $level2;
+    /** @var float */
+    public $level3;
+    /** @var float */
+    public $level4;
+    /** @var float */
+    public $level5;
+
     /**
      * @param array $params An array of data to populate the model with
      */
@@ -67,10 +78,14 @@ class DealerTonerAttributeModel extends My_Model_Abstract
             $this->dealerSku = $params->dealerSku;
         }
 
-        if (isset($params->dealerSrp) && !is_null($params->dealerSrp))
-        {
-            $this->dealerSrp = $params->dealerSrp;
-        }
+        if (isset($params->dealerSrp) && !is_null($params->dealerSrp)) $this->dealerSrp = $params->dealerSrp;
+
+        if (isset($params->level1) && !is_null($params->level1)) $this->level1 = $params->level1;
+        if (isset($params->level2) && !is_null($params->level2)) $this->level2 = $params->level2;
+        if (isset($params->level3) && !is_null($params->level3)) $this->level3 = $params->level3;
+        if (isset($params->level4) && !is_null($params->level4)) $this->level4 = $params->level4;
+        if (isset($params->level5) && !is_null($params->level5)) $this->level5 = $params->level5;
+
     }
 
     /**
@@ -84,6 +99,11 @@ class DealerTonerAttributeModel extends My_Model_Abstract
             "cost"      => $this->cost,
             "dealerSku" => $this->dealerSku,
             "dealerSrp" => $this->dealerSrp,
+            "level1" => $this->level1,
+            "level2" => $this->level2,
+            "level3" => $this->level3,
+            "level4" => $this->level4,
+            "level5" => $this->level5,
         ];
     }
 }

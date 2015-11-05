@@ -24,6 +24,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerVendorRankingSetMode
  * @property float defaultColorPartsCostPerPage
  * @property int   monochromeTonerVendorRankingSetId
  * @property int   colorTonerVendorRankingSetId
+ * @property string level
  */
 class FleetSettingsEntity extends EloquentModel
 {

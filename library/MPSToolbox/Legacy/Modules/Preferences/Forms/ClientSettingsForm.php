@@ -139,6 +139,11 @@ class ClientSettingsForm extends Zend_Form
             'required'    => true,
         ]);
 
+        $this->addElement('select', 'proposedLevel', [
+            'label'        => 'Pricing Level',
+            'multiOptions' => [''=>'Standard', 'level1'=>'Level 1', 'level2'=>'Level 2', 'level3'=>'Level 3', 'level4'=>'Level 4', 'level5'=>'Level 5'],
+        ]);
+
         $this->addElement('multiselect', 'proposedMonochromeRankSetArray', [
             'label'        => 'Monochrome Toner Vendors',
             'description'  => 'Devices will search for toners in order of selection from top to bottom with OEM always used last.',
