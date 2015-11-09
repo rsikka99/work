@@ -14,6 +14,7 @@ class Default_CronController extends \Tangent\Controller\Action {
 
         $clients = $service->getRmsClients();
         foreach ($clients as $client) {
+            if (empty($client['deviceGroup'])) continue;
             $newDeviceNeedsToner = false;
             $devices = $service->update($client['clientId'], $client['rmsUri'], $client['deviceGroup']);
             foreach ($devices as $device) {
