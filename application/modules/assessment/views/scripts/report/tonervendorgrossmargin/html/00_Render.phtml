@@ -128,8 +128,16 @@ if (strrpos($vendorConfigurationNames, ',') > 0)
                             </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($vendorData['fieldLists'] as $key => $fields) : ?>
-                                <tr class="<?= ($fields['completeMono']) ? "" : "nonCompliantMono" ?> <?= ($fields['completeColor']) ? "" : "nonCompliantColor" ?>">
+                            <?php foreach ($vendorData['fieldLists'] as $key => $fields) {
+
+                                $tr_class=[];
+                                if (!$fields['completeMono']) $tr_class[] = 'nonCompliantMono';
+                                if (!$fields['completeMono']) $tr_class[] = 'nonCompliantColor';
+                                if (!$fields['black_isUsingDealerPricing']) $tr_class[] = 'redMono';
+                                if (!$fields['color_isUsingDealerPricing']) $tr_class[] = 'redColor';
+
+                                ?>
+                                <tr class="<?= implode(' ', $tr_class) ?>">
                                     <td class="device-name"><?= $fields[0]['deviceName'] ?>
                                         <br /><?= sprintf('(%s - %s)', $fields[0]['serialNumber'], $fields[0]['ipAddress']) ?>
                                     </td>
@@ -146,7 +154,7 @@ if (strrpos($vendorConfigurationNames, ',') > 0)
                                     <td class="cost color"><?= (is_numeric($fields[10]) ? $this->currency($fields[10]) : "-") ?></td>
 
                                 </tr>
-                            <?php endforeach ?>
+                            <?php } ?>
                             <tr class="totals">
                                 <td><?= $vendorData['fieldTotals'][0] ?></td>
                                 <td class="page-volume mono"><?= number_format($vendorData['fieldTotals'][4]) ?></td>

@@ -134,8 +134,16 @@ $dealerId            = Zend_Auth::getInstance()->getIdentity()->dealerId;
             $colorToner                = null;
             $toners                    = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($assessmentViewModel->getCostPerPageSettingForDealer());
             $tonerSkus                 = [];
+
+            $black_isUsingDealerPricing = true;
+            $color_isUsingDealerPricing = true;
+
             foreach ($toners as $toner)
             {
+
+                #var_dump($toner);
+                #die();
+
                 $dealerTonerAttribute = DealerTonerAttributeMapper::getInstance()->findTonerAttributeByTonerId($toner->id, $dealerId);
                 $dealerSku            = null;
 
@@ -150,32 +158,38 @@ $dealerId            = Zend_Auth::getInstance()->getIdentity()->dealerId;
                         $blackToner                      = $toner;
                         $tonerSkus['black']['sku']       = $toner->sku;
                         $tonerSkus['black']['dealerSku'] = $dealerSku;
+                        $black_isUsingDealerPricing      = $toner->isUsingDealerPricing;
                         break;
                     case TonerColorModel::CYAN:
                         $colorToner                     = $toner;
                         $tonerSkus['cyan']['sku']       = $toner->sku;
                         $tonerSkus['cyan']['dealerSku'] = $dealerSku;
+                        $color_isUsingDealerPricing     &= $toner->isUsingDealerPricing;
                         break;
                     case TonerColorModel::MAGENTA:
                         $tonerSkus['magenta']['sku']       = $toner->sku;
                         $tonerSkus['magenta']['dealerSku'] = $dealerSku;
                         $colorToner                        = $toner;
+                        $color_isUsingDealerPricing     &= $toner->isUsingDealerPricing;
                         break;
                     case TonerColorModel::YELLOW:
                         $tonerSkus['yellow']['sku']       = $toner->sku;
                         $tonerSkus['yellow']['dealerSku'] = $dealerSku;
                         $colorToner                       = $toner;
+                        $color_isUsingDealerPricing     &= $toner->isUsingDealerPricing;
                         break;
                     case TonerColorModel::THREE_COLOR:
                         $tonerSkus['threeColor']['sku']       = $toner->sku;
                         $tonerSkus['threeColor']['dealerSku'] = $dealerSku;
                         $colorToner                           = $toner;
+                        $color_isUsingDealerPricing     &= $toner->isUsingDealerPricing;
                         break;
                     case TonerColorModel::FOUR_COLOR:
                         $tonerSkus['fourColor']['sku']       = $toner->sku;
                         $tonerSkus['fourColor']['dealerSku'] = $dealerSku;
                         $blackToner                          = $toner;
                         $colorToner                          = $toner;
+                        $color_isUsingDealerPricing     &= $toner->isUsingDealerPricing;
                         break;
                     default:
                         break;
@@ -197,8 +211,15 @@ $dealerId            = Zend_Auth::getInstance()->getIdentity()->dealerId;
                 $colorYield = number_format($colorToner->yield);
                 $isColor    = true;
             }
+
+            $tr_class=[];
+            if (!$completeMonoToners) $tr_class[] = 'nonCompliantMono';
+            if (!$completeColorToners) $tr_class[] = 'nonCompliantColor';
+            if (!$black_isUsingDealerPricing) $tr_class[] = 'redMono';
+            if (!$color_isUsingDealerPricing) $tr_class[] = 'redColor';
+
             ?>
-            <tr class="<?= ($completeMonoToners) ? "" : "nonCompliantMono" ?> <?= ($completeColorToners) ? "" : "nonCompliantColor" ?>">
+            <tr class="<?= implode(' ', $tr_class) ?>">
                 <!-- Monochrome -->
                 <td class="column1">
                     <div><?= str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) . "<br />(" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")"; ?></div>

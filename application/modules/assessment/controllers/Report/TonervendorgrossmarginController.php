@@ -256,24 +256,31 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
                     $toners = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($costPerPageSetting);
                 }
 
+                $black_isUsingDealerPricing = true;
+                $color_isUsingDealerPricing = true;
+
                 foreach ($toners as $toner)
                 {
                     switch ($toner->tonerColorId)
                     {
                         case TonerColorModel::BLACK:
                             $blackToner = $toner;
+                            $black_isUsingDealerPricing      = $toner->isUsingDealerPricing;
                             break;
                         case TonerColorModel::CYAN:
                         case TonerColorModel::MAGENTA:
                         case TonerColorModel::YELLOW:
                             $colorToner = $toner;
+                        $color_isUsingDealerPricing     &= $toner->isUsingDealerPricing;
                             break;
                         case TonerColorModel::THREE_COLOR:
                             $colorToner = $toner;
+                            $color_isUsingDealerPricing     &= $toner->isUsingDealerPricing;
                             break;
                         case TonerColorModel::FOUR_COLOR:
                             $blackToner = $toner;
                             $colorToner = $toner;
+                            $color_isUsingDealerPricing     &= $toner->isUsingDealerPricing;
                             break;
                         default:
                             break;
@@ -322,6 +329,8 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
                 $rowData [10]                = ($isColor) ? $deviceInstance->calculateMonthlyColorCost($costPerPageSetting) : "-";
                 $rowData ['completeMono']    = $completeMonoToners;
                 $rowData ['completeColor']   = $completeColorToners;
+                $rowData ['black_isUsingDealerPricing']    = $black_isUsingDealerPricing;
+                $rowData ['color_isUsingDealerPricing']    = $color_isUsingDealerPricing;
                 $fieldLists[]                = $rowData;
             }
 
