@@ -185,6 +185,7 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
                         .html('Edit')
                         .attr('data-device-id', row.id)
                         .attr('data-can-edit', canEdit)
+                        .attr('data-is-allowed', isSaveAndApproveAdmin)
                 );
 
                 if (canDelete)

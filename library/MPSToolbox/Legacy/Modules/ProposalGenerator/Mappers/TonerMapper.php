@@ -415,8 +415,10 @@ WHERE `device_toners`.`master_device_id` = ?';
     public function fetchTonersAssignedToDeviceForCurrentDealer($masterDeviceId, $justCount=false)
     {
         $db = $this->getDbTable()->getAdapter();
-
         $dealerId = intval(DealerEntity::getDealerId());
+
+        $and = "(device_toners.isSystemDevice=1 or device_toners.userId in (select id from `users` where dealerId = {$dealerId})) AND";
+        if ($dealerId==1) $and = '';
 
         $sql = "
 SELECT
@@ -441,8 +443,7 @@ FROM `toners`
     LEFT JOIN `toner_colors` ON `toner_colors`.`id` = `toners`.`tonerColorId`
     LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `toners`.`manufacturerId`
     LEFT JOIN dealer_toner_attributes ON (dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId})
-WHERE (device_toners.isSystemDevice=1 or device_toners.userId in (select id from `users` where dealerId = {$dealerId}))
-    AND `device_toners`.`master_device_id` = ?";
+WHERE {$and} `device_toners`.`master_device_id` = ?";
         $sql = $db->quoteInto($sql, $masterDeviceId);
 
         $query = $db->query($sql);
