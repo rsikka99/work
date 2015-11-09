@@ -66,6 +66,9 @@ limit 1
     }
 
     private function readUrl($url) {
+        /** @var \Zend_Log $log */
+        $log = \Zend_Registry::get('Zend_Log');
+        $log->log($url, 4);
         if (file_exists('c:')) {
             $parsed = parse_url($url);
             $filename = 'data/cache/'.basename($parsed['path']) . '.' . md5($url) . '.txt';
@@ -81,6 +84,9 @@ limit 1
     }
 
     public function update($clientId, $rmsUri, $groupId) {
+        if (empty($groupId)) {
+            throw new \InvalidArgumentException('$groupId is empty');
+        }
         $result = [];
         $uri = parse_url($rmsUri);
 
@@ -415,7 +421,7 @@ HTML;
 ;
 
         $email = new \Zend_Mail();
-        $email->setFrom(sprintf('"%s" <%s>',$dealerBranding->dealerName, $dealerBranding->dealerEmail));
+        $email->setFrom($dealerBranding->dealerEmail, $dealerBranding->dealerName);
         $email->addTo($contact->email);
         $email->addBcc($dealerBranding->dealerEmail);
         $email->setSubject('Printing Supplies Order Requirements for '.$client->getCompanyName());
