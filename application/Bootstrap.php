@@ -28,26 +28,6 @@ class Bootstrap extends Tangent\Bootstrap
         return $config;
     }
 
-    protected function _initRedisCache ()
-    {
-        $this->bootstrap('cachemanager');
-
-        /* @var $cm Zend_Cache_Manager */
-        $cm = $this->getResource('cachemanager');
-
-//        $navigationCache = $cm->getCache('navigation_cache');
-//        $navigationCache->setOption('cache_id_prefix', 'MPST_Navigation_');
-//        $navigationCache->setBackend(new Rediska_Zend_Cache_Backend_Redis(['rediska' => new Rediska()]));
-//        $defaultCache = $cm->getCache('default');
-//        $defaultCache->setBackend(new Rediska_Zend_Cache_Backend_Redis(['rediska' => new Rediska()]));
-
-//        echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-//        var_dump($cm->getCaches());
-//        die();
-
-        return $cm;
-    }
-
     /**
      * Initializes Laravel's database layer
      */
@@ -238,8 +218,19 @@ class Bootstrap extends Tangent\Bootstrap
         /* @var $cacheManager Zend_Cache_Manager */
         $cacheManager = $this->getResource('cachemanager');
 
-        Zend_Registry::set('navigationCache', $cacheManager->getCache('navigation_cache'));
-        Zend_Registry::set('aclCache', $cacheManager->getCache('acl_cache'));
+        $acl_cache = $cacheManager->getCache('acl_cache');
+        $navigation_cache = $cacheManager->getCache('navigation_cache');
+
+        if (extension_loaded('memcache')) {
+            $acl_cache->setBackend(new Zend_Cache_Backend_Memcached());
+            $navigation_cache->setBackend(new Zend_Cache_Backend_Memcached());
+        } else if (extension_loaded('memcached')) {
+            $acl_cache->setBackend(new Zend_Cache_Backend_Libmemcached());
+            $navigation_cache->setBackend(new Zend_Cache_Backend_Libmemcached());
+        }
+
+        Zend_Registry::set('navigationCache', $navigation_cache);
+        Zend_Registry::set('aclCache', $acl_cache);
     }
 
     /**
@@ -247,6 +238,17 @@ class Bootstrap extends Tangent\Bootstrap
      */
     protected function _initCurrency ()
     {
+        //Zend_Locale_Data::disableCache(true);
+        if (extension_loaded('memcache')) {
+            $core = new Zend_Cache_Core();
+            $core->setBackend(new Zend_Cache_Backend_Memcached());
+            Zend_Locale_Data::setCache($core);
+        } else if (extension_loaded('memcached')) {
+            $core = new Zend_Cache_Core();
+            $core->setBackend(new Zend_Cache_Backend_Libmemcached());
+            Zend_Locale_Data::setCache($core);
+        }
+
         $currency = new Zend_Currency(['currency' => 'EUR'], 'en_US');
         Zend_Registry::set('Zend_Currency', $currency);
     }
