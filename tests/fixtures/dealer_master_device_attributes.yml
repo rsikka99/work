@@ -1,0 +1,3 @@
+dealer_master_device_attributes:
+    - { masterDeviceId: '1', dealerId: '2', laborCostPerPage: '0.0045', partsCostPerPage: '0.0012', leaseBuybackPrice: null, isLeased: '0', leasedTonerYield: null }
+    - { masterDeviceId: '2', dealerId: '2', laborCostPerPage: '0.0045', partsCostPerPage: '0.0012', leaseBuybackPrice: null, isLeased: '1', leasedTonerYield: '123' }

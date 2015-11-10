@@ -384,6 +384,25 @@ group by clientId
 
             $color = $device->getToner()->getTonerColor()->getName();
 
+            $ampv = 0;
+            /** @var RmsUpdateEntity $rmsUpdate */
+            $rmsUpdate = RmsUpdateEntity::find([
+                'client'=>$client,
+                'assetId'=>$device->getAssetId(),
+                'ipAddress'=>$device->getIpAddress(),
+                'serialNumber'=>$device->getSerialNumber()
+            ]);
+            if ($rmsUpdate) {
+                if ($device->getColor()->getName() == 'BLACK') {
+                    $meter = $rmsUpdate->getEndMeterBlack() - $rmsUpdate->getStartMeterBlack();
+                } else {
+                    $meter = $rmsUpdate->getEndMeterColor() - $rmsUpdate->getStartMeterColor();
+                }
+                $diff = date_diff($rmsUpdate->getMonitorStartDate(), $rmsUpdate->getMonitorEndDate());
+                $daily = $meter / $diff->days;
+                $ampv = round($daily * 365 / 12);
+            }
+
             $devices .=
 <<<HTML
 <p>
@@ -391,7 +410,8 @@ group by clientId
     Serial Number: <b>{$device->getSerialNumber()}</b><br>
     IP Address: <b>{$device->getIpAddress()}</b><br>
     {$location}
-    Toner Level {$color}: <b>{$device->getTonerLevel()}%</b>
+    Toner Level {$color}: <b>{$device->getTonerLevel()}%</b><br>
+    Estimated Monthly Page Volume: <b>{$ampv}</b><br>
     Estimated time left until toner reaches 5%: <b>{$device->getDaysLeft()}</b> days
 </p>
 HTML;
@@ -406,7 +426,9 @@ HTML;
 {$devices}
 
 <p>
-    Note: Toners that are at 5% are likely to experience print quality issues (light print) at 5% or less.
+    <em>Note:</em> print quality typically degrades when supply levels are between 5 and 10%.
+    Lighter prints or inaccurate color representation are often common when supply levels are low.
+    Some devices will stop printing at any point below 5%.
     Delivery times should also be considered to ensure the device does not stop printing due to empty supplies.
 </p>
 <p>

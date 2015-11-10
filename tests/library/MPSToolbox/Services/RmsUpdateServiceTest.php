@@ -544,6 +544,41 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
 
     public function test_sendEmail() {
         $service = new \MPSToolbox\Services\RmsUpdateService();
+        #--
+        $device = new \MPSToolbox\Entities\RmsUpdateEntity();
+        $device->setClient(\MPSToolbox\Entities\ClientEntity::find(5));
+        $device->setAssetId('123');
+        $device->setIpAddress('1.1.1.1');
+        $device->setSerialNumber('321');
+        $device->setLocation('here and there');
+        $device->setMasterDevice(\MPSToolbox\Entities\MasterDeviceEntity::find(1));
+        $device->setTonerLevelBlack(34);
+        $device->setTonerLevelMagenta(23);
+        $device->setDaysLeft([
+            \MPSToolbox\Entities\TonerColorEntity::BLACK=>4,
+            \MPSToolbox\Entities\TonerColorEntity::MAGENTA=>5,
+        ]);
+        $client = ['clientId'=>5, 'dealerId'=>1];
+        #--
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $db->query("
+replace into rms_update set
+    clientId=5,
+    assetId='123',
+    ipAddress='1.1.1.1',
+    serialNumber='321',
+    rmsProviderId=6,
+    masterDeviceId=1,
+    monitorStartDate='2015-01-01',
+    monitorEndDate='2015-02-02',
+    startMeterBlack='100',
+    endMeterBlack='500',
+    startMeterColor='200',
+    endMeterColor='750'
+")->execute();
+        #--
+        $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::BLACK);
+        #--
         $service->sendEmail(['clientId'=>5]);
     }
 }

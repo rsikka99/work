@@ -393,6 +393,7 @@ class Proposalgen_FleetController extends Action
 
         if ($targetDeviceInstanceId !== false && $masterDeviceId !== false)
         {
+            /** @var MasterDeviceModel $masterDevice */
             $masterDevice = MasterDeviceMapper::getInstance()->find($masterDeviceId);
             if ($masterDevice instanceof MasterDeviceModel || $masterDeviceId == 0)
             {
@@ -443,8 +444,9 @@ class Proposalgen_FleetController extends Action
                                     $deviceInstanceMasterDeviceMapper->insert($deviceInstanceMasterDevice);
                                 }
 
-                                $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($this->getIdentity()->dealerId);
-                                $deviceInstance->isLeased                 = ($masterDevice->isLeased) ? true : $deviceInstance->isLeased;
+                                $dealerId = $this->getIdentity()->dealerId;
+                                $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($dealerId);
+                                $deviceInstance->isLeased                 = ($masterDevice->isLeased($dealerId)) ? true : $deviceInstance->isLeased;
                                 $deviceInstanceMapper->save($deviceInstance);
                             }
                         }

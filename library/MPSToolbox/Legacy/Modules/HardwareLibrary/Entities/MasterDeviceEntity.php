@@ -18,10 +18,10 @@ use MPSToolbox\Legacy\Entities\UserEntity;
  * @property bool                               isCopier
  * @property bool                               isDuplex
  * @property bool                               isFax
- * @property bool                               isLeased
+ *                                isLeased
  * @property bool                               isReplacementDevice
  * @property bool                               isSystemDevice
- * @property int                                leasedTonerYield
+ *                                 leasedTonerYield
  * @property int                                maximumRecommendedMonthlyPageVolume
  * @property int                                ppmBlack
  * @property int                                ppmColor
@@ -59,10 +59,10 @@ class MasterDeviceEntity extends EloquentModel
         'isCopier',
         'isDuplex',
         'isFax',
-        'isLeased',
+        #'isLeased',
         'isReplacementDevice',
         'isSystemDevice',
-        'leasedTonerYield',
+        #'leasedTonerYield',
         'maximumRecommendedMonthlyPageVolume',
         'ppmBlack',
         'ppmColor',

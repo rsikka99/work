@@ -57,7 +57,7 @@ class DeviceNeedsTonerEntity extends BaseEntity {
     private $tonerOptions;
 
     /**
-     * @return mixed
+     * @return TonerColorEntity
      */
     public function getColor()
     {

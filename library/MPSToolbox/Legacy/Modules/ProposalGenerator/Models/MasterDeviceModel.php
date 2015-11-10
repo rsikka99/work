@@ -153,15 +153,15 @@ class MasterDeviceModel extends My_Model_Abstract
      */
     public $ppmColor;
 
-    /**
-     * @var bool
-     */
-    public $isLeased;
+    #/**
+    # * @var bool
+    # */
+    #public $isLeased;
 
-    /**
-     * @var int
-     */
-    public $leasedTonerYield;
+    #/**
+    # * @var int
+    # */
+    #public $leasedTonerYield;
 
     /**
      * @var bool
@@ -256,10 +256,13 @@ class MasterDeviceModel extends My_Model_Abstract
 
         if (!array_key_exists($cacheKey, $this->_maximumMonthlyPageVolume))
         {
+            $attr = DealerMasterDeviceAttributeMapper::getInstance()->find([$this->id, $costPerPageSetting->dealerId]); //masterDeviceId, dealerId
+            if (!$attr) $attr = new DealerMasterDeviceAttributeModel(['isLeased'=>false]);
+
             $smallestYield = null;
-            if ($this->isLeased)
+            if ($attr->isLeased)
             {
-                $smallestYield = $this->leasedTonerYield;
+                $smallestYield = $attr->leasedTonerYield;
             }
             else
             {
@@ -406,15 +409,16 @@ class MasterDeviceModel extends My_Model_Abstract
             $this->ppmColor = $params->ppmColor;
         }
 
-        if (isset($params->isLeased) && !is_null($params->isLeased))
-        {
-            $this->isLeased = $params->isLeased;
-        }
+        #if (isset($params->isLeased) && !is_null($params->isLeased))
+        #{
+        #    $this->isLeased = $params->isLeased;
+        #}
 
-        if (isset($params->leasedTonerYield) && !is_null($params->leasedTonerYield))
-        {
-            $this->leasedTonerYield = $params->leasedTonerYield;
-        }
+        #if (isset($params->leasedTonerYield) && !is_null($params->leasedTonerYield))
+        #{
+        #    $this->leasedTonerYield = $params->leasedTonerYield;
+        #}
+
         if (isset($params->isCapableOfReportingTonerLevels) && !is_null($params->isCapableOfReportingTonerLevels))
         {
             $this->isCapableOfReportingTonerLevels = $params->isCapableOfReportingTonerLevels;
@@ -480,8 +484,8 @@ class MasterDeviceModel extends My_Model_Abstract
             "dateCreated"                         => $this->dateCreated,
             "ppmBlack"                            => $this->ppmBlack,
             "ppmColor"                            => $this->ppmColor,
-            "isLeased"                            => $this->isLeased,
-            "leasedTonerYield"                    => $this->leasedTonerYield,
+            #"isLeased"                            => $this->isLeased,
+            #"leasedTonerYield"                    => $this->leasedTonerYield,
             "isCapableOfReportingTonerLevels"     => $this->isCapableOfReportingTonerLevels,
         ];
     }
@@ -937,6 +941,11 @@ class MasterDeviceModel extends My_Model_Abstract
     public function isJitCompatible ($dealerId)
     {
         return JitCompatibleMasterDeviceMapper::getInstance()->find([$this->id, $dealerId]) instanceof JitCompatibleMasterDeviceModel;
+    }
+
+    public function isLeased ($dealerId) {
+        $attr = DealerMasterDeviceAttributeMapper::getInstance()->find([$this->id, $dealerId]); //masterDeviceId, dealerId
+        return !empty($attr) && ($attr->isLeased);
     }
 
     /**
