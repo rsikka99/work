@@ -398,6 +398,11 @@ class ManageMasterDevicesService
                     $validatedData['leaseBuybackPrice'] = new Zend_Db_Expr("NULL");
                 }
 
+                if ($validatedData['leaseBuybackPrice'] == '')
+                {
+                    $validatedData['leaseBuybackPrice'] = new Zend_Db_Expr("NULL");
+                }
+
                 if ($validatedData['ppmBlack'] == '')
                 {
                     $validatedData['ppmBlack'] = new Zend_Db_Expr("NULL");
@@ -463,6 +468,8 @@ class ManageMasterDevicesService
             $dealerMasterDeviceAttribute->laborCostPerPage  = ($validatedData['dealerLaborCostPerPage'] == '' ? new Zend_Db_Expr("NULL") : $validatedData['dealerLaborCostPerPage']);
             $dealerMasterDeviceAttribute->partsCostPerPage  = ($validatedData['dealerPartsCostPerPage'] == '' ? new Zend_Db_Expr("NULL") : $validatedData['dealerPartsCostPerPage']);
             $dealerMasterDeviceAttribute->leaseBuybackPrice = ($validatedData['leaseBuybackPrice'] == '' ? new Zend_Db_Expr("NULL") : $validatedData['leaseBuybackPrice']);
+            $dealerMasterDeviceAttribute->isLeased          = $validatedData['isLeased'];
+            $dealerMasterDeviceAttribute->leasedTonerYield  = ($validatedData['leasedTonerYield'] == '' ? new Zend_Db_Expr("NULL") : $validatedData['leasedTonerYield']);
 
             $dealerMasterDeviceAttribute->saveObject();
         }
@@ -644,7 +651,13 @@ class ManageMasterDevicesService
 
                 if ($dealerMasterDeviceAttributes)
                 {
-                    $this->_suppliesAndServiceForm->populate(["dealerLaborCostPerPage" => $dealerMasterDeviceAttributes->laborCostPerPage, "dealerPartsCostPerPage" => $dealerMasterDeviceAttributes->partsCostPerPage, 'leaseBuybackPrice' => $dealerMasterDeviceAttributes->leaseBuybackPrice]);
+                    $this->_suppliesAndServiceForm->populate([
+                        'dealerLaborCostPerPage' => $dealerMasterDeviceAttributes->laborCostPerPage,
+                        'dealerPartsCostPerPage' => $dealerMasterDeviceAttributes->partsCostPerPage,
+                        'leaseBuybackPrice' => $dealerMasterDeviceAttributes->leaseBuybackPrice,
+                        'isLeased' => $dealerMasterDeviceAttributes->isLeased,
+                        'leasedTonerYield' => $dealerMasterDeviceAttributes->leasedTonerYield,
+                    ]);
                 }
 
                 $this->_suppliesAndServiceForm->populate($masterDevice->toArray());

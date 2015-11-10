@@ -54,7 +54,6 @@ class SuppliesAndServiceForm extends \My_Form_Form
         $this->addElement('checkbox', 'isLeased', [
             'label'    => 'Is Leased',
             'id'       => 'isLeased',
-            'disabled' => (!$this->_isAllowed),
         ]);
 
         /**
@@ -65,7 +64,6 @@ class SuppliesAndServiceForm extends \My_Form_Form
             'id'          => 'leasedTonerYield',
             'description' => 'If this device is marked as leased you must fill this out.',
             'allowEmpty'  => false,
-            'disabled'    => (!$this->_isAllowed),
             'validators'  => [
                 new FieldDependsOnValue('isLeased', '1', [
                         new Zend_Validate_NotEmpty(),
@@ -81,7 +79,7 @@ class SuppliesAndServiceForm extends \My_Form_Form
          */
         $this->addElement('text_currency', 'dealerPartsCostPerPage', [
             'label'       => 'Parts CPP',
-            'id'          => 'dealerParsCostPerPage',
+            'id'          => 'dealerPartsCostPerPage',
             'description' => 'Your parts cost per page to manage this device. Overrides the default parts cost per page in reports.',
             'maxlength'   => 8,
             'required'    => $this->_isQuoteDevice,

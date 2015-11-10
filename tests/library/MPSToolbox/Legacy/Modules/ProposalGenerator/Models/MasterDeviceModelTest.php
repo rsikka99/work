@@ -3,7 +3,28 @@
 class MPSToolbox_Legacy_Modules_ProposalGenerator_Models_MasterDeviceModelTest extends My_DatabaseTestCase
 {
 
-    public $fixtures = [ 'toners', 'master_devices', 'device_toners', 'dealers', 'dealer_toner_attributes' ];
+    public $fixtures = [ 'toners', 'master_devices', 'device_toners', 'dealers', 'dealer_toner_attributes', 'dealer_master_device_attributes' ];
+
+    public function test_isLeased() {
+        $model = new \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel(['id'=>1]);
+        $result = $model->isLeased(2);
+        $this->assertFalse($result);
+        $model = new \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel(['id'=>2]);
+        $result = $model->isLeased(2);
+        $this->assertTrue($result);
+    }
+
+    public function test_getMaximumMonthlyPageVolume() {
+        $model = new \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel(['id'=>1]);
+        $cpp = new \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel(['dealerId'=>2]);
+        $result = $model->getMaximumMonthlyPageVolume($cpp);
+        $this->assertEquals(1400, $result);
+
+        $model = new \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel(['id'=>2]);
+        $cpp = new \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel(['dealerId'=>2]);
+        $result = $model->getMaximumMonthlyPageVolume($cpp);
+        $this->assertEquals(123, $result);
+    }
 
     public function test_getToners() {
         $model = new \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel(['id'=>1]);

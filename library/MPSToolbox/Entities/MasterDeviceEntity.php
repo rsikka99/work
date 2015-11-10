@@ -39,8 +39,10 @@ class MasterDeviceEntity extends BaseEntity {
     private $isDuplex;
     /** @Column(type="boolean") */
     private $isFax;
-    /** @Column(type="boolean") */
-    private $isLeased;
+
+    #Column(type="boolean")
+    #private $isLeased;
+
     /** @Column(type="boolean") */
     private $isReplacementDevice;
     /** @Column(type="date") */
@@ -54,8 +56,10 @@ class MasterDeviceEntity extends BaseEntity {
 
     /** @Column(type="string") */
     private $modelName;
-    /** @Column(type="integer") */
-    private $leasedTonerYield;
+
+    #Column(type="integer")
+    #private $leasedTonerYield;
+
     /** @Column(type="float") */
     private $ppmBlack;
     /** @Column(type="float") */

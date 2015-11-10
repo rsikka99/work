@@ -532,7 +532,7 @@ class RmsUploadService
                                 {
                                     $masterDevice                             = $deviceInstanceMasterDevice->getMasterDevice();
                                     if ($masterDevice instanceof MasterDeviceModel) {
-                                        $deviceInstance->isLeased = $masterDevice->isLeased;
+                                        $deviceInstance->isLeased = $masterDevice->isLeased($dealerId);
                                         $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($dealerId);
                                     }
                                     DeviceInstanceMapper::getInstance()->save($deviceInstance);

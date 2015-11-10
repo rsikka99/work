@@ -39,6 +39,12 @@ class DealerMasterDeviceAttributeModel extends My_Model_Abstract
      */
     public $leaseBuybackPrice;
 
+    /** @var  boolean */
+    public $isLeased;
+
+    /** @var  int */
+    public $leasedTonerYield;
+
     /**
      * @param array $params An array of data to populate the model with
      */
@@ -73,6 +79,9 @@ class DealerMasterDeviceAttributeModel extends My_Model_Abstract
         {
             $this->leaseBuybackPrice = $params->leaseBuybackPrice;
         }
+
+        if (isset($params->isLeased) && !is_null($params->isLeased)) $this->isLeased = $params->isLeased;
+        if (isset($params->leasedTonerYield) && !is_null($params->leasedTonerYield)) $this->leasedTonerYield = $params->leasedTonerYield;
     }
 
     /**
@@ -86,6 +95,8 @@ class DealerMasterDeviceAttributeModel extends My_Model_Abstract
             "partsCostPerPage"  => $this->partsCostPerPage,
             "laborCostPerPage"  => $this->laborCostPerPage,
             "leaseBuybackPrice" => $this->leaseBuybackPrice,
+            "isLeased" => $this->isLeased,
+            "leasedTonerYield" => $this->leasedTonerYield,
         ];
     }
 
@@ -101,12 +112,12 @@ class DealerMasterDeviceAttributeModel extends My_Model_Abstract
 
         $this->_filterData();
 
-        if ($this->laborCostPerPage instanceof Zend_Db_Expr && $this->partsCostPerPage instanceof Zend_Db_Expr && $this->leaseBuybackPrice instanceof Zend_Db_Expr)
-        {
-            $dealerMasterDeviceAttributeMapper->delete($this);
-        }
-        else
-        {
+        #if ($this->laborCostPerPage instanceof Zend_Db_Expr && $this->partsCostPerPage instanceof Zend_Db_Expr && $this->leaseBuybackPrice instanceof Zend_Db_Expr)
+        #{
+        #    $dealerMasterDeviceAttributeMapper->delete($this);
+        #}
+        #else
+        #{
             if ($dealerMasterDeviceAttributeMapper->fetch($dealerMasterDeviceAttributeMapper->getWhereId([$this->masterDeviceId, $this->dealerId])))
             {
                 $dealerMasterDeviceAttributeMapper->save($this);
@@ -115,7 +126,7 @@ class DealerMasterDeviceAttributeModel extends My_Model_Abstract
             {
                 $dealerMasterDeviceAttributeMapper->insert($this);
             }
-        }
+        #}
 
         return $this;
     }
@@ -135,6 +146,11 @@ class DealerMasterDeviceAttributeModel extends My_Model_Abstract
         if ($this->leaseBuybackPrice < 0)
         {
             $this->leaseBuybackPrice = new Zend_Db_Expr("null");
+        }
+
+        if ($this->leasedTonerYield < 0)
+        {
+            $this->leasedTonerYield = new Zend_Db_Expr("null");
         }
     }
 }
