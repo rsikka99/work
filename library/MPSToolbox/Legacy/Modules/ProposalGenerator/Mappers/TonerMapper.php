@@ -925,10 +925,16 @@ WHERE `toners`.`id` IN ({$tonerIdList})
      */
     public function getTonerPricingForExport ($manufacturerId, $dealerId)
     {
+        $manufacturers = [];
+        foreach (ManufacturerMapper::getInstance()->fetchTonerManufacturersForDealer($dealerId) as $line) {
+            $manufacturers[$line['id']] = $line['id'];
+        }
+
+
         $db = Zend_Db_Table::getDefaultAdapter();
 
         $select = $db->select()
-                     ->from(['t' => 'toners'], ['toners_id' => 'id', 'sku', 'name', 'yield', 'imageFile', "systemCost" => "cost"])
+                     ->from(['t' => 'toners'], ['toners_id' => 'id', 'sku', 'name', 'yield', 'imageFile', 'manufacturerId', "systemCost" => "cost"])
                      ->joinLeft(['dt' => 'device_toners'], 'dt.toner_id = t.id', ['master_device_id'])
                      ->joinLeft(['tm' => 'manufacturers'], 'tm.id = t.manufacturerId', ['fullname'])
                      ->joinLeft(['tc' => 'toner_colors'], 'tc.id = t.tonerColorId', ['name AS toner_color'])
@@ -948,23 +954,25 @@ WHERE `toners`.`id` IN ({$tonerIdList})
         $fieldList = [];
         foreach ($result as $value)
         {
-            $fieldList [] = [
-                $value ['toners_id'],
-                $value ['fullname'],
-                $value ['sku'],
-                $value ['name'],
-                $value ['toner_color'],
-                $value ['yield'],
-                $value ['systemCost'],
-                $value ['dealerSku'],
-                $value ['cost'],
-                //$value ['imageFile']?'Yes':'No',
-                $value ['level1'],
-                $value ['level2'],
-                $value ['level3'],
-                $value ['level4'],
-                $value ['level5'],
-            ];
+            if (isset($manufacturers[$value['manufacturerId']])) {
+                $fieldList[] = [
+                    $value ['toners_id'],
+                    $value ['fullname'],
+                    $value ['sku'],
+                    $value ['name'],
+                    $value ['toner_color'],
+                    $value ['yield'],
+                    $value ['systemCost'],
+                    $value ['dealerSku'],
+                    $value ['cost'],
+                    //$value ['imageFile']?'Yes':'No',
+                    $value ['level1'],
+                    $value ['level2'],
+                    $value ['level3'],
+                    $value ['level4'],
+                    $value ['level5'],
+                ];
+            }
         }
 
         return $fieldList;

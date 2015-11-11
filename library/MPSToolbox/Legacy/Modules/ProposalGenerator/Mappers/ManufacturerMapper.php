@@ -2,6 +2,9 @@
 
 namespace MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers;
 
+use MPSToolbox\Entities\DealerEntity;
+use MPSToolbox\Legacy\Mappers\DealerMapper;
+use MPSToolbox\Legacy\Models\DealerModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\ManufacturerModel;
 use My_Model_Mapper_Abstract;
 use Zend_Db_Table_Select;
@@ -254,6 +257,14 @@ class ManufacturerMapper extends My_Model_Mapper_Abstract
         ], [
             "{$this->col_fullName} ASC",
         ]);
+    }
+
+    public function fetchTonerManufacturersForDealer($dealerId = null) {
+        if (!$dealerId) $dealerId=DealerEntity::getDealerId();
+        $sql = 'select * from manufacturers where id in (select manufacturerId from dealer_toner_vendors where dealerId='.intval($dealerId).') or id in (select manufacturerId from master_devices) order by displayname';
+        $st = \Zend_Db_Table::getDefaultAdapter()->query($sql);
+        $st->execute();
+        return $st->fetchAll();
     }
 
     /**
