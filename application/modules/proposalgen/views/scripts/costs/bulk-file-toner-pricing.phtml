@@ -40,7 +40,13 @@ $this->headScript()->appendFile($this->baseUrl('js/app/legacy/proposalgen/cost/C
                     <a href="#" id="importLink" class="btn btn-primary"><i class="glyphicon glyphicon-upload"></i> Import</a>
                     <a href="#" id="exportLink" data-type="toner" class="btn btn-primary"><i class="fa fa-fw fa-download"></i>Export</a>
 
-                    <select style="width:200px; display:inline-block" class="form-control" type="text" id="manufacturerId" name="manufacturers"><option></option><?php foreach (\MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper::getInstance()->fetchAllAvailableManufacturers() as $line) { ?><option value="<?php echo $line->id ?>"><?php echo $line->fullname==$line->displayname?$line->fullname:$line->displayname." ({$line->fullname})" ?></option><?php } ?></select>
+                    <select style="width:200px; display:inline-block" class="form-control" type="text" id="manufacturerId" name="manufacturers">
+                        <option></option>
+<?php foreach (\MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper::getInstance()->fetchTonerManufacturersForDealer() as $line) {
+?>
+                        <option value="<?php echo $line['id'] ?>"><?= $line['displayname']; ?></option>
+<?php }?>
+                    </select>
                     <script> require(['jquery', 'select2'], function ($) { $('#manufacturerId').select2({}); }); </script>
                 </form>
             </div>
