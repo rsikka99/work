@@ -3,8 +3,10 @@
 namespace MPSToolbox\Legacy\Modules\HardwareOptimization\Mappers;
 
 use Assessment_ViewModel_Devices;
+use MPSToolbox\Entities\DealerEntity;
 use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationDeviceInstanceModel;
 use MPSToolbox\Legacy\Modules\HardwareOptimization\Models\HardwareOptimizationModel;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DealerMasterDeviceAttributeMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceInstanceMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceInstanceMasterDeviceMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceInstanceMeterMapper;
@@ -308,6 +310,9 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
         $masterDeviceMapper               = MasterDeviceMapper::getInstance();
         $manufacturerMapper               = ManufacturerMapper::getInstance();
         $deviceInstanceMeterMapper        = DeviceInstanceMeterMapper::getInstance();
+        $dmda                             = DealerMasterDeviceAttributeMapper::getInstance();
+
+        $dealerId = DealerEntity::getDealerId();
 
         if ($justCount)
         {
@@ -319,8 +324,9 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
                    ->join(["dimd" => $deviceInstanceMasterDeviceMapper->getTableName()], "dimd.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
                    ->join(["md" => $masterDeviceMapper->getTableName()], "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
                    ->join(["dim" => $deviceInstanceMeterMapper->getTableName()], "dim.{$deviceInstanceMeterMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
+                   ->join(["dmda" => $dmda->getTableName()], "dmda.masterDeviceId = md.id and dmda.dealerId=".intval($dealerId))
                    ->where("{$this->getTableName()}.$this->col_id = ?", $hardwareOptimizationId)
-                   ->where("md.isLeased = ?", 0)
+                   ->where("(dmda.isLeased = ?) or (dmda.isLeased is null)", 0)
                    ->where("di.isExcluded = ?", 0)
                    ->where("DATEDIFF(dim.monitorEndDate, dim.monitorStartDate) >= ? ", Assessment_ViewModel_Devices::MINIMUM_MONITOR_INTERVAL_DAYS);
 
@@ -344,8 +350,9 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
                    ->join(["md" => $masterDeviceMapper->getTableName()], "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
                    ->join(["m" => $manufacturerMapper->getTableName()], "m.{$manufacturerMapper->col_id} = md.{$masterDeviceMapper->col_manufacturerId}")
                    ->join(["dim" => $deviceInstanceMeterMapper->getTableName()], "dim.{$deviceInstanceMeterMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
+                   ->join(["dmda" => $dmda->getTableName()], "dmda.masterDeviceId = md.id and dmda.dealerId=".intval($dealerId))
                    ->where("{$this->getTableName()}.$this->col_id = ?", $hardwareOptimizationId)
-                   ->where("md.isLeased = ?", 0)
+                   ->where("(dmda.isLeased = ?) or (dmda.isLeased is null)", 0)
                    ->where("di.isExcluded = ?", 0)
                    ->where("DATEDIFF(dim.monitorEndDate, dim.monitorStartDate) >= ? ", Assessment_ViewModel_Devices::MINIMUM_MONITOR_INTERVAL_DAYS);
 
