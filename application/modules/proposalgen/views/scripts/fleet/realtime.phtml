@@ -1,0 +1,28 @@
+<div class="container">
+    <?php if (count($this->arr)<2) { ?>
+        <p>There is no real time data available yet.</p>
+        <p><a href="<?= $this->url([], 'app.dashboard.select-upload') ?>">&laquo; back</a></p>
+    <?php } else { ?>
+
+        <?php if (isset($this->error)) { echo '<p class="text-danger">'.$this->error.'</p>'; } ?>
+
+        <form method="post" action="?">
+            <p>Select a date range</p>
+            <div class="col-sm-4">
+                <label>From</label>
+                <select name="from" class="form-control"><?php foreach ($this->arr as $i=>$line) if ($i<count($this->arr)-1) echo '<option value="'.$line['scanDate'].'" '.($i==0?'selected="selected"':'').'>'.date('d M Y', strtotime($line['scanDate'])).'</option>' ?></select>
+            </div>
+            <div class="col-sm-4">
+                <label>Until</label>
+                <select name="until" class="form-control"><?php foreach ($this->arr as $i=>$line) if ($i>0) echo '<option value="'.$line['scanDate'].'" '.($i==count($this->arr)-1?'selected="selected"':'').'>'.date('d M Y', strtotime($line['scanDate'])).'</option>' ?></select>
+            </div>
+            <div class="col-sm-4">
+                <label>&nbsp;</label><br>
+                <button type="submit" class="btn btn-primary">Next &raquo;</button>
+            </div>
+        </form>
+        <p>&nbsp;</p>
+        <p><a href="<?= $this->url([], 'app.dashboard.select-upload') ?>">&laquo; back</a></p>
+
+    <?php } ?>
+</div>

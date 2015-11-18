@@ -30,10 +30,10 @@ $assessmentViewModel = $this->assessmentViewModel;
 <table cellspacing="0" class="genericTable" id="HighRiskDevicesTable">
     <thead>
     <tr class="center">
-        <th class="column1 left">High Risk Devices</th>
-        <th class="column2">Serial No.</th>
-        <th class="column3">Age</th>
-        <th class="column4">CURRENT ESTIMATED AMPV</th>
+        <th class="column1 left">High Risk Devices &nbsp;</th>
+        <th class="column2">Serial No. &nbsp;</th>
+        <th class="column3">Age &nbsp;</th>
+        <th class="column4">CURRENT ESTIMATED AMPV &nbsp;</th>
         <th class="column5">Current Life<br />Page Count</th>
         <th class="column6">Est. Max Life<br />Page Count</th>
     </tr>
@@ -43,22 +43,22 @@ $assessmentViewModel = $this->assessmentViewModel;
     foreach ($assessmentViewModel->getHighRiskDevices() as $deviceInstance) : ?>
         <tr>
             <td class="column1">
-                <div class=" left"><?= $deviceInstance->getDeviceName(); ?></div>
+                <div class=" left"><?= $deviceInstance->getDeviceName(); ?> &nbsp;</div>
             </td>
             <td class="column2">
-                <div class=" center"><?= ($deviceInstance->serialNumber) ?: 'Unknown'; ?></div>
+                <div class=" center"><?= ($deviceInstance->serialNumber) ?: 'Unknown'; ?> &nbsp;</div>
             </td>
             <td class="column3">
-                <div class=" center"><?= $deviceInstance->getAge(); ?> years</div>
+                <div class=" center"><?= $deviceInstance->getAge(); ?> years &nbsp;</div>
             </td>
             <td class="column4">
-                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></div>
+                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?> &nbsp;</div>
             </td>
             <td class="column5">
-                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getMeter()->endMeterLife); ?></div>
+                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getMeter()->endMeterLife); ?> &nbsp;</div>
             </td>
             <td class="column6">
-                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount()); ?></div>
+                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount()); ?> &nbsp;</div>
             </td>
         </tr>
         <?php $ctr++;

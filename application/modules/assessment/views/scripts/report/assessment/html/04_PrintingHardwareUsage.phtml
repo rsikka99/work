@@ -43,8 +43,8 @@ $assessmentViewModel = $this->assessmentViewModel;
 <table cellspacing="0" class="genericTable" id="LeastUsedDevicesTable">
     <thead>
     <tr>
-        <th class="column1">Lowest Utilization</th>
-        <th class="column2 center">Serial No.</th>
+        <th class="column1">Lowest Utilization &nbsp;</th>
+        <th class="column2 center">Serial No. &nbsp;</th>
         <th class="column3 center">Avg. Monthly<br />Volume</th>
         <th class="column4 center">Recommended <br />Max. Volume</th>
     </tr>
@@ -53,16 +53,16 @@ $assessmentViewModel = $this->assessmentViewModel;
     <?php foreach ($assessmentViewModel->getLeastUsedDevices() as $deviceInstance) : ?>
         <tr>
             <td class="column1">
-                <div><?= $deviceInstance->getDeviceName() ?></div>
+                <div><?= $deviceInstance->getDeviceName() ?> &nbsp;</div>
             </td>
             <td class="column2">
-                <div class=" center"><?= ($deviceInstance->serialNumber) ?: 'Unknown'; ?></div>
+                <div class=" center"><?= ($deviceInstance->serialNumber) ?: 'Unknown'; ?> &nbsp;</div>
             </td>
             <td class="column3">
-                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
+                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?> &nbsp;</div>
             </td>
             <td class="column4">
-                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></div>
+                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?> &nbsp;</div>
             </td>
         </tr>
     <?php endforeach; ?>
@@ -71,8 +71,8 @@ $assessmentViewModel = $this->assessmentViewModel;
 <table cellspacing="0" class="genericTable" style="margin-top: 10px;" id="MostUsedDevicesTable">
     <thead>
     <tr>
-        <th class="column1">Highest Utilization</th>
-        <th class="column2 center">Serial No.</th>
+        <th class="column1">Highest Utilization &nbsp;</th>
+        <th class="column2 center">Serial No. &nbsp;</th>
         <th class="column3 center">Avg. Monthly<br />Volume</th>
         <th class="column4 center">Recommended <br />Max. Volume</th>
     </tr>
@@ -81,16 +81,16 @@ $assessmentViewModel = $this->assessmentViewModel;
     <?php foreach ($assessmentViewModel->getMostUsedDevices() as $deviceInstance) : ?>
         <tr>
             <td class="column1">
-                <div><?= $deviceInstance->getDeviceName() ?></div>
+                <div><?= $deviceInstance->getDeviceName() ?> &nbsp;</div>
             </td>
             <td class="column2">
-                <div class=" center"><?= ($deviceInstance->serialNumber) ?: 'Unknown' ?></div>
+                <div class=" center"><?= ($deviceInstance->serialNumber) ?: 'Unknown' ?> &nbsp;</div>
             </td>
             <td class="column3">
-                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
+                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?> &nbsp;</div>
             </td>
             <td class="column4">
-                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></div>
+                <div class=" center"><?= $this->formatPageVolume($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?> &nbsp;</div>
             </td>
         </tr>
     <?php endforeach; ?>

@@ -36,6 +36,8 @@ class ProposalgenAclModel
     const RESOURCE_PROPOSALGEN_COSTS_BULKFILEDEVICEPRICNG   = 'proposalgen__costs__bulk-file-device-pricing';
     const RESOURCE_PROPOSALGEN_COSTS_BULKFILEDEVICEFEATURES = 'proposalgen__costs__bulk-file-device-features';
 
+    const RESOURCE_PROPOSALGEN_FLEET_WILDCARD              = 'proposalgen__fleet__%';
+    /**
     const RESOURCE_PROPOSALGEN_FLEET_DEVICESUMMARYLIST     = 'proposalgen__fleet__device-summary-list';
     const RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST          = 'proposalgen__fleet__excluded-list';
     const RESOURCE_PROPOSALGEN_FLEET_REPORTSETTINGS        = 'proposalgen__fleet__reportsettings';
@@ -52,6 +54,7 @@ class ProposalgenAclModel
     const RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE   = 'proposalgen__fleet__remove-unknown-device';
     const RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO           = 'proposalgen__fleet__set-mapped-to';
     const RESOURCE_PROPOSALGEN_FLEET_SUMMARY               = 'proposalgen__fleet__summary';
+    **/
 
     const RESOURCE_PROPOSALGEN_INDEX_INDEX            = 'proposalgen__index__index';
     const RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD  = 'proposalgen__manufacturer__%';
@@ -119,6 +122,8 @@ class ProposalgenAclModel
         $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERPRICING);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_EXPORTPRICING);
 
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_WILDCARD);
+        /**
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_RMSUPLOADLIST);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST);
@@ -135,6 +140,7 @@ class ProposalgenAclModel
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_TOGGLELEASEDFLAG);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEMANAGEDFLAG);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEJITFLAG);
+        **/
 
         $acl->addResource(self::RESOURCE_PROPOSALGEN_INDEX_INDEX);
 
@@ -187,7 +193,8 @@ class ProposalgenAclModel
         $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_ADMIN_REPLACETONER, AppAclModel::PRIVILEGE_VIEW);
         $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_INDEX_INDEX, AppAclModel::PRIVILEGE_VIEW);
         $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_SURVEY_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
-        $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_INDEX, AppAclModel::PRIVILEGE_VIEW);
+        $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
+        /**
         $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_MAPPING, AppAclModel::PRIVILEGE_VIEW);
         $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_SUMMARY, AppAclModel::PRIVILEGE_VIEW);
         $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_DEVICESUMMARYLIST, AppAclModel::PRIVILEGE_VIEW);
@@ -203,6 +210,7 @@ class ProposalgenAclModel
         $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEJITFLAG, AppAclModel::PRIVILEGE_VIEW);
         $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE, AppAclModel::PRIVILEGE_VIEW);
         $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO, AppAclModel::PRIVILEGE_VIEW);
+        **/
         $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_MANAGEDEVICES_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
         $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_MANUFACTURER_CREATE, AppAclModel::PRIVILEGE_VIEW);
 //        $acl->allow(AppAclModel::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_MANUFACTURER_INDEX, AppAclModel::PRIVILEGE_VIEW);

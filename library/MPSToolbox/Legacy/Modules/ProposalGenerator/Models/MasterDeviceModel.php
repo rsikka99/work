@@ -961,8 +961,6 @@ class MasterDeviceModel extends My_Model_Abstract
     /**
      * Calculates the max estimated life count (Defaults to using OEM)
      *
-     * @internal param CostPerPageSettingModel $costPerPageSetting Set this if you want to use a different set of toners
-     *
      * @return int
      */
     public function calculateEstimatedMaxLifeCount ()

@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified"
+	targetNamespace="http://fm.printaudit.com/DeviceInventorySchema.xsd"
+	xmlns="http://fm.printaudit.com/DeviceInventorySchema.xsd">
+	
+	<xsd:element name="DeviceInventory" type="DeviceInventoryType"/>
+
+	<xsd:complexType name="DeviceInventoryType">
+		<xsd:sequence>
+			<xsd:element name="Device" type="DeviceType" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="DeviceType">
+		<xsd:sequence>
+			<xsd:element name="Name" type="xsd:string" />
+			<xsd:element name="ModelName" type="xsd:string" />
+			<xsd:element name="SerialNumber" type="xsd:string" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="Location" type="xsd:string" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="FirmwareVersion" type="xsd:string" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="FirmwareDateLocalized" type="xsd:dateTime" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="Manufacturer" type="xsd:string" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="IPAddress" type="xsd:string" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="MacAddress" type="xsd:string" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="AssetNumber" type="xsd:string" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="IsColor" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="CustomFieldOne" type="xsd:string" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="CustomFieldTwo" type="xsd:string" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="ScanDateLocalized" type="xsd:dateTime" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="LifeCount" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="LifeCountMono" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="LifeCountColor" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="CopyCount" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="CopyCountMono" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="CopyCountColor" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="PrintCount" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="PrintCountMono" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="PrintCountColor" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="ScanCount" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="ScanCountMono" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="ScanCountColor" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="FaxCount" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="ExtendedCounts" type="ExtendedCountsType" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="SiteInfo" type="HierarchyType" />
+			<xsd:element name="CustomerInfo" type="HierarchyType"/>
+			<xsd:element name="DealerInfo" type="HierarchyType"/>
+			<xsd:element name="Toners" type="TonersType" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="Consumables" type="ConsumablesType" minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="TonersType">
+		<xsd:sequence>
+			<xsd:element name="TonerBlack" type="TonerType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="TonerCyan" type="TonerType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="TonerMagenta" type="TonerType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="TonerYellow" type="TonerType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="TonerWaste" type="TonerType" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="TonerType">
+		<xsd:sequence>
+			<xsd:element name="Information" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="SerialNumber" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="Level" type="LevelType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="LevelType" type="LevelTypeEnum" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="RundownDateLocalized" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="ExtendedCountsType">
+		<xsd:sequence>
+			<xsd:element name="Count" type="CountType" minOccurs="1" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:simpleType name="CountTypeEnum">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="PrintMono" />
+			<xsd:enumeration value="PrintColor" />
+			<xsd:enumeration value="CopierMono" />
+			<xsd:enumeration value="CopierColor" />
+			<xsd:enumeration value="FaxTotal" />
+			<xsd:enumeration value="LargePaper" />
+			<xsd:enumeration value="StaplesUsed" />
+			<xsd:enumeration value="DuplexedPages" />
+			<xsd:enumeration value="PagesPrintedFromDeviceLocalStorageTotal" />
+			<xsd:enumeration value="PagesPrintedFromDeviceLocalStorageColor" />
+			<xsd:enumeration value="PagesPrintedFromDeviceLocalStorageMono" />
+			<xsd:enumeration value="ScanTotal" />
+			<xsd:enumeration value="LifeTotal" />
+			<xsd:enumeration value="LifeMono" />
+			<xsd:enumeration value="LifeColor" />
+			<xsd:enumeration value="PrintTotal" />
+			<xsd:enumeration value="CopierTotal" />
+			<xsd:enumeration value="ScanMono" />
+			<xsd:enumeration value="ScanColor" />
+			<xsd:enumeration value="CMYDevelopment" />
+			<xsd:enumeration value="KDevelopment" />
+			<xsd:enumeration value="SmallMono" />
+			<xsd:enumeration value="SmallColor" />
+			<xsd:enumeration value="LargeMono" />
+			<xsd:enumeration value="LargeColor" />
+			<xsd:enumeration value="BillingLevel1" />
+			<xsd:enumeration value="BillingLevel2" />
+			<xsd:enumeration value="BillingLevel3" />
+			<xsd:enumeration value="Total2" />
+			<xsd:enumeration value="TotalMono2" />
+			<xsd:enumeration value="TotalColor2" />
+			<xsd:enumeration value="Other" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:complexType name="CountType">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="type" type="CountTypeEnum"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="ConsumablesType">
+		<xsd:sequence>
+			<xsd:element name="Consumable" type="ConsumableType" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="ConsumableType">
+		<xsd:sequence>
+			<xsd:element name="Information" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="Color" type="ConsumableColorType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="SerialNumber" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="Type" type="ConsumableEnumType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="Level" type="LevelType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="LevelType" type="LevelTypeEnum" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:simpleType name="LevelType">
+		<xsd:union memberTypes="xsd:nonNegativeInteger LevelEnumType"/>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="LevelTypeEnum">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Absolute" />
+			<xsd:enumeration value="Enumeration" />
+			<xsd:enumeration value="Percentage" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="LevelEnumType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Unknown" />
+			<xsd:enumeration value="OK" />
+			<xsd:enumeration value="Empty" />
+			<xsd:enumeration value="Low" />
+			<xsd:enumeration value="Mid" />
+			<xsd:enumeration value="High" />
+			<xsd:enumeration value="Full" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="ConsumableEnumType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="BlackToner" />
+			<xsd:enumeration value="CyanToner" />
+			<xsd:enumeration value="MagentaToner" />
+			<xsd:enumeration value="YellowToner" />
+			<xsd:enumeration value="WasteToner" />
+			<xsd:enumeration value="OtherToner" />
+			<xsd:enumeration value="Paper" />
+			<xsd:enumeration value="Fuser" />
+			<xsd:enumeration value="Staples" />
+			<xsd:enumeration value="MaintenanceKit" />
+			<xsd:enumeration value="PhotoConductor" />
+			<xsd:enumeration value="TransferKit" />
+			<xsd:enumeration value="Developer" />
+			<xsd:enumeration value="CoronaWire" />
+			<xsd:enumeration value="FuserOil" />
+			<xsd:enumeration value="FuserOilWick" />
+			<xsd:enumeration value="FuserCleaningPad" />
+			<xsd:enumeration value="FuserOiler" />
+			<xsd:enumeration value="CleanerUnit" />
+			<xsd:enumeration value="DrumKit" />
+			<xsd:enumeration value="Belt" />
+			<xsd:enumeration value="DocumentFeeder" />
+			<xsd:enumeration value="OtherConsumable" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="ConsumableColorType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="None" />
+			<xsd:enumeration value="Black" />
+			<xsd:enumeration value="Cyan" />
+			<xsd:enumeration value="Magenta" />
+			<xsd:enumeration value="Yellow" />
+			<xsd:enumeration value="Other" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:complexType name="HierarchyType">
+		<xsd:sequence>
+			<xsd:element name="Name" type="xsd:string" />
+			<xsd:element name="Id" type="xsd:nonNegativeInteger" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

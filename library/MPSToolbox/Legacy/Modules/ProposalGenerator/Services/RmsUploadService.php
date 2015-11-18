@@ -8,6 +8,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceInstanceMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceInstanceMasterDeviceMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceInstanceMeterMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\RmsDeviceMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\RmsExcludedRowMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\RmsUploadMapper;
@@ -30,6 +31,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\PrintAuditUpl
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\PrintFleetVersionThreeUploadService;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\PrintFleetVersionTwoUploadService;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\PrintTrackerUploadService;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\UploadLineModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUpload\XeroxUploadService;
 use Tangent\Logger\Logger;
 use Zend_Db_Expr;
@@ -87,6 +89,15 @@ class RmsUploadService
      */
     public $invalidRows = [];
 
+    /** @var  RmsUploadRowMapper */
+    private $rmsUploadRowMapper;
+    /** @var  RmsExcludedRowMapper */
+    private $rmsExcludedRowMapper;
+    /** @var  DeviceInstanceMeterMapper */
+    private $deviceInstanceMeterMapper;
+    /** @var  RmsDeviceMapper */
+    private $rmsDeviceMapper;
+
 
     /**
      * @param int                 $userId
@@ -107,6 +118,56 @@ class RmsUploadService
     }
 
     /**
+     * @return RmsUploadRowMapper
+     */
+    public function getRmsUploadRowMapper()
+    {
+        if (!$this->rmsUploadRowMapper) {
+            $this->rmsUploadRowMapper  = RmsUploadRowMapper::getInstance();
+            $this->rmsUploadRowMapper->clearItemCache();
+        }
+        return $this->rmsUploadRowMapper;
+    }
+
+    /**
+     * @return RmsExcludedRowMapper
+     */
+    public function getRmsExcludedRowMapper()
+    {
+        if (!$this->rmsExcludedRowMapper) {
+            $this->rmsExcludedRowMapper  = RmsExcludedRowMapper::getInstance();
+            $this->rmsExcludedRowMapper->clearItemCache();
+        }
+        return $this->rmsExcludedRowMapper;
+    }
+
+    /**
+     * @return DeviceInstanceMeterMapper
+     */
+    public function getDeviceInstanceMeterMapper()
+    {
+        if (!$this->deviceInstanceMeterMapper) {
+            $this->deviceInstanceMeterMapper  = DeviceInstanceMeterMapper::getInstance();
+            $this->deviceInstanceMeterMapper->clearItemCache();
+        }
+        return $this->deviceInstanceMeterMapper;
+    }
+
+    /**
+     * @return RmsDeviceMapper
+     */
+    public function getRmsDeviceMapper()
+    {
+        if (!$this->rmsDeviceMapper) {
+            $this->rmsDeviceMapper  = RmsDeviceMapper::getInstance();
+            $this->rmsDeviceMapper->clearItemCache();
+        }
+        return $this->rmsDeviceMapper;
+    }
+
+
+
+    /**
      * Process upload will take MPSToolbox\Legacy\Modules\ProposalGenerator\Forms\ImportRmsCsvForm values and process the upload,
      * the success is measured by the bool value returned. Error messages will be saved inside
      * the local member $errorMessages.
@@ -119,6 +180,7 @@ class RmsUploadService
      */
     public function processUpload ($data, $dealerId)
     {
+        $this->_dealerId = $dealerId;
         $importSuccessful = false;
 
         $this->_fileName = $this->getForm()->getUploadedFilename();
@@ -180,15 +242,6 @@ class RmsUploadService
                 $db->beginTransaction();
                 try
                 {
-                    $rmsUploadRowMapper        = RmsUploadRowMapper::getInstance();
-                    $rmsExcludedRowMapper      = RmsExcludedRowMapper::getInstance();
-                    $deviceInstanceMeterMapper = DeviceInstanceMeterMapper::getInstance();
-                    $rmsDeviceMapper           = RmsDeviceMapper::getInstance();
-                    $rmsUploadRowMapper->clearItemCache();
-                    $rmsExcludedRowMapper->clearItemCache();
-                    $deviceInstanceMeterMapper->clearItemCache();
-                    $rmsDeviceMapper->clearItemCache();
-
                     /**
                      * Store our old upload in case we need it.
                      */
@@ -234,8 +287,8 @@ class RmsUploadService
                                 /**
                                  * Delete all previously uploaded lines
                                  */
-                                $rmsUploadRowMapper->deleteAllForRmsUpload($oldRmsUpload->id);
-                                $rmsExcludedRowMapper->deleteAllForRmsUpload($oldRmsUpload->id);
+                                $this->getRmsUploadRowMapper()->deleteAllForRmsUpload($oldRmsUpload->id);
+                                $this->getRmsExcludedRowMapper()->deleteAllForRmsUpload($oldRmsUpload->id);
                                 RmsUploadMapper::getInstance()->delete($oldRmsUpload);
                             }
 
@@ -260,240 +313,10 @@ class RmsUploadService
 
                             foreach ($uploadCsvService->validCsvLines as $line)
                             {
-                                /*
-                                 * Convert line into device instance, upload row, and meters
-                                 */
-                                $lineArray = $line->toArray();
-
-                                /*
-                                 * Check and insert RMS device
-                                 */
-                                if (strlen($line->rmsModelId) > 0)
-                                {
-                                    $rmsDevice = $rmsDeviceMapper->find([$uploadProviderId, $line->rmsModelId]);
-                                    if ($rmsDevice instanceof RmsDeviceModel)
-                                    {
-                                        if ($rmsDevice->isGeneric)
-                                        {
-                                            $line->rmsModelId = null;
-                                        }
-                                        $lineArray = $line->toArray();
-                                    }
-                                    else
-                                    {
-                                        $rmsDevice                = new RmsDeviceModel($lineArray);
-                                        $rmsDevice->rmsProviderId = $uploadProviderId;
-                                        $rmsDevice->dateCreated   = new Zend_Db_Expr("NOW()");
-                                        $rmsDevice->userId        = $this->_userId;
-                                        $rmsDeviceMapper->insert($rmsDevice);
-                                    }
-
-                                }
-
-                                /*
-                                 * Save RMS Upload Row
-                                 */
-                                $rmsUploadRow                 = new RmsUploadRowModel($lineArray);
-                                $rmsUploadRow->fullDeviceName = "{$line->manufacturer} {$line->modelName}";
-                                $rmsUploadRow->rmsProviderId  = $uploadProviderId;
-
-                                // Lets make an attempt at finding the manufacturer
-                                $manufacturers = ManufacturerMapper::getInstance()->searchByName($rmsUploadRow->manufacturer);
-                                if ($manufacturers && count($manufacturers) > 0)
-                                {
-                                    $rmsUploadRow->manufacturerId = $manufacturers[0]->id;
-                                }
-
-                                try
-                                {
-                                    $rmsUploadRowMapper->insert($rmsUploadRow);
-                                }
-                                catch (Exception $e)
-                                {
-                                    if (isset($rmsDevice) && $rmsDevice instanceof RmsDeviceModel)
-                                    {
-                                        Logger::crit(print_r($rmsDevice->toArray(), true));
-                                    }
-                                    Logger::crit(print_r($rmsUploadRow->toArray(), true));
-                                    throw $e;
-                                }
-
-
-                                /*
-                                 * Save Device Instance
-                                 */
-                                $deviceInstance                 = new DeviceInstanceModel($lineArray);
-                                $deviceInstance->rmsUploadId    = $this->rmsUpload->id;
-                                $deviceInstance->rmsUploadRowId = $rmsUploadRow->id;
-                                DeviceInstanceMapper::getInstance()->insert($deviceInstance);
-
-                                $deviceInstances[] = $deviceInstance;
-
-                                /*
-                                 * Save Meters
-                                 */
-
-                                $meter                   = new DeviceInstanceMeterModel();
-                                $meter->deviceInstanceId = $deviceInstance->id;
-                                $meter->monitorStartDate = $line->monitorStartDate;
-                                $meter->monitorEndDate   = $line->monitorEndDate;
-
-                                $defaultDatabaseField = new Zend_Db_Expr('NULL');
-
-                                // Life Meter
-                                if ($line->endMeterLife > 0)
-                                {
-                                    $meter->startMeterLife = $line->startMeterLife;
-                                    $meter->endMeterLife   = $line->endMeterLife;
-                                }
-                                else if ($line->endMeterBlack > 0 || $line->endMeterColor > 0)
-                                {
-                                    $meter->startMeterLife = $line->startMeterBlack + $line->startMeterColor;
-                                    $meter->endMeterLife   = $line->endMeterBlack + $line->endMeterColor;
-                                }
-                                else
-                                {
-                                    $meter->startMeterLife = $defaultDatabaseField;
-                                    $meter->endMeterLife   = $defaultDatabaseField;
-                                }
-
-                                //  Black
-                                if ($line->endMeterBlack > 0)
-                                {
-                                    $meter->startMeterBlack = $line->startMeterBlack;
-                                    $meter->endMeterBlack   = $line->endMeterBlack;
-                                }
-                                // If we don't have a meter lets try creating it
-                                else if ($line->endMeterLife > 0)
-                                {
-                                    $endMeterBlack = $line->endMeterLife - $line->endMeterPrintColor - $line->endMeterCopyColor - $line->endMeterPrintA3Color;
-                                    if ($endMeterBlack > 0)
-                                    {
-                                        $meter->startMeterBlack = $line->startMeterLife - $line->startMeterPrintColor - $line->startMeterCopyColor - $line->startMeterPrintA3Color;
-                                        $meter->endMeterBlack   = $endMeterBlack;
-                                    }
-                                    else
-                                    {
-                                        $meter->startMeterBlack = $defaultDatabaseField;
-                                        $meter->endMeterBlack   = $defaultDatabaseField;
-                                    }
-                                }
-                                else
-                                {
-                                    $meter->startMeterBlack = $defaultDatabaseField;
-                                    $meter->endMeterBlack   = $defaultDatabaseField;
-                                }
-
-                                //  Color
-                                if ($line->endMeterColor > 0)
-                                {
-                                    $meter->startMeterColor = $line->startMeterColor;
-                                    $meter->endMeterColor   = $line->endMeterColor;
-                                }
-                                else
-                                {
-                                    $meter->startMeterColor = $defaultDatabaseField;
-                                    $meter->endMeterColor   = $defaultDatabaseField;
-                                }
-
-                                // Print Black
-                                if ($line->endMeterPrintBlack > 0)
-                                {
-                                    $meter->startMeterPrintBlack = $line->startMeterPrintBlack;
-                                    $meter->endMeterPrintBlack   = $line->endMeterPrintBlack;
-                                }
-                                else
-                                {
-                                    $meter->startMeterPrintBlack = $defaultDatabaseField;
-                                    $meter->endMeterPrintBlack   = $defaultDatabaseField;
-                                }
-
-                                // Print Color
-                                if ($line->endMeterPrintColor > 0)
-                                {
-                                    $meter->startMeterPrintColor = $line->startMeterPrintColor;
-                                    $meter->endMeterPrintColor   = $line->endMeterPrintColor;
-                                }
-                                else
-                                {
-                                    $meter->startMeterPrintColor = $defaultDatabaseField;
-                                    $meter->endMeterPrintColor   = $defaultDatabaseField;
-                                }
-
-                                // Copy Black
-                                if ($line->endMeterCopyBlack > 0)
-                                {
-                                    $meter->startMeterCopyBlack = $line->startMeterCopyBlack;
-                                    $meter->endMeterCopyBlack   = $line->endMeterCopyBlack;
-                                }
-                                else
-                                {
-                                    $meter->startMeterCopyBlack = $defaultDatabaseField;
-                                    $meter->endMeterCopyBlack   = $defaultDatabaseField;
-                                }
-
-                                // Copy Color
-                                if ($line->endMeterCopyColor > 0)
-                                {
-                                    $meter->startMeterCopyColor = $line->startMeterCopyColor;
-                                    $meter->endMeterCopyColor   = $line->endMeterCopyColor;
-                                }
-                                else
-                                {
-                                    $meter->startMeterCopyColor = $defaultDatabaseField;
-                                    $meter->endMeterCopyColor   = $defaultDatabaseField;
-                                }
-
-                                // Fax
-                                if ($line->endMeterFax > 0)
-                                {
-                                    $meter->startMeterFax = $line->startMeterFax;
-                                    $meter->endMeterFax   = $line->endMeterFax;
-                                }
-                                else
-                                {
-                                    $meter->startMeterFax = $defaultDatabaseField;
-                                    $meter->endMeterFax   = $defaultDatabaseField;
-                                }
-
-                                // Scan
-                                if ($line->endMeterScan > 0)
-                                {
-                                    $meter->startMeterScan = $line->startMeterScan;
-                                    $meter->endMeterScan   = $line->endMeterScan;
-                                }
-                                else
-                                {
-                                    $meter->startMeterScan = $defaultDatabaseField;
-                                    $meter->endMeterScan   = $defaultDatabaseField;
-                                }
-
-                                // Print A3 Black
-                                if ($line->endMeterPrintA3Black > 0)
-                                {
-                                    $meter->startMeterPrintA3Black = $line->startMeterPrintA3Black;
-                                    $meter->endMeterPrintA3Black   = $line->endMeterPrintA3Black;
-                                }
-                                else
-                                {
-                                    $meter->startMeterPrintA3Black = $defaultDatabaseField;
-                                    $meter->endMeterPrintA3Black   = $defaultDatabaseField;
-                                }
-
-                                // Print A3 Color
-                                if ($line->endMeterPrintA3Color > 0)
-                                {
-                                    $meter->startMeterPrintA3Color = $line->startMeterPrintA3Color;
-                                    $meter->endMeterPrintA3Color   = $line->endMeterPrintA3Color;
-                                }
-                                else
-                                {
-                                    $meter->startMeterPrintA3Color = $defaultDatabaseField;
-                                    $meter->endMeterPrintA3Color   = $defaultDatabaseField;
-                                }
-
-                                $deviceInstanceMeterMapper->insert($meter);
+                                $deviceInstances[] = $this->rmsUploadLine($line, $uploadProviderId);
                             }
+
+                            $this->mapDeviceInstances($deviceInstances);
 
                             /**
                              * Invalid Lines
@@ -512,33 +335,6 @@ class RmsUploadService
                                 $rmsExcludedRow->rmsProviderId = $uploadProviderId;
                                 RmsExcludedRowMapper::getInstance()->insert($rmsExcludedRow);
                             }
-
-
-                            /*
-                             * Perform Mapping
-                             */
-                            $deviceMappingService = new DeviceMappingService();
-                            $deviceMappingService->mapDevices($deviceInstances, $this->_userId, true);
-
-                            /**
-                             * @var $deviceInstance DeviceInstanceModel
-                             */
-                            foreach ($deviceInstances as $deviceInstance)
-                            {
-                                $deviceInstance             = DeviceInstanceMapper::getInstance()->find($deviceInstance->id);
-                                $deviceInstanceMasterDevice = DeviceInstanceMasterDeviceMapper::getInstance()->find($deviceInstance->id);
-
-                                if ($deviceInstanceMasterDevice instanceof DeviceInstanceMasterDeviceModel)
-                                {
-                                    $masterDevice                             = $deviceInstanceMasterDevice->getMasterDevice();
-                                    if ($masterDevice instanceof MasterDeviceModel) {
-                                        $deviceInstance->isLeased = $masterDevice->isLeased($dealerId);
-                                        $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($dealerId);
-                                    }
-                                    DeviceInstanceMapper::getInstance()->save($deviceInstance);
-                                }
-                            }
-
 
                             $db->commit();
                             $importSuccessful = true;
@@ -560,6 +356,271 @@ class RmsUploadService
         }
 
         return $importSuccessful;
+    }
+
+    /*
+    * Perform Mapping
+    */
+    public function mapDeviceInstances($deviceInstances) {
+        $deviceMappingService = new DeviceMappingService();
+        $deviceMappingService->mapDevices($deviceInstances, $this->_userId, true);
+
+        /**
+         * @var $deviceInstance DeviceInstanceModel
+         */
+        foreach ($deviceInstances as $deviceInstance)
+        {
+            $deviceInstance             = DeviceInstanceMapper::getInstance()->find($deviceInstance->id);
+            $deviceInstanceMasterDevice = DeviceInstanceMasterDeviceMapper::getInstance()->find($deviceInstance->id);
+
+            if ($deviceInstanceMasterDevice instanceof DeviceInstanceMasterDeviceModel)
+            {
+                $masterDevice                             = $deviceInstanceMasterDevice->getMasterDevice();
+                if ($masterDevice instanceof MasterDeviceModel) {
+                    $deviceInstance->isLeased = $masterDevice->isLeased($this->_dealerId);
+                    $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($this->_dealerId);
+                }
+                DeviceInstanceMapper::getInstance()->save($deviceInstance);
+            }
+        }
+    }
+
+    /*
+     * Convert line into device instance, upload row, and meters
+     */
+    protected function rmsUploadLine(UploadLineModel $line, $uploadProviderId) {
+        $lineArray = $line->toArray();
+
+        /*
+         * Check and insert RMS device
+         */
+        if (strlen($line->rmsModelId) > 0)
+        {
+            $rmsDevice = $this->getRmsDeviceMapper()->find([$uploadProviderId, $line->rmsModelId]);
+            if ($rmsDevice instanceof RmsDeviceModel)
+            {
+                if ($rmsDevice->isGeneric)
+                {
+                    $line->rmsModelId = null;
+                }
+                $lineArray = $line->toArray();
+            }
+            else
+            {
+                $rmsDevice                = new RmsDeviceModel($lineArray);
+                $rmsDevice->rmsProviderId = $uploadProviderId;
+                $rmsDevice->dateCreated   = new Zend_Db_Expr("NOW()");
+                $rmsDevice->userId        = $this->_userId;
+                $this->getRmsDeviceMapper()->insert($rmsDevice);
+            }
+
+        }
+
+        /*
+         * Save RMS Upload Row
+         */
+        $rmsUploadRow                 = new RmsUploadRowModel($lineArray);
+        $rmsUploadRow->fullDeviceName = "{$line->manufacturer} {$line->modelName}";
+        $rmsUploadRow->rmsProviderId  = $uploadProviderId;
+
+        // Lets make an attempt at finding the manufacturer
+        $manufacturers = ManufacturerMapper::getInstance()->searchByName($rmsUploadRow->manufacturer);
+        if ($manufacturers && count($manufacturers) > 0)
+        {
+            $rmsUploadRow->manufacturerId = $manufacturers[0]->id;
+        }
+
+        try
+        {
+            $this->getRmsUploadRowMapper()->insert($rmsUploadRow);
+        }
+        catch (Exception $e)
+        {
+            if (isset($rmsDevice) && $rmsDevice instanceof RmsDeviceModel)
+            {
+                Logger::crit(print_r($rmsDevice->toArray(), true));
+            }
+            Logger::crit(print_r($rmsUploadRow->toArray(), true));
+            throw $e;
+        }
+
+
+        /*
+         * Save Device Instance
+         */
+        $deviceInstance                 = new DeviceInstanceModel($lineArray);
+        $deviceInstance->rmsUploadId    = $this->rmsUpload->id;
+        $deviceInstance->rmsUploadRowId = $rmsUploadRow->id;
+        DeviceInstanceMapper::getInstance()->insert($deviceInstance);
+
+        $deviceInstances[] = $deviceInstance;
+
+        /*
+         * Save Meters
+         */
+
+        $meter                   = new DeviceInstanceMeterModel();
+        $meter->deviceInstanceId = $deviceInstance->id;
+        $meter->monitorStartDate = $line->monitorStartDate;
+        $meter->monitorEndDate   = $line->monitorEndDate;
+
+        $defaultDatabaseField = new Zend_Db_Expr('NULL');
+
+        // Life Meter
+        if ($line->endMeterLife > 0)
+        {
+            $meter->startMeterLife = $line->startMeterLife;
+            $meter->endMeterLife   = $line->endMeterLife;
+        }
+        else if ($line->endMeterBlack > 0 || $line->endMeterColor > 0)
+        {
+            $meter->startMeterLife = $line->startMeterBlack + $line->startMeterColor;
+            $meter->endMeterLife   = $line->endMeterBlack + $line->endMeterColor;
+        }
+        else
+        {
+            $meter->startMeterLife = $defaultDatabaseField;
+            $meter->endMeterLife   = $defaultDatabaseField;
+        }
+
+        //  Black
+        if ($line->endMeterBlack > 0)
+        {
+            $meter->startMeterBlack = $line->startMeterBlack;
+            $meter->endMeterBlack   = $line->endMeterBlack;
+        }
+        // If we don't have a meter lets try creating it
+        else if ($line->endMeterLife > 0)
+        {
+            $endMeterBlack = $line->endMeterLife - $line->endMeterPrintColor - $line->endMeterCopyColor - $line->endMeterPrintA3Color;
+            if ($endMeterBlack > 0)
+            {
+                $meter->startMeterBlack = $line->startMeterLife - $line->startMeterPrintColor - $line->startMeterCopyColor - $line->startMeterPrintA3Color;
+                $meter->endMeterBlack   = $endMeterBlack;
+            }
+            else
+            {
+                $meter->startMeterBlack = $defaultDatabaseField;
+                $meter->endMeterBlack   = $defaultDatabaseField;
+            }
+        }
+        else
+        {
+            $meter->startMeterBlack = $defaultDatabaseField;
+            $meter->endMeterBlack   = $defaultDatabaseField;
+        }
+
+        //  Color
+        if ($line->endMeterColor > 0)
+        {
+            $meter->startMeterColor = $line->startMeterColor;
+            $meter->endMeterColor   = $line->endMeterColor;
+        }
+        else
+        {
+            $meter->startMeterColor = $defaultDatabaseField;
+            $meter->endMeterColor   = $defaultDatabaseField;
+        }
+
+        // Print Black
+        if ($line->endMeterPrintBlack > 0)
+        {
+            $meter->startMeterPrintBlack = $line->startMeterPrintBlack;
+            $meter->endMeterPrintBlack   = $line->endMeterPrintBlack;
+        }
+        else
+        {
+            $meter->startMeterPrintBlack = $defaultDatabaseField;
+            $meter->endMeterPrintBlack   = $defaultDatabaseField;
+        }
+
+        // Print Color
+        if ($line->endMeterPrintColor > 0)
+        {
+            $meter->startMeterPrintColor = $line->startMeterPrintColor;
+            $meter->endMeterPrintColor   = $line->endMeterPrintColor;
+        }
+        else
+        {
+            $meter->startMeterPrintColor = $defaultDatabaseField;
+            $meter->endMeterPrintColor   = $defaultDatabaseField;
+        }
+
+        // Copy Black
+        if ($line->endMeterCopyBlack > 0)
+        {
+            $meter->startMeterCopyBlack = $line->startMeterCopyBlack;
+            $meter->endMeterCopyBlack   = $line->endMeterCopyBlack;
+        }
+        else
+        {
+            $meter->startMeterCopyBlack = $defaultDatabaseField;
+            $meter->endMeterCopyBlack   = $defaultDatabaseField;
+        }
+
+        // Copy Color
+        if ($line->endMeterCopyColor > 0)
+        {
+            $meter->startMeterCopyColor = $line->startMeterCopyColor;
+            $meter->endMeterCopyColor   = $line->endMeterCopyColor;
+        }
+        else
+        {
+            $meter->startMeterCopyColor = $defaultDatabaseField;
+            $meter->endMeterCopyColor   = $defaultDatabaseField;
+        }
+
+        // Fax
+        if ($line->endMeterFax > 0)
+        {
+            $meter->startMeterFax = $line->startMeterFax;
+            $meter->endMeterFax   = $line->endMeterFax;
+        }
+        else
+        {
+            $meter->startMeterFax = $defaultDatabaseField;
+            $meter->endMeterFax   = $defaultDatabaseField;
+        }
+
+        // Scan
+        if ($line->endMeterScan > 0)
+        {
+            $meter->startMeterScan = $line->startMeterScan;
+            $meter->endMeterScan   = $line->endMeterScan;
+        }
+        else
+        {
+            $meter->startMeterScan = $defaultDatabaseField;
+            $meter->endMeterScan   = $defaultDatabaseField;
+        }
+
+        // Print A3 Black
+        if ($line->endMeterPrintA3Black > 0)
+        {
+            $meter->startMeterPrintA3Black = $line->startMeterPrintA3Black;
+            $meter->endMeterPrintA3Black   = $line->endMeterPrintA3Black;
+        }
+        else
+        {
+            $meter->startMeterPrintA3Black = $defaultDatabaseField;
+            $meter->endMeterPrintA3Black   = $defaultDatabaseField;
+        }
+
+        // Print A3 Color
+        if ($line->endMeterPrintA3Color > 0)
+        {
+            $meter->startMeterPrintA3Color = $line->startMeterPrintA3Color;
+            $meter->endMeterPrintA3Color   = $line->endMeterPrintA3Color;
+        }
+        else
+        {
+            $meter->startMeterPrintA3Color = $defaultDatabaseField;
+            $meter->endMeterPrintA3Color   = $defaultDatabaseField;
+        }
+
+        $this->getDeviceInstanceMeterMapper()->insert($meter);
+
+        return $deviceInstance;
     }
 
     /**
@@ -584,4 +645,127 @@ class RmsUploadService
     {
         return $this->_fileName;
     }
+
+    public function fromRealtime($from, $until) {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $sql = "select * from rms_realtime where clientId={$this->_clientId} and (scanDate='{$from}' or scanDate='{$until}') order by scanDate";
+
+        $st = $db->query($sql);
+        $rmsProviderId = null;
+        $data=[];
+        foreach ($st->fetchAll() as $line) {
+            $id = "{$line['assetId']}-{$line['ipAddress']}-{$line['serialNumber']}";
+            $data[$id][$line['scanDate']] = $line;
+            $rmsProviderId = $line['rmsProviderId'];
+        }
+        $invalid = 0;
+        foreach ($data as $id=>$row) {
+            if (count($row)!=2) {
+                $invalid++;
+                unset($data[$id]);
+            }
+        }
+        if (count($data)==0) {
+            throw new \InvalidArgumentException('No data found');
+        }
+
+        $this->rmsUpload = new RmsUploadModel();
+        $this->rmsUpload->clientId = $this->_clientId;
+        $this->rmsUpload->fileName = 'Real Time Data from '.(date('d-M-Y',strtotime($from))).' until '.(date('d-M-Y',strtotime($until)));
+        $this->rmsUpload->invalidRowCount = $invalid;
+        $this->rmsUpload->validRowCount = count($data);
+        $this->rmsUpload->uploadDate = date('Y-m-d H:i:s');
+        $this->rmsUpload->rmsProviderId = $rmsProviderId;
+
+        RmsUploadMapper::getInstance()->insert($this->rmsUpload);
+
+        $di = [];
+
+        foreach (array_values($data) as $i=>$row) {
+            $from = array_shift($row);
+            $until = array_shift($row);
+            $line = new UploadLineModel();
+
+            $masterDevice = null;
+            if ($from['masterDeviceId']) {
+                $masterDevice = MasterDeviceMapper::getInstance()->find($from['masterDeviceId']);
+            }
+
+            $line->isManaged = null;
+            $line->managementProgram = null;
+            $line->rmsVendorName = null;
+            $line->rmsReportVersion = null;
+            $line->rmsDeviceId = null;
+            $line->rmsModelId = $from['modelName'];
+            $line->assetId = $from['assetId'];
+            $line->monitorStartDate= $from['scanDate'];
+            $line->monitorEndDate= $until['scanDate'];
+            $line->adoptionDate = null;
+            $line->cost = null;
+            $line->discoveryDate = null;
+            $line->launchDate = $masterDevice ? $masterDevice->launchDate : null;
+            $line->leasedTonerYield = null;
+            $line->ipAddress = $from['ipAddress'];
+            $line->isColor = $masterDevice ? $masterDevice->isColor : null;
+            $line->isCopier = $masterDevice ? $masterDevice->isCopier : null;
+            $line->isFax = $masterDevice ? $masterDevice->isFax : null;
+            $line->isA3 = $masterDevice ? $masterDevice->isA3 : null;
+            $line->isDuplex = $masterDevice ? $masterDevice->isDuplex : null;
+            $line->manufacturer = $from['manufacturer'];
+            $line->rawDeviceName = $from['rawDeviceName'];
+            $line->modelName = $from['modelName'];
+            $line->ppmBlack = $masterDevice ? $masterDevice->ppmBlack : null;
+            $line->ppmColor = $masterDevice ? $masterDevice->ppmColor : null;
+            $line->partsCostPerPage = null;
+            $line->laborCostPerPage = null;
+            $line->serialNumber= $from['serialNumber'];
+            $line->wattsPowerNormal = $masterDevice ? $masterDevice->wattsPowerNormal : null;
+            $line->wattsPowerIdle = $masterDevice ? $masterDevice->wattsPowerIdle : null;
+            $line->startMeterBlack = $from['lifeCountBlack'];
+            $line->endMeterBlack = $until['lifeCountBlack'];
+            $line->startMeterColor = $from['lifeCountColor'];
+            $line->endMeterColor = $until['lifeCountColor'];
+            $line->startMeterLife = $from['lifeCount'];
+            $line->endMeterLife = $until['lifeCount'];
+            $line->startMeterPrintBlack = $from['printCountBlack'];
+            $line->endMeterPrintBlack = $until['printCountBlack'];
+            $line->startMeterPrintColor = $from['printCountColor'];
+            $line->endMeterPrintColor = $until['printCountColor'];
+            $line->startMeterCopyBlack = $from['copyCountBlack'];
+            $line->endMeterCopyBlack = $until['copyCountBlack'];
+            $line->startMeterCopyColor = $from['copyCountColor'];
+            $line->endMeterCopyColor = $until['copyCountColor'];
+            $line->startMeterScan = $from['scanCount'];
+            $line->endMeterScan = $until['scanCount'];
+            $line->startMeterFax = $from['faxCount'];
+            $line->endMeterFax= $until['faxCount'];
+            $line->startMeterPrintA3Black = null;
+            $line->endMeterPrintA3Black = null;
+            $line->startMeterPrintA3Color = null;
+            $line->endMeterPrintA3Color = null;
+            $line->reportsTonerLevels = !empty($from['tonerLevelBlack']);
+            $line->tonerLevelBlack = $until['tonerLevelBlack'];
+            $line->tonerLevelCyan = $until['tonerLevelCyan'];
+            $line->tonerLevelMagenta = $until['tonerLevelMagenta'];
+            $line->tonerLevelYellow = $until['tonerLevelYellow'];
+            $line->isValid = 1;
+            $line->validationErrorMessage = '';
+            $line->hasCompleteInformation = '0';
+            $line->csvLineNumber = $i+1;
+            $line->tonerConfigId = $masterDevice ? $masterDevice->tonerConfigId : null;
+            $line->pageCoverageMonochrome = null;
+            $line->pageCoverageColor = null;
+            $line->pageCoverageCyan = null;
+            $line->pageCoverageMagenta = null;
+            $line->pageCoverageYellow = null;
+            $line->location = $from['location'];
+
+            $instance = $this->rmsUploadLine($line, $rmsProviderId);
+            if ($masterDevice) $instance->setMasterDevice($masterDevice);
+
+            $di[] = $instance;
+        }
+        $this->mapDeviceInstances($di);
+    }
+
 }
