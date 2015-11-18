@@ -440,6 +440,7 @@ group by clientId
             if ($rmsUpdate) {
                 if ($device->getColor()->getName() == 'BLACK') {
                     $meter = $rmsUpdate->getEndMeterBlack() - $rmsUpdate->getStartMeterBlack();
+                    $meter += $rmsUpdate->getEndMeterColor() - $rmsUpdate->getStartMeterColor();
                 } else {
                     $meter = $rmsUpdate->getEndMeterColor() - $rmsUpdate->getStartMeterColor();
                 }
@@ -502,29 +503,31 @@ HTML;
         foreach ($devices as $device) {
             /** @var RmsUpdateEntity $device */
 
-            $meter=$device->getEndMeterBlack() - $device->getStartMeterBlack();
             $diff = date_diff($device->getMonitorStartDate(), $device->getMonitorEndDate());
-            $daily = $meter/$diff->days;
-            if ($device->needsToner(TonerColorEntity::BLACK, $daily)) {
+
+            $color_meter = $device->getEndMeterColor() - $device->getStartMeterColor();
+            $color_daily = $color_meter/$diff->days;
+
+            $black_meter = $color_meter + ($device->getEndMeterBlack() - $device->getStartMeterBlack());
+            $black_daily = $black_meter/$diff->days;
+
+            if ($device->needsToner(TonerColorEntity::BLACK, $black_daily)) {
                 $this->deviceNeedsToner($device, $client, TonerColorEntity::BLACK);
             } else if ($device->getTonerLevelBlack()>5) {
                 $this->tonerMayBeReplaced($device, TonerColorEntity::BLACK);
             }
 
-            $meter=$device->getEndMeterColor() - $device->getStartMeterColor();
-            $diff = date_diff($device->getMonitorStartDate(), $device->getMonitorEndDate());
-            $daily = $meter/$diff->days;
-            if ($device->needsToner(TonerColorEntity::MAGENTA, $daily)) {
+            if ($device->needsToner(TonerColorEntity::MAGENTA, $color_daily)) {
                 $newDeviceNeedsToner |= $this->deviceNeedsToner($device, $client, TonerColorEntity::MAGENTA);
             } else if ($device->getTonerLevelMagenta()>5) {
                 $this->tonerMayBeReplaced($device, TonerColorEntity::MAGENTA);
             }
-            if ($device->needsToner(TonerColorEntity::CYAN, $daily)) {
+            if ($device->needsToner(TonerColorEntity::CYAN, $color_daily)) {
                 $newDeviceNeedsToner |= $this->deviceNeedsToner($device, $client, TonerColorEntity::CYAN);
             } else if ($device->getTonerLevelCyan()>5) {
                 $this->tonerMayBeReplaced($device, TonerColorEntity::CYAN);
             }
-            if ($device->needsToner(TonerColorEntity::YELLOW, $daily)) {
+            if ($device->needsToner(TonerColorEntity::YELLOW, $color_daily)) {
                 $newDeviceNeedsToner |= $this->deviceNeedsToner($device, $client, TonerColorEntity::YELLOW);
             } else if ($device->getTonerLevelYellow()>5) {
                 $this->tonerMayBeReplaced($device, TonerColorEntity::YELLOW);

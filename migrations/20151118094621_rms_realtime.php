@@ -41,6 +41,21 @@ CREATE TABLE IF NOT EXISTS `rms_realtime` (
   KEY `masterDeviceId` (`masterDeviceId`),
   KEY `rmsProviderId` (`rmsProviderId`)
 ) ENGINE=InnoDB');
+
+        $this->execute(
+'ALTER TABLE `rms_realtime` ADD FOREIGN KEY ( `clientId` ) REFERENCES `mpstoolbox_v2`.`clients` (
+`id`
+) ON DELETE CASCADE ON UPDATE CASCADE');
+
+        $this->execute(
+'ALTER TABLE `rms_realtime` ADD FOREIGN KEY ( `masterDeviceId` ) REFERENCES `mpstoolbox_v2`.`master_devices` (
+`id`
+) ON DELETE CASCADE ON UPDATE CASCADE');
+
+        $this->execute(
+'ALTER TABLE `rms_realtime` ADD FOREIGN KEY ( `rmsProviderId` ) REFERENCES `mpstoolbox_v2`.`rms_providers` (
+`id`
+) ON DELETE CASCADE ON UPDATE CASCADE');
     }
 
     /**
