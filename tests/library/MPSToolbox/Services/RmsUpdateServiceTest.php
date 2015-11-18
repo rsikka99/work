@@ -578,6 +578,7 @@ replace into rms_update set
 ")->execute();
         #--
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::BLACK);
+        $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::MAGENTA);
         #--
         $service->sendEmail(['clientId'=>5]);
     }

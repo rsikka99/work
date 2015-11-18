@@ -417,8 +417,15 @@ group by clientId
         $link = sprintf('http://%s.myshopify.com/account/login', $shopSettings->shopifyName);
 
         $rows = DeviceNeedsTonerEntity::getByClient($client);
-        $devices = '';
+        $arr=[];
         foreach ($rows as $device) {
+            /** @var DeviceNeedsTonerEntity $device */
+            $id = "{$device->getIpAddress()}-{$device->getSerialNumber()}-{$device->getAssetId()}";
+            $arr[$id][] = $device;
+        }
+
+        $devices = '';
+        foreach ($arr as $d) foreach ($d as $i=>$device) {
             /** @var DeviceNeedsTonerEntity $device */
             $model = sprintf('%s %s',
                 $device->getMasterDevice()->getManufacturer()->getDisplayname(),
@@ -449,13 +456,21 @@ group by clientId
                 $ampv = round($daily * 365 / 12);
             }
 
-            $devices .=
+            if ($i==0) $devices .=
 <<<HTML
 <p>
     Device Model: <b>{$model}</b><br>
     Serial Number: <b>{$device->getSerialNumber()}</b><br>
     IP Address: <b>{$device->getIpAddress()}</b><br>
     {$location}
+    Toner Level {$color}: <b>{$device->getTonerLevel()}%</b><br>
+    Estimated Monthly Page Volume: <b>{$ampv}</b><br>
+    Estimated time left until toner reaches 5%: <b>{$device->getDaysLeft()}</b> days
+</p>
+HTML;
+            else $devices .=
+<<<HTML
+<p>
     Toner Level {$color}: <b>{$device->getTonerLevel()}%</b><br>
     Estimated Monthly Page Volume: <b>{$ampv}</b><br>
     Estimated time left until toner reaches 5%: <b>{$device->getDaysLeft()}</b> days
