@@ -48,6 +48,7 @@ class AdminAclModel
     private static function setupAclResources (AppAclModel $acl)
     {
         $acl->addResource(self::RESOURCE_API_WILDCARD);
+        $acl->addResource(self::RESOURCE_API_RMS_WILDCARD);
         $acl->addResource(self::RESOURCE_DEALERAPI_AUTH);
         $acl->addResource(self::RESOURCE_DEALERAPI_WILDCARD);
         $acl->addResource(self::RESOURCE_ADMIN_CLIENT_WILDCARD);
