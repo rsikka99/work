@@ -87,8 +87,13 @@ class DeviceMappingService
      */
     protected function _mapIt (DeviceInstanceModel $deviceInstance, $userId, $useNameBasedMapping)
     {
+        $masterDevice = $deviceInstance->getMasterDevice();
+        if ($masterDevice) {
+            $this->_mapDeviceToMasterDevice($deviceInstance, $masterDevice->id);
+            return $masterDevice->id;
+        }
+
         $mapDeviceToMasterDeviceId = false;
-        $deviceInstance->id;
         $rmsUploadRow = $deviceInstance->getRmsUploadRow();
 
         $hasRmsModelId = (strlen($rmsUploadRow->rmsModelId) > 0);

@@ -1163,4 +1163,32 @@ class Proposalgen_FleetController extends Action
         $rmsUploadId = $this->_getParam('rmsUploadId', false);
         $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation, ['rmsUploadId' => $rmsUploadId]));
     }
+
+    public function realtimeAction() {
+        $db = Zend_Db_Table::getDefaultAdapter();
+
+        #--
+        if ($this->getRequest()->getMethod()=='POST') {
+            $from=strtotime($this->getParam('from'));
+            $until=strtotime($this->getParam('until'));
+            $check=strtotime('2010-01-01');
+            if (($from<$check) || ($until<$check) || ($from>=$until)) {
+                $this->view->error = 'Invalid dates selected';
+            } else {
+                if (!$this->uploadService) {
+                    $this->uploadService = new RmsUploadService($this->getIdentity()->id, $this->getIdentity()->dealerId, $this->getSelectedClient()->id, null);
+                }
+                $this->uploadService->fromRealtime(date('Y-m-d', $from), date('Y-m-d', $until));
+                $this->redirectToRoute('rms-upload.mapping', ["rmsUploadId" => $this->uploadService->rmsUpload->id]);
+                return;
+            }
+        }
+        #--
+
+        $st = $db->query('select distinct(scanDate) as scanDate from rms_realtime where clientId='.intval($this->getSelectedClient()->id));
+        $arr = $st->fetchAll();
+        $this->_pageTitle = ['Use Real Time Data'];
+        $this->view->arr = $arr;
+    }
+
 }

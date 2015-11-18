@@ -120,11 +120,6 @@ limit 1
             $device_instance = $this->findDeviceInstance($clientId, $line);
             if (!$device_instance) {
                 echo "!!! {$line['id']} {$line['name']} {$line['ipAddress']} {$line['serialNumber']} <br>\n";
-                continue;
-            }
-            if (in_array($device_instance['masterDeviceId'], $ignoreMasterDevices)) {
-                echo "ignoring: {$line['id']} {$line['name']} {$line['ipAddress']} {$line['serialNumber']} <br>\n";
-                continue;
             }
 
             echo "{$line['id']} {$line['name']} {$line['ipAddress']} {$line['serialNumber']} <br>\n";
@@ -157,43 +152,67 @@ limit 1
                 'serialNumber'=>$line['serialNumber'],
                 'location'=>$line['location'],
                 'rawDeviceName'=>$line['name'],
-                'masterDeviceId'=>$device_instance['masterDeviceId'],
+                'fullDeviceName'=>$line['modelMatch']['model']['name'],
+                'manufacturer'=>$line['modelMatch']['model']['manufacturer'],
+                'modelName'=>str_replace("{$line['modelMatch']['model']['manufacturer']} ", '', $line['modelMatch']['model']['name']),
+                'masterDeviceId'=>$device_instance ? $device_instance['masterDeviceId'] : null,
                 'rmsProviderId'=>6, //Printfleet 3.x
                 'isColor'=>$isColor?1:0,
                 'isCopier'=>isset($meters['COPIERTOTAL'])?'1':'0',
                 'isFax'=>isset($meters['FAXMONO'])?'1':'0',
-                'isLeased'=>$device_instance['isLeased'],
+                'isLeased'=>$device_instance ? $device_instance['isLeased'] : null,
                 'reportsTonerLevels'=>$reportsTonerLevels ?'1':'0',
-                'ppmBlack'=>$device_instance['ppmBlack'],
-                'ppmColor'=>$device_instance['ppmColor'],
-                'wattsPowerNormal'=>$device_instance['wattsPowerNormal'],
-                'wattsPowerIdle'=>$device_instance['wattsPowerIdle'],
-                'tonerLevelBlack'=>$reportsTonerLevels? $device['colorSupplies']['black']['level']['lowPercent'] : null,
+                'ppmBlack'=>$device_instance ? $device_instance['ppmBlack'] : null,
+                'ppmColor'=>$device_instance ? $device_instance['ppmColor'] : null,
+                'wattsPowerNormal'=>$device_instance ? $device_instance['wattsPowerNormal'] : null,
+                'wattsPowerIdle'=>$device_instance ? $device_instance['wattsPowerIdle'] : null,
+                'tonerLevelBlack'=>$reportsTonerLevels ? $device['colorSupplies']['black']['level']['lowPercent'] : null,
                 'tonerLevelCyan'=>$reportsTonerLevels && $isColor ? $device['colorSupplies']['cyan']['level']['lowPercent'] : null,
                 'tonerLevelMagenta'=>$reportsTonerLevels && $isColor ? $device['colorSupplies']['magenta']['level']['lowPercent'] : null,
                 'tonerLevelYellow'=>$reportsTonerLevels && $isColor ? $device['colorSupplies']['yellow']['level']['lowPercent'] : null,
-                'pageCoverageMonochrome'=>$device_instance['pageCoverageMonochrome'],
-                'pageCoverageCyan'=>$device_instance['pageCoverageCyan'],
-                'pageCoverageMagenta'=>$device_instance['pageCoverageMagenta'],
-                'pageCoverageYellow'=>$device_instance['pageCoverageYellow'],
-                'pageCoverageColor'=>$device_instance['pageCoverageColor'],
+                'pageCoverageMonochrome'=>$device_instance ? $device_instance['pageCoverageMonochrome'] : null,
+                'pageCoverageCyan'=>$device_instance ? $device_instance['pageCoverageCyan'] : null,
+                'pageCoverageMagenta'=>$device_instance ? $device_instance['pageCoverageMagenta'] : null,
+                'pageCoverageYellow'=>$device_instance ? $device_instance['pageCoverageYellow'] : null,
+                'pageCoverageColor'=>$device_instance ? $device_instance['pageCoverageColor'] : null,
                 'monitorStartDate'=>$minus90,
                 'monitorEndDate'=>$today,
                 'startMeterBlack'=>$meters['Total Mono Units Output']['count'] - $meters['Total Mono Units Output']['delta'],
                 'endMeterBlack'=>$meters['Total Mono Units Output']['count'],
                 'startMeterColor'=>$isColor ? $meters['Total Color Units Output']['count'] - $meters['Total Color Units Output']['delta'] : null,
                 'endMeterColor'=>$isColor ? $meters['Total Color Units Output']['count'] : null,
+                'startMeterPrintBlack'=>isset($meters['PRINTTOTAL']) ? $meters['PRINTTOTAL']['count'] - $meters['PRINTTOTAL']['delta'] : null,
+                'endMeterPrintBlack'=>isset($meters['PRINTTOTAL']) ? $meters['PRINTTOTAL']['count'] : null,
+                'startMeterPrintColor'=>null,
+                'endMeterPrintColor'=>null,
+                'startMeterCopyBlack'=>isset($meters['COPIERTOTAL']) ? $meters['COPIERTOTAL']['count'] - $meters['COPIERTOTAL']['delta'] : null,
+                'endMeterCopyBlack'=>isset($meters['COPIERTOTAL']) ? $meters['COPIERTOTAL']['count'] : null,
+                'startMeterCopyColor'=>null,
+                'endMeterCopyColor'=>null,
+                'startMeterFax'=>isset($meters['FAXMONO']) ? $meters['FAXMONO']['count'] - $meters['FAXMONO']['delta'] : null,
+                'endMeterFax'=>isset($meters['FAXMONO']) ? $meters['FAXMONO']['count'] : null,
+                'startMeterScan'=>isset($meters['SCAN']) ? $meters['SCAN']['count'] - $meters['SCAN']['delta'] : null,
+                'endMeterScan'=>isset($meters['SCAN']) ? $meters['SCAN']['count'] : null,
                 'startMeterLife'=>$meters['Total Units Output']['count'] - $meters['Total Units Output']['delta'],
                 'endMeterLife'=>$meters['Total Units Output']['count'],
             ];
 
-            $this->replaceRmsUpdate($data);
-            $result[] = RmsUpdateEntity::find([
-                'client'=>$clientId,
-                'assetId'=>$line['id'],
-                'ipAddress'=>$line['ipAddress'],
-                'serialNumber'=>$line['serialNumber']
-            ]);
+            $this->toRealtime($data);
+
+            if ($device_instance && in_array($device_instance['masterDeviceId'], $ignoreMasterDevices)) {
+                echo "ignoring: {$line['id']} {$line['name']} {$line['ipAddress']} {$line['serialNumber']} <br>\n";
+                continue;
+            }
+
+            if ($device_instance) {
+                $this->replaceRmsUpdate($data);
+                $result[] = RmsUpdateEntity::find([
+                    'client' => $clientId,
+                    'assetId' => $line['id'],
+                    'ipAddress' => $line['ipAddress'],
+                    'serialNumber' => $line['serialNumber']
+                ]);
+            }
         }
         return $result;
     }
@@ -220,6 +239,32 @@ group by clientId
         $db = \Zend_Db_Table::getDefaultAdapter();
         $st = $db->prepare("replace into rms_update ( {$str1} ) values ( {$str2} )");
         foreach ($fields as $field) if (!isset($data[$field])) $data[$field]=null;
+        foreach ($data as $key=>$value) if (!in_array($key, $fields)) unset($data[$key]);
+
+        $st->execute($data);
+    }
+
+    public function toRealtime($data) {
+        $fields = ['scanDate','clientId','assetId','ipAddress','serialNumber','location','rawDeviceName','fullDeviceName','manufacturer','modelName','masterDeviceId','rmsProviderId','tonerLevelBlack','tonerLevelCyan','tonerLevelMagenta','tonerLevelYellow','lifeCountBlack','lifeCountColor','printCountBlack','printCountColor','copyCountBlack','copyCountColor','faxCount','scanCount','lifeCount'];
+
+        $str1='`'.implode('`,`',$fields).'`';
+        $str2=':'.implode(',:',$fields);
+
+        $data['scanDate'] = date('Y-m-d H:i:s');
+        $data['lifeCountBlack'] = $data['endMeterBlack'];
+        $data['lifeCountColor'] = $data['endMeterColor'];
+        $data['printCountBlack'] = $data['endMeterPrintBlack'];
+        #$data['printCountColor'] = $data['x'];
+        $data['copyCountBlack'] = $data['endMeterCopyBlack'];
+        #$data['copyCountColor'] = $data['x'];
+        $data['faxCount'] = $data['endMeterFax'];
+        $data['scanCount'] = $data['endMeterScan'];
+        $data['lifeCount'] = $data['endMeterLife'];
+
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $st = $db->prepare("replace into rms_realtime ( {$str1} ) values ( {$str2} )");
+        foreach ($fields as $field) if (!isset($data[$field])) $data[$field]=null;
+        foreach ($data as $key=>$value) if (!in_array($key, $fields)) unset($data[$key]);
 
         $st->execute($data);
     }
@@ -450,6 +495,46 @@ HTML;
         $email->setBodyHtml($html);
         $email->setBodyText(strip_tags($html));
         $email->send();
+    }
+
+    public function checkDevices($devices, $client) {
+        $newDeviceNeedsToner = false;
+        foreach ($devices as $device) {
+            /** @var RmsUpdateEntity $device */
+
+            $meter=$device->getEndMeterBlack() - $device->getStartMeterBlack();
+            $diff = date_diff($device->getMonitorStartDate(), $device->getMonitorEndDate());
+            $daily = $meter/$diff->days;
+            if ($device->needsToner(TonerColorEntity::BLACK, $daily)) {
+                $this->deviceNeedsToner($device, $client, TonerColorEntity::BLACK);
+            } else if ($device->getTonerLevelBlack()>5) {
+                $this->tonerMayBeReplaced($device, TonerColorEntity::BLACK);
+            }
+
+            $meter=$device->getEndMeterColor() - $device->getStartMeterColor();
+            $diff = date_diff($device->getMonitorStartDate(), $device->getMonitorEndDate());
+            $daily = $meter/$diff->days;
+            if ($device->needsToner(TonerColorEntity::MAGENTA, $daily)) {
+                $newDeviceNeedsToner |= $this->deviceNeedsToner($device, $client, TonerColorEntity::MAGENTA);
+            } else if ($device->getTonerLevelMagenta()>5) {
+                $this->tonerMayBeReplaced($device, TonerColorEntity::MAGENTA);
+            }
+            if ($device->needsToner(TonerColorEntity::CYAN, $daily)) {
+                $newDeviceNeedsToner |= $this->deviceNeedsToner($device, $client, TonerColorEntity::CYAN);
+            } else if ($device->getTonerLevelCyan()>5) {
+                $this->tonerMayBeReplaced($device, TonerColorEntity::CYAN);
+            }
+            if ($device->needsToner(TonerColorEntity::YELLOW, $daily)) {
+                $newDeviceNeedsToner |= $this->deviceNeedsToner($device, $client, TonerColorEntity::YELLOW);
+            } else if ($device->getTonerLevelYellow()>5) {
+                $this->tonerMayBeReplaced($device, TonerColorEntity::YELLOW);
+            }
+        }
+
+        if ($newDeviceNeedsToner) {
+            printf('sending email...');
+            $this->sendEmail($client);
+        }
     }
 
 }

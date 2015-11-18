@@ -48,6 +48,8 @@ $r->addRoute('rms-upload.summary.device-list',        new R('rms-uploads/summary
 $r->addRoute('rms-upload.excluded-list',              new R('rms-uploads/excluded-list',                           ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'excluded-list',                              ]));
 //missing routes: toggle-excluded-flag, toggle-leased-flag, toggle-managed-flag, device-instance-details
 
+$r->addRoute('rms-upload.realtime',                   new R('rms-uploads/realtime',                                ['module' => 'proposalgen', 'controller' => 'fleet',         'action' => 'realtime']));
+
 /**
  * Home Route
  */
@@ -255,7 +257,7 @@ $r->addRoute('api.peripherals',           new R('api/v1/peripherals/:deviceId', 
 $r->addRoute('api.peripherals.grid-list', new R('api/v1/peripherals/grid-list',        ['module' => 'api', 'controller' => 'peripherals', 'action' => 'grid-list']));
 
 $r->addRoute('api.rms',                     new R('api/v1/rms/:rmsId',                   ['module' => 'api', 'controller' => 'rms', 'action' => 'index', 'rmsId' => false]));
-$r->addRoute('api.rms.to-shopify',          new R('api/v1/rms/to-shopify/:rmsId',        ['module' => 'api', 'controller' => 'rms', 'action' => 'to-shopify', 'rmsId' => false]));
+$r->addRoute('api.rms.printaudit-push',     new R('api/v1/rms/printaudit/:clientId',     ['module' => 'api', 'controller' => 'rms', 'action' => 'printaudit-push', 'clientId' => false]));
 
 // API for clients
 

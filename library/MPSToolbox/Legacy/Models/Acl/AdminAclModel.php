@@ -13,6 +13,7 @@ class AdminAclModel
      * Admin Constants
      */
     const RESOURCE_API_WILDCARD                 = 'api__%__%';
+    const RESOURCE_API_RMS_WILDCARD             = 'api__rms__%';
     const RESOURCE_DEALERAPI_WILDCARD           = 'dealerapi__%__%';
     const RESOURCE_DEALERAPI_AUTH               = 'dealerapi__auth__%';
     const RESOURCE_ADMIN_CLIENT_WILDCARD        = 'admin__client__%';
@@ -69,6 +70,7 @@ class AdminAclModel
      */
     private static function setupAclAccess (AppAclModel $acl)
     {
+        $acl->allow(AppAclModel::ROLE_GUEST,        self::RESOURCE_API_RMS_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
         $acl->allow(AppAclModel::ROLE_GUEST,        self::RESOURCE_DEALERAPI_AUTH, AppAclModel::PRIVILEGE_VIEW);
         $acl->allow(AppAclModel::ROLE_DEALERAPI,    self::RESOURCE_DEALERAPI_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
 
