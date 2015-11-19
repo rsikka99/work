@@ -40,7 +40,7 @@ define([
         /**
          * Toner Model
          */
-        this.tonerModel = {};
+        //this.tonerModel = {};
 
         // We want to destroy the modal once we're finished with it.
         $modal.on('hide.bs.modal', function ()
@@ -101,6 +101,7 @@ define([
                  */
                 $modal.find('.modal-footer > .js-save-approve').on('click', function ()
                 {
+                    $('#saveAndApproveHdn').val(1);
                     that.save();
                 });
 
@@ -110,6 +111,7 @@ define([
                     $modal.modal('hide');
                 });
 
+                /**
                 var tonerColorIdOptions = {};
                 if (that.tonerConfigId)
                 {
@@ -119,12 +121,14 @@ define([
                     }
                 }
                 $modal.find('[name="tonerColorId"]').selectTonerColor(tonerColorIdOptions);
+                **/
 
                 /**
                  * Setup two-way binding
                  */
                 that.$tonerForm = $modal.find('.js-toner-form');
 
+                /**
                 var $tonerIdElement = that.$tonerForm.find('[name="id"]'),
                     $tonerManufacturerElement = that.$tonerForm.find('[name="manufacturerId"]'),
                     $tonerColorElement = that.$tonerForm.find('[name="tonerColorId"]'),
@@ -205,6 +209,7 @@ define([
                 {
                     that.tonerModel.dealerSrp = $(this).val();
                 });
+                **/
 
                 /**
                  * Show the modal
@@ -223,7 +228,10 @@ define([
         var that = this;
         that.clearErrors();
 
-        return TonerService.saveToner(this.tonerModel).then(function (tonerId)
+        var data = $('#availableTonersForm').serialize();
+
+        //this.tonerModel
+        return TonerService.saveToner(data).then(function (tonerId)
         {
             $(that).trigger('toner-form.saved', [tonerId]);
             that.$modal.modal('hide');

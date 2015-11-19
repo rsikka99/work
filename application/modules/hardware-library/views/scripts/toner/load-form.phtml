@@ -18,6 +18,9 @@
             </form>
         </div>
         <div class="modal-footer">
+<?php if ($this->isAdmin && !$this->isSystemDevice) { ?>
+            <input class="btn btn-primary js-save-approve" type="button" value="Save and Approve" />
+<?php } ?>
             <input class="btn btn-primary js-save" type="button" value="Save" />
             <input class="btn btn-default js-cancel" type="button" value="Cancel" data-dismiss='modal' />
         </div>

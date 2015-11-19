@@ -13,66 +13,19 @@ $form->getElement('imageUrl')->setValue('');
 ?>
 
 <?= $this->RenderFormOpen($form) ?>
-    <div class="clearfix">
+
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#General" aria-controls="home" role="tab" data-toggle="tab">General</a></li>
+    <li role="presentation"><a href="#Dealer" aria-controls="profile" role="tab" data-toggle="tab">Dealer</a></li>
+    <li role="presentation"><a href="#Suppliers" aria-controls="messages" role="tab" data-toggle="tab">Suppliers</a></li>
+    <li role="presentation"><a href="#Image" aria-controls="settings" role="tab" data-toggle="tab">Image</a></li>
+</ul>
+
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane" id="Dealer">
         <fieldset>
             <div class="row">
                 <div class="col-md-4 col-md-push-1">
-                    <div class="form-group <?= ($form->getElement('manufacturerId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-
-                        <?= $this->RenderFormLabel($form->getElement('manufacturerId')) ?>
-
-                        <select class="form-control" type="text" id="manufacturerId" name="manufacturerId"><option></option><?php foreach (\MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper::getInstance()->fetchAllAvailableManufacturers() as $line) { ?><option value="<?= $line->id ?>" <?= $form->getElement('manufacturerId')->getValue()==$line->id?'selected="selected"':'' ?>><?php echo $line->fullname==$line->displayname?$line->fullname:$line->displayname." ({$line->fullname})" ?></option><?php } ?></select>
-                        <script> require(['jquery', 'select2'], function ($) { $('#manufacturerId').select2(); }); </script>
-
-                        <?= $this->RenderFormDescription($form->getElement('manufacturerId')) ?>
-                        <?= $this->RenderFormElementErrors($form->getElement('manufacturerId')) ?>
-                    </div>
-
-
-                </div>
-                <div class="col-md-4 col-md-push-3">
-                    <div class="form-group <?= ($form->getElement('tonerColorId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                        <?= $this->RenderFormLabel($form->getElement('tonerColorId')) ?>
-                        <?= $this->RenderFormText($form->getElement('tonerColorId')) ?>
-                        <?= $this->RenderFormDescription($form->getElement('tonerColorId')) ?>
-                        <?= $this->RenderFormElementErrors($form->getElement('tonerColorId')) ?>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-10 col-md-push-1">
-                    <div class="form-group <?= ($form->getElement('yield')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                        <?= $this->RenderFormLabel($form->getElement('yield')) ?>
-                        <?= $this->RenderFormText($form->getElement('yield'), [], null, 'pages') ?>
-                        <?= $this->RenderFormDescription($form->getElement('yield')) ?>
-                        <?= $this->RenderFormElementErrors($form->getElement('yield')) ?>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4 col-md-push-1">
-                    <div class="form-group <?= ($form->getElement('sku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                        <?= $this->RenderFormLabel($form->getElement('sku')) ?>
-                        <?= $this->RenderFormText($form->getElement('sku')) ?>
-                        <?= $this->RenderFormDescription($form->getElement('sku')) ?>
-                        <?= $this->RenderFormElementErrors($form->getElement('sku')) ?>
-                    </div>
-
-                    <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                        <?= $this->RenderFormLabel($form->getElement('cost')) ?>
-                        <?= $this->RenderFormText($form->getElement('cost'), [], '$') ?>
-                        <?= $this->RenderFormDescription($form->getElement('cost')) ?>
-                        <?= $this->RenderFormElementErrors($form->getElement('cost')) ?>
-                    </div>
-
-                    <div class="form-group <?= ($form->getElement('name')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                        <?= $this->RenderFormLabel($form->getElement('name')) ?>
-                        <?= $this->RenderFormText($form->getElement('name')) ?>
-                        <?= $this->RenderFormDescription($form->getElement('name')) ?>
-                        <?= $this->RenderFormElementErrors($form->getElement('name')) ?>
-                    </div>
-                </div>
-                <div class="col-md-4 col-md-push-3">
                     <div class="form-group <?= ($form->getElement('dealerSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                         <?= $this->RenderFormLabel($form->getElement('dealerSku')) ?>
                         <?= $this->RenderFormText($form->getElement('dealerSku')) ?>
@@ -96,6 +49,41 @@ $form->getElement('imageUrl')->setValue('');
 
                 </div>
             </div>
+        </fieldset>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="Suppliers">
+        <div class="row">
+            <div class="col-md-10 col-md-push-1">
+                <table class="table">
+                    <colgroup>
+                        <col width="40%" />
+                        <col width="20%" />
+                        <col width="20%" />
+                        <col width="20%" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Supplier</th>
+                            <th>Supplier SKU</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        <?php foreach ($form->suppliers as $line) { ?>
+                        <tr>
+                            <td><?= $line['name'] ?></td>
+                            <td><?= $line['price'] ?></td>
+                            <td><?= $line['stock'] ?></td>
+                        </tr>
+        <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="Image">
+        <fieldset>
             <div class="row">
                 <div class="col-md-4 col-md-push-1">
                     <div class="form-group <?= ($form->getElement('imageUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
@@ -105,12 +93,12 @@ $form->getElement('imageUrl')->setValue('');
                         <?= $this->RenderFormElementErrors($form->getElement('imageUrl')) ?>
                     </div>
 
-<?php if ($id) { ?>
-                    <div class="form-group">
-                        <?= $this->RenderFormLabel($form->getElement('imageFile')) ?>
-                        <input id="fileupload" type="file" name="imageFile" data-url="<?= $this->url(['id' => $id], 'hardware-library.toners.image'); ?>">
-                    </div>
-<?php } ?>
+                    <?php if ($id && $form->_isAllowedToEditFields) { ?>
+                        <div class="form-group">
+                            <?= $this->RenderFormLabel($form->getElement('imageFile')) ?>
+                            <input id="fileupload" type="file" name="imageFile" data-url="<?= $this->url(['id' => $id], 'hardware-library.toners.image'); ?>">
+                        </div>
+                    <?php } ?>
                 </div>
                 <div class="col-md-4 col-md-push-3">
                     <div id="imageDiv">
@@ -122,12 +110,107 @@ $form->getElement('imageUrl')->setValue('');
                     </div>
                 </div>
             </div>
-
         </fieldset>
     </div>
+    <div role="tabpanel" class="tab-pane active" id="General">
+
+        <div class="clearfix">
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-4 col-md-push-1">
+                        <div class="form-group <?= ($form->getElement('manufacturerId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+
+                            <?= $this->RenderFormLabel($form->getElement('manufacturerId')) ?>
+
+    <?php if ($form->_isAllowedToEditFields) { ?>
+                            <select class="form-control" type="text" id="manufacturerId" name="manufacturerId">
+                                <option></option>
+    <?php
+        foreach (\MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper::getInstance()->fetchTonerManufacturersForDealer() as $line) {
+            ?><option value="<?= $line['id'] ?>" <?= $form->getElement('manufacturerId')->getValue()==$line['id']?'selected="selected"':'' ?>><?= $line['fullname'] ?></option>
+    <?php } ?>
+                            </select>
+    <?php } else {
+        $mfgId = $form->getElement('manufacturerId')->getValue();
+        $mfg = \MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper::getInstance()->find($mfgId);
+    ?>
+                            <select class="form-control" type="text" id="manufacturerId" name="manufacturerId" disabled="disabled">
+                                <option value="<?= $mfgId ?>"><?= $mfg->fullname ?></option>
+                            </select>
+    <?php } ?>
+                            <script> require(['jquery', 'select2'], function ($) { $('#manufacturerId').select2(); }); </script>
+
+                            <?= $this->RenderFormDescription($form->getElement('manufacturerId')) ?>
+                            <?= $this->RenderFormElementErrors($form->getElement('manufacturerId')) ?>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-4 col-md-push-3">
+                        <div class="form-group <?= ($form->getElement('tonerColorId')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                            <?= $this->RenderFormLabel($form->getElement('tonerColorId')) ?>
+                            <?= $this->RenderFormSelect($form->getElement('tonerColorId')) ?>
+                            <?= $this->RenderFormDescription($form->getElement('tonerColorId')) ?>
+                            <?= $this->RenderFormElementErrors($form->getElement('tonerColorId')) ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-md-push-1">
+                        <div class="form-group <?= ($form->getElement('sku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                            <?= $this->RenderFormLabel($form->getElement('sku')) ?>
+                            <?= $this->RenderFormText($form->getElement('sku')) ?>
+                            <?= $this->RenderFormDescription($form->getElement('sku')) ?>
+                            <?= $this->RenderFormElementErrors($form->getElement('sku')) ?>
+                        </div>
+
+                        <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                            <?= $this->RenderFormLabel($form->getElement('cost')) ?>
+                            <?= $this->RenderFormText($form->getElement('cost'), [], '$') ?>
+                            <?= $this->RenderFormDescription($form->getElement('cost')) ?>
+                            <?= $this->RenderFormElementErrors($form->getElement('cost')) ?>
+                        </div>
+
+                        <div class="form-group <?= ($form->getElement('weight')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                            <?= $this->RenderFormLabel($form->getElement('weight')) ?>
+                            <?= $this->RenderFormText($form->getElement('weight')) ?>
+                            <?= $this->RenderFormDescription($form->getElement('weight')) ?>
+                            <?= $this->RenderFormElementErrors($form->getElement('weight')) ?>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-4 col-md-push-3">
+                        <div class="form-group <?= ($form->getElement('name')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                            <?= $this->RenderFormLabel($form->getElement('name')) ?>
+                            <?= $this->RenderFormText($form->getElement('name')) ?>
+                            <?= $this->RenderFormDescription($form->getElement('name')) ?>
+                            <?= $this->RenderFormElementErrors($form->getElement('name')) ?>
+                        </div>
+                        <div class="form-group <?= ($form->getElement('yield')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                            <?= $this->RenderFormLabel($form->getElement('yield')) ?>
+                            <?= $this->RenderFormText($form->getElement('yield'), [], null, 'pages') ?>
+                            <?= $this->RenderFormDescription($form->getElement('yield')) ?>
+                            <?= $this->RenderFormElementErrors($form->getElement('yield')) ?>
+                        </div>
+                        <div class="form-group <?= ($form->getElement('UPC')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                            <?= $this->RenderFormLabel($form->getElement('UPC')) ?>
+                            <?= $this->RenderFormText($form->getElement('UPC')) ?>
+                            <?= $this->RenderFormDescription($form->getElement('UPC')) ?>
+                            <?= $this->RenderFormElementErrors($form->getElement('UPC')) ?>
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
+        </div>
+    </div>
+
+
+
     <fieldset>
         <?= $this->RenderFormHidden($form->getElement('saveAndApproveHdn')) ?>
-        <?= $this->RenderFormHidden($form->getElement('id')) ?>
+        <input type="hidden" id="tonerId" value="<?= $id ?>" name="tonerId">
     </fieldset>
 <?= $this->RenderFormClose($form) ?>
 

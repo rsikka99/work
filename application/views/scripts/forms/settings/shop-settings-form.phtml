@@ -17,7 +17,7 @@ if ('' == $dealer->api_key) {
 <?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
 
 <div class="row">
-    <div class="col-sm-12 col-md-6">
+    <div class="col-sm-5">
         <fieldset>
             <legend>General</legend>
             <div class="form-group <?= ($form->getElement('hardwareMargin')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
@@ -76,6 +76,31 @@ if ('' == $dealer->api_key) {
                     <input type="text" style="width:400px; background-color: #ccc" value="<?php echo $dealer->api_secret ?>" class="form-control"/>
                 </div>
             </div>
+        </fieldset>
+    </div>
+    <div class="col-sm-6 col-sm-push-1">
+        <fieldset>
+            <legend>Suppliers</legend>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>Supplier</td>
+                        <td>Enabled</td>
+                        <td>URL</td>
+                        <td>User</td>
+                        <td>Pass</td>
+                    </tr>
+                </thead>
+    <?php foreach ($form->suppliers as $line) { ?>
+                <tr>
+                    <td><?= $line['name'] ?></td>
+                    <td><input type="checkbox" name="supplier[<?= $line['id'] ?>][enabled]" value="1" <?= $line['dealerId']?'checked="checked"':'' ?>></td>
+                    <td><input type="text" name="supplier[<?= $line['id'] ?>][url]" class="form-control" value="<?= $line['url'] ?>"></td>
+                    <td><input type="text" name="supplier[<?= $line['id'] ?>][user]" class="form-control" value="<?= $line['user'] ?>"></td>
+                    <td><input type="text" name="supplier[<?= $line['id'] ?>][pass]" class="form-control" value="<?= $line['pass'] ?>"></td>
+                </tr>
+    <?php } ?>
+            </table>
         </fieldset>
     </div>
 </div>
