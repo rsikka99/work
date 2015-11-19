@@ -11,7 +11,7 @@ require([
 {
     $(function ()
     {
-        var $tonersGrid = $('#toners-grid');
+        window.$tonersGrid = $('#toners-grid');
         var $tonersGridParent = $tonersGrid.parent();
 
         var $filterManufacturer = $(".js-filter-manufacturer");
@@ -116,6 +116,9 @@ require([
 { width: 100, name: 'costModified',               index: 'dealerCost',                 label: 'Cost<br/>(System Cost)',                align: 'right',  sortable: true }
 //@formatter:on
                 ],
+                ondblClickRow: function() {
+                    editRow();
+                },
                 gridComplete: function ()
                 {
                     var grid = $(this).jqGrid();
@@ -214,35 +217,36 @@ require([
         $tonersGrid.navButtonAdd('#toners-grid_toppager', {
             caption      : "Edit",
             buttonicon   : "ui-icon-pencil",
-            onClickButton: function ()
-            {
-                var rowData = $tonersGrid.jqGrid('getGridParam', 'selrow');
-
-                if (rowData)
-                {
-                    var data = $tonersGrid.jqGrid('getRowData', rowData);
-
-                    require(['app/legacy/hardware-library/manage-devices/TonerForm'], function (TonerForm)
-                    {
-                        var tonerForm = new TonerForm({
-                            isAllowed: isSaveAndApproveAdmin,
-                            tonerId  : data.id
-                        });
-
-                        $(tonerForm).on('toner-form.saved', function (event, tonerId)
-                        {
-                            $tonersGrid.trigger('reloadGrid');
-                        });
-
-                        tonerForm.show();
-                    });
-                }
-                else
-                {
-                    $("#alertMessageModal").modal().show()
-                }
-            },
+            onClickButton: function() { editRow(); },
             position     : "last"
         });
     });
 });
+
+function editRow() {
+    var rowData = $tonersGrid.jqGrid('getGridParam', 'selrow');
+
+    if (rowData)
+    {
+        var data = $tonersGrid.jqGrid('getRowData', rowData);
+
+        require(['app/legacy/hardware-library/manage-devices/TonerForm'], function (TonerForm)
+        {
+            var tonerForm = new TonerForm({
+                isAllowed: isSaveAndApproveAdmin,
+                tonerId  : data.id
+            });
+
+            $(tonerForm).on('toner-form.saved', function (event, tonerId)
+            {
+                $tonersGrid.trigger('reloadGrid');
+            });
+
+            tonerForm.show();
+        });
+    }
+    else
+    {
+        $("#alertMessageModal").modal().show()
+    }
+}

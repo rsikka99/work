@@ -33,14 +33,18 @@ class AvailableTonersForm extends \My_Form_Form
      */
     protected $viewScript = 'forms/hardware-library/device-management/available-toners-form.phtml';
 
+    public $_isAllowedToEditFields = false;
+
+    public $suppliers = [];
+
     /**
      * @param int        $dealerId
      * @param TonerModel $tonerModel
      * @param array|null $options
      */
-    public function __construct ($dealerId = null, $tonerModel = null, $options = null)
+    public function __construct ($dealerId = null, $tonerModel = null, $options = null, $isAllowedToEditFields = false)
     {
-
+        $this->_isAllowedToEditFields = $isAllowedToEditFields;
 
         $this->dealerId   = $dealerId;
         $this->tonerModel = $tonerModel;
@@ -80,24 +84,39 @@ class AvailableTonersForm extends \My_Form_Form
 
         $this->addElement('text', 'manufacturerId', [
             'label'      => 'Manufacturer',
-            'required'   => true,
+            'required'   => $this->_isAllowedToEditFields,
             'validators' => [$manufacturerValidator],
+            'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
         /**
          * Toner Color
          */
-        $tonerColorValidator = new \Zend_Validate_Db_RecordExists([
-            'table' => 'toner_colors',
-            'field' => 'id',
-        ]);
+        #$tonerColorValidator = new \Zend_Validate_Db_RecordExists([
+        #    'table' => 'toner_colors',
+        #    'field' => 'id',
+        #]);
+        #$tonerColorValidator->setMessage("Invalid toner color selected", \Zend_Validate_Db_Abstract::ERROR_NO_RECORD_FOUND);
+        #$this->addElement('text', 'tonerColorId', [
+        #    'label'      => 'Color',
+        #    'required'   => true,
+        #    'validators' => [$tonerColorValidator],
+        #    'disabled' => !$this->_isAllowedToEditFields,
+        #]);
 
-        $tonerColorValidator->setMessage("Invalid toner color selected", \Zend_Validate_Db_Abstract::ERROR_NO_RECORD_FOUND);
+        $colors    = TonerColorMapper::getInstance()->fetchAll();
+        $colorList = [0 => 'Select Color...'];
+        foreach ($colors as $color)
+        {
+            $colorList[$color->id] = $color->name;
+        }
 
-        $this->addElement('text', 'tonerColorId', [
-            'label'      => 'Color',
-            'required'   => true,
-            'validators' => [$tonerColorValidator],
+        $this->addElement('select', 'tonerColorId', [
+            'label'        => 'Color',
+            'required'     => $this->_isAllowedToEditFields,
+            //'validators' => [$tonerColorValidator],
+            'disabled' => !$this->_isAllowedToEditFields,
+            'multiOptions' => $colorList
         ]);
 
         /**
@@ -144,7 +163,7 @@ class AvailableTonersForm extends \My_Form_Form
 
         $this->addElement('text', 'sku', [
             'label'      => 'VPN (Vendor Product Number/SKU)',
-            'required'   => true,
+            'required'   => $this->_isAllowedToEditFields,
             'maxlength'  => 255,
             'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [
@@ -154,6 +173,7 @@ class AvailableTonersForm extends \My_Form_Form
                 ],
                 $dbNoRecordExistsValidator
             ],
+            'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
         $this->addElement('text', 'name', [
@@ -167,6 +187,7 @@ class AvailableTonersForm extends \My_Form_Form
                     'options'   => [1, 255],
                 ]
             ],
+            'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
         /**
@@ -174,7 +195,7 @@ class AvailableTonersForm extends \My_Form_Form
          */
         $this->addElement('text_int', 'yield', [
             'label'      => 'Yield',
-            'required'   => true,
+            'required'   => $this->_isAllowedToEditFields,
             'maxlength'  => 255,
             'validators' => [
                 [
@@ -183,6 +204,32 @@ class AvailableTonersForm extends \My_Form_Form
                 ],
                 'Int'
             ],
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
+        /**
+         * Weight
+         */
+        $this->addElement('text_float', 'weight', [
+            'label'      => 'Weight',
+            'required'   => false,
+            'validators' => [
+                [
+                    'validator' => 'greaterThan',
+                    'options'   => ['min' => 0]
+                ],
+                'Float'
+            ],
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
+        /**
+         * UPC
+         */
+        $this->addElement('text', 'UPC', [
+            'label'      => 'UPC',
+            'required'   => false,
+            'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
         /**
@@ -206,7 +253,7 @@ class AvailableTonersForm extends \My_Form_Form
          */
         $this->addElement('text_currency', 'cost', [
             'label'      => "Typical Dealer Cost",
-            'required'   => true,
+            'required'   => $this->_isAllowedToEditFields,
             'maxlength'  => 255,
             'validators' => [
                 [
@@ -214,7 +261,8 @@ class AvailableTonersForm extends \My_Form_Form
                     'options'   => ['min' => 0],
                 ],
                 'Float',
-            ]
+            ],
+            'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
         /* image */
@@ -222,16 +270,14 @@ class AvailableTonersForm extends \My_Form_Form
             'label'    => 'Image URL',
             'maxlength'  => 255,
             'filters'    => ['StringTrim', 'StripTags'],
-        ]);
-        $this->addElement('text', 'imageFile', [
-            'label'    => 'Upload Image',
+            'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
-        /**
-         * Save and approve
-         *
-         * TODO lrobert: Why is this hidden field here?
-         */
+        $this->addElement('text', 'imageFile', [
+            'label'    => 'Upload Image',
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
         $this->addElement('hidden', 'saveAndApproveHdn', [
             'value' => 0,
         ]);

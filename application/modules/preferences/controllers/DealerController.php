@@ -88,6 +88,12 @@ class Preferences_DealerController extends Action
     public function showShopSettingsForm()
     {
         $form = $this->getShopSettingsForm();
+
+        $dealerId = \MPSToolbox\Legacy\Entities\DealerEntity::getDealerId();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $st = $db->query('select * from suppliers left join dealer_suppliers on suppliers.id = dealer_suppliers.supplierId and dealerId='.intval($dealerId));
+        $form->suppliers = $st->fetchAll();
+
         $service = $this->getDealerSettingsService();
         $dealerSettings = $service->getDealerSettings($this->getIdentity()->dealerId);
         $form->populate($dealerSettings);
@@ -125,6 +131,29 @@ class Preferences_DealerController extends Action
             $service = $this->getDealerSettingsService();
             $dealerSettings = $service->getDealerSettings($this->getIdentity()->dealerId);
             $service->saveShopSettingsForm($form, $dealerSettings);
+
+            #--
+            $dealerId = \MPSToolbox\Legacy\Entities\DealerEntity::getDealerId();
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $st = $db->query('select * from suppliers left join dealer_suppliers on suppliers.id = dealer_suppliers.supplierId and dealerId='.intval($dealerId));
+            $suppliers = $st->fetchAll();
+            $post = $this->getRequest()->getParam('supplier');
+            if (empty($post)) $post=[];
+            foreach ($suppliers as $line) {
+                if (!isset($post[$line['id']]['enabled'])) {
+                    $db->query('delete from dealer_suppliers where supplierId='.$line['id'].' and dealerId='.intval($dealerId));
+                }
+            }
+            foreach ($post as $id=>$line) {
+                if (isset($line['enabled'])) {
+                    $db->query(
+                        'replace into dealer_suppliers set supplierId=' . $id . ', `url`=:url,`user`=:user,`pass`=:pass, dealerId=' . intval($dealerId),
+                        ['url' => $line['url'], 'user' => $line['user'], 'pass' => $line['pass']]
+                    );
+                }
+            }
+            #--
+
             $this->_flashMessenger->addMessage(['success' => 'Settings Saved.']);
             $this->redirectToRoute('company');
             return;

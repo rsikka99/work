@@ -52,7 +52,12 @@ class HardwareLibrary_TonerController extends Action
             $toner = TonerMapper::getInstance()->find($tonerId);
         }
 
-        $this->view->tonerForm = new AvailableTonersForm(Zend_Auth::getInstance()->getIdentity()->dealerId, $toner);
+        $isAdmin = $this->view->IsAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, AppAclModel::PRIVILEGE_ADMIN);
+        $isAllowed                 = ((!$toner instanceof TonerModel || !$toner->isSystemDevice || $isAdmin) ? true : false);
+        $this->view->isSystemDevice = $toner && $toner->isSystemDevice;
+        $this->view->isAdmin = $isAdmin;
+        $this->view->isAllowed = $isAllowed;
+        $this->view->tonerForm = new AvailableTonersForm(Zend_Auth::getInstance()->getIdentity()->dealerId, $toner, null, $isAllowed);
 
         $this->_helper->layout()->disableLayout();
     }
@@ -102,7 +107,7 @@ class HardwareLibrary_TonerController extends Action
                     }
                     else
                     {
-                        if ((int)$toner->tonerColorId !== (int)$formData['tonerColorId'])
+                        if (isset($formData['tonerColorId']) && ((int)$toner->tonerColorId !== (int)$formData['tonerColorId']))
                         {
                             $deviceToners = DeviceTonerMapper::getInstance()->fetchDeviceTonersByTonerId($toner->id);
                             if (count($deviceToners) > 0)
@@ -314,10 +319,10 @@ class HardwareLibrary_TonerController extends Action
 
         if ($jqGridService->sortingIsValid())
         {
-            $jqGridService->setRecordCount(count($tonerMapper->fetchTonersWithMachineCompatibilityUsingColorId(
+            $jqGridService->setRecordCount(count($tonerMapper->fetchTonersForDealer(
                 null,
-                10000,
-                0,
+                null,
+                null,
                 $filterManufacturerId,
                 $filterTonerSku,
                 $filterTonerColorId
@@ -359,7 +364,7 @@ class HardwareLibrary_TonerController extends Action
             }
 
 
-            $jqGridService->setRows($tonerMapper->fetchTonersWithMachineCompatibilityUsingColorId(
+            $jqGridService->setRows($tonerMapper->fetchTonersForDealer(
                 $sortOrder,
                 $jqGridService->getRecordsPerPage(),
                 $startRecord,

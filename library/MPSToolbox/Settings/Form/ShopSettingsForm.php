@@ -13,6 +13,9 @@ use MPSToolbox\Settings\Entities\ShopSettingsEntity;
  */
 class ShopSettingsForm extends \My_Form_Form
 {
+
+    public $suppliers = [];
+
     /**
      * Initializes the form with all the elements required
      */

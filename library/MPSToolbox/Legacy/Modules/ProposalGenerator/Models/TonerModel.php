@@ -68,6 +68,12 @@ class TonerModel extends My_Model_Abstract
      */
     public $yield;
 
+    /** @var  float */
+    public $weight;
+
+    /** @var  string */
+    public $UPC;
+
     /**
      * @var int
      */
@@ -178,6 +184,9 @@ class TonerModel extends My_Model_Abstract
             $this->yield = $params->yield;
         }
 
+        if (isset($params->weight) && !is_null($params->weight)) $this->weight = $params->weight;
+        if (isset($params->UPC) && !is_null($params->UPC)) $this->UPC = $params->UPC;
+
         if (isset($params->manufacturerId) && !is_null($params->manufacturerId))
         {
             $this->manufacturerId = $params->manufacturerId;
@@ -240,6 +249,8 @@ class TonerModel extends My_Model_Abstract
             "tonerColorId"   => $this->tonerColorId,
             "imageUrl"       => $this->imageUrl,
             "imageFile"      => $this->imageFile,
+            "weight"      => $this->weight,
+            "UPC"      => $this->UPC,
         ];
     }
 

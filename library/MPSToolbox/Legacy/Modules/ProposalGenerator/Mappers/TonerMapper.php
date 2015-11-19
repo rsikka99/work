@@ -614,6 +614,79 @@ FROM toners
         return $result;
     }
 
+    public function fetchTonersForDealer($orders = null, $count = 25, $offset = 0, $filterManufacturerId = false, $filterTonerSku = false, $filterTonerColorId = false) {
+        $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+        $db       = $this->getDbTable()->getAdapter();
+        $sql      = "SELECT
+    toners.id                           AS id,
+    toners.isSystemDevice               AS isSystemDevice,
+    manufacturers.id                    AS manufacturerId,
+    manufacturers.fullname              AS manufacturer,
+    toners.sku                          AS systemSku,
+    dealer_toner_attributes.dealerSku   AS dealerSku,
+    toners.name                         AS toner_name,
+    toners.cost                         AS systemCost,
+    dealer_toner_attributes.cost        AS dealerCost,
+    toners.yield,
+    toners.tonerColorId,
+    (SELECT
+    GROUP_CONCAT(CONCAT(manufacturers.fullname, ' ', master_devices.modelName) SEPARATOR ';,')
+     FROM device_toners
+         LEFT JOIN master_devices ON master_devices.id = device_toners.master_device_id
+         LEFT JOIN manufacturers ON manufacturers.id = master_devices.manufacturerId
+     WHERE device_toners.toner_id = toners.id) AS device_list
+FROM toners
+    LEFT JOIN manufacturers ON manufacturers.id = toners.manufacturerId
+    LEFT JOIN dealer_toner_attributes ON (dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId})
+    where (toners.manufacturerId in (select manufacturerId from dealer_toner_vendors where dealer_toner_vendors.dealerId = {$dealerId}) or toners.manufacturerId in (select manufacturerId from master_devices))
+";
+#--LEFT JOIN toner_vendor_manufacturers ON toner_vendor_manufacturers.manufacturerId = toners.manufacturerId
+#--LEFT JOIN dealer_toner_vendors ON (dealer_toner_vendors.dealerId = {$dealerId} AND dealer_toner_vendors.manufacturerId = toners.manufacturerId)
+
+        /**
+         * Filters toners to a specific manufacturer
+         */
+        if ($filterManufacturerId)
+        {
+            $filterManufacturerId = $db->quote($filterManufacturerId, 'INTEGER');
+            $sql .= " AND manufacturers.id = {$filterManufacturerId}";
+        }
+
+        /**
+         * Filters toners to a specific color
+         */
+        if ($filterTonerColorId)
+        {
+            $filterTonerColorId = $db->quote($filterTonerColorId, 'INTEGER');
+            $sql .= " AND toners.{$this->col_tonerColorId} = {$filterTonerColorId}";
+        }
+
+        /**
+         * Filters toners to a specific VPN/SKU
+         */
+        if ($filterTonerSku)
+        {
+            $filterTonerSku = $db->quote("%$filterTonerSku%", 'TEXT');
+            $sql .= " AND (toners.{$this->col_sku} LIKE {$filterTonerSku} OR dealer_toner_attributes.dealerSku LIKE {$filterTonerSku})";
+        }
+
+
+        if ($orders)
+        {
+            $sql .= sprintf(' ORDER BY %s', implode(',', $orders));
+
+        }
+
+        if ($count) {
+            $sql .= " LIMIT " . $offset . ", " . $count . " ";
+        }
+
+        $stmt   = $db->query($sql);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
     /**
      * Fetches a list of toners with machine compatibility for a certain color
      *

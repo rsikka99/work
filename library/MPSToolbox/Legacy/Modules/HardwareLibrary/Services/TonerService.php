@@ -174,6 +174,13 @@ class TonerService
                 $toner->manufacturerId = $data['manufacturerId'];
                 $toner->imageUrl       = $data['imageUrl'];
                 $toner->name           = $data['name'];
+                $toner->weight           = $data['weight'];
+                $toner->UPC           = $data['UPC'];
+
+                if ($data['saveAndApproveHdn'] == 1)
+                {
+                    $toner->isSystemDevice = 1;
+                }
 
                 $tonerMapper->save($toner);
             }
