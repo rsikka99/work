@@ -644,6 +644,15 @@ class HardwareLibrary_ManageDevicesController extends Action
                                     $this->sendJsonError("Failed to assign selected toners.");
                                 }
                             }
+
+                            if ($approve) {
+                                $deviceTonerMapper = DeviceTonerMapper::getInstance();
+                                $arr = $deviceTonerMapper->fetchAll(['master_device_id=?'=>$masterDeviceId]);
+                                foreach ($arr as $deviceTonerModel) {
+                                    $deviceTonerModel->isSystemDevice = 1;
+                                    $deviceTonerMapper->save($deviceTonerModel);
+                                }
+                            }
                         }
 
                         $manageMasterDeviceService->recalculateMaximumRecommendedMonthlyPageVolume();

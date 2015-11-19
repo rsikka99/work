@@ -732,7 +732,7 @@ FROM toners
             toners.yield,
             toners.tonerColorId,
             dt3.isSystemDevice                  AS deviceTonersIsSystemDevice,
-            IF(dt1.toner_id IN ({$tonerIdList}),'1','0') AS is_added,
+            IF(dt3.toner_id is null and dt1.toner_id IN ({$tonerIdList}),'1','0') AS is_added,
     (SELECT
     GROUP_CONCAT(CONCAT(manufacturers.fullname, ' ', master_devices.modelName) SEPARATOR ';,')
      FROM device_toners AS dt2
