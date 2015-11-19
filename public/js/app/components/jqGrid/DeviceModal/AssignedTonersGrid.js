@@ -116,7 +116,7 @@ define([
                         systemSku: currentRow.systemSku
                     });
 
-                    if (that.isAllowed || currentRow.isSystemDevice == false || currentRow.deviceTonersIsSystemDevice == false)
+                    if ((that.isAllowed) || (currentRow.is_added=='1') || (currentRow.deviceTonersIsSystemDevice!='1'))
                     {
                         var $unassignButton = $(document.createElement('button'));
                         $unassignButton
@@ -359,6 +359,7 @@ define([
     AssignedTonersGrid.prototype.colModel = [
 //@formatter:off
 { width: 30,  name: 'id',                         index: 'id',                         label: 'Id',                                  hidden: true                     },
+{ width: 30,  name: 'is_added',                   index: 'is_added',                   label: 'is_added',                            hidden: true                     },
 { width: 30,  name: 'isSystemDevice',             index: 'isSystemDevice',             label: 'isSystemDevice',                      hidden: true                     },
 { width: 30,  name: 'deviceTonersIsSystemDevice', index: 'deviceTonersIsSystemDevice', label: 'deviceTonersIsSystemDevice',          hidden: true                     },
 { width: 40,  name: 'tonerColorId',               index: 'tonerColorId',               label: 'Color',                               hidden: true                     },
