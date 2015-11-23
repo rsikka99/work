@@ -69,13 +69,13 @@ limit 1
         /** @var \Zend_Log $log */
         $log = \Zend_Registry::get('Zend_Log');
         $log->log($url, 4);
-        if (file_exists('c:')) {
+        if (file_exists('c:') && !defined('UNIT_TESTING')) {
             $parsed = parse_url($url);
             $filename = 'data/cache/'.basename($parsed['path']) . '.' . md5($url) . '.txt';
             if (file_exists($filename)) return new Response(200, [], file_get_contents($filename));
         }
         $result = $this->getHttp()->get($url);
-        if (file_exists('c:')) {
+        if (file_exists('c:') && !defined('UNIT_TESTING')) {
             $body = $result->getBody()->getContents();
             file_put_contents($filename, json_encode(json_decode($body, true), JSON_PRETTY_PRINT));
             $result = new Response(200, [], file_get_contents($filename));
@@ -175,8 +175,8 @@ limit 1
                 'pageCoverageMagenta'=>$device_instance ? $device_instance['pageCoverageMagenta'] : null,
                 'pageCoverageYellow'=>$device_instance ? $device_instance['pageCoverageYellow'] : null,
                 'pageCoverageColor'=>$device_instance ? $device_instance['pageCoverageColor'] : null,
-                'monitorStartDate'=>$minus90,
-                'monitorEndDate'=>$today,
+                'monitorStartDate'=>date('Y-m-d H:i:s',strtotime($meters['Total Units Output']['firstReportedAt'])),//$minus90,
+                'monitorEndDate'=>date('Y-m-d H:i:s',strtotime($meters['Total Units Output']['lastReportedAt'])), //$today,
                 'startMeterBlack'=>$meters['Total Mono Units Output']['count'] - $meters['Total Mono Units Output']['delta'],
                 'endMeterBlack'=>$meters['Total Mono Units Output']['count'],
                 'startMeterColor'=>$isColor ? $meters['Total Color Units Output']['count'] - $meters['Total Color Units Output']['delta'] : null,
