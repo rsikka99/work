@@ -300,7 +300,14 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
      *
      * @return array|int
      */
-    public function fetchAllForHardwareOptimization ($hardwareOptimizationId, $costPerPageSetting, $replacementCostPerPageSetting, $optimizationSettings, $limit, $offset = 0, $justCount = false)
+    public function fetchAllForHardwareOptimization (
+        $hardwareOptimizationId,
+        $costPerPageSetting = null,
+        $replacementCostPerPageSetting = null,
+        $optimizationSettings = null,
+        $limit = 0,
+        $offset = 0,
+        $justCount = false)
     {
         $db                     = $this->getDbTable()->getAdapter();
         $hardwareOptimizationId = $db->quote($hardwareOptimizationId, 'INTEGER');
@@ -312,20 +319,18 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
         $deviceInstanceMeterMapper        = DeviceInstanceMeterMapper::getInstance();
         $dmda                             = DealerMasterDeviceAttributeMapper::getInstance();
 
-        $dealerId = DealerEntity::getDealerId();
-
         if ($justCount)
         {
 
             $selectStatement = new Zend_Db_Expr("COUNT(*)");
             $select          = $db->select();
-            $select->from([$this->getTableName()], $selectStatement)
-                   ->join(["di" => $deviceInstanceMapper->getTableName()], "{$this->getTableName()}.{$this->col_rmsUploadId} = di.{$deviceInstanceMapper->col_rmsUploadId}")
+            $select->from(["ho" => $this->getTableName()], $selectStatement)
+                   ->join(["di" => $deviceInstanceMapper->getTableName()], "ho.{$this->col_rmsUploadId} = di.{$deviceInstanceMapper->col_rmsUploadId}")
                    ->join(["dimd" => $deviceInstanceMasterDeviceMapper->getTableName()], "dimd.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
                    ->join(["md" => $masterDeviceMapper->getTableName()], "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
                    ->join(["dim" => $deviceInstanceMeterMapper->getTableName()], "dim.{$deviceInstanceMeterMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
-                   ->join(["dmda" => $dmda->getTableName()], "dmda.masterDeviceId = md.id and dmda.dealerId=".intval($dealerId))
-                   ->where("{$this->getTableName()}.$this->col_id = ?", $hardwareOptimizationId)
+                   ->joinLeft(["dmda" => $dmda->getTableName()], "dmda.masterDeviceId = md.id and dmda.dealerId=ho.dealerId")
+                   ->where("ho.$this->col_id = ?", $hardwareOptimizationId)
                    ->where("(dmda.isLeased = ?) or (dmda.isLeased is null)", 0)
                    ->where("di.isExcluded = ?", 0)
                    ->where("DATEDIFF(dim.monitorEndDate, dim.monitorStartDate) >= ? ", Assessment_ViewModel_Devices::MINIMUM_MONITOR_INTERVAL_DAYS);
@@ -344,21 +349,21 @@ class HardwareOptimizationMapper extends My_Model_Mapper_Abstract
             $db     = Zend_Db_Table::getDefaultAdapter();
             $select = $db->select();
             // Get all the devices, we will limit and offset them once they are sorted by cost.
-            $select->from([$this->getTableName()], $selectStatement)
-                   ->join(["di" => $deviceInstanceMapper->getTableName()], "{$this->getTableName()}.{$this->col_rmsUploadId} = di.{$deviceInstanceMapper->col_rmsUploadId}")
+            $select->from(["ho"=>$this->getTableName()], $selectStatement)
+                   ->join(["di" => $deviceInstanceMapper->getTableName()], "ho.{$this->col_rmsUploadId} = di.{$deviceInstanceMapper->col_rmsUploadId}")
                    ->join(["dimd" => $deviceInstanceMasterDeviceMapper->getTableName()], "dimd.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
                    ->join(["md" => $masterDeviceMapper->getTableName()], "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
                    ->join(["m" => $manufacturerMapper->getTableName()], "m.{$manufacturerMapper->col_id} = md.{$masterDeviceMapper->col_manufacturerId}")
                    ->join(["dim" => $deviceInstanceMeterMapper->getTableName()], "dim.{$deviceInstanceMeterMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
-                   ->join(["dmda" => $dmda->getTableName()], "dmda.masterDeviceId = md.id and dmda.dealerId=".intval($dealerId))
-                   ->where("{$this->getTableName()}.$this->col_id = ?", $hardwareOptimizationId)
+                   ->joinLeft(["dmda" => $dmda->getTableName()], "dmda.masterDeviceId = md.id and dmda.dealerId=ho.dealerId")
+                   ->where("ho.$this->col_id = ?", $hardwareOptimizationId)
                    ->where("(dmda.isLeased = ?) or (dmda.isLeased is null)", 0)
                    ->where("di.isExcluded = ?", 0)
                    ->where("DATEDIFF(dim.monitorEndDate, dim.monitorStartDate) >= ? ", Assessment_ViewModel_Devices::MINIMUM_MONITOR_INTERVAL_DAYS);
 
             $query = $db->query($select);
 
-            $devices = [];
+            $devices = ['jsonData'=>[]];
             foreach ($query->fetchAll() as $row)
             {
                 $deviceInstance            = DeviceInstanceMapper::getInstance()->find($row['deviceInstanceId']);

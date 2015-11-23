@@ -15,6 +15,7 @@ class My_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTestCase {
         'device_swap_reasons'=>['dealers','device_swap_reason_categories'],
         'ext_computer'=>['ext_hardware','dealers','ext_dealer_hardware'],
         'dealer_settings'=>['toner_vendor_ranking_sets','fleet_settings','quote_settings','generic_settings','optimization_settings','shop_settings'],
+        'hardware_optimizations'=>['clients','rms_uploads'],
     ];
 
     public $fixtures = [];
