@@ -43,17 +43,17 @@ CREATE TABLE IF NOT EXISTS `rms_realtime` (
 ) ENGINE=InnoDB');
 
         $this->execute(
-'ALTER TABLE `rms_realtime` ADD FOREIGN KEY ( `clientId` ) REFERENCES `mpstoolbox_v2`.`clients` (
+'ALTER TABLE `rms_realtime` ADD FOREIGN KEY ( `clientId` ) REFERENCES `clients` (
 `id`
 ) ON DELETE CASCADE ON UPDATE CASCADE');
 
         $this->execute(
-'ALTER TABLE `rms_realtime` ADD FOREIGN KEY ( `masterDeviceId` ) REFERENCES `mpstoolbox_v2`.`master_devices` (
+'ALTER TABLE `rms_realtime` ADD FOREIGN KEY ( `masterDeviceId` ) REFERENCES `master_devices` (
 `id`
 ) ON DELETE CASCADE ON UPDATE CASCADE');
 
         $this->execute(
-'ALTER TABLE `rms_realtime` ADD FOREIGN KEY ( `rmsProviderId` ) REFERENCES `mpstoolbox_v2`.`rms_providers` (
+'ALTER TABLE `rms_realtime` ADD FOREIGN KEY ( `rmsProviderId` ) REFERENCES `rms_providers` (
 `id`
 ) ON DELETE CASCADE ON UPDATE CASCADE');
     }
