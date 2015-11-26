@@ -15,6 +15,13 @@ use Zend_Form_Element_Multi;
 class DealerForm extends Zend_Form
 {
 
+    public $dealerId;
+
+    public function __construct($dealerId=null) {
+        $this->dealerId = $dealerId;
+        parent::__construct();
+    }
+
     public function init ()
     {
         $this->setMethod('POST');

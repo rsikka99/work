@@ -299,4 +299,20 @@ class ManufacturerMapper extends My_Model_Mapper_Abstract
 
         return $results;
     }
+
+    public function fetchByName ($manufacturerName)
+    {
+        $result = $this->fetch([
+            "{$this->col_fullName}=?" => $manufacturerName,
+        ]);
+
+        if (!$result)
+        {
+            $result = $this->fetch([
+                "{$this->col_displayName}=?" => $manufacturerName,
+            ]);
+        }
+
+        return $result;
+    }
 }

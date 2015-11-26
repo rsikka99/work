@@ -35,18 +35,31 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
 
     public function test_replaceRmsUpdate() {
         $service = new \MPSToolbox\Services\RmsUpdateService();
-        $service->replaceRmsUpdate([
+        $data = [
             'clientId'=>'1',
             'assetId'=>'123',
             'ipAddress'=>'12.12.12.12',
             'serialNumber'=>'321',
             'rmsProviderId'=>'6',
-        ]);
+        ];
+        $data['rmsDeviceInstanceId'] = $service->toDeviceInstance($data);
+        $service->replaceRmsUpdate($data);
     }
 
     public function test_findDeviceInstance() {
         $service = new \MPSToolbox\Services\RmsUpdateService();
-        $line = $service->findDeviceInstance(5, ['ipAddress'=>'172.16.3.191', 'serialNumber'=>'J0J747067']);
+
+        $data = [
+            'clientId'=>'5',
+            'assetId'=>'123',
+            'ipAddress'=>'172.16.3.191',
+            'serialNumber'=>'J0J747067',
+            'rmsProviderId'=>'6',
+            'masterDeviceId'=>'2',
+        ];
+        $data['rmsDeviceInstanceId'] = $service->toDeviceInstance($data);
+
+        $line = $service->findDeviceInstance(5, ['ipAddress'=>'172.16.3.191', 'serialNumber'=>'J0J747067', 'id'=>'123']);
         $this->assertEquals(2, $line['masterDeviceId']);
     }
 
@@ -96,7 +109,7 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
   "firstReportedAt": "2015-05-28T18:06:54.85Z",
   "status": "Ok",
   "type": "Network",
-  "ipAddress": "192.168.17.44",
+  "ipAddress": "172.16.3.191",
   "macAddress": "EC-B1-D7-F7-E6-C3",
   "commonLifecountMeters": {
     "total": {
@@ -255,8 +268,8 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
     "source": "User"
   },
   "serialNumber": {
-    "value": "CN51KJK0G5",
-    "deviceValue": "CN51KJK0G5",
+    "value": "J0J747067",
+    "deviceValue": "J0J747067",
     "source": "Device"
   },
   "hostname": {
@@ -500,24 +513,45 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
         $service->setHttp($http);
         $clients = $service->getRmsClients();
         $client=current($clients);
-        $service->update($client['clientId'], $client['rmsUri'], $client['deviceGroup']);
+
+        $instance = new \MPSToolbox\Entities\RmsDeviceInstanceEntity();
+        $instance->setClient(\MPSToolbox\Entities\ClientEntity::find(5));
+        $instance->setId('1');
+        $instance->setClient(\MPSToolbox\Entities\ClientEntity::find($client['clientId']));
+        $instance->setAssetId('5d9dd066-9475-4405-a121-1b96c1073bab');
+        $instance->setIpAddress('172.16.3.191');
+        $instance->setSerialNumber('J0J747067');
+        $instance->setLocation('here and there');
+        $instance->setMasterDevice(\MPSToolbox\Entities\MasterDeviceEntity::find(1));
+        $instance->save();
+
+        $result = $service->update($client['clientId'], $client['rmsUri'], $client['deviceGroup']);
+        $this->assertEquals(1, count($result));
+        $this->assertTrue($result[0] instanceof \MPSToolbox\Entities\RmsUpdateEntity);
     }
 
     public function test_deviceNeedsToner() {
         $service = new \MPSToolbox\Services\RmsUpdateService();
+        $instance = new \MPSToolbox\Entities\RmsDeviceInstanceEntity();
+        $instance->setClient(\MPSToolbox\Entities\ClientEntity::find(5));
+        $instance->setId('1');
+        $instance->setAssetId('123');
+        $instance->setIpAddress('1.1.1.1');
+        $instance->setSerialNumber('321');
+        $instance->setLocation('here and there');
+        $instance->setMasterDevice(\MPSToolbox\Entities\MasterDeviceEntity::find(1));
+        $instance->save();
+
         $device = new \MPSToolbox\Entities\RmsUpdateEntity();
-        $device->setClient(\MPSToolbox\Entities\ClientEntity::find(5));
-        $device->setAssetId('123');
-        $device->setIpAddress('1.1.1.1');
-        $device->setSerialNumber('321');
-        $device->setLocation('here and there');
-        $device->setMasterDevice(\MPSToolbox\Entities\MasterDeviceEntity::find(1));
+        $device->setRmsDeviceInstance($instance);
         $device->setTonerLevelBlack(34);
         $device->setTonerLevelMagenta(23);
         $device->setDaysLeft([
             \MPSToolbox\Entities\TonerColorEntity::BLACK=>4,
             \MPSToolbox\Entities\TonerColorEntity::MAGENTA=>5,
         ]);
+        $device->save();
+
         $client = ['clientId'=>5, 'dealerId'=>1];
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::BLACK);
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::MAGENTA);
@@ -526,12 +560,15 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
     public function test_tonerMayBeReplaced() {
         $service = new \MPSToolbox\Services\RmsUpdateService();
         $device = new \MPSToolbox\Entities\RmsUpdateEntity();
-        $device->setClient(\MPSToolbox\Entities\ClientEntity::find(5));
-        $device->setAssetId('123');
-        $device->setIpAddress('1.1.1.1');
-        $device->setSerialNumber('321');
-        $device->setLocation('here and there');
-        $device->setMasterDevice(\MPSToolbox\Entities\MasterDeviceEntity::find(1));
+        $instance = new \MPSToolbox\Entities\RmsDeviceInstanceEntity();
+        $instance->setClient(\MPSToolbox\Entities\ClientEntity::find(5));
+        $instance->setAssetId('123');
+        $instance->setIpAddress('1.1.1.1');
+        $instance->setSerialNumber('321');
+        $instance->setLocation('here and there');
+        $instance->setMasterDevice(\MPSToolbox\Entities\MasterDeviceEntity::find(1));
+
+        $device->setRmsDeviceInstance($instance);
         $device->setTonerLevelBlack(34);
         $device->setDaysLeft([\MPSToolbox\Entities\TonerColorEntity::BLACK=>4]);
         $client = ['clientId'=>5, 'dealerId'=>1];
@@ -545,37 +582,33 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
     public function test_sendEmail() {
         $service = new \MPSToolbox\Services\RmsUpdateService();
         #--
+        $instance = new \MPSToolbox\Entities\RmsDeviceInstanceEntity();
+        $instance->setClient(\MPSToolbox\Entities\ClientEntity::find(5));
+        $instance->setId('1');
+        $instance->setAssetId('123');
+        $instance->setIpAddress('1.1.1.1');
+        $instance->setSerialNumber('321');
+        $instance->setLocation('here and there');
+        $instance->setMasterDevice(\MPSToolbox\Entities\MasterDeviceEntity::find(1));
+        $instance->save();
+
         $device = new \MPSToolbox\Entities\RmsUpdateEntity();
-        $device->setClient(\MPSToolbox\Entities\ClientEntity::find(5));
-        $device->setAssetId('123');
-        $device->setIpAddress('1.1.1.1');
-        $device->setSerialNumber('321');
-        $device->setLocation('here and there');
-        $device->setMasterDevice(\MPSToolbox\Entities\MasterDeviceEntity::find(1));
+        $device->setRmsDeviceInstance($instance);
         $device->setTonerLevelBlack(34);
         $device->setTonerLevelMagenta(23);
+        $device->setMonitorStartDate(new DateTime('2015-01-01'));
+        $device->setMonitorEndDate(new DateTime('2015-02-01'));
+        $device->setStartMeterBlack(100);
+        $device->setEndMeterBlack(500);
+        $device->setStartMeterColor(200);
+        $device->setEndMeterColor(750);
         $device->setDaysLeft([
             \MPSToolbox\Entities\TonerColorEntity::BLACK=>4,
             \MPSToolbox\Entities\TonerColorEntity::MAGENTA=>5,
         ]);
+        $device->save();
+
         $client = ['clientId'=>5, 'dealerId'=>1];
-        #--
-        $db = \Zend_Db_Table::getDefaultAdapter();
-        $db->query("
-replace into rms_update set
-    clientId=5,
-    assetId='123',
-    ipAddress='1.1.1.1',
-    serialNumber='321',
-    rmsProviderId=6,
-    masterDeviceId=1,
-    monitorStartDate='2015-01-01',
-    monitorEndDate='2015-02-02',
-    startMeterBlack='100',
-    endMeterBlack='500',
-    startMeterColor='200',
-    endMeterColor='750'
-")->execute();
         #--
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::BLACK);
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::MAGENTA);

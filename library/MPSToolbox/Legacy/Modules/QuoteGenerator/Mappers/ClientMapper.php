@@ -84,7 +84,6 @@ class ClientMapper extends My_Model_Mapper_Abstract
         {
             $primaryKey = $data [$this->col_id];
         }
-
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, [
             "{$this->col_id}  = ?" => $primaryKey,

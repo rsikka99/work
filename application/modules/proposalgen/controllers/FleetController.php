@@ -1,12 +1,11 @@
 <?php
-use MPSToolbox\Legacy\Entities\RmsUploadEntity;
+
 use MPSToolbox\Legacy\Modules\Assessment\Forms\AssessmentNavigationForm;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceInstanceMasterDeviceMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MapDeviceInstanceMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceInstanceMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\RmsUploadMapper;
-use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\RmsUploadRowMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\RmsExcludedRowMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\CostPerPageSettingModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceMasterDeviceModel;
@@ -19,7 +18,6 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsUploadModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\RmsExcludedRowModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Services\RmsUploadService;
-use MPSToolbox\Legacy\Modules\QuoteGenerator\Forms\AddDeviceForm;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper;
 use Tangent\Controller\Action;
 use Tangent\Service\JQGrid;
@@ -400,6 +398,18 @@ class Proposalgen_FleetController extends Action
                 $targetDeviceInstance = $deviceInstanceMapper->find($targetDeviceInstanceId);
                 if ($targetDeviceInstance instanceof DeviceInstanceModel)
                 {
+                    #--
+                    if ($targetDeviceInstance->rmsDeviceInstanceId) {
+                        /** @var \MPSToolbox\Entities\RmsDeviceInstanceEntity $rmsDeviceInstance */
+                        $rmsDeviceInstance = \MPSToolbox\Entities\RmsDeviceInstanceEntity::find($targetDeviceInstance->rmsDeviceInstanceId);
+                        if ($rmsDeviceInstance) {
+                            $masterDeviceEntity = $masterDevice ? \MPSToolbox\Entities\MasterDeviceEntity::find($masterDevice->id) : null;
+                            $rmsDeviceInstance->setMasterDevice($masterDeviceEntity);
+                            $rmsDeviceInstance->save();
+                        }
+                    }
+                    #--
+
                     $deviceInstances = [];
                     if (strlen($targetDeviceInstance->getRmsUploadRow()->rmsModelId) > 0)
                     {
@@ -1185,7 +1195,7 @@ class Proposalgen_FleetController extends Action
         }
         #--
 
-        $st = $db->query('select distinct(scanDate) as scanDate from rms_realtime where clientId='.intval($this->getSelectedClient()->id));
+        $st = $db->query('select distinct(scanDate) as scanDate from rms_realtime where rmsDeviceInstanceId in (select id from rms_device_instances where clientId='.intval($this->getSelectedClient()->id).')');
         $arr = $st->fetchAll();
         $this->_pageTitle = ['Use Real Time Data'];
         $this->view->arr = $arr;

@@ -25,6 +25,7 @@ use MPSToolbox\Entities\DealerEntity;
  * @property GenericSettingsEntity      genericSettings
  * @property OptimizationSettingsEntity optimizationSettings
  * @property QuoteSettingsEntity        quoteSettings
+ * @property ShopSettingsEntity         shopSettings
  */
 class DealerSettingsEntity extends EloquentModel
 {
@@ -32,12 +33,23 @@ class DealerSettingsEntity extends EloquentModel
     protected $table      = 'dealer_settings';
     public    $timestamps = false;
 
+    /**
+     * @param null $dealerId
+     * @return DealerSettingsEntity
+     */
     public static function getDealerSettings($dealerId=null) {
         if (!$dealerId) {
             $dealerId = DealerEntity::getDealerId();
         }
         if (!$dealerId) return false;
-        $settings = static::with('ShopSettings');
+        $settings = static::with(
+            'CurrentFleetSettings',
+            'ProposedFleetSettings',
+            'GenericSettings',
+            'QuoteSettings',
+            'OptimizationSettings',
+            'ShopSettings'
+        );
         if (!$settings) return false;
         $dealerSettings = $settings->find($dealerId);
         return $dealerSettings;

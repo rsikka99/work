@@ -295,23 +295,23 @@ class AssessmentMapper extends My_Model_Mapper_Abstract
      * sets the deviceModified field to 1
      *
      * @param int $masterDeviceId
-     *
      * @return bool
+     * @deprecated
      */
     public function setDevicesModifiedFlagOnAssessments ($masterDeviceId)
     {
-        $sql    = "
-    UPDATE assessments
-	SET assessments.devicesModified=1
-	WHERE assessments.id IN (
-		SELECT di.rmsUploadId FROM device_instances AS di
-        LEFT JOIN device_instance_master_devices AS dimd ON di.id = dimd.deviceInstanceId
-        WHERE dimd.masterDeviceId = ?
-		GROUP BY di.rmsUploadId
-	);";
-        $query  = $this->getDbTable()->getAdapter()->query($sql, $masterDeviceId);
-        $result = $query->execute();
-
-        return $result;
+#        $sql    = "
+#    UPDATE assessments
+#	SET assessments.devicesModified=1
+#	WHERE assessments.id IN (
+#		SELECT di.rmsUploadId FROM device_instances AS di
+#        LEFT JOIN device_instance_master_devices AS dimd ON di.id = dimd.deviceInstanceId
+#        WHERE dimd.masterDeviceId = ?
+#		GROUP BY di.rmsUploadId
+#	);";
+#        $query  = $this->getDbTable()->getAdapter()->query($sql, $masterDeviceId);
+#        $result = $query->execute();
+#        return $result;
     }
+
 }

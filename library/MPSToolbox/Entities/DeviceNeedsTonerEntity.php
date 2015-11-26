@@ -9,6 +9,13 @@ namespace MPSToolbox\Entities;
  * @Table(name="device_needs_toner")
  */
 class DeviceNeedsTonerEntity extends BaseEntity {
+
+    /**
+     * @ManyToOne(targetEntity="RmsDeviceInstanceEntity")
+     * @JoinColumn(name="rmsDeviceInstanceId", referencedColumnName="id")
+     */
+    private $rmsDeviceInstance;
+
     /**
      * @id
      * @ManyToOne(targetEntity="TonerColorEntity")
@@ -55,6 +62,22 @@ class DeviceNeedsTonerEntity extends BaseEntity {
 
     /** @Column(type="string") */
     private $tonerOptions;
+
+    /**
+     * @return mixed
+     */
+    public function getRmsDeviceInstance()
+    {
+        return $this->rmsDeviceInstance;
+    }
+
+    /**
+     * @param mixed $rmsDeviceInstance
+     */
+    public function setRmsDeviceInstance($rmsDeviceInstance)
+    {
+        $this->rmsDeviceInstance = $rmsDeviceInstance;
+    }
 
     /**
      * @return TonerColorEntity

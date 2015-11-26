@@ -2,6 +2,8 @@
 
 namespace MPSToolbox\Legacy\Modules\ProposalGenerator\Services;
 
+use MPSToolbox\Entities\MasterDeviceEntity;
+use MPSToolbox\Entities\RmsDeviceInstanceEntity;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceInstanceMasterDeviceMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceMasterDeviceModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceInstanceModel;
@@ -140,7 +142,6 @@ class DeviceMappingService
         $deviceInstanceMasterDevice->masterDeviceId   = $masterDeviceId;
 
         $result = $this->_deviceInstanceMasterDeviceMapper->insert($deviceInstanceMasterDevice);
-
         return $result;
     }
 }

@@ -60,12 +60,9 @@ class ClientForm extends \My_Form_Form
         $this->addElement('text', 'id', [
             'label'   => 'ID',
         ]);
-        $this->addElement('text', 'notSupportedMasterDevices', [
-            'label'   => 'notSupportedMasterDevices',
-        ]);
 
         $this->addElement('text', 'deviceGroup', [
-            'label'   => 'RMS Device Group',
+            'label'   => 'RMS Client Identifier',
             'filters' => ['StringTrim'],
         ]);
 

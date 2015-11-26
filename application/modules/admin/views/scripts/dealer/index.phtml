@@ -36,7 +36,7 @@ use MPSToolbox\Legacy\Models\DealerModel;
                                 <span class="btn btn-xs btn-warning disabled"><i class="glyphicon glyphicon-eye-close"></i></span>
                             <?php else : ?>
                                 <a class="btn btn-xs btn-info" title="Edit" href="<?= $this->url(['id' => $dealer->id], 'admin.dealers.view'); ?>">
-                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                    <i class="glyphicon glyphicon-pencil"></i>
                                 </a>
                                 <?php if ($dealer->id == 1) : ?>
                                     <span class="btn btn-xs btn-danger disabled"><i class="glyphicon glyphicon-trash"></i></span>

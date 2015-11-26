@@ -692,6 +692,16 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
         return $this->fetchAll($whereClause);
     }
 
+    public function fetchByNameAndManufacturer($modelName, $manufacturerId)
+    {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $st = $db->prepare('select id from master_devices where modelName=:modelName and manufacturerId=:manufacturerId');
+        $st->execute(['modelName'=>$modelName, 'manufacturerId'=>$manufacturerId]);
+        $arr = $st->fetchAll();
+        if (empty($arr) || (count($arr)!=1)) return null;
+        return $this->find($arr[0]['id']);
+    }
+
     /**
      * Returns results from a custom query that combines manufacturer and master device tables.
      * It returns a list of devices that match (like statement) the search terms that have been passed.

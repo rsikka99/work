@@ -67,10 +67,16 @@ class ClientModel extends My_Model_Abstract
     protected $webId;
 
     /** @var  string */
-    protected $notSupportedMasterDevices;
+    public $notSupportedMasterDevices;
 
     /** @var  string */
-    protected $deviceGroup;
+    public $deviceGroup;
+
+    /** @var  string */
+    public $priceLevel;
+
+    /** @var  string */
+    public $transactionType;
 
     /**
      * @param array $params An array of data to populate the model with
@@ -127,6 +133,15 @@ class ClientModel extends My_Model_Abstract
             $this->deviceGroup = $params->deviceGroup;
         }
 
+        if (isset($params->priceLevel) && !is_null($params->priceLevel))
+        {
+            $this->priceLevel = $params->priceLevel;
+        }
+        if (isset($params->transactionType) && !is_null($params->transactionType))
+        {
+            $this->transactionType = $params->transactionType;
+        }
+
     }
 
     /**
@@ -144,6 +159,8 @@ class ClientModel extends My_Model_Abstract
             "webId" => $this->webId,
             "notSupportedMasterDevices" => $this->notSupportedMasterDevices,
             "deviceGroup" => $this->deviceGroup,
+            "priceLevel" => $this->priceLevel,
+            "transactionType" => $this->transactionType,
         ];
     }
 

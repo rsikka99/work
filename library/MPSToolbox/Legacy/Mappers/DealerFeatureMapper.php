@@ -1,6 +1,7 @@
 <?php
 namespace MPSToolbox\Legacy\Mappers;
 
+use MPSToolbox\Legacy\Entities\DealerEntity;
 use MPSToolbox\Legacy\Models\DealerFeatureModel;
 use My_Model_Mapper_Abstract;
 use Zend_Db_Table_Select;
@@ -251,9 +252,9 @@ class DealerFeatureMapper extends My_Model_Mapper_Abstract
      *
      * @return DealerFeatureModel[]
      */
-    public function fetchFeatureListForDealer ($dealerId)
+    public function fetchFeatureListForDealer ($dealerId = null)
     {
+        if (!$dealerId) $dealerId = DealerEntity::getDealerId();
         return $this->fetchAll(["{$this->col_dealerId} = ?" => $dealerId]);
-
     }
 }

@@ -1,0 +1,125 @@
+<?php
+
+$settings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings();
+$shopSettings = $settings->shopSettings;
+
+/** @var \MPSToolbox\Entities\DealerEntity $dealer */
+$dealerBranding = \MPSToolbox\Legacy\Mappers\DealerBrandingMapper::getInstance()->find(\MPSToolbox\Entities\DealerEntity::getDealerId());
+if (empty($shopSettings->emailFromName)) $shopSettings->emailFromName = $dealerBranding->dealerName;
+if (empty($shopSettings->emailFromAddress)) $shopSettings->emailFromAddress = $dealerBranding->dealerEmail;
+if (empty($shopSettings->supplyNotifySubject)) $shopSettings->supplyNotifySubject = 'Printing Supplies Order Requirements for {{clientName}}';
+if (empty($shopSettings->supplyNotifyMessage)) $shopSettings->supplyNotifyMessage = <<<HTML
+<p>Hello {{contactName}}</p>
+
+<p>We have determined that the following devices require supplies:</p>
+
+{{devices}}
+
+<p>
+    <em>Note:</em> print quality typically degrades when supply levels are between 5 and 10%.
+    Lighter prints or inaccurate color representation are often common when supply levels are low.
+    Some devices will stop printing at any point below 5%.
+    Delivery times should also be considered to ensure the device does not stop printing due to empty supplies.
+</p>
+<p>
+    We have prepared a supply order for you. Please click here to login to your account and order:<br>
+    {{link}}
+</p>
+
+<p>Regards,<br>
+The toner management team at {$dealerBranding->dealerName}
+</p>
+HTML;
+
+
+?>
+<div class="container">
+    <form method="post">
+        <hr>
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>Distributors</h3>
+                <p>Use this table to enable or disable automatic pricing updates from your distributors.</p>
+            </div>
+            <div class="col-sm-8">
+                <table class="table">
+                    <colgroup>
+                        <col width="30%">
+                        <col width="10%">
+                        <col width="20%">
+                        <col width="20%">
+                        <col width="20%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>Distributor</th>
+                        <th>Enabled</th>
+                        <th>URL</th>
+                        <th>User</th>
+                        <th>Pass</th>
+                    </tr>
+                    </thead>
+                    <?php foreach ($this->distributors as $line) { ?>
+                        <tr>
+                            <td><?= $line['name'] ?></td>
+                            <td><input type="checkbox" name="supplier[<?= $line['id'] ?>][enabled]" value="1" <?= $line['dealerId']?'checked="checked"':'' ?>></td>
+                            <td><input type="text" name="supplier[<?= $line['id'] ?>][url]" class="form-control" value="<?= $line['url'] ?>"></td>
+                            <td><input type="text" name="supplier[<?= $line['id'] ?>][user]" class="form-control" value="<?= $line['user'] ?>"></td>
+                            <td><input type="text" name="supplier[<?= $line['id'] ?>][pass]" class="form-control" value="<?= $line['pass'] ?>"></td>
+                        </tr>
+                    <?php } ?>
+                </table>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>E-mail</h3>
+                <p>E-mail settings for supply notifications</p>
+            </div>
+            <div class="col-sm-8">
+                <p>
+                    <label>Send E-mail From</label>
+                    <table style="width:100%"><tr>
+                        <td>Name:&nbsp;</td><td><input required="required" class="form-control" type="text" placeholder="Sender Name" name="emailFromName" value="<?= $shopSettings->emailFromName ?>"></td>
+                        <td>&nbsp;</td>
+                        <td>E-mail:&nbsp;</td><td><input required="required" class="form-control" type="email" placeholder="E-mail Address" name="emailFromAddress" value="<?= $shopSettings->emailFromAddress ?>"></td>
+                    </tr></table>
+                </p>
+
+                <p>
+                    <label>Subject</label>
+                    <input required="required" class="form-control" type="text" placeholder="E-mail Subject" name="supplyNotifySubject" value="<?= $shopSettings->supplyNotifySubject ?>">
+                </p>
+
+                <p>
+                    <label>Message</label>
+                    <textarea required="required" class="form-control" id="editor1" style="height:450px;" name="supplyNotifyMessage"><?= $shopSettings->supplyNotifyMessage ?></textarea>
+                </p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>Shopify</h3>
+                <p>Your shopify sub-domain as configured by the Administrator</p>
+            </div>
+            <div class="col-sm-8">
+                <label>Shopify Sub-domain</label>
+                <table style="width:100%">
+                    <tr><td><input class="form-control" disabled="disabled" value="<?= $shopSettings->shopifyName ?>"></td><td>.myshopify.com</td></tr>
+                </table>
+            </div>
+        </div>
+        <hr>
+
+        <div class="pull-right">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+
+<script src="//cdn.ckeditor.com/4.5.5/basic/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('editor1');
+</script>

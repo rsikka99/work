@@ -346,6 +346,32 @@
                 </quotemenu>
             </pages>
         </homemenu>
+
+        <ecommerce>
+            <id>ecommerce</id>
+            <label>E-commerce</label>
+            <order>999992</order>
+            <icon>fa fa-fw fa-shopping-cart</icon>
+            <class>dropdown</class>
+            <route>app.dashboard</route>
+            <resource>default__index__index</resource>
+            <visible>0</visible>
+            <pages>
+                <dealer>
+                    <label>Dealer Settings</label>
+                    <uri>/ecommerce/dealer</uri>
+                </dealer>
+                <customer>
+                    <label>Client Settings</label>
+                    <uri>/ecommerce/client</uri>
+                </customer>
+                <device>
+                    <label>Device Settings</label>
+                    <uri>/ecommerce/device</uri>
+                </device>
+            </pages>
+        </ecommerce>
+
         <hardwarelibrary>
             <label>Hardware Library</label>
             <route>hardware-library.devices</route>

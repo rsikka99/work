@@ -1,5 +1,4 @@
 <?php
-use MPSToolbox\Legacy\Modules\ProposalGenerator\DbTables\DeviceInstanceMasterDeviceDbTable;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\DbTables\DeviceTonerDbTable;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\DbTables\ManufacturerDbTable;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\DbTables\MasterDeviceDbTable;
@@ -181,29 +180,28 @@ class Proposalgen_AdminController extends Action
         $this->sendJson($formData);
     }
 
+    /**
+     * @deprecated
+     */
     public function devicereportsAction ()
     {
-        $master_device_id = $this->_getParam('id', 0);
-
-        $device_instance_master_devicesTable = new DeviceInstanceMasterDeviceDbTable();
-        $where                               = $device_instance_master_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $master_device_id, 'INTEGER');
-        $device_instances                    = $device_instance_master_devicesTable->fetchAll($where);
-
-        try
-        {
-            $formdata = [
-                'report_count' => count($device_instances)
-            ];
-        }
-        catch (Exception $e)
-        {
-            // critical exception
-            Throw new exception("Critical Error: Unable to get report count.", 0, $e);
-        } // end catch
-
-
-        // encode user data to return to the client:
-        $this->sendJson($formdata);
+#        $master_device_id = $this->_getParam('id', 0);
+#        $device_instance_master_devicesTable = new DeviceInstanceMasterDeviceDbTable();
+#        $where                               = $device_instance_master_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $master_device_id, 'INTEGER');
+#        $device_instances                    = $device_instance_master_devicesTable->fetchAll($where);
+#        try
+#        {
+#            $formdata = [
+#                'report_count' => count($device_instances)
+#            ];
+#        }
+#        catch (Exception $e)
+#        {
+#            // critical exception
+#            Throw new exception("Critical Error: Unable to get report count.", 0, $e);
+#        } // end catch
+#        // encode user data to return to the client:
+#        $this->sendJson($formdata);
     }
 
     /**

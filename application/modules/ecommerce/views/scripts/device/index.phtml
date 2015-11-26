@@ -1,0 +1,155 @@
+<?php
+
+/** @var \MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel $selectedClient */
+$selectedClient = null;
+foreach($this->clients as $client) {
+    if ($this->clientId==$client->id) {
+        $selectedClient = $client;
+    }
+}
+
+?>
+
+<script>
+    var isSaveAndApproveAdmin = <?=($this->IsAllowed(\MPSToolbox\Legacy\Models\Acl\ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, \MPSToolbox\Legacy\Models\Acl\AppAclModel::PRIVILEGE_ADMIN) ? 'true' : 'false'); ?>,
+        dealerSkuName         = '<?= My_Brand::$dealerSku; ?>';
+</script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <p>Select a client</p>
+        </div>
+        <div class="col-sm-8">
+            <select class="form-control" onchange="window.location.href='?client='+this.value">
+                <option></option>
+                <?php foreach($this->clients as $client) { ?><option <?= $this->clientId==$client->id?'selected="selected"':'' ?> value="<?= $client->id ?>"><?= $client->companyName ?></option><?php } ?>
+            </select>
+        </div>
+    </div>
+
+    <hr>
+
+<?php if ($selectedClient) { ?>
+
+    <table class="table table-striped table-hover" id="my-table">
+        <colgroup>
+
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Raw Device Name</th>
+                <th>Model</th>
+                <th></th>
+                <th>IP Address</th>
+                <th>Serial Number</th>
+                <th>Asset ID</th>
+                <th>Last Reported</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <script>
+        function doMap(id, name) {
+            var tr = '<tr>';
+            tr+= '<td><i class="fa fa-fw"></i>&nbsp;'+name+'</td>';
+            tr+= '<td colspan="4"><table style="width:100%"><tr><td><input type="text" id="select-'+id+'" style="width:100%"></td><td>&nbsp;</td><td><button disabled="disabled" id="ok-btn-'+id+'" data-value="" onclick="modelSelected('+id+',this)" class="btn btn-primary">OK</button></td></tr></table></td>';
+            tr+= '<td></td>';
+            tr+= '<td><a href="javascript:;" onclick="newDeviceModel()" class="btn btn-primary">New Device Model</a></td>';
+            tr+= '</tr>';
+            $('#tr-'+id).replaceWith(tr);
+            require(['app/components/Select2/MasterDevice'], function () {
+                $('#select-'+id).on('change', function ()
+                {
+                    var $this = $(this);
+                    // Only update if there's an actual change
+                    if ($this.data('device-id') != $this.val())
+                    {
+                        $('#ok-btn-'+id).removeAttr('disabled');
+                        $('#ok-btn-'+id).attr('data-value', $this.val());
+                    }
+                }).selectMasterDevice();
+            });
+        }
+        function modelSelected(id, btn) {
+            var value = $(btn).attr('data-value');
+            $.post('/ecommerce/device/ajax-map', {instance:id, model:value}, function(response) {
+                window.dt_table.ajax.reload();
+            }, 'json');
+        }
+        function newDeviceModel() {
+            require(['app/legacy/hardware-library/manage-devices/DeviceModal'], function (DeviceModal)
+            {
+                var editDeviceModal = new DeviceModal({
+                    "deviceId"      : null,
+                    "isAllowed"     : isSaveAndApproveAdmin
+                });
+                $(editDeviceModal).on('DeviceModal.saved', function () {
+                    //map
+                    window.dt_table.ajax.reload();
+                });
+                editDeviceModal.show();
+            });
+        }
+        function showDetailsModal(id) {
+            $.post('/ecommerce/device/details', {id:id}, function(response) {
+                $('#details-modal-body').html(response);
+                var $modal = $('#details-modal');
+                $modal.modal({backdrop: 'static'}).css('margin-top',(-1 * ($modal.height()/2))).css('margin-left',(-1 * ($modal.width()/2)));
+            }, 'html');
+        }
+        function showModelModal(deviceId) {
+            require(['app/legacy/hardware-library/manage-devices/DeviceModal'], function (DeviceModal)
+            {
+                var editDeviceModal = new DeviceModal({
+                    "deviceId"      : deviceId,
+                    "isAllowed"     : isSaveAndApproveAdmin
+                });
+                $(editDeviceModal).on('DeviceModal.saved', function () {
+                    window.dt_table.ajax.reload();
+                });
+                editDeviceModal.show();
+            });
+        }
+        require(['jquery','datatables', 'datatables.bootstrap'], function ($) {
+            window.dt_table = $('#my-table').DataTable({
+                "columns": [
+                    {data: 'raw'},
+                    {data: 'model'},
+                    {data: 'mapped', orderable: false},
+                    {data: 'ipAddress'},
+                    {data: 'serialNumber'},
+                    {data: 'assetId'},
+                    {data: 'reportDate'}
+                ],
+                "ajax": {
+                    "url": "/ecommerce/device/ajax-table?client=<?= $selectedClient->id ?>"
+                },
+                "pageLength": 100
+            });
+        });
+
+    </script>
+
+<?php } ?>
+
+</div>
+
+<div class="modal fade" id="details-modal" style="width:800px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Device Details</h4>
+            </div>
+            <div class="modal-body" id="details-modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

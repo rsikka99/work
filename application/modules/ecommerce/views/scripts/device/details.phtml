@@ -1,0 +1,58 @@
+<div>
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#General" aria-controls="home" role="tab" data-toggle="tab">General</a></li>
+        <li role="presentation"><a href="#Status" aria-controls="messages" role="tab" data-toggle="tab">Status</a></li>
+        <li role="presentation"><a href="#Log" aria-controls="profile" role="tab" data-toggle="tab">RMS Log</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="General" style="padding:1em 10px">
+
+            <div class="row">
+
+                <div class="col-sm-6">
+
+                    <table class="table">
+                        <colgroup>
+                            <col width="30%">
+                            <col width="70%">
+                        </colgroup>
+                        <tr>
+                            <th>Model Name</th>
+                            <td><?= $this->device['fullDeviceName'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>Asset ID</th>
+                            <td><?= $this->device['assetId'] ?></td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div class="col-sm-6">
+
+                    <table class="table">
+                        <colgroup>
+                            <col width="30%">
+                            <col width="70%">
+                        </colgroup>
+                        <tr>
+                            <th>IP Address</th>
+                            <td><?= $this->device['ipAddress'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>Serial Number</th>
+                            <td><?= $this->device['serialNumber'] ?></td>
+                        </tr>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div role="tabpanel" class="tab-pane" id="Status">...</div>
+        <div role="tabpanel" class="tab-pane" id="Log">...</div>
+    </div>
+
+</div>
