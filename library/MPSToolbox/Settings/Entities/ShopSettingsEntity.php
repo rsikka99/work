@@ -15,6 +15,10 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
  * @property float oemTonerMargin
  * @property float compatibleTonerMargin
  * @property string rmsUri
+ * @property string emailFromName
+ * @property string emailFromAddress
+ * @property string supplyNotifySubject
+ * @property string supplyNotifyMessage
  */
 class ShopSettingsEntity extends EloquentModel
 {

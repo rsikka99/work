@@ -4,16 +4,15 @@ namespace MPSToolbox\Services;
 use cdyweb\http\Exception\RequestException;
 use cdyweb\http\guzzle\Guzzle;
 use GuzzleHttp\Psr7\Response;
-use Illuminate\Support\Facades\HTML;
 use MPSToolbox\Entities\ClientEntity;
 use MPSToolbox\Entities\DeviceNeedsTonerEntity;
+use MPSToolbox\Entities\RmsDeviceInstanceEntity;
 use MPSToolbox\Entities\RmsUpdateEntity;
 use MPSToolbox\Entities\TonerColorEntity;
 use MPSToolbox\Entities\TonerEntity;
 use MPSToolbox\Legacy\Mappers\DealerBrandingMapper;
-use MPSToolbox\Legacy\Models\DealerBrandingModel;
-use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
-use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ContactMapper;
 use MPSToolbox\Settings\Entities\DealerSettingsEntity;
 use MPSToolbox\Settings\Entities\ShopSettingsEntity;
@@ -23,7 +22,7 @@ use MPSToolbox\Settings\Entities\ShopSettingsEntity;
  * @package MPSToolbox\Services
  */
 class RmsUpdateService {
-    
+
     /** @var \cdyweb\http\BaseAdapter */
     private $http;
 
@@ -46,29 +45,26 @@ class RmsUpdateService {
         $this->http = $http;
     }
 
+    /**
     public function findDeviceInstance($clientId, $line) {
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $st = $db->prepare(
-"
-select dimd.masterDeviceId, di.*, r.*
-from device_instances di
-  join device_instance_master_devices dimd on di.id=dimd.deviceInstanceId
-  join rms_upload_rows r on di.rmsUploadRowId=r.id
-where rmsUploadId in (select id from rms_uploads where clientId=:clientId)
-    and ipAddress=:ipAddress
-    and serialNumber=:serialNumber
-order by rmsUploadRowId DESC
-limit 1
-"
-        );
-        $st->execute([':clientId'=>$clientId,':ipAddress'=>$line['ipAddress'],':serialNumber'=>$line['serialNumber']]);
-        return $st->fetch(\PDO::FETCH_ASSOC);
+        $st = $db->prepare('select * from rms_device_instances where clientId=:clientId and assetId=:assetId and ipAddress=:ipAddress and serialNumber=:serialNumber');
+        $st->execute([':clientId'=>$clientId,':ipAddress'=>$line['ipAddress'],':serialNumber'=>$line['serialNumber'],':assetId'=>$line['id']]);
+        $result = $st->fetch();
+        if (!$result) {
+            $st = $db->prepare('select * from rms_device_instances where clientId=:clientId and ipAddress=:ipAddress and serialNumber=:serialNumber and assetId=\'\'');
+            $st->execute([':clientId'=>$clientId,':ipAddress'=>$line['ipAddress'],':serialNumber'=>$line['serialNumber']]);
+            $result = $st->fetch();
+        }
+        return $result;
     }
+    **/
 
     private function readUrl($url) {
         /** @var \Zend_Log $log */
         $log = \Zend_Registry::get('Zend_Log');
         $log->log($url, 4);
+        $filename='';
         if (file_exists('c:') && !defined('UNIT_TESTING')) {
             $parsed = parse_url($url);
             $filename = 'data/cache/'.basename($parsed['path']) . '.' . md5($url) . '.txt';
@@ -117,7 +113,7 @@ limit 1
             if ($line['managementStatus']!='Managed') continue;
             if ($line['licenseStatus']!='Full') continue;
 
-            $device_instance = $this->findDeviceInstance($clientId, $line);
+            $device_instance = RmsDeviceInstanceEntity::findOne($clientId, $line['ipAddress'], $line['serialNumber'], $line['id']);//$this->findDeviceInstance($clientId, $line);
             if (!$device_instance) {
                 echo "!!! {$line['id']} {$line['name']} {$line['ipAddress']} {$line['serialNumber']} <br>\n";
             }
@@ -145,36 +141,55 @@ limit 1
             $reportsTonerLevels = isset($device['colorSupplies']) && (count($device['colorSupplies'])>0);
             $isColor = isset($meters['Total Color Units Output']);
 
+            $masterDevice = null;
+            $masterDeviceId = null;
+            $fullDeviceName = $line['modelMatch']['model']['name'];
+            if ($device_instance && $device_instance->getMasterDevice()) {
+                $masterDevice = MasterDeviceMapper::getInstance()->find($device_instance->getMasterDevice()->getId());
+            }
+
+            if (!$masterDevice) {
+                $manufacturer = $line['modelMatch']['model']['manufacturer'];
+                $modelName = str_replace("{$manufacturer} ", '', $line['modelMatch']['model']['name']);
+                $masterDevice = $this->tryToMap($manufacturer,$modelName);
+            }
+
+            if ($masterDevice) {
+                $fullDeviceName = $masterDevice->getFullDeviceName();
+                $masterDeviceId = $masterDevice->id;
+            }
+
             $data=[
+                'rmsDeviceInstanceId' => $device_instance ? $device_instance->getId() : null,
                 'clientId'=>$clientId,
                 'assetId'=>$line['id'],
                 'ipAddress'=>$line['ipAddress'],
                 'serialNumber'=>$line['serialNumber'],
                 'location'=>$line['location'],
                 'rawDeviceName'=>$line['name'],
-                'fullDeviceName'=>$line['modelMatch']['model']['name'],
+                'fullDeviceName'=>$fullDeviceName,
                 'manufacturer'=>$line['modelMatch']['model']['manufacturer'],
                 'modelName'=>str_replace("{$line['modelMatch']['model']['manufacturer']} ", '', $line['modelMatch']['model']['name']),
-                'masterDeviceId'=>$device_instance ? $device_instance['masterDeviceId'] : null,
+                'masterDeviceId'=>$masterDeviceId,
                 'rmsProviderId'=>6, //Printfleet 3.x
                 'isColor'=>$isColor?1:0,
                 'isCopier'=>isset($meters['COPIERTOTAL'])?'1':'0',
                 'isFax'=>isset($meters['FAXMONO'])?'1':'0',
-                'isLeased'=>$device_instance ? $device_instance['isLeased'] : null,
+                //'isLeased'=>$device_instance ? $device_instance['isLeased'] : null,
                 'reportsTonerLevels'=>$reportsTonerLevels ?'1':'0',
-                'ppmBlack'=>$device_instance ? $device_instance['ppmBlack'] : null,
-                'ppmColor'=>$device_instance ? $device_instance['ppmColor'] : null,
-                'wattsPowerNormal'=>$device_instance ? $device_instance['wattsPowerNormal'] : null,
-                'wattsPowerIdle'=>$device_instance ? $device_instance['wattsPowerIdle'] : null,
+                'ppmBlack'=>$masterDevice ? $masterDevice->ppmBlack : null,
+                'ppmColor'=>$masterDevice ? $masterDevice->ppmColor : null,
+                'wattsPowerNormal'=>$masterDevice ? $masterDevice->wattsPowerNormal : null,
+                'wattsPowerIdle'=>$masterDevice ? $masterDevice->wattsPowerIdle : null,
                 'tonerLevelBlack'=>$reportsTonerLevels ? $device['colorSupplies']['black']['level']['lowPercent'] : null,
                 'tonerLevelCyan'=>$reportsTonerLevels && $isColor ? $device['colorSupplies']['cyan']['level']['lowPercent'] : null,
                 'tonerLevelMagenta'=>$reportsTonerLevels && $isColor ? $device['colorSupplies']['magenta']['level']['lowPercent'] : null,
                 'tonerLevelYellow'=>$reportsTonerLevels && $isColor ? $device['colorSupplies']['yellow']['level']['lowPercent'] : null,
-                'pageCoverageMonochrome'=>$device_instance ? $device_instance['pageCoverageMonochrome'] : null,
-                'pageCoverageCyan'=>$device_instance ? $device_instance['pageCoverageCyan'] : null,
-                'pageCoverageMagenta'=>$device_instance ? $device_instance['pageCoverageMagenta'] : null,
-                'pageCoverageYellow'=>$device_instance ? $device_instance['pageCoverageYellow'] : null,
-                'pageCoverageColor'=>$device_instance ? $device_instance['pageCoverageColor'] : null,
+                'pageCoverageMonochrome'=>isset($line['coverages']['mono']['value']) ? intval($line['coverages']['mono']['value']) : null,
+                'pageCoverageCyan'=>isset($line['coverages']['color']['value']) ? intval($line['coverages']['color']['value'])/4 : null,
+                'pageCoverageMagenta'=>isset($line['coverages']['color']['value']) ? intval($line['coverages']['color']['value'])/4 : null,
+                'pageCoverageYellow'=>isset($line['coverages']['color']['value']) ? intval($line['coverages']['color']['value'])/4 : null,
+                'pageCoverageColor'=>isset($line['coverages']['color']['value']) ? intval($line['coverages']['color']['value']) : null,
                 'monitorStartDate'=>date('Y-m-d H:i:s',strtotime($meters['Total Units Output']['firstReportedAt'])),//$minus90,
                 'monitorEndDate'=>date('Y-m-d H:i:s',strtotime($meters['Total Units Output']['lastReportedAt'])), //$today,
                 'startMeterBlack'=>$meters['Total Mono Units Output']['count'] - $meters['Total Mono Units Output']['delta'],
@@ -197,24 +212,31 @@ limit 1
                 'endMeterLife'=>$meters['Total Units Output']['count'],
             ];
 
+            $data['rmsDeviceInstanceId'] = $this->toDeviceInstance($data);
             $this->toRealtime($data);
 
-            if ($device_instance && in_array($device_instance['masterDeviceId'], $ignoreMasterDevices)) {
-                echo "ignoring: {$line['id']} {$line['name']} {$line['ipAddress']} {$line['serialNumber']} <br>\n";
-                continue;
-            }
-
-            if ($device_instance) {
-                $this->replaceRmsUpdate($data);
-                $result[] = RmsUpdateEntity::find([
-                    'client' => $clientId,
-                    'assetId' => $line['id'],
-                    'ipAddress' => $line['ipAddress'],
-                    'serialNumber' => $line['serialNumber']
-                ]);
-            }
+            $this->replaceRmsUpdate($data);
+            $result[] = RmsUpdateEntity::find($data['rmsDeviceInstanceId']);
         }
         return $result;
+    }
+
+    public function tryToMap($manufacturer, $modelName) {
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        #--
+        $mfg = ManufacturerMapper::getInstance()->fetchByName($manufacturer);
+        if ($mfg) {
+            $masterDevice = MasterDeviceMapper::getInstance()->fetchByNameAndManufacturer($modelName, $mfg->id);
+            if ($masterDevice) {
+                return $masterDevice;
+            }
+        }
+        #--
+        $st = $db->prepare('select distinct masterDeviceId from rms_device_instances where masterDeviceId is not null and manufacturer=:mfg and modelName=:name');
+        $st->execute(['mfg'=>$manufacturer, 'name'=>$modelName]);
+        $arr = $st->fetchAll();
+        if (empty($arr) || (count($arr)!=1)) return null;
+        return MasterDeviceMapper::getInstance()->find($arr[0]['masterDeviceId']);
     }
 
     public function getRmsClients() {
@@ -231,7 +253,8 @@ group by clientId
 
 
     public function replaceRmsUpdate($data) {
-        $fields = ['clientId','assetId','ipAddress','serialNumber','location','rawDeviceName','masterDeviceId','rmsProviderId','isColor','isCopier','isFax','isLeased','isDuplex','isA3','reportsTonerLevels','launchDate','ppmBlack','ppmColor','wattsPowerNormal','wattsPowerIdle','tonerLevelBlack','tonerLevelCyan','tonerLevelMagenta','tonerLevelYellow','pageCoverageMonochrome','pageCoverageCyan','pageCoverageMagenta','pageCoverageYellow','pageCoverageColor','mpsDiscoveryDate','isManaged','monitorStartDate','monitorEndDate','startMeterBlack','endMeterBlack','startMeterColor','endMeterColor','startMeterPrintBlack','endMeterPrintBlack','startMeterPrintColor','endMeterPrintColor','startMeterCopyBlack','endMeterCopyBlack','startMeterCopyColor','endMeterCopyColor','startMeterFax','endMeterFax','startMeterScan','endMeterScan','startMeterPrintA3Black','endMeterPrintA3Black','startMeterPrintA3Color','endMeterPrintA3Color','startMeterLife','endMeterLife'];
+        //'isLeased',
+        $fields = ['rmsDeviceInstanceId','rmsProviderId','isColor','isCopier','isFax','isDuplex','isA3','reportsTonerLevels','launchDate','ppmBlack','ppmColor','wattsPowerNormal','wattsPowerIdle','tonerLevelBlack','tonerLevelCyan','tonerLevelMagenta','tonerLevelYellow','pageCoverageMonochrome','pageCoverageCyan','pageCoverageMagenta','pageCoverageYellow','pageCoverageColor','mpsDiscoveryDate','isManaged','monitorStartDate','monitorEndDate','startMeterBlack','endMeterBlack','startMeterColor','endMeterColor','startMeterPrintBlack','endMeterPrintBlack','startMeterPrintColor','endMeterPrintColor','startMeterCopyBlack','endMeterCopyBlack','startMeterCopyColor','endMeterCopyColor','startMeterFax','endMeterFax','startMeterScan','endMeterScan','startMeterPrintA3Black','endMeterPrintA3Black','startMeterPrintA3Color','endMeterPrintA3Color','startMeterLife','endMeterLife'];
 
         $str1='`'.implode('`,`',$fields).'`';
         $str2=':'.implode(',:',$fields);
@@ -244,13 +267,35 @@ group by clientId
         $st->execute($data);
     }
 
-    public function toRealtime($data) {
-        $fields = ['scanDate','clientId','assetId','ipAddress','serialNumber','location','rawDeviceName','fullDeviceName','manufacturer','modelName','masterDeviceId','rmsProviderId','tonerLevelBlack','tonerLevelCyan','tonerLevelMagenta','tonerLevelYellow','lifeCountBlack','lifeCountColor','printCountBlack','printCountColor','copyCountBlack','copyCountColor','faxCount','scanCount','lifeCount'];
+    public function toDeviceInstance($data) {
+        $fields = ['clientId','assetId','ipAddress','serialNumber','masterDeviceId','location','rawDeviceName','fullDeviceName','manufacturer','modelName','reportDate'];
+
+        $data['reportDate'] = date('Y-m-d');
 
         $str1='`'.implode('`,`',$fields).'`';
         $str2=':'.implode(',:',$fields);
 
-        $data['scanDate'] = date('Y-m-d H:i:s');
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        if (!empty($data['rmsDeviceInstanceId'])) {
+            $st = $db->prepare("update rms_device_instances set masterDeviceId=:masterDeviceId, assetId=:assetId, fullDeviceName=:fullDeviceName, reportDate=:reportDate where id=:id");
+            $st->execute(['masterDeviceId'=>$data['masterDeviceId'],'assetId'=>$data['assetId'],'fullDeviceName'=>$data['fullDeviceName'],'reportDate'=>$data['reportDate'], 'id'=>$data['rmsDeviceInstanceId']]);
+            return $data['rmsDeviceInstanceId'];
+        }
+
+        $st = $db->prepare("replace into rms_device_instances ( {$str1} ) values ( {$str2} )");
+        foreach ($fields as $field) if (!isset($data[$field])) $data[$field] = null;
+        foreach ($data as $key => $value) if (!in_array($key, $fields)) unset($data[$key]);
+        $st->execute($data);
+        return $db->lastInsertId();
+    }
+
+    public function toRealtime($data) {
+        $fields = ['rmsDeviceInstanceId','scanDate','rmsProviderId','tonerLevelBlack','tonerLevelCyan','tonerLevelMagenta','tonerLevelYellow','lifeCountBlack','lifeCountColor','printCountBlack','printCountColor','copyCountBlack','copyCountColor','faxCount','scanCount','lifeCount'];
+
+        $str1='`'.implode('`,`',$fields).'`';
+        $str2=':'.implode(',:',$fields);
+
+        $data['scanDate'] = date('Y-m-d');
         $data['lifeCountBlack'] = $data['endMeterBlack'];
         $data['lifeCountColor'] = $data['endMeterColor'];
         $data['printCountBlack'] = $data['endMeterPrintBlack'];
@@ -273,10 +318,10 @@ group by clientId
         /** @var DeviceNeedsTonerEntity $deviceNeedsToner */
         $deviceNeedsToner = DeviceNeedsTonerEntity::find([
             'color'=>$colorId,
-            'client'=>$device->getClient(),
-            'assetId'=>$device->getAssetId(),
-            'ipAddress'=>$device->getIpAddress(),
-            'serialNumber'=>$device->getSerialNumber()
+            'client'=>$device->getRmsDeviceInstance()->getClient(),
+            'assetId'=>$device->getRmsDeviceInstance()->getAssetId(),
+            'ipAddress'=>$device->getRmsDeviceInstance()->getIpAddress(),
+            'serialNumber'=>$device->getRmsDeviceInstance()->getSerialNumber()
         ]);
         if (empty($deviceNeedsToner)) {
             return;
@@ -287,21 +332,21 @@ group by clientId
             case TonerColorEntity::CYAN : { if ($device->getTonerLevelCyan()<=$deviceNeedsToner->getTonerLevel()) return; break; }
             case TonerColorEntity::YELLOW : { if ($device->getTonerLevelYellow()<=$deviceNeedsToner->getTonerLevel()) return; break; }
         }
-        printf("Toner has been replaced for device: %s <br>\n", $device->getIpAddress());
+        printf("Toner has been replaced for device: %s <br>\n", $device->getRmsDeviceInstance()->getIpAddress());
         $deviceNeedsToner->delete();
     }
 
     public function deviceNeedsToner(RmsUpdateEntity $device, $client, $colorId) {
         $result = false;
-        $masterDevice = $device->getMasterDevice();
+        $masterDevice = $device->getRmsDeviceInstance()->getMasterDevice();
         if (!$masterDevice) {
             error_log(sprintf('%s:%s masterDevice unknown', __FILE__, __LINE__));
-            return;
+            return null;
         }
         $mfg = $masterDevice->getManufacturer();
         if (!$mfg) {
             error_log(sprintf('%s:%s manufacturer unknown', __FILE__, __LINE__));
-            return;
+            return null;
         }
 
         $toners = [];
@@ -339,7 +384,7 @@ group by clientId
 
         if (empty($tonerOptions)) {
             error_log(sprintf('%s:%s no toner options', __FILE__, __LINE__));
-            return;
+            return null;
         }
 
         $toner = current($tonerOptions);
@@ -347,27 +392,28 @@ group by clientId
         /** @var \MPSToolbox\Entities\DeviceNeedsTonerEntity $deviceNeedsToner */
         $deviceNeedsToner = \MPSToolbox\Entities\DeviceNeedsTonerEntity::find([
             'color'=>$colorId,
-            'client'=>$device->getClient(),
-            'assetId'=>$device->getAssetId(),
-            'ipAddress'=>$device->getIpAddress(),
-            'serialNumber'=>$device->getSerialNumber()
+            'client'=>$device->getRmsDeviceInstance()->getClient(),
+            'assetId'=>$device->getRmsDeviceInstance()->getAssetId(),
+            'ipAddress'=>$device->getRmsDeviceInstance()->getIpAddress(),
+            'serialNumber'=>$device->getRmsDeviceInstance()->getSerialNumber()
         ]);
         if (empty($deviceNeedsToner)) {
-            printf("NEW Device Needs Toner! %s <br>\n", $device->getIpAddress());
+            printf("NEW Device Needs Toner! %s <br>\n", $device->getRmsDeviceInstance()->getIpAddress());
             $deviceNeedsToner = new \MPSToolbox\Entities\DeviceNeedsTonerEntity();
+            $deviceNeedsToner->setRmsDeviceInstance($device->getRmsDeviceInstance());
             $deviceNeedsToner->setColor(TonerColorEntity::find($colorId));
-            $deviceNeedsToner->setClient($device->getClient());
-            $deviceNeedsToner->setAssetId($device->getAssetId());
-            $deviceNeedsToner->setIpAddress($device->getIpAddress());
-            $deviceNeedsToner->setSerialNumber($device->getSerialNumber());
-            $deviceNeedsToner->setLocation($device->getLocation());
+            $deviceNeedsToner->setClient($device->getRmsDeviceInstance()->getClient());
+            $deviceNeedsToner->setAssetId($device->getRmsDeviceInstance()->getAssetId());
+            $deviceNeedsToner->setIpAddress($device->getRmsDeviceInstance()->getIpAddress());
+            $deviceNeedsToner->setSerialNumber($device->getRmsDeviceInstance()->getSerialNumber());
+            $deviceNeedsToner->setLocation($device->getRmsDeviceInstance()->getLocation());
             $deviceNeedsToner->setFirstReported(new \DateTime());
             $deviceNeedsToner->setMasterDevice($masterDevice);
             $deviceNeedsToner->setTonerOptions(implode(',', $tonerOptionIds));
             $deviceNeedsToner->setToner($toner);
             $result = true;
         } else {
-            printf("Device Needs Toner update %s <br>\n", $device->getIpAddress());
+            printf("Device Needs Toner update %s <br>\n", $device->getRmsDeviceInstance()->getIpAddress());
         }
 
         $deviceNeedsToner->setDaysLeft($device->getDaysLeft($colorId));
@@ -416,6 +462,37 @@ group by clientId
         $shopSettings = DealerSettingsEntity::getDealerSettings($dealerId)->shopSettings;
         $link = sprintf('http://%s.myshopify.com/account/login', $shopSettings->shopifyName);
 
+        $emailFromAddress = $shopSettings->emailFromAddress;
+        $emailFromName = $shopSettings->emailFromName;
+        $supplyNotifySubject = $shopSettings->supplyNotifySubject;
+        $supplyNotifyMessage = $shopSettings->supplyNotifyMessage;
+
+        if (empty($emailFromAddress)) $emailFromAddress = $dealerBranding->dealerEmail;
+        if (empty($emailFromName)) $emailFromName = $dealerBranding->dealerName;
+        if (empty($supplyNotifySubject)) $supplyNotifySubject = 'Printing Supplies Order Requirements for {{clientName}}';
+        if (empty($supplyNotifyMessage)) $supplyNotifyMessage = <<<HTML
+<p>Hello {{contactName}}</p>
+
+<p>We have determined that the following devices require supplies:</p>
+
+{{devices}}
+
+<p>
+    <em>Note:</em> print quality typically degrades when supply levels are between 5 and 10%.
+    Lighter prints or inaccurate color representation are often common when supply levels are low.
+    Some devices will stop printing at any point below 5%.
+    Delivery times should also be considered to ensure the device does not stop printing due to empty supplies.
+</p>
+<p>
+    We have prepared a supply order for you. Please click here to login to your account and order:<br>
+    {{link}}
+</p>
+
+<p>Regards,<br>
+The toner management team at {$dealerBranding->dealerName}
+</p>
+HTML;
+
         $rows = DeviceNeedsTonerEntity::getByClient($client);
         $arr=[];
         foreach ($rows as $device) {
@@ -438,12 +515,9 @@ group by clientId
 
             $ampv = 0;
             /** @var RmsUpdateEntity $rmsUpdate */
-            $rmsUpdate = RmsUpdateEntity::find([
-                'client'=>$client,
-                'assetId'=>$device->getAssetId(),
-                'ipAddress'=>$device->getIpAddress(),
-                'serialNumber'=>$device->getSerialNumber()
-            ]);
+
+            $rmsUpdate = RmsUpdateEntity::find($device->getRmsDeviceInstance());
+
             if ($rmsUpdate) {
                 if ($device->getColor()->getName() == 'BLACK') {
                     $meter = $rmsUpdate->getEndMeterBlack() - $rmsUpdate->getStartMeterBlack();
@@ -457,8 +531,8 @@ group by clientId
             }
 
             if ($i==0) $devices .=
-<<<HTML
-<p>
+                <<<HTML
+                <p>
     Device Model: <b>{$model}</b><br>
     Serial Number: <b>{$device->getSerialNumber()}</b><br>
     IP Address: <b>{$device->getIpAddress()}</b><br>
@@ -469,8 +543,8 @@ group by clientId
 </p>
 HTML;
             else $devices .=
-<<<HTML
-<p>
+                <<<HTML
+                <p>
     Toner Level {$color}: <b>{$device->getTonerLevel()}%</b><br>
     Estimated Monthly Page Volume: <b>{$ampv}</b><br>
     Estimated time left until toner reaches 5%: <b>{$device->getDaysLeft()}</b> days
@@ -478,36 +552,21 @@ HTML;
 HTML;
         }
 
-        $html =
-<<<HTML
-<p>Hello {$contactName}</p>
-
-<p>We have determined that the following devices require supplies:</p>
-
-{$devices}
-
-<p>
-    <em>Note:</em> print quality typically degrades when supply levels are between 5 and 10%.
-    Lighter prints or inaccurate color representation are often common when supply levels are low.
-    Some devices will stop printing at any point below 5%.
-    Delivery times should also be considered to ensure the device does not stop printing due to empty supplies.
-</p>
-<p>
-    We have prepared a supply order for you. Please click here to login to your account and order:<br>
-    <a href="{$link}">{$link}</a>
-</p>
-
-<p>Regards,<br>
-The toner management team at {$dealerBranding->dealerName}
-</p>
-HTML;
-;
+        $html = str_replace([
+            '{{contactName}}',
+            '{{devices}}',
+            '{{link}}',
+        ], [
+            $contactName,
+            $devices,
+            "<a href=\"{$link}\">{$link}</a>"
+        ], $supplyNotifyMessage);
 
         $email = new \Zend_Mail();
-        $email->setFrom($dealerBranding->dealerEmail, $dealerBranding->dealerName);
+        $email->setFrom($emailFromAddress, $emailFromName);
         $email->addTo($contact->email);
         $email->addBcc($dealerBranding->dealerEmail);
-        $email->setSubject('Printing Supplies Order Requirements for '.$client->getCompanyName());
+        $email->setSubject(str_replace('{{clientName}}',$client->getCompanyName(),$supplyNotifySubject)); //'Printing Supplies Order Requirements for '.$client->getCompanyName());
         $email->setBodyHtml($html);
         $email->setBodyText(strip_tags($html));
         $email->send();

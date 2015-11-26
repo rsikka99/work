@@ -3,7 +3,7 @@
 namespace MPSToolbox\Entities;
 
 /**
- * Class ManufacturerEntity
+ * Class RmsUpdateEntity
  *
  * @Entity
  * @Table(name="rms_update")
@@ -12,26 +12,11 @@ class RmsUpdateEntity extends BaseEntity {
 
     /**
      * @Id
-     * @ManyToOne(targetEntity="ClientEntity")
-     * @JoinColumn(name="clientId", referencedColumnName="id")
+     * @OneToOne(targetEntity="RmsDeviceInstanceEntity")
+     * @JoinColumn(name="rmsDeviceInstanceId", referencedColumnName="id")
      */
-    private $client;
+    private $rmsDeviceInstance;
 
-    /** @Id @Column(type="string") */
-    private $assetId;
-    /** @Id @Column(type="string") */
-    private $ipAddress;
-    /** @Id @Column(type="string") */
-    private $serialNumber;
-
-    /**
-     * @ManyToOne(targetEntity="MasterDeviceEntity")
-     * @JoinColumn(name="masterDeviceId", referencedColumnName="id")
-     **/
-    private $masterDevice;
-
-    /** @Column(type="string") */
-    private $location;
     /** @Column(type="boolean") */
     private $isColor;
 
@@ -87,87 +72,36 @@ class RmsUpdateEntity extends BaseEntity {
         $this->daysLeft = $daysLeft;
     }
 
-
-
     /**
-     * @return mixed
+     * @return RmsDeviceInstanceEntity
      */
-    public function getClient()
+    public function getRmsDeviceInstance()
     {
-        return $this->client;
+        return $this->rmsDeviceInstance;
     }
 
     /**
-     * @param mixed $client
+     * @param mixed $rmsDeviceInstance
      */
-    public function setClient($client)
+    public function setRmsDeviceInstance($rmsDeviceInstance)
     {
-        $this->client = $client;
-    }
-
-    /**
-     * @return MasterDeviceEntity
-     */
-    public function getMasterDevice()
-    {
-        return $this->masterDevice;
-    }
-
-    /**
-     * @param mixed $masterDevice
-     */
-    public function setMasterDevice($masterDevice)
-    {
-        $this->masterDevice = $masterDevice;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getAssetId()
-    {
-        return $this->assetId;
-    }
-
-    /**
-     * @param mixed $assetId
-     */
-    public function setAssetId($assetId)
-    {
-        $this->assetId = $assetId;
+        $this->rmsDeviceInstance = $rmsDeviceInstance;
     }
 
     /**
      * @return mixed
      */
-    public function getIpAddress()
+    public function getIsColor()
     {
-        return $this->ipAddress;
+        return $this->isColor;
     }
 
     /**
-     * @param mixed $ipAddress
+     * @param mixed $isColor
      */
-    public function setIpAddress($ipAddress)
+    public function setIsColor($isColor)
     {
-        $this->ipAddress = $ipAddress;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSerialNumber()
-    {
-        return $this->serialNumber;
-    }
-
-    /**
-     * @param mixed $serialNumber
-     */
-    public function setSerialNumber($serialNumber)
-    {
-        $this->serialNumber = $serialNumber;
+        $this->isColor = $isColor;
     }
 
     /**
@@ -410,40 +344,13 @@ class RmsUpdateEntity extends BaseEntity {
         $this->endMeterColor = $endMeterColor;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getLocation()
-    {
-        return $this->location;
-    }
-
-    /**
-     * @param mixed $location
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIsColor()
-    {
-        return $this->isColor;
-    }
-
-    /**
-     * @param mixed $isColor
-     */
-    public function setIsColor($isColor)
-    {
-        $this->isColor = $isColor;
-    }
 
     public function needsToner($forColor, $dailyPrintVolume) {
         if ($dailyPrintVolume<=0) return false;
+
+        /** @var MasterDeviceEntity $masterDevice */
+        $masterDevice = $this->getRmsDeviceInstance()->getMasterDevice();
+        if (!$masterDevice) return false;
 
         $tonerLevel = 0;
         $coverage = 0;
@@ -479,8 +386,6 @@ class RmsUpdateEntity extends BaseEntity {
             return true;
         }
 
-        /** @var MasterDeviceEntity $masterDevice */
-        $masterDevice = $this->getMasterDevice();
         $all_toners = $masterDevice->getToners();
         $my_toners = [];
         foreach ($all_toners as $toner) {
@@ -501,7 +406,7 @@ class RmsUpdateEntity extends BaseEntity {
         $numberOfPages5percent = 0.05 * $numberOfPages;
         $this->daysLeft[$forColor] = round(max(0,($numberOfPagesRemaining - $numberOfPages5percent)) / $dailyPrintVolume);
 
-        printf("%s - tonerLevel:%s daysLeft:%s:%s <br>\n", $this->getIpAddress(), $tonerLevel, $forColor, $this->daysLeft[$forColor]);
+        printf("%s - tonerLevel:%s daysLeft:%s:%s <br>\n", $this->getRmsDeviceInstance()->getIpAddress(), $tonerLevel, $forColor, $this->daysLeft[$forColor]);
 
         return $this->daysLeft[$forColor] < 10;
     }

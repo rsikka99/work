@@ -3,12 +3,19 @@
 namespace MPSToolbox\Entities;
 
 /**
- * Class ManufacturerEntity
+ * Class RmsRealtimeEntity
  *
  * @Entity
  * @Table(name="rms_realtime")
  */
 class RmsRealtimeEntity extends BaseEntity {
+
+    /**
+     * @Id
+     * @ManyToOne(targetEntity="RmsDeviceInstanceEntity")
+     * @JoinColumn(name="rmsDeviceInstanceId", referencedColumnName="id")
+     */
+    private $rmsDeviceInstance;
 
     /** @Id @Column(type=""datetime) */
     private $scanDate;
@@ -70,6 +77,22 @@ class RmsRealtimeEntity extends BaseEntity {
     private $tonerLevelMagenta;
     /** @Column(type="integer") */
     private $tonerLevelYellow;
+
+    /**
+     * @return mixed
+     */
+    public function getRmsDeviceInstance()
+    {
+        return $this->rmsDeviceInstance;
+    }
+
+    /**
+     * @param mixed $rmsDeviceInstance
+     */
+    public function setRmsDeviceInstance($rmsDeviceInstance)
+    {
+        $this->rmsDeviceInstance = $rmsDeviceInstance;
+    }
 
     /**
      * @return mixed

@@ -1,8 +1,12 @@
 <?php
+
 use MPSToolbox\Legacy\Modules\Admin\Forms\DealerForm;
 
 /* @var $form DealerForm */
 $form = $this->element;
+
+$dealerSettings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings($form->dealerId);
+
 ?>
 
 
@@ -62,3 +66,18 @@ $form = $this->element;
         <?= $this->RenderFormSubmit($form->getElement('cancel'), ['btn', 'btn-default']) ?>
     </fieldset>
 <?= $this->RenderFormClose($form) ?>
+
+<script>
+    require(['jquery'], function ($) {
+        $(document).ready(function () {
+            $('input[value="ecommerce"]').parent().parent().append('<label style="display:none" id="label_shopify_subdomain"><input type="text" value="<?= $dealerSettings->shopSettings->shopifyName ?>" placeholder="Shopify Subdomain" name="shopifyName"></label>');
+            $('input[value="ecommerce"]').on('click', function() {
+                if (this.checked) $('#label_shopify_subdomain').show();
+                else $('#label_shopify_subdomain').hide();
+            });
+            if ($('input[value="ecommerce"]')[0].checked) {
+                $('#label_shopify_subdomain').show();
+            }
+        });
+    });
+</script>

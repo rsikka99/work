@@ -37,7 +37,7 @@ class Admin_DealerController extends Action
         $paginator->setCurrentPageNumber($this->getRequest()->getUserParam('page', 1));
 
         // Sets the amount of dealers that we are showing per page.
-        $paginator->setItemCountPerPage(15);
+        $paginator->setItemCountPerPage(99999);
 
         $this->view->paginator = $paginator;
     }
@@ -119,7 +119,7 @@ class Admin_DealerController extends Action
             $features['dealerFeatures'][] = $feature->featureId;
         }
 
-        $form = new DealerForm();
+        $form = new DealerForm($dealerId);
         $form->populate($dealer->toArray());
         $form->populate($features);
 
@@ -189,6 +189,14 @@ class Admin_DealerController extends Action
                         }
 
                         $db->commit();
+
+                        $service = new \MPSToolbox\Settings\Service\DealerSettingsService();
+                        $settings = $service->getDealerSettings($dealerId);
+                        $shopifyName = $this->getRequest()->getParam('shopifyName');
+                        if ($shopifyName != $settings->shopSettings->shopifyName) {
+                            $settings->shopSettings->shopifyName = $shopifyName;
+                            $settings->shopSettings->save();
+                        }
 
                         // All done
                         $this->_flashMessenger->addMessage(['success' => "{$dealer->dealerName} has been successfully updated!"]);
@@ -378,6 +386,7 @@ class Admin_DealerController extends Action
             {
                 if ($form->isValid($values))
                 {
+                    $dealerId = false;
                     $db = Zend_Db_Table::getDefaultAdapter();
                     try
                     {
@@ -428,6 +437,14 @@ class Admin_DealerController extends Action
 
                         $db->commit();
 
+                        if ($dealerId) {
+                            $service = new \MPSToolbox\Settings\Service\DealerSettingsService();
+                            $settings = $service->getDealerSettings($dealerId);
+                            $shopifyName = $this->getRequest()->getParam('shopifyName');
+                            $settings->shopSettings->shopifyName = $shopifyName;
+                            $settings->shopSettings->save();
+                        }
+
                         if ($dealerId)
                         {
                             $this->_flashMessenger->addMessage(['success' => "Dealer {$dealer->dealerName} successfully created"]);
@@ -441,7 +458,7 @@ class Admin_DealerController extends Action
                     catch (Exception $e)
                     {
                         $db->rollBack();
-                        $this->_flashMessenger->addMessage(['danger' => "Error saving dealer to database. If problem persists please contact your system administrator."]);
+                        $this->_flashMessenger->addMessage(['danger' => "Error saving dealer to database. If problem persists please contact your system administrator.<br>". $e->getMessage()]);
                         \Tangent\Logger\Logger::logException($e);
                     }
                 }

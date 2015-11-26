@@ -78,6 +78,9 @@ class DeviceInstanceModel extends My_Model_Abstract
      */
     public $id;
 
+    /** @var  int */
+    public $rmsDeviceInstanceId;
+
     /**
      * @var int
      */
@@ -406,6 +409,11 @@ class DeviceInstanceModel extends My_Model_Abstract
             $this->id = $params->id;
         }
 
+        if (isset($params->rmsDeviceInstanceId) && !is_null($params->rmsDeviceInstanceId))
+        {
+            $this->rmsDeviceInstanceId = $params->rmsDeviceInstanceId;
+        }
+
         if (isset($params->rmsUploadId) && !is_null($params->rmsUploadId))
         {
             $this->rmsUploadId = $params->rmsUploadId;
@@ -514,6 +522,7 @@ class DeviceInstanceModel extends My_Model_Abstract
     {
         return [
             "id"                       => $this->id,
+            "rmsDeviceInstanceId"      => $this->rmsDeviceInstanceId,
             "rmsUploadId"              => $this->rmsUploadId,
             "rmsUploadRowId"           => $this->rmsUploadRowId,
             "ipAddress"                => $this->ipAddress,

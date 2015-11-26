@@ -3,6 +3,7 @@
 namespace MPSToolbox\Legacy\Services;
 
 use Bootstrap;
+use MPSToolbox\Legacy\Mappers\DealerFeatureMapper;
 use Zend_Acl;
 use Zend_Cache_Core;
 use Zend_Cache_Manager;
@@ -56,6 +57,14 @@ class NavigationService
         $container = new Zend_Navigation();
         $config    = new Zend_Config_Xml(APPLICATION_PATH . '/configs/navigation.xml', 'nav');
         $container->addPages($config);
+
+        $list = DealerFeatureMapper::getInstance()->fetchFeatureListForDealer();
+        foreach ($list as $feature) {
+            if ($feature->featureId=='ecommerce') {
+                $node = $container->findOneBy('id', 'ecommerce');
+                $node->setVisible(true);
+            }
+        }
 
         $acl = Zend_Registry::get('Zend_Acl');
         if ($acl instanceof Zend_Acl)

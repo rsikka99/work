@@ -3,6 +3,9 @@
 namespace MPSToolbox\Legacy\Modules\ProposalGenerator\Services;
 
 use Exception;
+use MPSToolbox\Entities\ClientEntity;
+use MPSToolbox\Entities\MasterDeviceEntity;
+use MPSToolbox\Entities\RmsDeviceInstanceEntity;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Forms\ImportRmsCsvForm;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceInstanceMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceInstanceMasterDeviceMapper;
@@ -337,6 +340,34 @@ class RmsUploadService
                             }
 
                             $db->commit();
+
+                            /**
+                             * @var $deviceInstance DeviceInstanceModel
+                             */
+                            foreach ($deviceInstances as $deviceInstance)
+                            {
+                                $deviceInstance             = DeviceInstanceMapper::getInstance()->find($deviceInstance->id);
+                                $deviceInstanceMasterDevice = DeviceInstanceMasterDeviceMapper::getInstance()->find($deviceInstance->id);
+
+                                if ($deviceInstanceMasterDevice instanceof DeviceInstanceMasterDeviceModel)
+                                {
+                                    $masterDevice                             = $deviceInstanceMasterDevice->getMasterDevice();
+                                    if ($masterDevice instanceof MasterDeviceModel) {
+                                        $deviceInstance->isLeased = $masterDevice->isLeased($this->_dealerId);
+                                        $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($this->_dealerId);
+
+                                        if ($deviceInstance->rmsDeviceInstanceId) {
+                                            /** @var RmsDeviceInstanceEntity $rmsDeviceInstanceEntity */
+                                            $rmsDeviceInstanceEntity = RmsDeviceInstanceEntity::find($deviceInstance->rmsDeviceInstanceId);
+                                            $rmsDeviceInstanceEntity->setMasterDevice(MasterDeviceEntity::find($masterDevice->id));
+                                            $rmsDeviceInstanceEntity->save();
+                                        }
+
+                                    }
+                                    DeviceInstanceMapper::getInstance()->save($deviceInstance);
+                                }
+                            }
+
                             $importSuccessful = true;
                         }
                     }
@@ -348,9 +379,9 @@ class RmsUploadService
                 }
                 catch (Exception $e)
                 {
-                    $db->rollBack();
                     Logger::logException($e);
                     $this->errorMessages = "There was an error parsing your file. If this continues to happen please reference this id when requesting support: " . Logger::getUniqueId();
+                    $db->rollBack();
                 }
             }
         }
@@ -364,25 +395,6 @@ class RmsUploadService
     public function mapDeviceInstances($deviceInstances) {
         $deviceMappingService = new DeviceMappingService();
         $deviceMappingService->mapDevices($deviceInstances, $this->_userId, true);
-
-        /**
-         * @var $deviceInstance DeviceInstanceModel
-         */
-        foreach ($deviceInstances as $deviceInstance)
-        {
-            $deviceInstance             = DeviceInstanceMapper::getInstance()->find($deviceInstance->id);
-            $deviceInstanceMasterDevice = DeviceInstanceMasterDeviceMapper::getInstance()->find($deviceInstance->id);
-
-            if ($deviceInstanceMasterDevice instanceof DeviceInstanceMasterDeviceModel)
-            {
-                $masterDevice                             = $deviceInstanceMasterDevice->getMasterDevice();
-                if ($masterDevice instanceof MasterDeviceModel) {
-                    $deviceInstance->isLeased = $masterDevice->isLeased($this->_dealerId);
-                    $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($this->_dealerId);
-                }
-                DeviceInstanceMapper::getInstance()->save($deviceInstance);
-            }
-        }
     }
 
     /*
@@ -445,12 +457,30 @@ class RmsUploadService
         }
 
 
+        /**/
+        $rmsDeviceInstance = RmsDeviceInstanceEntity::findOne($this->rmsUpload->clientId, $line->ipAddress, $line->serialNumber, $line->assetId);
+        if (!$rmsDeviceInstance) {
+            $rmsDeviceInstance = new RmsDeviceInstanceEntity();
+            $rmsDeviceInstance->setClient(ClientEntity::find($this->rmsUpload->clientId));
+            $rmsDeviceInstance->setIpAddress(''.$line->ipAddress);
+            $rmsDeviceInstance->setSerialNumber(''.$line->serialNumber);
+            $rmsDeviceInstance->setAssetId(''.$line->assetId);
+            $rmsDeviceInstance->setFullDeviceName($line->manufacturer.' '.$line->modelName);
+            $rmsDeviceInstance->setRawDeviceName($line->rawDeviceName);
+            $rmsDeviceInstance->setLocation($line->location);
+            $rmsDeviceInstance->setManufacturer($line->manufacturer);
+            $rmsDeviceInstance->setModelName($line->modelName);
+            $rmsDeviceInstance->setReportDate(new \DateTime($line->monitorEndDate));
+            $rmsDeviceInstance->save();
+        }
+
         /*
          * Save Device Instance
          */
         $deviceInstance                 = new DeviceInstanceModel($lineArray);
         $deviceInstance->rmsUploadId    = $this->rmsUpload->id;
         $deviceInstance->rmsUploadRowId = $rmsUploadRow->id;
+        $deviceInstance->rmsDeviceInstanceId = $rmsDeviceInstance->getId();
         DeviceInstanceMapper::getInstance()->insert($deviceInstance);
 
         $deviceInstances[] = $deviceInstance;
@@ -648,13 +678,13 @@ class RmsUploadService
 
     public function fromRealtime($from, $until) {
         $db = Zend_Db_Table::getDefaultAdapter();
-        $sql = "select * from rms_realtime where clientId={$this->_clientId} and (scanDate='{$from}' or scanDate='{$until}') order by scanDate";
+        $sql = "select * from rms_realtime r join rms_device_instances i on r.rmsDeviceInstanceId=i.id where clientId={$this->_clientId} and (scanDate='{$from}' or scanDate='{$until}') order by scanDate";
 
         $st = $db->query($sql);
         $rmsProviderId = null;
         $data=[];
         foreach ($st->fetchAll() as $line) {
-            $id = "{$line['assetId']}-{$line['ipAddress']}-{$line['serialNumber']}";
+            $id = $line['rmsDeviceInstanceId'];
             $data[$id][$line['scanDate']] = $line;
             $rmsProviderId = $line['rmsProviderId'];
         }
