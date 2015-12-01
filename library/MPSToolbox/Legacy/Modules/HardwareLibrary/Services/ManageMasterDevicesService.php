@@ -605,8 +605,15 @@ class ManageMasterDevicesService
             {
                 $device = new DeviceModel(['masterDeviceId' => $this->masterDeviceId, 'dealerId' => $this->_dealerId]);
                 $device->populate($validatedData);
-
                 $device->saveObject();
+
+                #--
+                $st=\Zend_Db_Table::getDefaultAdapter()->prepare('update ingram_products set masterDeviceId=:masterDeviceId where `vendor_part_number`=:vpn');
+                $st->execute(['masterDeviceId'=>$this->masterDeviceId, 'vpn'=>$validatedData['oemSku']]);
+                #--
+                $st=\Zend_Db_Table::getDefaultAdapter()->prepare('update ingram_products set masterDeviceId=:masterDeviceId where `vendor_part_number` like :like');
+                $st->execute(['masterDeviceId'=>$this->masterDeviceId, 'like'=>$validatedData['oemSku'].'#%']);
+                #--
             }
             else
             {

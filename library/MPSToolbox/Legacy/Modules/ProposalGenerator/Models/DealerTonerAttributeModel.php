@@ -32,11 +32,6 @@ class DealerTonerAttributeModel extends My_Model_Abstract
      */
     public $dealerSku;
 
-    /**
-     * @var string
-     */
-    public $dealerSrp;
-
     /** @var float */
     public $level1;
     /** @var float */
@@ -47,6 +42,17 @@ class DealerTonerAttributeModel extends My_Model_Abstract
     public $level4;
     /** @var float */
     public $level5;
+    /** @var float */
+    public $level6;
+    /** @var float */
+    public $level7;
+    /** @var float */
+    public $level8;
+    /** @var float */
+    public $level9;
+
+    /** @var  string */
+    public $distributor;
 
     /**
      * @param array $params An array of data to populate the model with
@@ -78,13 +84,17 @@ class DealerTonerAttributeModel extends My_Model_Abstract
             $this->dealerSku = $params->dealerSku;
         }
 
-        if (isset($params->dealerSrp) && !is_null($params->dealerSrp)) $this->dealerSrp = $params->dealerSrp;
-
         if (isset($params->level1) && !is_null($params->level1)) $this->level1 = $params->level1;
         if (isset($params->level2) && !is_null($params->level2)) $this->level2 = $params->level2;
         if (isset($params->level3) && !is_null($params->level3)) $this->level3 = $params->level3;
         if (isset($params->level4) && !is_null($params->level4)) $this->level4 = $params->level4;
         if (isset($params->level5) && !is_null($params->level5)) $this->level5 = $params->level5;
+        if (isset($params->level6) && !is_null($params->level6)) $this->level6 = $params->level6;
+        if (isset($params->level7) && !is_null($params->level7)) $this->level7 = $params->level7;
+        if (isset($params->level8) && !is_null($params->level8)) $this->level8 = $params->level8;
+        if (isset($params->level9) && !is_null($params->level9)) $this->level9 = $params->level9;
+
+        if (isset($params->distributor) && !is_null($params->distributor)) $this->distributor = $params->distributor;
 
     }
 
@@ -98,12 +108,16 @@ class DealerTonerAttributeModel extends My_Model_Abstract
             "dealerId"  => $this->dealerId,
             "cost"      => $this->cost,
             "dealerSku" => $this->dealerSku,
-            "dealerSrp" => $this->dealerSrp,
             "level1" => $this->level1,
             "level2" => $this->level2,
             "level3" => $this->level3,
             "level4" => $this->level4,
             "level5" => $this->level5,
+            "level6" => $this->level6,
+            "level7" => $this->level7,
+            "level8" => $this->level8,
+            "level9" => $this->level9,
+            "distributor" => $this->distributor,
         ];
     }
 }

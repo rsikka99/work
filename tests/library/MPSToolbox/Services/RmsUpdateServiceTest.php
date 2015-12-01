@@ -608,11 +608,11 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
         ]);
         $device->save();
 
-        $client = ['clientId'=>5, 'dealerId'=>1];
+        $client = ['clientId'=>5, 'dealerId'=>1, 'templateNum'=>1, 'ecomMonochromeRank'=>'3,43,46', 'ecomColorRank'=>'3,43,46'];
         #--
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::BLACK);
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::MAGENTA);
         #--
-        $service->sendEmail(['clientId'=>5]);
+        $service->sendEmail($client);
     }
 }

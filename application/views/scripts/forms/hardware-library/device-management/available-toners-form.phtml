@@ -17,7 +17,7 @@ $form->getElement('imageUrl')->setValue('');
 <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#General" aria-controls="home" role="tab" data-toggle="tab">General</a></li>
     <li role="presentation"><a href="#Dealer" aria-controls="profile" role="tab" data-toggle="tab">Dealer</a></li>
-    <li role="presentation"><a href="#Suppliers" aria-controls="messages" role="tab" data-toggle="tab">Suppliers</a></li>
+    <li role="presentation"><a href="#Distributors" aria-controls="messages" role="tab" data-toggle="tab">Distributors</a></li>
     <li role="presentation"><a href="#Image" aria-controls="settings" role="tab" data-toggle="tab">Image</a></li>
 </ul>
 
@@ -40,18 +40,11 @@ $form->getElement('imageUrl')->setValue('');
                         <?= $this->RenderFormElementErrors($form->getElement('dealerCost')) ?>
                     </div>
 
-                    <div class="form-group <?= ($form->getElement('dealerSrp')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                        <?= $this->RenderFormLabel($form->getElement('dealerSrp')) ?>
-                        <?= $this->RenderFormText($form->getElement('dealerSrp'), [], '$') ?>
-                        <?= $this->RenderFormDescription($form->getElement('dealerSrp')) ?>
-                        <?= $this->RenderFormElementErrors($form->getElement('dealerSrp')) ?>
-                    </div>
-
                 </div>
             </div>
         </fieldset>
     </div>
-    <div role="tabpanel" class="tab-pane" id="Suppliers">
+    <div role="tabpanel" class="tab-pane" id="Distributors">
         <div class="row">
             <div class="col-md-10 col-md-push-1">
                 <table class="table">
@@ -63,16 +56,17 @@ $form->getElement('imageUrl')->setValue('');
                     </colgroup>
                     <thead>
                         <tr>
-                            <th>Supplier</th>
-                            <th>Supplier SKU</th>
+                            <th>Distributor</th>
+                            <th>Distributor SKU</th>
                             <th>Price</th>
                             <th>Stock</th>
                         </tr>
                     </thead>
                     <tbody>
-        <?php foreach ($form->suppliers as $line) { ?>
+        <?php foreach ($form->distributors as $line) { ?>
                         <tr>
                             <td><?= $line['name'] ?></td>
+                            <td><?= $line['sku'] ?></td>
                             <td><?= $line['price'] ?></td>
                             <td><?= $line['stock'] ?></td>
                         </tr>

@@ -21,5 +21,19 @@ class Default_CronController extends \Tangent\Controller\Action {
         }
     }
 
+    public function distributorsAction() {
+        set_time_limit(0);
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout->disableLayout();
+
+
+        $service = new \MPSToolbox\Services\DistributorUpdateService();
+
+        $dealerSuppliers = $service->getDealerSuppliers();
+        foreach ($dealerSuppliers as $dealerSupplier) {
+            $service->updatePrices($dealerSupplier);
+        }
+    }
+
 }
 

@@ -19,6 +19,10 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
  * @property string emailFromAddress
  * @property string supplyNotifySubject
  * @property string supplyNotifyMessage
+ * @property string supplyNotifySubject2
+ * @property string supplyNotifyMessage2
+ * @property string supplyNotifySubject3
+ * @property string supplyNotifyMessage3
  */
 class ShopSettingsEntity extends EloquentModel
 {

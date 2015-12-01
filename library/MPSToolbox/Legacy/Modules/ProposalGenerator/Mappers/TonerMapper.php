@@ -1011,7 +1011,7 @@ WHERE `toners`.`id` IN ({$tonerIdList})
                      ->joinLeft(['dt' => 'device_toners'], 'dt.toner_id = t.id', ['master_device_id'])
                      ->joinLeft(['tm' => 'manufacturers'], 'tm.id = t.manufacturerId', ['fullname'])
                      ->joinLeft(['tc' => 'toner_colors'], 'tc.id = t.tonerColorId', ['name AS toner_color'])
-                     ->joinLeft(['dta' => 'dealer_toner_attributes'], "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", ['cost', 'dealerSku','level1','level2','level3','level4','level5'])
+                     ->joinLeft(['dta' => 'dealer_toner_attributes'], "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", ['distributor','cost', 'dealerSku','level1','level2','level3','level4','level5','level6','level7','level8','level9'])
                      ->where("t.id > 0")
                      ->group('t.id')
                      ->order(['tm.fullname']);
@@ -1030,6 +1030,7 @@ WHERE `toners`.`id` IN ({$tonerIdList})
             if (isset($manufacturers[$value['manufacturerId']])) {
                 $fieldList[] = [
                     $value ['toners_id'],
+                    $value ['distributor'],
                     $value ['fullname'],
                     $value ['sku'],
                     $value ['name'],
@@ -1044,6 +1045,10 @@ WHERE `toners`.`id` IN ({$tonerIdList})
                     $value ['level3'],
                     $value ['level4'],
                     $value ['level5'],
+                    $value ['level6'],
+                    $value ['level7'],
+                    $value ['level8'],
+                    $value ['level9'],
                 ];
             }
         }

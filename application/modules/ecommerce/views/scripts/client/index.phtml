@@ -14,9 +14,8 @@ foreach($this->clients as $client) {
         $selectedClient = $client;
         $contact = \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ContactMapper::getInstance()->getContactByClientId($this->clientId);
 
-        $clientSettings = \MPSToolbox\Settings\Entities\ClientSettingsEntity::getClientSettings($this->clientId);
-        $monochromeRank = $clientSettings->proposedFleetSettings->getMonochromeRankSet()->getRanksAsArray();
-        $colorRank = $clientSettings->proposedFleetSettings->getColorRankSet()->getRanksAsArray();
+        $monochromeRank = explode(',',$selectedClient->ecomMonochromeRank);
+        $colorRank = explode(',',$selectedClient->ecomColorRank);
     }
 }
 
@@ -66,19 +65,25 @@ if (empty($contact->email)) {
 <?php if ($selectedClient) { ?>
         <div class="row">
             <div class="col-sm-4">
-                <h3>Shopping Details</h3>
+                <h3>E-Commerce Details</h3>
             </div>
             <div class="col-sm-8">
                 <p>
                     <label>Price Level</label>
-                    <select class="form-control" name="priceLevel">
-                        <?php foreach (['Base',1,2,3,4,5,6,7,8,9] as $value) echo '<option '.($selectedClient->priceLevel==$value?'selected="selected"':'').' value="'.$value.'">'.$value.'</option>'; ?>
+                    <select class="form-control" name="priceLevelId">
+                        <?php foreach ($this->price_levels as $line) echo '<option '.($selectedClient->priceLevelId==$line['id']?'selected="selected"':'').' value="'.$line['id'].'">'.$line['name'].' ('.floatVal($line['margin']).'%)</option>'; ?>
                     </select>
                 </p>
                 <p>
                     <label>Transaction type</label>
                     <select class="form-control" name="transactionType">
                         <?php foreach (['Credit Card','Purchase Order'] as $value) echo '<option '.($selectedClient->transactionType==$value?'selected="selected"':'').' value="'.$value.'">'.$value.'</option>'; ?>
+                    </select>
+                </p>
+                <p>
+                    <label>Notification template</label>
+                    <select class="form-control" name="templateNum">
+                        <?php foreach (['1','2','3'] as $value) echo '<option '.($selectedClient->templateNum==$value?'selected="selected"':'').' value="'.$value.'">'.$value.'</option>'; ?>
                     </select>
                 </p>
             </div>
@@ -93,13 +98,13 @@ if (empty($contact->email)) {
             <div class="col-sm-8">
                 <p>
                     <label>Monochrome</label>
-                    <select id="proposedMonochromeRankSetArray" name="proposedMonochromeRankSetArray[]" multiple="true" class="tonerMultiselect form-control">
+                    <select id="ecomMonochromeRank" name="ecomMonochromeRank[]" multiple="true" class="tonerMultiselect form-control">
                         <?php foreach($tonerVendorList as $id=>$name) echo '<option value="'.$id.'" '.(in_array($id,$monochromeRank)?'selected="selected"':'').'>'.$name.'</option>' ?>
                     </select>
                 </p>
                 <p>
                     <label>Color</label>
-                    <select id="proposedColorRankSetArray" name="proposedColorRankSetArray[]" multiple="true" class="tonerMultiselect form-control">
+                    <select id="ecomColorRank" name="ecomColorRank[]" multiple="true" class="tonerMultiselect form-control">
                         <?php foreach($tonerVendorList as $id=>$name) echo '<option value="'.$id.'" '.(in_array($id,$colorRank)?'selected="selected"':'').'>'.$name.'</option>' ?>
                     </select>
                 </p>
