@@ -73,10 +73,19 @@ class ClientModel extends My_Model_Abstract
     public $deviceGroup;
 
     /** @var  string */
-    public $priceLevel;
+    public $priceLevelId;
 
     /** @var  string */
     public $transactionType;
+
+    /** @var  string */
+    public $ecomMonochromeRank;
+
+    /** @var  string */
+    public $ecomColorRank;
+
+    /** @var  int */
+    public $templateNum;
 
     /**
      * @param array $params An array of data to populate the model with
@@ -133,13 +142,25 @@ class ClientModel extends My_Model_Abstract
             $this->deviceGroup = $params->deviceGroup;
         }
 
-        if (isset($params->priceLevel) && !is_null($params->priceLevel))
+        if (isset($params->priceLevelId) && !is_null($params->priceLevelId))
         {
-            $this->priceLevel = $params->priceLevel;
+            $this->priceLevelId = $params->priceLevelId;
         }
         if (isset($params->transactionType) && !is_null($params->transactionType))
         {
             $this->transactionType = $params->transactionType;
+        }
+        if (isset($params->ecomMonochromeRank) && !is_null($params->ecomMonochromeRank))
+        {
+            $this->ecomMonochromeRank = $params->ecomMonochromeRank;
+        }
+        if (isset($params->ecomColorRank) && !is_null($params->ecomColorRank))
+        {
+            $this->ecomColorRank = $params->ecomColorRank;
+        }
+        if (isset($params->templateNum) && !is_null($params->templateNum))
+        {
+            $this->templateNum = $params->templateNum;
         }
 
     }
@@ -159,8 +180,11 @@ class ClientModel extends My_Model_Abstract
             "webId" => $this->webId,
             "notSupportedMasterDevices" => $this->notSupportedMasterDevices,
             "deviceGroup" => $this->deviceGroup,
-            "priceLevel" => $this->priceLevel,
+            "priceLevelId" => $this->priceLevelId,
             "transactionType" => $this->transactionType,
+            "ecomMonochromeRank" => $this->ecomMonochromeRank,
+            "ecomColorRank" => $this->ecomColorRank,
+            "templateNum" => $this->templateNum,
         ];
     }
 

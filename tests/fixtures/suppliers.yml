@@ -1,0 +1,2 @@
+suppliers:
+    - { id: '1', name: 'Ingram Micro' }

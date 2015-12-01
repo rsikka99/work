@@ -45,6 +45,8 @@ class HardwareLibrary_TonerController extends Action
      */
     public function loadFormAction ()
     {
+        $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+        $dealer = \MPSToolbox\Legacy\Mappers\DealerMapper::getInstance()->find($dealerId);
         $tonerId = $this->getParam('tonerId', false);
         $toner   = null;
         if ($tonerId !== false)
@@ -57,7 +59,31 @@ class HardwareLibrary_TonerController extends Action
         $this->view->isSystemDevice = $toner && $toner->isSystemDevice;
         $this->view->isAdmin = $isAdmin;
         $this->view->isAllowed = $isAllowed;
-        $this->view->tonerForm = new AvailableTonersForm(Zend_Auth::getInstance()->getIdentity()->dealerId, $toner, null, $isAllowed);
+        $form = new AvailableTonersForm($dealerId, $toner, null, $isAllowed);;
+        $form->distributors=[];
+        #--
+        $attr = $toner->getDealerTonerAttribute($dealerId);
+        if ($attr->cost) {
+            $form->distributors[] = [
+                'name'=>$attr->distributor?$attr->distributor:$dealer->dealerName,
+                'sku'=>$attr->dealerSku,
+                'price'=>$attr->cost,
+                'stock'=>'',
+            ];
+        }
+        #--
+        $st = Zend_Db_Table::getDefaultAdapter()->prepare('select * from ingram_products p join ingram_prices c using (ingram_part_number) where tonerId=:tonerId');
+        $st->execute(['tonerId'=>$tonerId]);
+        foreach ($st->fetchAll() as $line) {
+            $form->distributors[] = [
+                'name'=>'Ingram Micro',
+                'sku'=>$line['ingram_part_number'],
+                'price'=>$line['customer_price'],
+                'stock'=>$line['availability_flag'],
+            ];
+        }
+        #--
+        $this->view->tonerForm = $form;
 
         $this->_helper->layout()->disableLayout();
     }

@@ -10,11 +10,8 @@ if (empty($shopSettings->emailFromAddress)) $shopSettings->emailFromAddress = $d
 if (empty($shopSettings->supplyNotifySubject)) $shopSettings->supplyNotifySubject = 'Printing Supplies Order Requirements for {{clientName}}';
 if (empty($shopSettings->supplyNotifyMessage)) $shopSettings->supplyNotifyMessage = <<<HTML
 <p>Hello {{contactName}}</p>
-
 <p>We have determined that the following devices require supplies:</p>
-
 {{devices}}
-
 <p>
     <em>Note:</em> print quality typically degrades when supply levels are between 5 and 10%.
     Lighter prints or inaccurate color representation are often common when supply levels are low.
@@ -25,17 +22,76 @@ if (empty($shopSettings->supplyNotifyMessage)) $shopSettings->supplyNotifyMessag
     We have prepared a supply order for you. Please click here to login to your account and order:<br>
     {{link}}
 </p>
-
 <p>Regards,<br>
 The toner management team at {$dealerBranding->dealerName}
 </p>
 HTML;
 
+if (empty($shopSettings->supplyNotifySubject2)) $shopSettings->supplyNotifySubject2=$shopSettings->supplyNotifySubject;
+if (empty($shopSettings->supplyNotifySubject3)) $shopSettings->supplyNotifySubject3=$shopSettings->supplyNotifySubject;
+if (empty($shopSettings->supplyNotifyMessage2)) $shopSettings->supplyNotifyMessage2=$shopSettings->supplyNotifyMessage;
+if (empty($shopSettings->supplyNotifyMessage3)) $shopSettings->supplyNotifyMessage3=$shopSettings->supplyNotifyMessage;
 
 ?>
 <div class="container">
-    <form method="post">
-        <hr>
+    <hr>
+    <div class="row">
+        <div class="col-sm-4">
+            <h3>Client Price Levels</h3>
+        </div>
+        <div class="col-sm-8">
+            <form method="post" action="?section=price_levels">
+                <table class="table table-hover">
+                    <colgroup>
+                        <col width="40%">
+                        <col width="40%">
+                        <col width="20%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Margin (%)</th>
+                            <th class="text-right"><a href="javascript:;" onclick="$('#tr-add').show()">add</a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+<?php foreach ($this->price_levels as $line) { ?>
+                        <tr>
+                            <td><?= $line['name'] ?></td>
+                            <td><?= $line['margin'] ?></td>
+                            <td>
+                                <a href="javascript:;" onclick='editPriceLevel(this, <?= json_encode($line) ?>)'>edit</a>
+                                <?php if (!$line['is_used']) { ?>
+                                <a href="javascript:;" onclick="if (window.confirm('Delete this Price Level?')) window.location.href='/ecommerce/dealer?section=price_levels&delete=<?= $line['id'] ?>'">delete</a>
+                                <?php } ?>
+                            </td>
+                        </tr>
+<?php } ?>
+                    </tbody>
+                    <tfoot>
+                        <tr id="tr-add" style="display:none">
+                            <td><input type="text" class="form-control" name="price_level_add[name]"></td>
+                            <td><input type="number" class="form-control" name="price_level_add[margin]" min="0" max="999" step="0.01"></td>
+                            <td><button class="btn btn-primary" type="submit">Add</button></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <script>
+                    function editPriceLevel(ahref, data) {
+                        $('#tr-add').replaceWith('');
+                        var tr = '<tr>';
+                        tr+= '<td><input type="hidden" class="form-control" name="price_level_edit[id]" value="'+data.id+'"><input type="text" class="form-control" value="'+data.name+'" name="price_level_edit[name]"></td>';
+                        tr+= '<td><input type="number" class="form-control" name="price_level_edit[margin]" value="'+data.margin+'" min="0" max="999" step="0.01"></td>';
+                        tr+= '<td><button class="btn btn-primary" type="submit">Save</button></td>';
+                        tr+= '</tr>';
+                        $(ahref).parent().parent().replaceWith(tr);
+                    }
+                </script>
+            </form>
+        </div>
+    </div>
+    <hr>
+    <form method="post" action="?section=main">
         <div class="row">
             <div class="col-sm-4">
                 <h3>Distributors</h3>
@@ -87,15 +143,49 @@ HTML;
                     </tr></table>
                 </p>
 
-                <p>
-                    <label>Subject</label>
-                    <input required="required" class="form-control" type="text" placeholder="E-mail Subject" name="supplyNotifySubject" value="<?= $shopSettings->supplyNotifySubject ?>">
-                </p>
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Template 1</a></li>
+                    <li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Template 2</a></li>
+                    <li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Template 3</a></li>
+                </ul>
 
-                <p>
-                    <label>Message</label>
-                    <textarea required="required" class="form-control" id="editor1" style="height:450px;" name="supplyNotifyMessage"><?= $shopSettings->supplyNotifyMessage ?></textarea>
-                </p>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="tab1">
+                        <p>
+                            <label>Subject</label>
+                            <input required="required" class="form-control" type="text" placeholder="E-mail Subject" name="supplyNotifySubject" value="<?= $shopSettings->supplyNotifySubject ?>">
+                        </p>
+
+                        <p>
+                            <label>Message</label>
+                            <textarea required="required" class="form-control" id="editor1" style="height:450px;" name="supplyNotifyMessage"><?= $shopSettings->supplyNotifyMessage ?></textarea>
+                        </p>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab2">
+                        <p>
+                            <label>Subject</label>
+                            <input required="required" class="form-control" type="text" placeholder="E-mail Subject" name="supplyNotifySubject2" value="<?= $shopSettings->supplyNotifySubject2 ?>">
+                        </p>
+
+                        <p>
+                            <label>Message</label>
+                            <textarea required="required" class="form-control" id="editor2" style="height:450px;" name="supplyNotifyMessage2"><?= $shopSettings->supplyNotifyMessage2 ?></textarea>
+                        </p>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab3">
+                        <p>
+                            <label>Subject</label>
+                            <input required="required" class="form-control" type="text" placeholder="E-mail Subject" name="supplyNotifySubject3" value="<?= $shopSettings->supplyNotifySubject3 ?>">
+                        </p>
+
+                        <p>
+                            <label>Message</label>
+                            <textarea required="required" class="form-control" id="editor3" style="height:450px;" name="supplyNotifyMessage3"><?= $shopSettings->supplyNotifyMessage3 ?></textarea>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
         <hr>
@@ -122,4 +212,6 @@ HTML;
 <script src="//cdn.ckeditor.com/4.5.5/basic/ckeditor.js"></script>
 <script>
     CKEDITOR.replace('editor1');
+    CKEDITOR.replace('editor2');
+    CKEDITOR.replace('editor3');
 </script>

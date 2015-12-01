@@ -1,0 +1,2 @@
+devices:
+    - { masterDeviceId: '42', dealerId: '2', cost: '1000', dealerSku: Q5400A, oemSku: Q5400A, description: '', srp: null, webId: null, rent: null, pagesPerMonth: null, dataSheetUrl: null, reviewsUrl: null, online: null, onlineDescription: null }

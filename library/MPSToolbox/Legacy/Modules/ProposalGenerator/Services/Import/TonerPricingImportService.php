@@ -26,9 +26,15 @@ class TonerPricingImportService extends AbstractImportService
     const TONER_PRICING_LEVEL_3      = "Price Level 3";
     const TONER_PRICING_LEVEL_4      = "Price Level 4";
     const TONER_PRICING_LEVEL_5      = "Price Level 5";
+    const TONER_PRICING_LEVEL_6      = "Price Level 6";
+    const TONER_PRICING_LEVEL_7      = "Price Level 7";
+    const TONER_PRICING_LEVEL_8      = "Price Level 8";
+    const TONER_PRICING_LEVEL_9      = "Price Level 9";
+    const TONER_DISTRIBUTOR          = "Distributor";
 
     public $csvHeaders = [
         self::TONER_PRICING_TONER_ID,
+        self::TONER_DISTRIBUTOR,
         self::TONER_PRICING_MANUFACTURER,
         self::TONER_PRICING_SKU,
         self::TONER_PRICING_NAME,
@@ -42,6 +48,10 @@ class TonerPricingImportService extends AbstractImportService
         self::TONER_PRICING_LEVEL_3,
         self::TONER_PRICING_LEVEL_4,
         self::TONER_PRICING_LEVEL_5,
+        self::TONER_PRICING_LEVEL_6,
+        self::TONER_PRICING_LEVEL_7,
+        self::TONER_PRICING_LEVEL_8,
+        self::TONER_PRICING_LEVEL_9,
     ];
 
     public function __construct ()

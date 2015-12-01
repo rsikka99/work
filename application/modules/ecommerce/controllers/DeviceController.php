@@ -6,7 +6,16 @@ class Ecommerce_DeviceController extends Action
 {
     public function indexAction() {
         $this->_pageTitle = ['E-commerce - Device Settings'];
-        $this->view->clientId = $this->getRequest()->getParam('client');
+
+        $clientId = $this->getRequest()->getParam('client');
+        if ($clientId) {
+            $client = \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->find($clientId);
+            if ($client) {
+                $this->getMpsSession()->selectedClientId = $clientId;
+            }
+        }
+
+        $this->view->clientId = $this->getMpsSession()->selectedClientId;
         $this->view->devices = [];
 
         $dealerId = \MPSToolbox\Legacy\Entities\DealerEntity::getDealerId();

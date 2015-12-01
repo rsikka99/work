@@ -67,7 +67,6 @@ class TonerService
             // This allows null to be saved to the database.
             $dealerTonerAttributes->cost      = ($data['dealerCost'] == '' ? new Zend_Db_Expr("NULL") : $data['dealerCost']);
             $dealerTonerAttributes->dealerSku = ($data['dealerSku'] == '' ? new Zend_Db_Expr("NULL") : $data['dealerSku']);
-            $dealerTonerAttributes->dealerSrp = ($data['dealerSrp'] == '' ? new Zend_Db_Expr("NULL") : $data['dealerSrp']);
 
             // If these are NULL we want to remove it from the database
             if ($dealerTonerAttributes->cost == new Zend_Db_Expr("NULL") && $dealerTonerAttributes->dealerSku == new Zend_Db_Expr("NULL"))
@@ -87,7 +86,6 @@ class TonerService
             $dealerTonerAttributes->dealerId  = $this->dealerId;
             $dealerTonerAttributes->cost      = ($data['dealerCost'] == '' ? new Zend_Db_Expr("NULL") : $data['dealerCost']);
             $dealerTonerAttributes->dealerSku = ($data['dealerSku'] == '' ? new Zend_Db_Expr("NULL") : $data['dealerSku']);
-            $dealerTonerAttributes->dealerSrp = ($data['dealerSrp'] == '' ? new Zend_Db_Expr("NULL") : $data['dealerSrp']);
             $dealerTonerAttributesMapper->insert($dealerTonerAttributes);
         }
     }
@@ -120,6 +118,21 @@ class TonerService
         if ($data['imageUrl']) {
             $this->downloadImageFromImageUrl($toner, $data['imageUrl']);
             $tonerMapper->save($toner);
+        }
+
+        $st=\Zend_Db_Table::getDefaultAdapter()->prepare('update ingram_products set tonerId=:tonerId where tonerId is null and `vendor_part_number`=:vpn');
+        $st->execute(['tonerId'=>$toner->id, 'vpn'=>$data['sku']]);
+
+        $st=\Zend_Db_Table::getDefaultAdapter()->prepare("update ingram_products set tonerId=:tonerId where tonerId is null and `vendor_part_number` like :like");
+        $st->execute(['tonerId'=>$toner->id, 'like'=>"{$data['sku']}#%"]);
+
+        if (!$data['weight']) {
+            $st = \Zend_Db_Table::getDefaultAdapter()->prepare('UPDATE toners t SET weight = 0.453592 * (select weight from ingram_products where tonerId=t.id) WHERE id=:tonerId');
+            $st->execute(['tonerId'=>$toner->id]);
+        }
+        if (!$data['upc']) {
+            $st = \Zend_Db_Table::getDefaultAdapter()->prepare('UPDATE toners t SET upc = (select upc_code from ingram_products where tonerId=t.id) WHERE id=:tonerId');
+            $st->execute(['tonerId'=>$toner->id]);
         }
 
         return $toner;
@@ -174,8 +187,8 @@ class TonerService
                 $toner->manufacturerId = $data['manufacturerId'];
                 $toner->imageUrl       = $data['imageUrl'];
                 $toner->name           = $data['name'];
-                $toner->weight           = $data['weight'];
-                $toner->UPC           = $data['UPC'];
+                $toner->weight         = $data['weight'];
+                $toner->UPC            = $data['UPC'];
 
                 if ($data['saveAndApproveHdn'] == 1)
                 {

@@ -35,12 +35,13 @@ class AvailableTonersForm extends \My_Form_Form
 
     public $_isAllowedToEditFields = false;
 
-    public $suppliers = [];
+    public $distributors = [];
 
     /**
-     * @param int        $dealerId
-     * @param TonerModel $tonerModel
-     * @param array|null $options
+     * @param null $dealerId
+     * @param null $tonerModel
+     * @param null $options
+     * @param bool $isAllowedToEditFields
      */
     public function __construct ($dealerId = null, $tonerModel = null, $options = null, $isAllowedToEditFields = false)
     {
@@ -56,7 +57,6 @@ class AvailableTonersForm extends \My_Form_Form
             $data               = $tonerModel->toArray();
             $data['dealerSku']  = $tonerModel->getDealerTonerAttribute($dealerId)->dealerSku;
             $data['dealerCost'] = $tonerModel->getDealerTonerAttribute($dealerId)->cost;
-            $data['dealerSrp'] = $tonerModel->getDealerTonerAttribute($dealerId)->dealerSrp;
 
             $this->setDefaults($data);
         }
@@ -136,22 +136,6 @@ class AvailableTonersForm extends \My_Form_Form
         ]);
 
         /**
-         * Dealer SRP
-         */
-        $this->addElement('text_currency', 'dealerSrp', [
-            'label'      => 'SRP',
-            'required'   => false,
-            'maxlength'  => 255,
-            'validators' => [
-                [
-                    'validator' => 'greaterThan',
-                    'options'   => ['min' => 0],
-                ],
-                'Float',
-            ]
-        ]);
-
-        /**
          * OEM SKU
          */
         $tonerMapper = TonerMapper::getInstance();
@@ -211,7 +195,7 @@ class AvailableTonersForm extends \My_Form_Form
          * Weight
          */
         $this->addElement('text_float', 'weight', [
-            'label'      => 'Weight',
+            'label'      => 'Weight (KG)',
             'required'   => false,
             'validators' => [
                 [

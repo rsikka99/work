@@ -149,7 +149,7 @@ class Action extends \Zend_Controller_Action
     /**
      * Gets the identity of the currently logged in user
      *
-     * @return stdClass
+     * @return Zend_Session_Namespace
      */
     public function getMpsSession ()
     {

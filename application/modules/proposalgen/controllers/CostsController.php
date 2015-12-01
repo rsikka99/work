@@ -537,7 +537,7 @@ class Proposalgen_CostsController extends Action
         $tonerPricingService = $this->getTonerPricingService();
         $canApprove             = $this->_canApprove();
 
-        $manufacturer_id = $this->getRequest()->getParam('manufacturers');
+        #$manufacturer_id = $this->getRequest()->getParam('manufacturers');
 
         if ($this->_request->isPost())
         {
@@ -562,6 +562,7 @@ class Proposalgen_CostsController extends Action
 
                                 $dataArray = [
                                     'dealerId'  => $this->_dealerId,
+                                    'distributor'   => $validData[$tonerPricingService::TONER_DISTRIBUTOR],
                                     'tonerId'   => $validData[$tonerPricingService::TONER_PRICING_TONER_ID],
                                     'dealerSku' => $validData[$tonerPricingService::TONER_PRICING_DEALER_SKU],
                                     'cost'      => $validData[$tonerPricingService::TONER_PRICING_NEW_PRICE],
@@ -570,10 +571,15 @@ class Proposalgen_CostsController extends Action
                                     'level3'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_3],
                                     'level4'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_4],
                                     'level5'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_5],
+                                    'level6'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_6],
+                                    'level7'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_7],
+                                    'level8'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_8],
+                                    'level9'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_9],
                                 ];
 
                                 $toner = TonerMapper::getInstance()->find($validData['Toner ID']);
 
+                                /*
                                 if ($manufacturer_id) {
                                     if ($toner instanceof TonerModel) {
 
@@ -590,6 +596,7 @@ class Proposalgen_CostsController extends Action
                                             $skus[$sku] = $sku;
                                             $comp_dataArray = [
                                                 'dealerId'  => $this->_dealerId,
+                                                'distributor' => $validData[$tonerPricingService::TONER_DISTRIBUTOR],
                                                 'tonerId'   => $found->id,
                                                 'dealerSku' => $validData[$tonerPricingService::TONER_PRICING_DEALER_SKU],
                                                 'cost'      => $validData[$tonerPricingService::TONER_PRICING_NEW_PRICE],
@@ -598,6 +605,10 @@ class Proposalgen_CostsController extends Action
                                                 'level3'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_3],
                                                 'level4'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_4],
                                                 'level5'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_5],
+                                                'level6'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_6],
+                                                'level7'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_7],
+                                                'level8'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_8],
+                                                'level9'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_9],
                                             ];
                                             $tonerAttribute = DealerTonerAttributeMapper::getInstance()->find([$comp_dataArray['tonerId'], $this->_dealerId]);
                                             if ($tonerAttribute instanceof DealerTonerAttributeModel) {
@@ -635,6 +646,7 @@ class Proposalgen_CostsController extends Action
 
                                                 $comp_dataArray = [
                                                     'dealerId'  => $this->_dealerId,
+                                                    'distributor' => $validData[$tonerPricingService::TONER_DISTRIBUTOR],
                                                     'tonerId'   => $comp_id,
                                                     'dealerSku' => $validData[$tonerPricingService::TONER_PRICING_DEALER_SKU],
                                                     'cost'      => $validData[$tonerPricingService::TONER_PRICING_NEW_PRICE],
@@ -643,13 +655,17 @@ class Proposalgen_CostsController extends Action
                                                     'level3'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_3],
                                                     'level4'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_4],
                                                     'level5'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_5],
+                                                    'level6'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_6],
+                                                    'level7'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_7],
+                                                    'level8'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_8],
+                                                    'level9'  => $validData[$tonerPricingService::TONER_PRICING_LEVEL_9],
                                                 ];
                                                 $tonerAttribute = new DealerTonerAttributeModel();
                                                 $tonerAttribute->populate($comp_dataArray);
                                                 DealerTonerAttributeMapper::getInstance()->insert($tonerAttribute);
 
                                                 foreach (DeviceTonerMapper::getInstance()->fetchDeviceTonersByTonerId($toner->id) as $deviceToner) {
-                                                    /** @var DeviceTonerModel $deviceToner */
+                                                    ** @var DeviceTonerModel $deviceToner *
                                                     $new_deviceToner = new DeviceTonerModel([
                                                         'toner_id'=>$comp_id,
                                                         'master_device_id'=>$deviceToner->master_device_id,
@@ -665,6 +681,7 @@ class Proposalgen_CostsController extends Action
                                         //noop
                                     }
                                 } else {
+                                */
                                     if ($toner instanceof TonerModel) {
                                         $tonerAttribute = DealerTonerAttributeMapper::getInstance()->find([$dataArray['tonerId'], $this->_dealerId]);
                                         // Does the toner attribute exists ?
@@ -689,7 +706,7 @@ class Proposalgen_CostsController extends Action
                                     } else {
                                         $errorMessages [$lineCounter] = 'Unknown Toner ID: '.$validData[$tonerPricingService::TONER_PRICING_TONER_ID];
                                     }
-                                }
+                                #}
                             }
                             else
                             {

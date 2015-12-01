@@ -6,52 +6,46 @@ class Ecommerce_ClientController extends Action
 {
     public function indexAction() {
         $this->_pageTitle = ['E-commerce - Client Settings'];
-        $this->view->clientId = $this->getRequest()->getParam('client');
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+
+        $clientId = $this->getRequest()->getParam('client');
+        if ($clientId) {
+            $client = \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->find($clientId);
+            if ($client) {
+                $this->getMpsSession()->selectedClientId = $clientId;
+            }
+        }
+
+        $this->view->clientId = $this->getMpsSession()->selectedClientId;
         $dealerId = \MPSToolbox\Legacy\Entities\DealerEntity::getDealerId();
-        if ($this->getRequest()->getMethod()=='POST') {
+        if ($this->view->clientId && $this->getRequest()->getMethod()=='POST') {
             $client = \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->find($this->view->clientId);
             if ($client && ($client->dealerId == $dealerId)) {
                 #--
-                $client->priceLevel = $this->getRequest()->getParam('priceLevel');
+                $client->templateNum = $this->getRequest()->getParam('templateNum');
+                $client->priceLevelId = $this->getRequest()->getParam('priceLevelId');
                 $client->transactionType = $this->getRequest()->getParam('transactionType');
                 $client->notSupportedMasterDevices = implode(',',$this->getRequest()->getParam('notSupportedMasterDevices'));
+                $client->ecomMonochromeRank = implode(',',$this->getRequest()->getParam('ecomMonochromeRank'));
+                $client->ecomColorRank = implode(',',$this->getRequest()->getParam('ecomColorRank'));
                 \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->save($client);
                 #--
-                $clientSettings = \MPSToolbox\Settings\Entities\ClientSettingsEntity::getClientSettings($client->id);
-                $clientSettingsService = new \MPSToolbox\Settings\Service\ClientSettingsService();
-                $newTonerRanks     = $this->getPostedRanks('proposedMonochromeRankSetArray');
-                $currentTonerRanks = $clientSettings->proposedFleetSettings->getMonochromeRankSet()->getRankings();
-                $clientSettingsService->saveTonerRankChanges($currentTonerRanks, $newTonerRanks, $clientSettings->proposedFleetSettings->getMonochromeRankSet()->id);
-
-                $newTonerRanks     = $this->getPostedRanks('proposedColorRankSetArray');
-                $currentTonerRanks = $clientSettings->proposedFleetSettings->getColorRankSet()->getRankings();
-                $clientSettingsService->saveTonerRankChanges($currentTonerRanks, $newTonerRanks, $clientSettings->proposedFleetSettings->getColorRankSet()->id);
-                #--
                 $this->_flashMessenger->addMessage(["success" => "Your changes are saved"]);
-                $this->redirect('/ecommerce/client?client='.$client->id);
+                $this->redirect('/ecommerce/client');
             }
         }
         $this->view->clients = \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->fetchAll(["dealerId=?"=>$dealerId]);
-    }
 
-    private function getPostedRanks($param)
-    {
-        $tonerRanks = [];
-
-        $manufacturerIds = $this->getRequest()->getParam($param);
-        if ($manufacturerIds)
-        {
-            $i = 0;
-            foreach ($manufacturerIds as $manufacturerId)
-            {
-                $i++;
-                $tonerRank                        = new \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerVendorRankingModel();
-                $tonerRank->manufacturerId        = $manufacturerId;
-                $tonerRank->rank                  = $i;
-                $tonerRanks[(int)$manufacturerId] = $tonerRank;
-            }
+        $st = $db->query('select id, name, margin, id IN (SELECT priceLevelId FROM clients) as is_used from dealer_price_levels where dealerId='.intval($dealerId).' order by `margin`');
+        $this->view->price_levels = $st->fetchAll();
+        if (empty($this->view->price_levels)) {
+            $db->query("insert into dealer_price_levels set name='Base', margin='30', dealerId=".intval($dealerId));
+            $id = $db->lastInsertId();
+            $db->query('update clients set priceLevelId='.intval($id).' where dealerId='.intval($dealerId));
+            $st = $db->query('select id, name, margin, id IN (SELECT priceLevelId FROM clients) as is_used from dealer_price_levels where dealerId='.intval($dealerId).' order by `margin`');
+            $this->view->price_levels = $st->fetchAll();
         }
-
-        return $tonerRanks;
     }
+
 }

@@ -84,7 +84,7 @@ class ProposedFleetSettingsForm extends \My_Form_Form
 
         $this->addElement('select', 'proposedLevel', [
             'label'        => 'Pricing Level',
-            'multiOptions' => [''=>'Standard', 'level1'=>'Level 1', 'level2'=>'Level 2', 'level3'=>'Level 3', 'level4'=>'Level 4', 'level5'=>'Level 5'],
+            'multiOptions' => [''=>'Standard', 'level1'=>'Level 1', 'level2'=>'Level 2', 'level3'=>'Level 3', 'level4'=>'Level 4', 'level5'=>'Level 5', 'level6'=>'Level 6', 'level7'=>'Level 7', 'level8'=>'Level 8', 'level9'=>'Level 9'],
         ]);
 
         $this->addElement('multiselect', 'proposedMonochromeRankSetArray', [

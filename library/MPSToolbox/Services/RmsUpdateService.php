@@ -242,7 +242,7 @@ class RmsUpdateService {
     public function getRmsClients() {
         $db = \Zend_Db_Table::getDefaultAdapter();
         return $db->fetchAll('
-SELECT c.id as clientId, c.dealerId, c.deviceGroup, ss.rmsUri
+SELECT c.id as clientId, c.dealerId, c.deviceGroup, c.ecomMonochromeRank, c.ecomColorRank, c.templateNum, ss.rmsUri
 FROM `clients` c
 JOIN `dealer_settings` ds ON c.dealerId = ds.dealerId
 JOIN `shop_settings` ss ON ds.shopSettingsId = ss.id
@@ -357,13 +357,11 @@ group by clientId
             }
         }
 
-        $clientSettingsService = new \MPSToolbox\Settings\Service\ClientSettingsService();
-        $settings = $clientSettingsService->getClientSettings($client['clientId'], $client['dealerId']);
-        $rank = $settings->currentFleetSettings->getMonochromeRankSet();
-        if ($colorId!=TonerColorEntity::BLACK) {
-            $rank = $settings->currentFleetSettings->getColorRankSet();
+        if ($colorId==TonerColorEntity::BLACK) {
+            $arr = explode(',',$client['ecomMonochromeRank']);
+        } else {
+            $arr = explode(',',$client['ecomColorRank']);
         }
-        $arr = $rank->getRanksAsArray();
         $arr[] = $mfg->getId();
         $tonerOptions=[];
         $tonerOptionIds=[];
@@ -464,8 +462,21 @@ group by clientId
 
         $emailFromAddress = $shopSettings->emailFromAddress;
         $emailFromName = $shopSettings->emailFromName;
-        $supplyNotifySubject = $shopSettings->supplyNotifySubject;
-        $supplyNotifyMessage = $shopSettings->supplyNotifyMessage;
+
+        switch($c['templateNum']) {
+            case 2:
+                $supplyNotifySubject = $shopSettings->supplyNotifySubject2;
+                $supplyNotifyMessage = $shopSettings->supplyNotifyMessage2;
+                break;
+            case 3:
+                $supplyNotifySubject = $shopSettings->supplyNotifySubject3;
+                $supplyNotifyMessage = $shopSettings->supplyNotifyMessage3;
+                break;
+            default:
+                $supplyNotifySubject = $shopSettings->supplyNotifySubject;
+                $supplyNotifyMessage = $shopSettings->supplyNotifyMessage;
+                break;
+        }
 
         if (empty($emailFromAddress)) $emailFromAddress = $dealerBranding->dealerEmail;
         if (empty($emailFromName)) $emailFromName = $dealerBranding->dealerName;
