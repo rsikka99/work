@@ -78,7 +78,7 @@ ADD `supplyNotifyMessage3` TEXT NULL ');
         $this->execute('ALTER TABLE `clients` CHANGE `priceLevel` `priceLevelId` INT NULL DEFAULT NULL');
         $this->execute('ALTER TABLE `clients` ADD INDEX ( `priceLevelId` )');
         $this->execute('update `clients` set priceLevelId=null');
-        $this->execute('ALTER TABLE `clients` ADD FOREIGN KEY ( `priceLevelId` ) REFERENCES `mpstoolbox_dev`.`dealer_price_levels` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE');
+        $this->execute('ALTER TABLE `clients` ADD FOREIGN KEY ( `priceLevelId` ) REFERENCES `dealer_price_levels` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE');
 
         $this->execute('alter table dealer_toner_attributes drop dealerSrp');
         $this->execute('ALTER TABLE `dealer_toner_attributes` ADD `level6` DECIMAL( 10, 2 ) NULL ,
