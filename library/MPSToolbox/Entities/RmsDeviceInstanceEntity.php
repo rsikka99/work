@@ -62,7 +62,7 @@ class RmsDeviceInstanceEntity extends BaseEntity {
      */
     public static function findOne($clientId, $ipAddress, $serialNumber, $assetId) {
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $st = $db->prepare('select id from rms_device_instances where clientId=:c and ipAddress=:i and serialNumber=:s and (assetId=:a or assetId is null)');
+        $st = $db->prepare("select id from rms_device_instances where clientId=:c and ipAddress=:i and serialNumber=:s and (assetId=:a or assetId='')");
         $st->execute(['c'=>''.$clientId, 'i'=>''.$ipAddress, 's'=>''.$serialNumber, 'a'=>''.$assetId]);
         $arr = $st->fetchAll();
         if (empty($arr) || (count($arr)!=1)) return null;
