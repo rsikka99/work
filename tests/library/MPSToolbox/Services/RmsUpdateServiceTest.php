@@ -550,9 +550,10 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
             \MPSToolbox\Entities\TonerColorEntity::BLACK=>4,
             \MPSToolbox\Entities\TonerColorEntity::MAGENTA=>5,
         ]);
+        $device->setRmsProviderId(6);
         $device->save();
 
-        $client = ['clientId'=>5, 'dealerId'=>1];
+        $client = ['clientId'=>5, 'dealerId'=>1, 'templateNum'=>1, 'ecomMonochromeRank'=>'3,43,46', 'ecomColorRank'=>'3,43,46'];
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::BLACK);
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::MAGENTA);
     }
@@ -571,7 +572,7 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
         $device->setRmsDeviceInstance($instance);
         $device->setTonerLevelBlack(34);
         $device->setDaysLeft([\MPSToolbox\Entities\TonerColorEntity::BLACK=>4]);
-        $client = ['clientId'=>5, 'dealerId'=>1];
+        $client = ['clientId'=>5, 'dealerId'=>1, 'templateNum'=>1, 'ecomMonochromeRank'=>'3,43,46', 'ecomColorRank'=>'3,43,46'];
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::BLACK);
 
         $device->setTonerLevelBlack(99);
@@ -606,6 +607,7 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
             \MPSToolbox\Entities\TonerColorEntity::BLACK=>4,
             \MPSToolbox\Entities\TonerColorEntity::MAGENTA=>5,
         ]);
+        $device->setRmsProviderId(6);
         $device->save();
 
         $client = ['clientId'=>5, 'dealerId'=>1, 'templateNum'=>1, 'ecomMonochromeRank'=>'3,43,46', 'ecomColorRank'=>'3,43,46'];
