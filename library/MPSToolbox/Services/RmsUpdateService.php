@@ -6,6 +6,7 @@ use cdyweb\http\guzzle\Guzzle;
 use GuzzleHttp\Psr7\Response;
 use MPSToolbox\Entities\ClientEntity;
 use MPSToolbox\Entities\DeviceNeedsTonerEntity;
+use MPSToolbox\Entities\MasterDeviceEntity;
 use MPSToolbox\Entities\RmsDeviceInstanceEntity;
 use MPSToolbox\Entities\RmsUpdateEntity;
 use MPSToolbox\Entities\TonerColorEntity;
@@ -277,8 +278,18 @@ group by clientId
 
         $db = \Zend_Db_Table::getDefaultAdapter();
         if (!empty($data['rmsDeviceInstanceId'])) {
-            $st = $db->prepare("update rms_device_instances set location=:location, masterDeviceId=:masterDeviceId, assetId=:assetId, fullDeviceName=:fullDeviceName, reportDate=:reportDate where id=:id");
-            $st->execute(['location'=>$data['location'],'masterDeviceId'=>$data['masterDeviceId'],'assetId'=>$data['assetId'],'fullDeviceName'=>$data['fullDeviceName'],'reportDate'=>$data['reportDate'], 'id'=>$data['rmsDeviceInstanceId']]);
+            #$st = $db->prepare("update rms_device_instances set location=:location, masterDeviceId=:masterDeviceId, assetId=:assetId, fullDeviceName=:fullDeviceName, reportDate=:reportDate where id=:id");
+            #$st->execute(['location'=>$data['location'],'masterDeviceId'=>$data['masterDeviceId'],'assetId'=>$data['assetId'],'fullDeviceName'=>$data['fullDeviceName'],'reportDate'=>$data['reportDate'], 'id'=>$data['rmsDeviceInstanceId']]);
+
+            $masterDevice = MasterDeviceEntity::find($data['masterDeviceId']);
+            /** @var RmsDeviceInstanceEntity $obj */
+            $obj = RmsDeviceInstanceEntity::find($data['rmsDeviceInstanceId']);
+            $obj->setLocation($data['location']);
+            $obj->setMasterDevice($masterDevice);
+            $obj->setAssetId($data['assetId']);
+            $obj->setFullDeviceName($data['fullDeviceName']);
+            $obj->setReportDate(new \DateTime($data['reportDate']));
+            $obj->save();
             return $data['rmsDeviceInstanceId'];
         }
 
