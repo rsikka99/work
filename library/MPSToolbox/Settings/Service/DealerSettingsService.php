@@ -338,6 +338,18 @@ class DealerSettingsService
             $dealerSettings->push();
         }
 
+        if (!$dealerSettings->shopSettings instanceof ShopSettingsEntity) {
+            $shopSettings                      = new ShopSettingsEntity();
+            $shopSettings->shopifyName = '';
+            $shopSettings->hardwareMargin = 30;
+            $shopSettings->oemTonerMargin = 30;
+            $shopSettings->compatibleTonerMargin = 30;
+            $shopSettings->rmsUri = '';
+            $shopSettings->save();
+            $dealerSettings->shopSettings()->associate($shopSettings);
+            $dealerSettings->save();
+        }
+
         return $dealerSettings;
     }
 
