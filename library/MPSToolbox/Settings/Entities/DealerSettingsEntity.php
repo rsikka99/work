@@ -4,6 +4,7 @@ namespace MPSToolbox\Settings\Entities;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use MPSToolbox\Entities\DealerEntity;
+use MPSToolbox\Settings\Service\DealerSettingsService;
 
 /**
  * Class DealerSettingsEntity
@@ -38,21 +39,8 @@ class DealerSettingsEntity extends EloquentModel
      * @return DealerSettingsEntity
      */
     public static function getDealerSettings($dealerId=null) {
-        if (!$dealerId) {
-            $dealerId = DealerEntity::getDealerId();
-        }
-        if (!$dealerId) return false;
-        $settings = static::with(
-            'CurrentFleetSettings',
-            'ProposedFleetSettings',
-            'GenericSettings',
-            'QuoteSettings',
-            'OptimizationSettings',
-            'ShopSettings'
-        );
-        if (!$settings) return false;
-        $dealerSettings = $settings->find($dealerId);
-        return $dealerSettings;
+        $service = new DealerSettingsService();
+        return $service->getDealerSettings($dealerId);
     }
 
     public static function hasShopify() {

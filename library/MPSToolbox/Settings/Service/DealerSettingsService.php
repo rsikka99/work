@@ -2,6 +2,7 @@
 
 namespace MPSToolbox\Settings\Service;
 
+use MPSToolbox\Legacy\Entities\DealerEntity;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerVendorRankingMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerVendorRankingModel;
 use MPSToolbox\Settings\Entities\DealerSettingsEntity;
@@ -314,8 +315,11 @@ class DealerSettingsService
      *
      * @return DealerSettingsEntity
      */
-    public function getDealerSettings ($dealerId)
+    public function getDealerSettings ($dealerId=null)
     {
+        if (!$dealerId) {
+            $dealerId = DealerEntity::getDealerId();
+        }
         $dealerSettings = DealerSettingsEntity::with(
             'CurrentFleetSettings',
             'ProposedFleetSettings',

@@ -101,6 +101,8 @@ ADD `distributor` VARCHAR( 255 ) NULL ');
 
         $this->execute('drop table `dealer_price_levels`');
 
+        $this->execute('alter table clients change `priceLevelId` `priceLevel` VARCHAR(255) NULL');
+
         $this->execute('alter table dealer_toner_attributes add dealerSrp float null default null');
         $this->execute('alter table dealer_toner_attributes drop level6, drop level7, drop level8, drop level9, drop distributor');
     }
