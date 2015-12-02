@@ -277,8 +277,8 @@ group by clientId
 
         $db = \Zend_Db_Table::getDefaultAdapter();
         if (!empty($data['rmsDeviceInstanceId'])) {
-            $st = $db->prepare("update rms_device_instances set masterDeviceId=:masterDeviceId, assetId=:assetId, fullDeviceName=:fullDeviceName, reportDate=:reportDate where id=:id");
-            $st->execute(['masterDeviceId'=>$data['masterDeviceId'],'assetId'=>$data['assetId'],'fullDeviceName'=>$data['fullDeviceName'],'reportDate'=>$data['reportDate'], 'id'=>$data['rmsDeviceInstanceId']]);
+            $st = $db->prepare("update rms_device_instances set location=:location, masterDeviceId=:masterDeviceId, assetId=:assetId, fullDeviceName=:fullDeviceName, reportDate=:reportDate where id=:id");
+            $st->execute(['location'=>$data['location'],'masterDeviceId'=>$data['masterDeviceId'],'assetId'=>$data['assetId'],'fullDeviceName'=>$data['fullDeviceName'],'reportDate'=>$data['reportDate'], 'id'=>$data['rmsDeviceInstanceId']]);
             return $data['rmsDeviceInstanceId'];
         }
 

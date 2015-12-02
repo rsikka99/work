@@ -17,6 +17,9 @@ class RmsUpdateEntity extends BaseEntity {
      */
     private $rmsDeviceInstance;
 
+    /** @Column(type="integer") */
+    private $rmsProviderId;
+
     /** @Column(type="boolean") */
     private $isColor;
 
@@ -70,6 +73,22 @@ class RmsUpdateEntity extends BaseEntity {
     public function setDaysLeft($daysLeft)
     {
         $this->daysLeft = $daysLeft;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRmsProviderId()
+    {
+        return $this->rmsProviderId;
+    }
+
+    /**
+     * @param mixed $rmsProviderId
+     */
+    public function setRmsProviderId($rmsProviderId)
+    {
+        $this->rmsProviderId = $rmsProviderId;
     }
 
     /**
