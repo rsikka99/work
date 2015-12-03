@@ -38,12 +38,12 @@ foreach($this->clients as $client) {
         </colgroup>
         <thead>
             <tr>
+                <th></th>
                 <th>Raw Device Name</th>
                 <th>Model</th>
-                <th></th>
                 <th>IP Address</th>
                 <th>Serial Number</th>
-                <th>Asset ID</th>
+                <th>Location</th>
                 <th>Last Reported</th>
             </tr>
         </thead>
@@ -115,12 +115,12 @@ foreach($this->clients as $client) {
         require(['jquery','datatables', 'datatables.bootstrap'], function ($) {
             window.dt_table = $('#my-table').DataTable({
                 "columns": [
+                    {data: 'mapped'},
                     {data: 'raw'},
                     {data: 'model'},
-                    {data: 'mapped', orderable: false},
                     {data: 'ipAddress'},
                     {data: 'serialNumber'},
-                    {data: 'assetId'},
+                    {data: 'location'},
                     {data: 'reportDate'}
                 ],
                 "ajax": {

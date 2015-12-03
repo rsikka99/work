@@ -60,17 +60,24 @@ class Ecommerce_DeviceController extends Action
             $db = Zend_Db_Table::getDefaultAdapter();
             $st = $db->prepare("select * from rms_device_instances where clientId=:clientId");
             $st->execute(['clientId'=>$clientId]);
+
+            $masterDeviceService = new \MPSToolbox\Legacy\Modules\HardwareLibrary\Services\MasterDeviceService();
+            $incomplete = $masterDeviceService->getIncomplete($clientId);
+
             foreach ($st->fetchAll() as $line) {
                 if ($line['masterDeviceId']) {
                     $fullDeviceName =
 '<a href="javascript:;" onclick="showDetailsModal('.$line['id'].')"><i class="fa fa-fw fa-info-circle text-info"></i></a>&nbsp;
 <a href="javascript:;" onclick="showModelModal('.$line['masterDeviceId'].')">'.$line['fullDeviceName'].'</a>';
-                    $mapped = '<i class="fa fa-fw fa-check text-success"></i>';
+                    $mapped = '<span style="display:none">3 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-check text-success">&nbsp;</i>';
+                    if (isset($incomplete[$line['masterDeviceId']])) {
+                        $mapped = '<span style="display:none">2 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-warning text-danger"></i>';
+                    }
                 } else {
                     $fullDeviceName =
 '<a href="javascript:;" onclick="showDetailsModal('.$line['id'].')"><i class="fa fa-fw fa-info-circle text-info"></i></a>&nbsp;
 <span class="text-danger">'.$line['fullDeviceName'].'</span>';
-                    $mapped = '<a href="javascript:;" onclick="doMap('.$line['id'].', \''.htmlentities($line['fullDeviceName'], ENT_QUOTES).'\')" class="btn btn-default"><i class="fa fa-fw fa-chain"></i></a>';
+                    $mapped = '<span style="display:none">1 '.$line['fullDeviceName'].'</span><a href="javascript:;" onclick="doMap('.$line['id'].', \''.htmlentities($line['fullDeviceName'], ENT_QUOTES).'\')" class="btn btn-default"><i class="fa fa-fw fa-chain">&nbsp;</i></a>';
                 }
 
                 $result['data'][] = [
@@ -80,7 +87,7 @@ class Ecommerce_DeviceController extends Action
                     'mapped'=>$mapped,
                     'ipAddress'=>$line['ipAddress'],
                     'serialNumber'=>$line['serialNumber'],
-                    'assetId'=>$line['assetId'],
+                    'location'=>$line['location'],
                     'reportDate'=>$line['reportDate'],
                 ];
             }

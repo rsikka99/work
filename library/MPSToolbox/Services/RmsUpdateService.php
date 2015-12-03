@@ -12,6 +12,7 @@ use MPSToolbox\Entities\RmsUpdateEntity;
 use MPSToolbox\Entities\TonerColorEntity;
 use MPSToolbox\Entities\TonerEntity;
 use MPSToolbox\Legacy\Mappers\DealerBrandingMapper;
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Services\TonerService;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ContactMapper;
@@ -360,11 +361,15 @@ group by clientId
             return null;
         }
 
+        $tonerService = new TonerService();
         $toners = [];
         foreach ($masterDevice->getToners() as $toner) {
             /** @var TonerEntity $toner */
             if ($toner->getTonerColor()->getId() == $colorId) {
-                $toners[] = $toner;
+                $price = $tonerService->getTonerPrice($toner->getId());
+                if ($price) {
+                    $toners[] = $toner;
+                }
             }
         }
 
@@ -386,10 +391,10 @@ group by clientId
                 }
             }
         }
-        foreach ($toners as $toner) {
-            $tonerOptions[] = $toner;
-            $tonerOptionIds[] = $toner->getId();
-        }
+        #foreach ($toners as $toner) {
+        #    $tonerOptions[] = $toner;
+        #    $tonerOptionIds[] = $toner->getId();
+        #}
 
         if (empty($tonerOptions)) {
             error_log(sprintf('%s:%s no toner options', __FILE__, __LINE__));

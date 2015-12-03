@@ -1,0 +1,3 @@
+ingram_prices:
+    - { dealerId: '2', ingram_part_number: BB0037, customer_price: '17.88', special_price_flag: O, dt: '2015-12-03 12:24:54' }
+    - { dealerId: '2', ingram_part_number: BB0038, customer_price: '17.88', special_price_flag: O, dt: '2015-12-03 12:24:54' }

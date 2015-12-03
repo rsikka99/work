@@ -2,6 +2,7 @@
 
 namespace MPSToolbox\Legacy\Modules\HardwareLibrary\Services;
 
+use MPSToolbox\Entities\DealerEntity;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Entities\TonerEntity;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DealerTonerAttributeMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DeviceTonerMapper;
@@ -43,8 +44,10 @@ class TonerService
      * @param int  $dealerId
      * @param bool $isMasterHardwareAdministrator
      */
-    public function __construct ($userId, $dealerId, $isMasterHardwareAdministrator)
+    public function __construct ($userId=null, $dealerId=null, $isMasterHardwareAdministrator=false)
     {
+        if (!$dealerId) $dealerId = DealerEntity::getDealerId();
+
         $this->userId                        = $userId;
         $this->dealerId                      = $dealerId;
         $this->isMasterHardwareAdministrator = $isMasterHardwareAdministrator;
@@ -397,4 +400,21 @@ class TonerService
 
         return $toners;
     }
+
+    public function getTonerPrice($tonerId) {
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $st = $db->query(
+"
+select a.cost, ingram_prices.customer_price as ingramPrice
+from toners t
+  left join dealer_toner_attributes a on t.id=a.tonerId and a.dealerId={$this->dealerId}
+  left join ingram_products on ingram_products.tonerId = t.id
+  left join ingram_prices on ingram_prices.ingram_part_number = ingram_products.ingram_part_number
+where t.id = ".intval($tonerId)
+        );
+        $line = $st->fetch();
+        if ($line['ingramPrice'] && (!$line['cost'] || ($line['ingramPrice']<$line['cost']))) $line['cost'] = $line['ingramPrice'];
+        return $line['cost'];
+    }
+
 }
