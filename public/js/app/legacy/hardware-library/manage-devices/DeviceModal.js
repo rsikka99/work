@@ -24,10 +24,11 @@ define([
 
         var settings = _.extend({
             rmsUploadRowId: 0,
+            rmsDeviceInstanceId: 0,
             deviceId      : 0,
             isAllowed     : false,
             onModalClose  : false
-        }, _.pick(options, ['rmsUploadRowId', 'deviceId', 'isAllowed', 'onModalClose']) || {});
+        }, _.pick(options, ['rmsUploadRowId', 'rmsDeviceInstanceId', 'deviceId', 'isAllowed', 'onModalClose']) || {});
 
         /**
          * Create Modal
@@ -41,6 +42,7 @@ define([
          */
         this.$modal = $modal;
         this.rmsUploadRowId = settings.rmsUploadRowId;
+        this.rmsDeviceInstanceId = settings.rmsDeviceInstanceId;
         this.deviceId = settings.deviceId;
         this.isAllowed = (settings.isAllowed == 'true' || settings.isAllowed == '1'); //!(settings.isAllowed == 'undefined' || settings.isAllowed == 'false');
         this.isCreatingNewDevice = (this.deviceId === 0);
@@ -117,7 +119,8 @@ define([
         $modal.load(this.urls.loadForms,
             {
                 masterDeviceId: this.deviceId,
-                rmsUploadRowId: this.rmsUploadRowId
+                rmsUploadRowId: this.rmsUploadRowId,
+                rmsDeviceInstanceId: this.rmsDeviceInstanceId
             },
             function ()
             {

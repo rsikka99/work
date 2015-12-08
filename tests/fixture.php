@@ -50,6 +50,7 @@ foreach ($rows as $i=>$row) {
         $line[$col] = $value;
     }
     $result[]=$line;
+    if ($i>=100) break;
 }
 file_put_contents($path, Symfony\Component\Yaml\Yaml::dump([$_GET['table']=>$result]));
 echo 'done writing '.count($rows).' rows to '.$fn;

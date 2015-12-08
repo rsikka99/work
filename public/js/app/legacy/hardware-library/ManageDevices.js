@@ -9,6 +9,7 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
     var $deviceListGridParent = $deviceListGrid.parent();
     var $canSellCheckbox = $("#can-sell");
     var $unapprovedCheckbox = $("#unapproved");
+    var $incompleteCheckbox = $("#incomplete");
     var $searchColumnDropdown = $("#filter-index");
     var $searchTextInput = $("#filter-value");
 
@@ -147,6 +148,11 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
             filterUnapproved : function ()
             {
                 return ($unapprovedCheckbox.length > 0 && $unapprovedCheckbox[0].checked) ? 'true' : 'false';
+
+            },
+            filterIncomplete : function ()
+            {
+                return ($incompleteCheckbox.length > 0 && $incompleteCheckbox[0].checked) ? 'true' : 'false';
 
             },
             filterSearchIndex: function ()

@@ -2,10 +2,16 @@
 
 /** @var \MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel $selectedClient */
 $selectedClient = null;
+$clientOptions = [];
+$s = new \MPSToolbox\Services\RmsDeviceInstanceService();
 foreach($this->clients as $client) {
     if ($this->clientId==$client->id) {
         $selectedClient = $client;
     }
+    $clientName = $client->companyName;
+    $n = count($s->getIncomplete($client->id));
+    if ($n>0) $clientName .= " ({$n})";
+    $clientOptions[$client->id] = $clientName;
 }
 
 ?>
@@ -23,7 +29,7 @@ foreach($this->clients as $client) {
         <div class="col-sm-8">
             <select class="form-control" onchange="window.location.href='?client='+this.value">
                 <option></option>
-                <?php foreach($this->clients as $client) { ?><option <?= $this->clientId==$client->id?'selected="selected"':'' ?> value="<?= $client->id ?>"><?= $client->companyName ?></option><?php } ?>
+                <?php foreach($clientOptions as $id=>$client) { ?><option <?= $this->clientId==$id?'selected="selected"':'' ?> value="<?= $id ?>"><?= $client ?></option><?php } ?>
             </select>
         </div>
     </div>
@@ -38,12 +44,12 @@ foreach($this->clients as $client) {
         </colgroup>
         <thead>
             <tr>
+                <th></th>
                 <th>Raw Device Name</th>
                 <th>Model</th>
-                <th></th>
                 <th>IP Address</th>
                 <th>Serial Number</th>
-                <th>Asset ID</th>
+                <th>Location</th>
                 <th>Last Reported</th>
             </tr>
         </thead>
@@ -51,12 +57,32 @@ foreach($this->clients as $client) {
         </tbody>
     </table>
     <script>
+        function reloadMe() {
+            window.dt_table.ajax.reload();
+            $.get('/ecommerce/device/ajax-todo', [], function(response) {
+                $.each(response, function(i,e) {
+                    notifyTodo(e.item, e.n);
+                });
+            }, 'json');
+        }
         function doMap(id, name) {
             var tr = '<tr>';
-            tr+= '<td><i class="fa fa-fw"></i>&nbsp;'+name+'</td>';
-            tr+= '<td colspan="4"><table style="width:100%"><tr><td><input type="text" id="select-'+id+'" style="width:100%"></td><td>&nbsp;</td><td><button disabled="disabled" id="ok-btn-'+id+'" data-value="" onclick="modelSelected('+id+',this)" class="btn btn-primary">OK</button></td></tr></table></td>';
+            tr+= '<td colspan="2"><i class="fa fa-fw"></i>&nbsp;'+name+'</td>';
+            tr+= '<td colspan="3">' +
+                '<table style="width:100%">' +
+                    '<tr>' +
+                        '<td><input type="text" id="select-'+id+'" style="width:100%"></td>' +
+                        '<td>&nbsp;</td>' +
+                        '<td>' +
+                            '<button disabled="disabled" id="ok-btn-'+id+'" data-value="" onclick="modelSelected('+id+',this)" class="btn btn-primary">OK</button>' +
+                            '&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="window.dt_table.ajax.reload();">Cancel</a>' +
+                            '&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="if (window.confirm(\'Ignore this model?\')) ignore('+id+')">Ignore</a>' +
+                        '</td>' +
+                    '</tr>' +
+                '</table>' +
+            '</td>';
             tr+= '<td></td>';
-            tr+= '<td><a href="javascript:;" onclick="newDeviceModel()" class="btn btn-primary">New Device Model</a></td>';
+            tr+= '<td><a href="javascript:;" onclick="newDeviceModel('+id+')" class="btn btn-primary">New Device Model</a></td>';
             tr+= '</tr>';
             $('#tr-'+id).replaceWith(tr);
             require(['app/components/Select2/MasterDevice'], function () {
@@ -74,20 +100,37 @@ foreach($this->clients as $client) {
         }
         function modelSelected(id, btn) {
             var value = $(btn).attr('data-value');
-            $.post('/ecommerce/device/ajax-map', {instance:id, model:value}, function(response) {
-                window.dt_table.ajax.reload();
+            $.post('/ecommerce/device/ajax-map', {client:<?= $selectedClient->id ?>, instance:id, model:value}, function(response) {
+                reloadMe();
             }, 'json');
         }
-        function newDeviceModel() {
+        function ignore(id) {
+            $.post('/ecommerce/device/ajax-ignore', {client:<?= $selectedClient->id ?>, instance:id}, function(response) {
+                reloadMe();
+            }, 'json');
+        }
+        function unignore(id) {
+            $.post('/ecommerce/device/ajax-ignore', {client:<?= $selectedClient->id ?>, instance:id, reverse:true}, function(response) {
+                reloadMe();
+            }, 'json');
+        }
+        function unmap(id) {
+            $.post('/ecommerce/device/ajax-map', {client:<?= $selectedClient->id ?>, instance:id, reverse:true}, function(response) {
+                reloadMe();
+            }, 'json');
+        }
+        function newDeviceModel(rmsDeviceInstanceId) {
             require(['app/legacy/hardware-library/manage-devices/DeviceModal'], function (DeviceModal)
             {
                 var editDeviceModal = new DeviceModal({
                     "deviceId"      : null,
-                    "isAllowed"     : isSaveAndApproveAdmin
+                    "isAllowed"     : isSaveAndApproveAdmin,
+                    "rmsDeviceInstanceId" : rmsDeviceInstanceId
                 });
-                $(editDeviceModal).on('DeviceModal.saved', function () {
-                    //map
-                    window.dt_table.ajax.reload();
+                $(editDeviceModal).on('DeviceModal.saved', function (event, masterDeviceId) {
+                    $.post('/ecommerce/device/ajax-map', {client:<?= $selectedClient->id ?>, instance:rmsDeviceInstanceId, model:masterDeviceId}, function(response) {
+                        reloadMe();
+                    }, 'json');
                 });
                 editDeviceModal.show();
             });
@@ -106,8 +149,8 @@ foreach($this->clients as $client) {
                     "deviceId"      : deviceId,
                     "isAllowed"     : isSaveAndApproveAdmin
                 });
-                $(editDeviceModal).on('DeviceModal.saved', function () {
-                    window.dt_table.ajax.reload();
+                $(editDeviceModal).on('DeviceModal.saved', function (event, masterDeviceId) {
+                    reloadMe();
                 });
                 editDeviceModal.show();
             });
@@ -115,12 +158,12 @@ foreach($this->clients as $client) {
         require(['jquery','datatables', 'datatables.bootstrap'], function ($) {
             window.dt_table = $('#my-table').DataTable({
                 "columns": [
+                    {data: 'icon'},
                     {data: 'raw'},
                     {data: 'model'},
-                    {data: 'mapped', orderable: false},
                     {data: 'ipAddress'},
                     {data: 'serialNumber'},
-                    {data: 'assetId'},
+                    {data: 'location'},
                     {data: 'reportDate'}
                 ],
                 "ajax": {
