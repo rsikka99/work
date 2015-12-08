@@ -17,7 +17,8 @@ class Default_CronController extends \Tangent\Controller\Action {
         foreach ($clients as $client) {
             if (empty($client['deviceGroup'])) continue;
             $devices = $service->update($client['clientId'], $client['rmsUri'], $client['deviceGroup']);
-            $service->checkDevices($devices, $client);
+            $settings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings();
+            $service->checkDevices($devices, $client, $settings->shopSettings);
         }
     }
 

@@ -39,6 +39,8 @@ class Ecommerce_DealerController extends Action
                 $settings->shopSettings->supplyNotifyMessage2 = $this->getRequest()->getParam('supplyNotifyMessage2');
                 $settings->shopSettings->supplyNotifySubject3 = $this->getRequest()->getParam('supplyNotifySubject3');
                 $settings->shopSettings->supplyNotifyMessage3 = $this->getRequest()->getParam('supplyNotifyMessage3');
+                $settings->shopSettings->thresholdPercent = max(0,intval($this->getRequest()->getParam('thresholdPercent')));
+                $settings->shopSettings->thresholdDays = max(1,intval($this->getRequest()->getParam('thresholdDays')));
                 $settings->shopSettings->save();
                 #--
                 $st = $db->query('SELECT * FROM suppliers LEFT JOIN dealer_suppliers ON suppliers.id = dealer_suppliers.supplierId AND dealerId=' . intval($dealerId));

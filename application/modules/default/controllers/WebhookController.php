@@ -48,9 +48,9 @@ class Default_WebhookController extends \Tangent\Controller\Action {
 
                 foreach ($order['line_items'] as $line_item) {
                     $rmsDeviceInstanceId = null;
-                    foreach ($line_item['properties'] as $key=>$property) {
-                        if ($key=='Device') {
-                            $e = explode('; ', $property);
+                    foreach ($line_item['properties'] as $property) {
+                        if ($property['name']=='Device') {
+                            $e = explode('; ', $property['value']);
                             if (!empty($e) && is_numeric($e[0])) {
                                 $rmsDeviceInstanceId = $e[0];
                             }
