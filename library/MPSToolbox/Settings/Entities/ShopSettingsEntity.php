@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
  * @property string supplyNotifyMessage2
  * @property string supplyNotifySubject3
  * @property string supplyNotifyMessage3
+ * @property int thresholdDays
+ * @property int thresholdPercent
  */
 class ShopSettingsEntity extends EloquentModel
 {

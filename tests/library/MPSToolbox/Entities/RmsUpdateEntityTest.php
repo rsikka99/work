@@ -2,7 +2,7 @@
 
 class RmsUpdateEntityTest extends My_DatabaseTestCase {
 
-    public $fixtures = ['clients','master_devices','rms_providers','rms_update','toners','device_toners'];
+    public $fixtures = ['clients','master_devices','rms_providers','rms_device_instances','rms_update','toners','device_toners'];
 
     public function test_load() {
         $result = \MPSToolbox\Entities\RmsUpdateEntity::find([
@@ -18,17 +18,17 @@ class RmsUpdateEntityTest extends My_DatabaseTestCase {
     public function test_needsToner() {
         /** @var \MPSToolbox\Entities\RmsUpdateEntity $device */
         $device = \MPSToolbox\Entities\RmsUpdateEntity::find([
-            'client'=>'185',
-            'assetId'=>'197027cf-98ed-4834-a6c7-8ed19ea6f0a8',
-            'ipAddress'=>'192.168.15.61',
-            'serialNumber'=>'CN44PGX0HP'
+            'rmsDeviceInstance'=>'393'
         ]);
 
         $meter=$device->getEndMeterBlack() - $device->getStartMeterBlack();
         $diff = date_diff($device->getMonitorStartDate(), $device->getMonitorEndDate());
 
         $daily = $meter/$diff->days;
-        $result = $device->needsToner(\MPSToolbox\Entities\TonerColorEntity::BLACK, $daily);
+        $settings = new \MPSToolbox\Settings\Entities\ShopSettingsEntity();
+        $settings->thresholdDays = 10;
+        $settings->thresholdPercent = 5;
+        $result = $device->needsToner(\MPSToolbox\Entities\TonerColorEntity::BLACK, $daily, $settings);
 
         $this->assertFalse($result);
 

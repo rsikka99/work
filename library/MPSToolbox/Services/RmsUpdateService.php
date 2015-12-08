@@ -595,7 +595,12 @@ HTML;
         $email->send();
     }
 
-    public function checkDevices($devices, $client) {
+    /**
+     * @param array $devices
+     * @param array $client
+     * @param ShopSettingsEntity $settings
+     */
+    public function checkDevices($devices, $client, $settings) {
         $sendEmail = false;
         foreach ($devices as $device) {
             /** @var RmsUpdateEntity $device */
@@ -608,22 +613,22 @@ HTML;
             $black_meter = $color_meter + ($device->getEndMeterBlack() - $device->getStartMeterBlack());
             $black_daily = $black_meter/$diff->days;
 
-            if ($device->needsToner(TonerColorEntity::BLACK, $black_daily)) {
+            if ($device->needsToner(TonerColorEntity::BLACK, $black_daily, $settings)) {
                 $sendEmail |= $this->deviceNeedsToner($device, $client, TonerColorEntity::BLACK);
             } else if ($device->getTonerLevelBlack()>5) {
                 $this->tonerMayBeReplaced($device, TonerColorEntity::BLACK);
             }
-            if ($device->needsToner(TonerColorEntity::MAGENTA, $color_daily)) {
+            if ($device->needsToner(TonerColorEntity::MAGENTA, $color_daily, $settings)) {
                 $sendEmail |= $this->deviceNeedsToner($device, $client, TonerColorEntity::MAGENTA);
             } else if ($device->getTonerLevelMagenta()>5) {
                 $this->tonerMayBeReplaced($device, TonerColorEntity::MAGENTA);
             }
-            if ($device->needsToner(TonerColorEntity::CYAN, $color_daily)) {
+            if ($device->needsToner(TonerColorEntity::CYAN, $color_daily, $settings)) {
                 $sendEmail |= $this->deviceNeedsToner($device, $client, TonerColorEntity::CYAN);
             } else if ($device->getTonerLevelCyan()>5) {
                 $this->tonerMayBeReplaced($device, TonerColorEntity::CYAN);
             }
-            if ($device->needsToner(TonerColorEntity::YELLOW, $color_daily)) {
+            if ($device->needsToner(TonerColorEntity::YELLOW, $color_daily, $settings)) {
                 $sendEmail |= $this->deviceNeedsToner($device, $client, TonerColorEntity::YELLOW);
             } else if ($device->getTonerLevelYellow()>5) {
                 $this->tonerMayBeReplaced($device, TonerColorEntity::YELLOW);

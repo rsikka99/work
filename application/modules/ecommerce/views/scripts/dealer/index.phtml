@@ -187,6 +187,34 @@ if (empty($shopSettings->supplyNotifyMessage3)) $shopSettings->supplyNotifyMessa
                     </div>
                 </div>
             </div>
+            <div class="col-sm-4">
+                <h3>Thresholds</h3>
+                <p>Email notification thresholds</p>
+            </div>
+            <div class="col-sm-8">
+                <div>
+                    <label>Send email when number of days before empty equals or lower than (default 10)</label>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <input class="form-control" type="number" min="1" max="999" step="1" name="thresholdDays" value="<?= $shopSettings->thresholdDays ?>">
+                                <span class="input-group-addon">days</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label>Toner is empty when level equals or below (default 5%)</label>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <input class="form-control" type="number" min="0" max="100" step="1" name="thresholdPercent" value="<?= $shopSettings->thresholdPercent ?>">
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <hr>
         <div class="row">

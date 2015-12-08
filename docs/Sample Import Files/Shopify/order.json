@@ -92,7 +92,7 @@
             "gift_card": false,
             "name": "Wire Cutter",
             "variant_inventory_management": null,
-            "properties": {"Device":"10203; abc"},
+            "properties": [{"name":"Device","value":"10203; abc"}],
             "product_exists": true,
             "fulfillable_quantity": 1,
             "total_discount": "5.00",

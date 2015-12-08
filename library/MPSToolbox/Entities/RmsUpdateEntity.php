@@ -1,6 +1,7 @@
 <?php
 
 namespace MPSToolbox\Entities;
+use MPSToolbox\Settings\Entities\ShopSettingsEntity;
 
 /**
  * Class RmsUpdateEntity
@@ -364,7 +365,13 @@ class RmsUpdateEntity extends BaseEntity {
     }
 
 
-    public function needsToner($forColor, $dailyPrintVolume) {
+    /**
+     * @param string $forColor
+     * @param int $dailyPrintVolume
+     * @param ShopSettingsEntity $shopSettings
+     * @return bool
+     */
+    public function needsToner($forColor, $dailyPrintVolume, $shopSettings) {
         if ($dailyPrintVolume<=0) return false;
 
         /** @var MasterDeviceEntity $masterDevice */
@@ -400,7 +407,7 @@ class RmsUpdateEntity extends BaseEntity {
         }
 
         if ($coverage<=0) $coverage=5;
-        if ($tonerLevel<5) {
+        if ($tonerLevel <= $shopSettings->thresholdPercent) {
             $this->daysLeft[$forColor] = 0;
             return true;
         }
@@ -427,7 +434,7 @@ class RmsUpdateEntity extends BaseEntity {
 
         printf("%s - tonerLevel:%s daysLeft:%s:%s <br>\n", $this->getRmsDeviceInstance()->getIpAddress(), $tonerLevel, $forColor, $this->daysLeft[$forColor]);
 
-        return $this->daysLeft[$forColor] < 10;
+        return $this->daysLeft[$forColor] <= $shopSettings->thresholdDays;
     }
 
 }
