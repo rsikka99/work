@@ -469,6 +469,10 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
             {
                 $whereClause["{$whereColumn} NOT LIKE ?"] = "%" . $filter->getFilterValue() . "%";
             }
+            elseif ($filter instanceof Filter\NotIn)
+            {
+                $whereClause["{$whereColumn} NOT in ({$filter->getFilterValue()})"] = null;
+            }
         }
 
         /*

@@ -41,14 +41,19 @@ $this->headScript()->appendFile($this->baseUrl('js/app/legacy/hardware-library/M
 
             <div class="checkbox">
                 <label>
-                    <input id="can-sell" type="checkbox"> Show only quotable SKUs
+                    <input id="can-sell" type="checkbox"> Quotable SKUs
                 </label>
             </div>
 
             <?php if ($this->isAdmin) : ?>
                 <div class="checkbox">
                     <label>
-                        <input id="unapproved" type="checkbox"> Show only unapproved devices
+                        <input id="unapproved" type="checkbox"> Unapproved devices
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input id="incomplete" type="checkbox"> Incomplete devices
                     </label>
                 </div>
             <?php endif; ?>

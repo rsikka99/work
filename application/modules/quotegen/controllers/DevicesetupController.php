@@ -50,6 +50,7 @@ class Quotegen_DevicesetupController extends Action
         $postData          = $this->getAllParams();
         $filterCanSell     = ($this->_getParam('filterCanSell', null) == 'true') ? true : false;
         $filterUnapproved  = ($this->_getParam('filterUnapproved', null) == 'true') ? true : false;
+        $filterIncomplete  = ($this->_getParam('filterIncomplete', null) == 'true') ? true : false;
         $filterSearchIndex = $this->_getParam('filterSearchIndex', null);
         $filterSearchValue = $this->_getParam('filterSearchValue', null);
         $columnFactory     = new \Tangent\Grid\Order\ColumnFactory([
@@ -75,6 +76,15 @@ class Quotegen_DevicesetupController extends Action
         if ($filterUnapproved)
         {
             $dataAdapter->addFilter(new \Tangent\Grid\Filter\IsNot('isSystemDevice', true));
+        }
+        if ($filterIncomplete)
+        {
+            $dataAdapter->addFilter(new \Tangent\Grid\Filter\NotIn('master_devices.id',
+'select master_device_id
+  from device_toners dt
+    join master_devices msub on dt.master_device_id=msub.id
+    join toners t on dt.toner_id=t.id and t.manufacturerId = msub.manufacturerId'
+            ));
         }
 
         /**

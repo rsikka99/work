@@ -140,7 +140,7 @@ class MasterDeviceDataAdapter implements DataAdapterInterface
      */
     public function count ()
     {
-        return $this->mapper->getCanSellMasterDevices($this->getOrderBy(), [], null, null, $this->onlyQuoteDevices, true);
+        return $this->mapper->getCanSellMasterDevices($this->getOrderBy(), $this->filters, null, null, $this->onlyQuoteDevices, true);
     }
 
     /**
@@ -150,7 +150,7 @@ class MasterDeviceDataAdapter implements DataAdapterInterface
      */
     public function countWithoutFilter ()
     {
-        return $this->mapper->getCanSellMasterDevices($this->getOrderBy(), $this->filters, null, null, $this->onlyQuoteDevices, true);
+        return $this->mapper->getCanSellMasterDevices($this->getOrderBy(), [], null, null, $this->onlyQuoteDevices, true);
     }
 
     /**

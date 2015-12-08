@@ -71,6 +71,7 @@ define([
          */
         this.gridId = 'AssignedTonersGrid' + this.instanceId;
         this.$grid = $(document.createElement('table'));
+        window.$tonersGrid = this.$grid;
         this.$grid.attr('id', this.gridId);
         this.$rootElement.append(this.$grid);
 
@@ -91,6 +92,9 @@ define([
             "rowNum"      : 50,
             "toppager"    : true,
             "postData"    : postData,
+            "ondblClickRow" : function() {
+                editRow();
+            },
             "gridComplete": function ()
             {
                 var grid = that.$grid.jqGrid();
@@ -381,3 +385,31 @@ define([
 
     return AssignedTonersGrid;
 });
+
+function editRow() {
+    var rowData = $tonersGrid.jqGrid('getGridParam', 'selrow');
+
+    if (rowData)
+    {
+        var data = $tonersGrid.jqGrid('getRowData', rowData);
+
+        require(['app/legacy/hardware-library/manage-devices/TonerForm'], function (TonerForm)
+        {
+            var tonerForm = new TonerForm({
+                isAllowed: isSaveAndApproveAdmin,
+                tonerId  : data.id
+            });
+
+            $(tonerForm).on('toner-form.saved', function (event, tonerId)
+            {
+                $tonersGrid.trigger('reloadGrid');
+            });
+
+            tonerForm.show();
+        });
+    }
+    else
+    {
+        $("#alertMessageModal").modal().show()
+    }
+}

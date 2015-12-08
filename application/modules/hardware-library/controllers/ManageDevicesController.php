@@ -351,13 +351,14 @@ class HardwareLibrary_ManageDevicesController extends Action
         $this->_helper->layout()->disableLayout();
         $masterDeviceId = $this->_getParam('masterDeviceId', false);
         $rmsUploadRowId = $this->_getParam('rmsUploadRowId', false);
+        $rmsDeviceInstanceId = $this->_getParam('rmsDeviceInstanceId', false);
 
         $masterDevice = MasterDeviceMapper::getInstance()->find($masterDeviceId);
         $isAllowed    = ((!$masterDevice instanceof MasterDeviceModel || !$masterDevice->isSystemDevice || $this->_isAdmin) ? true : false);
 
         $service = new ManageMasterDevicesService($masterDeviceId, $this->_identity->dealerId, ($rmsUploadRowId > 0 ? true : $isAllowed), $this->_isAdmin);
 
-        if ($rmsUploadRowId > 0)
+        if ($rmsUploadRowId)
         {
             $rmsUploadRow = RmsUploadRowMapper::getInstance()->find($rmsUploadRowId);
 
@@ -367,6 +368,17 @@ class HardwareLibrary_ManageDevicesController extends Action
 
                 $this->view->modelName      = $rmsUploadRow->modelName;
                 $this->view->manufacturerId = $rmsUploadRow->manufacturerId;
+            }
+        }
+        else if ($rmsDeviceInstanceId) {
+            /** @var \MPSToolbox\Entities\RmsDeviceInstanceEntity $rmsDeviceInstance */
+            $rmsDeviceInstance = \MPSToolbox\Entities\RmsDeviceInstanceEntity::find($rmsDeviceInstanceId);
+            if ($rmsDeviceInstance) {
+                $manufacturer = ManufacturerMapper::getInstance()->fetchByName($rmsDeviceInstance->getManufacturer());
+                $this->view->modelName      = $rmsDeviceInstance->getModelName();
+                if ($manufacturer) {
+                    $this->view->manufacturerId = $manufacturer->id;
+                }
             }
         }
         else if ($masterDevice instanceof MasterDeviceModel)
