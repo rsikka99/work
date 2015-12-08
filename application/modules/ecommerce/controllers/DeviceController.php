@@ -99,7 +99,7 @@ class Ecommerce_DeviceController extends Action
             $s = new \MPSToolbox\Services\RmsDeviceInstanceService();
             $incomplete = $s->getIncomplete($clientId);
 
-            $staleDate = strtotime('-7 DAY');
+            $staleDate = date('Y-m-d', strtotime('-7 DAY'));
 
             foreach ($st->fetchAll() as $line) {
                 if ($line['ignore']) {

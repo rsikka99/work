@@ -328,13 +328,7 @@ group by clientId
 
     public function tonerMayBeReplaced(RmsUpdateEntity $device, $colorId) {
         /** @var DeviceNeedsTonerEntity $deviceNeedsToner */
-        $deviceNeedsToner = DeviceNeedsTonerEntity::find([
-            'color'=>$colorId,
-            'client'=>$device->getRmsDeviceInstance()->getClient(),
-            'assetId'=>$device->getRmsDeviceInstance()->getAssetId(),
-            'ipAddress'=>$device->getRmsDeviceInstance()->getIpAddress(),
-            'serialNumber'=>$device->getRmsDeviceInstance()->getSerialNumber()
-        ]);
+        $deviceNeedsToner = DeviceNeedsTonerEntity::find(['color'=>$colorId, 'rmsDeviceInstance'=>$device->getRmsDeviceInstance()]);
         if (empty($deviceNeedsToner)) {
             return;
         }
@@ -406,10 +400,7 @@ group by clientId
         /** @var \MPSToolbox\Entities\DeviceNeedsTonerEntity $deviceNeedsToner */
         $deviceNeedsToner = \MPSToolbox\Entities\DeviceNeedsTonerEntity::find([
             'color'=>$colorId,
-            'client'=>$device->getRmsDeviceInstance()->getClient(),
-            'assetId'=>$device->getRmsDeviceInstance()->getAssetId(),
-            'ipAddress'=>$device->getRmsDeviceInstance()->getIpAddress(),
-            'serialNumber'=>$device->getRmsDeviceInstance()->getSerialNumber()
+            'rmsDeviceInstance'=>$device->getRmsDeviceInstance(),
         ]);
         if (empty($deviceNeedsToner)) {
             printf("NEW Device Needs Toner! %s <br>\n", $device->getRmsDeviceInstance()->getIpAddress());
@@ -427,7 +418,12 @@ group by clientId
             $deviceNeedsToner->setToner($toner);
             $result = true;
         } else {
-            printf("Device Needs Toner update %s <br>\n", $device->getRmsDeviceInstance()->getIpAddress());
+            if ($deviceNeedsToner->getShopifyOrder()) {
+                printf("Device Needs Toner update %s but toner has been ordered, order id: %s <br>\n", $device->getRmsDeviceInstance()->getIpAddress(), $deviceNeedsToner->getShopifyOrder());
+            } else {
+                $result = true;
+                printf("Device Needs Toner update %s <br>\n", $device->getRmsDeviceInstance()->getIpAddress());
+            }
         }
 
         $deviceNeedsToner->setDaysLeft($device->getDaysLeft($colorId));
@@ -600,7 +596,7 @@ HTML;
     }
 
     public function checkDevices($devices, $client) {
-        $newDeviceNeedsToner = false;
+        $sendEmail = false;
         foreach ($devices as $device) {
             /** @var RmsUpdateEntity $device */
 
@@ -613,29 +609,28 @@ HTML;
             $black_daily = $black_meter/$diff->days;
 
             if ($device->needsToner(TonerColorEntity::BLACK, $black_daily)) {
-                $this->deviceNeedsToner($device, $client, TonerColorEntity::BLACK);
+                $sendEmail |= $this->deviceNeedsToner($device, $client, TonerColorEntity::BLACK);
             } else if ($device->getTonerLevelBlack()>5) {
                 $this->tonerMayBeReplaced($device, TonerColorEntity::BLACK);
             }
-
             if ($device->needsToner(TonerColorEntity::MAGENTA, $color_daily)) {
-                $newDeviceNeedsToner |= $this->deviceNeedsToner($device, $client, TonerColorEntity::MAGENTA);
+                $sendEmail |= $this->deviceNeedsToner($device, $client, TonerColorEntity::MAGENTA);
             } else if ($device->getTonerLevelMagenta()>5) {
                 $this->tonerMayBeReplaced($device, TonerColorEntity::MAGENTA);
             }
             if ($device->needsToner(TonerColorEntity::CYAN, $color_daily)) {
-                $newDeviceNeedsToner |= $this->deviceNeedsToner($device, $client, TonerColorEntity::CYAN);
+                $sendEmail |= $this->deviceNeedsToner($device, $client, TonerColorEntity::CYAN);
             } else if ($device->getTonerLevelCyan()>5) {
                 $this->tonerMayBeReplaced($device, TonerColorEntity::CYAN);
             }
             if ($device->needsToner(TonerColorEntity::YELLOW, $color_daily)) {
-                $newDeviceNeedsToner |= $this->deviceNeedsToner($device, $client, TonerColorEntity::YELLOW);
+                $sendEmail |= $this->deviceNeedsToner($device, $client, TonerColorEntity::YELLOW);
             } else if ($device->getTonerLevelYellow()>5) {
                 $this->tonerMayBeReplaced($device, TonerColorEntity::YELLOW);
             }
         }
 
-        if ($newDeviceNeedsToner) {
+        if ($sendEmail) {
             printf('sending email...');
             $this->sendEmail($client);
         }
