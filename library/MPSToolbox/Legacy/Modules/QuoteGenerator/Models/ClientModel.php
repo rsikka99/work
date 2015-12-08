@@ -64,7 +64,7 @@ class ClientModel extends My_Model_Abstract
     protected $survey;
 
     /** @var  int */
-    protected $webId;
+    public $webId;
 
     /** @var  string */
     public $notSupportedMasterDevices;

@@ -30,7 +30,8 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
         'dealer_settings',
         'client_settings',
         'dealer_branding',
-        'contacts'
+        'contacts',
+        'dealer_toner_attributes'
     ];
 
     public function test_replaceRmsUpdate() {
@@ -559,8 +560,11 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
     }
 
     public function test_tonerMayBeReplaced() {
+        $user = \MPSToolbox\Legacy\Mappers\UserMapper::getInstance()->find(2);
+        Zend_Auth::getInstance()->getStorage()->write($user);
+
         $service = new \MPSToolbox\Services\RmsUpdateService();
-        $device = new \MPSToolbox\Entities\RmsUpdateEntity();
+
         $instance = new \MPSToolbox\Entities\RmsDeviceInstanceEntity();
         $instance->setClient(\MPSToolbox\Entities\ClientEntity::find(5));
         $instance->setAssetId('123');
@@ -568,17 +572,21 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
         $instance->setSerialNumber('321');
         $instance->setLocation('here and there');
         $instance->setMasterDevice(\MPSToolbox\Entities\MasterDeviceEntity::find(1));
+        $instance->save();
 
+        $device = new \MPSToolbox\Entities\RmsUpdateEntity();
         $device->setRmsDeviceInstance($instance);
-        $device->setTonerLevelBlack(34);
+        $device->setTonerLevelBlack(4);
+        $device->setRmsProviderId(6);
         $device->setDaysLeft([\MPSToolbox\Entities\TonerColorEntity::BLACK=>4]);
+        $device->save();
+
         $client = ['clientId'=>5, 'dealerId'=>1, 'templateNum'=>1, 'ecomMonochromeRank'=>'3,43,46', 'ecomColorRank'=>'3,43,46'];
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::BLACK);
 
         $device->setTonerLevelBlack(99);
         $service->tonerMayBeReplaced($device, \MPSToolbox\Entities\TonerColorEntity::BLACK);
     }
-
 
     public function test_sendEmail() {
         $service = new \MPSToolbox\Services\RmsUpdateService();

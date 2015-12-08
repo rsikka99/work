@@ -245,6 +245,17 @@ class DealerTonerAttributeMapper extends My_Model_Mapper_Abstract
     }
 
     /**
+     * @param $tonerId  int
+     * @param $dealerId int
+     *
+     * @return DealerTonerAttributeModel
+     */
+    public function findTonerAttributeByWebId ($webId)
+    {
+        return $this->fetch(["`webId` = ?" => $webId]);
+    }
+
+    /**
      * @param DealerTonerAttributeModel $object
      *
      * @return int

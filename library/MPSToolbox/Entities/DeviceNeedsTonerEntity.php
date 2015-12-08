@@ -11,6 +11,7 @@ namespace MPSToolbox\Entities;
 class DeviceNeedsTonerEntity extends BaseEntity {
 
     /**
+     * @id
      * @ManyToOne(targetEntity="RmsDeviceInstanceEntity")
      * @JoinColumn(name="rmsDeviceInstanceId", referencedColumnName="id")
      */
@@ -24,17 +25,16 @@ class DeviceNeedsTonerEntity extends BaseEntity {
     private $color;
 
     /**
-     * @Id
      * @ManyToOne(targetEntity="ClientEntity")
      * @JoinColumn(name="clientId", referencedColumnName="id")
      */
     private $client;
 
-    /** @Id @Column(type="string") */
+    /** @Column(type="string") */
     private $assetId;
-    /** @Id @Column(type="string") */
+    /** @Column(type="string") */
     private $ipAddress;
-    /** @Id @Column(type="string") */
+    /** @Column(type="string") */
     private $serialNumber;
 
     /**
@@ -62,6 +62,9 @@ class DeviceNeedsTonerEntity extends BaseEntity {
 
     /** @Column(type="string") */
     private $tonerOptions;
+
+    /** @Column(type="integer") */
+    private $shopify_order;
 
     /**
      * @return mixed
@@ -271,6 +274,24 @@ class DeviceNeedsTonerEntity extends BaseEntity {
     {
         $this->masterDevice = $masterDevice;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getShopifyOrder()
+    {
+        return $this->shopify_order;
+    }
+
+    /**
+     * @param mixed $shopify_order
+     */
+    public function setShopifyOrder($shopify_order)
+    {
+        $this->shopify_order = $shopify_order;
+    }
+
+
 
     public static function getByClient(ClientEntity $client) {
         $query = self::em()->createQuery("SELECT d FROM \MPSToolbox\Entities\DeviceNeedsTonerEntity d WHERE d.client = :client");
