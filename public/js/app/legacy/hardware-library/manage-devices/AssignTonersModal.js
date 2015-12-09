@@ -285,7 +285,7 @@ define([
 { width: 213, name: 'manufacturer',               index: 'manufacturer',               label: 'Manufacturer',                                         sortable: true  },
 { width: 250, name: 'device_list',                index: 'device_list',                label: 'Machine Compatibility'                                                 },
 { width: 60,  name: 'yield',                      index: 'yield',                      label: 'Yield',                               align: 'right',  sortable: true  },
-{ width: 100, name: 'costModified',               index: 'dealerCost',                 label: 'Cost<br/>(System Cost)',              align: 'right',  sortable: true  },
+{ width: 100, name: 'costModified',               index: 'dealerCost',                 label: 'Your Cost',                           align: 'right',  sortable: true  },
 { width: 80,  name: 'action',                     index: 'action',                     label: 'Action',                              align: 'center', sortable: false }
 //@formatter:on
                 ],
@@ -299,10 +299,7 @@ define([
                         var currentRowId = ids[i];
                         var currentRow = grid.getRowData(currentRowId);
 
-                        currentRow.costModified = Template.jqGrid.tonerCost({
-                            dealerCost: (currentRow.dealerCost == '') ? "-" : accounting.formatMoney(currentRow.dealerCost),
-                            systemCost: accounting.formatMoney(currentRow.systemCost)
-                        });
+                        currentRow.costModified = (currentRow.dealerCost == '') ? "-" : accounting.formatMoney(currentRow.dealerCost);
 
                         currentRow.skuModified = Template.jqGrid.tonerSku({
                             dealerSku: (currentRow.dealerSku == '') ? "-" : currentRow.dealerSku,

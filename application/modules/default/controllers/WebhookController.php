@@ -57,7 +57,7 @@ class Default_WebhookController extends \Tangent\Controller\Action {
                         }
                     }
                     if ($rmsDeviceInstanceId) {
-                        $attr = \MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DealerTonerAttributeMapper::getInstance()->findTonerAttributeByWebId($line_item['id']);
+                        $attr = \MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DealerTonerAttributeMapper::getInstance()->findTonerAttributeByWebId($line_item['product_id']);
                         if ($attr) {
                             $st = $db->prepare('update device_needs_toner set shopify_order=:shopify_order where rmsDeviceInstanceId=:rmsDeviceInstanceId and toner=:toner');
                             $st->execute(['shopify_order'=>$order['id'], 'rmsDeviceInstanceId'=>$rmsDeviceInstanceId, 'toner'=>$attr->tonerId]);
