@@ -110,10 +110,7 @@ define([
 
                     that.tonerList.push(parseInt(currentRow.id));
 
-                    currentRow.costModified = Template.jqGrid.tonerCost({
-                        dealerCost: (currentRow.dealerCost == '') ? "-" : accounting.formatMoney(currentRow.dealerCost),
-                        systemCost: accounting.formatMoney(currentRow.systemCost)
-                    });
+                    currentRow.costModified = (currentRow.dealerCost == '') ? '<div style="width:100%;text-align:center"><i class="fa fa-fw fa-warning text-'+(currentRow.is_oem?'danger':'warning')+'" title="No cost assigned"></i></div>' : accounting.formatMoney(currentRow.dealerCost);
 
                     currentRow.skuModified = Template.jqGrid.tonerSku({
                         dealerSku: (currentRow.dealerSku == '') ? "-" : currentRow.dealerSku,
@@ -364,6 +361,7 @@ define([
 //@formatter:off
 { width: 30,  name: 'id',                         index: 'id',                         label: 'Id',                                  hidden: true                     },
 { width: 30,  name: 'is_added',                   index: 'is_added',                   label: 'is_added',                            hidden: true                     },
+{ width: 30,  name: 'is_oem',                     index: 'is_oem',                     label: 'is_oem',                              hidden: true                     },
 { width: 30,  name: 'isSystemDevice',             index: 'isSystemDevice',             label: 'isSystemDevice',                      hidden: true                     },
 { width: 30,  name: 'deviceTonersIsSystemDevice', index: 'deviceTonersIsSystemDevice', label: 'deviceTonersIsSystemDevice',          hidden: true                     },
 { width: 40,  name: 'tonerColorId',               index: 'tonerColorId',               label: 'Color',                               hidden: true                     },
@@ -378,7 +376,7 @@ define([
 { width: 233, name: 'manufacturer',               index: 'manufacturer',               label: 'Manufacturer',                                         sortable: true  },
 { width: 250, name: 'device_list',                index: 'device_list',                label: 'Machine Compatibility'                                                 },
 { width: 60,  name: 'yield',                      index: 'yield',                      label: 'Yield',                               align: 'right',  sortable: true  },
-{ width: 100, name: 'costModified',               index: 'dealerCost',                 label: 'Cost<br/>(System Cost)',              align: 'right'                   },
+{ width: 100, name: 'costModified',               index: 'dealerCost',                 label: 'Your Cost',              align: 'right'                   },
 { width: 80,  name: 'action',                     index: 'action',                     label: 'Action',                              align: 'center', sortable: false }
 //@formatter:on
     ];

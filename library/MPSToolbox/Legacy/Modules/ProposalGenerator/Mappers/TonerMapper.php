@@ -423,6 +423,7 @@ WHERE `device_toners`.`master_device_id` = ?';
         $sql = "
 SELECT
     toners.id                           AS id,
+    t2.id                               AS is_oem,
     toners.isSystemDevice               AS isSystemDevice,
     manufacturers.id                    AS manufacturerId,
     manufacturers.fullname              AS manufacturer,
@@ -430,6 +431,7 @@ SELECT
     dealer_toner_attributes.dealerSku   AS dealerSku,
     toners.cost                         AS systemCost,
     dealer_toner_attributes.cost        AS dealerCost,
+    ingram_prices.customer_price        AS ingramPrice,
     toners.yield,
     toners.tonerColorId,
     device_toners.isSystemDevice       AS deviceTonersIsSystemDevice,
@@ -439,10 +441,13 @@ SELECT
          LEFT JOIN manufacturers ON manufacturers.id = master_devices.manufacturerId
      WHERE dt2.toner_id = device_toners.toner_id) AS device_list
 FROM `toners`
+    left join `toners` t2 on toners.id=t2.id and t2.manufacturerId in (select manufacturerId from master_devices)
     LEFT JOIN `device_toners` ON `device_toners`.`toner_id` = `toners`.`id`
     LEFT JOIN `toner_colors` ON `toner_colors`.`id` = `toners`.`tonerColorId`
     LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `toners`.`manufacturerId`
     LEFT JOIN dealer_toner_attributes ON (dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId})
+    left join ingram_products on ingram_products.tonerId = `toners`.`id`
+    left join ingram_prices on ingram_products.ingram_part_number = ingram_prices.ingram_part_number and ingram_prices.dealerId = {$dealerId}
 WHERE {$and} `device_toners`.`master_device_id` = ?";
         $sql = $db->quoteInto($sql, $masterDeviceId);
 
@@ -451,6 +456,14 @@ WHERE {$and} `device_toners`.`master_device_id` = ?";
         $arr = $query->fetchAll();
         if ($justCount) {
             return count($arr);
+        }
+
+        foreach ($arr as $i=>$line) {
+            if ($line['ingramPrice']) {
+                if (!$line['dealerCost'] || ($line['ingramPrice']<$line['dealerCost'])) {
+                    $arr[$i]['dealerCost'] = $line['ingramPrice'];
+                }
+            }
         }
 
         return $arr;
@@ -614,11 +627,22 @@ FROM toners
         return $result;
     }
 
+    /**
+     * @param null $orders
+     * @param int $count
+     * @param int $offset
+     * @param bool $filterManufacturerId
+     * @param bool $filterTonerSku
+     * @param bool $filterTonerColorId
+     * @return array
+     *
+     */
     public function fetchTonersForDealer($orders = null, $count = 25, $offset = 0, $filterManufacturerId = false, $filterTonerSku = false, $filterTonerColorId = false) {
         $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         $db       = $this->getDbTable()->getAdapter();
         $sql      = "SELECT
     toners.id                           AS id,
+    t2.id                               AS is_oem,
     toners.isSystemDevice               AS isSystemDevice,
     manufacturers.id                    AS manufacturerId,
     manufacturers.fullname              AS manufacturer,
@@ -627,6 +651,7 @@ FROM toners
     toners.name                         AS toner_name,
     toners.cost                         AS systemCost,
     dealer_toner_attributes.cost        AS dealerCost,
+    ingram_prices.customer_price        AS ingramPrice,
     toners.yield,
     toners.tonerColorId,
     (SELECT
@@ -636,8 +661,11 @@ FROM toners
          LEFT JOIN manufacturers ON manufacturers.id = master_devices.manufacturerId
      WHERE device_toners.toner_id = toners.id) AS device_list
 FROM toners
+    left join `toners` t2 on toners.id=t2.id and t2.manufacturerId in (select manufacturerId from master_devices)
     LEFT JOIN manufacturers ON manufacturers.id = toners.manufacturerId
     LEFT JOIN dealer_toner_attributes ON (dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId})
+    left join ingram_products on ingram_products.tonerId = `toners`.`id`
+    left join ingram_prices on ingram_products.ingram_part_number = ingram_prices.ingram_part_number and ingram_prices.dealerId = {$dealerId}
     where (toners.manufacturerId in (select manufacturerId from dealer_toner_vendors where dealer_toner_vendors.dealerId = {$dealerId}) or toners.manufacturerId in (select manufacturerId from master_devices))
 ";
 #--LEFT JOIN toner_vendor_manufacturers ON toner_vendor_manufacturers.manufacturerId = toners.manufacturerId
@@ -682,9 +710,17 @@ FROM toners
         }
 
         $stmt   = $db->query($sql);
-        $result = $stmt->fetchAll();
+        $arr = $stmt->fetchAll();
 
-        return $result;
+        foreach ($arr as $i=>$line) {
+            if ($line['ingramPrice']) {
+                if (!$line['dealerCost'] || ($line['ingramPrice']<$line['dealerCost'])) {
+                    $arr[$i]['dealerCost'] = $line['ingramPrice'];
+                }
+            }
+        }
+
+        return $arr;
     }
 
     /**
@@ -795,6 +831,7 @@ FROM toners
 
         $sql = "SELECT
             toners.id                          AS id,
+            t2.id                              AS is_oem,
             toners.isSystemDevice              AS isSystemDevice,
             manufacturers.fullname             AS manufacturer,
             toners.manufacturerId              AS manufacturerId,
@@ -802,6 +839,7 @@ FROM toners
             dealer_toner_attributes.dealerSku  AS dealerSku,
             toners.cost                        AS systemCost,
             dealer_toner_attributes.cost       AS dealerCost,
+            ingram_prices.customer_price       AS ingramPrice,
             toners.yield,
             toners.tonerColorId,
             dt3.isSystemDevice                  AS deviceTonersIsSystemDevice,
@@ -813,11 +851,14 @@ FROM toners
          LEFT JOIN manufacturers ON manufacturers.id = master_devices.manufacturerId
      WHERE dt2.toner_id = dt1.toner_id) AS device_list
 FROM `toners`
+    left join `toners` t2 on toners.id=t2.id and t2.manufacturerId in (select manufacturerId from master_devices)
     LEFT JOIN device_toners dt1 ON toners.id = dt1.toner_id
     LEFT JOIN device_toners dt3 ON toners.id = dt3.toner_id AND dt3.master_device_id = {$masterDeviceId}
     LEFT JOIN `toner_colors` ON `toner_colors`.`id` = `toners`.`tonerColorId`
     LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `toners`.`manufacturerId`
     LEFT JOIN dealer_toner_attributes ON dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId}
+    left join ingram_products on ingram_products.tonerId = `toners`.`id`
+    left join ingram_prices on ingram_products.ingram_part_number = ingram_prices.ingram_part_number and ingram_prices.dealerId = {$dealerId}
 WHERE `toners`.`id` IN ({$tonerIdList})
                 GROUP BY id";
 
@@ -828,12 +869,20 @@ WHERE `toners`.`id` IN ({$tonerIdList})
 
         $query = $db->query($sql);
 
+        $arr = $query->fetchAll();
         if ($justCount)
         {
-            return count($query->fetchAll());
+            return count($arr);
         }
 
-        return $query->fetchAll();
+        foreach ($arr as $i=>$line) {
+            if ($line['ingramPrice']) {
+                if (!$line['dealerCost'] || ($line['ingramPrice']<$line['dealerCost'])) {
+                    $arr[$i]['dealerCost'] = $line['ingramPrice'];
+                }
+            }
+        }
+        return $arr;
     }
 
     /**

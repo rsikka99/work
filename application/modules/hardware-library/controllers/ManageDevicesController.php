@@ -157,13 +157,10 @@ class HardwareLibrary_ManageDevicesController extends Action
     }
 
     /**
-     * Gets a list of all the available toners for a specific master device
+     * Gets a list of all the available toners
      */
     public function availableTonersListAction ()
     {
-        $masterDeviceId     = $this->_getParam('masterDeviceId', false);
-        $tonerColorConfigId = $this->_getParam('tonerColorConfigId', false);
-
         $filterManufacturerId = $this->_getParam('filterManufacturerId', false);
         $filterTonerSku       = $this->_getParam('filterTonerSku', false);
         $filterTonerColorId   = $this->_getParam('filterTonerColorId', false);
@@ -194,31 +191,8 @@ class HardwareLibrary_ManageDevicesController extends Action
         if ($jqGridService->sortingIsValid())
         {
 
-            if ($tonerColorConfigId)
-            {
-                $jqGridService->setRecordCount(count($tonerMapper->fetchTonersWithMachineCompatibilityUsingColorConfigId(
-                    $tonerColorConfigId,
-                    null,
-                    10000,
-                    0,
-                    $filterManufacturerId,
-                    $filterTonerSku,
-                    $filterTonerColorId,
-                    $masterDeviceId
-                )));
-            }
-            else
-            {
-                $jqGridService->setRecordCount(count($tonerMapper->fetchTonersWithMachineCompatibilityUsingColorId(
-                    null,
-                    10000,
-                    0,
-                    $filterManufacturerId,
-                    $filterTonerSku,
-                    $filterTonerColorId,
-                    $masterDeviceId
-                )));
-            }
+            $arr = $tonerMapper->fetchTonersForDealer(null,1000,0,$filterManufacturerId,$filterTonerSku,$filterTonerColorId);
+            $jqGridService->setRecordCount(count($arr));
 
             // Validate current page number since we don't want to be out of bounds
             if ($jqGridService->getCurrentPage() < 1)
@@ -255,32 +229,14 @@ class HardwareLibrary_ManageDevicesController extends Action
                 $sortOrder[] = $jqGridService->getSortColumn() . ' ' . $jqGridService->getSortDirection();
             }
 
-            if ($tonerColorConfigId)
-            {
-                $jqGridService->setRows($tonerMapper->fetchTonersWithMachineCompatibilityUsingColorConfigId(
-                    $tonerColorConfigId,
-                    $sortOrder,
-                    $jqGridService->getRecordsPerPage(),
-                    $startRecord,
-                    $filterManufacturerId,
-                    $filterTonerSku,
-                    $filterTonerColorId,
-                    $masterDeviceId
-                ));
-            }
-            else
-            {
-                $jqGridService->setRows($tonerMapper->fetchTonersWithMachineCompatibilityUsingColorId(
-                    $sortOrder,
-                    $jqGridService->getRecordsPerPage(),
-                    $startRecord,
-                    $filterManufacturerId,
-                    $filterTonerSku,
-                    $filterTonerColorId,
-                    $masterDeviceId
-                ));
-
-            }
+            $jqGridService->setRows($tonerMapper->fetchTonersForDealer(
+                $sortOrder,
+                $jqGridService->getRecordsPerPage(),
+                $startRecord,
+                $filterManufacturerId,
+                $filterTonerSku,
+                $filterTonerColorId
+            ));
 
             // Send back jqGrid JSON data
             $this->sendJson($jqGridService->createPagerResponseArray());

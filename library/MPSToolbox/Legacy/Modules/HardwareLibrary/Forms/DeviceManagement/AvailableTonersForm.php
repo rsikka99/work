@@ -198,10 +198,6 @@ class AvailableTonersForm extends \My_Form_Form
             'label'      => 'Weight (KG)',
             'required'   => false,
             'validators' => [
-                [
-                    'validator' => 'greaterThan',
-                    'options'   => ['min' => 0]
-                ],
                 'Float'
             ],
             'disabled' => !$this->_isAllowedToEditFields,
