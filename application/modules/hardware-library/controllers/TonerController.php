@@ -62,14 +62,16 @@ class HardwareLibrary_TonerController extends Action
         $form = new AvailableTonersForm($dealerId, $toner, null, $isAllowed);;
         $form->distributors=[];
         #--
-        $attr = $toner->getDealerTonerAttribute($dealerId);
-        if ($attr->cost) {
-            $form->distributors[] = [
-                'name'=>$attr->distributor?$attr->distributor:$dealer->dealerName,
-                'sku'=>$attr->dealerSku,
-                'price'=>$attr->cost,
-                'stock'=>'',
-            ];
+        if ($toner) {
+            $attr = $toner->getDealerTonerAttribute($dealerId);
+            if ($attr->cost) {
+                $form->distributors[] = [
+                    'name' => $attr->distributor ? $attr->distributor : $dealer->dealerName,
+                    'sku' => $attr->dealerSku,
+                    'price' => $attr->cost,
+                    'stock' => '',
+                ];
+            }
         }
         #--
         $st = Zend_Db_Table::getDefaultAdapter()->prepare('select * from ingram_products p join ingram_prices c using (ingram_part_number) where tonerId=:tonerId');
