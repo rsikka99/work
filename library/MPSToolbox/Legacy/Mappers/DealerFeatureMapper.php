@@ -255,6 +255,7 @@ class DealerFeatureMapper extends My_Model_Mapper_Abstract
     public function fetchFeatureListForDealer ($dealerId = null)
     {
         if (!$dealerId) $dealerId = DealerEntity::getDealerId();
+        if (!$dealerId) return [];
         return $this->fetchAll(["{$this->col_dealerId} = ?" => $dealerId]);
     }
 }
