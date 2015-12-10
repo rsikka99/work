@@ -256,6 +256,9 @@ $r->addRoute('api.computers.grid-list', new R('api/v1/computers/grid-list',     
 $r->addRoute('api.peripherals',           new R('api/v1/peripherals/:deviceId',        ['module' => 'api', 'controller' => 'peripherals', 'action' => 'index', 'deviceId' => false]));
 $r->addRoute('api.peripherals.grid-list', new R('api/v1/peripherals/grid-list',        ['module' => 'api', 'controller' => 'peripherals', 'action' => 'grid-list']));
 
+$r->addRoute('api.services',           new R('api/v1/services/:deviceId',        ['module' => 'api', 'controller' => 'services', 'action' => 'index', 'deviceId' => false]));
+$r->addRoute('api.services.grid-list', new R('api/v1/services/grid-list',        ['module' => 'api', 'controller' => 'services', 'action' => 'grid-list']));
+
 $r->addRoute('api.rms',                     new R('api/v1/rms/:rmsId',                   ['module' => 'api', 'controller' => 'rms', 'action' => 'index', 'rmsId' => false]));
 $r->addRoute('api.rms.printaudit-push',     new R('api/v1/rms/printaudit/:clientId',     ['module' => 'api', 'controller' => 'rms', 'action' => 'printaudit-push', 'clientId' => false]));
 
@@ -275,6 +278,7 @@ $r->addRoute('api.countries.country',   new R('api/v1/countries/:countryId',   [
 $r->addRoute('hardware-library.all-devices',                new R('hardware-library/all-devices',                    ['module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index'                      ]));
 $r->addRoute('hardware-library.computers',                  new R('hardware-library/computers',                      ['module' => 'hardware-library', 'controller' => 'computers', 'action' => 'index'                      ]));
 $r->addRoute('hardware-library.peripherals',                new R('hardware-library/peripherals',                    ['module' => 'hardware-library', 'controller' => 'peripherals', 'action' => 'index'                      ]));
+$r->addRoute('hardware-library.services',                   new R('hardware-library/services',                    ['module' => 'hardware-library', 'controller' => 'services', 'action' => 'index'                      ]));
 
 // TODO kmccully: blank page
 $r->addRoute('hardware-library.all-devices.create',         new R('hardware-library/all-devices/create',             ['module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'create'                     ]));

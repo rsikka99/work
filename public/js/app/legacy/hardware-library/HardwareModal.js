@@ -81,7 +81,7 @@ define([
         "loadForms"               : "/hardware-library/"+window.hardware_type+"/load-forms",
         "delete"                  : "/hardware-library/"+window.hardware_type+"/delete",
         "availableOptions"        : "/hardware-library/options",
-        "sauron"                  : "/hardware-library/sauron",
+        "sauron"                  : "/hardware-library/sauron"
     };
 
     HardwareModal.prototype.show = function ()
@@ -212,13 +212,6 @@ define([
                  */
                 $('#' + formName.substr(0, formName.length - 4) + 'Modal').modal('hide');
                 clearErrors();
-
-                /**
-                 * Reload our grid
-                 */
-                $("#" + formName.substr(0, formName.length - 4)).trigger('reloadGrid');
-
-                $("#availableTonersForm").trigger("createTonerSuccess", xhr.id);
             },
             error   : function (xhr)
             {
@@ -280,7 +273,7 @@ define([
                 }
 
                 var hardwareManagement = $("#hardwareManagement");
-                $(window).trigger("hardwareSaveSuccess", [hardwareModalInstance.hardwareId]);
+                $(window).trigger("hardwareSaveSuccess", hardwareModalInstance.hardwareId);
             },
             error   : function (xhr)
             {

@@ -31,6 +31,10 @@ abstract class Hardware_Action extends Action
         $this->view->isAdmin = $this->isAdmin;
     }
 
+    protected function getForms($hardwareService) {
+        return $hardwareService->getForms();
+    }
+
     public function loadFormsAction ()
     {
         // image upload
@@ -75,7 +79,7 @@ abstract class Hardware_Action extends Action
         }
         $this->view->categories     = $this->hardware_categories;
 
-        $forms = $service->getForms();
+        $forms = $this->getForms($service);
 
         foreach ($forms as $formName => $form) {
             $this->view->$formName = $form;
@@ -115,7 +119,7 @@ abstract class Hardware_Action extends Action
             $isAllowed                 = ((!$hardware->getId() || !$hardware->isSystemDevice || $this->isAdmin) ? true : false);
             $service = new HardwareService($hardware, $this->identity->dealerId, $isAllowed, $this->isAdmin, $this->hardware_type);
 
-            $forms                      = $service->getForms();
+            $forms = $this->getForms($service);
             $modelAndManufacturerErrors = [];
             $formErrors                 = null;
 

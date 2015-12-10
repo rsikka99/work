@@ -1,5 +1,8 @@
 <?php
+
 $applicationTimeStarted = microtime(true);
+
+ini_set("auto_detect_line_endings", true);
 
 defined('APPLICATION_BASE_PATH') || define('APPLICATION_BASE_PATH', realpath(dirname(__FILE__) . '/..'));
 
