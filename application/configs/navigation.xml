@@ -395,6 +395,11 @@
                     <route>hardware-library.peripherals</route>
                     <resource>hardware-library__peripherals__index</resource>
                 </peripherals>
+                <services>
+                    <label>Services</label>
+                    <route>hardware-library.services</route>
+                    <resource>hardware-library__services__index</resource>
+                </services>
                 <alldevices>
                     <label>All Devices</label>
                     <route>hardware-library.devices</route>

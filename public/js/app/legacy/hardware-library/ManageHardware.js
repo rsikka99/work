@@ -39,9 +39,12 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
                 }
             });
 
-            $(createModal).on('HardwareModal.saved', function ()
+            $(window).on('hardwareSaveSuccess', function (event, hardwareId)
             {
                 $hardwareListGrid.trigger("reloadGrid");
+                if (window.sync_to_shopify) {
+                    sync_shopify(hardwareId, window.sync_to_shopify);
+                }
             });
 
             createModal.show();
@@ -71,6 +74,9 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
             $(window).on('hardwareSaveSuccess', function ()
             {
                 $hardwareListGrid.trigger("reloadGrid");
+                if (window.sync_to_shopify) {
+                    sync_shopify(hardwareId, window.sync_to_shopify);
+                }
             });
 
             editModal.show();
