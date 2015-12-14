@@ -67,9 +67,6 @@ class ClientModel extends My_Model_Abstract
     public $webId;
 
     /** @var  string */
-    public $notSupportedMasterDevices;
-
-    /** @var  string */
     public $deviceGroup;
 
     /** @var  string */
@@ -132,11 +129,6 @@ class ClientModel extends My_Model_Abstract
             $this->webId = $params->webId;
         }
 
-        if (isset($params->notSupportedMasterDevices) && !is_null($params->notSupportedMasterDevices))
-        {
-            if (is_array($params->notSupportedMasterDevices)) $params->notSupportedMasterDevices = trim(str_replace(',,',',',implode(',', $params->notSupportedMasterDevices)),',');
-            $this->notSupportedMasterDevices = $params->notSupportedMasterDevices;
-        }
         if (isset($params->deviceGroup) && !is_null($params->deviceGroup))
         {
             $this->deviceGroup = $params->deviceGroup;
@@ -178,7 +170,6 @@ class ClientModel extends My_Model_Abstract
             "legalName"     => $this->legalName,
             "employeeCount" => $this->employeeCount,
             "webId" => $this->webId,
-            "notSupportedMasterDevices" => $this->notSupportedMasterDevices,
             "deviceGroup" => $this->deviceGroup,
             "priceLevelId" => $this->priceLevelId,
             "transactionType" => $this->transactionType,

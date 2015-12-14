@@ -123,8 +123,18 @@ foreach($this->clients as $client) {
                 reloadMe();
             }, 'json');
         }
+        function ignoreSingle(id) {
+            $.post('/ecommerce/device/ajax-ignore-single', {client:<?= $selectedClient->id ?>, instance:id}, function(response) {
+                reloadMe();
+            }, 'json');
+        }
         function unignore(id) {
             $.post('/ecommerce/device/ajax-ignore', {client:<?= $selectedClient->id ?>, instance:id, reverse:true}, function(response) {
+                reloadMe();
+            }, 'json');
+        }
+        function unignoreSingle(id) {
+            $.post('/ecommerce/device/ajax-ignore-single', {client:<?= $selectedClient->id ?>, instance:id, reverse:true}, function(response) {
                 reloadMe();
             }, 'json');
         }
@@ -170,6 +180,11 @@ foreach($this->clients as $client) {
             });
         }
         require(['jquery','datatables', 'datatables.bootstrap'], function ($) {
+
+            require(['bootstrap.contextmenu'], function() {
+
+            });
+
             window.dt_table = $('#my-table').DataTable({
                 "columns": [
                     {data: 'icon'},
@@ -184,7 +199,10 @@ foreach($this->clients as $client) {
                     "url": "/ecommerce/device/ajax-table?client=<?= $selectedClient->id ?>"
                 },
                 "pageLength": 100
+            }).on( 'draw.dt', function () {
+                $('.context').contextMenu({});
             });
+
         });
 
     </script>

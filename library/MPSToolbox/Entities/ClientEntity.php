@@ -39,9 +39,6 @@ class ClientEntity extends BaseEntity {
     private $webId;
 
     /** @Column(type="string") */
-    private $notSupportedMasterDevices;
-
-    /** @Column(type="string") */
     private $deviceGroup;
 
     /**
@@ -154,22 +151,6 @@ class ClientEntity extends BaseEntity {
     public function setWebId($webId)
     {
         $this->webId = $webId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getNotSupportedMasterDevices()
-    {
-        return $this->notSupportedMasterDevices;
-    }
-
-    /**
-     * @param mixed $notSupportedMasterDevices
-     */
-    public function setNotSupportedMasterDevices($notSupportedMasterDevices)
-    {
-        $this->notSupportedMasterDevices = $notSupportedMasterDevices;
     }
 
     /**

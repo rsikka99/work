@@ -81,6 +81,12 @@ class RmsUpdateService {
         return $result;
     }
 
+    /**
+     * @param $clientId
+     * @param $rmsUri
+     * @param $groupId
+     * @return RmsUpdateEntity[]
+     */
     public function update($clientId, $rmsUri, $groupId) {
         if (empty($groupId)) {
             throw new \InvalidArgumentException('$groupId is empty');
@@ -109,7 +115,6 @@ class RmsUpdateService {
 
         /** @var ClientEntity $client */
         $client = ClientEntity::find($clientId);
-        $ignoreMasterDevices = explode(',',$client->getNotSupportedMasterDevices());
 
         foreach ($json as $line) {
             if ($line['managementStatus']!='Managed') continue;
@@ -343,8 +348,13 @@ group by clientId
     }
 
     public function deviceNeedsToner(RmsUpdateEntity $device, $client, $colorId) {
+        $rmsDeviceInstance = $device->getRmsDeviceInstance();
+        if ($rmsDeviceInstance->getIgnore()) {
+            error_log(sprintf('ignoring %s', $device->getRmsProviderId()->getId()));
+            return null;
+        }
         $result = false;
-        $masterDevice = $device->getRmsDeviceInstance()->getMasterDevice();
+        $masterDevice = $rmsDeviceInstance->getMasterDevice();
         if (!$masterDevice) {
             error_log(sprintf('%s:%s masterDevice unknown', __FILE__, __LINE__));
             return null;
@@ -400,18 +410,18 @@ group by clientId
         /** @var \MPSToolbox\Entities\DeviceNeedsTonerEntity $deviceNeedsToner */
         $deviceNeedsToner = \MPSToolbox\Entities\DeviceNeedsTonerEntity::find([
             'color'=>$colorId,
-            'rmsDeviceInstance'=>$device->getRmsDeviceInstance(),
+            'rmsDeviceInstance'=>$rmsDeviceInstance,
         ]);
         if (empty($deviceNeedsToner)) {
-            printf("NEW Device Needs Toner! %s <br>\n", $device->getRmsDeviceInstance()->getIpAddress());
+            printf("NEW Device Needs Toner! %s <br>\n", $rmsDeviceInstance->getIpAddress());
             $deviceNeedsToner = new \MPSToolbox\Entities\DeviceNeedsTonerEntity();
-            $deviceNeedsToner->setRmsDeviceInstance($device->getRmsDeviceInstance());
+            $deviceNeedsToner->setRmsDeviceInstance($rmsDeviceInstance);
             $deviceNeedsToner->setColor(TonerColorEntity::find($colorId));
-            $deviceNeedsToner->setClient($device->getRmsDeviceInstance()->getClient());
-            $deviceNeedsToner->setAssetId($device->getRmsDeviceInstance()->getAssetId());
-            $deviceNeedsToner->setIpAddress($device->getRmsDeviceInstance()->getIpAddress());
-            $deviceNeedsToner->setSerialNumber($device->getRmsDeviceInstance()->getSerialNumber());
-            $deviceNeedsToner->setLocation($device->getRmsDeviceInstance()->getLocation());
+            $deviceNeedsToner->setClient($rmsDeviceInstance->getClient());
+            $deviceNeedsToner->setAssetId($rmsDeviceInstance->getAssetId());
+            $deviceNeedsToner->setIpAddress($rmsDeviceInstance->getIpAddress());
+            $deviceNeedsToner->setSerialNumber($rmsDeviceInstance->getSerialNumber());
+            $deviceNeedsToner->setLocation($rmsDeviceInstance->getLocation());
             $deviceNeedsToner->setFirstReported(new \DateTime());
             $deviceNeedsToner->setMasterDevice($masterDevice);
             $deviceNeedsToner->setTonerOptions(implode(',', $tonerOptionIds));
@@ -419,10 +429,10 @@ group by clientId
             $result = true;
         } else {
             if ($deviceNeedsToner->getShopifyOrder()) {
-                printf("Device Needs Toner update %s but toner has been ordered, order id: %s <br>\n", $device->getRmsDeviceInstance()->getIpAddress(), $deviceNeedsToner->getShopifyOrder());
+                printf("Device Needs Toner update %s but toner has been ordered, order id: %s <br>\n", $rmsDeviceInstance->getIpAddress(), $deviceNeedsToner->getShopifyOrder());
             } else {
                 $result = true;
-                printf("Device Needs Toner update %s <br>\n", $device->getRmsDeviceInstance()->getIpAddress());
+                printf("Device Needs Toner update %s <br>\n", $rmsDeviceInstance->getIpAddress());
             }
         }
 

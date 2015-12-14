@@ -532,6 +532,9 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
     }
 
     public function test_deviceNeedsToner() {
+        $user = \MPSToolbox\Legacy\Mappers\UserMapper::getInstance()->find(2);
+        Zend_Auth::getInstance()->getStorage()->write($user);
+
         $service = new \MPSToolbox\Services\RmsUpdateService();
         $instance = new \MPSToolbox\Entities\RmsDeviceInstanceEntity();
         $instance->setClient(\MPSToolbox\Entities\ClientEntity::find(5));
@@ -556,6 +559,9 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
 
         $client = ['clientId'=>5, 'dealerId'=>1, 'templateNum'=>1, 'ecomMonochromeRank'=>'3,43,46', 'ecomColorRank'=>'3,43,46'];
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::BLACK);
+        $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::MAGENTA);
+
+        $device->getRmsDeviceInstance()->setIgnore(true);
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::MAGENTA);
     }
 
