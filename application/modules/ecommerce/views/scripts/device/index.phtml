@@ -61,7 +61,8 @@ foreach($this->clients as $client) {
         <thead><tr><th colspan="2">Legend</th></tr></thead>
         <tbody>
         <tr><td><i class="fa fa-fw fa-check text-success"></i></td><td>Device is successfully mapped and monitored</td><td>No action required</td></tr>
-        <tr><td><i class="fa fa-fw fa-warning text-warning"></i></td><td>Device is mapped but no monitoring data has been received within a week</td><td>Investigate why this devide is stale</td></tr>
+        <tr><td><i class="fa fa-fw fa-warning text-warning"></i></td><td>Device is mapped but no monitoring data has been received for a week or longer</td><td>Investigate why this device is stale</td></tr>
+        <tr><td><i class="fa fa-fw fa-wrench text-danger"></i></td><td>Device is not mapped to a device model</td><td>Map the device</td></tr>
         <tr><td><i class="fa fa-fw fa-bars text-danger"></i></td><td>Device is mapped but there is no cost available for at least one of the supplies, or no supplies are defined</td><td>Enter your costs for the supplies</td></tr>
         <tr><td><i class="fa fa-fw fa-remove"></i></td><td>Device is ignored</td><td>No action required</td></tr>
         <tr><td><i class="fa fa-fw fa-info-circle text-info"></i></td><td>Click this icon for more information about the device</td><td></td></tr>

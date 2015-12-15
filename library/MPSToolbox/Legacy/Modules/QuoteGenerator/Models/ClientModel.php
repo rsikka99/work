@@ -31,22 +31,22 @@ class ClientModel extends My_Model_Abstract
     /**
      * @var string
      */
-    public $accountNumber;
+    public $accountNumber = '';
 
     /**
      * @var string
      */
-    public $companyName;
+    public $companyName = '';
 
     /**
      * @var string
      */
-    public $legalName;
+    public $legalName = '';
 
     /**
      * @var int
      */
-    public $employeeCount;
+    public $employeeCount = 0;
 
     /**
      * @var ClientSettingsEntity
@@ -64,25 +64,28 @@ class ClientModel extends My_Model_Abstract
     protected $survey;
 
     /** @var  int */
-    public $webId;
+    public $webId = null;
 
     /** @var  string */
-    public $deviceGroup;
+    public $deviceGroup = null;
 
     /** @var  string */
-    public $priceLevelId;
+    public $priceLevelId = null;
 
     /** @var  string */
-    public $transactionType;
+    public $transactionType = null;
 
     /** @var  string */
-    public $ecomMonochromeRank;
+    public $ecomMonochromeRank = null;
 
     /** @var  string */
-    public $ecomColorRank;
+    public $ecomColorRank = null;
 
     /** @var  int */
-    public $templateNum;
+    public $templateNum = 1;
+
+    /** @var  string */
+    public $industry = null;
 
     /**
      * @param array $params An array of data to populate the model with
@@ -154,6 +157,10 @@ class ClientModel extends My_Model_Abstract
         {
             $this->templateNum = $params->templateNum;
         }
+        if (isset($params->industry) && !is_null($params->industry))
+        {
+            $this->industry = $params->industry;
+        }
 
     }
 
@@ -176,6 +183,7 @@ class ClientModel extends My_Model_Abstract
             "ecomMonochromeRank" => $this->ecomMonochromeRank,
             "ecomColorRank" => $this->ecomColorRank,
             "templateNum" => $this->templateNum,
+            "industry" => $this->industry,
         ];
     }
 

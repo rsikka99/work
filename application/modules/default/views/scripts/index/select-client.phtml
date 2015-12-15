@@ -1,7 +1,12 @@
 <div class="container">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <a class="btn btn-success btn-xs pull-right" href="<?= $this->url([], 'company.clients.create') ?>?select"><i class="fa fa-fw fa-plus-circle"></i> Create new</a>
+            <span class="pull-right">
+                <a class="btn btn-info btn-xs" href="<?= $this->url([], 'company.clients') ?>?select"><i class="fa fa-fw fa-wrench"></i> Manage Clients</a>
+                &nbsp;&nbsp;&nbsp;
+                <a class="btn btn-success btn-xs" href="<?= $this->url([], 'company.clients.create') ?>?select"><i class="fa fa-fw fa-plus-circle"></i> Create New</a>
+            </span>
+
             Client List
         </div>
         <div class="panel-body">

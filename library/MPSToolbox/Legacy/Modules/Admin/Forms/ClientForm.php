@@ -92,6 +92,12 @@ class ClientForm extends \My_Form_Form
             'filters'  => ['StringTrim'],
         ]);
 
+        $this->addElement('text', 'industry', [
+            'label'    => 'Industry',
+            'required' => 'false',
+            'filters'  => ['StringTrim'],
+        ]);
+
         /**
          * Company Legal Name
          */
@@ -129,6 +135,17 @@ class ClientForm extends \My_Form_Form
 
         $this->addElement('text', 'email', [
             'label'       => 'E-mail address',
+            'placeholder' => '',
+            'filters'     => ['StringTrim'],
+        ]);
+
+        $this->addElement('text', 'website', [
+            'label'    => 'Website',
+            'filters'  => ['StringTrim'],
+        ]);
+
+        $this->addElement('text', 'emailSupply', [
+            'label'       => 'Supply E-mail address',
             'placeholder' => '',
             'filters'     => ['StringTrim'],
         ]);

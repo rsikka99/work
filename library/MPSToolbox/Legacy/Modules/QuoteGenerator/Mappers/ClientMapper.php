@@ -185,6 +185,14 @@ class ClientMapper extends My_Model_Mapper_Abstract
     }
 
     /**
+     * @param $id
+     * @return \MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel
+     */
+    public function fetchByRmsId($id) {
+        return $this->fetch(['deviceGroup=?'=>$id]);
+    }
+
+    /**
      * Fetches all clients
      *
      * @param $where  string|array|Zend_Db_Table_Select

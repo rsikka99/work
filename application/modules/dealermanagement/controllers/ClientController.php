@@ -25,18 +25,13 @@ class Dealermanagement_ClientController extends Action
      */
     public function indexAction ()
     {
-        $this->_pageTitle = ['Your Clients', 'Company'];
+        $this->_pageTitle = ['Manage Clients', 'Company'];
         // Display all of the clients
         $mapper    = ClientMapper::getInstance();
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper, UserMapper::getInstance()->getWhereDealerId(Zend_Auth::getInstance()->getIdentity()->dealerId)));
-        // Set the current page we're on
-        $paginator->setCurrentPageNumber($this->_getParam('page', 1));
-
-        // Set how many items to show
-        $paginator->setItemCountPerPage(15);
+        $clients = $mapper->fetchClientListForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
 
         // Pass the view the paginator
-        $this->view->paginator = $paginator;
+        $this->view->clients = $clients;
     }
 
     /**
@@ -44,7 +39,7 @@ class Dealermanagement_ClientController extends Action
      */
     public function deleteAction ()
     {
-        $this->_pageTitle = ['Delete Client', 'Your Clients', 'Company'];
+        $this->_pageTitle = ['Delete Client', 'Manage Clients', 'Company'];
         $clientId         = $this->_getParam('id', false);
         $dealerId         = Zend_Auth::getInstance()->getIdentity()->dealerId;
         if (!$clientId)
@@ -115,7 +110,7 @@ class Dealermanagement_ClientController extends Action
     }
 
     public function ordersAction() {
-        $this->_pageTitle = ['Supply Orders', 'Your Clients', 'Company'];
+        $this->_pageTitle = ['Supply Orders', 'Manage Clients', 'Company'];
     }
 
     /**
@@ -123,7 +118,7 @@ class Dealermanagement_ClientController extends Action
      */
     public function createAction ()
     {
-        $this->_pageTitle = ['Create Client', 'Your Clients', 'Company'];
+        $this->_pageTitle = ['Create Client', 'Manage Clients', 'Company'];
         $clientService    = new ClientService();
         if ($this->getRequest()->isPost())
         {
@@ -174,7 +169,7 @@ class Dealermanagement_ClientController extends Action
 
     public function editAction ()
     {
-        $this->_pageTitle = ['Edit Client', 'Your Clients', 'Company'];
+        $this->_pageTitle = ['Edit Client', 'Manage Clients', 'Company'];
         // Get the passed client id
         $clientId = $this->_getParam('id', false);
         $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
@@ -240,7 +235,7 @@ class Dealermanagement_ClientController extends Action
      */
     public function viewAction ()
     {
-        $this->_pageTitle = ['Viewing Client', 'Your Clients', 'Company'];
+        $this->_pageTitle = ['Viewing Client', 'Manage Clients', 'Company'];
 
         $this->view->client = ClientMapper::getInstance()->find($this->_getParam('id', false));
         $dealerId           = Zend_Auth::getInstance()->getIdentity()->dealerId;
@@ -263,5 +258,88 @@ class Dealermanagement_ClientController extends Action
         }
         $this->view->contact = $contact;
     }
+
+    private function recursiveGroupTable($groups) {
+        $result = [];
+        foreach ($groups as $group) {
+            if (!$group['deviceCountTotal']) continue;
+            $icon = 'glyphicon glyphicon glyphicon-folder-open';
+            switch ($group['groupType']) {
+                case 'Dealer' : $icon = 'glyphicon glyphicon glyphicon-list-alt'; break;
+                case 'Customer' : $icon = 'glyphicon glyphicon glyphicon-user'; break;
+                case 'Office/Location' : $icon = 'glyphicon glyphicon glyphicon-home'; break;
+            }
+            $state=[['expanded'=>true]];
+
+            $addr = [];
+            if (!empty($group['additionalDetails']['street 1'])) $addr []= $group['additionalDetails']['street 1'];
+            if (!empty($group['additionalDetails']['city'])) $addr []= $group['additionalDetails']['city'];
+            if (!empty($group['additionalDetails']['state/Prov'])) $addr []= $group['additionalDetails']['state/Prov'];
+            if (!empty($group['additionalDetails']['ziP/Postal Code'])) $addr []= $group['additionalDetails']['ziP/Postal Code'];
+            if (!empty($group['additionalDetails']['country'])) $addr []= $group['additionalDetails']['country'];
+
+            $text = $group['name'];
+            $text.= ' ('.$group['deviceCountTotal'].')';
+            if (!empty($addr)) $text.="<span class='pull-right'>".implode(', ',$addr).'</span>';
+            $line=['text'=>$text, 'icon'=>$icon,'state'=>$state,'selectable'=>false, 'href'=>$group['id']];
+            if (!empty($group['children'])) {
+                $line['nodes'] = $this->recursiveGroupTable($group['children']);
+            }
+            $result []= $line;
+        }
+        return $result;
+    }
+
+    private function getPrintFleet() {
+        $service = new \MPSToolbox\Services\RmsUpdateService();
+        $rmsUri = $service->getRmsUri();
+        if (!$rmsUri) {
+            echo 'Error: RMS Uri not specified by root administrator';
+            return false;
+        }
+
+        $printFleet = new \MPSToolbox\Api\PrintFleet($rmsUri);
+        if (!$printFleet->auth()) {
+            echo 'Error: Cannot connect with Print Fleet';
+            return false;
+        }
+        return $printFleet;
+    }
+
+    public function importAction() {
+        $ajax = $this->getRequest()->getParam('ajax');
+        if ($ajax) {
+            $this->_helper->layout()->disableLayout();
+            $this->_helper->viewRenderer->setNoRender(true);
+
+            $printFleet = $this->getPrintFleet();
+            if ($printFleet) {
+                $groups = $printFleet->groups();
+                echo '<div id="tree"></div><script> showTree(' . json_encode($this->recursiveGroupTable($groups)) . '); </script>';
+            }
+            return;
+        }
+        if ($this->getRequest()->getMethod()=='POST') {
+            $ids = $this->getParam('ids');
+            if (!empty($ids)) {
+                $printFleet = $this->getPrintFleet();
+                if ($printFleet) {
+                    $groups = $printFleet->groups();
+                    $service = new ClientService();
+                    $result = $service->importFromPrintFleet($printFleet, explode(' ',$ids));
+                    $this->redirect('/dealermanagement/client/imported?'.http_build_query(['result'=>json_encode($result)]));
+                }
+                return;
+            }
+        }
+
+        $this->_pageTitle = ['Import Clients from RMS', 'Manage Clients', 'Company'];
+    }
+
+    public function importedAction() {
+        $this->_pageTitle = ['Import Clients from RMS', 'Manage Clients', 'Company'];
+        $this->view->result = json_decode($this->getParam('result'), true);
+    }
+
 }
 

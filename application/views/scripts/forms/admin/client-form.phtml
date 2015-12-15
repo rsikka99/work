@@ -8,6 +8,8 @@ if (isset($_GET['select'])) $action .= '?select';
 
 $client_id = intval($form->getElement('id')->getValue());
 
+$hasEcommerce = \MPSToolbox\Entities\DealerEntity::hasEcommerce()
+
 ?>
 <form class="form-horizontal" method="<?= $form->getMethod() ?>" accept-charset="UTF-8" action="<?= $action ?>">
     <div class="row">
@@ -67,6 +69,16 @@ $client_id = intval($form->getElement('id')->getValue());
                         <?= $this->RenderFormElementErrors($form->getElement('employeeCount')) ?>
                     </div>
                 </div>
+
+                <div class="form-group <?= ($form->getElement('industry')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('industry'), ['col-md-3']) ?>
+
+                    <div class="col-md-9">
+                        <?= $this->RenderFormText($form->getElement('industry')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('industry')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('industry')) ?>
+                    </div>
+                </div>
             </fieldset>
 
             <fieldset>
@@ -90,6 +102,7 @@ $client_id = intval($form->getElement('id')->getValue());
             <fieldset>
                 <legend>Primary Contact Details</legend>
                 <div class="form-group <?= ($form->getElement('firstName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?php $warning = ''; if ($hasEcommerce && !($form->getElement('firstName')->getValue())) $form->getElement('firstName')->setLabel('<i class="fa fa-fw fa-warning text-danger" title="Required for E-commerce"></i> '.$form->getElement('firstName')->getLabel()); ?>
                     <?= $this->RenderFormLabel($form->getElement('firstName'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
@@ -99,6 +112,7 @@ $client_id = intval($form->getElement('id')->getValue());
                     </div>
                 </div>
                 <div class="form-group <?= ($form->getElement('lastName')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?php $warning = ''; if ($hasEcommerce && !($form->getElement('lastName')->getValue())) $form->getElement('lastName')->setLabel('<i class="fa fa-fw fa-warning text-danger" title="Required for E-commerce"></i> '.$form->getElement('lastName')->getLabel()); ?>
                     <?= $this->RenderFormLabel($form->getElement('lastName'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
@@ -117,14 +131,36 @@ $client_id = intval($form->getElement('id')->getValue());
                     </div>
                 </div>
                 <div class="form-group <?= ($form->getElement('email')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?php $warning = ''; if ($hasEcommerce && !($form->getElement('email')->getValue())) $form->getElement('email')->setLabel('<i class="fa fa-fw fa-warning text-danger" title="Required for E-commerce"></i> '.$form->getElement('email')->getLabel()); ?>
                     <?= $this->RenderFormLabel($form->getElement('email'), ['col-md-3']) ?>
 
                     <div class="col-md-9">
-                        <?= $this->RenderFormText($form->getElement('email')) ?>
+                        <?= $this->RenderFormText($form->getElement('email'), ['type-email']) ?>
                         <?= $this->RenderFormDescription($form->getElement('email')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('email')) ?>
                     </div>
                 </div>
+                <div class="form-group <?= ($form->getElement('website')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('website'), ['col-md-3']) ?>
+
+                    <div class="col-md-9">
+                        <?= $this->RenderFormText($form->getElement('website')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('website')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('website')) ?>
+                    </div>
+                </div>
+
+                <legend>Supply Order Contact</legend>
+                <div class="form-group <?= ($form->getElement('emailSupply')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('emailSupply'), ['col-md-3']) ?>
+
+                    <div class="col-md-9">
+                        <?= $this->RenderFormText($form->getElement('emailSupply', ['type-email'])) ?>
+                        <?= $this->RenderFormDescription($form->getElement('emailSupply')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('emailSupply')) ?>
+                    </div>
+                </div>
+
             </fieldset>
 
             <fieldset>

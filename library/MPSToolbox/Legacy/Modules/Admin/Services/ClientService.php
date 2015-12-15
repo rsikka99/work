@@ -2,6 +2,8 @@
 namespace MPSToolbox\Legacy\Modules\Admin\Services;
 
 use Exception;
+use MPSToolbox\Api\PrintFleet;
+use MPSToolbox\Legacy\Entities\DealerEntity;
 use MPSToolbox\Legacy\Modules\Admin\Forms\ClientForm;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\AddressMapper;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper;
@@ -11,6 +13,7 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\AddressModel;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ContactModel;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\CountryModel;
+use MPSToolbox\Services\RmsUpdateService;
 use Tangent\Logger\Logger;
 use Zend_Db_Expr;
 use Zend_Db_Table;
@@ -241,5 +244,75 @@ class ClientService
         }
         $this->getForm()->populate($combinedClientData);
     }
+
+    private function recursivePrintFleet($groups, $ids, &$result, $parentName='') {
+        foreach ($groups as $group) {
+            $children = $group['children'];
+            unset($group['children']);
+            $name = $group['name'];
+            if (in_array($group['id'], $ids)) {
+                if ($group['groupType']=='Office/Location') {
+                    $group['name'] = trim($parentName.' > '.$group['name']);
+                }
+                $result[] = $group;
+            }
+            if (!empty($children)) $this->recursivePrintFleet($children, $ids, $result, $name);
+        }
+    }
+
+    public function importFromPrintFleet(PrintFleet $printFleet, array $ids) {
+        $result = [];
+        $arr = [];
+        $this->recursivePrintFleet($printFleet->groups(), $ids, $arr);
+
+        $rmsUpdateService = new RmsUpdateService();
+
+        foreach ($arr as $group) {
+            $client = ClientMapper::getInstance()->fetchByRmsId($group['id']);
+            $group_result='u';
+            if (!$client) {
+                $client = new ClientModel();
+                $client->dealerId = DealerEntity::getDealerId();
+                $client->deviceGroup = $group['id'];
+                $group_result='i';
+            }
+            $client->companyName = $group['name'];
+            if (isset($group['additionalDetails']['number of Employees'])) $client->employeeCount = $group['additionalDetails']['number of Employees'];
+            if (isset($group['additionalDetails']['industry Vertical'])) $client->industry = $group['additionalDetails']['industry Vertical'];
+            $client->id ? ClientMapper::getInstance()->save($client) : $client->id = ClientMapper::getInstance()->insert($client);
+            $result[$client->id] = $group_result;
+
+            $contact = $client->getContact();
+            if (!$contact) {
+                $contact = new ContactModel();
+                $contact->clientId = $client->id;
+            }
+            if (isset($group['additionalDetails']['email'])) $contact->email = $group['additionalDetails']['email'];
+            if (isset($group['additionalDetails']['email']) && empty($contact->emailSupply)) $contact->emailSupply = $group['additionalDetails']['email'];
+            if (isset($group['additionalDetails']['phone'])) $contact->phoneNumber = $group['additionalDetails']['phone'];
+            if (isset($group['additionalDetails']['website URL'])) $contact->website = $group['additionalDetails']['website URL'];
+            $contact->id ? ContactMapper::getInstance()->save($contact) : ContactMapper::getInstance()->insert($contact);
+
+            $address = $client->getAddress();
+            if (!$address) {
+                $address = new AddressModel();
+                $address->clientId = $client->id;
+            }
+
+            if (isset($group['additionalDetails']['street 1'])) $address->addressLine1 = $group['additionalDetails']['street 1'];
+            if (isset($group['additionalDetails']['street 2'])) $address->addressLine2 = $group['additionalDetails']['street 2'];
+            if (isset($group['additionalDetails']['city'])) $address->city = $group['additionalDetails']['city'];
+            if (isset($group['additionalDetails']['country'])) $address->countryId = CountryMapper::getInstance()->nameToId($group['additionalDetails']['country']);;
+            if (isset($group['additionalDetails']['ziP/Postal Code'])) $address->postCode = $group['additionalDetails']['ziP/Postal Code'];
+            if (isset($group['additionalDetails']['state/Prov'])) $address->region = $group['additionalDetails']['state/Prov'];
+            $address->id ? AddressMapper::getInstance()->save($address) : AddressMapper::getInstance()->insert($address);
+
+            if ($group_result=='i') {
+                $rmsUpdateService->update($client->id, $printFleet, $group['id']);
+            }
+        }
+        return $result;
+    }
+
 }
 

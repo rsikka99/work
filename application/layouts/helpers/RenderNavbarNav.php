@@ -45,7 +45,7 @@ class App_View_Helper_RenderNavbarNav extends Zend_View_Helper_Abstract
             $clients = \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->fetchAll(["dealerId=?" => $dealerId]);
             foreach ($clients as $client) {
                 $contact = \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ContactMapper::getInstance()->getContactByClientId($client->id);
-                if (empty($contact->email)) {
+                if (empty($contact->firstName) || empty($contact->lastName) || empty($contact->email)) {
                     self::$incompleteClientSettings++;
                 }
             }
@@ -58,6 +58,11 @@ class App_View_Helper_RenderNavbarNav extends Zend_View_Helper_Abstract
             $settings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings();
             if (empty($settings->shopSettings->emailFromAddress) || empty($settings->shopSettings->emailFromName)) {
                 self::$incompleteDealerSettings = 1;
+            } else {
+                $branding = \MPSToolbox\Legacy\Mappers\DealerBrandingMapper::getInstance()->find();
+                if (empty($branding->dealerEmail)) {
+                    self::$incompleteDealerSettings = 1;
+                }
             }
         }
         return self::$incompleteDealerSettings;

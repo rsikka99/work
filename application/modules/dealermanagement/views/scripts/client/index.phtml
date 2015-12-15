@@ -4,14 +4,20 @@ use MPSToolbox\Legacy\Models\Acl\AppAclModel;
 use MPSToolbox\Legacy\Models\Acl\DealerManagementAclModel;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
 
+$settings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings();
+$shopSettings = $settings->shopSettings;
+
 ?>
 <div class="container">
-    <div class="clearfix">
-        <a class="btn btn-success pull-right btn-sm create-button" href="<?= $this->url([], 'company.clients.create') ?>">
-            <i class="glyphicon glyphicon-plus-sign"></i> Create new</a>
-    </div>
-    <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
-        <table class="table table-striped table-condensed table-bordered">
+    <p class="clearfix text-right">
+<?php if (!empty($shopSettings->rmsUri)) { ?>
+        <a class="btn btn-info btn-sm create-button" href="/dealermanagement/client/import"><i class="glyphicon glyphicon-import"></i> Import Clients from RMS</a>
+        &nbsp;&nbsp;&nbsp;
+<?php } ?>
+        <a class="btn btn-success btn-sm create-button" href="<?= $this->url([], 'company.clients.create') ?>"><i class="glyphicon glyphicon-plus-sign"></i> Create New</a>
+    </p>
+    <?php if (count($this->clients)>0) { ?>
+        <table class="table table-striped table-hover" id="my-table">
             <thead>
             <tr>
                 <th style="width: 30px;">ID</th>
@@ -22,7 +28,7 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
             </thead>
             <tbody>
             <?php /* @var $client ClientModel */ ?>
-            <?php foreach ($this->paginator->getCurrentItems() as $client) : ?>
+            <?php foreach ($this->clients as $client) { ?>
                 <tr>
                     <td><?= $this->escape($client->id); ?></td>
                     <td><?= $this->escape($client->companyName); ?></td>
@@ -35,21 +41,29 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel;
                             <a class="btn btn-xs btn-warning" title="Edit" href="<?= $this->url(['id' => $client->id], 'company.clients.edit'); ?>">
                                 <i class="glyphicon glyphicon-pencil"></i>
                             </a>
-                            <?php if ($this->IsAllowed(DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_CLIENT_DELETE, AppAclModel::PRIVILEGE_VIEW)): ?>
-                                <a class="btn btn-xs btn-danger" title="Delete" href="<?= $this->url(['id' => $client->id], 'company.clients.delete'); ?>">
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                </a>
-                            <?php endif; ?>
+                        <?php if ($this->IsAllowed(DealerManagementAclModel::RESOURCE_DEALERMANAGEMENT_CLIENT_DELETE, AppAclModel::PRIVILEGE_VIEW)): ?>
+                            <a class="btn btn-xs btn-danger" title="Delete" href="<?= $this->url(['id' => $client->id], 'company.clients.delete'); ?>">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                        <?php endif; ?>
                         </div>
                     </td>
                 </tr>
-            <?php endforeach; ?>
+            <?php } ?>
             </tbody>
         </table>
-        <?= $this->paginationControl($this->paginator); ?>
-    <?php else : ?>
+    <?php } else { ?>
         <div class='well'>
             <h1>There are no clients</h1>
         </div>
-    <?php endif; ?>
+    <?php } ?>
 </div>
+
+<script>
+    require(['jquery','datatables', 'datatables.bootstrap'], function ($) {
+        window.dt_table = $('#my-table').DataTable({
+            "pageLength": 100,
+            "order": [[1,'asc']]
+        });
+    });
+</script>

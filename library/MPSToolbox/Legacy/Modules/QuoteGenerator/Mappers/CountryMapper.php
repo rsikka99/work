@@ -231,6 +231,12 @@ class CountryMapper extends My_Model_Mapper_Abstract
         return $this->fetchAll(["{$this->col_name} LIKE ?" => "%{$searchTerm}%"], "{$this->col_name} ASC");
     }
 
+    public function nameToId($name) {
+        $row = $this->fetch(["{$this->col_name} = ?" => $name]);
+        if ($row) return $row->country_id;
+        return null;
+    }
+
     /**
      * Gets a where clause for filtering by id
      *

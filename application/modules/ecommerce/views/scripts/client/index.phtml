@@ -43,7 +43,7 @@ foreach($this->clients as $client) {
                     &nbsp;
 <?php
 if (empty($selectedContact->email)) {
-    echo '<button class="btn" disabled="disabled" type="button">Synchronize with Shopify</button><p><em><i class="fa fa-fw fa-exclamation-circle text-danger"></i> Shopify requires an e-mail address.</em></p>';
+    echo '<button class="btn" disabled="disabled" type="button">Synchronize with Shopify</button><p><em><i class="fa fa-fw fa-exclamation-circle text-danger"></i> Shopify requires a contact first name, last name and e-mail address.</em></p>';
 } else {
     echo '<button id="btn-shopifySync" class="btn btn-primary" type="button" onclick="shopifySync(this)">Synchronize Details with Shopify</button>';
 }
