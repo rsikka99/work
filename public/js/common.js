@@ -20,6 +20,8 @@ requirejs.config({
         'bootstrap.modal.manager': 'lib/bootstrap/bootstrap-modalmanager',
         'bootstrap.switch'       : 'lib/bootstrap/bootstrap-switch.min',
         'bootstrap.typeahead'    : 'lib/bootstrap/bootstrap-typeahead',
+        'bootstrap.contextmenu'  : 'lib/bootstrap/bootstrap-contextmenu',
+		'bootstrap.treeview'     : 'lib/bootstrap/bootstrap-treeview',
         'datatables'             : 'lib/jquery/dataTables/jquery.dataTables',
         'datatables.bootstrap'   : 'lib/jquery/dataTables/jquery.dataTables.bootstrap',
         'datatables.responsive'  : 'lib/jquery/dataTables/jquery.dataTables.responsive',

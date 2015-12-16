@@ -1,6 +1,7 @@
 <?php
 
 namespace MPSToolbox\Entities;
+use MPSToolbox\Legacy\Mappers\DealerFeatureMapper;
 
 /**
  * Class DealerEntity
@@ -25,6 +26,16 @@ class DealerEntity extends BaseEntity {
 
     public static function getDealerId() {
         return \Zend_Auth::getInstance()->getIdentity()->dealerId;
+    }
+
+    public static function hasEcommerce($dealerId = null) {
+        $list = DealerFeatureMapper::getInstance()->fetchFeatureListForDealer($dealerId);
+        foreach ($list as $feature) {
+            if ($feature->featureId == 'ecommerce') {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

@@ -1,0 +1,42 @@
+<div class="container">
+    <p class="text-right">
+        <a href="javascript:loadTree()" class="btn btn-default"><i class="glyphicon glyphicon glyphicon-refresh"></i></a>
+    </p>
+    <p>Select the customers you like to import by switching <i class="glyphicon glyphicon-remove text-danger"></i> to <i class="glyphicon glyphicon-ok text-success"></i></p>
+    <div id="main-div">
+        loading...
+    </div>
+    <form method="post" onsubmit="if ($('#input-ids').val()=='') { alert('Select at least one row to import as a client'); return false; }">
+        <input type="hidden" name="ids" id="input-ids" class="form-control">
+        <p class="text-right">
+            <button type="submit" class="btn btn-success">Import</button>
+        </p>
+    </form>
+</div>
+<script>
+    require(['jquery'], function ($) {
+        require(['bootstrap.treeview'], function ($) {
+        });
+        loadTree();
+    });
+    function loadTree() {
+        $('#main-div').load('/dealermanagement/client/import?ajax=load');
+    }
+    function showTree(data) {
+        window.ids = [];
+        $("#tree").treeview({data:data, levels:99, showCheckbox:true, checkedIcon:'glyphicon glyphicon-ok text-success', 'uncheckedIcon':'glyphicon glyphicon-remove text-danger'});
+        $("#tree").on('nodeChecked',function (event, node) {
+            window.ids[window.ids.length] = node.href;
+            var str='';
+            $.each(window.ids, function(i,e) { str+=e+' ' });
+            $('#input-ids').val($.trim(str));
+        }).on('nodeUnchecked', function(event, node) {
+            var new_ids=[];
+            $.each(window.ids, function(i,e) { if (e!=node.href) new_ids[new_ids.length]=e });
+            window.ids = new_ids;
+            var str='';
+            $.each(window.ids, function(i,e) { str+=e+' ' });
+            $('#input-ids').val($.trim(str));
+        });
+    }
+</script>

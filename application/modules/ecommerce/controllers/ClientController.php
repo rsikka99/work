@@ -26,7 +26,6 @@ class Ecommerce_ClientController extends Action
                 $client->templateNum = $this->getRequest()->getParam('templateNum');
                 $client->priceLevelId = $this->getRequest()->getParam('priceLevelId');
                 $client->transactionType = $this->getRequest()->getParam('transactionType');
-                $client->notSupportedMasterDevices = implode(',',$this->getRequest()->getParam('notSupportedMasterDevices'));
                 $client->ecomMonochromeRank = implode(',',$this->getRequest()->getParam('ecomMonochromeRank'));
                 $client->ecomColorRank = implode(',',$this->getRequest()->getParam('ecomColorRank'));
                 \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->save($client);

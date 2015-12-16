@@ -67,8 +67,21 @@ class Ecommerce_DeviceController extends Action
         $instance = \MPSToolbox\Entities\RmsDeviceInstanceEntity::find($instanceId);
         if ($instance) {
             $db = Zend_Db_Table::getDefaultAdapter();
-            $st = $db->prepare('UPDATE rms_device_instances SET `ignore`='.($reverse?'0':'1').' where clientId=:clientId and masterDeviceId IS NULL AND manufacturer=:manufacturer AND modelName=:modelName');
-            $st->execute(['clientId'=>$clientId, 'modelName'=>$instance->getModelName(), 'manufacturer'=>$instance->getManufacturer()]);
+            $st = $db->prepare('UPDATE rms_device_instances SET `ignore`='.($reverse?'0':'1').' where clientId=:clientId and manufacturer=:manufacturer AND modelName=:modelName');
+            $arr = ['clientId'=>$clientId, 'modelName'=>$instance->getModelName(), 'manufacturer'=>$instance->getManufacturer()];
+            $st->execute($arr);
+        }
+        $this->sendJson(['ok'=>true]);
+    }
+    public function ajaxIgnoreSingleAction() {
+        $clientId = $this->getRequest()->getParam('client');
+        $instanceId = $this->getRequest()->getParam('instance');
+        $reverse = $this->getRequest()->getParam('reverse');
+        $instance = \MPSToolbox\Entities\RmsDeviceInstanceEntity::find($instanceId);
+        if ($instance) {
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $st = $db->prepare('UPDATE rms_device_instances SET `ignore`='.($reverse?'0':'1').' where clientId=:clientId and id=:id');
+            $st->execute(['clientId'=>$clientId, 'id'=>$instanceId]);
         }
         $this->sendJson(['ok'=>true]);
     }
@@ -103,32 +116,49 @@ class Ecommerce_DeviceController extends Action
 
             foreach ($st->fetchAll() as $line) {
                 if ($line['ignore']) {
-                    $icon = '<span style="display:none">4 '.$line['fullDeviceName'].'</span><a href="javascript:;" onclick="if (window.confirm(\'Unignore this model?\')) unignore('.$line['id'].')"><i class="fa fa-fw fa-remove" style="color:black" title="Ignored, click to unignore"></i><a>';
-                    $fullDeviceName = '<a href="javascript:;" onclick="showDetailsModal('.$line['id'].')"><i class="fa fa-fw fa-info-circle text-info"></i></a>&nbsp;'.$line['fullDeviceName'];
+                    $fullDeviceName = $line['fullDeviceName'];
+                    $icon = '<span style="display:none">4 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-remove context" style="color:black" title="Ignored" data-target="#context-menu-'.$line['id'].'"></i>
+                    <ul class="dropdown-menu ul-context-menu" role="menu" id="context-menu-'.$line['id'].'" style="display:none">
+                        <li><a href="javascript:;" onclick="if (window.confirm(\'Unignore this model?\')) unignore('.$line['id'].')">Unignore this device model</a></li>
+                        <li><a href="javascript:;" onclick="if (window.confirm(\'Unignore this single device?\')) unignoreSingle('.$line['id'].')">Unignore this single device</a></li>
+                    </ul>';
                 } else if ($line['masterDeviceId']) {
                     $color='';
-                    $icon = '<span style="display:none">3 '.$line['fullDeviceName'].'</span><a href="javascript:;" onclick="if (window.confirm(\'Unmap this model?\')) unmap('.$line['id'].')"><i class="fa fa-fw fa-check text-success" title="Click to unmap this model"></i></a>';
+                    $li = '
+                        <li><a href="javascript:;" onclick="if (window.confirm(\'Unmap this model?\')) unmap('.$line['id'].')">Unmap this device model</a></li>
+                        <li><a href="javascript:;" onclick="if (window.confirm(\'Ignore this model?\')) ignore('.$line['id'].')">Ignore this device model</a></li>
+                        <li><a href="javascript:;" onclick="if (window.confirm(\'Ignore this single device?\')) ignoreSingle('.$line['id'].')">Ignore this single device</a></li>
+                    ';
+                    $icon = '<span style="display:none">3 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-check text-success context" data-target="#context-menu-'.$line['id'].'"></i>';
                     if (isset($incomplete[$line['id']])) {
-                        $icon = '<span style="display:none">2 '.$line['fullDeviceName'].'</span><a href="javascript:;" onclick="if (window.confirm(\'Unmap this model?\')) unmap('.$line['id'].')"><i class="fa fa-fw fa-bars text-danger" title="Unavailable Supplies, click to unmap this model"></i></a>';
+                        $li = '<li><a href="javascript:;" onclick="showModelModal('.$line['masterDeviceId'].')">Edit device model details</a></li>'.$li;
+                        $icon = '<span style="display:none">2 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-bars text-danger context" data-target="#context-menu-'.$line['id'].'" title="Unavailable Supplies"></i>';
                         $color='text-danger';
                     } else if ($line['reportDate']<$staleDate) {
-                        $icon = '<span style="display:none">3 '.$line['fullDeviceName'].'</span><a href="javascript:;" onclick="if (window.confirm(\'Unmap this model?\')) unmap('.$line['id'].')"><i class="fa fa-fw fa-warning text-warning" title="Stale, click to unmap this model"></i></a>';
+                        $icon = '<span style="display:none">3 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-warning text-warning context" data-target="#context-menu-'.$line['id'].'" title="Stale"></i>';
                     }
-                    $fullDeviceName =
-'<a href="javascript:;" onclick="showDetailsModal('.$line['id'].')"><i class="fa fa-fw fa-info-circle text-info"></i></a>&nbsp;
-<a href="javascript:;" onclick="showModelModal('.$line['masterDeviceId'].')" class="'.$color.'">'.$line['fullDeviceName'].'</a>';
+                    $fullDeviceName = '<a href="javascript:;" onclick="showModelModal('.$line['masterDeviceId'].')" class="'.$color.'">'.$line['fullDeviceName'].'</a>';
+                    $icon.='
+                    <ul class="dropdown-menu ul-context-menu" role="menu" id="context-menu-'.$line['id'].'" style="display:none">'.$li.'</ul>';
+
                 } else {
-                    $fullDeviceName =
-'<a href="javascript:;" onclick="showDetailsModal('.$line['id'].')"><i class="fa fa-fw fa-info-circle text-info"></i></a>&nbsp;
-<a href="javascript:;" class="text-danger" onclick="doMap('.$line['id'].', \''.htmlentities($line['fullDeviceName'], ENT_QUOTES).'\')">'.$line['fullDeviceName'].'</a>';
-                    $icon = '<span style="display:none">1 '.$line['fullDeviceName'].'</span><a href="javascript:;" onclick="doMap('.$line['id'].', \''.htmlentities($line['fullDeviceName'], ENT_QUOTES).'\')"><i class="fa fa-fw fa-wrench text-danger" title="Unmapped, click to map this model"></i></a>';
+                    $icon = '<span style="display:none">1 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-wrench text-danger context" data-target="#context-menu-'.$line['id'].'" title="Unmapped"></i>';
+                    $fullDeviceName = '<a href="javascript:;" class="text-danger" onclick="doMap('.$line['id'].', \''.htmlentities($line['fullDeviceName'], ENT_QUOTES).'\')">'.$line['fullDeviceName'].'</a>';
+                    $icon.='
+                    <ul class="dropdown-menu ul-context-menu" role="menu" id="context-menu-'.$line['id'].'" style="display:none">
+                        <li><a href="javascript:;" onclick="doMap('.$line['id'].', \''.htmlentities($line['fullDeviceName'], ENT_QUOTES).'\')">Map this device model</a></li>
+                        <li><a href="javascript:;" onclick="if (window.confirm(\'Ignore this model?\')) ignore('.$line['id'].')">Ignore this device model</a></li>
+                        <li><a href="javascript:;" onclick="if (window.confirm(\'Ignore this single device?\')) ignoreSingle('.$line['id'].')">Ignore this single device</a></li>
+                    </ul>';
                 }
+
+                $fullDeviceName = '<a href="javascript:;" onclick="showDetailsModal('.$line['id'].')"><i class="fa fa-fw fa-info-circle text-info"></i></a>&nbsp;' . $fullDeviceName;
 
                 $result['data'][] = [
                     'DT_RowId'=>'tr-'.$line['id'],
+                    'icon'=>$icon,
                     'model'=>$fullDeviceName,
                     'raw'=>$line['rawDeviceName'],
-                    'icon'=>$icon,
                     'ipAddress'=>$line['ipAddress'],
                     'serialNumber'=>$line['serialNumber'],
                     'location'=>$line['location'],

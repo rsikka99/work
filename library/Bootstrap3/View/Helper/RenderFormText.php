@@ -65,8 +65,11 @@ class RenderFormText extends RenderFormAbstract
                 }
             }
 
+            $type = 'text';
+            if (in_array('type-email',$elementClasses)) $type='email';
+            if (in_array('type-number',$elementClasses)) $type='number';
             $html [] = sprintf(
-                '<input type="text" name="%1$s" value="%2$s" title="%3$s" %4$s id="%5$s">',
+                '<input type="'.$type.'" name="%1$s" value="%2$s" title="%3$s" %4$s id="%5$s">',
                 $element->getName(),
                 $element->getValue(),
                 $element->getDescription(),

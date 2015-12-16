@@ -31,22 +31,22 @@ class ClientModel extends My_Model_Abstract
     /**
      * @var string
      */
-    public $accountNumber;
+    public $accountNumber = '';
 
     /**
      * @var string
      */
-    public $companyName;
+    public $companyName = '';
 
     /**
      * @var string
      */
-    public $legalName;
+    public $legalName = '';
 
     /**
      * @var int
      */
-    public $employeeCount;
+    public $employeeCount = 0;
 
     /**
      * @var ClientSettingsEntity
@@ -64,28 +64,28 @@ class ClientModel extends My_Model_Abstract
     protected $survey;
 
     /** @var  int */
-    public $webId;
+    public $webId = null;
 
     /** @var  string */
-    public $notSupportedMasterDevices;
+    public $deviceGroup = null;
 
     /** @var  string */
-    public $deviceGroup;
+    public $priceLevelId = null;
 
     /** @var  string */
-    public $priceLevelId;
+    public $transactionType = null;
 
     /** @var  string */
-    public $transactionType;
+    public $ecomMonochromeRank = null;
 
     /** @var  string */
-    public $ecomMonochromeRank;
-
-    /** @var  string */
-    public $ecomColorRank;
+    public $ecomColorRank = null;
 
     /** @var  int */
-    public $templateNum;
+    public $templateNum = 1;
+
+    /** @var  string */
+    public $industry = null;
 
     /**
      * @param array $params An array of data to populate the model with
@@ -132,11 +132,6 @@ class ClientModel extends My_Model_Abstract
             $this->webId = $params->webId;
         }
 
-        if (isset($params->notSupportedMasterDevices) && !is_null($params->notSupportedMasterDevices))
-        {
-            if (is_array($params->notSupportedMasterDevices)) $params->notSupportedMasterDevices = trim(str_replace(',,',',',implode(',', $params->notSupportedMasterDevices)),',');
-            $this->notSupportedMasterDevices = $params->notSupportedMasterDevices;
-        }
         if (isset($params->deviceGroup) && !is_null($params->deviceGroup))
         {
             $this->deviceGroup = $params->deviceGroup;
@@ -162,6 +157,10 @@ class ClientModel extends My_Model_Abstract
         {
             $this->templateNum = $params->templateNum;
         }
+        if (isset($params->industry) && !is_null($params->industry))
+        {
+            $this->industry = $params->industry;
+        }
 
     }
 
@@ -178,13 +177,13 @@ class ClientModel extends My_Model_Abstract
             "legalName"     => $this->legalName,
             "employeeCount" => $this->employeeCount,
             "webId" => $this->webId,
-            "notSupportedMasterDevices" => $this->notSupportedMasterDevices,
             "deviceGroup" => $this->deviceGroup,
             "priceLevelId" => $this->priceLevelId,
             "transactionType" => $this->transactionType,
             "ecomMonochromeRank" => $this->ecomMonochromeRank,
             "ecomColorRank" => $this->ecomColorRank,
             "templateNum" => $this->templateNum,
+            "industry" => $this->industry,
         ];
     }
 

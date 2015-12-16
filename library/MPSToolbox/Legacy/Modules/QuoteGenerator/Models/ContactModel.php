@@ -26,19 +26,24 @@ class ContactModel extends My_Model_Abstract
     /**
      * @var string
      */
-    public $firstName;
+    public $firstName = '';
 
     /**
      * @var string
      */
-    public $lastName;
+    public $lastName = '';
 
-    /**
-     * @var int
-     */
-    public $phoneNumber;
+    /** @var  string */
+    public $phoneNumber = '';
 
-    public $email;
+    /** @var  string */
+    public $email = '';
+
+    /** @var  string */
+    public $website = '';
+
+    /** @var  string */
+    public $emailSupply = '';
 
     /**
      * @param array $params An array of data to populate the model with
@@ -78,6 +83,14 @@ class ContactModel extends My_Model_Abstract
         {
             $this->email = $params->email;
         }
+        if (isset($params->website) && !is_null($params->website))
+        {
+            $this->website = $params->website;
+        }
+        if (isset($params->emailSupply) && !is_null($params->emailSupply))
+        {
+            $this->emailSupply = $params->emailSupply;
+        }
     }
 
     /**
@@ -92,6 +105,8 @@ class ContactModel extends My_Model_Abstract
             "lastName"    => $this->lastName,
             "phoneNumber" => $this->phoneNumber,
             "email" => $this->email,
+            "website" => $this->website,
+            "emailSupply" => $this->emailSupply,
         ];
     }
 
@@ -102,17 +117,21 @@ class ContactModel extends My_Model_Abstract
      */
     public function isEmpty ()
     {
-        if (strcmp($this->firstName, ""))
+        if (strcmp($this->firstName, "")!==0)
         {
             return false;
         }
 
-        if (strcmp($this->lastName, ""))
+        if (strcmp($this->lastName, "")!==0)
         {
             return false;
         }
 
-        if (strcmp($this->email, ""))
+        if (strcmp($this->email, "")!==0)
+        {
+            return false;
+        }
+        if (strcmp($this->website, "")!==0)
         {
             return false;
         }

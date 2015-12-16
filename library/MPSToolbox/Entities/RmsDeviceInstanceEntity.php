@@ -54,6 +54,12 @@ class RmsDeviceInstanceEntity extends BaseEntity {
     private $reportDate;
 
     /**
+     * @Column(type="boolean", name="`ignore`")
+     * @var boolean
+     */
+    private $ignore = 0;
+
+    /**
      * @param $clientId
      * @param $ipAddress
      * @param $serialNumber
@@ -259,6 +265,22 @@ class RmsDeviceInstanceEntity extends BaseEntity {
     public function setReportDate($reportDate)
     {
         $this->reportDate = $reportDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIgnore()
+    {
+        return $this->ignore;
+    }
+
+    /**
+     * @param mixed $ignore
+     */
+    public function setIgnore($ignore)
+    {
+        $this->ignore = $ignore;
     }
 
 

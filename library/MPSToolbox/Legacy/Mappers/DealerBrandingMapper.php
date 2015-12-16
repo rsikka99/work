@@ -1,6 +1,7 @@
 <?php
 namespace MPSToolbox\Legacy\Mappers;
 
+use MPSToolbox\Legacy\Entities\DealerEntity;
 use MPSToolbox\Legacy\Models\DealerBrandingModel;
 use My_Model_Mapper_Abstract;
 use Zend_Db_Table_Select;
@@ -119,8 +120,10 @@ class DealerBrandingMapper extends My_Model_Mapper_Abstract
      *
      * @return DealerBrandingModel
      */
-    public function find ($id)
+    public function find ($id=null)
     {
+        if (!$id) $id = DealerEntity::getDealerId();
+
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
         if ($result instanceof DealerBrandingModel)

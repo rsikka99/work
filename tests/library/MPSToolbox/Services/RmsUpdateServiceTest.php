@@ -72,6 +72,9 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
     }
 
     public function test_update() {
+        $user = \MPSToolbox\Legacy\Mappers\UserMapper::getInstance()->find(2);
+        Zend_Auth::getInstance()->getStorage()->write($user);
+
         $http = $this->getMock('\cdyweb\http\BaseAdapter');
         $json1 = '
 [
@@ -511,9 +514,12 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
         );
 
         $service = new \MPSToolbox\Services\RmsUpdateService();
-        $service->setHttp($http);
+        $service->setPrintFleet(new \MPSToolbox\Api\PrintFleet('http://foo:bar@localhost/'));
         $clients = $service->getRmsClients();
         $client=current($clients);
+
+        $printFleet = new \MPSToolbox\Api\PrintFleet($client['rmsUri']);
+        $printFleet->setHttp($http);
 
         $instance = new \MPSToolbox\Entities\RmsDeviceInstanceEntity();
         $instance->setClient(\MPSToolbox\Entities\ClientEntity::find(5));
@@ -526,12 +532,15 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
         $instance->setMasterDevice(\MPSToolbox\Entities\MasterDeviceEntity::find(1));
         $instance->save();
 
-        $result = $service->update($client['clientId'], $client['rmsUri'], $client['deviceGroup']);
+        $result = $service->update($client['clientId'], $printFleet, $client['deviceGroup']);
         $this->assertEquals(1, count($result));
         $this->assertTrue($result[0] instanceof \MPSToolbox\Entities\RmsUpdateEntity);
     }
 
     public function test_deviceNeedsToner() {
+        $user = \MPSToolbox\Legacy\Mappers\UserMapper::getInstance()->find(2);
+        Zend_Auth::getInstance()->getStorage()->write($user);
+
         $service = new \MPSToolbox\Services\RmsUpdateService();
         $instance = new \MPSToolbox\Entities\RmsDeviceInstanceEntity();
         $instance->setClient(\MPSToolbox\Entities\ClientEntity::find(5));
@@ -556,6 +565,9 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
 
         $client = ['clientId'=>5, 'dealerId'=>1, 'templateNum'=>1, 'ecomMonochromeRank'=>'3,43,46', 'ecomColorRank'=>'3,43,46'];
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::BLACK);
+        $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::MAGENTA);
+
+        $device->getRmsDeviceInstance()->setIgnore(true);
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::MAGENTA);
     }
 

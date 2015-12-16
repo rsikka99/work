@@ -2,9 +2,10 @@
 
 namespace MPSToolbox\Services;
 use cdyweb\http\Exception\RequestException;
-use cdyweb\http\guzzle\Guzzle;
-use GuzzleHttp\Psr7\Response;
+
+use MPSToolbox\Api\PrintFleet;
 use MPSToolbox\Entities\ClientEntity;
+use MPSToolbox\Entities\DealerEntity;
 use MPSToolbox\Entities\DeviceNeedsTonerEntity;
 use MPSToolbox\Entities\MasterDeviceEntity;
 use MPSToolbox\Entities\RmsDeviceInstanceEntity;
@@ -25,91 +26,44 @@ use MPSToolbox\Settings\Entities\ShopSettingsEntity;
  */
 class RmsUpdateService {
 
-    /** @var \cdyweb\http\BaseAdapter */
-    private $http;
+    private $printFleet;
 
     /**
-     * @return \cdyweb\http\BaseAdapter
+     * @return PrintFleet
      */
-    public function getHttp()
+    public function getPrintFleet($rmsUri)
     {
-        if (empty($this->http)) {
-            $this->http = Guzzle::getAdapter();
+        if (empty($this->printFleet)) {
+            $this->printFleet = new PrintFleet($rmsUri);
         }
-        return $this->http;
+        return $this->printFleet;
     }
 
     /**
-     * @param \cdyweb\http\BaseAdapter $http
+     * @param PrintFleet $printFleet
      */
-    public function setHttp($http)
+    public function setPrintFleet(PrintFleet $printFleet)
     {
-        $this->http = $http;
+        $this->printFleet = $printFleet;
     }
+
+
 
     /**
-    public function findDeviceInstance($clientId, $line) {
-        $db = \Zend_Db_Table::getDefaultAdapter();
-        $st = $db->prepare('select * from rms_device_instances where clientId=:clientId and assetId=:assetId and ipAddress=:ipAddress and serialNumber=:serialNumber');
-        $st->execute([':clientId'=>$clientId,':ipAddress'=>$line['ipAddress'],':serialNumber'=>$line['serialNumber'],':assetId'=>$line['id']]);
-        $result = $st->fetch();
-        if (!$result) {
-            $st = $db->prepare('select * from rms_device_instances where clientId=:clientId and ipAddress=:ipAddress and serialNumber=:serialNumber and assetId=\'\'');
-            $st->execute([':clientId'=>$clientId,':ipAddress'=>$line['ipAddress'],':serialNumber'=>$line['serialNumber']]);
-            $result = $st->fetch();
-        }
-        return $result;
-    }
-    **/
-
-    private function readUrl($url) {
-        /** @var \Zend_Log $log */
-        $log = \Zend_Registry::get('Zend_Log');
-        $log->log($url, 4);
-        $filename='';
-        if (file_exists('c:') && !defined('UNIT_TESTING')) {
-            $parsed = parse_url($url);
-            $filename = 'data/cache/'.basename($parsed['path']) . '.' . md5($url) . '.txt';
-            if (file_exists($filename)) return new Response(200, [], file_get_contents($filename));
-        }
-        $result = $this->getHttp()->get($url);
-        if (file_exists('c:') && !defined('UNIT_TESTING')) {
-            $body = $result->getBody()->getContents();
-            file_put_contents($filename, json_encode(json_decode($body, true), JSON_PRETTY_PRINT));
-            $result = new Response(200, [], file_get_contents($filename));
-        }
-        return $result;
-    }
-
-    public function update($clientId, $rmsUri, $groupId) {
+     * @param $clientId
+     * @param $rmsUri
+     * @param $groupId
+     * @return RmsUpdateEntity[]
+     */
+    public function update($clientId, PrintFleet $printFleet, $groupId) {
         if (empty($groupId)) {
             throw new \InvalidArgumentException('$groupId is empty');
         }
         $result = [];
-        $uri = parse_url($rmsUri);
 
-        $http = $this->getHttp();
-        $http->appendRequestHeader('Accept','application/json');
-        $http->appendRequestHeader('X-API-KEY','eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJvZmYiOmZhbHNlLCJzdWIiOiJOb3JtIE1jQ29ua2V5IChQYXJ0cyBOb3cpIiwiYXVkIjoiYzE4ZTQ4MWUtZGY0OS00NDdjLWI2MmMtZmI5NTljNjcxYjFkIiwiaWF0IjoxNDQ2MjIzMzkxLCJuYmYiOjE0NDYxNjMyMDAsImV4cCI6bnVsbH0.oS8yjz9-P4hIIU8cx8aZQhryxiDUfRm04QL969sCPbrl2TqBQ8XTtMRm5ymiVuTIBof8EvzDfKfAi26Ca83DQg');
-        $http->setBasicAuth($uri['user'],$uri['pass']);
-        $base_path = 'https://'.$uri['host'].'/restapi/3.5.5';
+        if (!$printFleet->auth()) return [];
 
-        //throw Exception when auth fails
-        try {
-            $http->put($base_path . '/auth');
-        } catch(RequestException $ex) {
-            $r = $ex->getResponse();
-            throw new \RuntimeException('Auth failed: '.$r->getBody()->getContents(), -1, $ex);
-        }
-
-        $url=$base_path.'/devices?'.http_build_query(['groupId'=>$groupId,'includeSubGroups'=>'true']);
-        $response = $this->readUrl($url); //$http->get($url);
-        $str = $response->getBody()->getContents();
-        $json = json_decode($str, true);
-
-        /** @var ClientEntity $client */
-        $client = ClientEntity::find($clientId);
-        $ignoreMasterDevices = explode(',',$client->getNotSupportedMasterDevices());
+        $json = $printFleet->devices($groupId);
 
         foreach ($json as $line) {
             if ($line['managementStatus']!='Managed') continue;
@@ -117,23 +71,16 @@ class RmsUpdateService {
 
             $device_instance = RmsDeviceInstanceEntity::findOne($clientId, $line['ipAddress'], $line['serialNumber'], $line['id']);//$this->findDeviceInstance($clientId, $line);
             if (!$device_instance) {
-                echo "!!! {$line['id']} {$line['name']} {$line['ipAddress']} {$line['serialNumber']} <br>\n";
+                echo "new device instance!!! {$line['id']} {$line['name']} {$line['ipAddress']} {$line['serialNumber']} <br>\n";
+            } else {
+                echo "updating device: {$line['id']} {$line['name']} {$line['ipAddress']} {$line['serialNumber']} <br>\n";
             }
 
-            echo "{$line['id']} {$line['name']} {$line['ipAddress']} {$line['serialNumber']} <br>\n";
-
-            $url=$base_path.'/devices/'.$line['id'];
-            $response = $this->readUrl($url); //$http->get($url);
-            $str = $response->getBody()->getContents();
-            $device = json_decode($str, true);
+            $device = $printFleet->device($line['id']);
 
             $today = date('Y-m-d', strtotime('+1 DAY'));
             $minus90 = date('Y-m-d', strtotime('-90 DAY'));
-            $url=$base_path.'/devices/'.$device['id'].'/meters?'.http_build_query(['startDate'=>$minus90.'T00:00:00Z','endDate'=>$today.'T00:00:00Z','intervalUnit'=>'yearly']);
-            #echo "{$url} <br>\n";
-            $response = $this->readUrl($url); //$http->get($url);
-            $str = $response->getBody()->getContents();
-            $meters = json_decode($str, true);
+            $meters = $printFleet->meters($device['id'], $minus90, $today);
             foreach ($meters as $meter) {
                 if (empty($meter['delta'])) $meter['delta']=0;
                 if (empty($meter['count'])) $meter['count']=0;
@@ -241,6 +188,18 @@ class RmsUpdateService {
         return MasterDeviceMapper::getInstance()->find($arr[0]['masterDeviceId']);
     }
 
+    public function getRmsUri($dealerId=null) {
+        if (!$dealerId) $dealerId = DealerEntity::getDealerId();
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $line= $db->query("
+SELECT ss.rmsUri
+from `dealer_settings` ds
+JOIN `shop_settings` ss ON ds.shopSettingsId = ss.id
+WHERE ds.dealerId = {$dealerId}
+")->fetch();
+        return $line['rmsUri'];
+    }
+
     public function getRmsClients() {
         $db = \Zend_Db_Table::getDefaultAdapter();
         return $db->fetchAll('
@@ -343,8 +302,13 @@ group by clientId
     }
 
     public function deviceNeedsToner(RmsUpdateEntity $device, $client, $colorId) {
+        $rmsDeviceInstance = $device->getRmsDeviceInstance();
+        if ($rmsDeviceInstance->getIgnore()) {
+            error_log(sprintf('ignoring %s', $device->getRmsProviderId()->getId()));
+            return null;
+        }
         $result = false;
-        $masterDevice = $device->getRmsDeviceInstance()->getMasterDevice();
+        $masterDevice = $rmsDeviceInstance->getMasterDevice();
         if (!$masterDevice) {
             error_log(sprintf('%s:%s masterDevice unknown', __FILE__, __LINE__));
             return null;
@@ -400,18 +364,18 @@ group by clientId
         /** @var \MPSToolbox\Entities\DeviceNeedsTonerEntity $deviceNeedsToner */
         $deviceNeedsToner = \MPSToolbox\Entities\DeviceNeedsTonerEntity::find([
             'color'=>$colorId,
-            'rmsDeviceInstance'=>$device->getRmsDeviceInstance(),
+            'rmsDeviceInstance'=>$rmsDeviceInstance,
         ]);
         if (empty($deviceNeedsToner)) {
-            printf("NEW Device Needs Toner! %s <br>\n", $device->getRmsDeviceInstance()->getIpAddress());
+            printf("NEW Device Needs Toner! %s <br>\n", $rmsDeviceInstance->getIpAddress());
             $deviceNeedsToner = new \MPSToolbox\Entities\DeviceNeedsTonerEntity();
-            $deviceNeedsToner->setRmsDeviceInstance($device->getRmsDeviceInstance());
+            $deviceNeedsToner->setRmsDeviceInstance($rmsDeviceInstance);
             $deviceNeedsToner->setColor(TonerColorEntity::find($colorId));
-            $deviceNeedsToner->setClient($device->getRmsDeviceInstance()->getClient());
-            $deviceNeedsToner->setAssetId($device->getRmsDeviceInstance()->getAssetId());
-            $deviceNeedsToner->setIpAddress($device->getRmsDeviceInstance()->getIpAddress());
-            $deviceNeedsToner->setSerialNumber($device->getRmsDeviceInstance()->getSerialNumber());
-            $deviceNeedsToner->setLocation($device->getRmsDeviceInstance()->getLocation());
+            $deviceNeedsToner->setClient($rmsDeviceInstance->getClient());
+            $deviceNeedsToner->setAssetId($rmsDeviceInstance->getAssetId());
+            $deviceNeedsToner->setIpAddress($rmsDeviceInstance->getIpAddress());
+            $deviceNeedsToner->setSerialNumber($rmsDeviceInstance->getSerialNumber());
+            $deviceNeedsToner->setLocation($rmsDeviceInstance->getLocation());
             $deviceNeedsToner->setFirstReported(new \DateTime());
             $deviceNeedsToner->setMasterDevice($masterDevice);
             $deviceNeedsToner->setTonerOptions(implode(',', $tonerOptionIds));
@@ -419,10 +383,10 @@ group by clientId
             $result = true;
         } else {
             if ($deviceNeedsToner->getShopifyOrder()) {
-                printf("Device Needs Toner update %s but toner has been ordered, order id: %s <br>\n", $device->getRmsDeviceInstance()->getIpAddress(), $deviceNeedsToner->getShopifyOrder());
+                printf("Device Needs Toner update %s but toner has been ordered, order id: %s <br>\n", $rmsDeviceInstance->getIpAddress(), $deviceNeedsToner->getShopifyOrder());
             } else {
                 $result = true;
-                printf("Device Needs Toner update %s <br>\n", $device->getRmsDeviceInstance()->getIpAddress());
+                printf("Device Needs Toner update %s <br>\n", $rmsDeviceInstance->getIpAddress());
             }
         }
 
@@ -587,7 +551,7 @@ HTML;
 
         $email = new \Zend_Mail();
         $email->setFrom($emailFromAddress, $emailFromName);
-        $email->addTo($contact->email);
+        $email->addTo(empty($contact->emailSupply) ? $contact->email : $contact->emailSupply);
         $email->addBcc($dealerBranding->dealerEmail);
         $email->setSubject(str_replace('{{clientName}}',$client->getCompanyName(),$supplyNotifySubject)); //'Printing Supplies Order Requirements for '.$client->getCompanyName());
         $email->setBodyHtml($html);

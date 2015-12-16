@@ -1,0 +1,38 @@
+<?php
+$clientMapper = \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance();
+$instanceService = new \MPSToolbox\Services\RmsDeviceInstanceService();
+?>
+<div class="container">
+    <h2>Import Results</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th width="40%">Client Name</th>
+                <th width="20%">Result</th>
+                <th width="40%">Actions</th>
+            </tr>
+        </thead>
+        <?php foreach ($this->result as $id=>$type) {
+            $client = $clientMapper->find($id);
+            $contact = \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ContactMapper::getInstance()->getContactByClientId($client->id);
+            $contact_incomplete = empty($contact->firstName) || empty($contact->lastName) || empty($contact->email);
+        ?>
+            <tr>
+                <td><a href="/company/clients/edit/<?= $id ?>"><?= htmlentities($client->companyName) ?></a></td>
+                <td><?= $type=='u'?'Updated':'Created' ?></td>
+                <td>
+                    <a href="/company/clients/edit/<?= $id ?>"><?php if ($contact_incomplete) echo '<i class="fa fa-fw fa-warning text-danger"></i> ' ?>Edit Client Details</a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="/select-client?selectClient=<?= $id ?>">Start Assessment</a>
+<?php if (\MPSToolbox\Entities\DealerEntity::hasEcommerce()) {
+    $incomplete = count($instanceService->getIncomplete($id));
+?>
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="/ecommerce/device?client=<?= $id ?>">View devices<?= $incomplete?" (<i class=\"fa fa-fw fa-warning text-danger\"></i> {$incomplete} incomplete)":'' ?></a>
+<?php } ?>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
+    <p><a class="btn btn-default" href="/company/clients">&laquo; back to client management</a></p>
+</div>

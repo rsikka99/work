@@ -26,37 +26,37 @@ class AddressModel extends My_Model_Abstract
     /**
      * @var string
      */
-    public $addressLine1;
+    public $addressLine1 = '';
 
     /**
      * @var string
      */
-    public $addressLine2;
+    public $addressLine2 = '';
 
     /**
      * @var string
      */
-    public $city;
+    public $city = '';
 
     /**
      * @var string
      */
-    public $region;
+    public $region = '';
 
     /**
      * @var string
      */
-    public $postCode;
+    public $postCode = '';
 
     /**
      * @var int
      */
-    public $countryId;
+    public $countryId = null;
 
     /**
      * @var CountryModel
      */
-    protected $country;
+    protected $country = null;
 
 
     /**
