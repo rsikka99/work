@@ -319,7 +319,7 @@ group by clientId
             return null;
         }
 
-        $tonerService = new TonerService();
+        $tonerService = new TonerService(null, $client['dealerId']);
         $toners = [];
         foreach ($masterDevice->getToners() as $toner) {
             /** @var TonerEntity $toner */
