@@ -200,60 +200,6 @@ $shopSettings = $dealerSettings->shopSettings;
                             </div>
                         </div>
 
-                        <div class="modal masterDeviceModal" id="replacementTonersModal">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title" id="aTitle"></h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <h3 class="text-center">Affected Devices</h3>
-
-                                        <div class="form-horizontal">
-                                            <span id="affectedDevicesText"></span>
-                                            <table id="affectedReplacementToners"></table>
-                                            <div id="affectedReplacementToners_Pager"></div>
-                                            <h3 id="selectReplacementText" class="text-center"></h3>
-
-                                            <div id="replacementToners_criteria_container">
-                                                Manufacturer:
-                                                <input id="replacementTonersSelectManufacturer" type="text" name="replacementTonersSelectManufacturer" class="input-large" title="Replacement Toner Select Manufacturer" />
-                                                <input type="button" value="Reset" class="btn btn-xs btn-default" id='replacementTonersClearManSearch' />
-                                                Filter:
-                                                <select id="replacementTonersFilter" name="filterList" class="input-large" title="Replacement Toner Search Filter">
-                                                    <option value="dealerSku"><?= My_Brand::$dealerSku; ?></option>
-                                                    <option value="sku">OEM SKU</option>
-                                                </select>
-                                                <input type="text" id="replacementTonersCriteria" class="input-medium" title="Replacement Toner Search Text" />
-                                                <input id="replacementTonersSearch" type="button" value="Search" class="btn btn-xs btn-success" />
-                                                <input id="replacementTonersReset" type="button" value="Reset" class="btn btn-xs btn-default" />
-                                            </div>
-                                            <table id="replacementToners"></table>
-                                            <div id="replacementToners_Pager"></div>
-                                            <div>
-                                                <span class="text-center">Apply to all devices using this toner?</span>
-                                                <br />
-
-                                                <div class="switch" data-on-label="Yes" data-off-label="No" data-off="danger" data-on="success">
-                                                    <input type="checkbox" id="replacementTonersApplyToAll" title="Apply replacement toner to all matching devices" />
-                                                </div>
-                                            </div>
-                                            <br />
-
-
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <input type="button" class="btn btn-primary" value="Save" id="replacementTonersFormBtn" onclick="replaceToner();" />
-                                        <input type="button" class="btn btn-default" value="Cancel" data-dismiss='modal' " />
-
-                                        <input type="hidden" id="replacementTonersTotalCount" />
-                                        <input type="hidden" id="replacementTonersDeviceCount" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 <?php endif; ?>
 

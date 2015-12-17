@@ -21,43 +21,74 @@ class MPSToolbox_Legacy_Modules_ProposalGenerator_Mappers_TonerMapperTest extend
 
     public function test_getReportToners() {
         $mapper = TonerMapper::getInstance();
-        $result = $mapper->getReportToners(1, 2, 5, 'level1');
+        $result = $mapper->getReportToners(1, 2);
         $this->assertTrue(isset($result[1][1][0]));
+        /** @var \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel $toner */
         $toner = $result[1][1][0];
         $this->assertEquals(1, $toner->isUsingDealerPricing);
+        $this->assertEquals(0, $toner->isUsingCustomerPricing);
+        $this->assertEquals(92.44, $toner->calculatedCost);
+
+        $result = $mapper->getReportToners(1, 2, 5, 'level1');
+        $this->assertTrue(isset($result[1][1][0]));
+        /** @var \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel $toner */
+        $toner = $result[1][1][0];
+        $this->assertEquals(1, $toner->isUsingDealerPricing);
+        $this->assertEquals(0, $toner->isUsingCustomerPricing);
         $this->assertEquals(21, $toner->calculatedCost);
     }
 
     public function test_fetchTonersAssignedToDevice() {
-
+        $mapper = TonerMapper::getInstance();
+        $result = $mapper->fetchTonersAssignedToDevice(1);
+        $this->assertEquals(8, count($result));
+        $this->assertEquals(1, $result[0]->id);
     }
 
     public function test_fetchTonersAssignedToDeviceForCurrentDealer() {
-
+        $this->user2();
+        $mapper = TonerMapper::getInstance();
+        $result = $mapper->fetchTonersAssignedToDeviceForCurrentDealer(1);
+        $this->assertEquals(8, count($result));
+        $this->assertEquals(1, $result[0]['id']);
     }
 
-    public function test_fetchTonersAssignedToDeviceWithMachineCompatibility() {
-
-    }
-
-    public function test_fetchTonersWithMachineCompatibilityUsingColorConfigId() {
-
-    }
-
-    public function test_fetchTonersWithMachineCompatibilityUsingColorId() {
-
+    public function test_fetchTonersForDealer() {
+        $this->user2();
+        $mapper = TonerMapper::getInstance();
+        $result = $mapper->fetchTonersForDealer();
+        $this->assertEquals(25, count($result));
+        $this->assertEquals(1, $result[0]['id']);
     }
 
     public function test_fetchListOfToners() {
-
-    }
-
-    public function test_fetchListOfTonersWithMachineCompatibility() {
-
+        $this->user2();
+        $mapper = TonerMapper::getInstance();
+        $result = $mapper->fetchListOfToners('1');
+        $this->assertEquals(1, count($result));
+        $this->assertEquals(1, $result[0]['id']);
     }
 
     public function test_fetchListOfAffectedToners() {
 
+    }
+
+    public function test_getCheapestTonersForDevice() {
+        $this->user2();
+        $mapper = TonerMapper::getInstance();
+        $result = $mapper->getCheapestTonersForDevice(17,2,'5','5');
+        $this->assertEquals(4, count($result));
+        $this->assertEquals(40, $result[2]->id);
+        $this->assertEquals(41, $result[3]->id);
+        $this->assertEquals(42, $result[4]->id);
+        $this->assertEquals(39, $result[1]->id);
+
+        $result = $mapper->getCheapestTonersForDevice(1,2,'','',null,'level1');
+        $this->assertEquals(4, count($result));
+        $this->assertEquals(2, $result[2]->id);
+        $this->assertEquals(3, $result[3]->id);
+        $this->assertEquals(4, $result[4]->id);
+        $this->assertEquals(1, $result[1]->id);
     }
 
     public function test_getTonerPricingForExport() {
@@ -72,20 +103,20 @@ class MPSToolbox_Legacy_Modules_ProposalGenerator_Mappers_TonerMapperTest extend
 
     }
 
-    public function test_fetchAllTonersWithMachineCompatibility() {
-
-    }
-
-    public function test_getCompatibleToners() {
-
-    }
-
     public function test_findCompatibleToners() {
-
+        $this->user2();
+        $mapper = TonerMapper::getInstance();
+        $result = $mapper->findCompatibleToners(2);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals(374, $result[0]->id);
     }
 
     public function test_findOemToners() {
-
+        $this->user2();
+        $mapper = TonerMapper::getInstance();
+        $result = $mapper->findOemToners(33);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals(32, $result[0]->id);
     }
 
 

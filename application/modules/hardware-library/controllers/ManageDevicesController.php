@@ -122,7 +122,6 @@ class HardwareLibrary_ManageDevicesController extends Action
             }
             else if ($masterDeviceId !== false && $masterDeviceId !== 0 && $firstLoad)
             {
-                //$tonerCount = TonerMapper::getInstance()->fetchTonersAssignedToDeviceWithMachineCompatibility($masterDeviceId, null, true);
                 $tonerCount = TonerMapper::getInstance()->fetchTonersAssignedToDeviceForCurrentDealer($masterDeviceId, true);
             }
 
@@ -138,7 +137,6 @@ class HardwareLibrary_ManageDevicesController extends Action
             }
             else if ($masterDeviceId !== false && $masterDeviceId !== 0 && $firstLoad)
             {
-                //$toners = TonerMapper::getInstance()->fetchTonersAssignedToDeviceWithMachineCompatibility($masterDeviceId, $sortOrder);
                 $toners = TonerMapper::getInstance()->fetchTonersAssignedToDeviceForCurrentDealer($masterDeviceId);
             }
 
@@ -191,8 +189,8 @@ class HardwareLibrary_ManageDevicesController extends Action
         if ($jqGridService->sortingIsValid())
         {
 
-            $arr = $tonerMapper->fetchTonersForDealer(null,1000,0,$filterManufacturerId,$filterTonerSku,$filterTonerColorId);
-            $jqGridService->setRecordCount(count($arr));
+            $count = $tonerMapper->countTonersForDealer($filterManufacturerId,$filterTonerSku,$filterTonerColorId);
+            $jqGridService->setRecordCount($count);
 
             // Validate current page number since we don't want to be out of bounds
             if ($jqGridService->getCurrentPage() < 1)
@@ -989,82 +987,6 @@ class HardwareLibrary_ManageDevicesController extends Action
         else
         {
             $this->sendJsonError("Cannot remove toner, missing required id.");
-        }
-    }
-
-    /**
-     *  Gets a list of all the master devices and their toners that will be affected by the toner deletion
-     */
-    public function affectedReplacementTonersListAction ()
-    {
-        $tonerId        = $this->_getParam('tonerId', false);
-        $searchCriteria = $this->_getParam('criteriaFilter', null);
-        $searchValue    = $this->_getParam('criteria', null);
-
-        $tonerMapper = TonerMapper::getInstance();
-
-        $jqGridService = new JQGrid();
-
-        $jqGridParameters = [
-            'sidx' => $this->_getParam('sidx', 'yield'),
-            'sord' => $this->_getParam('sord', 'desc'),
-            'page' => $this->_getParam('page', 1),
-            'rows' => $this->_getParam('rows', 10),
-        ];
-
-        $sortColumns = [
-            'id',
-            'name',
-            'description'
-        ];
-
-        $jqGridService->setValidSortColumns($sortColumns);
-
-        if ($jqGridService->sortingIsValid())
-        {
-            $jqGridService->parseJQGridPagingRequest($jqGridParameters);
-
-            $filterCriteriaValidator = new Zend_Validate_InArray([
-                'haystack' => $sortColumns
-            ]);
-
-            // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
-            if ($searchCriteria === null || $searchValue === null || !$filterCriteriaValidator->isValid($searchCriteria))
-            {
-                $searchCriteria = null;
-                $searchValue    = null;
-            }
-            $jqGridService->setRecordCount(count($tonerMapper->fetchListOfAffectedToners($tonerId, null, 1000)));
-
-            // Validate current page number since we don't want to be out of bounds
-            if ($jqGridService->getCurrentPage() < 1)
-            {
-                $jqGridService->setCurrentPage(1);
-            }
-            else if ($jqGridService->getCurrentPage() > $jqGridService->calculateTotalPages())
-            {
-                $jqGridService->setCurrentPage($jqGridService->calculateTotalPages());
-            }
-
-            $sortOrder = [];
-
-            if ($jqGridService->hasGrouping())
-            {
-                $sortOrder[] = $jqGridService->getGroupByColumn() . ' ' . $jqGridService->getGroupBySortOrder();
-            }
-
-            if ($jqGridService->hasColumns())
-            {
-                $sortOrder[] = $jqGridService->getSortColumn() . ' ' . $jqGridService->getSortDirection();
-            }
-
-            $jqGridService->setRows($tonerMapper->fetchListOfAffectedToners($tonerId, null, 1000, 0)); // We want to show EVERYTHING, every time
-
-            $this->sendJson($jqGridService->createPagerResponseArray());
-        }
-        else
-        {
-            $this->sendJsonError(sprintf('Sort index "%s" is not a valid sorting index.', $jqGridService->getSortColumn()));
         }
     }
 
