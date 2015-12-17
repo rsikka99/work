@@ -25,6 +25,11 @@ class My_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTestCase {
     private $_fixtureDataset = null;
     private $_connectionMock;
 
+    public function user2() {
+        $user = \MPSToolbox\Legacy\Mappers\UserMapper::getInstance()->find(2);
+        Zend_Auth::getInstance()->getStorage()->write($user);
+    }
+
     protected function getConnection()
     {
         if ($this->_connectionMock == null) {

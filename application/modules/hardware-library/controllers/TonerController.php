@@ -347,14 +347,8 @@ class HardwareLibrary_TonerController extends Action
 
         if ($jqGridService->sortingIsValid())
         {
-            $jqGridService->setRecordCount(count($tonerMapper->fetchTonersForDealer(
-                null,
-                null,
-                null,
-                $filterManufacturerId,
-                $filterTonerSku,
-                $filterTonerColorId
-            )));
+            $count = $tonerMapper->countTonersForDealer($filterManufacturerId,$filterTonerSku,$filterTonerColorId);
+            $jqGridService->setRecordCount($count);
 
             // Validate current page number since we don't want to be out of bounds
             if ($jqGridService->getCurrentPage() < 1)

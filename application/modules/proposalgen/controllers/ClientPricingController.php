@@ -154,7 +154,7 @@ class Proposalgen_ClientPricingController extends Action
 
         if ($tonerId)
         {
-            $toners = TonerMapper::getInstance()->getCompatibleToners($tonerId, $this->_selectedClientId);
+            $toners = TonerMapper::getInstance()->findCompatibleToners($tonerId, $this->_selectedClientId);
             foreach ($toners as $toner)
             {
                 $replacementData[$toner->id] = $toner->getManufacturer()->displayname . " - " . $toner->sku . " - " . $this->view->formatCostPerPage($toner->calculatedCost / $toner->yield);
