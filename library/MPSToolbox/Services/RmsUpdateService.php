@@ -434,7 +434,7 @@ group by clientId
 
         /** @var ShopSettingsEntity $shopSettings */
         $shopSettings = DealerSettingsEntity::getDealerSettings($dealerId)->shopSettings;
-        $link = sprintf('http://%s.myshopify.com/account/login', $shopSettings->shopifyName);
+        $link = '<a href="'.sprintf('http://%s.myshopify.com/tools/mps?p=rms&origin=email', $shopSettings->shopifyName).'">Go to your supply cupboard</a>';
 
         $emailFromAddress = $shopSettings->emailFromAddress;
         $emailFromName = $shopSettings->emailFromName;
