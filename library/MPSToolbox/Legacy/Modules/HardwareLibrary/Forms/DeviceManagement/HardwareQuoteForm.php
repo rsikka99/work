@@ -78,12 +78,6 @@ class HardwareQuoteForm extends \My_Form_Form
                 ]),
             ],
         ]);
-        $this->addElement('text_currency', 'srp', [
-            'label'      => 'SRP',
-            'maxlength'  => 255,
-            'required'   => false,
-            'allowEmpty' => true,
-        ]);
         $this->addElement('text_currency', 'rent', [
             'label'      => 'Rent per month',
             'maxlength'  => 255,

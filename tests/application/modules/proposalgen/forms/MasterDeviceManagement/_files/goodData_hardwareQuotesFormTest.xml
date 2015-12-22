@@ -14,7 +14,6 @@
             <oemSku>testers</oemSku>
             <dealerSku>12345</dealerSku>
             <cost>25.55</cost>
-            <srp>25.55</srp>
         </data>
     </testData>
     <testData>
@@ -23,7 +22,6 @@
             <oemSku>1</oemSku>
             <dealerSku>1</dealerSku>
             <cost>1</cost>
-            <srp>25.55</srp>
         </data>
     </testData>
     <testData>
