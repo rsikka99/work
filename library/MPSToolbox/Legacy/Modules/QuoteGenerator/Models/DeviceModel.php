@@ -54,11 +54,6 @@ class DeviceModel extends My_Model_Abstract
     /**
      * @var float
      */
-    public $srp;
-
-    /**
-     * @var float
-     */
     public $rent;
 
     /**
@@ -132,9 +127,6 @@ class DeviceModel extends My_Model_Abstract
             $this->cost = $params->cost;
         }
 
-        if (isset($params->srp) && !is_null($params->srp)) $this->srp = $params->srp;
-
-        if (isset($params->srp) && !is_null($params->srp)) $this->srp = $params->srp;
         if (isset($params->rent) && !is_null($params->rent)) $this->rent = $params->rent;
         if (isset($params->pagesPerMonth) && !is_null($params->pagesPerMonth)) $this->pagesPerMonth = $params->pagesPerMonth;
         if (isset($params->dataSheetUrl) && !is_null($params->dataSheetUrl)) $this->dataSheetUrl = $params->dataSheetUrl;
@@ -155,7 +147,6 @@ class DeviceModel extends My_Model_Abstract
             "dealerSku"      => $this->dealerSku,
             "description"    => $this->description,
             "cost"           => $this->cost,
-            "srp"            => $this->srp,
             "rent"           => $this->rent,
             "pagesPerMonth"  => $this->pagesPerMonth,
             "dataSheetUrl"   => $this->dataSheetUrl,

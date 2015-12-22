@@ -28,7 +28,6 @@ class Default_CronController extends \Tangent\Controller\Action {
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_helper->layout->disableLayout();
 
-
         $service = new \MPSToolbox\Services\DistributorUpdateService();
 
         $dealerSuppliers = $service->getDealerSuppliers();

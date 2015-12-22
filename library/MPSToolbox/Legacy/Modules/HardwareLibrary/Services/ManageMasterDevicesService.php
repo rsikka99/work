@@ -8,6 +8,7 @@ use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\AvailableTo
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeleteForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeviceAttributesForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeviceImageForm;
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DistributorsForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HistoryForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareConfigurationsForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareOptimizationForm;
@@ -113,7 +114,8 @@ class ManageMasterDevicesService
         $showAvailableOptions = true,
         $showHardwareConfigurations = true,
         $showDeviceImage = true,
-        $showHistory = true
+        $showHistory = true,
+        $showDistributors = true
     )
     {
         $formsToShow = [];
@@ -154,9 +156,14 @@ class ManageMasterDevicesService
             $formsToShow['deviceImage']  = $this->getDeviceImageForm();
         }
 
-        if ($showDeviceImage)
+        if ($showHistory)
         {
             $formsToShow['history']  = $this->getHistoryForm();
+        }
+
+        if ($showDistributors)
+        {
+            $formsToShow['distributors']  = $this->getDistributorsForm();
         }
 
         $formsToShow['delete'] = new DeleteForm();
@@ -824,6 +831,13 @@ class ManageMasterDevicesService
         }
 
         return $this->_historyForm;
+    }
+
+    public function getDistributorsForm($id = null) {
+        if (!isset($this->_distributorsForm)) {
+            $this->_distributorsForm = new DistributorsForm($id, null);
+        }
+        return $this->_distributorsForm;
     }
 
     /**

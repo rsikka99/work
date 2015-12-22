@@ -103,6 +103,13 @@ $shopSettings = $dealerSettings->shopSettings;
                             </li>
                         <?php endif; ?>
 
+                        <?php if ($this->distributors) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#distributorsTab" id="distributorsTopTab" data-toggle="tab">Distributors</a>
+                            </li>
+                        <?php endif; ?>
+
                     </ul>
                 </div>
             </div>
@@ -342,6 +349,13 @@ $shopSettings = $dealerSettings->shopSettings;
                     <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="historyTab">
                         <?php $first = ($first) ? false : $first ?>
                         <?= $this->history ?>
+                    </div>
+                <?php endif ?>
+
+                <?php if ($this->distributors) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="distributorsTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->distributors ?>
                     </div>
                 <?php endif ?>
 

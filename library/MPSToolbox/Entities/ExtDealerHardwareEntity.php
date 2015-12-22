@@ -53,12 +53,6 @@ class ExtDealerHardwareEntity extends BaseEntity {
      * @var float
      * @Column(type="float")
      */
-    private $srp;
-
-    /**
-     * @var float
-     * @Column(type="float")
-     */
     private $rent;
 
     /**
@@ -189,22 +183,6 @@ class ExtDealerHardwareEntity extends BaseEntity {
     public function setDescription($description)
     {
         $this->description = $description;
-    }
-
-    /**
-     * @return float
-     */
-    public function getSrp()
-    {
-        return $this->srp;
-    }
-
-    /**
-     * @param float $srp
-     */
-    public function setSrp($srp)
-    {
-        $this->srp = $srp;
     }
 
     /**

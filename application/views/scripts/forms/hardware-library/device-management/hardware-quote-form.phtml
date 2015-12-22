@@ -74,16 +74,6 @@ $shopSettings = $dealerSettings->shopSettings;
                 </div>
             </div>
 
-            <div class="form-group <?= ($form->getElement('srp')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                <?= $this->RenderFormLabel($form->getElement('srp'), ['col-md-4']) ?>
-
-                <div class="col-md-6">
-                    <?= $this->RenderFormText($form->getElement('srp'), null, '$') ?>
-                    <?= $this->RenderFormDescription($form->getElement('srp')) ?>
-                    <?= $this->RenderFormElementErrors($form->getElement('srp')) ?>
-                </div>
-            </div>
-
             <div class="form-group <?= ($form->getElement('rent')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                 <?= $this->RenderFormLabel($form->getElement('rent'), ['col-md-4']) ?>
 
