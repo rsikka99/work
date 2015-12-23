@@ -59,5 +59,26 @@ class DistributorsForm extends \My_Form_Form
         #--
         return $distributors;
     }
+    public static function getServices(MasterDeviceModel $masterDevice)
+    {
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        return $db->query(
+'
+  select
+    master_device_service.id,
+    suppliers.name as supplier,
+    COALESCE(ingram_products.vendor_part_number) as sku,
+    COALESCE(ingram_products.ingram_part_number) as part_number,
+    COALESCE(ingram_prices.customer_price) as price
+  from
+    master_device_service
+    join suppliers on master_device_service.supplier=suppliers.id
+    left join ingram_products on ingram_products.ingram_part_number =  master_device_service.ingram_part_number
+      left join ingram_prices on ingram_prices.ingram_part_number = ingram_products.ingram_part_number
+  WHERE
+    master_device_service.masterDeviceId = ?
+',
+        [$masterDevice->id])->fetchAll();
+    }
 
 }
