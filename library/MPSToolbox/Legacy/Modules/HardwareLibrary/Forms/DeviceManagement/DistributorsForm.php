@@ -45,8 +45,9 @@ class DistributorsForm extends \My_Form_Form
                 ];
             }
         }
+        $dealerId = DealerEntity::getDealerId();
         #--
-        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from ingram_products p join ingram_prices c using (ingram_part_number) where masterDeviceId=:masterDeviceId');
+        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from ingram_products p join ingram_prices c using (ingram_part_number) where dealerId='.$dealerId.' and masterDeviceId=:masterDeviceId');
         $st->execute(['masterDeviceId'=>$masterDevice->id]);
         foreach ($st->fetchAll() as $line) {
             $distributors[] = [
@@ -57,7 +58,7 @@ class DistributorsForm extends \My_Form_Form
             ];
         }
         #--
-        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from synnex_products p join synnex_prices c using (SYNNEX_SKU) where masterDeviceId=:masterDeviceId');
+        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from synnex_products p join synnex_prices c using (SYNNEX_SKU) where dealerId='.$dealerId.' and masterDeviceId=:masterDeviceId');
         $st->execute(['masterDeviceId'=>$masterDevice->id]);
         foreach ($st->fetchAll() as $line) {
             $distributors[] = [

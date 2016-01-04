@@ -74,7 +74,7 @@ class HardwareLibrary_TonerController extends Action
             }
         }
         #--
-        $st = Zend_Db_Table::getDefaultAdapter()->prepare('select * from ingram_products p join ingram_prices c using (ingram_part_number) where tonerId=:tonerId');
+        $st = Zend_Db_Table::getDefaultAdapter()->prepare('select * from ingram_products p join ingram_prices c using (ingram_part_number) where dealerId='.$dealerId.' and tonerId=:tonerId');
         $st->execute(['tonerId'=>$tonerId]);
         foreach ($st->fetchAll() as $line) {
             $form->distributors[] = [
@@ -85,7 +85,7 @@ class HardwareLibrary_TonerController extends Action
             ];
         }
         #--
-        $st = Zend_Db_Table::getDefaultAdapter()->prepare('select * from synnex_products p join synnex_prices c using (SYNNEX_SKU) where tonerId=:tonerId');
+        $st = Zend_Db_Table::getDefaultAdapter()->prepare('select * from synnex_products p join synnex_prices c using (SYNNEX_SKU) where dealerId='.$dealerId.' and tonerId=:tonerId');
         $st->execute(['tonerId'=>$tonerId]);
         foreach ($st->fetchAll() as $line) {
             $form->distributors[] = [
