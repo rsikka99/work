@@ -468,6 +468,7 @@ SELECT
 FROM toners
     left join `toners` t2 on toners.id=t2.id and t2.manufacturerId in (select manufacturerId from master_devices)
     LEFT JOIN manufacturers ON manufacturers.id = toners.manufacturerId
+    left join dealer_toner_attributes on dealer_toner_attributes.tonerId=toners.id and dealer_toner_attributes.dealerId = {$dealerId}
     where (toners.manufacturerId in (select manufacturerId from dealer_toner_vendors where dealer_toner_vendors.dealerId = {$dealerId}) or toners.manufacturerId in (select manufacturerId from master_devices))
 ";
 #--LEFT JOIN toner_vendor_manufacturers ON toner_vendor_manufacturers.manufacturerId = toners.manufacturerId
