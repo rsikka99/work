@@ -168,7 +168,6 @@ class DistributorUpdateService {
             'Gov_Class',
             'Warehouse_Qty_on_Hand_16',
             'MFG_Drop_Ship_Warehouse_QTY',
-            '_dummy'
         ];
         $filename=dirname($zip_filename).'/'.$txt_filename;
         echo $filename;
@@ -187,8 +186,10 @@ class DistributorUpdateService {
         $hdr = fgetcsv($fp, null, '~');
 
         while ($line = fgetcsv($fp, null, '~')) {
+            while (count($line)>count($columns)) {
+                array_pop($line);
+            }
             $line = array_combine($columns, $line);
-            print_r($line);
 
             $price_data = [
                 'Contract_Price' => $line['Contract_Price'],
@@ -200,7 +201,7 @@ class DistributorUpdateService {
                 'SYNNEX_SKU' => $line['SYNNEX_SKU'],
             ];
 
-            foreach (['Contract_Price', 'Unit_Cost', 'Promotion_Flag', 'Promotion_Comment','Promotion_Expiration_Date','_dummy'] as $key) {
+            foreach (['Contract_Price', 'Unit_Cost', 'Promotion_Flag', 'Promotion_Comment','Promotion_Expiration_Date'] as $key) {
                 unset($line[$key]);
             }
 
