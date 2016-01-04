@@ -85,6 +85,17 @@ class HardwareLibrary_TonerController extends Action
             ];
         }
         #--
+        $st = Zend_Db_Table::getDefaultAdapter()->prepare('select * from synnex_products p join synnex_prices c using (SYNNEX_SKU) where tonerId=:tonerId');
+        $st->execute(['tonerId'=>$tonerId]);
+        foreach ($st->fetchAll() as $line) {
+            $form->distributors[] = [
+                'name'=>'Synnex',
+                'sku'=>$line['SYNNEX_SKU'],
+                'price'=>$line['Unit_Cost'],
+                'stock'=>$line['Qty_on_Hand'],
+            ];
+        }
+        #--
         $this->view->tonerForm = $form;
 
         $this->_helper->layout()->disableLayout();

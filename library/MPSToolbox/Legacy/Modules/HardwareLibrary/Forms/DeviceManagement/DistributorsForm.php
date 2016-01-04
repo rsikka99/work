@@ -57,6 +57,17 @@ class DistributorsForm extends \My_Form_Form
             ];
         }
         #--
+        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from synnex_products p join synnex_prices c using (SYNNEX_SKU) where masterDeviceId=:masterDeviceId');
+        $st->execute(['masterDeviceId'=>$masterDevice->id]);
+        foreach ($st->fetchAll() as $line) {
+            $distributors[] = [
+                'name'=>'Synnex',
+                'sku'=>$line['SYNNEX_SKU'],
+                'price'=>$line['Unit_Cost'],
+                'stock'=>$line['Qty_on_Hand'],
+            ];
+        }
+        #--
         return $distributors;
     }
     public static function getServices(MasterDeviceModel $masterDevice)
