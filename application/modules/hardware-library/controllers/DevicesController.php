@@ -8,6 +8,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
 use Tangent\Controller\Action;
+use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\DeviceMapper;
 
 /**
  * Class HardwareLibrary_DevicesController
@@ -136,4 +137,46 @@ class HardwareLibrary_DevicesController extends Action
             $this->sendJsonError('Invalid Method');
         }
     }
+
+    public function rentCalcAction() {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $masterDeviceId = $this->getRequest()->getParam('id');
+        $masterDevice = MasterDeviceMapper::getInstance()->find($masterDeviceId);
+        $dealerId = \MPSToolbox\Entities\DealerEntity::getDealerId();
+        $device = DeviceMapper::getInstance()->fetch(DeviceMapper::getInstance()->getWhereId([$masterDeviceId, $dealerId]));
+
+        $services = \MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DistributorsForm::getServices($masterDeviceId);
+        $dealerTonerVendors = [];
+        foreach (\MPSToolbox\Legacy\Modules\Admin\Mappers\DealerTonerVendorMapper::getInstance()->fetchAllForDealer($dealerId) as $dtv) {
+            $dealerTonerVendors[] = $dtv->manufacturerId;
+        }
+        $toners = [];
+        foreach(TonerMapper::getInstance()->fetchTonersAssignedToDeviceForCurrentDealer($masterDeviceId) as $arr) {
+            $manufacturerId = $arr['manufacturerId'];
+            if (($manufacturerId!=$masterDevice->manufacturerId) && !in_array($manufacturerId, $dealerTonerVendors)) {
+                continue;
+            }
+            if ($arr['tonerColorId']==1) $group='black'; else $group='color';
+            $cpp = ''. ($arr['dealerCost'] / $arr['yield']);
+            $toners[$manufacturerId][$group][$cpp] = $cpp;
+        }
+        $vendors=[];
+        foreach ($toners as $manufacturerId=>$byMfg) {
+            $manufacturer = \MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper::getInstance()->find($manufacturerId);
+            $result=['black'=>0, 'color'=>0];
+            foreach ($byMfg as $group=>$byGroup) {
+                ksort($byGroup);
+                $result[$group] = current($byGroup);
+            }
+            $vendors[] = ['name'=>$manufacturer->fullname, 'value'=>implode(',',$result)];
+        }
+
+        $this->sendJson([
+            'hardware'=>$device->cost,
+            'service'=>empty($services)?0:$services[0]['price'],
+            'pages'=>$device->pagesPerMonth,
+            'vendor'=>$vendors
+        ]);
+    }
+
 }

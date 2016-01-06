@@ -10,7 +10,7 @@ if (!$form->getView()->masterDevice || !$form->getView()->masterDevice->id) {
 }
 
 $distributors = DistributorsForm::getDistributors($form->getView()->masterDevice);
-$services = DistributorsForm::getServices($form->getView()->masterDevice);
+$services = DistributorsForm::getServices($form->getView()->masterDevice->id);
 
 ?>
 <div class="row">

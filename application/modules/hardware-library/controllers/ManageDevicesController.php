@@ -389,7 +389,7 @@ class HardwareLibrary_ManageDevicesController extends Action
             $db = Zend_Db_Table::getDefaultAdapter();
             $db->query('DELETE FROM master_device_service WHERE id=? and masterDeviceId=?', [$id, $masterDeviceId])->execute();
         }
-        $result = \MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DistributorsForm::getServices($masterDevice);
+        $result = \MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DistributorsForm::getServices($masterDevice->id);
         $this->sendJson($result);
     }
     public function addServiceAction() {
@@ -400,7 +400,7 @@ class HardwareLibrary_ManageDevicesController extends Action
         if ($masterDevice && $sku) {
             $db->prepare('insert into master_device_service set masterDeviceId=?, vpn=?')->execute([$masterDeviceId, $sku]);
         }
-        $result = \MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DistributorsForm::getServices($masterDevice);
+        $result = \MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DistributorsForm::getServices($masterDevice->id);
         $this->sendJson($result);
     }
 

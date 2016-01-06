@@ -71,7 +71,7 @@ class DistributorsForm extends \My_Form_Form
         #--
         return $distributors;
     }
-    public static function getServices(MasterDeviceModel $masterDevice)
+    public static function getServices($masterDeviceId)
     {
         $result = [];
         $db = \Zend_Db_Table::getDefaultAdapter();
@@ -93,7 +93,7 @@ class DistributorsForm extends \My_Form_Form
   WHERE
     master_device_service.masterDeviceId = ?
 ",
-        [$masterDevice->id])->fetchAll() as $line) {
+        [$masterDeviceId])->fetchAll() as $line) {
             $result[] = $line;
         }
 
@@ -112,7 +112,7 @@ class DistributorsForm extends \My_Form_Form
   WHERE
     master_device_service.masterDeviceId = ?
 ",
-            [$masterDevice->id])->fetchAll() as $line) {
+            [$masterDeviceId])->fetchAll() as $line) {
             $result[] = $line;
         }
 

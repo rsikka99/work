@@ -64,3 +64,132 @@ $this->headScript()->appendFile($this->baseUrl('js/app/legacy/hardware-library/M
     <table id="devicesGrid"></table>
     <div id="devicesGridPager"></div>
 </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="rentalCalc">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Rental Calculator</h4>
+            </div>
+            <div class="modal-body">
+
+                <table class="table" id="table-calc">
+                    <colgroup>
+                        <col width="20%">
+                        <col width="30%">
+                        <col width="20%">
+                        <col width="30%">
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td>Hardware cost:</td>
+                            <td><input id="input-hardware" type="text" class="form-control" disabled="disabled"></td>
+                            <td>Per month:</td>
+                            <td id="td-harware-per-month">0</td>
+                        </tr>
+                        <tr>
+                            <td>Service cost:</td>
+                            <td><input id="input-service" type="text" class="form-control" disabled="disabled"></td>
+                            <td>Per month:</td>
+                            <td id="td-service-per-month">0</td>
+                        </tr>
+                        <tr>
+                            <td>Monochrome pages per month:</td>
+                            <td><input id="input-pages-black" type="number" class="form-control" min="0" step="1"></td>
+                            <td>Color pages per month:</td>
+                            <td><input id="input-pages-color" type="number" class="form-control" min="0" step="1"></td>
+                        </tr>
+                        <tr>
+                            <td>Toner vendor:</td>
+                            <td colspan="3">
+                                <select class="form-control" id="input-vendor">
+                                    <option value="0.01,0.02">Vendor 1</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Monochrome CPP:</td>
+                            <td id="td-cpp-black">0</td>
+                            <td>Color CPP:</td>
+                            <td id="td-cpp-color">0</td>
+                        </tr>
+                        <tr>
+                            <td>Monochrome cost per month:</td>
+                            <td id="td-cpm-black">0</td>
+                            <td>Color cost per month:</td>
+                            <td id="td-cpm-color">0</td>
+                        </tr>
+                        <tr>
+                            <th>Total cost per month:</th>
+                            <td id="td-total"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>Rent per month:</th>
+                            <td><input id="input-rent" type="number" class="form-control" min="0" step="0.01"></td>
+                            <td>Margin:</td>
+                            <td id="td-margin"></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+    function toMoney(fl, n) {
+        if (!n) n=2;
+        return '$ '+fl.toFixed(n);
+    }
+    function showCalc(hardware, service, pages, vendor) {
+        $('#input-hardware').val(hardware);
+        $('#input-service').val(service);
+        $('#input-pages-black').val(Math.round(pages*0.25));
+        $('#input-pages-color').val(Math.round(pages*0.75));
+        var s='';
+        $.each(vendor, function(i,e) {
+            s+='<option value="'+ e.value +'">'+ e.name +'</option>';
+        });
+        $('#input-vendor').html(s);
+        $('#rentalCalc').modal();
+        doCalc();
+    }
+    function doCalc() {
+        var hardware = $('#input-hardware').val() / 36;
+        var service = $('#input-service').val() / 36;
+        var vendor = $('#input-vendor').val();
+        vendor = vendor.split(',');
+        var cpp_black = parseFloat(vendor[0]);
+        var cpp_color = parseFloat(vendor[1]);
+        var rent = $('#input-rent').val();
+
+        var black_pages = $('#input-pages-black').val();
+        var color_pages = $('#input-pages-color').val();
+
+        var total_per_month = hardware + service + (cpp_black * black_pages) + (cpp_color * color_pages);
+        var diff = rent-total_per_month;
+
+        $('#span-black-pages').text(black_pages);
+        $('#span-color-pages').text(color_pages);
+        $('#td-harware-per-month').text(toMoney(hardware));
+        $('#td-service-per-month').text(toMoney(service));
+        $('#td-cpp-black').text(toMoney(cpp_black,3));
+        $('#td-cpp-color').text(toMoney(cpp_color,3));
+        $('#td-cpm-black').text(toMoney(cpp_black * black_pages));
+        $('#td-cpm-color').text(toMoney(cpp_color * color_pages));
+        $('#td-total').text(toMoney(total_per_month));
+        $('#td-margin').text(Math.round(100*diff/total_per_month)+' %');
+
+
+    }
+    require(['jquery'], function($) {
+        $('#table-calc input, #table-calc select').keyup(doCalc).change(doCalc);
+    });
+</script>
