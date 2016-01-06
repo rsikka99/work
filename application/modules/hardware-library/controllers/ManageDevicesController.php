@@ -394,19 +394,11 @@ class HardwareLibrary_ManageDevicesController extends Action
     }
     public function addServiceAction() {
         $masterDeviceId = $this->getParam('masterDeviceId');
-        $supplier = $this->getParam('supplier');
         $sku = $this->getParam('sku');
         $masterDevice = MasterDeviceMapper::getInstance()->find($masterDeviceId);
         $db = Zend_Db_Table::getDefaultAdapter();
-        if ($masterDevice && $supplier && $sku) {
-            switch ($supplier) {
-                case 1: {
-                    $ingram_line = $db->query('select * from ingram_products where ingram_micro_category=1221 and vendor_part_number=?',[$sku])->fetch();
-                    if ($ingram_line) {
-                        $db->prepare('insert into master_device_service set supplier=1, masterDeviceId=?, ingram_part_number=?')->execute([$masterDeviceId, $ingram_line['ingram_part_number']]);
-                    }
-                }
-            }
+        if ($masterDevice && $sku) {
+            $db->prepare('insert into master_device_service set masterDeviceId=?, vpn=?')->execute([$masterDeviceId, $sku]);
         }
         $result = \MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DistributorsForm::getServices($masterDevice);
         $this->sendJson($result);

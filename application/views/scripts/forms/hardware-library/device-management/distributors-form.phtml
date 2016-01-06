@@ -82,14 +82,7 @@ $services = DistributorsForm::getServices($form->getView()->masterDevice);
             </tbody>
             <tfoot id="service-tfoot" style="display:none">
                 <tr>
-                    <td><select class="form-control" id="service-supplier">
-<?php
-$db = Zend_Db_Table::getDefaultAdapter();
-foreach ($db->query('select * from suppliers order by name')->fetchAll() as $line) {
-    echo '<option value="'.$line['id'].'">'.$line['name'].'</option>';
-}
-?>
-                        </select></td>
+                    <td class="text-right">SKU/VPN: </td>
                     <td><input class="form-control" type="text" id="service-sku"></td>
                     <td colspan="2">
                         <button type="button" class="btn btn-primary" onclick="addService()">Add</button>
