@@ -82,6 +82,9 @@ $shopSettings = $dealerSettings->shopSettings;
                     <?= $this->RenderFormDescription($form->getElement('rent')) ?>
                     <?= $this->RenderFormElementErrors($form->getElement('rent')) ?>
                 </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn" onclick="calcClick()"><i class="fa fa-gear fa-fw"></i></button>
+                </div>
             </div>
 
             <div class="form-group <?= ($form->getElement('pagesPerMonth')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
@@ -137,4 +140,13 @@ $shopSettings = $dealerSettings->shopSettings;
 
     </fieldset>
 </div>
+
+<script>
+    function calcClick() {
+        $.get('/hardware-library/devices/rent-calc', {id:<?= intval($form->masterDeviceId) ?>}, function(r) {
+            showCalc(r.hardware, r.service, r.pages, r.vendor);
+        }, 'json');
+    }
+</script>
+
 <?= $this->RenderFormClose($form) ?>

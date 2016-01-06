@@ -17,6 +17,15 @@ use Zend_Validate_NotEmpty;
 class HardwareQuoteForm extends \My_Form_Form
 {
 
+    public $masterDeviceId;
+
+    public function populate($arr) {
+        if (isset($arr['masterDeviceId'])) {
+            $this->masterDeviceId = $arr['masterDeviceId'];
+        }
+        return parent::populate($arr);
+    }
+
     public function init ()
     {
         $this->setMethod('post');
