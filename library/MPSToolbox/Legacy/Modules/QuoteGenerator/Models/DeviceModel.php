@@ -62,6 +62,11 @@ class DeviceModel extends My_Model_Abstract
     public $pagesPerMonth;
 
     /**
+     * @var float
+     */
+    public $additionalCpp;
+
+    /**
      * @var string
      */
     public $dataSheetUrl;
@@ -133,6 +138,7 @@ class DeviceModel extends My_Model_Abstract
         if (isset($params->reviewsUrl) && !is_null($params->reviewsUrl)) $this->reviewsUrl = $params->reviewsUrl;
         if (isset($params->online) && !is_null($params->online)) $this->online = $params->online;
         if (isset($params->onlineDescription) && !is_null($params->onlineDescription)) $this->onlineDescription = $params->onlineDescription;
+        if (isset($params->additionalCpp) && !is_null($params->additionalCpp)) $this->additionalCpp = $params->additionalCpp;
     }
 
     /**
@@ -153,6 +159,7 @@ class DeviceModel extends My_Model_Abstract
             "reviewsUrl"     => $this->reviewsUrl,
             "online"         => $this->online,
             "onlineDescription"     => $this->onlineDescription,
+            'additionalCpp'  => $this->additionalCpp,
         ];
     }
 

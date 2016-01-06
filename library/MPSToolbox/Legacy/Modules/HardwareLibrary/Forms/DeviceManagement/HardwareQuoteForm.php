@@ -90,6 +90,12 @@ class HardwareQuoteForm extends \My_Form_Form
             'required'   => false,
             'allowEmpty' => true,
         ]);
+        $this->addElement('text_currency', 'additionalCpp', [
+            'label'      => 'Additional Page Cost',
+            'maxlength'  => 255,
+            'required'   => false,
+            'allowEmpty' => true,
+        ]);
         $this->addElement('text', 'dataSheetUrl', [
             'label'      => 'Data Sheet URL',
             'maxlength'  => 255,

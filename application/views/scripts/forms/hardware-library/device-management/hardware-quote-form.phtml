@@ -94,6 +94,16 @@ $shopSettings = $dealerSettings->shopSettings;
                 </div>
             </div>
 
+            <div class="form-group <?= ($form->getElement('additionalCpp')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('additionalCpp'), ['col-md-4']) ?>
+
+                <div class="col-md-6">
+                    <?= $this->RenderFormText($form->getElement('additionalCpp'), null, '$') ?>
+                    <?= $this->RenderFormDescription($form->getElement('additionalCpp')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('additionalCpp')) ?>
+                </div>
+            </div>
+
             <div class="form-group <?= ($form->getElement('dataSheetUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                 <?= $this->RenderFormLabel($form->getElement('dataSheetUrl'), ['col-md-4']) ?>
 
