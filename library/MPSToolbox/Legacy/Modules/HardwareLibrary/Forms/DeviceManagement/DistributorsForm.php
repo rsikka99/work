@@ -73,24 +73,50 @@ class DistributorsForm extends \My_Form_Form
     }
     public static function getServices(MasterDeviceModel $masterDevice)
     {
+        $result = [];
         $db = \Zend_Db_Table::getDefaultAdapter();
-        return $db->query(
-'
+
+        $dealerId = DealerEntity::getDealerId();
+
+        foreach($db->query(
+"
   select
     master_device_service.id,
-    suppliers.name as supplier,
-    COALESCE(ingram_products.vendor_part_number) as sku,
-    COALESCE(ingram_products.ingram_part_number) as part_number,
-    COALESCE(ingram_prices.customer_price) as price
+    'Ingram Micro' as supplier,
+    ingram_products.vendor_part_number as sku,
+    ingram_products.ingram_part_number as part_number,
+    ingram_prices.customer_price as price
   from
     master_device_service
-    join suppliers on master_device_service.supplier=suppliers.id
-    left join ingram_products on ingram_products.ingram_part_number =  master_device_service.ingram_part_number
-      left join ingram_prices on ingram_prices.ingram_part_number = ingram_products.ingram_part_number
+    join ingram_products on ingram_products.vendor_part_number =  master_device_service.vpn and ingram_products.ingram_micro_category=1221
+      join ingram_prices on ingram_prices.ingram_part_number = ingram_products.ingram_part_number and ingram_prices.dealerId={$dealerId}
   WHERE
     master_device_service.masterDeviceId = ?
-',
-        [$masterDevice->id])->fetchAll();
+",
+        [$masterDevice->id])->fetchAll() as $line) {
+            $result[] = $line;
+        }
+
+        foreach ($db->query(
+            "
+  select
+    master_device_service.id,
+    'Synnex' as supplier,
+    synnex_products.Manufacturer_Part as sku,
+    synnex_products.SYNNEX_SKU as part_number,
+    synnex_prices.Unit_Cost as price
+  from
+    master_device_service
+    join synnex_products on synnex_products.Manufacturer_Part =  master_device_service.vpn and SYNNEX_CAT_Code like '010%'
+      join synnex_prices on synnex_prices.SYNNEX_SKU = synnex_products.SYNNEX_SKU and synnex_prices.dealerId={$dealerId}
+  WHERE
+    master_device_service.masterDeviceId = ?
+",
+            [$masterDevice->id])->fetchAll() as $line) {
+            $result[] = $line;
+        }
+
+        return $result;
     }
 
 }
