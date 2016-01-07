@@ -2,8 +2,10 @@
 
 namespace Tangent\Controller;
 
+use MPSToolbox\Entities\ExtDealerHardwareEntity;
 use MPSToolbox\Entities\ExtHardwareEntity;
 use MPSToolbox\Forms\HardwareDistributorsForm;
+use MPSToolbox\Legacy\Entities\DealerEntity;
 use MPSToolbox\Services\HardwareService;
 
 abstract class Hardware_Action extends Action
@@ -222,5 +224,18 @@ abstract class Hardware_Action extends Action
             $this->sendJson(['ok']);
         }
         $this->sendJsonError('This method only accepts POST');
+    }
+
+    public function rentCalcAction() {
+        $hardwareId = $this->getRequest()->getParam('id');
+        $dealerId = DealerEntity::getDealerId();
+        $e = ExtDealerHardwareEntity::find(['hardware'=>$hardwareId, 'dealer'=>$dealerId]);
+
+        $services = HardwareDistributorsForm::getServices($hardwareId);
+
+        $this->sendJson([
+            'hardware'=>empty($e)?0:$e->getCost(),
+            'service'=>empty($services)?0:$services[0]['price'],
+        ]);
     }
 }
