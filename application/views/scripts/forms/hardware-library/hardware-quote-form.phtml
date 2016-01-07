@@ -70,6 +70,10 @@ $form = $this->element;
                     <?= $this->RenderFormDescription($form->getElement('rent')) ?>
                     <?= $this->RenderFormElementErrors($form->getElement('rent')) ?>
                 </div>
+
+                <div class="col-md-2">
+                    <button type="button" class="btn" onclick="calcClick()"><i class="fa fa-gear fa-fw"></i></button>
+                </div>
             </div>
 
             <div class="form-group <?= ($form->getElement('dataSheetUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
@@ -105,4 +109,14 @@ $form = $this->element;
 
     </fieldset>
 </div>
+
+<script>
+    function calcClick() {
+        $.get('<?= str_replace('/load-forms','/rent-calc',$_SERVER['REQUEST_URI']) ?>', {id:<?= intval($form->getView()->hardwareId) ?>}, function(r) {
+            showCalc(r.hardware, r.service);
+        }, 'json');
+    }
+</script>
+
 <?= $this->RenderFormClose($form) ?>
+

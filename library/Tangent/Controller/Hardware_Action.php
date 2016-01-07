@@ -2,7 +2,10 @@
 
 namespace Tangent\Controller;
 
+use MPSToolbox\Entities\ExtDealerHardwareEntity;
 use MPSToolbox\Entities\ExtHardwareEntity;
+use MPSToolbox\Forms\HardwareDistributorsForm;
+use MPSToolbox\Legacy\Entities\DealerEntity;
 use MPSToolbox\Services\HardwareService;
 
 abstract class Hardware_Action extends Action
@@ -15,6 +18,8 @@ abstract class Hardware_Action extends Action
 
     protected $hardware_type = 'Computers';
     protected $hardware_categories = ['Laptop','Desktop','Server','Tablet'];
+
+    public $hardwareId;
 
     public function init ()
     {
@@ -35,12 +40,33 @@ abstract class Hardware_Action extends Action
         return $hardwareService->getForms();
     }
 
+    public function deleteServiceAction() {
+        $hardwareId = $this->getParam('hardwareId');
+        $id = $this->getParam('id');
+        if ($hardwareId && $id) {
+            $db = \Zend_Db_Table::getDefaultAdapter();
+            $db->query('DELETE FROM ext_hardware_service WHERE id=? and hardwareId=?', [$id, $hardwareId])->execute();
+        }
+        $result = HardwareDistributorsForm::getServices($hardwareId);
+        $this->sendJson($result);
+    }
+    public function addServiceAction() {
+        $hardwareId = $this->getParam('hardwareId');
+        $sku = $this->getParam('sku');
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        if ($hardwareId && $sku) {
+            $db->prepare('insert into ext_hardware_service set hardwareId=?, vpn=?')->execute([$hardwareId, $sku]);
+        }
+        $result = HardwareDistributorsForm::getServices($hardwareId);
+        $this->sendJson($result);
+    }
+
     public function loadFormsAction ()
     {
         // image upload
         if (!empty($_FILES) && $this->getParam('id')) {
-            $hardwareId = $this->_getParam('id', false);
-            $hardware = \MPSToolbox\Entities\ExtHardwareEntity::find($hardwareId);
+            $this->hardwareId = $this->_getParam('id', false);
+            $hardware = \MPSToolbox\Entities\ExtHardwareEntity::find($this->hardwareId);
             if (!$hardware) {
                 $this->sendJsonError('not found');
                 return;
@@ -64,8 +90,8 @@ abstract class Hardware_Action extends Action
         }
 
         $this->_helper->layout()->disableLayout();
-        $hardwareId = $this->_getParam('hardwareId', false);
-        $hardware = $this->getHardware($hardwareId);
+        $this->hardwareId = $this->_getParam('hardwareId', false);
+        $hardware = $this->getHardware($this->hardwareId);
 
         $isAllowed    = ((!$hardware instanceof \MPSToolbox\Entities\ExtHardwareEntity || !$hardware->getIsSystemDevice() || $this->isAdmin) ? true : false);
 
@@ -88,6 +114,7 @@ abstract class Hardware_Action extends Action
         $this->view->isAllowed                   = $isAllowed;
         $this->view->manufacturers               = \MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper::getInstance()->fetchAllAvailableManufacturers();
         $this->view->hardware                = $hardware;
+        $this->view->hardwareId = $this->hardwareId;
     }
 
     /*
@@ -108,12 +135,12 @@ abstract class Hardware_Action extends Action
         {
             $postData = $this->_request->getPost();
 
-            $hardwareId = $this->getParam('hardwareId', false);
+            $this->hardwareId = $this->getParam('hardwareId', false);
             $category      = $this->getParam('category', false);
             $modelName      = $this->getParam('modelName', false);
             $manufacturerId = $this->getParam('manufacturerId', false);
 
-            $hardware = $this->getHardware($hardwareId, true);
+            $hardware = $this->getHardware($this->hardwareId, true);
 
             // Are they allowed to modify data? If they are creating yes, if its not a system device then yes, otherwise use their admin privilege
             $isAllowed                 = ((!$hardware->getId() || !$hardware->isSystemDevice || $this->isAdmin) ? true : false);
@@ -189,13 +216,26 @@ abstract class Hardware_Action extends Action
     public function deleteAction ()
     {
         if ($this->_request->isPost()) {
-            $hardwareId = intval($this->getRequest()->getParam('hardwareId'));
-            if ($this->isAdmin && $hardwareId) {
-                $hardware = $this->getHardware($hardwareId);
+            $this->hardwareId = intval($this->getRequest()->getParam('hardwareId'));
+            if ($this->isAdmin && $this->hardwareId) {
+                $hardware = $this->getHardware($this->hardwareId);
                 $hardware->delete();
             }
             $this->sendJson(['ok']);
         }
         $this->sendJsonError('This method only accepts POST');
+    }
+
+    public function rentCalcAction() {
+        $hardwareId = $this->getRequest()->getParam('id');
+        $dealerId = DealerEntity::getDealerId();
+        $e = ExtDealerHardwareEntity::find(['hardware'=>$hardwareId, 'dealer'=>$dealerId]);
+
+        $services = HardwareDistributorsForm::getServices($hardwareId);
+
+        $this->sendJson([
+            'hardware'=>empty($e)?0:$e->getCost(),
+            'service'=>empty($services)?0:$services[0]['price'],
+        ]);
     }
 }

@@ -75,6 +75,12 @@ $shopSettings = $dealerSettings->shopSettings;
                                 <a href="#hardwareImageTab" id="hardwareImageTopTab" data-toggle="tab">Image</a>
                             </li>
                         <?php endif; ?>
+                        <?php if ($this->hardwareDistributors) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#hardwareDistributorsTab" id="hardwareDistributorsTopTab" data-toggle="tab">Distributors</a>
+                            </li>
+                        <?php endif; ?>
 
                     </ul>
                 </div>
@@ -106,6 +112,13 @@ $shopSettings = $dealerSettings->shopSettings;
                     <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="hardwareImageTab">
                         <?php $first = ($first) ? false : $first ?>
                         <?= $this->hardwareImage ?>
+                    </div>
+                <?php endif ?>
+
+                <?php if ($this->hardwareDistributors) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="hardwareDistributorsTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->hardwareDistributors ?>
                     </div>
                 <?php endif ?>
 

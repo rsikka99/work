@@ -9,6 +9,7 @@ use MPSToolbox\Entities\ExtHardwareEntity;
 use MPSToolbox\Forms\HardwareImageForm;
 use MPSToolbox\Forms\HardwareAttributesForm;
 use MPSToolbox\Forms\HardwareQuoteForm;
+use MPSToolbox\Forms\HardwareDistributorsForm;
 use Tangent\Logger\Logger;
 use Zend_Form;
 
@@ -58,6 +59,7 @@ class HardwareService
         $formsToShow['hardwareAttributes'] = $this->getHardwareAttributesForm();
         $formsToShow['hardwareQuote'] = $this->getHardwareQuoteForm();
         $formsToShow['hardwareImage']  = $this->getHardwareImageForm();
+        $formsToShow['hardwareDistributors']  = $this->getHardwareDistributorsForm();
         return $formsToShow;
     }
 
@@ -225,6 +227,16 @@ class HardwareService
             }
         }
         return $this->_imageForm;
+    }
+
+    public function getHardwareDistributorsForm() {
+        if (!isset($this->_distributorsForm)) {
+            $this->_distributorsForm = new HardwareDistributorsForm(null, $this->_isAllowed);
+            if ($this->hardware) {
+                $this->_distributorsForm->populate($this->hardware->toArray());
+            }
+        }
+        return $this->_distributorsForm;
     }
 
     /**

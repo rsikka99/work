@@ -97,6 +97,7 @@ class HardwareLibrary_TonerController extends Action
         }
         #--
         $this->view->tonerForm = $form;
+        $this->view->toner = $toner;
 
         $this->_helper->layout()->disableLayout();
     }

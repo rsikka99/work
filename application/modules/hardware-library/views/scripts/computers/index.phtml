@@ -45,3 +45,83 @@ $this->headScript()->appendFile($this->baseUrl('js/app/legacy/hardware-library/M
     <table id="hardwareGrid"></table>
     <div id="hardwareGridPager"></div>
 </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="rentalCalc">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Rental Calculator</h4>
+            </div>
+            <div class="modal-body">
+
+                <table class="table" id="table-calc">
+                    <colgroup>
+                        <col width="20%">
+                        <col width="30%">
+                        <col width="20%">
+                        <col width="30%">
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <td>Hardware cost:</td>
+                        <td><input id="input-hardware" type="text" class="form-control" disabled="disabled"></td>
+                        <td>Per month:</td>
+                        <td id="td-harware-per-month">0</td>
+                    </tr>
+                    <tr>
+                        <td>Service cost:</td>
+                        <td><input id="input-service" type="text" class="form-control" disabled="disabled"></td>
+                        <td>Per month:</td>
+                        <td id="td-service-per-month">0</td>
+                    </tr>
+                    <tr>
+                        <th>Total cost per month:</th>
+                        <td id="td-total"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Rent per month:</th>
+                        <td><input id="input-rent" type="number" class="form-control" min="0" step="0.01"></td>
+                        <td>Margin:</td>
+                        <td id="td-margin"></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+    function toMoney(fl, n) {
+        if (!n) n=2;
+        return '$ '+fl.toFixed(n);
+    }
+    function showCalc(hardware, service) {
+        $('#input-hardware').val(hardware);
+        $('#input-service').val(service);
+        $('#rentalCalc').modal();
+        doCalc();
+    }
+    function doCalc() {
+        var hardware = $('#input-hardware').val() / 36;
+        var service = $('#input-service').val() / 36;
+        var rent = $('#input-rent').val();
+        var total_per_month = hardware + service;
+        var diff = rent-total_per_month;
+
+        $('#td-harware-per-month').text(toMoney(hardware));
+        $('#td-service-per-month').text(toMoney(service));
+        $('#td-total').text(toMoney(total_per_month));
+        $('#td-margin').text(Math.round(100*diff/total_per_month)+' %');
+    }
+    require(['jquery'], function($) {
+        $('#table-calc input, #table-calc select').keyup(doCalc).change(doCalc);
+    });
+</script>
