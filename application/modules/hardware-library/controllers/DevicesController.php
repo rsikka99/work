@@ -168,6 +168,9 @@ class HardwareLibrary_DevicesController extends Action
                 ksort($byGroup);
                 $result[$group] = current($byGroup);
             }
+            if ($result['color']) {
+                $result['color'] = ($result['color']*3) + $result['black'];
+            }
             $vendors[] = ['name'=>$manufacturer->fullname, 'value'=>implode(',',$result)];
         }
 
