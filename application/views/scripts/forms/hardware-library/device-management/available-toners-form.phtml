@@ -9,6 +9,7 @@ $id = $form->getElement('id')->getValue();
 $filename = $form->getElement('imageFile')->getValue();
 
 $form->getElement('imageUrl')->setValue('');
+$toner = $form->getView()->toner;
 
 ?>
 
@@ -100,7 +101,15 @@ $form->getElement('imageUrl')->setValue('');
                             <a href="/img/toners/<?php echo $filename ?>" target="_blank" class="thumbnail">
                                 <img src="/img/toners/<?php echo $filename ?>" style="max-width:250px;max-height:250px">
                             </a>
-                        <?php } ?>
+                        <?php } else {
+
+                            switch($toner->manufacturerId) {
+                                case 47: // lmi
+                                case 61: // zero waste
+                                    echo '<img src="/img/toners/default_'.$toner->manufacturerId.'.jpg" style="max-width:250px;max-height:250px">';
+                            }
+
+                        } ?>
                     </div>
                 </div>
             </div>
