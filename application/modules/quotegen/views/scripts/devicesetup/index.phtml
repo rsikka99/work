@@ -194,9 +194,7 @@ $this->headScript()->appendFile($this->baseUrl('js/app/legacy/hardware-library/M
         $('#td-cpm-black').text(toMoney(cpp_black * black_pages));
         $('#td-cpm-color').text(toMoney(cpp_color * color_pages));
         $('#td-total').text(toMoney(total_per_month));
-        $('#td-margin').text(Math.round(100*diff/total_per_month)+' %');
-
-
+        $('#td-margin').text(Math.round(100*diff/rent)+' %');
     }
     require(['jquery'], function($) {
         $('#table-calc input, #table-calc select').keyup(doCalc).change(doCalc);
