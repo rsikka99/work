@@ -72,6 +72,8 @@ class HardwareService
      */
     public function validateData ($form, $data, $formName)
     {
+        if (empty($data)) $data=[];
+
         $json = null;
         $form->populate($data);
 
