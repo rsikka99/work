@@ -149,10 +149,19 @@ $this->headScript()->appendFile($this->baseUrl('js/app/legacy/hardware-library/M
         return '$ '+fl.toFixed(n);
     }
     function showCalc(hardware, service, pages, vendor) {
+        if (vendor.length==0) return;
+        var e = vendor[0].value.split(',');
         $('#input-hardware').val(hardware);
         $('#input-service').val(service);
-        $('#input-pages-black').val(Math.round(pages*0.25));
-        $('#input-pages-color').val(Math.round(pages*0.75));
+        if (e[1]>0) {
+            $('#input-pages-black').val(Math.round(pages * 0.25));
+            $('#input-pages-color').removeAttr('disabled');
+            $('#input-pages-color').val(Math.round(pages * 0.75));
+        } else {
+            $('#input-pages-black').val(pages);
+            $('#input-pages-color').val(0);
+            $('#input-pages-color').attr('disabled','disabled');
+        }
         var s='';
         $.each(vendor, function(i,e) {
             s+='<option value="'+ e.value +'">'+ e.name +'</option>';
