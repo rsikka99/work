@@ -94,6 +94,7 @@ class Dealerapi_DeviceController extends Dealerapi_IndexController
             ->select()
             ->from('master_devices',['*'])
             ->join('device_swaps','master_devices.id = device_swaps.masterDeviceId', ['minimumPageCount', 'maximumPageCount'])
+            ->join('devices', 'master_devices.id = devices.masterDeviceId and devices.dealerId = '.intval($dealerId), ['webId'])
             ->where('device_swaps.dealerId=?', $dealerId);
         $zendDbStatement = $db->query($zendDbSelect);
         $result = [];
@@ -123,7 +124,7 @@ class Dealerapi_DeviceController extends Dealerapi_IndexController
                 if ($page_volume < $line['minimumPageCount']) continue;
             }
 
-            $result[] = $line['id'];
+            $result[] = $line['webId'];
         }
 
         $this->outputJson(['result'=>$result]);
@@ -238,7 +239,6 @@ class Dealerapi_DeviceController extends Dealerapi_IndexController
             $replacementDevice = $option['replacementDevice'];
             $deviceReplacementCost = $option['deviceReplacementCost'];
             $costDelta = $option['costDelta'];
-            $webid = $option['webid'];
             $item = [
                 'id'=>$replacementDevice->id,
                 'webid'=>$replacementDevice->dealerWebId,
