@@ -41,6 +41,7 @@ class My_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
                             $params = $_GET + $_POST;
                             unset($params['hmac']);
                             $check = hash_hmac('sha256', http_build_query($params), $dealer->getApiSecret());
+                            #die($check);
                             if ($check === $hmac) {
                                 $user = new \MPSToolbox\Legacy\Models\UserModel([
                                     'id' => -1,

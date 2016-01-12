@@ -819,6 +819,9 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
                            "isUsingDealerPartsCostPerPage" => "(dmda.partsCostPerPage IS NOT NULL)",
                            "isUsingDealerLaborCostPerPage" => "(dmda.laborCostPerPage IS NOT NULL)",
                        ])
+                       ->joinLeft(['devices'=>'devices'], "pmd.id = devices.masterDeviceId AND devices.dealerId = {$dealerId}", [
+                           'dealerWebId' => 'webid',
+                       ])
                        ->where("pmd.id = ? ", $masterDeviceId);
 
         $stmt = $db->query($select);
