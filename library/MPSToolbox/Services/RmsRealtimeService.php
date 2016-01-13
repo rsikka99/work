@@ -87,7 +87,7 @@ class RmsRealtimeService {
                 'tonerLevelMagenta' => $device->Toners->TonerMagenta->Level,
                 'tonerLevelYellow' => $device->Toners->TonerYellow->Level
             ];
-            $data['rmsDeviceInstanceId'] = $rmsUpdateService->toDeviceInstance($data);
+            $data['rmsDeviceInstanceId'] = $rmsUpdateService->toDeviceInstance($data, $data['scanDate']);
             $this->replaceRmsRealtime($data);
         }
 
