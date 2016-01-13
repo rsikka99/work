@@ -161,7 +161,7 @@ class RmsUpdateService {
                 'endMeterLife'=>$meters['Total Units Output']['count'],
             ];
 
-            $data['rmsDeviceInstanceId'] = $this->toDeviceInstance($data);
+            $data['rmsDeviceInstanceId'] = $this->toDeviceInstance($data, $data['monitorEndDate']);
             $this->toRealtime($data);
 
             $this->replaceRmsUpdate($data);
@@ -228,10 +228,11 @@ group by clientId
         $st->execute($data);
     }
 
-    public function toDeviceInstance($data) {
+    public function toDeviceInstance($data, $reportDate=null) {
         $fields = ['clientId','assetId','ipAddress','serialNumber','masterDeviceId','location','rawDeviceName','fullDeviceName','manufacturer','modelName','reportDate'];
 
-        $data['reportDate'] = date('Y-m-d');
+        if (!$reportDate) $reportDate = date('Y-m-d');
+        $data['reportDate'] = $reportDate;
 
         $str1='`'.implode('`,`',$fields).'`';
         $str2=':'.implode(',:',$fields);
