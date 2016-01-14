@@ -269,7 +269,9 @@ class Bootstrap extends Tangent\Bootstrap
 
     protected function _initMailTransport()
     {
-        //change the mail transport only if dev or test
+        $config = Zend_Registry::get('config');
+        Zend_Mail::setDefaultFrom($config->app->supportEmail, $config->app->name);
+
         //if (APPLICATION_ENV <> 'production') {
         if (file_exists('c:')) {
             $callback = function() {
@@ -280,6 +282,18 @@ class Bootstrap extends Tangent\Bootstrap
                 'callback'=>$callback
             ]);
             Zend_Mail::setDefaultTransport($fileTransport);
+        } else {
+            if ($config->email->type=='smtp') {
+                $emailConfig = [
+                    'auth' => 'login',
+                    'username' => $config->email->username,
+                    'password' => $config->email->password,
+                    'ssl' => $config->email->ssl,
+                    'port' => $config->email->port,
+                    'host' => $config->email->host
+                ];
+                Zend_Mail::setDefaultTransport(new Zend_Mail_Transport_Smtp($emailConfig['host'], $emailConfig));
+            }
         }
     }
 }

@@ -511,14 +511,10 @@ class Default_AuthController extends Action
      */
     private function sendForgotPasswordEmail ($user, $token)
     {
-
-        Zend_Mail::setDefaultTransport(self::getMailTransport());
-
         $config = \Zend_Registry::get('config');
-        $email  = $config->email;
 
         $mail = new Zend_Mail ();
-        $mail->setFrom($email->username, 'Forgot Password');
+        $mail->setFrom($config->app->supportEmail, 'Forgot Password');
         $mail->addTo($user->email, $user->firstname . ' ' . $user->lastname);
         $mail->setSubject('Password Reset Request');
         $link = $this->view->serverUrl($this->view->url([

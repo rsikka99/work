@@ -76,6 +76,7 @@ class Dealermanagement_UserController extends Action
                         {
                             $this->_flashMessenger->addMessage(['success' => 'User created. An email will be sent out to the user with instructions on how to proceed.']);
                             $db->commit();
+                            $this->redirectToRoute('company.users');
                         }
                         else
                         {
@@ -95,6 +96,8 @@ class Dealermanagement_UserController extends Action
                 {
                     $db->rollBack();
                     \Tangent\Logger\Logger::logException($e);
+                    $this->_flashMessenger->addMessage(['danger' => $e->getMessage()]);
+                    $this->redirectToRoute('company.users.create');
                 }
             }
             else
