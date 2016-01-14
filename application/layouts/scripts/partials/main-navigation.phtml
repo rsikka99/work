@@ -55,24 +55,4 @@
         <!-- /.navbar-collapse -->
     </div>
 </nav>
-
-<script>
-    function notifyTodo(item, n) {
-        if (n>99) {
-            $('#todo-'+item).html('&nbsp;<span style="display:inline-block;width:25px;height:25px;background:transparent url(/img/icons/dot-25.png) no-repeat;text-align:center;line-height:25px">99<sup>+</sup></span>');
-        } else {
-            $('#todo-'+item).html('&nbsp;<span style="display:inline-block;width:20px;height:20px;background:transparent url(/img/icons/dot-20.png) no-repeat;text-align:center;line-height:20px">'+n+'</span>');
-        }
-        if (item=='all') {
-            window.document.title = '('+n+') ' + $(window.document).attr('data-title');
-        }
-    }
-    require(['jquery'], function ($) {
-        $(window.document).attr('data-title', window.document.title);
-        $('.span-todo').each(function(i,e) {
-            var $el = $(e);
-            notifyTodo($el.attr('data-item'), $el.attr('data-n'));
-        });
-    });
-</script>
 <!-- /Navbar -->
