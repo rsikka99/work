@@ -302,23 +302,6 @@ class UserService extends BaseService
         return false;
     }
 
-    protected static function _initMailTransport ()
-    {
-        $config = Zend_Registry::get('config');
-
-        $emailConfig = [
-            'auth'     => 'login',
-            'username' => $config->email->username,
-            'password' => $config->email->password,
-            'ssl'      => $config->email->ssl,
-            'port'     => $config->email->port,
-            'host'     => $config->email->host
-        ];
-
-        Zend_Mail::setDefaultTransport(new Zend_Mail_Transport_Smtp($emailConfig['host'], $emailConfig));
-        Zend_Mail::setDefaultFrom($emailConfig['username'], $config->app->name);
-    }
-
     /**
      * Gets the application url
      *
@@ -340,9 +323,6 @@ class UserService extends BaseService
      */
     public static function sendNewUserEmail ($user, $plainTextPassword)
     {
-        // FIXME: Should this be done on bootstrap?
-        self::_initMailTransport();
-
         $config  = Zend_Registry::get('config');
         $appName = $config->app->title;
         $appUrl  = self::_getAppUrl();
@@ -400,9 +380,6 @@ class UserService extends BaseService
      */
     public static function sendPasswordChangedEmail ($user, $plainTextPassword)
     {
-        // FIXME: Should this be done on bootstrap?
-        self::_initMailTransport();
-
         $config  = Zend_Registry::get('config');
         $appName = $config->app->title;
         $appUrl  = self::_getAppUrl();

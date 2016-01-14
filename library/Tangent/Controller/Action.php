@@ -404,9 +404,12 @@ class Action extends \Zend_Controller_Action
 
     /**
      * @return \Zend_Mail_Transport_Abstract
+     * @deprecated
      */
     public static function getMailTransport()
     {
+        return null;
+        /**
         if (null === self::$mailTransport) {
             $config = \Zend_Registry::get('config');
             $email  = $config->email;
@@ -425,6 +428,7 @@ class Action extends \Zend_Controller_Action
             self::$mailTransport = new \Zend_Mail_Transport_Smtp($emailConfig['host'], $emailConfig);
         }
         return self::$mailTransport;
+        **/
     }
 
     /**
