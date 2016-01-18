@@ -13,7 +13,6 @@ use MPSToolbox\Legacy\Modules\DDefault\Forms\ForgotPasswordForm;
 use MPSToolbox\Legacy\Modules\DDefault\Forms\LoginForm;
 use MPSToolbox\Legacy\Modules\DDefault\Forms\ResetPasswordForm;
 use Tangent\Controller\Action;
-use Tangent\Statsd;
 
 /**
  * Class Default_AuthController
@@ -43,7 +42,7 @@ class Default_AuthController extends Action
         $request = $this->getRequest();
         $form    = new LoginForm();
 
-        Statsd::increment('mpstoolbox.login.attempts');
+        #Statsd::increment('mpstoolbox.login.attempts');
 
         if ($this->getRequest()->isPost())
         {
@@ -68,7 +67,7 @@ class Default_AuthController extends Action
                 // If the value is valid, store the information
                 if ($result->isValid())
                 {
-                    Statsd::increment('mpstoolbox.login.successes');
+                    #Statsd::increment('mpstoolbox.login.successes');
 
                     // Get all the user information and only omit the password
                     // since we don't want to store it in the session.
@@ -130,7 +129,7 @@ class Default_AuthController extends Action
                 }
                 else
                 {
-                    Statsd::increment('mpstoolbox.login.failures');
+                    #Statsd::increment('mpstoolbox.login.failures');
                     EventLogMapper::getInstance()->createEventLog(EventLogTypeModel::LOGIN_FAIL, "Email: " . $request->getParam('email', ''));
 
                     switch ($result->getCode())
