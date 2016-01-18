@@ -2,7 +2,6 @@
 use MPSToolbox\Legacy\Models\Acl\AppAclModel;
 use MPSToolbox\Legacy\Services\NavigationService;
 use MPSToolbox\Legacy\Services\LessCssService;
-use Tangent\Statsd;
 
 
 /**
@@ -96,19 +95,6 @@ class Bootstrap extends Tangent\Bootstrap
                 $brandVariables = include($includeBrandFile);
                 My_Brand::populate($brandVariables);
             }
-        }
-    }
-
-    protected function _initStatsd ()
-    {
-        $options = $this->getOptions();
-        if (isset($options['statsd']))
-        {
-            Statsd::$rootBucket = $options['statsd']['rootBucket'];
-            Statsd::$enabled    = $options['statsd']['enabled'];
-            Statsd::$host       = $options['statsd']['host'];
-            Statsd::$port       = $options['statsd']['port'];
-            Statsd::increment('mpstoolbox.pageloads', 1);
         }
     }
 

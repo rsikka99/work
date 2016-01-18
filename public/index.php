@@ -36,13 +36,13 @@ $application = new Zend_Application('production', array(
     )));
 $application->bootstrap()->run();
 
-\Tangent\Statsd::timing('pageloadtime', microtime(true) - $applicationTimeStarted);
+#\Tangent\Statsd::timing('pageloadtime', microtime(true) - $applicationTimeStarted);
 
 /**
  * Log our errors
  */
-foreach (My_Error_Handler::$errorCounts as $errorLevel => $count)
-{
-    \Tangent\Statsd::updateStats('php.' . $errorLevel, $count);
-    \Tangent\Statsd::gauge('php.' . $errorLevel, $count);
-}
+#foreach (My_Error_Handler::$errorCounts as $errorLevel => $count)
+#{
+#    \Tangent\Statsd::updateStats('php.' . $errorLevel, $count);
+#    \Tangent\Statsd::gauge('php.' . $errorLevel, $count);
+#}
