@@ -31,6 +31,7 @@ class DealerRmsProvidersService extends BaseService
             $dealerSettings = DealerSettingsEntity::getDealerSettings($dealerId);
             if ($dealerSettings && $dealerSettings->shopSettings) {
                 $dealerSettings->shopSettings->rmsUri = $data['rmsUri'];
+                $dealerSettings->shopSettings->rmsGroup = $data['rmsGroup'];
                 $dealerSettings->shopSettings->save();
             }
         }

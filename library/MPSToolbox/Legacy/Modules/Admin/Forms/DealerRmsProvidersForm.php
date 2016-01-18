@@ -31,6 +31,10 @@ class DealerRmsProvidersForm extends Zend_Form
             'label'       => 'RMS API URL',
             'filters'     => ['StringTrim'],
         ]);
+        $this->addElement('text', 'rmsGroup', [
+            'label'       => 'RMS Group',
+            'filters'     => ['StringTrim'],
+        ]);
 
         /**
          * Form Actions

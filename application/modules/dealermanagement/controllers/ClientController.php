@@ -259,7 +259,20 @@ class Dealermanagement_ClientController extends Action
         $this->view->contact = $contact;
     }
 
-    private function recursiveGroupTable($groups) {
+    private function recursiveGroupTable($groups, $root=null, $root_found=false) {
+        if (!$root) $root_found=true;
+        if (!$root_found) {
+            foreach ($groups as $group) {
+                if ($group['id']==$root) {
+                    $root_found=true;
+                    $groups = [$group];
+                } else {
+                    $result = $this->recursiveGroupTable($group['children'], $root, false);
+                    if ($result) return $result;
+                }
+            }
+            if (!$root_found) return false;
+        }
         $result = [];
         foreach ($groups as $group) {
             if (!$group['deviceCountTotal']) continue;
@@ -283,7 +296,7 @@ class Dealermanagement_ClientController extends Action
             if (!empty($addr)) $text.="<span class='pull-right'>".implode(', ',$addr).'</span>';
             $line=['text'=>$text, 'icon'=>$icon,'state'=>$state,'selectable'=>false, 'href'=>$group['id']];
             if (!empty($group['children'])) {
-                $line['nodes'] = $this->recursiveGroupTable($group['children']);
+                $line['nodes'] = $this->recursiveGroupTable($group['children'], null, true);
             }
             $result []= $line;
         }
@@ -307,6 +320,9 @@ class Dealermanagement_ClientController extends Action
     }
 
     public function importAction() {
+        $settings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings();
+        $root = $settings->shopSettings->rmsGroup;
+
         $ajax = $this->getRequest()->getParam('ajax');
         if ($ajax) {
             $this->_helper->layout()->disableLayout();
@@ -315,7 +331,12 @@ class Dealermanagement_ClientController extends Action
             $printFleet = $this->getPrintFleet();
             if ($printFleet) {
                 $groups = $printFleet->groups();
-                echo '<div id="tree"></div><script> showTree(' . json_encode($this->recursiveGroupTable($groups)) . '); </script>';
+                $tree = $this->recursiveGroupTable($groups, $root);
+                if ($tree) {
+                    echo '<div id="tree"></div><script> showTree(' . json_encode($tree) . '); </script>';
+                } else {
+                    echo '<div id="tree">No RMS groups found</div>';
+                }
             }
             return;
         }
@@ -324,7 +345,6 @@ class Dealermanagement_ClientController extends Action
             if (!empty($ids)) {
                 $printFleet = $this->getPrintFleet();
                 if ($printFleet) {
-                    $groups = $printFleet->groups();
                     $service = new ClientService();
                     $result = $service->importFromPrintFleet($printFleet, explode(' ',$ids));
                     $this->redirect('/dealermanagement/client/imported?'.http_build_query(['result'=>json_encode($result)]));
