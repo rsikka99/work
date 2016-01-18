@@ -2,6 +2,14 @@
 
 class Default_WebhookController extends \Tangent\Controller\Action {
 
+    public function printauditAction() {
+        $service = new \MPSToolbox\Services\RmsRealtimeService();
+        $str = file_get_contents('php://input');
+        $xml = new SimpleXMLElement($str);
+        $result = $service->processPrintauditXml($xml);
+        $this->sendJson(["message" => "printaudit ".$result]);
+    }
+
     public function shopifyOrderAction() {
         if (isset($_POST['input'])) {
             $input = $_POST['input'];
