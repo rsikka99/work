@@ -106,6 +106,7 @@ class ShopSettingsForm extends \My_Form_Form
         {
             $model = new ShopSettingsEntity();
             $model->rmsUri = '';
+            $model->rmsGroup = '';
         }
 
         $model->shopifyName = $this->getValue('shopifyName');

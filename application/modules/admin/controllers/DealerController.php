@@ -293,6 +293,7 @@ class Admin_DealerController extends Action
             $dealerSettings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings($dealerId);
             if ($dealerSettings && $dealerSettings->shopSettings) {
                 $arr['rmsUri'] = $dealerSettings->shopSettings->rmsUri;
+                $arr['rmsGroup'] = $dealerSettings->shopSettings->rmsGroup;
             }
             $form->populate($arr);
         }

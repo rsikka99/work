@@ -292,6 +292,7 @@ class DealerSettingsService
         $shopSettings->oemTonerMargin = 30;
         $shopSettings->compatibleTonerMargin = 30;
         $shopSettings->rmsUri = '';
+        $shopSettings->rmsGroup = '';
 
         $currentFleetSetting->save();
         $proposedFleetSetting->save();
@@ -345,6 +346,7 @@ class DealerSettingsService
             $shopSettings->oemTonerMargin = 30;
             $shopSettings->compatibleTonerMargin = 30;
             $shopSettings->rmsUri = '';
+            $shopSettings->rmsGroup = '';
             $shopSettings->save();
             $dealerSettings->shopSettings()->associate($shopSettings);
             $dealerSettings->save();
