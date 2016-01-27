@@ -242,7 +242,7 @@ group by clientId
             #$st = $db->prepare("update rms_device_instances set location=:location, masterDeviceId=:masterDeviceId, assetId=:assetId, fullDeviceName=:fullDeviceName, reportDate=:reportDate where id=:id");
             #$st->execute(['location'=>$data['location'],'masterDeviceId'=>$data['masterDeviceId'],'assetId'=>$data['assetId'],'fullDeviceName'=>$data['fullDeviceName'],'reportDate'=>$data['reportDate'], 'id'=>$data['rmsDeviceInstanceId']]);
 
-            $masterDevice = MasterDeviceEntity::find($data['masterDeviceId']);
+            $masterDevice = $data['masterDeviceId'] ? MasterDeviceEntity::find($data['masterDeviceId']) : null;
             /** @var RmsDeviceInstanceEntity $obj */
             $obj = RmsDeviceInstanceEntity::find($data['rmsDeviceInstanceId']);
             $obj->setLocation($data['location']);
