@@ -16,7 +16,7 @@ class PrintFleet {
 
     public function __construct($rmsUri) {
         $this->uri = parse_url($rmsUri);
-        $this->base_path = 'https://'.$this->uri['host'].'/restapi/3.5.5';
+        $this->base_path = 'https://'.$this->uri['host'].'/restapi/3.6.5';
     }
 
     /** @var \cdyweb\http\BaseAdapter */
@@ -63,7 +63,7 @@ class PrintFleet {
     public function auth() {
         $http = $this->getHttp();
         $http->appendRequestHeader('Accept','application/json');
-        //$http->appendRequestHeader('X-API-KEY','eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJvZmYiOmZhbHNlLCJzdWIiOiJOb3JtIE1jQ29ua2V5IChQYXJ0cyBOb3cpIiwiYXVkIjoiYzE4ZTQ4MWUtZGY0OS00NDdjLWI2MmMtZmI5NTljNjcxYjFkIiwiaWF0IjoxNDQ2MjIzMzkxLCJuYmYiOjE0NDYxNjMyMDAsImV4cCI6bnVsbH0.oS8yjz9-P4hIIU8cx8aZQhryxiDUfRm04QL969sCPbrl2TqBQ8XTtMRm5ymiVuTIBof8EvzDfKfAi26Ca83DQg');
+        $http->appendRequestHeader('X-API-KEY','eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJvZmYiOmZhbHNlLCJzdWIiOiJOb3JtIE1jQ29ua2V5IChQYXJ0cyBOb3cpIiwiYXVkIjoiYWM4ZDkxNGQtYzUxNS00ODMxLTgxZTgtNzE1NDBiN2I0NzUzIiwiaWF0IjoxNDUzODY5NDM4LCJuYmYiOjE0NTM3NjY0MDAsImV4cCI6bnVsbH0.jKrQ14BJTRXUDrP6F3xevVROuRAXsHDSX8dc4GOnO56XP_7N1F7MYZMCB3f7BrYqeA9gESZ4UkHCAlewNCReUg');
         $http->setBasicAuth($this->uri['user'],$this->uri['pass']);
         try {
             $http->put($this->base_path . '/auth');
