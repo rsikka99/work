@@ -552,7 +552,7 @@ HTML;
 
         $email = new \Zend_Mail();
         $email->setFrom($emailFromAddress, $emailFromName);
-        $email->addTo(explode(',',empty($contact->emailSupply) ? $contact->email : $contact->emailSupply));
+        $email->addTo(explode(',',str_replace(';',',',empty($contact->emailSupply) ? $contact->email : $contact->emailSupply)));
         $email->addBcc($dealerBranding->dealerEmail);
         $email->setSubject(str_replace('{{clientName}}',$client->getCompanyName(),$supplyNotifySubject)); //'Printing Supplies Order Requirements for '.$client->getCompanyName());
         $email->setBodyHtml($html);
