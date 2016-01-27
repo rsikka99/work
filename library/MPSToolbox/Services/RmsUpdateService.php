@@ -19,6 +19,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ContactMapper;
 use MPSToolbox\Settings\Entities\DealerSettingsEntity;
 use MPSToolbox\Settings\Entities\ShopSettingsEntity;
+use Tangent\Logger\Logger;
 
 /**
  * Class HardwareService
@@ -557,7 +558,11 @@ HTML;
         $email->setSubject(str_replace('{{clientName}}',$client->getCompanyName(),$supplyNotifySubject)); //'Printing Supplies Order Requirements for '.$client->getCompanyName());
         $email->setBodyHtml($html);
         $email->setBodyText(strip_tags($html));
-        $email->send();
+        try {
+            $email->send();
+        } catch (\Exception $ex) {
+            Logger::error($ex->getMessage(), $ex);
+        }
     }
 
     /**
