@@ -101,6 +101,7 @@ class RmsUploadService
     /** @var  RmsDeviceMapper */
     private $rmsDeviceMapper;
 
+    private $rmsDeviceInstances;
 
     /**
      * @param int                 $userId
@@ -316,7 +317,18 @@ class RmsUploadService
 
                             foreach ($uploadCsvService->validCsvLines as $line)
                             {
-                                $deviceInstances[] = $this->rmsUploadLine($line, $uploadProviderId);
+                                try {
+                                    $deviceInstance = $this->rmsUploadLine($line, $uploadProviderId);
+                                } catch(\Exception $ex) {
+                                    $deviceInstance = null;
+                                }
+                                if ($deviceInstance) {
+                                    $deviceInstances[] = $deviceInstance;
+                                } else {
+                                    $this->rmsUpload->invalidRowCount++;
+                                    $this->rmsUpload->validRowCount--;
+                                    $uploadCsvService->invalidCsvLines[] = $line;
+                                }
                             }
 
                             $this->mapDeviceInstances($deviceInstances);
@@ -458,20 +470,32 @@ class RmsUploadService
 
 
         /**/
-        $rmsDeviceInstance = RmsDeviceInstanceEntity::findOne($this->rmsUpload->clientId, $line->ipAddress, $line->serialNumber, $line->assetId);
-        if (!$rmsDeviceInstance) {
-            $rmsDeviceInstance = new RmsDeviceInstanceEntity();
-            $rmsDeviceInstance->setClient(ClientEntity::find($this->rmsUpload->clientId));
-            $rmsDeviceInstance->setIpAddress(''.$line->ipAddress);
-            $rmsDeviceInstance->setSerialNumber(''.$line->serialNumber);
-            $rmsDeviceInstance->setAssetId(''.$line->assetId);
-            $rmsDeviceInstance->setFullDeviceName($line->manufacturer.' '.$line->modelName);
-            $rmsDeviceInstance->setRawDeviceName($line->rawDeviceName);
-            $rmsDeviceInstance->setLocation($line->location);
-            $rmsDeviceInstance->setManufacturer($line->manufacturer);
-            $rmsDeviceInstance->setModelName($line->modelName);
-            $rmsDeviceInstance->setReportDate(new \DateTime($line->monitorEndDate));
-            $rmsDeviceInstance->save();
+        try {
+            $rmsDeviceInstance = RmsDeviceInstanceEntity::findOne($this->rmsUpload->clientId, $line->ipAddress, $line->serialNumber, $line->assetId, true);
+
+            if (!$rmsDeviceInstance) {
+                $key = "{$line->ipAddress}|{$line->serialNumber}|{$line->assetId}";
+                if (isset($this->rmsDeviceInstances[$key])) {
+                    $rmsDeviceInstance = $this->rmsDeviceInstances[$key];
+                } else {
+                    $rmsDeviceInstance = new RmsDeviceInstanceEntity();
+                    $rmsDeviceInstance->setClient(ClientEntity::find($this->rmsUpload->clientId));
+                    $rmsDeviceInstance->setIpAddress('' . $line->ipAddress);
+                    $rmsDeviceInstance->setSerialNumber('' . $line->serialNumber);
+                    $rmsDeviceInstance->setAssetId('' . $line->assetId);
+                    $rmsDeviceInstance->setFullDeviceName($line->manufacturer . ' ' . $line->modelName);
+                    $rmsDeviceInstance->setRawDeviceName($line->rawDeviceName);
+                    $rmsDeviceInstance->setLocation($line->location);
+                    $rmsDeviceInstance->setManufacturer($line->manufacturer);
+                    $rmsDeviceInstance->setModelName($line->modelName);
+                    $rmsDeviceInstance->setReportDate(new \DateTime($line->monitorEndDate));
+                    $rmsDeviceInstance->save();
+                    $this->rmsDeviceInstances[$key] = $rmsDeviceInstance;
+                }
+            }
+
+        } catch (\Exception $ex) {
+            $rmsDeviceInstance = null;
         }
 
         /*
@@ -480,7 +504,7 @@ class RmsUploadService
         $deviceInstance                 = new DeviceInstanceModel($lineArray);
         $deviceInstance->rmsUploadId    = $this->rmsUpload->id;
         $deviceInstance->rmsUploadRowId = $rmsUploadRow->id;
-        $deviceInstance->rmsDeviceInstanceId = $rmsDeviceInstance->getId();
+        $deviceInstance->rmsDeviceInstanceId = $rmsDeviceInstance?$rmsDeviceInstance->getId():null;
         DeviceInstanceMapper::getInstance()->insert($deviceInstance);
 
         $deviceInstances[] = $deviceInstance;
