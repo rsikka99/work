@@ -40,6 +40,18 @@ class DealerForm extends Zend_Form
             ],
         ]);
 
+        $this->addElement('text', 'currency', [
+            'required'    => true,
+            'label'       => 'Currency',
+            'filters'     => ['StringTrim'],
+            'validators'  => [
+                [
+                    'validator' => 'StringLength',
+                    'options'   => ['min' => 3, 'max' => 3],
+                ],
+            ],
+        ]);
+
         $this->addElement('text', 'userLicenses', [
             'required'    => true,
             'label'       => '# of user licenses',

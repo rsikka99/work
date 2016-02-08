@@ -30,6 +30,9 @@ class DealerEntity extends EloquentModel
     public static function getDealerId() {
         return \Zend_Auth::getInstance()->getIdentity()->dealerId;
     }
+    public static function getCurrency() {
+        return \Zend_Auth::getInstance()->getIdentity()->currency;
+    }
 
     /**
      * Additional date fields that should be mutated

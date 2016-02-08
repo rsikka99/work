@@ -28,6 +28,15 @@ $dealerSettings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerS
                 </fieldset>
             <?php endif; ?>
             <fieldset>
+                <div class="form-group <?= ($form->getElement('currency')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('currency'), ['col-md-3']) ?>
+
+                    <div class="col-md-9">
+                        <?= $this->RenderFormText($form->getElement('currency')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('currency')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('currency')) ?>
+                    </div>
+                </div>
                 <div class="form-group <?= ($form->getElement('userLicenses')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                     <?= $this->RenderFormLabel($form->getElement('userLicenses'), ['col-md-3']) ?>
 

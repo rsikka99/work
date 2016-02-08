@@ -6,14 +6,22 @@ use MPSToolbox\Legacy\Models\Acl\QuoteGeneratorAclModel;
 
 $this->headScript()->appendFile($this->baseUrl('js/app/legacy/hardware-library/toner/ManageToners.js'));
 
+$currencyService = \MPSToolbox\Services\CurrencyService::getInstance();
+$currencyJs = '';
+if (!$currencyService->is_usd()) {
+    $currencyJs = "window.currencySymbol = '{$currencyService->get_symbol()}';\n";
+}
+
 ?>
 <script>
     <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
     var isSaveAndApproveAdmin = <?=($this->IsAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, AppAclModel::PRIVILEGE_ADMIN) ? 'true' : 'false'); ?>,
         canDelete             = <?=($this->IsAllowed(QuoteGeneratorAclModel::RESOURCE_QUOTEGEN_DEVICESETUP_DELETE, AppAclModel::PRIVILEGE_VIEW) ? 'true' : 'false'); ?>,
         dealerSkuName         = '<?= My_Brand::$dealerSku; ?>';
+    <?= $currencyJs ?>
     <?php $this->headScript()->captureEnd(); ?>
 </script>
+
 <div class="container">
     <div class="row">
         <div class="col-sm-12">

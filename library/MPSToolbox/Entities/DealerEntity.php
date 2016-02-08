@@ -27,6 +27,9 @@ class DealerEntity extends BaseEntity {
     public static function getDealerId() {
         return \Zend_Auth::getInstance()->getIdentity()->dealerId;
     }
+    public static function getCurrency() {
+        return \Zend_Auth::getInstance()->getIdentity()->currency;
+    }
 
     public static function hasEcommerce($dealerId = null) {
         $list = DealerFeatureMapper::getInstance()->fetchFeatureListForDealer($dealerId);

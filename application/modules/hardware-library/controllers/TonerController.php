@@ -164,6 +164,12 @@ class HardwareLibrary_TonerController extends Action
                             }
                         }
 
+                        if (!empty($formData['cost']) && !\MPSToolbox\Services\CurrencyService::isUSD()) {
+                            $toner = TonerMapper::getInstance()->find($tonerId);
+                            $toner->setLocalCost($formData['cost']);
+                            unset($formData['cost']);
+                        }
+
                         $toner = $tonerService->updateToner($tonerId, $formData);
 
                         if (!$toner instanceof TonerModel)

@@ -47,7 +47,7 @@ $shopSettings = $dealerSettings->shopSettings;
             <?= $this->RenderFormLabel($form->getElement('cost'), ['col-md-4']) ?>
 
             <div class="col-md-6">
-                <?= $this->RenderFormText($form->getElement('cost'), null, '$') ?>
+                <?= $this->RenderFormText($form->getElement('cost'), null, \MPSToolbox\Services\CurrencyService::getSymbol()) ?>
                 <?= $this->RenderFormDescription($form->getElement('cost')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('cost')) ?>
             </div>

@@ -55,6 +55,7 @@ class AvailableTonersForm extends \My_Form_Form
         if ($tonerModel instanceof TonerModel)
         {
             $data               = $tonerModel->toArray();
+            $data['cost']       = $tonerModel->getLocalCost();
             $data['dealerSku']  = $tonerModel->getDealerTonerAttribute($dealerId)->dealerSku;
             $data['dealerCost'] = $tonerModel->getDealerTonerAttribute($dealerId)->cost;
 
