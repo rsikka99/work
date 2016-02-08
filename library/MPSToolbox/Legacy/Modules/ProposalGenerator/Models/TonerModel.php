@@ -8,6 +8,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerColorMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerVendorManufacturerMapper;
+use MPSToolbox\Services\CurrencyService;
 use My_Model_Abstract;
 
 /**
@@ -462,4 +463,12 @@ class TonerModel extends My_Model_Abstract
 
         return $this->_oemToners;
     }
+
+    public function getLocalCost() {
+        return number_format(CurrencyService::getInstance()->getObjectValue($this, 'toners', 'cost'),2);
+    }
+    public function setLocalCost($cost) {
+        CurrencyService::getInstance()->setObjectValue($this, 'toners', 'cost', $cost);
+    }
+
 }

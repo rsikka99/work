@@ -27,6 +27,7 @@ class My_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTestCase {
 
     public function user2() {
         $user = \MPSToolbox\Legacy\Mappers\UserMapper::getInstance()->find(2);
+        $user->currency = 'CAD';
         Zend_Auth::getInstance()->getStorage()->write($user);
     }
 

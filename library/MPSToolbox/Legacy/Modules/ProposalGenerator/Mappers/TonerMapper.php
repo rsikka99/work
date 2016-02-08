@@ -6,6 +6,7 @@ use MPSToolbox\Legacy\Entities\DealerEntity;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
+use MPSToolbox\Services\CurrencyService;
 use My_Model_Mapper_Abstract;
 use Zend_Auth;
 use Zend_Db_Table;
@@ -422,7 +423,8 @@ WHERE `device_toners`.`master_device_id` = :masterDeviceId
         $db = $this->getDbTable()->getAdapter();
         $dealerId = intval(DealerEntity::getDealerId());
 
-        $and = "(device_toners.isSystemDevice=1 or device_toners.userId in (select id from `users` where dealerId = {$dealerId})) AND";
+        //$and = "(device_toners.isSystemDevice=1 or device_toners.userId in (select id from `users` where dealerId = {$dealerId})) AND";
+        $and = "(toners.manufacturerId in (select manufacturerId from dealer_toner_vendors where dealer_toner_vendors.dealerId = {$dealerId}) or toners.manufacturerId in (select manufacturerId from master_devices)) AND ";
         if ($dealerId==1) $and = '';
 
         $sql = "
@@ -435,7 +437,7 @@ SELECT
     toners.sku                          AS systemSku,
     dealer_toner_attributes.dealerSku   AS dealerSku,
     toners.cost                         AS systemCost,
-    _view_cheapest_toner_cost.cost      AS dealerCost,
+    if (_view_cheapest_toner_cost.isUsingDealerPricing=0, null, _view_cheapest_toner_cost.cost) AS dealerCost,
     toners.yield,
     toners.tonerColorId,
     device_toners.isSystemDevice       AS deviceTonersIsSystemDevice,
@@ -517,27 +519,32 @@ FROM toners
      */
     public function fetchTonersForDealer($orders = null, $count = 25, $offset = 0, $filterManufacturerId = false, $filterTonerSku = false, $filterTonerColorId = false) {
         $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+
+        $currency = DealerEntity::getCurrency();
+        $rate = CurrencyService::getInstance()->getRate();
+
         $db       = $this->getDbTable()->getAdapter();
         $sql      = "SELECT
-    toners.id                           AS id,
-    t2.id                               AS is_oem,
-    toners.isSystemDevice               AS isSystemDevice,
-    manufacturers.id                    AS manufacturerId,
-    manufacturers.fullname              AS manufacturer,
-    toners.sku                          AS systemSku,
-    dealer_toner_attributes.dealerSku   AS dealerSku,
-    toners.name                         AS toner_name,
-    toners.cost                         AS systemCost,
-    _view_cheapest_toner_cost.cost      AS dealerCost,
+    toners.id                                 AS id,
+    t2.id                                     AS is_oem,
+    toners.isSystemDevice                     AS isSystemDevice,
+    manufacturers.id                          AS manufacturerId,
+    manufacturers.fullname                    AS manufacturer,
+    toners.sku                                AS systemSku,
+    dealer_toner_attributes.dealerSku         AS dealerSku,
+    toners.name                               AS toner_name,
+    toners.cost                               AS base_systemCost,
+    COALESCE(cv1.value, toners.cost*{$rate})  as systemCost,
+    if (_view_cheapest_toner_cost.isUsingDealerPricing=0, null, _view_cheapest_toner_cost.cost) AS dealerCost,
     toners.yield,
     toners.tonerColorId,
     (SELECT GROUP_CONCAT( CONCAT( fullname, ' ', modelName ) SEPARATOR ', ' ) FROM device_toners vw_dt, master_devices vw_md, manufacturers vw_mf where toners.id=vw_dt.toner_id and vw_dt.master_device_id = vw_md.id and vw_md.manufacturerId = vw_mf.id GROUP BY toner_id) as device_list
 FROM toners
     join _view_cheapest_toner_cost on (_view_cheapest_toner_cost.tonerId = toners.id AND _view_cheapest_toner_cost.dealerId = {$dealerId})
-
     left join `toners` t2 on toners.id=t2.id and t2.manufacturerId in (select manufacturerId from master_devices)
     LEFT JOIN manufacturers ON manufacturers.id = toners.manufacturerId
     LEFT JOIN dealer_toner_attributes ON (dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId})
+    left join currency_value cv1 on cv1.`table`='toners' and cv1.`field`='cost' and cv1.id=toners.id and cv1.currency='{$currency}'
     where (toners.manufacturerId in (select manufacturerId from dealer_toner_vendors where dealer_toner_vendors.dealerId = {$dealerId}) or toners.manufacturerId in (select manufacturerId from master_devices))
 ";
 #--LEFT JOIN toner_vendor_manufacturers ON toner_vendor_manufacturers.manufacturerId = toners.manufacturerId
@@ -721,14 +728,16 @@ WHERE `toners`.`id` IN ({$tonerIdList})
         $colorManufacturerPreference[$masterDevice['manufacturerId']] = $masterDevice['manufacturerId'];
         $colorManufacturerPreference=implode(',',$colorManufacturerPreference);
 
+        $rate = 1 / CurrencyService::getInstance()->getRate();
+
         $sql =
 "
 select
   toners.*,
   false as isUsingCustomerPricing,
   {$_view_cheapest_toner_cost}.isUsingDealerPricing,
-  {$_view_cheapest_toner_cost}.cost AS calculatedCost,
-  {$_view_cheapest_toner_cost}.cost / toners.yield AS costPerPage,
+  if({$_view_cheapest_toner_cost}.isUsingDealerPricing=0,{$_view_cheapest_toner_cost}.cost,{$_view_cheapest_toner_cost}.cost*{$rate}) AS calculatedCost,
+  if({$_view_cheapest_toner_cost}.isUsingDealerPricing=0,{$_view_cheapest_toner_cost}.cost,{$_view_cheapest_toner_cost}.cost*{$rate}) / toners.yield AS costPerPage,
   IF(master_devices.manufacturerId = toners.manufacturerId, 1, 0) AS isOem
 from
   toners
@@ -750,8 +759,8 @@ select
   toners.*,
   false as isUsingCustomerPricing,
   {$_view_cheapest_toner_cost}.isUsingDealerPricing,
-  {$_view_cheapest_toner_cost}.cost AS calculatedCost,
-  {$_view_cheapest_toner_cost}.cost / toners.yield AS costPerPage,
+  if({$_view_cheapest_toner_cost}.isUsingDealerPricing=0,{$_view_cheapest_toner_cost}.cost,{$_view_cheapest_toner_cost}.cost*{$rate}) AS calculatedCost,
+  if({$_view_cheapest_toner_cost}.isUsingDealerPricing=0,{$_view_cheapest_toner_cost}.cost,{$_view_cheapest_toner_cost}.cost*{$rate}) / toners.yield AS costPerPage,
   IF(master_devices.manufacturerId = toners.manufacturerId, 1, 0) AS isOem
 from
   toners

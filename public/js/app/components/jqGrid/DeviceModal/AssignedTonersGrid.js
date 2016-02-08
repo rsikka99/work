@@ -13,6 +13,10 @@ define([
 {
     var instanceCounter = 0;
 
+    if (window.currencySymbol) {
+        accounting.settings.currency.symbol = window.currencySymbol;
+    }
+
     /**
      * @param {*|HTMLElement} element
      * @param {Object} options

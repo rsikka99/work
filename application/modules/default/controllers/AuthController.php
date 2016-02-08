@@ -72,6 +72,8 @@ class Default_AuthController extends Action
                     // Get all the user information and only omit the password
                     // since we don't want to store it in the session.
                     $userInfo    = $authAdapter->getResultRowObject(null, 'password');
+                    $userInfo->dealer = \MPSToolbox\Legacy\Mappers\DealerMapper::getInstance()->find($userInfo->dealerId);
+                    $userInfo->currency = $userInfo->dealer->currency;
                     $authStorage = $auth->getStorage();
                     $authStorage->write($userInfo);
 

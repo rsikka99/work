@@ -36,7 +36,7 @@ $toner = $form->getView()->toner;
 
                     <div class="form-group <?= ($form->getElement('dealerCost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                         <?= $this->RenderFormLabel($form->getElement('dealerCost')) ?>
-                        <?= $this->RenderFormText($form->getElement('dealerCost'), [], '$') ?>
+                        <?= $this->RenderFormText($form->getElement('dealerCost'), [], \MPSToolbox\Services\CurrencyService::getSymbol()) ?>
                         <?= $this->RenderFormDescription($form->getElement('dealerCost')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('dealerCost')) ?>
                     </div>
@@ -169,7 +169,7 @@ $toner = $form->getView()->toner;
 
                         <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                             <?= $this->RenderFormLabel($form->getElement('cost')) ?>
-                            <?= $this->RenderFormText($form->getElement('cost'), [], '$') ?>
+                            <?= $this->RenderFormText($form->getElement('cost'), [], \MPSToolbox\Services\CurrencyService::getSymbol()) ?>
                             <?= $this->RenderFormDescription($form->getElement('cost')) ?>
                             <?= $this->RenderFormElementErrors($form->getElement('cost')) ?>
                         </div>

@@ -57,6 +57,7 @@ class DealerModel extends My_Model_Abstract
 
     public $api_key;
     public $api_secret;
+    public $currency;
 
     /**
      * @var DealerSettingModel
@@ -116,6 +117,10 @@ class DealerModel extends My_Model_Abstract
         {
             $this->api_secret = $params->api_secret;
         }
+        if (isset($params->currency) && !is_null($params->currency))
+        {
+            $this->currency = $params->currency;
+        }
     }
 
     /**
@@ -131,6 +136,7 @@ class DealerModel extends My_Model_Abstract
             'dealerLogoImageId' => $this->dealerLogoImageId,
             'api_key'           => $this->api_key,
             'api_secret'        => $this->api_secret,
+            'currency'          => $this->currency,
         ];
     }
 

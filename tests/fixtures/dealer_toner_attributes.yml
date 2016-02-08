@@ -12,3 +12,7 @@ dealer_toner_attributes:
     - { tonerId: '36', dealerId: '1', cost: null, dealerSku: null, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
     - { tonerId: '36', dealerId: '2', cost: '87.9', dealerSku: null, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
     - { tonerId: '36', dealerId: '3', cost: '72.26', dealerSku: Q6003A, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '132', dealerId: '2', cost: '140', dealerSku: Q6003A, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '374', dealerId: '2', cost: '170', dealerSku: Q6003A, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '375', dealerId: '2', cost: '170', dealerSku: Q6003A, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }
+    - { tonerId: '376', dealerId: '2', cost: '170', dealerSku: Q6003A, webId: null, level1: null, level2: null, level3: null, level4: null, level5: null }

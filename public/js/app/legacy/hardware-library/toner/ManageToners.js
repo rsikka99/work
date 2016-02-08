@@ -9,6 +9,10 @@ require([
     'bootstrap.modal.manager'
 ], function ($, require, Template, accounting)
 {
+    if (window.currencySymbol) {
+        accounting.settings.currency.symbol = window.currencySymbol;
+    }
+
     $(function ()
     {
         window.$tonersGrid = $('#toners-grid');
