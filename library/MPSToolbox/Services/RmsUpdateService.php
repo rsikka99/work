@@ -405,7 +405,7 @@ group by clientId
         return $result;
     }
 
-    public function sendEmail($c) {
+    public function sendEmail($c, $shopSettings) {
         /** @var ClientEntity $client */
         $client = ClientEntity::find($c['clientId']);
         if (empty($client)) {
@@ -528,7 +528,7 @@ HTML;
     {$location}
     Toner Level {$color}: <b>{$device->getTonerLevel()}%</b><br>
     Estimated Monthly Page Volume: <b>{$ampv}</b><br>
-    Estimated time left until toner reaches 5%: <b>{$device->getDaysLeft()}</b> days
+    Estimated time left until toner reaches {$shopSettings->thresholdPercent}%: <b>{$device->getDaysLeft()}</b> days
 </p>
 HTML;
             else $devices .=
@@ -536,7 +536,7 @@ HTML;
                 <p>
     Toner Level {$color}: <b>{$device->getTonerLevel()}%</b><br>
     Estimated Monthly Page Volume: <b>{$ampv}</b><br>
-    Estimated time left until toner reaches 5%: <b>{$device->getDaysLeft()}</b> days
+    Estimated time left until toner reaches {$shopSettings->thresholdPercent}%: <b>{$device->getDaysLeft()}</b> days
 </p>
 HTML;
         }
@@ -607,7 +607,7 @@ HTML;
 
         if ($sendEmail) {
             printf('sending email...');
-            $this->sendEmail($client);
+            $this->sendEmail($client, $settings);
         }
     }
 

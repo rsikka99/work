@@ -429,7 +429,7 @@ class RmsUpdateEntity extends BaseEntity {
 
         $numberOfPages = $toner->getYield() / ((1 + ( $coverage - 5 ) / 10) );
         $numberOfPagesRemaining = ($tonerLevel/100) * $numberOfPages;
-        $numberOfPages5percent = 0.05 * $numberOfPages;
+        $numberOfPages5percent = ($shopSettings->thresholdPercent/100) * $numberOfPages;
         $this->daysLeft[$forColor] = round(max(0,($numberOfPagesRemaining - $numberOfPages5percent)) / $dailyPrintVolume);
 
         printf("%s - tonerLevel:%s daysLeft:%s:%s <br>\n", $this->getRmsDeviceInstance()->getIpAddress(), $tonerLevel, $forColor, $this->daysLeft[$forColor]);
