@@ -173,6 +173,9 @@ class DistributorUpdateService {
         echo $filename;
         $fp = fopen($filename, 'rb');
 
+        $sql=['Qty_on_Hand=0'];
+        for ($i=1;$i<=16;$i++) $sql[]="`Warehouse_Qty_on_Hand_{$i}`=0";
+        $db->query('update synnex_products set '.implode($sql));
 
         $replace_statement = false;
         $price_statement = false;
@@ -307,6 +310,9 @@ class DistributorUpdateService {
 'SUBSTITUTE_PART_NUMBER', // - 7 Positions, Alphanumeric, followed by 5 spaces; (Blank Field)=No substitute part number
         ];
         $fp = fopen(dirname($zip_filename).'/PRICE.TXT', 'rb');
+
+        $db->query("update ingram_products set `status`='*', `AVAILABILITY_FLAG`='N'");
+
         $replace_statement = false;
         $price_statement = false;
         $toner_statement = false;
