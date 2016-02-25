@@ -36,6 +36,14 @@ class Default_CronController extends \Tangent\Controller\Action {
         foreach ($dealerSuppliers as $dealerSupplier) {
             $service->updatePrices($dealerSupplier);
         }
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $arr = $db->query("
+SELECT dealers.id FROM dealers join `dealer_settings` on dealers.id=dealer_settings.dealerId join shop_settings on dealer_settings.`shopSettingsId`=shop_settings.id where shop_settings.shopifyName<>''
+        ")->fetchAll();
+        foreach ($arr as $line) {
+            file_get_contents('http://proxy.mpstoolbox.com/shopify/dist_update.php?dealerId='.$line['id'].'&origin='.$_SERVER['HTTP_HOST']);
+        }
     }
 
 }
