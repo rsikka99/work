@@ -66,13 +66,28 @@ class RmsDeviceInstanceEntity extends BaseEntity {
      * @param $assetId
      * @return RmsDeviceInstanceEntity
      */
-    public static function findOne($clientId, $ipAddress, $serialNumber, $assetId) {
+    public static function findOne($clientId, $ipAddress, $serialNumber, $assetId, $throwException=false) {
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $st = $db->prepare("select id from rms_device_instances where clientId=:c and ipAddress=:i and serialNumber=:s and (assetId=:a or assetId='')");
-        $st->execute(['c'=>''.$clientId, 'i'=>''.$ipAddress, 's'=>''.$serialNumber, 'a'=>''.$assetId]);
+        if ((''.$assetId)!=='') {
+            $st = $db->prepare("SELECT id FROM rms_device_instances WHERE clientId=:c AND ipAddress=:i AND serialNumber=:s AND assetId=:a");
+            $st->execute(['c' => '' . $clientId, 'i' => '' . $ipAddress, 's' => '' . $serialNumber, 'a' => '' . $assetId]);
+            $arr = $st->fetchAll();
+            if (!empty($arr)) {
+                return self::find($arr[0]['id']);
+            }
+        }
+        #--
+        $st = $db->prepare("SELECT id FROM rms_device_instances WHERE clientId=:c AND ipAddress=:i AND serialNumber=:s and assetId=''");
+        $st->execute(['c' => ''.$clientId, 'i' => ''.$ipAddress, 's' => ''.$serialNumber]);
         $arr = $st->fetchAll();
-        if (empty($arr) || (count($arr)!=1)) return null;
-        return self::find($arr[0]['id']);
+        if (!empty($arr)) {
+            if (count($arr)==1) return self::find($arr[0]['id']);
+            if ($throwException) {
+                throw new \Exception("cannot uniquely identify device {$ipAddress} {$serialNumber} {$assetId}");
+            }
+        }
+        #--
+        return null;
     }
 
     /**
