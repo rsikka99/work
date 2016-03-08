@@ -37,12 +37,13 @@ class Default_WebhookController extends \Tangent\Controller\Action {
                 }
             }
             if ($client) {
-                $fields = explode(',','id,clientId,created_at,number,total_price,subtotal_price,line_items,customer,raw');
+                $fields = explode(',','dealerId,id,clientId,created_at,number,total_price,subtotal_price,line_items,customer,customer_name,raw');
                 $sql = [];
                 foreach ($fields as $key) $sql[]="`$key`=:{$key}";
                 $db = Zend_Db_Table::getDefaultAdapter();
                 $st = $db->prepare('replace'.' into shopify_orders set '.implode(',',$sql));
-                $st->execute([
+                $data = [
+                    'dealerId'=>$dealerId,
                     'id'=>$order['id'],
                     'clientId'=>$client->id,
                     'created_at'=>$order['created_at'],
@@ -51,8 +52,10 @@ class Default_WebhookController extends \Tangent\Controller\Action {
                     'subtotal_price'=>$order['subtotal_price'],
                     'line_items'=>json_encode($order['line_items']),
                     'customer'=>json_encode($order['customer']),
+                    'customer_name'=>$order['customer']['last_name'].', '.$order['customer']['first_name'],
                     'raw'=>$input,
-                ]);
+                ];
+                $st->execute($data);
 
                 foreach ($order['line_items'] as $line_item) {
                     $rmsDeviceInstanceId = null;

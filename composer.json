@@ -25,7 +25,8 @@
     "szymach/c-pchart"            : "1.*",
     "doctrine/orm"                : "*",
     "guzzlehttp/guzzle"           : "~6.0",
-    "cdyweb/http-adapter"         : ">=0.2.1"
+    "cdyweb/http-adapter"         : ">=0.2.1",
+    "cdyweb/shopify-client"       : "0.1.5"
   },
   "require-dev": {
     "phpunit/phpunit": "3.7.x",
