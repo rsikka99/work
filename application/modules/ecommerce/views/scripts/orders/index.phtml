@@ -1,0 +1,141 @@
+<?php
+if (isset($this->shopifyError)) {
+    echo '<p>Cannot connect with Shopify</p>';
+    return;
+}
+?>
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Order #</th>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Subtotal</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+<?php
+if (empty($this->orders)) { ?>
+            <tr>
+                <td colspan="5">No orders found</td>
+            </tr>
+<?php
+} else {
+    foreach ($this->orders as $order) {
+        /** @var $order \ActiveResource\Base */
+?>
+        <tr style="cursor:pointer" onclick="popup(<?= $order->getId() ?>)">
+            <td><?= $order->order_number ?></td>
+            <td><?= date('Y-m-d H:i',strtotime($order->created_at)) ?></td>
+            <td><?= $order->customer['last_name'].', '.$order->customer['first_name'] ?></td>
+            <td><?= $order->subtotal_price ?></td>
+            <td><?= $order->financial_status ?></td>
+        </tr>
+<?php
+    }
+}
+?>
+        </tbody>
+    </table>
+
+<script>
+    function popup(id) {
+        $.post('/ecommerce/orders',{id:id}, function(response) {
+            $('#span-order-number').text(response.number);
+            var str = '';
+            for (var i=0;i<response.general.length;i++) {
+                str += '<tr><th>'+response.general[i][0]+'</th><td>'+response.general[i][1]+'</td></tr>';
+            }
+            $('#general-tbody').html(str);
+
+            str = '';
+            for (var i=0;i<response.customer.length;i++) {
+                str += '<tr><th>'+response.customer[i][0]+'</th><td>'+response.customer[i][1]+'</td></tr>';
+            }
+            $('#customer-tbody').html(str);
+
+            str = '';
+            for (var i=0;i<response.products.length;i++) {
+                str += '<tr>';
+                for (var j=0;j<response.products[i].length;j++) {
+                    str += '<td>'+response.products[i][j]+'</td>';
+                }
+                str += '</tr>';
+            }
+            $('#products-tbody').html(str);
+
+            var $modal=$('#details-modal');
+            $modal.modal({backdrop: 'static'}).css('margin-top',(-1 * ($modal.height()/2))).css('margin-left',(-1 * ($modal.width()/2)));
+        }, 'json');
+    }
+</script>
+
+</div>
+
+<div class="modal fade" id="details-modal" style="width:800px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Order <span id="span-order-number"></span> Details</h4>
+            </div>
+            <div class="modal-body" id="details-modal-body">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">General</a></li>
+                    <li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Customer</a></li>
+                    <li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Products</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="tab1">
+                        <p>&nbsp;</p>
+                        <table class="table" id="general-table">
+                            <colgroup><col width="150"><col width=""></colgroup>
+                            <thead></thead>
+                            <tbody id="general-tbody"></tbody>
+                        </table>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab2">
+                        <p>&nbsp;</p>
+                        <table class="table" id="customer-table">
+                            <colgroup><col width="150"><col width=""></colgroup>
+                            <thead></thead>
+                            <tbody id="customer-tbody"></tbody>
+                        </table>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab3">
+                        <p>&nbsp;</p>
+                        <table class="table" id="products-table">
+                            <colgroup>
+                                <col width="" />
+                                <col width="80" />
+                                <col width="80" />
+                                <col width="80" />
+                                <col width="80" />
+                                <col width="80" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>SKU</th>
+                                    <th>Sell Price</th>
+                                    <th>Distributor</th>
+                                    <th>Part number</th>
+                                    <th>Buy Price</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -369,6 +369,10 @@
                     <label>Device Settings</label>
                     <uri>/ecommerce/device</uri>
                 </device>
+                <orders>
+                    <label>Orders</label>
+                    <uri>/ecommerce/orders</uri>
+                </orders>
             </pages>
         </ecommerce>
 
