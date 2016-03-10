@@ -5,6 +5,7 @@
             <dealerName>Bo</dealerName>
             <userLicenses>432</userLicenses>
             <dealerLogoImage></dealerLogoImage>
+            <currency>USD</currency>
         </data>
     </testData>
     <testData>
@@ -12,6 +13,7 @@
             <dealerName>Boundary</dealerName>
             <userLicenses>2</userLicenses>
             <dealerLogoImage></dealerLogoImage>
+            <currency>USD</currency>
         </data>
     </testData>
     <testData>
@@ -19,6 +21,7 @@
             <dealerName>Boundary</dealerName>
             <userLicenses>999</userLicenses>
             <dealerLogoImage></dealerLogoImage>
+            <currency>USD</currency>
         </data>
     </testData>
 </dealerGoodData>

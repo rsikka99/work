@@ -17,6 +17,7 @@
             <postCode>K1K 1K1</postCode>
             <countryId>9999999999999</countryId>
             <dealerId>9999999999999</dealerId>
+            <industry>abc</industry>
         </data>
     </testData>
     <testData>
@@ -36,6 +37,7 @@
             <postCode>K1K 1K1</postCode>
             <countryId></countryId>
             <dealerId>1</dealerId>
+            <industry>abc</industry>
         </data>
     </testData>
     <testData>
@@ -55,6 +57,7 @@
             <postCode>K1K 1K1</postCode>
             <countryId>9999999999999</countryId>
             <dealerId>9999999999999</dealerId>
+            <industry>abc</industry>
         </data>
     </testData>
     <testData>
@@ -72,6 +75,7 @@
             <postCode>K1K 1K1</postCode>
             <countryId>11111</countryId>
             <dealerId>1</dealerId>
+            <industry>abc</industry>
         </data>
     </testData>
 </clientsBadData>

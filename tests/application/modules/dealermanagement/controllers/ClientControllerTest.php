@@ -22,7 +22,9 @@ class Dealermanagement_ClientControllerTest extends My_ControllerTestCase
         $this->assertModule('dealermanagement');
         $this->assertController('client');
         $this->assertAction('index');
-        $this->assertEquals(1,preg_match('#'.preg_quote('<table class="table table-striped table-condensed table-bordered">').'#',$this->getResponse()->getBody()));
+        $body = $this->getResponse()->getBody();
+        //echo $body;
+        $this->assertEquals(1,preg_match('#'.preg_quote('<table class="table table-striped table-hover" id="my-table">').'#',$body));
     }
 
     public function test_createClientAction() {
@@ -59,13 +61,14 @@ class Dealermanagement_ClientControllerTest extends My_ControllerTestCase
             'phoneNumber'	=>'1',
             'postCode'=>'1',
             'region'=>'1',
+            'industry'=>'1',
         ]);
 
         $_GET['select']=true;
         $request->setMethod('POST');
         $this->dispatch('company/clients/create');
 
-        #echo $this->getResponse()->getBody();
+        echo $this->getResponse()->getBody();
         \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->setDbTable(null);
 
         $this->assertRedirectTo('/select-client?selectClient=1');
@@ -122,6 +125,7 @@ class Dealermanagement_ClientControllerTest extends My_ControllerTestCase
             'phoneNumber'	=>'1',
             'postCode'=>'1',
             'region'=>'1',
+            'industry'=>'1',
         ]);
         $request->setMethod('POST');
         $this->dispatch('company/clients/edit/5');

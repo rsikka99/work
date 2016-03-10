@@ -2,34 +2,40 @@
 <dealerBadData>
     <testData>
         <data>
+            <currency>USD</currency>
         </data>
     </testData>
     <testData>
         <data>
             <dealerName>lrobert</dealerName>
+            <currency>USD</currency>
         </data>
     </testData>
     <testData>
         <data>
             <userLicenses>somePassword</userLicenses>
+            <currency>USD</currency>
         </data>
     </testData>
     <testData>
         <data>
             <dealerName>a</dealerName>
             <userLicenses>25</userLicenses>
+            <currency>USD</currency>
         </data>
     </testData>
     <testData>
         <data>
             <dealerName>boundary</dealerName>
             <userLicenses>0</userLicenses>
+            <currency>USD</currency>
         </data>
     </testData>
     <testData>
         <data>
             <dealerName>boundary</dealerName>
             <userLicenses>1001</userLicenses>
+            <currency>USD</currency>
         </data>
     </testData>
 </dealerBadData>

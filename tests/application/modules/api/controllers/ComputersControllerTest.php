@@ -40,7 +40,7 @@ class Api_ComputersControllerTest extends My_ControllerTestCase
         $json = $this->response->getBody();
         $this->assertJson($json);
         $arr = json_decode($json,true);
-        print_r($arr);
+        //print_r($arr);
         $this->assertEquals(1, $arr['total']);
         $this->assertEquals(2, $arr['rows'][0]['id']);
     }
