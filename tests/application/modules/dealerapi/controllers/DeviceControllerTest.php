@@ -16,7 +16,8 @@ class Dealerapi_DeviceControllerTest extends My_DatabaseTestCase
         'toner_configs','manufacturers',
         'master_devices',
         'rms_providers','rms_devices','rms_uploads','rms_upload_rows',
-        'device_instances','device_instance_meters','device_instance_master_devices'
+        'device_instances','device_instance_meters','device_instance_master_devices',
+        'toner_vendor_ranking_sets','toner_vendor_rankings'
     ];
 
     public function setUp()
@@ -31,6 +32,7 @@ class Dealerapi_DeviceControllerTest extends My_DatabaseTestCase
     }
 
     public function testSwap() {
+        $this->user2();
         $this->request->setParam('id',1);
         $this->request->setParam('ampv',1000);
         $this->controller->swapAction();
