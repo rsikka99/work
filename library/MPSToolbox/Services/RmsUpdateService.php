@@ -405,7 +405,7 @@ group by clientId
         return $result;
     }
 
-    public function sendEmail($c, $shopSettings) {
+    public function sendEmail($c) {
         /** @var ClientEntity $client */
         $client = ClientEntity::find($c['clientId']);
         if (empty($client)) {
@@ -436,51 +436,10 @@ group by clientId
 
         /** @var ShopSettingsEntity $shopSettings */
         $shopSettings = DealerSettingsEntity::getDealerSettings($dealerId)->shopSettings;
-        $link = '<a href="'.sprintf('http://%s.myshopify.com/tools/mps?p=rms&origin=email', $shopSettings->shopifyName).'">Go to your supply cupboard</a>';
+        $link = '<a href="'.sprintf('http://%s.myshopify.com/tools/mps?p=rms&origin=email', $shopSettings->shopifyName).'"><img alt="Go to your supply cupboard" title="Go to your supply cupboard" src="https://staging.mpstoolbox.com/img/SupplyCupboardButton.png"></a>';
 
         $emailFromAddress = $shopSettings->emailFromAddress;
         $emailFromName = $shopSettings->emailFromName;
-
-        switch($c['templateNum']) {
-            case 2:
-                $supplyNotifySubject = $shopSettings->supplyNotifySubject2;
-                $supplyNotifyMessage = $shopSettings->supplyNotifyMessage2;
-                break;
-            case 3:
-                $supplyNotifySubject = $shopSettings->supplyNotifySubject3;
-                $supplyNotifyMessage = $shopSettings->supplyNotifyMessage3;
-                break;
-            default:
-                $supplyNotifySubject = $shopSettings->supplyNotifySubject;
-                $supplyNotifyMessage = $shopSettings->supplyNotifyMessage;
-                break;
-        }
-
-        if (empty($emailFromAddress)) $emailFromAddress = $dealerBranding->dealerEmail;
-        if (empty($emailFromName)) $emailFromName = $dealerBranding->dealerName;
-        if (empty($supplyNotifySubject)) $supplyNotifySubject = 'Printing Supplies Order Requirements for {{clientName}}';
-        if (empty($supplyNotifyMessage)) $supplyNotifyMessage = <<<HTML
-<p>Hello {{contactName}}</p>
-
-<p>We have determined that the following devices require supplies:</p>
-
-{{devices}}
-
-<p>
-    <em>Note:</em> print quality typically degrades when supply levels are between 5 and 10%.
-    Lighter prints or inaccurate color representation are often common when supply levels are low.
-    Some devices will stop printing at any point below 5%.
-    Delivery times should also be considered to ensure the device does not stop printing due to empty supplies.
-</p>
-<p>
-    We have prepared a supply order for you. Please click here to login to your account and order:<br>
-    {{link}}
-</p>
-
-<p>Regards,<br>
-The toner management team at {$dealerBranding->dealerName}
-</p>
-HTML;
 
         $rows = DeviceNeedsTonerEntity::getByClient($client);
         $arr=[];
@@ -490,9 +449,14 @@ HTML;
             $arr[$id][] = $device;
         }
 
-        $devices = '';
+        $devicesByTemplate = [];
         foreach ($arr as $d) foreach ($d as $i=>$device) {
-            /** @var DeviceNeedsTonerEntity $device */
+            $templateNum = $device->getRmsDeviceInstance()->getEmailTemplate();
+            switch ($templateNum) {
+                case 1: case 2: case 3: { break; }
+                default: { $templateNum=$c['templateNum']; }
+            }
+
             $model = sprintf('%s %s',
                 $device->getMasterDevice()->getManufacturer()->getDisplayname(),
                 $device->getMasterDevice()->getModelName()
@@ -519,7 +483,7 @@ HTML;
                 $ampv = round($daily * 365 / 12);
             }
 
-            if ($i==0) $devices .=
+            if ($i==0) $devicesByTemplate[$templateNum][] =
                 <<<HTML
                 <p>
     Device Model: <b>{$model}</b><br>
@@ -531,7 +495,7 @@ HTML;
     Estimated time left until toner reaches {$shopSettings->thresholdPercent}%: <b>{$device->getDaysLeft()}</b> days
 </p>
 HTML;
-            else $devices .=
+            else $devicesByTemplate[$templateNum][] =
                 <<<HTML
                 <p>
     Toner Level {$color}: <b>{$device->getTonerLevel()}%</b><br>
@@ -541,27 +505,73 @@ HTML;
 HTML;
         }
 
-        $html = str_replace([
-            '{{contactName}}',
-            '{{devices}}',
-            '{{link}}',
-        ], [
-            $contactName,
-            $devices,
-            "<a href=\"{$link}\">{$link}</a>"
-        ], $supplyNotifyMessage);
+        foreach ($devicesByTemplate as $templateNum=>$devices) {
 
-        $email = new \Zend_Mail();
-        $email->setFrom($emailFromAddress, $emailFromName);
-        $email->addTo(explode(',',str_replace(';',',',empty($contact->emailSupply) ? $contact->email : $contact->emailSupply)));
-        $email->addBcc($dealerBranding->dealerEmail);
-        $email->setSubject(str_replace('{{clientName}}',$client->getCompanyName(),$supplyNotifySubject)); //'Printing Supplies Order Requirements for '.$client->getCompanyName());
-        $email->setBodyHtml($html);
-        $email->setBodyText(strip_tags($html));
-        try {
-            $email->send();
-        } catch (\Exception $ex) {
-            Logger::error($ex->getMessage(), $ex);
+            switch($templateNum) {
+                case 2:
+                    $supplyNotifySubject = $shopSettings->supplyNotifySubject2;
+                    $supplyNotifyMessage = $shopSettings->supplyNotifyMessage2;
+                    break;
+                case 3:
+                    $supplyNotifySubject = $shopSettings->supplyNotifySubject3;
+                    $supplyNotifyMessage = $shopSettings->supplyNotifyMessage3;
+                    break;
+                default:
+                    $supplyNotifySubject = $shopSettings->supplyNotifySubject;
+                    $supplyNotifyMessage = $shopSettings->supplyNotifyMessage;
+                    break;
+            }
+
+            if (empty($emailFromAddress)) $emailFromAddress = $dealerBranding->dealerEmail;
+            if (empty($emailFromName)) $emailFromName = $dealerBranding->dealerName;
+            if (empty($supplyNotifySubject)) $supplyNotifySubject = 'Printing Supplies Order Requirements for {{companyName}}';
+            if (empty($supplyNotifyMessage)) $supplyNotifyMessage = <<<HTML
+<p>Hello {{clientName}}</p>
+
+<p>We have determined that the following devices require supplies:</p>
+
+{{devices}}
+
+<p>
+    <em>Note:</em> print quality typically degrades when supply levels are between 5 and 10%.
+    Lighter prints or inaccurate color representation are often common when supply levels are low.
+    Some devices will stop printing at any point below 5%.
+    Delivery times should also be considered to ensure the device does not stop printing due to empty supplies.
+</p>
+<p>
+    We have prepared a supply order for you. Please click here to login to your account and order:<br>
+    {{link}}
+</p>
+
+<p>Regards,<br>
+The toner management team at {$dealerBranding->dealerName}
+</p>
+HTML;
+
+            $html = str_replace([
+                '{{clientName}}',
+                '{{contactName}}',
+                '{{devices}}',
+                '{{link}}',
+            ], [
+                $client->getCompanyName(),
+                $contactName,
+                implode("\n",$devices),
+                $link
+            ], $supplyNotifyMessage);
+
+            $email = new \Zend_Mail();
+            $email->setFrom($emailFromAddress, $emailFromName);
+            $email->addTo(explode(',', str_replace(';', ',', empty($contact->emailSupply) ? $contact->email : $contact->emailSupply)));
+            $email->addBcc($dealerBranding->dealerEmail);
+            $email->setSubject(str_replace('{{clientName}}', $client->getCompanyName(), $supplyNotifySubject)); //'Printing Supplies Order Requirements for '.$client->getCompanyName());
+            $email->setBodyHtml($html);
+            $email->setBodyText(strip_tags($html));
+            try {
+                $email->send();
+            } catch (\Exception $ex) {
+                Logger::error($ex->getMessage(), $ex);
+            }
         }
     }
 
@@ -607,7 +617,7 @@ HTML;
 
         if ($sendEmail) {
             printf('sending email...');
-            $this->sendEmail($client, $settings);
+            $this->sendEmail($client);
         }
     }
 

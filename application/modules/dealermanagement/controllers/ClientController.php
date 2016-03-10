@@ -274,6 +274,7 @@ class Dealermanagement_ClientController extends Action
             if (!$root_found) return false;
         }
         $result = [];
+        $clients = ClientMapper::getInstance()->fetchClientListForDealer(\MPSToolbox\Legacy\Entities\DealerEntity::getDealerId());
         foreach ($groups as $group) {
             if (!$group['deviceCountTotal']) continue;
             $icon = 'glyphicon glyphicon glyphicon-folder-open';
@@ -282,7 +283,13 @@ class Dealermanagement_ClientController extends Action
                 case 'Customer' : $icon = 'glyphicon glyphicon glyphicon-user'; break;
                 case 'Office/Location' : $icon = 'glyphicon glyphicon glyphicon-home'; break;
             }
-            $state=[['expanded'=>true]];
+
+            $state=['expanded'=>true];
+            foreach ($clients as $client) {
+                if ($client->deviceGroup == $group['id']) {
+                    $state['checked'] = true;
+                }
+            }
 
             $addr = [];
             if (!empty($group['additionalDetails']['street 1'])) $addr []= $group['additionalDetails']['street 1'];
@@ -296,7 +303,10 @@ class Dealermanagement_ClientController extends Action
             if (!empty($addr)) $text.="<span class='pull-right'>".implode(', ',$addr).'</span>';
             $line=['text'=>$text, 'icon'=>$icon,'state'=>$state,'selectable'=>false, 'href'=>$group['id']];
             if (!empty($group['children'])) {
-                $line['nodes'] = $this->recursiveGroupTable($group['children'], null, true);
+                $nodes = $this->recursiveGroupTable($group['children'], null, true);
+                if (!empty($nodes)) {
+                    $line['nodes'] =  $nodes;
+                }
             }
             $result []= $line;
         }

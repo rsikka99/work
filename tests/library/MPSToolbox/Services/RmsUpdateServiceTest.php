@@ -611,6 +611,7 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
         $instance->setSerialNumber('321');
         $instance->setLocation('here and there');
         $instance->setMasterDevice(\MPSToolbox\Entities\MasterDeviceEntity::find(1));
+        $instance->setEmailTemplate(2);
         $instance->save();
 
         $device = new \MPSToolbox\Entities\RmsUpdateEntity();

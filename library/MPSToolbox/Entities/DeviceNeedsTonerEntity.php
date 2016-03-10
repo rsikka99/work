@@ -67,7 +67,7 @@ class DeviceNeedsTonerEntity extends BaseEntity {
     private $shopify_order;
 
     /**
-     * @return mixed
+     * @return RmsDeviceInstanceEntity
      */
     public function getRmsDeviceInstance()
     {
@@ -292,7 +292,10 @@ class DeviceNeedsTonerEntity extends BaseEntity {
     }
 
 
-
+    /**
+     * @param ClientEntity $client
+     * @return DeviceNeedsTonerEntity[]
+     */
     public static function getByClient(ClientEntity $client) {
         $query = self::em()->createQuery("SELECT d FROM \MPSToolbox\Entities\DeviceNeedsTonerEntity d WHERE d.client = :client");
         $query->setParameter('client', $client);
