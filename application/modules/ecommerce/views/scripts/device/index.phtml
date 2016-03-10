@@ -51,6 +51,7 @@ foreach($this->clients as $client) {
                 <th>Serial Number</th>
                 <th>Location</th>
                 <th>Last Reported</th>
+                <th>Template</th>
             </tr>
         </thead>
         <tbody>
@@ -160,6 +161,20 @@ foreach($this->clients as $client) {
                 editDeviceModal.show();
             });
         }
+        function selectTemplate(id) {
+            var $el = $('#template-'+id);
+            var value = $el.attr('data-value');
+            $el.html('<select onchange="templateSelected('+id+',this.value)"><option '+(value==0?'selected="selected"':'')+' value="0">Client</option><option '+(value==1?'selected="selected"':'')+' value="1">1</option><option '+(value==2?'selected="selected"':'')+' value="2">2</option><option '+(value==3?'selected="selected"':'')+' value="3">3</option></select> <a href="javascript:;" onclick="templateSelected('+id+','+value+')">cancel</a>');
+        }
+        function templateSelected(id,value) {
+            var $el = $('#template-'+id);
+            var old_value = $el.attr('data-value');
+            $el.attr('data-value', value);
+            $el.html('<span onclick="selectTemplate('+id+')" style="cursor:pointer">'+(value>0?value:'Client')+'</span>');
+            if (old_value!=value) {
+                $.post('/ecommerce/device/template-selected', {id:id, value:value}, function(response) {}, 'json');
+            }
+        }
         function showDetailsModal(id) {
             $.post('/ecommerce/device/details', {id:id}, function(response) {
                 $('#details-modal-body').html(response);
@@ -194,7 +209,8 @@ foreach($this->clients as $client) {
                     {data: 'ipAddress'},
                     {data: 'serialNumber'},
                     {data: 'location'},
-                    {data: 'reportDate'}
+                    {data: 'reportDate'},
+                    {data: 'template'}
                 ],
                 "ajax": {
                     "url": "/ecommerce/device/ajax-table?client=<?= $selectedClient->id ?>"

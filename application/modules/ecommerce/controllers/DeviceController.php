@@ -101,6 +101,14 @@ class Ecommerce_DeviceController extends Action
 
     }
 
+    public function templateSelectedAction() {
+        $id = $this->getParam('id');
+        $value = $this->getParam('value');
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->query('update rms_device_instances set email_template='.intval($value).' where id='.intval($id));
+        $this->sendJson([]);
+    }
+
     public function ajaxTableAction() {
         $clientId = $this->getRequest()->getParam('client');
         $result=['data'=>[]];
@@ -154,6 +162,8 @@ class Ecommerce_DeviceController extends Action
 
                 $fullDeviceName = '<a href="javascript:;" onclick="showDetailsModal('.$line['id'].')"><i class="fa fa-fw fa-info-circle text-info"></i></a>&nbsp;' . $fullDeviceName;
 
+                $template='<span id="template-'.$line['id'].'" data-value="'.$line['email_template'].'"><span onclick="selectTemplate('.$line['id'].')" style="cursor:pointer">'.($line['email_template']?$line['email_template']:'Client').'</span></span>';
+
                 $result['data'][] = [
                     'DT_RowId'=>'tr-'.$line['id'],
                     'icon'=>$icon,
@@ -163,6 +173,7 @@ class Ecommerce_DeviceController extends Action
                     'serialNumber'=>$line['serialNumber'],
                     'location'=>$line['location'],
                     'reportDate'=>$line['reportDate'],
+                    'template'=>$template,
                 ];
             }
         }

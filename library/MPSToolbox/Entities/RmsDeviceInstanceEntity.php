@@ -59,6 +59,9 @@ class RmsDeviceInstanceEntity extends BaseEntity {
      */
     private $ignore = 0;
 
+    /** @Column(type="integer") */
+    private $email_template = 0;
+
     /**
      * @param $clientId
      * @param $ipAddress
@@ -296,6 +299,22 @@ class RmsDeviceInstanceEntity extends BaseEntity {
     public function setIgnore($ignore)
     {
         $this->ignore = $ignore;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmailTemplate()
+    {
+        return $this->email_template;
+    }
+
+    /**
+     * @param mixed $email_template
+     */
+    public function setEmailTemplate($email_template)
+    {
+        $this->email_template = $email_template;
     }
 
 
