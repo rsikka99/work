@@ -90,6 +90,26 @@ if (empty($selectedContact->email)) {
                         <?php foreach (['1','2','3'] as $value) echo '<option '.($selectedClient->templateNum==$value?'selected="selected"':'').' value="'.$value.'">'.$value.'</option>'; ?>
                     </select>
                 </p>
+                <p>
+                    <?php if ($selectedClient->monitoringEnabled) { ?>
+                    <a href="/ecommerce/client?client=<?= $selectedClient->id ?>&monitoringEnabled=0" class="btn btn-default"><span class="glyphicon glyphicon-off text-danger"></span> Turn toner monitoring OFF</a>
+                    <?php } else { ?>
+                    <a href="/ecommerce/client?client=<?= $selectedClient->id ?>&monitoringEnabled=1" class="btn btn-success"><span class="glyphicon glyphicon-play"></span> Turn toner monitoring ON</a>
+                    <?php } ?>
+
+                    <?php if (preg_match('#^\w+-\w+-\w+-\w+-\w+$#', $selectedClient->deviceGroup)) { ?>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-info" onclick="runNow(this)"><span class="glyphicon glyphicon-cog"></span> Run a monitoring cycle now</button>
+                    <script>
+                        function runNow(e) {
+                            $(e).attr('disabled','disabled').html('busy...');
+                            $.get('/default/cron/rms-update?client=<?= $selectedClient->id ?>', function() {
+                                $(e).html('Monitoring cycle done');
+                            }, 'html');
+                        }
+                    </script>
+                    <?php } ?>
+                </p>
             </div>
         </div>
         <hr>

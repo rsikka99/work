@@ -87,6 +87,9 @@ class ClientModel extends My_Model_Abstract
     /** @var  string */
     public $industry = null;
 
+    /** @var boolean */
+    public $monitoringEnabled = true;
+
     /**
      * @param array $params An array of data to populate the model with
      */
@@ -161,6 +164,10 @@ class ClientModel extends My_Model_Abstract
         {
             $this->industry = $params->industry;
         }
+        if (isset($params->monitoringEnabled) && !is_null($params->monitoringEnabled))
+        {
+            $this->monitoringEnabled = $params->monitoringEnabled;
+        }
 
     }
 
@@ -184,6 +191,7 @@ class ClientModel extends My_Model_Abstract
             "ecomColorRank" => $this->ecomColorRank,
             "templateNum" => $this->templateNum,
             "industry" => $this->industry,
+            "monitoringEnabled" => $this->monitoringEnabled,
         ];
     }
 
