@@ -32,8 +32,18 @@ class Ecommerce_ClientController extends Action
                 #--
                 $this->_flashMessenger->addMessage(["success" => "Your changes are saved"]);
                 $this->redirect('/ecommerce/client');
+                return;
             }
         }
+
+        if ($this->view->clientId && isset($_GET['monitoringEnabled'])) {
+            $client = \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->find($this->view->clientId);
+            $client->monitoringEnabled = intval($_GET['monitoringEnabled']);
+            \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->save($client);
+            $this->redirect('/ecommerce/client');
+            return;
+        }
+
         $this->view->clients = \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->fetchAll(["dealerId=?"=>$dealerId]);
 
         $st = $db->query('select id, name, margin, id IN (SELECT priceLevelId FROM clients) as is_used from dealer_price_levels where dealerId='.intval($dealerId).' order by `margin`');

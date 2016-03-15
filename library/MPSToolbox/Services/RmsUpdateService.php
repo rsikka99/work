@@ -204,7 +204,7 @@ WHERE ds.dealerId = {$dealerId}
     public function getRmsClients() {
         $db = \Zend_Db_Table::getDefaultAdapter();
         return $db->fetchAll('
-SELECT c.id as clientId, c.dealerId, c.deviceGroup, c.ecomMonochromeRank, c.ecomColorRank, c.templateNum, ss.rmsUri
+SELECT c.id as clientId, c.dealerId, c.deviceGroup, c.ecomMonochromeRank, c.ecomColorRank, c.templateNum, c.monitoringEnabled, ss.rmsUri
 FROM `clients` c
 JOIN `dealer_settings` ds ON c.dealerId = ds.dealerId
 JOIN `shop_settings` ss ON ds.shopSettingsId = ss.id

@@ -10,12 +10,17 @@ class Default_CronController extends \Tangent\Controller\Action {
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_helper->layout->disableLayout();
 
+        $onlyClientId = $this->getParam('client');
 
         $service = new \MPSToolbox\Services\RmsUpdateService();
 
         $clients = $service->getRmsClients();
+
         foreach ($clients as $client) {
             if (empty($client['deviceGroup'])) continue;
+            if ($onlyClientId && ($onlyClientId!=$client['clientId'])) continue;
+            if (!$onlyClientId && ($client['monitoringEnabled']==0)) continue;
+
             echo "updating client: {$client['clientId']}<br>\n";
             if (preg_match('#^\w+-\w+-\w+-\w+-\w+$#', $client['deviceGroup'])) {
                 $devices = $service->update($client['clientId'], new \MPSToolbox\Api\PrintFleet($client['rmsUri']), $client['deviceGroup']);
