@@ -636,6 +636,17 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::BLACK);
         $service->deviceNeedsToner($device, $client, \MPSToolbox\Entities\TonerColorEntity::MAGENTA);
         #--
-        $service->sendEmail($client);
+        $mock = $this->getMock('TestTonerSync');
+        $mock
+            ->expects($this->once())
+            ->method('syncToner')
+            ->will($this->returnValue(json_encode(['Base'=>123.45])));
+        #--
+        $service->sendEmail($client, $mock);
+    }
+}
+
+class TestTonerSync {
+    public function syncToner($tonerId, $dealerId) {
     }
 }

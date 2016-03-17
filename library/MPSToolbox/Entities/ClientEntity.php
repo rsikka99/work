@@ -42,6 +42,12 @@ class ClientEntity extends BaseEntity {
     private $deviceGroup;
 
     /**
+     * @ManyToOne(targetEntity="DealerPriceLevelEntity")
+     * @JoinColumn(name="priceLevelId", referencedColumnName="id")
+     **/
+    private $priceLevel;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -167,6 +173,14 @@ class ClientEntity extends BaseEntity {
     public function setDeviceGroup($deviceGroup)
     {
         $this->deviceGroup = $deviceGroup;
+    }
+
+    /**
+     * @return DealerPriceLevelEntity
+     */
+    public function getPriceLevel()
+    {
+        return $this->priceLevel;
     }
 
 
