@@ -728,7 +728,7 @@ WHERE `toners`.`id` IN ({$tonerIdList})
         $colorManufacturerPreference[$masterDevice['manufacturerId']] = $masterDevice['manufacturerId'];
         $colorManufacturerPreference=implode(',',$colorManufacturerPreference);
 
-        $rate = 1 / CurrencyService::getInstance()->getRate();
+        $rate = 1 / CurrencyService::getInstance($dealerId)->getRate();
 
         $sql =
 "

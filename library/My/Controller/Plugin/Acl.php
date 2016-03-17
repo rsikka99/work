@@ -50,6 +50,7 @@ class My_Controller_Plugin_Acl extends Zend_Controller_Plugin_Abstract
                                     'lastname' => $dealer->dealerName,
                                     'email' => '',
                                     'dealerId' => $dealer->id,
+                                    'currency' => $dealer->currency,
                                 ]);
                                 $auth->getStorage()->write($user);
                             }
