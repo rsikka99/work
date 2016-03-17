@@ -3,11 +3,11 @@
 namespace MPSToolbox\Entities;
 
 /**
- * Class ClientEntity
+ * Class DealerPriceLevelEntity
  * @package MPSToolbox\Entities
  *
  * @Entity
- * @Table(name="clients")
+ * @Table(name="dealer_price_levels")
  */
 class DealerPriceLevelEntity extends BaseEntity {
 
