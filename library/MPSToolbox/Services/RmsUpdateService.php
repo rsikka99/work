@@ -405,7 +405,16 @@ group by clientId
         return $result;
     }
 
-    public function sendEmail($c) {
+    public function syncToner($tonerId, $dealerId) {
+        return file_get_contents('http://proxy.mpstoolbox.com/shopify/sync_toner.php?id='.$tonerId.'&dealerId='.$dealerId.'&origin='.$_SERVER['HTTP_HOST']);
+    }
+
+    /**
+     * @param $c
+     * @param $that RmsUpdateService
+     * @throws \Zend_Mail_Exception
+     */
+    public function sendEmail($c, $that) {
         /** @var ClientEntity $client */
         $client = ClientEntity::find($c['clientId']);
         if (empty($client)) {
@@ -436,7 +445,6 @@ group by clientId
 
         /** @var ShopSettingsEntity $shopSettings */
         $shopSettings = DealerSettingsEntity::getDealerSettings($dealerId)->shopSettings;
-        $link = '<a href="'.sprintf('http://%s.myshopify.com/tools/mps?p=rms&origin=email', $shopSettings->shopifyName).'"><img alt="Go to your supply cupboard" title="Go to your supply cupboard" src="https://staging.mpstoolbox.com/img/SupplyCupboardButton.png"></a>';
 
         $emailFromAddress = $shopSettings->emailFromAddress;
         $emailFromName = $shopSettings->emailFromName;
@@ -450,6 +458,7 @@ group by clientId
         }
 
         $devicesByTemplate = [];
+        $buynowByTemplate = [];
         foreach ($arr as $d) foreach ($d as $i=>$device) {
             $templateNum = $device->getRmsDeviceInstance()->getEmailTemplate();
             switch ($templateNum) {
@@ -483,6 +492,19 @@ group by clientId
                 $ampv = round($daily * 365 / 12);
             }
 
+            $priceLevelName = 'Base';
+            $priceLevel = $client->getPriceLevel();
+            if ($priceLevel) $priceLevelName = $priceLevel->getName();
+            $json=json_decode($that->syncToner($device->getToner()->getId(), $dealerId),true);
+            if (is_array($json)) {
+                foreach ($json as $n=>$variantId) {
+                    if ($n == $priceLevelName) {
+                        if (isset($buynowByTemplate[$templateNum][$variantId])) $buynowByTemplate[$templateNum][$variantId]++;
+                        else $buynowByTemplate[$templateNum][$variantId] = 1;
+                    }
+                }
+            }
+
             if ($i==0) $devicesByTemplate[$templateNum][] =
                 <<<HTML
                 <p>
@@ -506,6 +528,13 @@ HTML;
         }
 
         foreach ($devicesByTemplate as $templateNum=>$devices) {
+
+            $buynow = [];
+            if (!empty($buynowByTemplate[$templateNum])) {
+                foreach ($buynowByTemplate[$templateNum] as $variantId=>$qty) {
+                    $buynow[] = "{$variantId}:{$qty}";
+                }
+            }
 
             switch($templateNum) {
                 case 2:
@@ -548,16 +577,21 @@ The toner management team at {$dealerBranding->dealerName}
 </p>
 HTML;
 
+            $link = '<a href="'.sprintf('http://%s.myshopify.com/tools/mps?p=rms&origin=email', $shopSettings->shopifyName).'"><img alt="Go to your supply cupboard" title="Go to your supply cupboard" src="https://staging.mpstoolbox.com/img/SupplyCupboardButton.png"></a>';
+            $buybtn = '<a href="https://'.$shopSettings->shopifyName.'.myshopify.com/cart/'.implode(',',$buynow).'/"><img alt="Buy Now" title="Buy Now" src="https://staging.mpstoolbox.com/img/BuyNowButton.png"></a>';
+
             $html = str_replace([
                 '{{clientName}}',
                 '{{contactName}}',
                 '{{devices}}',
                 '{{link}}',
+                '{{buybtn}}',
             ], [
                 $client->getCompanyName(),
                 $contactName,
                 implode("\n",$devices),
-                $link
+                $link,
+                $buybtn
             ], $supplyNotifyMessage);
 
             $email = new \Zend_Mail();
@@ -617,7 +651,7 @@ HTML;
 
         if ($sendEmail) {
             printf('sending email...');
-            $this->sendEmail($client);
+            $this->sendEmail($client, $this);
         }
     }
 
