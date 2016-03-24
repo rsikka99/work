@@ -46,6 +46,7 @@ class RmsRealtimeService {
                         continue;
                     }
                 }
+                if ($client_line['monitoringEnabled']==0) continue;
 
                 $check_clients[$clientId] = $client_line;
                 $device_instance = RmsDeviceInstanceEntity::findOne($clientId, $device->IPAddress, $device->SerialNumber, $device->AssetNumber ? $device->AssetNumber : $device->MacAddress); //$this->findDeviceInstance($clientId, $device);
