@@ -74,7 +74,7 @@ class DistributorsForm extends \My_Form_Form
         $st->execute(['masterDeviceId'=>$masterDevice->id]);
         foreach ($st->fetchAll() as $line) {
             $distributors[] = [
-                'name'=>'Synnex',
+                'name'=>'Tech Data',
                 'sku'=>$line['Matnr'],
                 'price'=>$rate*$line['CustBestPrice'],
                 'stock'=>$line['Qty'],

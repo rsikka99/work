@@ -213,9 +213,8 @@ class DistributorUpdateService {
 
                 $sql = "update `techdata_products` i set `tonerId`=(select id from toners where `manufacturerId` in (select manufacturerId from master_devices) and i.`ManufPartNo` like concat(sku,'#%') limit 1) where tonerId is null and Matnr=:Matnr";
                 $hp_toner_statement = $db->prepare($sql);
-                $sql = "update `ingram_products` i set `masterDeviceId`=(select masterDeviceId from devices where i.`ManufPartNo` like concat(oemSku,'#%') limit 1) where masterDeviceId is null and Matnr=:Matnr";
+                $sql = "update `techdata_products` i set `masterDeviceId`=(select masterDeviceId from devices where i.`ManufPartNo` like concat(oemSku,'#%') limit 1) where masterDeviceId is null and Matnr=:Matnr";
                 $hp_device_statement = $db->prepare($sql);
-
             }
 
             if ($line['ProdSubClass']=='Printer Consumables') { //Printer Consumables
