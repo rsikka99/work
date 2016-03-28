@@ -69,6 +69,18 @@ class DistributorsForm extends \My_Form_Form
             ];
         }
         #--
+        $rate = \MPSToolbox\Services\CurrencyService::getInstance()->getRate();
+        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from techdata_products p join techdata_prices c using (Matnr) where dealerId='.$dealerId.' and masterDeviceId=:masterDeviceId');
+        $st->execute(['masterDeviceId'=>$masterDevice->id]);
+        foreach ($st->fetchAll() as $line) {
+            $distributors[] = [
+                'name'=>'Synnex',
+                'sku'=>$line['Matnr'],
+                'price'=>$rate*$line['CustBestPrice'],
+                'stock'=>$line['Qty'],
+            ];
+        }
+        #--
         return $distributors;
     }
     public static function getServices($masterDeviceId)

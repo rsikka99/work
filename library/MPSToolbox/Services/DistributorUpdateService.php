@@ -7,8 +7,9 @@ use Tangent\Logger\Logger;
 
 class DistributorUpdateService {
 
-    const SUPPLIER_INGRAM  = 1;
-    const SUPPLIER_SYNNEX  = 2;
+    const SUPPLIER_INGRAM   = 1;
+    const SUPPLIER_SYNNEX   = 2;
+    const SUPPLIER_TECHDATA = 3;
 
     /** @var  \Zend_Filter_Compress_Zip */
     private $zipAdapter;
@@ -70,7 +71,204 @@ class DistributorUpdateService {
                 $this->updateSynnex($dealerSupplier);
                 break;
             }
+            case self::SUPPLIER_TECHDATA : {
+                $this->updateTechData($dealerSupplier);
+                break;
+            }
         }
+    }
+
+    private function updateTechData($dealerSupplier) {
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $zip_filename = APPLICATION_BASE_PATH . '/data/temp/'.$dealerSupplier['url'];
+
+        $product_file='';
+        $price_file='';
+        $stock_file='';
+
+        try {
+            if (!file_exists($zip_filename) || (filemtime($zip_filename) < strtotime('-6 DAY'))) {
+                #$ftp = $this->getFtpClient();
+                #$ftp->get($dealerSupplier['url'], $dealerSupplier['user'], $dealerSupplier['pass'], $zip_filename);
+                echo "file not found: {$zip_filename}<br>\n";
+                return null;
+            }
+
+            $zip = $this->getZipAdapter();
+            $zip->open($zip_filename);
+            for ($i=0;$i<$zip->numFiles;$i++) {
+                $finfo = $zip->statIndex($i);
+                if (preg_match('#__MACOSX#',$finfo['name'])) continue;
+                if (preg_match('#Material.txt#',$finfo['name'])) $product_file = $finfo['name'];
+                if (preg_match('#Price.txt#',$finfo['name'])) $price_file = $finfo['name'];
+                if (preg_match('#Availability.txt#',$finfo['name'])) $stock_file = $finfo['name'];
+                $subdir = dirname($finfo['name']);
+                if (!file_exists(dirname($zip_filename).'/'.$subdir)) mkdir(dirname($zip_filename).'/'.$subdir);
+                $zip->extractTo(dirname($zip_filename));
+            }
+            $zip->close();
+
+        } catch (\Exception $ex) {
+            print_r($ex);
+            Logger::logException($ex);
+            return false;
+        }
+
+        if (empty($product_file)) { echo "product_file?<br>\n"; return null; }
+        if (empty($price_file)) { echo "price_file?<br>\n"; return null; }
+        if (empty($stock_file)) { echo "stock_file?<br>\n"; return null; }
+
+        $columns = [
+            'Matnr',
+            'ManufPartNo',
+            'GTIN',
+            'Qty',
+        ];
+        $qty = [];
+        $filename=dirname($zip_filename).'/'.$stock_file;
+        echo "{$filename}<br>\n";
+        $fp = fopen($filename, 'rb');
+
+        $hdr = fgetcsv($fp, null, "\t");
+        while ($line = fgetcsv($fp, null, "\t")) {
+            while (count($line) > count($columns)) {
+                array_pop($line);
+            }
+            $line = array_combine($columns, $line);
+            $qty[$line['Matnr']] = $line['Qty'];
+        }
+        fclose($filename);
+
+        $columns = [
+            'Matnr',
+            'ShortDescription',
+            'LongDescription',
+            'ManufPartNo',
+            'Manufacturer',
+            'ManufacturerGlobalDescr',
+            'GTIN',
+            'ProdFamilyID',
+            'ProdFamily',
+            'ProdClassID',
+            'ProdClass',
+            'ProdSubClassID',
+            'ProdSubClass',
+            'ArticleCreationDate',
+            'CNETavailable',
+            'CNETid',
+            'ListPrice',
+            'Weight',
+            'Length',
+            'Width',
+            'Heigth',
+            'NoReturn',
+            'MayRequireAuthorization',
+            'EndUserInformation',
+            'FreightPolicyException'
+        ];
+
+        $filename=dirname($zip_filename).'/'.$product_file;
+        echo "{$filename}<br>\n";
+        $fp = fopen($filename, 'rb');
+
+        $db->query('update techdata_products set Qty=0');
+
+        $replace_statement = false;
+        $toner_statement = false;
+        $masterDevice_statement = false;
+        $computer_statement = false;
+        $peripheral_statement = false;
+        $price_statement = false;
+        $hp_toner_statement = false;
+        $hp_device_statement = false;
+
+
+        $hdr = fgetcsv($fp, null, "\t");
+        while ($line = fgetcsv($fp, null, "\t")) {
+            while (count($line)>count($columns)) {
+                array_pop($line);
+            }
+            $line = array_combine($columns, $line);
+            $line['Qty'] = isset($qty[$line['Matnr']]) ? $qty[$line['Matnr']] : 0;
+
+            if (!$replace_statement) {
+                $sql = [];
+                foreach ($line as $key => $value) {
+                    $sql[] = "`$key`=:{$key}";
+                }
+                $sql = 'REPLACE INTO techdata_products SET ' . implode(', ', $sql);
+                $replace_statement = $db->prepare($sql);
+            }
+            $replace_statement->execute($line);
+/**/
+            if (!$toner_statement) {
+                $sql = 'update `techdata_products` i set `tonerId`=(select id from toners where `manufacturerId` in (select manufacturerId from master_devices) and sku=i.`ManufPartNo` limit 1) where tonerId is null and Matnr=:Matnr';
+                $toner_statement = $db->prepare($sql);
+                $sql = 'update `techdata_products` i set `masterDeviceId`=(select masterDeviceId from devices where oemSku=i.`ManufPartNo` limit 1) where Matnr=:Matnr';
+                $masterDevice_statement = $db->prepare($sql);
+                $sql = 'update `techdata_products` i set `computerId`=(select id from ext_dealer_hardware where id in (select id from ext_computer) and oemSku=i.`ManufPartNo` limit 1) where Matnr=:Matnr';
+                $computer_statement = $db->prepare($sql);
+                $sql = 'update `techdata_products` i set `peripheralId`=(select id from ext_dealer_hardware where id in (select id from ext_peripheral) and oemSku=i.`ManufPartNo` limit 1) where Matnr=:Matnr';
+                $peripheral_statement = $db->prepare($sql);
+
+                $sql = "update `techdata_products` i set `tonerId`=(select id from toners where `manufacturerId` in (select manufacturerId from master_devices) and i.`ManufPartNo` like concat(sku,'#%') limit 1) where tonerId is null and Matnr=:Matnr";
+                $hp_toner_statement = $db->prepare($sql);
+                $sql = "update `ingram_products` i set `masterDeviceId`=(select masterDeviceId from devices where i.`ManufPartNo` like concat(oemSku,'#%') limit 1) where masterDeviceId is null and Matnr=:Matnr";
+                $hp_device_statement = $db->prepare($sql);
+
+            }
+
+            if ($line['ProdSubClass']=='Printer Consumables') { //Printer Consumables
+                $toner_statement->execute(['Matnr'=>$line['Matnr']]);
+                $hp_toner_statement->execute(['Matnr'=>$line['Matnr']]);
+            } else if (($line['ProdSubClass']=='Multifunction Office Equipment') || ($line['ProdSubClass']=='Laser Printers (Mono)') || ($line['ProdSubClass']=='Laser Printers (Color)')) {
+                $masterDevice_statement->execute(['Matnr'=>$line['Matnr']]);
+                $hp_device_statement->execute(['Matnr'=>$line['Matnr']]);
+            } else {
+                $computer_statement->execute(['Matnr'=>$line['Matnr']]);
+                $peripheral_statement->execute(['Matnr'=>$line['Matnr']]);
+            }
+/**/
+        }
+        fclose($fp);
+
+        $columns = [
+            'Matnr',
+            'CustBestPrice',
+            'Promotion',
+        ];
+        $filename=dirname($zip_filename).'/'.$price_file;
+        echo "{$filename}<br>\n";
+        $fp = fopen($filename, 'rb');
+
+        $hdr = fgetcsv($fp, null, "\t");
+        while ($line = fgetcsv($fp, null, "\t")) {
+            while (count($line) > count($columns)) {
+                array_pop($line);
+            }
+            $line = array_combine($columns, $line);
+
+            if (!$price_statement) {
+                $sql = 'replace into techdata_prices set dealerId=?, Matnr=?, CustBestPrice=?, Promotion=?';
+                $price_statement = $db->prepare($sql);
+            }
+
+            $price_statement->execute([
+                $dealerSupplier['dealerId'],
+                $line['Matnr'],
+                $line['CustBestPrice'],
+                $line['Promotion'],
+            ]);
+
+        }
+        fclose($filename);
+
+
+
+        echo 'done! '.time();
+        return true;
+
+
     }
 
     private function updateSynnex($dealerSupplier)

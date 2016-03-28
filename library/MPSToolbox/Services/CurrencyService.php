@@ -21,6 +21,9 @@ class CurrencyService {
 
     public static function getInstance($dealerId = null) {
         if (!self::$instance) {
+            if (!$dealerId) {
+                $dealerId = DealerEntity::getDealerId();
+            }
             $currency = DealerEntity::getCurrency($dealerId);
             self::$instance = new CurrencyService($currency);
         }

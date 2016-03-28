@@ -96,6 +96,18 @@ class HardwareLibrary_TonerController extends Action
             ];
         }
         #--
+        $rate = \MPSToolbox\Services\CurrencyService::getInstance()->getRate();
+        $st = Zend_Db_Table::getDefaultAdapter()->prepare('select * from techdata_products p join techdata_prices c using (Matnr) where dealerId='.$dealerId.' and tonerId=:tonerId');
+        $st->execute(['tonerId'=>$tonerId]);
+        foreach ($st->fetchAll() as $line) {
+            $form->distributors[] = [
+                'name'=>'Tech Data',
+                'sku'=>$line['Matnr'],
+                'price'=>$rate*$line['CustBestPrice'],
+                'stock'=>$line['Qty'],
+            ];
+        }
+        #--
         $this->view->tonerForm = $form;
         $this->view->toner = $toner;
 
