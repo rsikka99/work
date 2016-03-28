@@ -67,9 +67,12 @@ class Ecommerce_OrdersController extends Action {
 
                         $ingram = null;
                         $synnex = null;
+                        $techdata = null;
                         if ($tonerId) {
                             $ingram = $db->query("select 'Ingram' as distributor, ingram_products.ingram_part_number as partnumber, availability_flag as available, customer_price as price from ingram_products join ingram_prices on ingram_products.ingram_part_number = ingram_prices.ingram_part_number where dealerId={$dealerId} and tonerId={$tonerId}")->fetch();
                             $synnex = $db->query("select 'Synnex' as distributor, synnex_products.SYNNEX_SKU as partnumber, if (Qty_on_Hand>0,'Y','N') as available, Unit_Cost as price from synnex_products join synnex_prices on synnex_products.SYNNEX_SKU = synnex_prices.SYNNEX_SKU where dealerId={$dealerId} and tonerId={$tonerId}")->fetch();
+                            $rate = \MPSToolbox\Services\CurrencyService::getInstance()->getRate();
+                            $techdata = $db->query("select 'Tech Data' as distributor, techdata_products.Matnr as partnumber, if (Qty>0,'Y','N') as available, {$rate} * CustBestPrice as price from techdata_products join techdata_prices on techdata_products.Matnr = techdata_prices.Matnr where dealerId={$dealerId} and tonerId={$tonerId}")->fetch();
                         }
 
                         $the_distributor = null;
@@ -77,6 +80,7 @@ class Ecommerce_OrdersController extends Action {
                         $found = [];
                         if ($ingram) $found[] = $ingram;
                         if ($synnex) $found[] = $synnex;
+                        if ($techdata) $found[] = $techdata;
                         if (count($found)==0) {
                             //noop
                         } else if (count($found)==1) {

@@ -52,6 +52,18 @@ class HardwareDistributorsForm extends \My_Form_Form {
             ];
         }
         #--
+        $rate = \MPSToolbox\Services\CurrencyService::getInstance()->getRate();
+        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from techdata_products p join techdata_prices c using (Matnr) where dealerId='.$dealerId.' and (computerId=:id or peripheralId=:id)');
+        $st->execute(['id'=>$hardwareId]);
+        foreach ($st->fetchAll() as $line) {
+            $distributors[] = [
+                'name'=>'Tech Data',
+                'sku'=>$line['Matnr'],
+                'price'=>$rate*$line['CustBestPrice'],
+                'stock'=>$line['Qty'],
+            ];
+        }
+        #--
         return $distributors;
     }
     public static function getServices($hardwareId)
