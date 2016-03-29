@@ -614,6 +614,7 @@ class ManageMasterDevicesService
                 $device->populate($validatedData);
                 $device->saveObject();
 
+                //@todo make this generic for all vendors
                 #--
                 $st=\Zend_Db_Table::getDefaultAdapter()->prepare('update ingram_products set masterDeviceId=:masterDeviceId where `vendor_part_number`=:vpn');
                 $st->execute(['masterDeviceId'=>$this->masterDeviceId, 'vpn'=>$validatedData['oemSku']]);

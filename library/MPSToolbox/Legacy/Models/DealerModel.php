@@ -58,6 +58,8 @@ class DealerModel extends My_Model_Abstract
     public $api_key;
     public $api_secret;
     public $currency;
+    public $rent_options;
+    public $plan_options;
 
     /**
      * @var DealerSettingModel
@@ -121,6 +123,14 @@ class DealerModel extends My_Model_Abstract
         {
             $this->currency = $params->currency;
         }
+        if (isset($params->rent_options) && !is_null($params->rent_options))
+        {
+            $this->rent_options = $params->rent_options;
+        }
+        if (isset($params->plan_options) && !is_null($params->plan_options))
+        {
+            $this->plan_options = $params->plan_options;
+        }
     }
 
     /**
@@ -137,6 +147,8 @@ class DealerModel extends My_Model_Abstract
             'api_key'           => $this->api_key,
             'api_secret'        => $this->api_secret,
             'currency'          => $this->currency,
+            'rent_options'      => $this->rent_options,
+            'plan_options'      => $this->plan_options,
         ];
     }
 
