@@ -86,6 +86,11 @@ class DeviceModel extends My_Model_Abstract
      */
     public $onlineDescription;
 
+    public $rent_values;
+    public $plan_values;
+    public $plan_page_values;
+    public $tags;
+
     /**
      * @var DeviceOptionModel[]
      */
@@ -139,6 +144,10 @@ class DeviceModel extends My_Model_Abstract
         if (isset($params->online) && !is_null($params->online)) $this->online = $params->online;
         if (isset($params->onlineDescription) && !is_null($params->onlineDescription)) $this->onlineDescription = $params->onlineDescription;
         if (isset($params->additionalCpp) && !is_null($params->additionalCpp)) $this->additionalCpp = $params->additionalCpp;
+        if (isset($params->rent_values) && !is_null($params->rent_values)) $this->rent_values = $params->rent_values;
+        if (isset($params->plan_values) && !is_null($params->plan_values)) $this->plan_values = $params->plan_values;
+        if (isset($params->plan_page_values) && !is_null($params->plan_page_values)) $this->plan_page_values = $params->plan_page_values;
+        if (isset($params->tags) && !is_null($params->tags)) $this->tags = $params->tags;
     }
 
     /**
@@ -158,8 +167,12 @@ class DeviceModel extends My_Model_Abstract
             "dataSheetUrl"   => $this->dataSheetUrl,
             "reviewsUrl"     => $this->reviewsUrl,
             "online"         => $this->online,
-            "onlineDescription"     => $this->onlineDescription,
-            'additionalCpp'  => $this->additionalCpp,
+            "onlineDescription" => $this->onlineDescription,
+            'additionalCpp'     => $this->additionalCpp,
+            'rent_values'       => is_array($this->rent_values)?json_encode($this->rent_values):$this->rent_values,
+            'plan_values'       => is_array($this->plan_values)?json_encode($this->plan_values):$this->plan_values,
+            'plan_page_values'  => $this->plan_page_values,
+            'tags'              => $this->tags,
         ];
     }
 

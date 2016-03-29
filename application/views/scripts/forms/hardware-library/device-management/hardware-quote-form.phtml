@@ -5,7 +5,9 @@ use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HardwareQuo
 /* @var $form HardwareQuoteForm */
 $form = $this->element;
 
-$dealerSettings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::with('ShopSettings')->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+$dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+$dealer = \MPSToolbox\Legacy\Mappers\DealerMapper::getInstance()->find($dealerId);
+$dealerSettings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::with('ShopSettings')->find($dealerId);
 $shopSettings = $dealerSettings->shopSettings;
 
 ?>
@@ -74,28 +76,69 @@ $shopSettings = $dealerSettings->shopSettings;
                 </div>
             </div>
 
-            <div class="form-group <?= ($form->getElement('rent')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                <?= $this->RenderFormLabel($form->getElement('rent'), ['col-md-4']) ?>
+            <?php if (!empty($dealer->rent_options) || !empty($dealer->plan_options)) { ?>
+                <?php $rent_values = json_decode($form->getElement('rent_values')->getValue(), true); ?>
+                <?php $plan_values = json_decode($form->getElement('plan_values')->getValue(), true); ?>
+                <?php $plan_page_values = json_decode($form->getElement('plan_page_values')->getValue(), true); ?>
+                <?php foreach (preg_split('#,\s?#', $dealer->rent_options) as $str) { ?>
 
-                <div class="col-md-6">
-                    <?= $this->RenderFormText($form->getElement('rent'), null, '$') ?>
-                    <?= $this->RenderFormDescription($form->getElement('rent')) ?>
-                    <?= $this->RenderFormElementErrors($form->getElement('rent')) ?>
-                </div>
-                <div class="col-md-2">
-                    <button type="button" class="btn" onclick="calcClick()"><i class="fa fa-gear fa-fw"></i></button>
-                </div>
-            </div>
+                    <div class="form-group">
+                        <label class="col-md-4" for="">Rent <?= $str ?></label>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon"><?= \MPSToolbox\Services\CurrencyService::getSymbol() ?></span>
+                                <input type="number" class="form-control" step="0.01" min="0" value="<?= isset($rent_values[$str])?$rent_values[$str]:'0' ?>" name="rent_values[<?= $str ?>]">
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+                <?php foreach (preg_split('#,\s?#', $dealer->plan_options) as $str) { ?>
 
-            <div class="form-group <?= ($form->getElement('pagesPerMonth')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                <?= $this->RenderFormLabel($form->getElement('pagesPerMonth'), ['col-md-4']) ?>
+                    <div class="form-group">
+                        <label class="col-md-4" for="">Printing Plan <?= $str ?></label>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon"><?= \MPSToolbox\Services\CurrencyService::getSymbol() ?></span>
+                                <input type="number" class="form-control" step="0.01" min="0" value="<?= isset($plan_values[$str])?$plan_values[$str]:'0' ?>" name="plan_values[<?= $str ?>]">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4" for="">Page Range <?= $str ?></label>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="number" class="form-control" step="1" min="0" value="<?= isset($plan_page_values[$str])?$plan_page_values[$str]:'0' ?>" name="plan_page_values[<?= $str ?>]">
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
 
-                <div class="col-md-6">
-                    <?= $this->RenderFormText($form->getElement('pagesPerMonth')) ?>
-                    <?= $this->RenderFormDescription($form->getElement('pagesPerMonth')) ?>
-                    <?= $this->RenderFormElementErrors($form->getElement('pagesPerMonth')) ?>
+            <?php } else { ?>
+
+                <div class="form-group <?= ($form->getElement('rent')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('rent'), ['col-md-4']) ?>
+
+                    <div class="col-md-6">
+                        <?= $this->RenderFormText($form->getElement('rent'), null, \MPSToolbox\Services\CurrencyService::getSymbol()) ?>
+                        <?= $this->RenderFormDescription($form->getElement('rent')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('rent')) ?>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn" onclick="calcClick()"><i class="fa fa-gear fa-fw"></i></button>
+                    </div>
                 </div>
-            </div>
+
+                <div class="form-group <?= ($form->getElement('pagesPerMonth')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('pagesPerMonth'), ['col-md-4']) ?>
+
+                    <div class="col-md-6">
+                        <?= $this->RenderFormText($form->getElement('pagesPerMonth')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('pagesPerMonth')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('pagesPerMonth')) ?>
+                    </div>
+                </div>
+
+            <?php } ?>
 
             <div class="form-group <?= ($form->getElement('additionalCpp')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                 <?= $this->RenderFormLabel($form->getElement('additionalCpp'), ['col-md-4']) ?>
@@ -124,6 +167,16 @@ $shopSettings = $dealerSettings->shopSettings;
                     <?= $this->RenderFormText($form->getElement('reviewsUrl')) ?>
                     <?= $this->RenderFormDescription($form->getElement('reviewsUrl')) ?>
                     <?= $this->RenderFormElementErrors($form->getElement('reviewsUrl')) ?>
+                </div>
+            </div>
+
+            <div class="form-group <?= ($form->getElement('tags')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('tags'), ['col-md-4']) ?>
+
+                <div class="col-md-6">
+                    <?= $this->RenderFormText($form->getElement('tags')) ?>
+                    <?= $this->RenderFormDescription($form->getElement('tags')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('tags')) ?>
                 </div>
             </div>
 

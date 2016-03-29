@@ -19,11 +19,19 @@ class HardwareQuoteForm extends \My_Form_Form
 
     public $masterDeviceId;
 
-    public function populate($arr) {
+    public function populate(array $arr) {
         if (isset($arr['masterDeviceId'])) {
             $this->masterDeviceId = $arr['masterDeviceId'];
         }
-        return parent::populate($arr);
+        $result = parent::populate($arr);
+        return $result;
+    }
+
+    public function isValid($arr) {
+        if (is_array($arr['rent_values'])) $arr['rent_values'] = json_encode($arr['rent_values']);
+        if (is_array($arr['plan_values'])) $arr['plan_values'] = json_encode($arr['plan_values']);
+        if (is_array($arr['plan_page_values'])) $arr['plan_page_values'] = json_encode($arr['plan_page_values']);
+        return parent::isValid($arr);
     }
 
     public function init ()
@@ -131,6 +139,27 @@ class HardwareQuoteForm extends \My_Form_Form
          */
         $this->addElement('textarea', 'description', [
             'label'    => 'Standard Features',
+            'required' => false,
+            'filters'  => ['StringTrim', 'StripTags'],
+        ]);
+
+        $this->addElement('textarea', 'rent_values', [
+            'label'    => '',
+            'required' => false,
+            'filters'  => ['StringTrim', 'StripTags'],
+        ]);
+        $this->addElement('textarea', 'plan_values', [
+            'label'    => '',
+            'required' => false,
+            'filters'  => ['StringTrim', 'StripTags'],
+        ]);
+        $this->addElement('textarea', 'plan_page_values', [
+            'label'    => '',
+            'required' => false,
+            'filters'  => ['StringTrim', 'StripTags'],
+        ]);
+        $this->addElement('text', 'tags', [
+            'label'    => 'Tags',
             'required' => false,
             'filters'  => ['StringTrim', 'StripTags'],
         ]);
