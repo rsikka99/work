@@ -11,11 +11,14 @@ use MPSToolbox\Legacy\Entities\DealerEntity;
  * @package MPSToolbox\Legacy\Modules\HardwareLibrary\Entities
  *
  * @property int          id
- * @property int          cost
+ * @property float          cost
  * @property string       dealerSku
  * @property string       description
  * @property string       name
  * @property string       oemSku
+ * @property float          purchasePrice
+ * @property float          rentPrice
+ * @property float          planPrice
  *
  * @property int          dealerId
  *
@@ -27,7 +30,7 @@ class OptionEntity extends EloquentModel
     protected $table      = 'options';
     public    $timestamps = false;
 
-    protected $fillable = ['id', 'cost', 'dealerId', 'dealerSku', 'description', 'name', 'oemSku'];
+    protected $fillable = ['id', 'cost', 'dealerId', 'dealerSku', 'description', 'name', 'oemSku','purchasePrice','rentPrice','planPrice'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

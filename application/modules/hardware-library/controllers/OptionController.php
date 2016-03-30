@@ -79,7 +79,7 @@ class HardwareLibrary_OptionController extends Action
                 $creatingOption = false;
                 $postData       = $this->getRequest()->getPost();
 
-                $optionId = $this->getParam('optionId', false);
+                $optionId = $this->getParam('id', false);
                 if ((int)$optionId > 0)
                 {
                     $optionEntity = $optionService->find($optionId);

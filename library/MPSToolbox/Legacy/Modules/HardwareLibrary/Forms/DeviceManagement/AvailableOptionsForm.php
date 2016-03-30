@@ -51,6 +51,21 @@ class AvailableOptionsForm extends \My_Form_Form
             'validators' => [['validator' => 'StringLength', 'options' => [1, 255],],],
         ]);
 
+        $this->addElement('text_currency', 'purchasePrice', [
+            'label'      => 'Purchase Price',
+            'required'   => false,
+        ]);
+
+        $this->addElement('text_currency', 'rentPrice', [
+            'label'      => 'Rental Price',
+            'required'   => false,
+        ]);
+
+        $this->addElement('text_currency', 'planPrice', [
+            'label'      => 'Printing Plan Price',
+            'required'   => false,
+        ]);
+
         $this->addElement('hidden', 'id', []);
     }
 

@@ -1,6 +1,7 @@
 <?php
 namespace MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers;
 
+use MPSToolbox\Entities\DealerEntity;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceConfigurationOptionModel;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\OptionModel;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceOptionModel;
@@ -421,14 +422,16 @@ class OptionMapper extends My_Model_Mapper_Abstract
         $quoteDeviceConfigurationOptionTableName = QuoteDeviceConfigurationOptionMapper::getInstance()->getTableName();
         $quoteDeviceOptionTableName              = QuoteDeviceOptionMapper::getInstance()->getTableName();
         $deviceOptionTableName                   = DeviceOptionMapper::getInstance()->getTableName();
+        $dealerId = DealerEntity::getDealerId();
 
-        $sql = "SELECT * FROM  {$deviceOptionTableName} AS do
-                JOIN  {$this->getTableName()} AS opt ON do.optionId = opt.id
+        $sql = "SELECT * FROM `device_options` AS do
+                JOIN  `options` AS opt ON do.optionId = opt.id
                 WHERE NOT EXISTS (
                     SELECT * FROM {$quoteDeviceConfigurationOptionTableName} AS qdco
                     JOIN  {$quoteDeviceOptionTableName} AS qdo ON qdo.id = qdco.quoteDeviceOptionId
                     WHERE qdo.quoteDeviceId = ? AND qdco.optionId = opt.id
                 )
+                and do.dealerId = {$dealerId}
                 AND do.masterDeviceId = ?
                 ORDER BY  opt.name ASC
         ";

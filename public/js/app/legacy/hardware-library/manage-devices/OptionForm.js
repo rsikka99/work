@@ -31,26 +31,6 @@ define(['jquery', './OptionService', 'bootstrap.modal.manager'], function ($, Op
         this.optionId = settings.optionId;
         this.isCreatingNewOption = (this.optionId === 0);
 
-        /**
-         * Option Model
-         *
-         * @type {{
-     *     optionId    : number,
-     *     cost        : number,
-     *     description : string,
-     *     dealerCost  : number,
-     *     dealerSku   : string
-     *     name        : string,
-     *     oemSku      : string,
-     *     }}
-         */
-        this.optionModel = {};
-
-        if (!this.isCreatingNewOption)
-        {
-            this.optionModel.optionId = this.optionId;
-        }
-
         // We want to destroy the modal once we're finished with it.
         $modal.on('hide.bs.modal', function ()
         {
@@ -124,51 +104,6 @@ define(['jquery', './OptionService', 'bootstrap.modal.manager'], function ($, Op
                  */
                 that.$optionForm = $modal.find('.js-option-form');
 
-                var $optionIdElement = that.$optionForm.find('[name="id"]'),
-                    $optionNameElement = that.$optionForm.find('[name="name"]'),
-                    $optionDescriptionElement = that.$optionForm.find('[name="description"]'),
-                    $optionCostElement = that.$optionForm.find('[name="cost"]'),
-                    $optionOemSkuElement = that.$optionForm.find('[name="oemSku"]'),
-                    $optionDealerSkuElement = that.$optionForm.find('[name="dealerSku"]');
-
-                that.optionModel.optionId = $optionIdElement.val();
-                that.optionModel.name = $optionNameElement.val();
-                that.optionModel.description = $optionDescriptionElement.val();
-                that.optionModel.cost = $optionCostElement.val();
-                that.optionModel.oemSku = $optionOemSkuElement.val();
-                that.optionModel.dealerSku = $optionDealerSkuElement.val();
-
-
-                $optionIdElement.on('change', function ()
-                {
-                    that.optionModel.optionId = $(this).val();
-                });
-
-                $optionNameElement.on('change', function ()
-                {
-                    that.optionModel.name = $(this).val();
-                });
-
-                $optionDescriptionElement.on('change', function ()
-                {
-                    that.optionModel.description = $(this).val();
-                });
-
-                $optionCostElement.on('change', function ()
-                {
-                    that.optionModel.cost = $(this).val();
-                });
-
-                $optionOemSkuElement.on('change', function ()
-                {
-                    that.optionModel.oemSku = $(this).val();
-                });
-
-                $optionDealerSkuElement.on('change', function ()
-                {
-                    that.optionModel.dealerSku = $(this).val();
-                });
-
                 /**
                  * Show the modal
                  */
@@ -186,7 +121,9 @@ define(['jquery', './OptionService', 'bootstrap.modal.manager'], function ($, Op
         var that = this;
         that.clearErrors();
 
-        return OptionService.saveOption(this.optionModel).then(function (optionId)
+        var form_data=$('.js-option-form').serialize();
+
+        return OptionService.saveOption(form_data).then(function (optionId)
         {
             $(that).trigger('option-form.saved', [optionId]);
             that.$modal.modal('hide');

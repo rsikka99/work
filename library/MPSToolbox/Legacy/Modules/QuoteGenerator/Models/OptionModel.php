@@ -49,6 +49,10 @@ class OptionModel extends My_Model_Abstract
      */
     public $dealerSku;
 
+    public $purchasePrice;
+    public $rentPrice;
+    public $planPrice;
+
     /**
      * An array of MPSToolbox\Legacy\Modules\QuoteGenerator\Models\CategoryModel associated with the object
      *
@@ -108,6 +112,21 @@ class OptionModel extends My_Model_Abstract
             $this->dealerSku = $params->dealerSku;
         }
 
+        if (isset($params->purchasePrice) && !is_null($params->purchasePrice))
+        {
+            $this->purchasePrice = $params->purchasePrice;
+        }
+
+        if (isset($params->rentPrice) && !is_null($params->rentPrice))
+        {
+            $this->rentPrice = $params->rentPrice;
+        }
+
+        if (isset($params->planPrice) && !is_null($params->planPrice))
+        {
+            $this->planPrice = $params->planPrice;
+        }
+
     }
 
     /**
@@ -123,6 +142,9 @@ class OptionModel extends My_Model_Abstract
             "cost"        => $this->cost,
             "oemSku"      => $this->oemSku,
             "dealerSku"   => $this->dealerSku,
+            "purchasePrice"   => $this->purchasePrice,
+            "rentPrice"   => $this->rentPrice,
+            "planPrice"   => $this->planPrice,
         ];
     }
 
