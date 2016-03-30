@@ -22,15 +22,6 @@ $form = $this->element;
                 <?= $this->RenderFormDescription($form->getElement('description')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('description')) ?>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                <?= $this->RenderFormLabel($form->getElement('cost')) ?>
-                <?= $this->RenderFormText($form->getElement('cost'), [], '$') ?>
-                <?= $this->RenderFormDescription($form->getElement('cost')) ?>
-                <?= $this->RenderFormElementErrors($form->getElement('cost')) ?>
-            </div>
-
             <div class="form-group <?= ($form->getElement('oemSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                 <?= $this->RenderFormLabel($form->getElement('oemSku')) ?>
                 <?= $this->RenderFormText($form->getElement('oemSku')) ?>
@@ -44,6 +35,33 @@ $form = $this->element;
                 <?= $this->RenderFormDescription($form->getElement('dealerSku')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('dealerSku')) ?>
             </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('cost')) ?>
+                <?= $this->RenderFormText($form->getElement('cost'), [], \MPSToolbox\Services\CurrencyService::getSymbol()) ?>
+                <?= $this->RenderFormDescription($form->getElement('cost')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('cost')) ?>
+            </div>
+            <div class="form-group <?= ($form->getElement('purchasePrice')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('purchasePrice')) ?>
+                <?= $this->RenderFormText($form->getElement('purchasePrice'), [], \MPSToolbox\Services\CurrencyService::getSymbol()) ?>
+                <?= $this->RenderFormDescription($form->getElement('purchasePrice')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('purchasePrice')) ?>
+            </div>
+            <div class="form-group <?= ($form->getElement('rentPrice')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('rentPrice')) ?>
+                <?= $this->RenderFormText($form->getElement('rentPrice'), [], \MPSToolbox\Services\CurrencyService::getSymbol()) ?>
+                <?= $this->RenderFormDescription($form->getElement('rentPrice')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('rentPrice')) ?>
+            </div>
+            <div class="form-group <?= ($form->getElement('planPrice')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('planPrice')) ?>
+                <?= $this->RenderFormText($form->getElement('planPrice'), [], \MPSToolbox\Services\CurrencyService::getSymbol()) ?>
+                <?= $this->RenderFormDescription($form->getElement('planPrice')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('planPrice')) ?>
+            </div>
+
         </div>
     </div>
 <?= $this->RenderFormHidden($form->getElement('id')) ?>
