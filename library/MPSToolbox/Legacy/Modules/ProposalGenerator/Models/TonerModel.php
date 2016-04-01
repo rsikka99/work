@@ -88,7 +88,7 @@ class TonerModel extends My_Model_Abstract
     /**
      * @var float
      */
-    public $calculatedCost;
+    protected $calculatedCost;
 
     /**
      * @var bool
@@ -231,6 +231,17 @@ class TonerModel extends My_Model_Abstract
         {
             $this->name = $params->sku;
         }
+    }
+
+    public function __get($property) {
+        switch ($property) {
+            case 'calculatedCost' :
+                return $this->getCalculatedCost();
+        }
+    }
+
+    public function getCalculatedCost() {
+        return $this->calculatedCost * CurrencyService::getInstance()->getRate();
     }
 
     /**
