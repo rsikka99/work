@@ -51,5 +51,54 @@ SELECT dealers.id FROM dealers join `dealer_settings` on dealers.id=dealer_setti
         }
     }
 
+    public function incompleteAction() {
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout->disableLayout();
+        #--
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $arr = $db->query('select mfg.fullName, count(*) as c from master_devices m join manufacturers mfg on m.manufacturerId=mfg.id where m.id not in (
+select master_device_id
+  from device_toners dt
+    join master_devices msub on dt.master_device_id=msub.id
+    join toners t on dt.toner_id=t.id and t.manufacturerId = msub.manufacturerId
+)
+group by manufacturerId
+order by fullName')->fetchAll();
+
+        if (!empty($arr)) {
+
+            $total=0;
+            foreach ($arr as $line) $total += $line['c'];
+
+            $html =
+"
+<p>Hello,</p>
+<p>There are currently {$c} incomplete printer models.</p>
+<p>Here is the break down per manufacturer:</p>
+<table>
+";
+            foreach ($arr as $line) {
+                $html .= '<tr><td>'.$line['fullName'].'</td><td>'.$line['c'].'</td></tr>';
+            }
+
+            $html .= '</table>';
+            $html .= '<p>Have a nice day!<br>MPS Toolbox</p>';
+
+            $email = new \Zend_Mail();
+            $email->setFrom('it@tangentmtw.com');
+            $email->addTo('root@tangentmtw.com');
+            $email->setSubject('Printer Model Notification');
+            $email->setBodyHtml($html);
+            $email->setBodyText(strip_tags($html));
+            try {
+                $email->send();
+            } catch (\Exception $ex) {
+                \Tangent\Logger\Logger::error($ex->getMessage(), $ex);
+            }
+
+        }
+
+    }
+
 }
 
