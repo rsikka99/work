@@ -697,7 +697,7 @@ WHERE `toners`.`id` IN ({$tonerIdList})
      * @param array $colorManufacturerPreference      CSV list of manufacturer ids
      * @param int   $clientId                         The client id to get toner pricing for
      *
-     * @return array
+     * @return TonerModel[]
      */
     public function getCheapestTonersForDevice ($masterDeviceId, $dealerId, $monochromeManufacturerPreferenceStr, $colorManufacturerPreferenceStr, $clientId = null, $level = null)
     {

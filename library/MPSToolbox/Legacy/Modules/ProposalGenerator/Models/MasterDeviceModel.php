@@ -8,6 +8,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\JitCompatibleMasterDevic
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerConfigMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerMapper;
+use MPSToolbox\Services\CurrencyService;
 use My_Model_Abstract;
 use Zend_Auth;
 
@@ -832,20 +833,20 @@ class MasterDeviceModel extends My_Model_Abstract
      *
      * @return TonerModel[]
      */
-    public function getCheapestTonerSetByVendor ($costPerPageSetting)
+    public function getCheapestTonerSetByVendor ($costPerPageSetting, $toLocalCurrency=true)
     {
         if (!isset($this->_cachedCheapestTonerVendorSet))
         {
             $this->_cachedCheapestTonerVendorSet = [];
         }
 
-        $cacheKey = $costPerPageSetting->createCacheKey();
+        $cacheKey = $costPerPageSetting->createCacheKey().($toLocalCurrency?'1':'0');
 
         if (!array_key_exists($cacheKey, $this->_cachedCheapestTonerVendorSet))
         {
             $monochromeManufacturerPreference               = implode(',', $costPerPageSetting->monochromeTonerRankSet->getRanksAsArray());
             $colorManufacturerPreference                    = implode(',', $costPerPageSetting->colorTonerRankSet->getRanksAsArray());
-            $this->_cachedCheapestTonerVendorSet[$cacheKey] = TonerMapper::getInstance()->getCheapestTonersForDevice(
+            $result = TonerMapper::getInstance()->getCheapestTonersForDevice(
                 $this->id,
                 $costPerPageSetting->dealerId,
                 $monochromeManufacturerPreference,
@@ -853,6 +854,12 @@ class MasterDeviceModel extends My_Model_Abstract
                 $costPerPageSetting->clientId,
                 $costPerPageSetting->level
             );
+            if ($toLocalCurrency) {
+                foreach ($result as $line) {
+                    $line->calculatedCost = $line->calculatedCost * CurrencyService::getInstance()->getRate();
+                }
+            }
+            $this->_cachedCheapestTonerVendorSet[$cacheKey] = $result;
         }
 
         return $this->_cachedCheapestTonerVendorSet[$cacheKey];
