@@ -9,6 +9,9 @@ $assessmentViewModel = $this->assessmentViewModel;
 $brandName           = My_Brand::getDealerBranding()->mpsProgramName;
 $companyName         = My_Brand::getDealerBranding()->shortDealerName;
 $dealerId            = Zend_Auth::getInstance()->getIdentity()->dealerId;
+
+$cppSetting = $assessmentViewModel->getCostPerPageSettingForDealer();
+
 ?>
 <div class="container full-width gross-margin" id="htmlReportContainer">
     <div>
@@ -22,71 +25,71 @@ $dealerId            = Zend_Auth::getInstance()->getIdentity()->dealerId;
         <tbody>
         <tr>
             <td class="column1">
-                <div class="heading"><?= $brandName ?> Black And White CPP:</div>
+                <div class="heading"><?= $brandName ?> Black And White CPP:&nbsp;</div>
             </td>
             <td class="column2">
-                <div><?= $this->formatCostPerPage($assessmentViewModel->getMPSBlackAndWhiteCPP()); ?></div>
+                <div><?= $this->formatCostPerPage($assessmentViewModel->getMPSBlackAndWhiteCPP()); ?>&nbsp;</div>
             </td>
             <td class="column3">
-                <div class="heading">Total Cost:</div>
+                <div class="heading">Total Cost:&nbsp;</div>
             </td>
             <td class="column4">
-                <div><?= $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Combined); ?></div>
+                <div><?= $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Combined); ?>&nbsp;</div>
             </td>
         </tr>
         <tr>
             <td class="column1">
-                <div class="heading"><?= $brandName ?> Color CPP:</div>
+                <div class="heading"><?= $brandName ?> Color CPP:&nbsp;</div>
             </td>
             <td class="column2">
-                <div><?= $this->formatCostPerPage($assessmentViewModel->getMPSColorCPP()); ?></div>
+                <div><?= $this->formatCostPerPage($assessmentViewModel->getMPSColorCPP()); ?>&nbsp;</div>
             </td>
             <td class="column3">
-                <div class="heading">Total Revenue:</div>
+                <div class="heading">Total Revenue:&nbsp;</div>
             </td>
             <td class="column4">
-                <div><?= $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined); ?></div>
+                <div><?= $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined); ?>&nbsp;</div>
             </td>
         </tr>
         <tr>
             <td class="column1">
-                <div class="heading">Weighted Black And White CPP:</div>
+                <div class="heading">Weighted Black And White CPP:&nbsp;</div>
             </td>
             <td class="column2">
-                <div><?= $this->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP()->BlackAndWhite); ?></div>
+                <div><?= $this->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP()->BlackAndWhite); ?>&nbsp;</div>
             </td>
             <td class="column3">
-                <div class="heading">Monthly Profit:</div>
+                <div class="heading">Monthly Profit:&nbsp;</div>
             </td>
             <td class="column4">
-                <div><?= $this->currency($assessmentViewModel->getGrossMarginMonthlyProfit()); ?></div>
+                <div><?= $this->currency($assessmentViewModel->getGrossMarginMonthlyProfit()); ?>&nbsp;</div>
             </td>
         </tr>
         <tr>
             <td class="column1">
-                <div class="heading">Weighted Color CPP:</div>
+                <div class="heading">Weighted Color CPP:&nbsp;</div>
             </td>
             <td class="column2">
-                <div><?= $this->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP()->Color); ?></div>
+                <div><?= $this->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP()->Color); ?>&nbsp;</div>
             </td>
             <td class="column3">
-                <div class="heading">Overall Margin:</div>
+                <div class="heading">Overall Margin:&nbsp;</div>
             </td>
             <td class="column4">
-                <div><?= number_format($assessmentViewModel->getGrossMarginOverallMargin()); ?>%</div>
+                <div><?= number_format($assessmentViewModel->getGrossMarginOverallMargin()); ?>%&nbsp;</div>
             </td>
         </tr>
         <tr>
             <td class="column1">
-                <div class="heading">Black And White Margin:</div>
+                <div class="heading">Black And White Margin:&nbsp;</div>
             </td>
             <td class="column2">
-                <div><?= number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin()); ?>%</div>
+                <div><?= number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin()); ?>%&nbsp;</div>
             </td>
             <td class="column3">
                 <div class="heading">Color Margin:</div>
             </td>
-            <td class="column4"><?= number_format($assessmentViewModel->getGrossMarginColorMargin()); ?>%</td>
+            <td class="column4"><?= number_format($assessmentViewModel->getGrossMarginColorMargin()); ?>%&nbsp;</td>
         </tr>
         </tbody>
     </table>
@@ -127,12 +130,11 @@ $dealerId            = Zend_Auth::getInstance()->getIdentity()->dealerId;
         <?php foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance) : ?>
             <?php
             $tonerConfig               = $deviceInstance->getMasterDevice()->tonerConfigId;
-            $dealerCostPerPageSettings = $assessmentViewModel->getCostPerPageSettingForDealer();
-            $completeMonoToners        = $deviceInstance->getMasterDevice()->getHasValidMonoGrossMarginToners($assessmentViewModel->getCostPerPageSettingForDealer());
-            $completeColorToners       = $deviceInstance->getMasterDevice()->getHasValidColorGrossMarginToners($assessmentViewModel->getCostPerPageSettingForDealer());
+            $completeMonoToners        = $deviceInstance->getMasterDevice()->getHasValidMonoGrossMarginToners($cppSetting);
+            $completeColorToners       = $deviceInstance->getMasterDevice()->getHasValidColorGrossMarginToners($cppSetting);
             $blackToner                = null;
             $colorToner                = null;
-            $toners                    = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($assessmentViewModel->getCostPerPageSettingForDealer());
+            $toners                    = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($cppSetting, true);
             $tonerSkus                 = [];
 
             $black_isUsingDealerPricing = true;
@@ -235,11 +237,11 @@ $dealerId            = Zend_Auth::getInstance()->getIdentity()->dealerId;
                     <div class="right"><?= $blackYield ?></div>
                 </td>
                 <td class="column5 mono">
-                    <div class="right"><?= $this->formatCostPerPage($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->monochromeCostPerPage); ?></div>
+                    <div class="right"><?= $this->formatCostPerPage($deviceInstance->calculateCostPerPage($cppSetting)->getCostPerPage()->monochromeCostPerPage); ?></div>
                 </td>
                 <td class="column6 mono">
                     <div class="right">
-                        <?= $this->currency($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer())); ?></div>
+                        <?= $this->currency($deviceInstance->getMonthlyBlackAndWhiteCost($cppSetting)); ?></div>
                 </td>
 
                 <!-- Color -->
@@ -253,11 +255,11 @@ $dealerId            = Zend_Auth::getInstance()->getIdentity()->dealerId;
                     <div class="<?= $colorStyle; ?>"><?= $colorYield ?></div>
                 </td>
                 <td class="column10 color">
-                    <div class="<?= $colorStyle; ?>"><?= ($isColor) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->colorCostPerPage) : "-"; ?></div>
+                    <div class="<?= $colorStyle; ?>"><?= ($isColor) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($cppSetting)->getCostPerPage()->colorCostPerPage) : "-"; ?></div>
                 </td>
 
                 <td class="column11 color">
-                    <div class="<?= $colorStyle; ?>"><?= ($isColor) ? $this->currency($deviceInstance->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer())) : "-"; ?></div>
+                    <div class="<?= $colorStyle; ?>"><?= ($isColor) ? $this->currency($deviceInstance->calculateMonthlyColorCost($cppSetting)) : "-"; ?></div>
                 </td>
                 <td class="column12">
                     <div class="<?= $colorStyle; ?>">
