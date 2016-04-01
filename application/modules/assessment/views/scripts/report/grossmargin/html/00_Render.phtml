@@ -199,7 +199,7 @@ $cppSetting = $assessmentViewModel->getCostPerPageSettingForDealer();
             }
 
             // Black Toner
-            $blackCost  = $this->currency($blackToner->calculatedCost);
+            $blackCost  = $this->currency($blackToner->getCalculatedCost());
             $blackYield = number_format($blackToner->yield);
 
             // Color Toner
@@ -209,7 +209,7 @@ $cppSetting = $assessmentViewModel->getCostPerPageSettingForDealer();
             $isColor    = false;
             if ($colorToner instanceof TonerModel)
             {
-                $colorCost  = $this->currency($colorToner->cost);
+                $colorCost  = $this->currency($colorToner->getCalculatedCost());
                 $colorYield = number_format($colorToner->yield);
                 $isColor    = true;
             }
