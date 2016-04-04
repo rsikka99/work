@@ -1,18 +1,24 @@
 <?php
 
+$is_root = \MPSToolbox\Legacy\Entities\DealerEntity::getDealerId() == 1;
+
 /** @var \MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel $selectedClient */
 $selectedClient = null;
+$selectedClientId = null;
 $clientOptions = [];
 $s = new \MPSToolbox\Services\RmsDeviceInstanceService();
 foreach($this->clients as $client) {
     if ($this->clientId==$client->id) {
         $selectedClient = $client;
+        $selectedClientId = $client->id;
     }
     $clientName = $client->companyName;
     $n = count($s->getIncomplete($client->id));
     if ($n>0) $clientName .= " ({$n})";
     $clientOptions[$client->id] = $clientName;
 }
+
+if ($is_root) $selectedClientId = 0;
 
 ?>
 
@@ -22,6 +28,8 @@ foreach($this->clients as $client) {
 </script>
 
 <div class="container">
+
+<?php if (!$is_root) { ?>
     <div class="row">
         <div class="col-sm-4">
             <p>Select a client</p>
@@ -33,10 +41,11 @@ foreach($this->clients as $client) {
             </select>
         </div>
     </div>
+<?php } ?>
 
     <hr>
 
-<?php if ($selectedClient) { ?>
+<?php if ($selectedClient || $is_root) { ?>
 
     <table class="table table-striped table-hover" id="my-table">
         <colgroup>
@@ -116,32 +125,32 @@ foreach($this->clients as $client) {
         }
         function modelSelected(id, btn) {
             var value = $(btn).attr('data-value');
-            $.post('/ecommerce/device/ajax-map', {client:<?= $selectedClient->id ?>, instance:id, model:value}, function(response) {
+            $.post('/ecommerce/device/ajax-map', {client:<?= $selectedClientId ?>, instance:id, model:value}, function(response) {
                 reloadMe();
             }, 'json');
         }
         function ignore(id) {
-            $.post('/ecommerce/device/ajax-ignore', {client:<?= $selectedClient->id ?>, instance:id}, function(response) {
+            $.post('/ecommerce/device/ajax-ignore', {client:<?= $selectedClientId ?>, instance:id}, function(response) {
                 reloadMe();
             }, 'json');
         }
         function ignoreSingle(id) {
-            $.post('/ecommerce/device/ajax-ignore-single', {client:<?= $selectedClient->id ?>, instance:id}, function(response) {
+            $.post('/ecommerce/device/ajax-ignore-single', {client:<?= $selectedClientId ?>, instance:id}, function(response) {
                 reloadMe();
             }, 'json');
         }
         function unignore(id) {
-            $.post('/ecommerce/device/ajax-ignore', {client:<?= $selectedClient->id ?>, instance:id, reverse:true}, function(response) {
+            $.post('/ecommerce/device/ajax-ignore', {client:<?= $selectedClientId ?>, instance:id, reverse:true}, function(response) {
                 reloadMe();
             }, 'json');
         }
         function unignoreSingle(id) {
-            $.post('/ecommerce/device/ajax-ignore-single', {client:<?= $selectedClient->id ?>, instance:id, reverse:true}, function(response) {
+            $.post('/ecommerce/device/ajax-ignore-single', {client:<?= $selectedClientId ?>, instance:id, reverse:true}, function(response) {
                 reloadMe();
             }, 'json');
         }
         function unmap(id) {
-            $.post('/ecommerce/device/ajax-map', {client:<?= $selectedClient->id ?>, instance:id, reverse:true}, function(response) {
+            $.post('/ecommerce/device/ajax-map', {client:<?= $selectedClientId ?>, instance:id, reverse:true}, function(response) {
                 reloadMe();
             }, 'json');
         }
@@ -154,7 +163,7 @@ foreach($this->clients as $client) {
                     "rmsDeviceInstanceId" : rmsDeviceInstanceId
                 });
                 $(editDeviceModal).on('DeviceModal.saved', function (event, masterDeviceId) {
-                    $.post('/ecommerce/device/ajax-map', {client:<?= $selectedClient->id ?>, instance:rmsDeviceInstanceId, model:masterDeviceId}, function(response) {
+                    $.post('/ecommerce/device/ajax-map', {client:<?= $selectedClientId ?>, instance:rmsDeviceInstanceId, model:masterDeviceId}, function(response) {
                         reloadMe();
                     }, 'json');
                 });
@@ -213,7 +222,7 @@ foreach($this->clients as $client) {
                     {data: 'template'}
                 ],
                 "ajax": {
-                    "url": "/ecommerce/device/ajax-table?client=<?= $selectedClient->id ?>"
+                    "url": "/ecommerce/device/ajax-table?client=<?= $selectedClientId ?>"
                 },
                 "pageLength": 100
             }).on( 'draw.dt', function () {
