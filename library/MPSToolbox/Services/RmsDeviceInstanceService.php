@@ -20,7 +20,6 @@ class RmsDeviceInstanceService {
         foreach ($st->fetchAll() as $line) {
             $result[$line['id']]=$line['id'];
         }
-
         $st = $db->query("
 select di.id from rms_device_instances di
   left join dealer_master_device_attributes a on a.masterDeviceId=di.masterDeviceId and a.dealerId={$dealerId}
@@ -39,14 +38,13 @@ and {$where}
         }
 
         $sql = "
-select di.id, md.tonerConfigId, t.tonerColorId, a.cost, ingram_prices.customer_price as ingramPrice
+select di.id, md.tonerConfigId, t.tonerColorId, v1.cost
 from rms_device_instances di
   join master_devices md on di.masterDeviceId=md.id
   join device_toners dt on dt.master_device_id=md.id
   join toners t on dt.toner_id=t.id
   left join dealer_toner_attributes a on t.id=a.tonerId and a.dealerId={$dealerId}
-  left join ingram_products on ingram_products.tonerId = t.id
-  left join ingram_prices on ingram_prices.ingram_part_number = ingram_products.ingram_part_number
+  left join _view_dist_stock_price_grouped v1 on t.id=v1.tonerId and v1.dealerId={$dealerId}
 where {$where} and `ignore`=0
         ";
         $st = $db->query($sql);
@@ -63,7 +61,7 @@ where {$where} and `ignore`=0
         foreach ($monoDevices as $id=>$arr) {
             $valid=false;
             foreach ($arr as $line) {
-                if ($line['cost'] || $line['ingramPrice']) {
+                if ($line['cost']) {
                     $valid=true;
                 }
             }
@@ -75,7 +73,7 @@ where {$where} and `ignore`=0
             $colorArr=[];
             foreach ($arr as $tonerColorId=>$lines) {
                 foreach ($lines as $line) {
-                    if ($line['cost'] || $line['ingramPrice']) {
+                    if ($line['cost']) {
                         $colorArr[$tonerColorId] = $line;
                     }
                 }

@@ -22,6 +22,10 @@ $this->headScript()->appendFile($this->baseUrl('js/app/legacy/hardware-library/M
 
     <input type="hidden" id="isAdmin" value="<?= $this->isAdmin; ?>" />
 
+    <?php if ($this->isAdmin) { ?>
+        <p class="text-right"><a href="/ecommerce/device">incomplete mappings</a></p>
+    <?php } ?>
+
     <div class="well">
         <form id="editMasterDeviceForm" class="form-inline" onsubmit="return false">
             <div class="form-group">

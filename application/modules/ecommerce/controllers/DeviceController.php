@@ -4,6 +4,10 @@ use Tangent\Controller\Action;
 
 class Ecommerce_DeviceController extends Action
 {
+    public function is_root() {
+        return \MPSToolbox\Legacy\Entities\DealerEntity::getDealerId() == 1;
+    }
+
     public function indexAction() {
         $this->_pageTitle = ['E-commerce - Device Settings'];
 
@@ -43,7 +47,9 @@ class Ecommerce_DeviceController extends Action
         $clientId = $this->getRequest()->getParam('client');
         $reverse = $this->getRequest()->getParam('reverse');
         $instanceId = $this->getRequest()->getParam('instance');
+        /** @var \MPSToolbox\Entities\RmsDeviceInstanceEntity $instance */
         $instance = \MPSToolbox\Entities\RmsDeviceInstanceEntity::find($instanceId);
+        if ($this->is_root()) $clientId = $instance->getClient()->getId();
         if ($clientId && $reverse && $instance) {
             $db = Zend_Db_Table::getDefaultAdapter();
             $st = $db->prepare('UPDATE rms_device_instances SET masterDeviceId=null WHERE clientId=:clientId and manufacturer=:manufacturer AND modelName=:modelName');
@@ -64,7 +70,9 @@ class Ecommerce_DeviceController extends Action
         $clientId = $this->getRequest()->getParam('client');
         $instanceId = $this->getRequest()->getParam('instance');
         $reverse = $this->getRequest()->getParam('reverse');
+        /** @var \MPSToolbox\Entities\RmsDeviceInstanceEntity $instance */
         $instance = \MPSToolbox\Entities\RmsDeviceInstanceEntity::find($instanceId);
+        if ($this->is_root()) $clientId = $instance->getClient()->getId();
         if ($instance) {
             $db = Zend_Db_Table::getDefaultAdapter();
             $st = $db->prepare('UPDATE rms_device_instances SET `ignore`='.($reverse?'0':'1').' where clientId=:clientId and manufacturer=:manufacturer AND modelName=:modelName');
@@ -77,7 +85,9 @@ class Ecommerce_DeviceController extends Action
         $clientId = $this->getRequest()->getParam('client');
         $instanceId = $this->getRequest()->getParam('instance');
         $reverse = $this->getRequest()->getParam('reverse');
+        /** @var \MPSToolbox\Entities\RmsDeviceInstanceEntity $instance */
         $instance = \MPSToolbox\Entities\RmsDeviceInstanceEntity::find($instanceId);
+        if ($this->is_root()) $clientId = $instance->getClient()->getId();
         if ($instance) {
             $db = Zend_Db_Table::getDefaultAdapter();
             $st = $db->prepare('UPDATE rms_device_instances SET `ignore`='.($reverse?'0':'1').' where clientId=:clientId and id=:id');
@@ -112,70 +122,94 @@ class Ecommerce_DeviceController extends Action
     public function ajaxTableAction() {
         $clientId = $this->getRequest()->getParam('client');
         $result=['data'=>[]];
-        if ($clientId) {
-            $db = Zend_Db_Table::getDefaultAdapter();
-            $st = $db->prepare("select * from rms_device_instances where clientId=:clientId");
-            $st->execute(['clientId'=>$clientId]);
+
+        $arr = [];
+        $incomplete = [];
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+        if ($clientId ) {
+            $st = $db->prepare("SELECT * FROM rms_device_instances WHERE clientId=:clientId");
+            $st->execute(['clientId' => $clientId]);
+            $arr = $st->fetchAll();
 
             $s = new \MPSToolbox\Services\RmsDeviceInstanceService();
             $incomplete = $s->getIncomplete($clientId);
 
-            $staleDate = date('Y-m-d', strtotime('-7 DAY'));
+        } else if ($this->is_root()) {
+            $st = $db->prepare("
+SELECT *
+FROM rms_device_instances
+where `ignore`=0 and (
+  masterDeviceId is null or
+  masterDeviceId not in (
+    select master_device_id
+    from device_toners dt
+      join master_devices msub on dt.master_device_id=msub.id
+      join toners t on dt.toner_id=t.id and t.manufacturerId = msub.manufacturerId
+  )
+)
+");
+            $st->execute(['clientId' => $clientId]);
+            $arr = $st->fetchAll();
+            $incomplete=array();
+            foreach ($arr as $line) $incomplete[$line['id']] = $line['id'];
+        }
 
-            foreach ($st->fetchAll() as $line) {
-                if ($line['ignore']) {
-                    $fullDeviceName = $line['fullDeviceName'];
-                    $icon = '<span style="display:none">4 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-remove context" style="color:black" title="Ignored" data-target="#context-menu-'.$line['id'].'"></i>
-                    <ul class="dropdown-menu ul-context-menu" role="menu" id="context-menu-'.$line['id'].'" style="display:none">
-                        <li><a href="javascript:;" onclick="if (window.confirm(\'Unignore this model?\')) unignore('.$line['id'].')">Unignore this device model</a></li>
-                        <li><a href="javascript:;" onclick="if (window.confirm(\'Unignore this single device?\')) unignoreSingle('.$line['id'].')">Unignore this single device</a></li>
-                    </ul>';
-                } else if ($line['masterDeviceId']) {
-                    $color='';
-                    $li = '
-                        <li><a href="javascript:;" onclick="if (window.confirm(\'Unmap this model?\')) unmap('.$line['id'].')">Unmap this device model</a></li>
-                        <li><a href="javascript:;" onclick="if (window.confirm(\'Ignore this model?\')) ignore('.$line['id'].')">Ignore this device model</a></li>
-                        <li><a href="javascript:;" onclick="if (window.confirm(\'Ignore this single device?\')) ignoreSingle('.$line['id'].')">Ignore this single device</a></li>
-                    ';
-                    $icon = '<span style="display:none">3 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-check text-success context" data-target="#context-menu-'.$line['id'].'"></i>';
-                    if (isset($incomplete[$line['id']])) {
-                        $li = '<li><a href="javascript:;" onclick="showModelModal('.$line['masterDeviceId'].')">Edit device model details</a></li>'.$li;
-                        $icon = '<span style="display:none">2 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-bars text-danger context" data-target="#context-menu-'.$line['id'].'" title="Unavailable Supplies"></i>';
-                        $color='text-danger';
-                    } else if ($line['reportDate']<$staleDate) {
-                        $icon = '<span style="display:none">3 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-warning text-warning context" data-target="#context-menu-'.$line['id'].'" title="Stale"></i>';
-                    }
-                    $fullDeviceName = '<a href="javascript:;" onclick="showModelModal('.$line['masterDeviceId'].')" class="'.$color.'">'.$line['fullDeviceName'].'</a>';
-                    $icon.='
-                    <ul class="dropdown-menu ul-context-menu" role="menu" id="context-menu-'.$line['id'].'" style="display:none">'.$li.'</ul>';
+        $staleDate = date('Y-m-d', strtotime('-7 DAY'));
 
-                } else {
-                    $icon = '<span style="display:none">1 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-wrench text-danger context" data-target="#context-menu-'.$line['id'].'" title="Unmapped"></i>';
-                    $fullDeviceName = '<a href="javascript:;" class="text-danger" onclick="doMap('.$line['id'].', \''.htmlentities($line['fullDeviceName'], ENT_QUOTES).'\')">'.$line['fullDeviceName'].'</a>';
-                    $icon.='
-                    <ul class="dropdown-menu ul-context-menu" role="menu" id="context-menu-'.$line['id'].'" style="display:none">
-                        <li><a href="javascript:;" onclick="doMap('.$line['id'].', \''.htmlentities($line['fullDeviceName'], ENT_QUOTES).'\')">Map this device model</a></li>
-                        <li><a href="javascript:;" onclick="if (window.confirm(\'Ignore this model?\')) ignore('.$line['id'].')">Ignore this device model</a></li>
-                        <li><a href="javascript:;" onclick="if (window.confirm(\'Ignore this single device?\')) ignoreSingle('.$line['id'].')">Ignore this single device</a></li>
-                    </ul>';
+        foreach ($arr as $line) {
+            if ($line['ignore']) {
+                $fullDeviceName = $line['fullDeviceName'];
+                $icon = '<span style="display:none">4 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-remove context" style="color:black" title="Ignored" data-target="#context-menu-'.$line['id'].'"></i>
+                <ul class="dropdown-menu ul-context-menu" role="menu" id="context-menu-'.$line['id'].'" style="display:none">
+                    <li><a href="javascript:;" onclick="if (window.confirm(\'Unignore this model?\')) unignore('.$line['id'].')">Unignore this device model</a></li>
+                    <li><a href="javascript:;" onclick="if (window.confirm(\'Unignore this single device?\')) unignoreSingle('.$line['id'].')">Unignore this single device</a></li>
+                </ul>';
+            } else if ($line['masterDeviceId']) {
+                $color='';
+                $li = '
+                    <li><a href="javascript:;" onclick="if (window.confirm(\'Unmap this model?\')) unmap('.$line['id'].')">Unmap this device model</a></li>
+                    <li><a href="javascript:;" onclick="if (window.confirm(\'Ignore this model?\')) ignore('.$line['id'].')">Ignore this device model</a></li>
+                    <li><a href="javascript:;" onclick="if (window.confirm(\'Ignore this single device?\')) ignoreSingle('.$line['id'].')">Ignore this single device</a></li>
+                ';
+                $icon = '<span style="display:none">3 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-check text-success context" data-target="#context-menu-'.$line['id'].'"></i>';
+                if (isset($incomplete[$line['id']])) {
+                    $li = '<li><a href="javascript:;" onclick="showModelModal('.$line['masterDeviceId'].')">Edit device model details</a></li>'.$li;
+                    $icon = '<span style="display:none">2 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-bars text-danger context" data-target="#context-menu-'.$line['id'].'" title="Unavailable Supplies"></i>';
+                    $color='text-danger';
+                } else if ($line['reportDate']<$staleDate) {
+                    $icon = '<span style="display:none">3 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-warning text-warning context" data-target="#context-menu-'.$line['id'].'" title="Stale"></i>';
                 }
+                $fullDeviceName = '<a href="javascript:;" onclick="showModelModal('.$line['masterDeviceId'].')" class="'.$color.'">'.$line['fullDeviceName'].'</a>';
+                $icon.='
+                <ul class="dropdown-menu ul-context-menu" role="menu" id="context-menu-'.$line['id'].'" style="display:none">'.$li.'</ul>';
 
-                $fullDeviceName = '<a href="javascript:;" onclick="showDetailsModal('.$line['id'].')"><i class="fa fa-fw fa-info-circle text-info"></i></a>&nbsp;' . $fullDeviceName;
-
-                $template='<span id="template-'.$line['id'].'" data-value="'.$line['email_template'].'"><span onclick="selectTemplate('.$line['id'].')" style="cursor:pointer">'.($line['email_template']?$line['email_template']:'Client').'</span></span>';
-
-                $result['data'][] = [
-                    'DT_RowId'=>'tr-'.$line['id'],
-                    'icon'=>$icon,
-                    'model'=>$fullDeviceName,
-                    'raw'=>$line['rawDeviceName'],
-                    'ipAddress'=>$line['ipAddress'],
-                    'serialNumber'=>$line['serialNumber'],
-                    'location'=>$line['location'],
-                    'reportDate'=>$line['reportDate'],
-                    'template'=>$template,
-                ];
+            } else {
+                $icon = '<span style="display:none">1 '.$line['fullDeviceName'].'</span><i class="fa fa-fw fa-wrench text-danger context" data-target="#context-menu-'.$line['id'].'" title="Unmapped"></i>';
+                $fullDeviceName = '<a href="javascript:;" class="text-danger" onclick="doMap('.$line['id'].', \''.htmlentities($line['fullDeviceName'], ENT_QUOTES).'\')">'.$line['fullDeviceName'].'</a>';
+                $icon.='
+                <ul class="dropdown-menu ul-context-menu" role="menu" id="context-menu-'.$line['id'].'" style="display:none">
+                    <li><a href="javascript:;" onclick="doMap('.$line['id'].', \''.htmlentities($line['fullDeviceName'], ENT_QUOTES).'\')">Map this device model</a></li>
+                    <li><a href="javascript:;" onclick="if (window.confirm(\'Ignore this model?\')) ignore('.$line['id'].')">Ignore this device model</a></li>
+                    <li><a href="javascript:;" onclick="if (window.confirm(\'Ignore this single device?\')) ignoreSingle('.$line['id'].')">Ignore this single device</a></li>
+                </ul>';
             }
+
+            $fullDeviceName = '<a href="javascript:;" onclick="showDetailsModal('.$line['id'].')"><i class="fa fa-fw fa-info-circle text-info"></i></a>&nbsp;' . $fullDeviceName;
+
+            $template='<span id="template-'.$line['id'].'" data-value="'.$line['email_template'].'"><span onclick="selectTemplate('.$line['id'].')" style="cursor:pointer">'.($line['email_template']?$line['email_template']:'Client').'</span></span>';
+
+            $result['data'][] = [
+                'DT_RowId'=>'tr-'.$line['id'],
+                'icon'=>$icon,
+                'model'=>$fullDeviceName,
+                'raw'=>$line['rawDeviceName'],
+                'ipAddress'=>$line['ipAddress'],
+                'serialNumber'=>$line['serialNumber'],
+                'location'=>$line['location'],
+                'reportDate'=>$line['reportDate'],
+                'template'=>$template,
+            ];
         }
         $this->sendJson($result);
     }

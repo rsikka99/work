@@ -110,7 +110,7 @@ class RmsDeviceInstanceEntity extends BaseEntity {
     }
 
     /**
-     * @return mixed
+     * @return ClientEntity
      */
     public function getClient()
     {
