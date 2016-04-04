@@ -139,7 +139,7 @@ class Ecommerce_DeviceController extends Action
             $st = $db->prepare("
 SELECT *
 FROM rms_device_instances
-where `ignore`=0 and (
+where `ignore`=0 and clientId in (select id from clients where dealerId in (select dealerId from dealer_settings where shopSettingsId in (select id from shop_settings where shopifyName<>''))) and (
   masterDeviceId is null or
   masterDeviceId not in (
     select master_device_id
