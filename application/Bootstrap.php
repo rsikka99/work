@@ -99,10 +99,37 @@ class Bootstrap extends Tangent\Bootstrap
     }
 
     /**
+     * Setup configuration for Cache
+     *
+     * @return array
+     */
+    protected function _initCacheConfig()
+    {
+        $confCache = new Zend_Config_Ini(APPLICATION_PATH . '/configs/cache.ini');
+        return $confCache;
+    }
+
+    /**
      * Start session
      */
     public function _initCoreSession ()
     {
+        if (extension_loaded('memcache')) {
+            #--
+            Zend_Loader::loadClass('My_SessionSaveHandlerCache');
+            $cacheConfig = $this->getResource('cacheConfig');
+            $cache = Zend_Cache::factory(
+                $cacheConfig->session->frontend,
+                $cacheConfig->session->backend,
+                $cacheConfig->session->frontendOptions->toArray(),
+                $cacheConfig->session->backendOptions->toArray()
+            );
+            Zend_Session::setSaveHandler(new My_SessionSaveHandlerCache($cache));
+            #--
+        } /* else {
+            die('memcache not loaded');
+        } */
+
         $this->bootstrap('session');
         Zend_Session::start();
 
