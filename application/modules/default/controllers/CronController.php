@@ -56,12 +56,15 @@ SELECT dealers.id FROM dealers join `dealer_settings` on dealers.id=dealer_setti
         $this->_helper->layout->disableLayout();
         #--
         $db = Zend_Db_Table::getDefaultAdapter();
-        $arr = $db->query('select mfg.fullName, count(*) as c from master_devices m join manufacturers mfg on m.manufacturerId=mfg.id where m.id not in (
+        $arr = $db->query('
+select mfg.fullName, count(*) as c from master_devices m join manufacturers mfg on m.manufacturerId=mfg.id where m.id not in (
 select master_device_id
   from device_toners dt
     join master_devices msub on dt.master_device_id=msub.id
     join toners t on dt.toner_id=t.id and t.manufacturerId = msub.manufacturerId
 )
+or imageUrl is null
+or (isA3=0 and isAccessCard=0 and isADF=0 and isBinding=0 and isCapableOfReportingTonerLevels=0 and isDuplex=0 and isFax=0 and isPIN=0 and isSmartphone=0 and isStapling=0 and isTouchscreen=0 and isUSB=0 and isWalkup=0 and isWired=0 and isWireless=0)
 group by manufacturerId
 order by fullName')->fetchAll();
 

@@ -468,6 +468,10 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
             {
                 $whereClause["{$whereColumn} NOT LIKE ?"] = "%" . $filter->getFilterValue() . "%";
             }
+            elseif ($filter instanceof Filter\In)
+            {
+                $whereClause["{$whereColumn} in ({$filter->getFilterValue()})"] = null;
+            }
             elseif ($filter instanceof Filter\NotIn)
             {
                 $whereClause["{$whereColumn} NOT in ({$filter->getFilterValue()})"] = null;
@@ -495,7 +499,7 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
          */
         foreach ($whereClause as $condition => $value)
         {
-            $zendDbSelect->where($condition, $value);
+            $zendDbSelect->orWhere($condition, $value);
         }
 
         /**
