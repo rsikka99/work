@@ -65,6 +65,26 @@ $shopSettings = $dealerSettings->shopSettings;
             </div>
         </div>
 
+        <div class="form-group <?= ($form->getElement('dataSheetUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('dataSheetUrl'), ['col-md-4']) ?>
+
+            <div class="col-md-6">
+                <?= $this->RenderFormText($form->getElement('dataSheetUrl')) ?>
+                <?= $this->RenderFormDescription($form->getElement('dataSheetUrl')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('dataSheetUrl')) ?>
+            </div>
+        </div>
+
+        <div class="form-group <?= ($form->getElement('reviewsUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('reviewsUrl'), ['col-md-4']) ?>
+
+            <div class="col-md-6">
+                <?= $this->RenderFormText($form->getElement('reviewsUrl')) ?>
+                <?= $this->RenderFormDescription($form->getElement('reviewsUrl')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('reviewsUrl')) ?>
+            </div>
+        </div>
+
         <?php if ($shopSettings->shopifyName!='') { ?>
             <div class="form-group <?= ($form->getElement('online')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                 <?= $this->RenderFormLabel($form->getElement('online'), ['col-md-4']) ?>
@@ -147,26 +167,6 @@ $shopSettings = $dealerSettings->shopSettings;
                     <?= $this->RenderFormText($form->getElement('additionalCpp'), null, '$') ?>
                     <?= $this->RenderFormDescription($form->getElement('additionalCpp')) ?>
                     <?= $this->RenderFormElementErrors($form->getElement('additionalCpp')) ?>
-                </div>
-            </div>
-
-            <div class="form-group <?= ($form->getElement('dataSheetUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                <?= $this->RenderFormLabel($form->getElement('dataSheetUrl'), ['col-md-4']) ?>
-
-                <div class="col-md-6">
-                    <?= $this->RenderFormText($form->getElement('dataSheetUrl')) ?>
-                    <?= $this->RenderFormDescription($form->getElement('dataSheetUrl')) ?>
-                    <?= $this->RenderFormElementErrors($form->getElement('dataSheetUrl')) ?>
-                </div>
-            </div>
-
-            <div class="form-group <?= ($form->getElement('reviewsUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                <?= $this->RenderFormLabel($form->getElement('reviewsUrl'), ['col-md-4']) ?>
-
-                <div class="col-md-6">
-                    <?= $this->RenderFormText($form->getElement('reviewsUrl')) ?>
-                    <?= $this->RenderFormDescription($form->getElement('reviewsUrl')) ?>
-                    <?= $this->RenderFormElementErrors($form->getElement('reviewsUrl')) ?>
                 </div>
             </div>
 
