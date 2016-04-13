@@ -49,7 +49,11 @@ class My_Controller_Plugin_UserActivity extends Zend_Controller_Plugin_Abstract
                         // Save up the last seen field to the user time
                         $user           = UserMapper::getInstance()->find($userIdentity->id);
                         $user->lastSeen = $currentTime;
-                        UserMapper::getInstance()->save($user);
+                        try {
+                            UserMapper::getInstance()->save($user);
+                        } catch (Exception $ex) {
+                            \Tangent\Logger\Logger::warn('Cannot write UserActivity, '.$ex->getMessage());
+                        }
                         $userIdentity->lastSeen = $currentTime;
                     }
                 }
@@ -70,7 +74,11 @@ class My_Controller_Plugin_UserActivity extends Zend_Controller_Plugin_Abstract
                     // Save up the last seen field to the user time
                     $user           = UserMapper::getInstance()->find($userIdentity->id);
                     $user->lastSeen = $currentTime;
-                    UserMapper::getInstance()->save($user);
+                    try {
+                        UserMapper::getInstance()->save($user);
+                    } catch (Exception $ex) {
+                        \Tangent\Logger\Logger::warn('Cannot write UserActivity, '.$ex->getMessage());
+                    }
 
                     $userIdentity->lastSeen = $currentTime;
                 }
