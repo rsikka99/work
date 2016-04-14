@@ -134,6 +134,11 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/hardwareoptimization/report-dealer-optimization')
             ],
+            "export"   => [
+                "pagetitle" => "Export to Excel",
+                "active"    => false,
+                "url"       => $this->view->baseUrl('/hardwareoptimization/xls')
+            ],
         ];
     }
 

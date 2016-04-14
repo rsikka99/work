@@ -962,4 +962,14 @@ class OptimizationViewModel
         return $myPicture;
     }
 
+    /**
+     * @return HardwareOptimizationModel
+     */
+    public function getOptimization()
+    {
+        return $this->_optimization;
+    }
+
+
+
 }

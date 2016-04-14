@@ -26,6 +26,9 @@ class CostPerPageModel extends My_Model_Abstract
      */
     public $colorCostPerPage = 0;
 
+    public $monochromeBreakDown = ['Hardware'=>0, 'Margin'=>0, 'Parts'=>0, 'Labor'=>0, 'Admin'=>0];
+    public $colorBreakDown = ['Hardware'=>0, 'Margin'=>0, 'Parts'=>0, 'Labor'=>0, 'Admin'=>0];
+
     /**
      * @param array $params An array of data to populate the model with
      */
@@ -65,9 +68,13 @@ class CostPerPageModel extends My_Model_Abstract
      * @param CostPerPageModel $costPerPage
      *            The cost per page object to add to this cost per page object
      */
-    public function add (CostPerPageModel $costPerPage)
+    public function add (CostPerPageModel $costPerPage, $breakDownTo=null)
     {
         $this->monochromeCostPerPage += $costPerPage->monochromeCostPerPage;
         $this->colorCostPerPage += $costPerPage->colorCostPerPage;
+        if ($breakDownTo) {
+            $this->monochromeBreakDown[$breakDownTo] += $costPerPage->monochromeCostPerPage;
+            $this->colorBreakDown[$breakDownTo] += $costPerPage->colorCostPerPage;
+        }
     }
 }

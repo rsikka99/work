@@ -130,10 +130,7 @@ class DeviceCostPerPageModel extends My_Model_Abstract
 
         if (!array_key_exists($cacheKey, $this->_cachedCostPerPage))
         {
-            $costPerPage                        = new CostPerPageModel();
-            $costPerPage->monochromeCostPerPage = 0;
-            $costPerPage->colorCostPerPage      = 0;
-            $costPerPage->add($this->getCostOfInkAndTonerPerPage());
+            $costPerPage                        = $this->getCostOfInkAndTonerPerPage();
 
             /**
              * Customer cost per page is used when we showing the cost per page to a customer and it's
@@ -160,10 +157,17 @@ class DeviceCostPerPageModel extends My_Model_Abstract
 
 
                     $costPerPage->monochromeCostPerPage += $laborCostPerPage + $partsCostPerPage + $this->costPerPageSetting->adminCostPerPage;
+                    $costPerPage->monochromeBreakDown['Labor'] = $laborCostPerPage;
+                    $costPerPage->monochromeBreakDown['Parts'] = $partsCostPerPage;
+                    $costPerPage->monochromeBreakDown['Admin'] = $this->costPerPageSetting->adminCostPerPage;
 
                     if ($costPerPage->colorCostPerPage > 0)
                     {
                         $costPerPage->colorCostPerPage += $costPerPage->monochromeCostPerPage;
+                        $costPerPage->colorBreakDown['Hardware'] += $costPerPage->monochromeBreakDown['Hardware'];
+                        $costPerPage->colorBreakDown['Labor'] = $laborCostPerPage;
+                        $costPerPage->colorBreakDown['Parts'] = $partsCostPerPage;
+                        $costPerPage->colorBreakDown['Admin'] = $this->costPerPageSetting->adminCostPerPage;
                     }
                 }
             }
@@ -197,14 +201,12 @@ class DeviceCostPerPageModel extends My_Model_Abstract
             foreach ($this->toners as $toner)
             {
                 $tonerCostPerPage = $toner->calculateCostPerPage($this->costPerPageSetting);
-
                 if (!$toner->isUsingCustomerPricing)
                 {
                     $tonerCostPerPage->monochromeCostPerPage = Accounting::applyMargin($tonerCostPerPage->monochromeCostPerPage, $this->costPerPageSetting->pricingMargin);
                     $tonerCostPerPage->colorCostPerPage      = Accounting::applyMargin($tonerCostPerPage->colorCostPerPage, $this->costPerPageSetting->pricingMargin);
                 }
-
-                $costPerPage->add($tonerCostPerPage);
+                $costPerPage->add($tonerCostPerPage, 'Hardware');
             }
 
             /**
@@ -216,12 +218,13 @@ class DeviceCostPerPageModel extends My_Model_Abstract
             {
                 if ($this->costPerPageSetting->customerMonochromeCostPerPage != null)
                 {
-                    $costPerPage->monochromeCostPerPage = $this->costPerPageSetting->customerMonochromeCostPerPage;
+                    $costPerPage->monochromeBreakDown['Hardware'] = $costPerPage->monochromeCostPerPage = $this->costPerPageSetting->customerMonochromeCostPerPage;
+
                 }
 
                 if ($this->costPerPageSetting->customerColorCostPerPage != null)
                 {
-                    $costPerPage->colorCostPerPage = $this->costPerPageSetting->customerColorCostPerPage;
+                    $costPerPage->colorBreakDown['Hardware'] = $costPerPage->colorCostPerPage = $this->costPerPageSetting->customerColorCostPerPage;
                 }
             }
 
@@ -235,7 +238,8 @@ class DeviceCostPerPageModel extends My_Model_Abstract
     {
         $laborCostPerPage = (isset($this->laborCostPerpage) ? $this->laborCostPerpage : "null");
         $partsCostPerPage = (isset($this->partsCostPerPage) ? $this->partsCostPerPage : "null");
+        $toner = md5(json_encode($this->toners));
 
-        return "{$laborCostPerPage}_{$partsCostPerPage}_{$this->isManaged}_{$this->costPerPageSetting->pricingMargin}";
+        return "{$toner}_{$laborCostPerPage}_{$partsCostPerPage}_{$this->isManaged}_{$this->costPerPageSetting->pricingMargin}";
     }
 }
