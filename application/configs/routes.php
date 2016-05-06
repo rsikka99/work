@@ -1,4 +1,9 @@
 <?php
+
+
+define ('DOMAIN_URL', (empty($_SERVER['HTTPS'])?'http':'https').'://'.(file_exists('/etc/hostname')?trim(file_get_contents('/etc/hostname')):@$_SERVER['HTTP_HOST']));
+
+
 /* @var $r Zend_Controller_Router_Rewrite */
 $r = Zend_Controller_Front::getInstance()->getRouter();
 use \Zend_Controller_Router_Route as R;
