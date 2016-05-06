@@ -230,16 +230,20 @@ class DeviceCostPerPageModel extends My_Model_Abstract
 
             $this->_cachedCostOfInkAndTonerPerPage[$cacheKey] = $costPerPage;
         }
-
         return $this->_cachedCostOfInkAndTonerPerPage[$cacheKey];
     }
 
     public function createCacheKey ()
     {
+        $toner_str = [];
+        foreach ($this->toners as $toner) {
+            $toner_str[] = $toner->id.':'.$toner->cost;
+        }
+        $toner_str = implode(',', $toner_str);
+
         $laborCostPerPage = (isset($this->laborCostPerpage) ? $this->laborCostPerpage : "null");
         $partsCostPerPage = (isset($this->partsCostPerPage) ? $this->partsCostPerPage : "null");
-        $toner = md5(json_encode($this->toners));
 
-        return "{$toner}_{$laborCostPerPage}_{$partsCostPerPage}_{$this->isManaged}_{$this->costPerPageSetting->pricingMargin}";
+        return "{$toner_str}_{$laborCostPerPage}_{$partsCostPerPage}_{$this->isManaged}_{$this->costPerPageSetting->pricingMargin}";
     }
 }
