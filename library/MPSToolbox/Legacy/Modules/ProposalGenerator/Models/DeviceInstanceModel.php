@@ -1534,7 +1534,6 @@ class DeviceInstanceModel extends My_Model_Abstract
                 $deviceCostPerPage->isManaged = $this->isManaged;
             }
 
-
             $this->_cachedDeviceCostPerPage [$cacheKey] = $deviceCostPerPage;
         }
 

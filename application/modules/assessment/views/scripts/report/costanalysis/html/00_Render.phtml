@@ -35,14 +35,15 @@ $deviceInstances            = $assessmentViewModel->getMonthlyHighCostPurchasedD
             <?php
             $isColor              = ($deviceInstance->getMasterDevice()->tonerConfigId != TonerConfigModel::BLACK_ONLY) ? true : false;
             $percentOfMonthlyCost = ($assessmentViewModel->calculateTotalMonthlyCost() > 0) ? number_format($deviceInstance->calculateMonthlyCost($customerCostPerPageSetting) / $assessmentViewModel->calculateTotalMonthlyCost() * 100, 2) : 0;
+            $cpp = $deviceInstance->calculateCostPerPage($customerCostPerPageSetting)->getCostPerPage();
             ?>
             <tr>
                 <td><?= $deviceInstance->getDeviceName(); ?></td>
                 <td class='number'><?= $percentOfMonthlyCost; ?>%</td>
                 <td class='number'><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
                 <td class='number'><?= ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : ' - '; ?></td>
-                <td class='number cpp'><?= $this->formatCostPerPage($deviceInstance->calculateCostPerPage($customerCostPerPageSetting)->getCostPerPage()->monochromeCostPerPage); ?></td>
-                <td class='number cpp'><?= ($isColor) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($customerCostPerPageSetting)->getCostPerPage()->colorCostPerPage) : ' - '; ?></td>
+                <td class='number cpp'><?= $this->formatCostPerPage($cpp->monochromeCostPerPage); ?></td>
+                <td class='number cpp'><?= ($isColor) ? $this->formatCostPerPage($cpp->colorCostPerPage) : ' - '; ?></td>
                 <td class='number'><?= $this->currency($deviceInstance->calculateMonthlyCost($customerCostPerPageSetting)); ?></td>
             </tr>
         <?php endforeach; ?>
