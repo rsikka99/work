@@ -283,5 +283,5 @@ $objWriter->save($this->savePath);
 /**
  * Finally we write out the url to the file we just generated.
  */
-if (Zend_Controller_Front::getInstance()->getRequest()->isXmlHttpRequest()) echo $this->baseUrl($this->publicFileName);
-else header('Location: '.$this->baseUrl($this->publicFileName));
+if (Zend_Controller_Front::getInstance()->getRequest()->isXmlHttpRequest()) echo DOMAIN_URL.$this->baseUrl($this->publicFileName);
+else header('Location: '.DOMAIN_URL.$this->baseUrl($this->publicFileName));
