@@ -1197,5 +1197,5 @@ $this->partial("report/solution/docx/08_nextsteps.phtml", $data);
 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpword, 'Word2007');
 $objWriter->save($this->savePath);
 
-if (Zend_Controller_Front::getInstance()->getRequest()->isXmlHttpRequest()) echo $this->baseUrl($this->publicFileName);
-else header('Location: '.$this->baseUrl($this->publicFileName));
+if (Zend_Controller_Front::getInstance()->getRequest()->isXmlHttpRequest()) echo DOMAIN_URL.$this->baseUrl($this->publicFileName);
+else header('Location: '.DOMAIN_URL.$this->baseUrl($this->publicFileName));
