@@ -92,7 +92,7 @@ define(['jquery', 'jquery.ui'], function ($)
                     data    : extraData,
                     success : function (data)
                     {
-                        if (data.indexOf(extension) < 0 || data.length > 100)
+                        if (data.indexOf(extension) < 0 || data.length > 255)
                         {
                             $("<div id='errorMessage'></div>").append(data).dialog({
                                 height    : 300,
