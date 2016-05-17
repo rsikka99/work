@@ -373,5 +373,5 @@ define([
 
 function uploadDone (e, result) {
     var filename = result._response.result.filename;
-    $('#imageDiv').html('<a href="/img/hardware/'+filename+'" target="_blank" class="thumbnail"><img src="/img/hardware/'+filename+'" style="max-width:300px;max-height:300px"></a>');
+    $('#imageDiv').html('<a href="<?= IMG_CDN ?>/img/hardware/'+filename+'" target="_blank" class="thumbnail"><img src="<?= IMG_CDN ?>/img/hardware/'+filename+'" style="max-width:300px;max-height:300px"></a>');
 }
