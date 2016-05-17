@@ -129,6 +129,10 @@ class HardwareQuoteForm extends \My_Form_Form
             'label'      => 'Is visible online',
             'required'   => false,
         ]);
+        $this->addElement('checkbox', 'taxable', [
+            'label'      => 'Is taxable',
+            'required'   => false,
+        ]);
         $this->addElement('textarea', 'onlineDescription', [
             'label'    => 'Online description',
             'required' => false,

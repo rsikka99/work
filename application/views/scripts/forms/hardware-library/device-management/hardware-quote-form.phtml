@@ -96,6 +96,16 @@ $shopSettings = $dealerSettings->shopSettings;
                 </div>
             </div>
 
+            <div class="form-group <?= ($form->getElement('taxable')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                <?= $this->RenderFormLabel($form->getElement('taxable'), ['col-md-4']) ?>
+
+                <div class="col-md-6">
+                    <?= $this->RenderFormBootstrapSwitch($form->getElement('taxable'), ['js-yes-no-switch']) ?>
+                    <?= $this->RenderFormDescription($form->getElement('taxable')) ?>
+                    <?= $this->RenderFormElementErrors($form->getElement('taxable')) ?>
+                </div>
+            </div>
+
             <?php if (!empty($dealer->rent_options) || !empty($dealer->plan_options)) { ?>
                 <?php $rent_values = json_decode($form->getElement('rent_values')->getValue(), true); ?>
                 <?php $plan_values = json_decode($form->getElement('plan_values')->getValue(), true); ?>
