@@ -90,6 +90,7 @@ class DeviceModel extends My_Model_Abstract
     public $plan_values;
     public $plan_page_values;
     public $tags;
+    public $taxable;
 
     /**
      * @var DeviceOptionModel[]
@@ -148,6 +149,7 @@ class DeviceModel extends My_Model_Abstract
         if (isset($params->plan_values) && !is_null($params->plan_values)) $this->plan_values = $params->plan_values;
         if (isset($params->plan_page_values) && !is_null($params->plan_page_values)) $this->plan_page_values = $params->plan_page_values;
         if (isset($params->tags) && !is_null($params->tags)) $this->tags = $params->tags;
+        if (isset($params->taxable) && !is_null($params->taxable)) $this->taxable = $params->taxable;
     }
 
     /**
@@ -173,6 +175,7 @@ class DeviceModel extends My_Model_Abstract
             'plan_values'       => is_array($this->plan_values)?json_encode($this->plan_values):$this->plan_values,
             'plan_page_values'  => $this->plan_page_values,
             'tags'              => $this->tags,
+            'taxable'          => $this->taxable,
         ];
     }
 
