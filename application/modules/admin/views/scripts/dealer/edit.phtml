@@ -2,6 +2,6 @@
     <?= $this->form ?>
     <?php if (isset($this->dealerLogoImagePath)) : ?>
         <strong>Current Dealer Logo:</strong>
-        <img src="<?= $this->baseUrl($this->dealerLogoImagePath); ?>" />
+        <img src="<?= IMG_CDN ?><?= $this->dealerLogoImagePath; ?>" />
     <?php endif; ?>
 </div>

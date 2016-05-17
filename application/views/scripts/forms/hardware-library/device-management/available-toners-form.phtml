@@ -98,15 +98,15 @@ $toner = $form->getView()->toner;
                 <div class="col-md-4 col-md-push-3">
                     <div id="imageDiv">
                         <?php if ($filename) { ?>
-                            <a href="/img/toners/<?php echo $filename ?>" target="_blank" class="thumbnail">
-                                <img src="/img/toners/<?php echo $filename ?>" style="max-width:250px;max-height:250px">
+                            <a href="<?= IMG_CDN ?>/img/toners/<?php echo $filename ?>" target="_blank" class="thumbnail">
+                                <img src="<?= IMG_CDN ?>/img/toners/<?php echo $filename ?>" style="max-width:250px;max-height:250px">
                             </a>
                         <?php } else {
 
                             switch($toner->manufacturerId) {
                                 case 47: // lmi
                                 case 61: // zero waste
-                                    echo '<img src="/img/toners/default_'.$toner->manufacturerId.'.jpg" style="max-width:250px;max-height:250px">';
+                                    echo '<img src="<?= IMG_CDN ?>/img/toners/default_'.$toner->manufacturerId.'.jpg" style="max-width:250px;max-height:250px">';
                             }
 
                         } ?>
