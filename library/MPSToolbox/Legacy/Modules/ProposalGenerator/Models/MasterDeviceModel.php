@@ -619,7 +619,7 @@ class MasterDeviceModel extends My_Model_Abstract
 
         if (!isset($this->_hasValidMonoGrossMarginToners[$cacheKey]))
         {
-            $usesAllValidToners      = true;
+            $usesAllValidToners      = false;
             $toners                  = $this->getCheapestTonerSetByVendor($costPerPageSetting);
             $oemRank                 = new TonerVendorRankingModel();
             $oemRank->manufacturerId = $this->manufacturerId;
@@ -631,9 +631,10 @@ class MasterDeviceModel extends My_Model_Abstract
                 switch ($toner->tonerColorId)
                 {
                     case TonerColorModel::BLACK:
-                        if ($toner->manufacturerId != $preferredMonochromeVendors[0]->manufacturerId)
-                        {
-                            $usesAllValidToners = false;
+                        foreach ($preferredMonochromeVendors as $preferredMonochromeVendor) {
+                            if ($toner->manufacturerId == $preferredMonochromeVendor->manufacturerId) {
+                                $usesAllValidToners = true;
+                            }
                         }
                         break;
                 }
@@ -662,7 +663,7 @@ class MasterDeviceModel extends My_Model_Abstract
 
         if (!isset($this->_hasValidColorGrossMarginToners[$cacheKey]))
         {
-            $usesAllValidToners           = true;
+            $usesAllValidToners           = false;
             $toners                       = $this->getCheapestTonerSetByVendor($costPerPageSetting);
             $oemRank                      = new TonerVendorRankingModel();
             $oemRank->manufacturerId      = $this->manufacturerId;
@@ -678,9 +679,10 @@ class MasterDeviceModel extends My_Model_Abstract
                     case TonerColorModel::MAGENTA:
                     case TonerColorModel::YELLOW:
                     case TonerColorModel::THREE_COLOR:
-                        if ($toner->manufacturerId != $preferredColorVendors[0]->manufacturerId)
-                        {
-                            $usesAllValidToners = false;
+                        foreach ($preferredColorVendors as $preferredColorVendor) {
+                            if ($toner->manufacturerId == $preferredColorVendor->manufacturerId) {
+                                $usesAllValidToners = true;
+                            }
                         }
                         break;
                 }

@@ -271,7 +271,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
                         case TonerColorModel::MAGENTA:
                         case TonerColorModel::YELLOW:
                             $colorToner = $toner;
-                        $color_isUsingDealerPricing     &= $toner->isUsingDealerPricing;
+                            $color_isUsingDealerPricing     &= $toner->isUsingDealerPricing;
                             break;
                         case TonerColorModel::THREE_COLOR:
                             $colorToner = $toner;
