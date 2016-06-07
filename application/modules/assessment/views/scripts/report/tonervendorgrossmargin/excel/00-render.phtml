@@ -211,7 +211,7 @@ foreach ($this->vendorSeparatedData as $vendorData)
     // End right side statistics
 
     $currentRow = $activeSheet->getHighestRow() + 2;
-    $activeSheet->setCellValue("A{$currentRow}", "Yellow highlighted rows indicate devices that have not been assigned toners matching your selected first toner vendor preference.");
+    $activeSheet->setCellValue("A{$currentRow}", "Yellow highlighted rows indicate devices that have not been assigned toners matching your selected toner vendor(s) preference.");
     $activeSheet->getStyle("A{$currentRow}:G{$currentRow}")->applyFromArray($styleNotification);
     $currentRow = $activeSheet->getHighestRow() + 1;
     $activeSheet->setCellValue("A{$currentRow}", "For these devices the system has selected the best available alternative based on the current toner preference.");
