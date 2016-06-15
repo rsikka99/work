@@ -88,7 +88,7 @@ class TonerModel extends My_Model_Abstract
     /**
      * @var float
      */
-    protected $calculatedCost;
+    public $calculatedCost;
 
     /**
      * @var bool
@@ -114,6 +114,10 @@ class TonerModel extends My_Model_Abstract
      * @var string
      */
     public $name = '';
+
+    public $type = null;
+    public $compatiblePrinters = null;
+    public $mlYield = null;
 
     /**
      * @var ManufacturerModel
@@ -223,14 +227,12 @@ class TonerModel extends My_Model_Abstract
             $this->imageFile = $params->imageFile;
         }
 
-        if (isset($params->name) && !is_null($params->name))
-        {
-            $this->name = $params->name;
-        }
-        else if (isset($params->sku) && !is_null($params->sku))
-        {
-            $this->name = $params->sku;
-        }
+        if (isset($params->name) && !is_null($params->name)) $this->name = $params->name;
+
+        if (isset($params->type) && !is_null($params->type)) $this->type = $params->type;
+        if (isset($params->compatiblePrinters) && !is_null($params->compatiblePrinters)) $this->compatiblePrinters = $params->compatiblePrinters;
+        if (isset($params->mlYield) && !is_null($params->mlYield)) $this->mlYield = $params->mlYield;
+
     }
 
     public function __get($property) {
@@ -263,9 +265,44 @@ class TonerModel extends My_Model_Abstract
             "imageFile"      => $this->imageFile,
             "weight"      => $this->weight,
             "UPC"      => $this->UPC,
+            "type"      => $this->type,
+            "compatiblePrinters"      => $this->compatiblePrinters,
+            "mlYield"      => $this->mlYield,
         ];
     }
 
+    public function toProductArray ()
+    {
+        return [
+            "userId"         => $this->userId,
+            "isSystemProduct" => $this->isSystemDevice,
+            "sku"            => $this->sku,
+            "name"           => $this->name,
+            "manufacturerId" => $this->manufacturerId,
+            "imageUrl"       => $this->imageUrl,
+            "imageFile"      => $this->imageFile,
+            "weight"      => $this->weight,
+            "UPC"      => $this->UPC,
+        ];
+    }
+
+    public function toConsumableArray ()
+    {
+        return [
+            "cost"           => $this->cost,
+            "pageYield"          => $this->yield,
+            "type" => $this->type,
+            "compatiblePrinters" => $this->compatiblePrinters,
+        ];
+    }
+
+    public function toCartridgeArray ()
+    {
+        return [
+            "colorId"   => $this->tonerColorId,
+            "mlYield"      => $this->mlYield,
+        ];
+    }
 
     /**
      * @return ManufacturerModel

@@ -59,21 +59,39 @@ class TonerMapper extends My_Model_Mapper_Abstract
      */
     public function insert ($object)
     {
-        // Get an array of data to save
-        $data = $object->toArray();
-
-        // Remove the id
-        unset($data [$this->col_id]);
-
+        $db = Zend_Db_Table::getDefaultAdapter();
         // Insert the data
-        $id = $this->getDbTable()->insert($data);
+        //$id = $this->getDbTable()->insert($data);
+        $object->dateCreated = date('Y-m-d');
+        $productData = $object->toProductArray();
+        $sql=[];
+        foreach (array_keys($productData) as $k) {
+            $sql[] = "`{$k}`=?";
+        }
+        $st = $db->prepare('insert into base_product set '.implode(',', $sql));
+        $st->execute(array_values($productData));
+        $object->id = $db->lastInsertId();
 
-        $object->id = $id;
+        $consumableArray = $object->toConsumableArray();
+        $sql=["`id`={$object->id}"];
+        foreach (array_keys($consumableArray) as $k) {
+            $sql[] = "`{$k}`=?";
+        }
+        $st = $db->prepare('insert into base_printer_consumable set '.implode(',', $sql));
+        $st->execute(array_values($consumableArray));
+
+        $cartridgeData = $object->toCartridgeArray();
+        $sql=["`id`={$object->id}"];
+        foreach (array_keys($cartridgeData) as $k) {
+            $sql[] = "`{$k}`=?";
+        }
+        $st = $db->prepare('insert into base_printer_cartridge set '.implode(',', $sql));
+        $st->execute(array_values($cartridgeData));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
 
-        return $id;
+        return $object->id;
     }
 
     /**
@@ -88,22 +106,35 @@ class TonerMapper extends My_Model_Mapper_Abstract
      */
     public function save ($object, $primaryKey = null)
     {
-        $data = $this->unsetNullValues($object->toArray());
-
-        if ($primaryKey === null)
-        {
-            $primaryKey = $data [$this->col_id];
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $productData = $object->toProductArray();
+        $sql=[];
+        foreach (array_keys($productData) as $k) {
+            $sql[] = "`{$k}`=?";
         }
+        $st = $db->prepare('update base_product set '.implode(',', $sql)." where `id`={$object->id}");
+        $st->execute(array_values($productData));
 
-        // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, [
-            "{$this->col_id} = ?" => $primaryKey,
-        ]);
+        $consumableArray = $object->toConsumableArray();
+        $sql=[];
+        foreach (array_keys($consumableArray) as $k) {
+            $sql[] = "`{$k}`=?";
+        }
+        $st = $db->prepare('update base_printer_consumable set '.implode(',', $sql)." where `id`={$object->id}");
+        $st->execute(array_values($consumableArray));
+
+        $cartridgeData = $object->toCartridgeArray();
+        $sql=[];
+        foreach (array_keys($cartridgeData) as $k) {
+            $sql[] = "`{$k}`=?";
+        }
+        $st = $db->prepare('update base_printer_cartridge set '.implode(',', $sql)." where `id`={$object->id}");
+        $st->execute(array_values($cartridgeData));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
 
-        return $rowsAffected;
+        return 1;
     }
 
     /**
