@@ -62,6 +62,11 @@ class MasterDeviceModel extends My_Model_Abstract
     /**
      * @var string
      */
+    public $sku;
+
+    /**
+     * @var string
+     */
     public $imageUrl = '';
 
     /**
@@ -77,61 +82,66 @@ class MasterDeviceModel extends My_Model_Abstract
     /**
      * @var bool
      */
-    public $isCopier;
+    public $isCopier=0;
 
     /**
      * @var bool
      */
-    public $isFax;
+    public $isFax=0;
 
     /**
      * @var bool
      */
-    public $isDuplex;
+    public $isDuplex=0;
 
     /**
      * @var int
      */
-    public $isSystemDevice;
+    public $isSystemDevice=0;
 
     /**
      * @var bool
      */
     public $isA3;
 
-    public $isSmartphone;
-    public $additionalTrays;
-    public $isPIN;
-    public $isAccessCard;
-    public $isWalkup;
-    public $isStapling;
-    public $isBinding;
-    public $isTouchscreen;
-    public $isADF;
+    public $isSmartphone=0;
+    public $additionalTrays=0;
+    public $isPIN=0;
+    public $isAccessCard=0;
+    public $isWalkup=0;
+    public $isStapling=0;
+    public $isBinding=0;
+    public $isTouchscreen=0;
+    public $isADF=0;
 
-    public $isUSB;
-    public $isWired;
-    public $isWireless;
+    public $isUSB=0;
+    public $isWired=0;
+    public $isWireless=0;
+
+    public $productLine;
+
+    public $weight;
+    public $UPC;
 
     /**
      * @var int
      */
-    public $maximumRecommendedMonthlyPageVolume;
+    public $maximumRecommendedMonthlyPageVolume=0;
 
     /**
      * @var bool
      */
-    public $isReplacementDevice;
+    public $isReplacementDevice=0;
 
     /**
      * @var int
      */
-    public $wattsPowerNormal;
+    public $wattsPowerNormal=0;
 
     /**
      * @var int
      */
-    public $wattsPowerIdle;
+    public $wattsPowerIdle=0;
 
     /**
      * @var string
@@ -166,7 +176,7 @@ class MasterDeviceModel extends My_Model_Abstract
     /**
      * @var bool
      */
-    public $isCapableOfReportingTonerLevels;
+    public $isCapableOfReportingTonerLevels=0;
 
     /**
      * @var int
@@ -319,6 +329,11 @@ class MasterDeviceModel extends My_Model_Abstract
             $this->modelName = $params->modelName;
         }
 
+        if (isset($params->sku) && !is_null($params->sku))
+        {
+            $this->sku = $params->sku;
+        }
+
         if (isset($params->imageUrl) && !is_null($params->imageUrl))
         {
             $this->imageUrl = $params->imageUrl;
@@ -372,6 +387,9 @@ class MasterDeviceModel extends My_Model_Abstract
         if (isset($params->isUSB) && !is_null($params->isUSB)) $this->isUSB = $params->isUSB;
         if (isset($params->isWired) && !is_null($params->isWired)) $this->isWired = $params->isWired;
         if (isset($params->isWireless) && !is_null($params->isWireless)) $this->isWireless = $params->isWireless;
+        if (isset($params->productLine) && !is_null($params->productLine)) $this->productLine = $params->productLine;
+        if (isset($params->weight) && !is_null($params->weight)) $this->weight = $params->weight;
+        if (isset($params->UPC) && !is_null($params->UPC)) $this->UPC = $params->UPC;
 
         if (isset($params->dealerWebId) && !is_null($params->dealerWebId)) $this->dealerWebId = $params->dealerWebId;
 
@@ -463,6 +481,7 @@ class MasterDeviceModel extends My_Model_Abstract
             "userId"                              => $this->userId,
             "manufacturerId"                      => $this->manufacturerId,
             "modelName"                           => $this->modelName,
+            "sku"                           => $this->sku,
             "imageUrl"                            => $this->imageUrl,
             "imageFile"                           => $this->imageFile,
             "tonerConfigId"                       => $this->tonerConfigId,
@@ -483,12 +502,68 @@ class MasterDeviceModel extends My_Model_Abstract
             "isUSB"                                => $this->isUSB,
             "isWired"                                => $this->isWired,
             "isWireless"                                => $this->isWireless,
+            "productLine"                                => $this->productLine,
+            "weight"                                => $this->weight,
+            "UPC"                                => $this->UPC,
             "maximumRecommendedMonthlyPageVolume" => $this->maximumRecommendedMonthlyPageVolume,
             "isReplacementDevice"                 => $this->isReplacementDevice,
             "wattsPowerNormal"                    => $this->wattsPowerNormal,
             "wattsPowerIdle"                      => $this->wattsPowerIdle,
             "launchDate"                          => $this->launchDate,
             "dateCreated"                         => $this->dateCreated,
+            "ppmBlack"                            => $this->ppmBlack,
+            "ppmColor"                            => $this->ppmColor,
+            #"isLeased"                            => $this->isLeased,
+            #"leasedTonerYield"                    => $this->leasedTonerYield,
+            "isCapableOfReportingTonerLevels"     => $this->isCapableOfReportingTonerLevels,
+        ];
+    }
+
+    public function toProductArray() {
+        return [
+            "isSystemProduct"                     => $this->isSystemDevice,
+            "userId"                              => $this->userId,
+            "manufacturerId"                      => $this->manufacturerId,
+            "name"                                => $this->modelName,
+            "sku"                                 => $this->sku,
+            "imageUrl"                            => $this->imageUrl,
+            "imageFile"                           => $this->imageFile,
+            "weight"                              => $this->weight,
+            "UPC"                                 => $this->UPC,
+            "dateCreated"                         => $this->dateCreated,
+        ];
+    }
+
+    public function toPrintingDeviceData() {
+        return [
+            "productLine"                                => $this->productLine,
+        ];
+    }
+
+    public function toPrinterData() {
+        return [
+            "tonerConfigId"                       => $this->tonerConfigId,
+            "isCopier"                            => $this->isCopier,
+            "isFax"                               => $this->isFax,
+            "isDuplex"                            => $this->isDuplex,
+            "isA3"                                => $this->isA3,
+            "isSmartphone"                                => $this->isSmartphone,
+            "additionalTrays"                                => $this->additionalTrays,
+            "isPIN"                                => $this->isPIN,
+            "isAccessCard"                                => $this->isAccessCard,
+            "isWalkup"                                => $this->isWalkup,
+            "isStapling"                                => $this->isStapling,
+            "isBinding"                                => $this->isBinding,
+            "isTouchscreen"                                => $this->isTouchscreen,
+            "isADF"                                => $this->isADF,
+            "isUSB"                                => $this->isUSB,
+            "isWired"                                => $this->isWired,
+            "isWireless"                                => $this->isWireless,
+            "maximumRecommendedMonthlyPageVolume" => $this->maximumRecommendedMonthlyPageVolume,
+            "isReplacementDevice"                 => $this->isReplacementDevice,
+            "wattsPowerNormal"                    => $this->wattsPowerNormal,
+            "wattsPowerIdle"                      => $this->wattsPowerIdle,
+            "launchDate"                          => $this->launchDate,
             "ppmBlack"                            => $this->ppmBlack,
             "ppmColor"                            => $this->ppmColor,
             #"isLeased"                            => $this->isLeased,

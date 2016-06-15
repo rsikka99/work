@@ -66,16 +66,35 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
      */
     public function insert ($object)
     {
-        // Get an array of data to save
-        $data = $this->unsetNullValues($object->toArray());
-
-        // Remove the id
-        unset($data ["{$this->col_id}"]);
-
+        $db = Zend_Db_Table::getDefaultAdapter();
         // Insert the data
-        $id = $this->getDbTable()->insert($data);
+        //$id = $this->getDbTable()->insert($data);
+        $object->dateCreated = date('Y-m-d');
+        $productData = $object->toProductArray();
+        $sql=[];
+        foreach (array_keys($productData) as $k) {
+            $sql[] = "`{$k}`=?";
+        }
+        $st = $db->prepare('insert into base_product set '.implode(',', $sql));
+        $st->execute(array_values($productData));
+        $object->id = $db->lastInsertId();
 
-        $object->id = $id;
+        $printingDeviceData = $object->toPrintingDeviceData();
+        $sql=["`id`={$object->id}"];
+        foreach (array_keys($printingDeviceData) as $k) {
+            $sql[] = "`{$k}`=?";
+        }
+        $st = $db->prepare('insert into base_printing_device set '.implode(',', $sql));
+        $st->execute(array_values($printingDeviceData));
+
+        $printerData = $object->toPrinterData();
+        $sql=["`id`={$object->id}"];
+        foreach (array_keys($printerData) as $k) {
+            $sql[] = "`{$k}`=?";
+        }
+        $st = $db->prepare('insert into base_printer set '.implode(',', $sql));
+        $st->execute(array_values($printerData));
+
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -88,7 +107,7 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
         $db->query($sql);
         #--
 
-        return $id;
+        return $object->id;
     }
 
     /**
@@ -103,21 +122,39 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
      */
     public function save ($object, $primaryKey = null)
     {
-        $data = $this->unsetNullValues($object->toArray());
-
         if ($primaryKey === null)
         {
-            $primaryKey = $data [$this->col_id];
+            $primaryKey = $object->id;
         }
 
-        $changed_fields = $this->changed_fields($this->getDbTable()->find($data [$this->col_id])->current(), $object);
+        $changed_fields = $this->changed_fields($this->getDbTable()->find($object->id)->current(), $object);
 
-        // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, [
-            "{$this->col_id} = ?" => $primaryKey,
-        ]);
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $productData = $object->toProductArray();
+        $sql=[];
+        foreach (array_keys($productData) as $k) {
+            $sql[] = "`{$k}`=?";
+        }
+        $st = $db->prepare('update base_product set '.implode(',', $sql)." where `id`={$object->id}");
+        $st->execute(array_values($productData));
 
-        if ($rowsAffected) {
+        $printingDeviceData = $object->toPrintingDeviceData();
+        $sql=[];
+        foreach (array_keys($printingDeviceData) as $k) {
+            $sql[] = "`{$k}`=?";
+        }
+        $st = $db->prepare('update base_printing_device set '.implode(',', $sql)." where `id`={$object->id}");
+        $st->execute(array_values($printingDeviceData));
+
+        $printerData = $object->toPrinterData();
+        $sql=[];
+        foreach (array_keys($printerData) as $k) {
+            $sql[] = "`{$k}`=?";
+        }
+        $st = $db->prepare('update base_printer set '.implode(',', $sql)." where `id`={$object->id}");
+        $st->execute(array_values($printerData));
+
+        if (!empty($changed_fields)) {
             $identity = \Zend_Auth::getInstance()->getIdentity();
             $db = \Zend_Db_Table::getDefaultAdapter();
 
@@ -135,7 +172,7 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
 
         // Save the object into the cache
         $this->saveItemToCache($object);
-        return $rowsAffected;
+        return 1;
     }
 
     /**
