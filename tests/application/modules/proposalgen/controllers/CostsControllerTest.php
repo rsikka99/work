@@ -3,7 +3,7 @@
 class Proposalgen_CostsControllerTest extends My_ControllerTestCase {
 
     public $fixtures = [
-        'users', 'clients', 'toners', 'master_devices', 'device_toners', 'manufacturers'
+        'users', 'clients', 'base_printer_cartridge', 'base_printer', 'oem_printing_device_consumable', 'manufacturers'
     ];
 
     /**
@@ -23,23 +23,6 @@ class Proposalgen_CostsControllerTest extends My_ControllerTestCase {
     public function tearDown() {
         Zend_Auth::getInstance()->getStorage()->write(null);
         parent::tearDown();
-    }
-
-    public function test_bulkFileTonerMatchupAction() {
-        $this->dispatch('/hardware-library/bulk-file-toner-matchup');
-
-        require_once APPLICATION_BASE_PATH.'/application/modules/proposalgen/controllers/CostsController.php';
-        $this->getRequest()->setMethod('POST');
-        $controller = new Proposalgen_CostsController($this->getRequest(), $this->getResponse());
-
-        $matchupService = new MyTonerMatchupImportService();
-        $controller->setMatchupService($matchupService);
-
-        $controller->getFlashMessenger()->clearMessages();
-        $controller->bulkFileTonerMatchupAction();
-        $result = $controller->getFlashMessenger()->getCurrentMessages();
-        $this->assertEquals([['success' => 'Your pricing updates have been applied successfully.']], $result);
-        $this->assertEquals(array(), $controller->view->errorMessages);
     }
 
     public function test_bulkFileTonerPricingAction() {
@@ -103,22 +86,6 @@ class Proposalgen_CostsControllerTest extends My_ControllerTestCase {
             $controller->view->errorMessages
         );
     }
-}
-
-class MyTonerMatchupImportService extends \MPSToolbox\Legacy\Modules\ProposalGenerator\Services\Import\TonerMatchupImportService {
-    /** @override */
-    public function getValidFile ($config)
-    {
-        $this->importFile    = fopen(APPLICATION_BASE_PATH.'/docs/Sample Import Files/toner/matchup.csv','rb');
-        $this->importHeaders = fgetcsv($this->importFile);
-
-        return null;
-    }
-    /** @override */
-    public function closeFiles () {
-        //noop
-    }
-
 }
 
 class MyTonerPricingImportService extends \MPSToolbox\Legacy\Modules\ProposalGenerator\Services\Import\TonerPricingImportService {

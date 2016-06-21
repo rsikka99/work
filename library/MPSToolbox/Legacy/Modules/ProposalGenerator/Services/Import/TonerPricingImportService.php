@@ -13,9 +13,12 @@ use Zend_Validate_Float;
 class TonerPricingImportService extends AbstractImportService
 {
     const TONER_PRICING_TONER_ID     = "Toner ID";
+//    const TONER_DISTRIBUTOR          = "Distributor";
     const TONER_PRICING_MANUFACTURER = "Manufacturer";
     const TONER_PRICING_SKU          = "SKU";
     const TONER_PRICING_NAME         = "Name";
+    const TONER_PRICING_OEM_MFG      = "OEM Manufacturer";
+    const TONER_PRICING_OEM_SKU      = "OEM SKUs";
     const TONER_PRICING_COLOR        = "Color";
     const TONER_PRICING_YIELD        = "Yield";
     const TONER_PRICING_SYSTEM_PRICE = "System Price";
@@ -30,14 +33,16 @@ class TonerPricingImportService extends AbstractImportService
     const TONER_PRICING_LEVEL_7      = "Price Level 7";
     const TONER_PRICING_LEVEL_8      = "Price Level 8";
     const TONER_PRICING_LEVEL_9      = "Price Level 9";
-    const TONER_DISTRIBUTOR          = "Distributor";
+
 
     public $csvHeaders = [
         self::TONER_PRICING_TONER_ID,
-        self::TONER_DISTRIBUTOR,
+//        self::TONER_DISTRIBUTOR,
         self::TONER_PRICING_MANUFACTURER,
         self::TONER_PRICING_SKU,
         self::TONER_PRICING_NAME,
+        self::TONER_PRICING_OEM_MFG,
+        self::TONER_PRICING_OEM_SKU,
         self::TONER_PRICING_COLOR,
         self::TONER_PRICING_YIELD,
         self::TONER_PRICING_SYSTEM_PRICE,

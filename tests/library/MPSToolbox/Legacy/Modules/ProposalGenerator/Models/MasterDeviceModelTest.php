@@ -3,7 +3,7 @@
 class MPSToolbox_Legacy_Modules_ProposalGenerator_Models_MasterDeviceModelTest extends My_DatabaseTestCase
 {
 
-    public $fixtures = [ 'toners', 'master_devices', 'device_toners', 'dealers', 'dealer_toner_attributes', 'dealer_master_device_attributes', 'toner_vendor_ranking_sets', 'toner_vendor_rankings' ];
+    public $fixtures = [ 'base_printer_cartridge', 'base_printer', 'oem_printing_device_consumable', 'dealers', 'dealer_toner_attributes', 'dealer_master_device_attributes', 'toner_vendor_ranking_sets', 'toner_vendor_rankings' ];
 
     public function test_isLeased() {
         $model = new \MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel(['id'=>1]);

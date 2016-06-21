@@ -125,12 +125,15 @@ create table base_printer_consumable (
 create table compatible_printer_consumable (
   oem int not null,
   compatible int not null,
+  primary key (oem, compatible),
   KEY (`oem`),
   KEY (`compatible`),
   CONSTRAINT FOREIGN KEY (`oem`) REFERENCES `base_printer_consumable` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT FOREIGN KEY (`compatible`) REFERENCES `base_printer_consumable` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB
 ");
+
+
 
         $this->execute("
 create table base_printer_cartridge (

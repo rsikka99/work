@@ -11,7 +11,7 @@ class MPSToolbox_Legacy_Modules_HardwareOptimization_Mappers_DeviceSwapMapper ex
 {
 
     public $fixtures = [
-        'dealers','toner_configs','manufacturers','users','master_devices','toner_colors','toners','device_toners'
+        'dealers','toner_configs','manufacturers','users','base_printer','toner_colors','base_printer_cartridge','oem_printing_device_consumable'
     ];
 
     public function setUp()

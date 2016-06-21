@@ -2,7 +2,7 @@
 
 class RmsUpdateEntityTest extends My_DatabaseTestCase {
 
-    public $fixtures = ['clients','master_devices','rms_providers','rms_device_instances','rms_update','toners','device_toners'];
+    public $fixtures = ['clients','base_printer','rms_providers','rms_device_instances','rms_update','base_printer_cartridge','oem_printing_device_consumable'];
 
     public function test_load() {
         $result = \MPSToolbox\Entities\RmsUpdateEntity::find([

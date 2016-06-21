@@ -2,7 +2,7 @@
 
 class MasterDeviceEntityTest extends My_DatabaseTestCase {
 
-    public $fixtures = ['master_devices', 'toners', 'device_toners'];
+    public $fixtures = ['base_printer', 'base_printer_cartridge', 'oem_printing_device_consumable'];
 
     public function test_load() {
         $result = \MPSToolbox\Entities\MasterDeviceEntity::find(1);

@@ -3,6 +3,7 @@ namespace MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers;
 
 use Exception;
 use MPSToolbox\Legacy\Entities\DealerEntity;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\ManufacturerModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerConfigModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
@@ -234,6 +235,30 @@ class TonerMapper extends My_Model_Mapper_Abstract
         }
     }
 
+    public function findBySku($mfg, $sku)
+    {
+        $mfg = ManufacturerMapper::getInstance()->findByFullName($mfg);
+        if (!$mfg) return null;
+
+        foreach ($this->_rowHashTable as $k=>$toner) {
+            /** @var $toner TonerModel */
+            if (($toner->manufacturerId == $mfg->id) && (strcasecmp($toner->sku, $sku)===0)) {
+                return $toner;
+            }
+        }
+
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $st = $db->prepare('select * from toners where manufacturerId=? and sku=?');
+        $st->execute([$mfg->id, $sku]);
+        $row = $st->fetch();
+        if (empty($row)) return null;
+
+        $object = new TonerModel($row);
+        $this->saveItemToCache($object);
+        return $object;
+    }
+
+
     /**
      * Fetches a toner
      *
@@ -306,6 +331,13 @@ class TonerMapper extends My_Model_Mapper_Abstract
             "{$this->col_id} = ?" => $id,
         ];
     }
+
+    public function setCompatible($oem_id, $compatible_id) {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $st = $db->prepare('replace into compatible_printer_consumable set oem=?, compatible=?');
+        $st->execute([$oem_id, $compatible_id]);
+    }
+
 
     /**
      * @param TonerModel $object
@@ -474,7 +506,7 @@ SELECT
     device_toners.isSystemDevice       AS deviceTonersIsSystemDevice,
     (SELECT GROUP_CONCAT( CONCAT( fullname, ' ', modelName ) SEPARATOR ', ' ) FROM device_toners vw_dt, master_devices vw_md, manufacturers vw_mf where toners.id=vw_dt.toner_id and vw_dt.master_device_id = vw_md.id and vw_md.manufacturerId = vw_mf.id GROUP BY toner_id) as device_list
 FROM `device_toners`
-    LEFT JOIN `toners` ON `device_toners`.`toner_id` = `toners`.`id`
+    JOIN `toners` ON `device_toners`.`toner_id` = `toners`.`id`
     left join `toners` t2 on toners.id=t2.id and t2.manufacturerId in (select manufacturerId from master_devices)
     LEFT JOIN `toner_colors` ON `toner_colors`.`id` = `toners`.`tonerColorId`
     LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `toners`.`manufacturerId`
@@ -860,9 +892,9 @@ limit 1
         $select = $db->select()
                      ->from(['t' => 'toners'], ['toners_id' => 'id', 'sku', 'name', 'yield', 'imageFile', 'manufacturerId', "systemCost" => "cost"])
                      ->joinLeft(['dt' => 'device_toners'], 'dt.toner_id = t.id', ['master_device_id'])
-                     ->joinLeft(['tm' => 'manufacturers'], 'tm.id = t.manufacturerId', ['fullname'])
+                     ->joinLeft(['tm' => 'manufacturers'], 'tm.id = t.manufacturerId', ['displayname'])
                      ->joinLeft(['tc' => 'toner_colors'], 'tc.id = t.tonerColorId', ['name AS toner_color'])
-                     ->joinLeft(['dta' => 'dealer_toner_attributes'], "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", ['distributor','cost', 'dealerSku','level1','level2','level3','level4','level5','level6','level7','level8','level9'])
+                     ->joinLeft(['dta' => 'dealer_toner_attributes'], "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", ['cost', 'dealerSku','level1','level2','level3','level4','level5','level6','level7','level8','level9']) //'distributor',
                      ->where("t.id > 0")
                      ->group('t.id')
                      ->order(['tm.fullname']);
@@ -871,9 +903,16 @@ limit 1
         {
             $select->where("manufacturerId = ?", $manufacturerId);
         }
-
         $stmt   = $db->query($select);
         $result = $stmt->fetchAll();
+
+        $oemMfg=[];
+        $oemSku=[];
+        $sql='select m.displayName, t.sku, comp.oem, comp.compatible from toners t join manufacturers m on t.manufacturerId=m.id join compatible_printer_consumable comp on t.id=comp.oem';
+        foreach ($db->query($sql)->fetchAll() as $line) {
+            $oemMfg[$line['compatible']] = $line['displayName'];
+            $oemSku[$line['compatible']][] = $line['sku'];
+        }
 
         $fieldList = [];
         foreach ($result as $value)
@@ -881,10 +920,12 @@ limit 1
             if (isset($manufacturers[$value['manufacturerId']])) {
                 $fieldList[] = [
                     $value ['toners_id'],
-                    $value ['distributor'],
-                    $value ['fullname'],
+//                    $value ['distributor'],
+                    $value ['displayname'],
                     $value ['sku'],
                     $value ['name'],
+                    isset($oemMfg[$value['toners_id']])? $oemMfg[$value['toners_id']] : '',
+                    isset($oemSku[$value['toners_id']])? implode(', ', $oemSku[$value['toners_id']]) : '',
                     $value ['toner_color'],
                     $value ['yield'],
                     $value ['systemCost'],
