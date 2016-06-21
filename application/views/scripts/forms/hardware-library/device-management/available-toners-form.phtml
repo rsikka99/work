@@ -106,7 +106,7 @@ $toner = $form->getView()->toner;
                             switch($toner->manufacturerId) {
                                 case 47: // lmi
                                 case 61: // zero waste
-                                    echo '<img src="<?= IMG_CDN ?>/img/toners/default_'.$toner->manufacturerId.'.jpg" style="max-width:250px;max-height:250px">';
+                                    echo '<img src="'.IMG_CDN.'/img/toners/default_'.$toner->manufacturerId.'.jpg" style="max-width:250px;max-height:250px">';
                             }
 
                         } ?>

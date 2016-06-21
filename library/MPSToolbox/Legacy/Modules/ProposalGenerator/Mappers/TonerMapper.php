@@ -506,7 +506,7 @@ SELECT
     device_toners.isSystemDevice       AS deviceTonersIsSystemDevice,
     (SELECT GROUP_CONCAT( CONCAT( fullname, ' ', modelName ) SEPARATOR ', ' ) FROM device_toners vw_dt, master_devices vw_md, manufacturers vw_mf where toners.id=vw_dt.toner_id and vw_dt.master_device_id = vw_md.id and vw_md.manufacturerId = vw_mf.id GROUP BY toner_id) as device_list
 FROM `device_toners`
-    LEFT JOIN `toners` ON `device_toners`.`toner_id` = `toners`.`id`
+    JOIN `toners` ON `device_toners`.`toner_id` = `toners`.`id`
     left join `toners` t2 on toners.id=t2.id and t2.manufacturerId in (select manufacturerId from master_devices)
     LEFT JOIN `toner_colors` ON `toner_colors`.`id` = `toners`.`tonerColorId`
     LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `toners`.`manufacturerId`

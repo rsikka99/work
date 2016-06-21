@@ -44,16 +44,7 @@ class DeviceTonerMapper extends My_Model_Mapper_Abstract
      */
     public function insert ($object)
     {
-        // Get an array of data to save
-        $data = $this->unsetNullValues($object->toArray());
-
-        // Insert the data
-        $id = $this->getDbTable()->insert($data);
-
-        // Save the object into the cache
-        $this->saveItemToCache($object);
-
-        return $id;
+        return $this->save($object);
     }
 
     /**
@@ -68,23 +59,13 @@ class DeviceTonerMapper extends My_Model_Mapper_Abstract
      */
     public function save ($object, $primaryKey = null)
     {
-        $data = $this->unsetNullValues($object->toArray());
-
-        if ($primaryKey === null)
-        {
-            $primaryKey = $this->getPrimaryKeyValueForObject($object);
-        }
-
-        // Update the row
-        $rowsAffected = $this->getDbTable()->update($data, [
-            "{$this->col_tonerId} = ?"        => $primaryKey[0],
-            "{$this->col_masterDeviceId} = ?" => $primaryKey[1],
-        ]);
+        $st = \Zend_Db_Table::getDefaultAdapter()->query('replace into `oem_printing_device_consumable` set `printing_device`='.$object->master_device_id.', `printer_consumable`='.$object->toner_id.', `userId`='.$object->userId.', `isApproved`='.($object->isSystemDevice?1:0));
+        $st->execute($object->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
 
-        return $rowsAffected;
+        return $st->rowCount();
     }
 
 
@@ -99,25 +80,18 @@ class DeviceTonerMapper extends My_Model_Mapper_Abstract
      */
     public function delete ($object)
     {
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $st = $db->prepare('delete from oem_printing_device_consumable where printer_consumable=? and printing_device=?');
         if ($object instanceof DeviceTonerModel)
         {
-            $whereClause = [
-                "{$this->col_tonerId} = ?"        => $object->toner_id,
-                "{$this->col_masterDeviceId} = ?" => $object->master_device_id,
-
-            ];
+            $st->execute([$object->toner_id, $object->master_device_id]);
         }
         else
         {
-            $whereClause = [
-                "{$this->col_tonerId} = ?"        => $object[0],
-                "{$this->col_masterDeviceId} = ?" => $object[1],
-            ];
+            $st->execute([$object[0], $object[1]]);
         }
 
-        $rowsAffected = $this->getDbTable()->delete($whereClause);
-
-        return $rowsAffected;
+        return $st->rowCount();
     }
 
     /**

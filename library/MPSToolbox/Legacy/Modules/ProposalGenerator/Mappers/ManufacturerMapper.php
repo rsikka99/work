@@ -297,6 +297,12 @@ class ManufacturerMapper extends My_Model_Mapper_Abstract
         ]);
     }
 
+    public function fetchAllOemManufacturers ()
+    {
+        $sql = 'select * from manufacturers where id in (select manufacturerId from master_devices) order by displayname';
+        return \Zend_Db_Table::getDefaultAdapter()->query($sql)->fetchAll();
+    }
+
     public function fetchTonerManufacturersForDealer($dealerId = null) {
         if (!$dealerId) $dealerId=DealerEntity::getDealerId();
         $sql = 'select * from manufacturers where id in (select manufacturerId from dealer_toner_vendors where dealerId='.intval($dealerId).') or id in (select manufacturerId from master_devices) order by displayname';

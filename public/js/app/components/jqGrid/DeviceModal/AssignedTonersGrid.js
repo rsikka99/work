@@ -121,7 +121,7 @@ define([
                         systemSku: currentRow.systemSku
                     });
 
-                    if ((that.isAllowed) || (currentRow.is_added=='1') || (currentRow.deviceTonersIsSystemDevice!='1'))
+                    if ((currentRow.is_oem>0) && ((that.isAllowed) || (currentRow.is_added=='1') || (currentRow.deviceTonersIsSystemDevice!='1')))
                     {
                         var $unassignButton = $(document.createElement('button'));
                         $unassignButton
