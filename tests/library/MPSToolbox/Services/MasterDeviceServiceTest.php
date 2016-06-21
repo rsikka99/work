@@ -3,9 +3,9 @@ class MasterDeviceServiceTest extends My_DatabaseTestCase {
 
     public $fixtures = [
         'clients',
-        'master_devices',
-        'toners',
-        'device_toners',
+        'base_printer',
+        'base_printer_cartridge',
+        'oem_printing_device_consumable',
         'ingram_products',
         'ingram_prices',
         'dealer_toner_attributes',

@@ -3,7 +3,7 @@ class HardwareLibrary_ManageDevicesControllerTest extends My_ControllerTestCase
 {
 
     public $fixtures = [
-        'toners','master_devices','dealer_settings','history',
+        'base_printer_cartridge','base_printer','dealer_settings','history',
     ];
 
     public function setUp ()

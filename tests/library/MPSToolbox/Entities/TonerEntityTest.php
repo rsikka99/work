@@ -2,7 +2,7 @@
 
 class TonerEntityTest extends My_DatabaseTestCase {
 
-    public $fixtures = ['users', 'manufacturers', 'toners'];
+    public $fixtures = ['users', 'manufacturers', 'base_printer_cartridge'];
 
     public function test_load() {
         $result = \MPSToolbox\Entities\TonerEntity::find(1);

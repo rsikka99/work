@@ -160,6 +160,44 @@ class ManufacturerMapper extends My_Model_Mapper_Abstract
         return $object;
     }
 
+    public function findByDisplayName($name) {
+        foreach ($this->_rowHashTable as $mfg) {
+            /** @var $mfg ManufacturerModel */
+            if (strcasecmp($mfg->displayname,$name)===0) {
+                return $mfg;
+            }
+        }
+
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $st = $db->prepare('select * from manufacturers where displayname=?');
+        $st->execute([$name]);
+        $row = $st->fetch();
+        if (empty($row)) return null;
+
+        $object = new ManufacturerModel($row);
+        $this->saveItemToCache($object);
+        return $object;
+    }
+
+    public function findByFullName($name) {
+        foreach ($this->_rowHashTable as $mfg) {
+            /** @var $mfg ManufacturerModel */
+            if (strcasecmp($mfg->fullname,$name)===0) {
+                return $mfg;
+            }
+        }
+
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $st = $db->prepare('select * from manufacturers where fullname=?');
+        $st->execute([$name]);
+        $row = $st->fetch();
+        if (empty($row)) return null;
+
+        $object = new ManufacturerModel($row);
+        $this->saveItemToCache($object);
+        return $object;
+    }
+
     /**
      * Checks to see if a manufacturer id exists
      *

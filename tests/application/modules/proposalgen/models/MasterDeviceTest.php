@@ -104,7 +104,7 @@ class Proposalgen_Model_MasterDeviceTest extends My_DatabaseTestCase
      */
     public function testCalculateCostPerPage ()
     {
-        $this->setup_fixtures(['dealers','toner_configs','manufacturers','users','master_devices','toner_colors','toners','device_toners']);
+        $this->setup_fixtures(['dealers','toner_configs','manufacturers','users','base_printer','toner_colors','base_printer_cartridge','oem_printing_device_consumable']);
         Zend_Auth::getInstance()->getStorage()->write((object)array("dealerId" => 1));
 
         $masterDevice       = $this->getMasterDevice();
@@ -154,7 +154,7 @@ class Proposalgen_Model_MasterDeviceTest extends My_DatabaseTestCase
      * @dataProvider get_recalculateMaximumRecommendedMonthlyPageVolume
      */
     public function test_recalculateMaximumRecommendedMonthlyPageVolume($masterDeviceId, $expected) {
-        $this->setup_fixtures(['dealers','toner_configs','manufacturers','users','master_devices','toner_colors','toners','device_toners']);
+        $this->setup_fixtures(['dealers','toner_configs','manufacturers','users','base_printer','toner_colors','base_printer_cartridge','oem_printing_device_consumable']);
         $device = $this->getMasterDevice($masterDeviceId);
         $device->maximumRecommendedMonthlyPageVolume = 0;
         $device->recalculateMaximumRecommendedMonthlyPageVolume();

@@ -3,8 +3,8 @@
 class DistributorUpdateServiceTest extends My_DatabaseTestCase {
 
     public $fixtures = [
-        'toners',
-        'master_devices',
+        'base_printer_cartridge',
+        'base_printer',
         'devices',
         'dealers',
         'suppliers',

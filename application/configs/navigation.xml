@@ -438,11 +438,6 @@
                             <route>hardware-library.bulk-hardware-pricing-updates.bulk-file-toner-pricing</route>
                             <resource>proposalgen__costs__bulk-file-toner-pricing</resource>
                         </bulkfiletonerpricing>
-                        <bulkfiletonermatchup>
-                            <label>Bulk File Toner Matchup</label>
-                            <route>hardware-library.bulk-hardware-pricing-updates.bulk-file-toner-matchup</route>
-                            <resource>proposalgen__costs__bulk-file-toner-matchup</resource>
-                        </bulkfiletonermatchup>
                     </pages>
                 </updatepricing>
                 <deviceswaps>

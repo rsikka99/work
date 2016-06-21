@@ -4,7 +4,7 @@ use \MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerMapper;
 
 class MPSToolbox_Legacy_Modules_ProposalGenerator_Mappers_TonerMapperTest extends My_DatabaseTestCase {
 
-    public $fixtures = [ 'toners', 'master_devices', 'device_toners', 'dealers', 'dealer_toner_attributes', 'currency_exchange' ];
+    public $fixtures = [ 'base_printer_cartridge', 'base_printer', 'oem_printing_device_consumable', 'dealers', 'dealer_toner_attributes', 'currency_exchange' ];
 
     public function test_construct() {
         $result = TonerMapper::getInstance();

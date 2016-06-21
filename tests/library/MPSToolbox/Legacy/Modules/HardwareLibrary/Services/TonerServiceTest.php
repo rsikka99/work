@@ -3,7 +3,7 @@
 class TonerServiceTest extends My_DatabaseTestCase {
 
     public $fixtures = [
-        'toners',
+        'base_printer_cartridge',
         'dealer_toner_attributes',
         'ingram_products',
         'ingram_prices'

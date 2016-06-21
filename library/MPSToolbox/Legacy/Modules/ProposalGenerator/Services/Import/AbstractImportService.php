@@ -66,7 +66,7 @@ class AbstractImportService
     public function validatedHeaders ()
     {
         // Find a matching array
-        if (count(array_diff($this->importHeaders, $this->csvHeaders)) == 0)
+        if ((count(array_diff($this->importHeaders, $this->csvHeaders)) == 0) && (count(array_diff($this->csvHeaders, $this->importHeaders)) == 0))
         {
             return true;
         }

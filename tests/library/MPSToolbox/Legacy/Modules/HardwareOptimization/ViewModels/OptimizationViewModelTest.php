@@ -15,7 +15,7 @@ class MPSToolbox_Legacy_Modules_HardwareOptimization_ViewModels_OptimizationView
     public $fixtures = [
         'images','dealers','clients','users',
         'toner_configs','manufacturers',
-        'master_devices',
+        'base_printer',
         'rms_providers','rms_devices','rms_uploads','rms_upload_rows',
         'device_instances','device_instance_meters','device_instance_master_devices',
         'device_swap_reason_categories','device_swap_reasons',

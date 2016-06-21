@@ -75,7 +75,7 @@ class Modules_HardwareLibrary_Services_ManageMasterDevicesServiceTest extends My
 
         TonerMapper::getInstance()->clearItemCache();
 
-        $this->setup_fixtures(['toner_configs','dealers','manufacturers','users','master_devices','toner_colors','toners','device_toners']);
+        $this->setup_fixtures(['toner_configs','dealers','manufacturers','users','base_printer','toner_colors','base_printer_cartridge','oem_printing_device_consumable']);
         $result = $this->service->validateToners([1,2,3,4], TonerConfigModel::THREE_COLOR_SEPARATED, 1, 1);
         $this->assertEquals(true, $result);
     }

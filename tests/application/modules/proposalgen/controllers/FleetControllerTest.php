@@ -19,7 +19,7 @@ class Proposalgen_FleetController_FileMock extends Zend_Form_Element_File {
 class Proposalgen_FleetControllerTest extends My_ControllerTestCase {
 
     public $fixtures = [
-        'users', 'clients', 'device_instances', 'master_devices', 'device_instance_master_devices','device_toners','device_instance_meters'];
+        'users', 'clients', 'device_instances', 'base_printer', 'device_instance_master_devices','oem_printing_device_consumable','device_instance_meters'];
 
     /**
      * @var Zend_Session_Namespace

@@ -8,7 +8,7 @@ class Hardwareoptimization_IndexControllerTest extends My_ControllerTestCase
     public $fixtures = [
         'images','dealers','clients','users',
         'dealer_features',
-        'master_devices',
+        'base_printer',
         'rms_uploads',
         'device_instances','device_instance_meters','device_instance_master_devices',
         'device_swap_reasons',
