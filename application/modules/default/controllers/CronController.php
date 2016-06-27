@@ -38,7 +38,9 @@ class Default_CronController extends \Tangent\Controller\Action {
         $service = new \MPSToolbox\Services\DistributorUpdateService();
 
         $dealerSuppliers = $service->getDealerSuppliers();
+        $requestedDealer = $this->getRequest()->getParam('dealerId');
         foreach ($dealerSuppliers as $dealerSupplier) {
+            if ($requestedDealer && ($requestedDealer!=$dealerSupplier['dealerId'])) continue;
             $service->updatePrices($dealerSupplier);
         }
 
