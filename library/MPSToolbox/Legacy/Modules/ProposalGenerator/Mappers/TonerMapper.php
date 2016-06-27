@@ -526,20 +526,20 @@ WHERE {$and} `device_toners`.`master_device_id` = :masterDeviceId
     }
 
     public function countTonersForDealer($filterManufacturerId = false, $filterTonerSku = false, $filterTonerColorId = false) {
+        if (!$filterManufacturerId && !$filterTonerColorId && !$filterTonerSku) {
+            return 0;
+        }
+
         $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         $db       = $this->getDbTable()->getAdapter();
         $sql      = "
 SELECT
     count(*) as c
 FROM toners
-    left join `toners` t2 on toners.id=t2.id and t2.manufacturerId in (select manufacturerId from master_devices)
-    LEFT JOIN manufacturers ON manufacturers.id = toners.manufacturerId
+    JOIN manufacturers ON manufacturers.id = toners.manufacturerId
     left join dealer_toner_attributes on dealer_toner_attributes.tonerId=toners.id and dealer_toner_attributes.dealerId = {$dealerId}
     where (toners.manufacturerId in (select manufacturerId from dealer_toner_vendors where dealer_toner_vendors.dealerId = {$dealerId}) or toners.manufacturerId in (select manufacturerId from master_devices))
 ";
-#--LEFT JOIN toner_vendor_manufacturers ON toner_vendor_manufacturers.manufacturerId = toners.manufacturerId
-#--LEFT JOIN dealer_toner_vendors ON (dealer_toner_vendors.dealerId = {$dealerId} AND dealer_toner_vendors.manufacturerId = toners.manufacturerId)
-
         /**
          * Filters toners to a specific manufacturer
          */
@@ -566,6 +566,7 @@ FROM toners
             $filterTonerSku = $db->quote("%$filterTonerSku%", 'TEXT');
             $sql .= " AND (toners.{$this->col_sku} LIKE {$filterTonerSku} OR dealer_toner_attributes.dealerSku LIKE {$filterTonerSku})";
         }
+
         $stmt   = $db->query($sql);
         $arr = $stmt->fetch();
         return $arr['c'];
@@ -582,6 +583,10 @@ FROM toners
      *
      */
     public function fetchTonersForDealer($orders = null, $count = 25, $offset = 0, $filterManufacturerId = false, $filterTonerSku = false, $filterTonerColorId = false) {
+        if (!$filterManufacturerId && !$filterTonerColorId && !$filterTonerSku) {
+            return [];
+        }
+
         $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
 
         $currency = DealerEntity::getCurrency();
@@ -590,7 +595,7 @@ FROM toners
         $db       = $this->getDbTable()->getAdapter();
         $sql      = "SELECT
     toners.id                                 AS id,
-    t2.id                                     AS is_oem,
+    if (oem.manufacturerId,1,0)               as is_oem,
     toners.isSystemDevice                     AS isSystemDevice,
     manufacturers.id                          AS manufacturerId,
     manufacturers.fullname                    AS manufacturer,
@@ -602,17 +607,16 @@ FROM toners
     if (_view_cheapest_toner_cost.isUsingDealerPricing=0, null, _view_cheapest_toner_cost.cost) AS dealerCost,
     toners.yield,
     toners.tonerColorId,
-    (SELECT GROUP_CONCAT( CONCAT( fullname, ' ', modelName ) SEPARATOR ', ' ) FROM device_toners vw_dt, master_devices vw_md, manufacturers vw_mf where toners.id=vw_dt.toner_id and vw_dt.master_device_id = vw_md.id and vw_md.manufacturerId = vw_mf.id GROUP BY toner_id) as device_list
+    dl.devices as device_list
 FROM toners
+    JOIN manufacturers ON manufacturers.id = toners.manufacturerId
     join _view_cheapest_toner_cost on (_view_cheapest_toner_cost.tonerId = toners.id AND _view_cheapest_toner_cost.dealerId = {$dealerId})
-    left join `toners` t2 on toners.id=t2.id and t2.manufacturerId in (select manufacturerId from master_devices)
-    LEFT JOIN manufacturers ON manufacturers.id = toners.manufacturerId
+    left join device_list dl on toners.id=dl.toner_id
+    left join oem_manufacturers oem on toners.manufacturerId=oem.manufacturerId
     LEFT JOIN dealer_toner_attributes ON (dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId})
     left join currency_value cv1 on cv1.`table`='toners' and cv1.`field`='cost' and cv1.id=toners.id and cv1.currency='{$currency}'
     where (toners.manufacturerId in (select manufacturerId from dealer_toner_vendors where dealer_toner_vendors.dealerId = {$dealerId}) or toners.manufacturerId in (select manufacturerId from master_devices))
 ";
-#--LEFT JOIN toner_vendor_manufacturers ON toner_vendor_manufacturers.manufacturerId = toners.manufacturerId
-#--LEFT JOIN dealer_toner_vendors ON (dealer_toner_vendors.dealerId = {$dealerId} AND dealer_toner_vendors.manufacturerId = toners.manufacturerId)
 
         /**
          * Filters toners to a specific manufacturer
@@ -640,7 +644,6 @@ FROM toners
             $filterTonerSku = $db->quote("%$filterTonerSku%", 'TEXT');
             $sql .= " AND (toners.{$this->col_sku} LIKE {$filterTonerSku} OR dealer_toner_attributes.dealerSku LIKE {$filterTonerSku})";
         }
-
 
         if ($orders)
         {

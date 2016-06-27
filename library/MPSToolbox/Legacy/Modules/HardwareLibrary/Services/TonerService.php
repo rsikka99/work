@@ -105,6 +105,12 @@ class TonerService
         $tonerMapper = TonerMapper::getInstance();
         $toner       = new TonerModel($data);
 
+        if ($toner->tonerColorId==1) {
+            $toner->type = 'Monochrome Toner';
+        } else {
+            $toner->type = 'Color Toner';
+        }
+
         if ($this->isMasterHardwareAdministrator)
         {
             $toner->isSystemDevice = 1;

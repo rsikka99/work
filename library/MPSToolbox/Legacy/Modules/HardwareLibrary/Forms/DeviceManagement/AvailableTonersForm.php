@@ -93,17 +93,11 @@ class AvailableTonersForm extends \My_Form_Form
         /**
          * Toner Color
          */
-        #$tonerColorValidator = new \Zend_Validate_Db_RecordExists([
-        #    'table' => 'toner_colors',
-        #    'field' => 'id',
-        #]);
-        #$tonerColorValidator->setMessage("Invalid toner color selected", \Zend_Validate_Db_Abstract::ERROR_NO_RECORD_FOUND);
-        #$this->addElement('text', 'tonerColorId', [
-        #    'label'      => 'Color',
-        #    'required'   => true,
-        #    'validators' => [$tonerColorValidator],
-        #    'disabled' => !$this->_isAllowedToEditFields,
-        #]);
+        $tonerColorValidator = new \Zend_Validate_Db_RecordExists([
+            'table' => 'toner_colors',
+            'field' => 'id',
+        ]);
+        $tonerColorValidator->setMessage("Invalid toner color selected", \Zend_Validate_Db_Abstract::ERROR_NO_RECORD_FOUND);
 
         $colors    = TonerColorMapper::getInstance()->fetchAll();
         $colorList = [0 => 'Select Color...'];
@@ -115,7 +109,7 @@ class AvailableTonersForm extends \My_Form_Form
         $this->addElement('select', 'tonerColorId', [
             'label'        => 'Color',
             'required'     => $this->_isAllowedToEditFields,
-            //'validators' => [$tonerColorValidator],
+            'validators' => [$tonerColorValidator],
             'disabled' => !$this->_isAllowedToEditFields,
             'multiOptions' => $colorList
         ]);
