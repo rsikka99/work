@@ -251,6 +251,13 @@ class TonerModel extends My_Model_Abstract
      */
     public function toArray ()
     {
+        if (empty($this->type)) {
+            if ($this->tonerColorId==1) {
+                $this->type = 'Monochrome Toner';
+            } else {
+                $this->type = 'Color Toner';
+            }
+        }
         return [
             "id"             => $this->id,
             "userId"         => $this->userId,
@@ -274,6 +281,7 @@ class TonerModel extends My_Model_Abstract
     public function toProductArray ()
     {
         return [
+            "base_type"      => 'printer_cartridge',
             "userId"         => $this->userId,
             "isSystemProduct" => $this->isSystemDevice,
             "sku"            => $this->sku,
@@ -288,6 +296,13 @@ class TonerModel extends My_Model_Abstract
 
     public function toConsumableArray ()
     {
+        if (empty($this->type)) {
+            if ($this->tonerColorId==1) {
+                $this->type = 'Monochrome Toner';
+            } else {
+                $this->type = 'Color Toner';
+            }
+        }
         return [
             "cost"           => $this->cost,
             "pageYield"          => $this->yield,
@@ -369,6 +384,9 @@ class TonerModel extends My_Model_Abstract
         if (!isset($this->_dealerTonerAttribute[$dealerId]))
         {
             $this->_dealerTonerAttribute[$dealerId] = DealerTonerAttributeMapper::getInstance()->find([$this->id, $dealerId]);
+            if (empty($this->_dealerTonerAttribute[$dealerId])) {
+                $this->_dealerTonerAttribute[$dealerId] = new DealerTonerAttributeModel();
+            }
         }
 
         return $this->_dealerTonerAttribute[$dealerId];

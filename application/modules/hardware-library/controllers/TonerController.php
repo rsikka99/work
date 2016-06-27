@@ -146,11 +146,12 @@ class HardwareLibrary_TonerController extends Action
                     $creatingToner = true;
                 }
 
-                $form = new AvailableTonersForm($dealerId, $toner);
+                $form = new AvailableTonersForm($dealerId, $toner, null, true);
 
                 if ($form->isValid($postData))
                 {
                     $formData     = $form->getValues();
+
                     $tonerService = new TonerService($userId, $dealerId, $this->isMasterHardwareAdmin);
 
                     if ($creatingToner)
@@ -414,7 +415,6 @@ class HardwareLibrary_TonerController extends Action
                 }
                 $sortOrder[] = $jqGridService->getSortColumn() . ' ' . $jqGridService->getSortDirection();
             }
-
 
             $jqGridService->setRows($tonerMapper->fetchTonersForDealer(
                 $sortOrder,
