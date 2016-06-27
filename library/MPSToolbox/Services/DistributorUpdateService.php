@@ -372,7 +372,7 @@ class DistributorUpdateService {
 
         $sql=['Qty_on_Hand=0'];
         for ($i=1;$i<=16;$i++) $sql[]="`Warehouse_Qty_on_Hand_{$i}`=0";
-        $db->query('update synnex_products set '.implode($sql));
+        $db->query('update synnex_products set '.implode(',', $sql));
 
         $replace_statement = false;
         $price_statement = false;
