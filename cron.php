@@ -62,7 +62,7 @@ $frontController
 
 try {
     $result = $frontController->dispatch();
-    var_dump($result);
+    echo $result->getBody();
 } catch (Exception $ex) {
     var_dump($ex);
 }
