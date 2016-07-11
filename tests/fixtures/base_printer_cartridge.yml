@@ -100,3 +100,7 @@ base_printer_cartridge:
     - { id: '118', colorId: '1', mlYield: null }
     - { id: '119', colorId: '1', mlYield: null }
     - { id: '120', colorId: '1', mlYield: null }
+    - { id: '132', colorId: '1', mlYield: null }
+    - { id: '374', colorId: '2', mlYield: null }
+    - { id: '375', colorId: '3', mlYield: null }
+    - { id: '376', colorId: '4', mlYield: null }

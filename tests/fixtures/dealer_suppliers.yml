@@ -1,2 +1,5 @@
 dealer_suppliers:
     - { dealerId: '2', supplierId: '1', url: 'ftp://ftpsecure.ingrammicro.com/FUSION/CA/TJF493', user: '088390', pass: Cfk549 }
+    - { dealerId: '2', supplierId: '2', url: 'ftp://ftpsecure.ingrammicro.com/FUSION/CA/TJF493', user: '088390', pass: Cfk549 }
+    - { dealerId: '2', supplierId: '3', url: 'ftp://ftpsecure.ingrammicro.com/FUSION/CA/TJF493', user: '088390', pass: Cfk549 }
+
