@@ -100,3 +100,8 @@ base_printer_consumable:
     - { id: '118', cost: '128.00', pageYield: '12600', quantity: '1', type: 'Monochrome Toner', compatiblePrinters: null }
     - { id: '119', cost: '203.30', pageYield: '20000', quantity: '1', type: 'Monochrome Toner', compatiblePrinters: null }
     - { id: '120', cost: '63.60', pageYield: '20000', quantity: '1', type: 'Monochrome Toner', compatiblePrinters: null }
+    - { id: '132', cost: '124.11', pageYield: '6000', quantity: '1', type: 'Monochrome Toner', compatiblePrinters: null }
+    - { id: '374', cost: '155.83', pageYield: '6000', quantity: '1', type: 'Color Toner', compatiblePrinters: null }
+    - { id: '375', cost: '155.83', pageYield: '6000', quantity: '1', type: 'Color Toner', compatiblePrinters: null }
+    - { id: '376', cost: '155.83', pageYield: '6000', quantity: '1', type: 'Color Toner', compatiblePrinters: null }
+    - { id: '377', cost: '155.83', pageYield: '6000', quantity: '1', type: 'Color Toner', compatiblePrinters: null }

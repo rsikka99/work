@@ -4,7 +4,7 @@ use \MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerMapper;
 
 class MPSToolbox_Legacy_Modules_ProposalGenerator_Mappers_TonerMapperTest extends My_DatabaseTestCase {
 
-    public $fixtures = [ 'base_printer_cartridge', 'base_printer', 'oem_printing_device_consumable', 'dealers', 'dealer_toner_attributes', 'currency_exchange' ];
+    public $fixtures = [ 'base_printer_cartridge', 'base_printer', 'oem_printing_device_consumable', 'dealers', 'dealer_toner_attributes', 'currency_exchange', 'synnex_products', 'synnex_prices', 'suppliers', 'dealer_suppliers' ];
 
     public function test_construct() {
         $result = TonerMapper::getInstance();
@@ -76,19 +76,12 @@ class MPSToolbox_Legacy_Modules_ProposalGenerator_Mappers_TonerMapperTest extend
     public function test_getCheapestTonersForDevice() {
         $this->user2();
         $mapper = TonerMapper::getInstance();
-        $result = $mapper->getCheapestTonersForDevice(19,2,'3,5','3,5');
+        $result = $mapper->getCheapestTonersForDevice(10019,2,'3,5','3,5');
         $this->assertEquals(4, count($result));
-        $this->assertEquals(132, $result[1]->id);
-        $this->assertEquals(374, $result[2]->id);
-        $this->assertEquals(375, $result[3]->id);
-        $this->assertEquals(376, $result[4]->id);
-
-        $result = $mapper->getCheapestTonersForDevice(1,2,'','',null,'level1');
-        $this->assertEquals(4, count($result));
-        $this->assertEquals(2, $result[2]->id);
-        $this->assertEquals(3, $result[3]->id);
-        $this->assertEquals(4, $result[4]->id);
-        $this->assertEquals(1, $result[1]->id);
+        $this->assertEquals(47, $result[1]->id);
+        $this->assertEquals(52, $result[2]->id);
+        $this->assertEquals(53, $result[3]->id);
+        $this->assertEquals(54, $result[4]->id);
     }
 
     public function test_getTonerPricingForExport() {

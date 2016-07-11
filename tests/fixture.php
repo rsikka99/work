@@ -39,8 +39,11 @@ $application = new Zend_Application('production', array(
 $application->bootstrap();
 
 $adapter = Zend_Db_Table::getDefaultAdapter();
-$select = $adapter->select()->from($_GET['table']);
-$rows = $adapter->fetchAll($select);
+#$select = $adapter->select()->from($_GET['table']);
+#$rows = $adapter->fetchAll($select);
+$where = '';
+if (isset($_GET['where'])) $where='where '.$_GET['where'];
+$rows = $adapter->query("select * from {$_GET['table']} {$where} limit 100")->fetchAll();
 
 $path=dirname(__FILE__).($fn='/fixtures/'.$_GET['table'].'.yml');
 $result=[];

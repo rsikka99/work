@@ -82,7 +82,9 @@ class Hardwareoptimization_DeviceswapsController extends Action
 
         if ($jqGridService->sortingIsValid())
         {
-            $jqGridService->setRecordCount($deviceSwapMapper->fetAllForDealer($this->_identity->dealerId, null, null, null, null, true));
+
+            $n=$deviceSwapMapper->fetAllForDealer($this->_identity->dealerId, null, null, null, null, true);
+            $jqGridService->setRecordCount($n);
 
             // Validate current page number since we don't want to be out of bounds
             if ($jqGridService->getCurrentPage() < 1)
@@ -115,7 +117,8 @@ class Hardwareoptimization_DeviceswapsController extends Action
             }
 
 
-            $jqGridService->setRows($deviceSwapMapper->fetAllForDealer($this->_identity->dealerId, $costPerPageSetting, $sortOrder, $jqGridService->getSortDirection()), $jqGridService->getRecordsPerPage(), $startRecord);
+            $arr=$deviceSwapMapper->fetAllForDealer($this->_identity->dealerId, $costPerPageSetting, $sortOrder, $jqGridService->getSortDirection());
+            $jqGridService->setRows($arr, $jqGridService->getRecordsPerPage(), $startRecord);
 
             // Send back jqGrid JSON data
             $this->sendJson($jqGridService->createPagerResponseArray());

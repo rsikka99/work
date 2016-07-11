@@ -321,15 +321,19 @@ class DeviceSwapMapper extends My_Model_Mapper_Abstract
                ->limit($limit, $offset)
                ->order($sortOrder);
 
+
+
         $query = $db->query($select);
 
         $deviceSwaps = [];
         foreach ($query->fetchAll() as $row)
         {
             $masterDevice         = MasterDeviceMapper::getInstance()->find($row['id']);
+            $cpp = $masterDevice->calculateCostPerPage($costPerPageSetting);
+
             $row['deviceType']    = MasterDeviceModel::$TonerConfigNames[$masterDevice->getDeviceType()];
-            $row['monochromeCpp'] = $masterDevice->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage()->monochromeCostPerPage;
-            $row['colorCpp']      = $row['monochromeCpp'] + $masterDevice->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage()->colorCostPerPage;
+            $row['monochromeCpp'] = $cpp->getCostOfInkAndTonerPerPage()->monochromeCostPerPage;
+            $row['colorCpp']      = $row['monochromeCpp'] + $cpp->getCostOfInkAndTonerPerPage()->colorCostPerPage;
 
             $deviceSwaps[] = $row;
         }

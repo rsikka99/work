@@ -1,2 +1,4 @@
 suppliers:
     - { id: '1', name: 'Ingram Micro' }
+    - { id: '2', name: 'Ingram Micro' }
+    - { id: '3', name: 'Ingram Micro' }

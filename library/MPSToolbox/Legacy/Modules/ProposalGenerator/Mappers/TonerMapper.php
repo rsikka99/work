@@ -755,6 +755,82 @@ WHERE `toners`.`id` IN ({$tonerIdList})
         return $query->fetchAll();
     }
 
+    private function getTonerAggr($db, $dealerId, $toners, $suppliers) {
+        $ids = [];
+        foreach ($toners as $line) {
+            $ids[] = $line['id'];
+        }
+
+        $dist = $db->query(
+            'select 1 as dist, dealer_toner_attributes.tonerId, 1 as stock, dealer_toner_attributes.dealerId, dealer_toner_attributes.cost
+    from
+      dealer_toner_attributes
+    where cost is not null and dealerId='.$dealerId.' and tonerId in ('.implode(',', $ids).')')->fetchAll();
+
+        $dist = array_merge($dist, isset($suppliers[1]) ? $db->query(
+            '
+select 2 as dist, ingram_products.tonerId, ingram_products.availability_flag as stock, ingram_prices.dealerId, ingram_prices.customer_price as cost
+    from
+      ingram_products
+      join ingram_prices on ingram_products.ingram_part_number = ingram_prices.ingram_part_number
+    where dealerId='.$dealerId.' and tonerId in ('.implode(',', $ids).')')->fetchAll() : []);
+
+        $dist = array_merge($dist, isset($suppliers[2]) ? $db->query(
+            '
+select 3 as dist, synnex_products.tonerId, synnex_products.Qty_on_Hand as stock, synnex_prices.dealerId, synnex_prices.Contract_Price as cost
+    from
+      synnex_products
+      join synnex_prices on synnex_products.SYNNEX_SKU = synnex_prices.SYNNEX_SKU
+    where dealerId='.$dealerId.' and tonerId in ('.implode(',', $ids).')')->fetchAll() : []);
+
+        $dist = array_merge($dist, isset($suppliers[3]) ? $db->query(
+            '
+select 4 as dist, techdata_products.tonerId, techdata_products.Qty as stock, techdata_prices.dealerId, currency_exchange.rate * techdata_prices.CustBestPrice as cost
+    from
+      techdata_products
+      join techdata_prices on techdata_products.Matnr = techdata_prices.Matnr
+      join dealers on dealers.id = techdata_prices.dealerId
+      join currency_exchange on currency_exchange.currency = dealers.currency
+    where dealerId='.$dealerId.' and tonerId in ('.implode(',', $ids).')')->fetchAll() : []);
+
+        $aggr = [];
+        foreach ($toners as $toner) {
+            foreach($dist as $d) {
+                if ($d['tonerId']==$toner['id']) {
+                    $line = ['toner'=>$toner,'dist'=>$d];
+                    $aggr[] = $line;
+                }
+            }
+        }
+
+        usort($aggr, function($a, $b) {
+            $dist_a = $a['dist'];
+            $dist_b = $b['dist'];
+            if (is_numeric($dist_a['stock'])) $stock_a = $dist_a['stock']>0; else $stock_a = ($dist_a['stock'] == 'Y');
+            if (is_numeric($dist_b['stock'])) $stock_b = $dist_a['stock']>0; else $stock_b = ($dist_a['stock'] == 'Y');
+            if ($stock_a && !$stock_b) return -1;
+            if ($stock_b && !$stock_a) return 1;
+
+            $toner_a = $a['toner'];
+            $toner_b = $b['toner'];
+
+            if (!$toner_a['yield'] || !$toner_b['yield']) {
+                if ($toner_a['cost'] < $toner_b['cost']) return -1;
+                if ($toner_b['cost'] < $toner_a['cost']) return 1;
+                return 0;
+            }
+
+            $cpp_a = $dist_a['cost'] / $toner_a['yield'];
+            $cpp_b = $dist_b['cost'] / $toner_b['yield'];
+
+            if ($cpp_a < $cpp_b) return -1;
+            if ($cpp_b < $cpp_a) return 1;
+            return 0;
+        });
+
+        return $aggr;
+    }
+
     /**
      * Gets the cheapest toners
      *
@@ -773,7 +849,7 @@ WHERE `toners`.`id` IN ({$tonerIdList})
             return $this->cache['getCheapestTonersForDevice'][$cache_key];
         }
 
-        $toners  = [];
+        $toners = [];
         $db                               = $this->getDbTable()->getDefaultAdapter();
         $masterDeviceId                   = intval($masterDeviceId);
         $dealerId                         = intval($dealerId);
@@ -789,6 +865,7 @@ WHERE `toners`.`id` IN ({$tonerIdList})
         $sql = 'select * from master_devices where id='.$masterDeviceId;
         $query = $db->query($sql);
         $masterDevice = $query->fetch();
+        if (empty($masterDevice)) return [];
 
         $monochromeManufacturerPreference[$masterDevice['manufacturerId']] = $masterDevice['manufacturerId'];
         $monochromeManufacturerPreference=implode(',',$monochromeManufacturerPreference);
@@ -797,49 +874,64 @@ WHERE `toners`.`id` IN ({$tonerIdList})
 
         $rate = 1 / CurrencyService::getInstance($dealerId)->getRate();
 
-        $sql =
-"
-select
-  toners.*,
-  false as isUsingCustomerPricing,
-  {$_view_cheapest_toner_cost}.isUsingDealerPricing,
-  if({$_view_cheapest_toner_cost}.isUsingDealerPricing=0,{$_view_cheapest_toner_cost}.cost,{$_view_cheapest_toner_cost}.cost*{$rate}) AS calculatedCost,
-  if({$_view_cheapest_toner_cost}.isUsingDealerPricing=0,{$_view_cheapest_toner_cost}.cost,{$_view_cheapest_toner_cost}.cost*{$rate}) / toners.yield AS costPerPage,
-  IF(master_devices.manufacturerId = toners.manufacturerId, 1, 0) AS isOem
-from
-  toners
-  join device_toners on toners.id=device_toners.toner_id and toners.tonerColorId = 1 and device_toners.master_device_id={$masterDeviceId} and toners.manufacturerId in ({$monochromeManufacturerPreference})
-  join master_devices on master_devices.id = device_toners.master_device_id
-  join {$_view_cheapest_toner_cost} on {$_view_cheapest_toner_cost}.tonerId=toners.id and {$_view_cheapest_toner_cost}.dealerId={$dealerId}
-order by costPerPage
-limit 1
-";
+        $monochrome_toners = $db->query(
+            "select toners.*
+              from toners
+                join device_toners on toners.id=device_toners.toner_id
+              where
+                toners.tonerColorId = 1 and
+                device_toners.master_device_id={$masterDeviceId} and
+                toners.manufacturerId in ({$monochromeManufacturerPreference})
+            "
+        )->fetchAll();
 
-        $query   = $db->query($sql);
-        $row = $query->fetch();
-        if ($row) $toners[1] = new TonerModel($row);
+        $color_toners = [];
+        foreach ($db->query(
+            "select toners.*
+              from toners
+                join device_toners on toners.id=device_toners.toner_id
+              where
+                toners.tonerColorId > 1 and
+                device_toners.master_device_id={$masterDeviceId} and
+                toners.manufacturerId in ({$colorManufacturerPreference})
+            "
+        )->fetchAll() as $line) {
+            $color_toners[$line['tonerColorId']][] = $line;
+        };
 
-        if ($masterDevice['tonerConfigId']>1) foreach([2,3,4] as $c) {
-            $sql =
-                "
-select
-  toners.*,
-  false as isUsingCustomerPricing,
-  {$_view_cheapest_toner_cost}.isUsingDealerPricing,
-  if({$_view_cheapest_toner_cost}.isUsingDealerPricing=0,{$_view_cheapest_toner_cost}.cost,{$_view_cheapest_toner_cost}.cost*{$rate}) AS calculatedCost,
-  if({$_view_cheapest_toner_cost}.isUsingDealerPricing=0,{$_view_cheapest_toner_cost}.cost,{$_view_cheapest_toner_cost}.cost*{$rate}) / toners.yield AS costPerPage,
-  IF(master_devices.manufacturerId = toners.manufacturerId, 1, 0) AS isOem
-from
-  toners
-  join device_toners on toners.id=device_toners.toner_id and toners.tonerColorId = {$c} and device_toners.master_device_id={$masterDeviceId} and toners.manufacturerId in ({$colorManufacturerPreference})
-  join master_devices on master_devices.id = device_toners.master_device_id
-  join {$_view_cheapest_toner_cost} on {$_view_cheapest_toner_cost}.tonerId=toners.id and {$_view_cheapest_toner_cost}.dealerId={$dealerId}
-order by costPerPage
-limit 1
-";
-            $query   = $db->query($sql);
-            $row = $query->fetch();
-            if ($row) $toners [$c] = new TonerModel($row);
+        $suppliers=[];
+        foreach ($db->query('select supplierId from dealer_suppliers where dealerId='.$dealerId) as $line) {
+            $suppliers[$line['supplierId']] = $line['supplierId'];
+        }
+
+        $lines = [];
+
+        if (!empty($monochrome_toners)) {
+            $arr = $this->getTonerAggr($db, $dealerId, $monochrome_toners, $suppliers);
+            if (!empty($arr)) {
+                $line = current($arr);
+                $lines[1] = $line;
+            }
+        }
+        if (!empty($color_toners)) {
+            foreach ($color_toners as $i=>$t) {
+                $arr = $this->getTonerAggr($db, $dealerId, $t, $suppliers);
+                if (!empty($arr)) {
+                    $line = current($arr);
+                    $lines[$i] = $line;
+                }
+            }
+        }
+
+        foreach ($lines as $i=>$line) {
+            $toner = $line['toner'];
+            $isUsingDealerPricing = $line['dist']['dist'] == 1;
+            $toner['isUsingCustomerPricing'] = false;
+            $toner['isUsingDealerPricing'] = $isUsingDealerPricing;
+            $toner['calculatedCost'] = $isUsingDealerPricing ? $line['dist']['cost'] * $rate : $line['dist']['cost'];
+            $toner['costPerPage'] = $toner['yield'] ? $toner['calculatedCost'] / $toner['yield'] : 0;
+            $toner['isOem'] = ($toner['manufacturerId'] == $masterDevice['manufacturerId']);
+            $toners[$i] = new TonerModel($toner);
         }
 
         $this->cache['getCheapestTonersForDevice'][$cache_key] = $toners;
