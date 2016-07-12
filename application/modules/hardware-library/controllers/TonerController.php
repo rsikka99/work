@@ -36,6 +36,90 @@ class HardwareLibrary_TonerController extends Action
      */
     public function indexAction ()
     {
+        if (\MPSToolbox\Legacy\Services\NavigationService::$userId == 1) {
+            header('Location: /hardware-library/toner/infinite');
+            exit();
+        }
+        $this->_pageTitle = ['All Toners'];
+    }
+
+    private function outputInfiniteRow($line) {
+?>
+        <div class="toner-item row" id="toner-<?= $line['id'] ?>">
+            <div class="toner-image col-sm-3">
+                <a href="javascript:" onclick="editRow(<?= $line['id'] ?>);" class="thumbnail">
+                    <img src="<?= $line['imageFile']?'/img/toners/'.$line['imageFile']:'about:blank' ?>">
+                </a>
+            </div>
+            <div class="toner-info col-sm-4">
+                <table class="table">
+                    <tr><th>Sku: </th><td><a href="javascript:" onclick="editRow(<?= $line['id'] ?>);"><?= $line['systemSku'] ?></a></td></tr>
+                    <tr><th>Manufacturer: </th><td><?= $line['manufacturer'] ?></td></tr>
+                    <tr><th>Name: </th><td><?= $line['toner_name'] ?></td></tr>
+                    <tr><th>Color: </th><td><?= $line['tonerColor'] ?></td></tr>
+                    <tr><th>Yield: </th><td><?= number_format($line['yield'],0) ?></td></tr>
+                    <tr><th>Cost: </th><td>$ <?= $line['base_systemCost'] ?></td></tr>
+                </table>
+            </div>
+            <div class="toner-info col-sm-5">
+                <table class="table">
+                    <tr><th>Devices: </th><td><?= $line['device_list'] ?></td></tr>
+                </table>
+            </div>
+        </div>
+<?
+    }
+
+    public function infiniteAction ()
+    {
+        if ($this->getRequest()->getMethod()=='POST') {
+            $this->_helper->viewRenderer->setNoRender(true);
+            $this->_helper->layout->disableLayout();
+
+            $filterManufacturerId = $this->getParam('assign-toners-manufacturer-filter');
+            $filterTonerSku = $this->getParam('assign-toners-filter-sku');
+            $filterTonerColorId = $this->getParam('assign-toners-filter-color');
+
+            $sortOrder = ['sku'];
+
+            $offset = intval($this->getParam('offset'));
+            $pageSize = 30;
+
+            $tonerMapper = TonerMapper::getInstance();
+            $count = $tonerMapper->countTonersForDealer($filterManufacturerId,$filterTonerSku,$filterTonerColorId);
+            $arr = $tonerMapper->fetchTonersForDealer(
+                $sortOrder,
+                $pageSize,
+                $offset,
+                $filterManufacturerId,
+                $filterTonerSku,
+                $filterTonerColorId
+            );
+
+            foreach($arr as $line) {
+                $this->outputInfiniteRow($line);
+            }
+
+
+            if ($count>$offset+$pageSize) {
+                echo '<div id="load-more" data-offset="' . ($offset + $pageSize) . '"></div>';
+            }
+
+            return;
+        }
+
+        $reload = $this->getParam('reload');
+        if ($reload) {
+            $this->_helper->viewRenderer->setNoRender(true);
+            $this->_helper->layout->disableLayout();
+            $tonerMapper = TonerMapper::getInstance();
+            $arr = $tonerMapper->fetchTonersForDealer(['sku'],1,0,false,false,false,$reload);
+            foreach($arr as $line) {
+                $this->outputInfiniteRow($line);
+            }
+            return;
+        }
+
         $this->_pageTitle = ['All Toners'];
     }
 
