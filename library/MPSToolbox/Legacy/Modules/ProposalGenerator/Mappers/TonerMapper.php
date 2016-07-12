@@ -149,21 +149,16 @@ class TonerMapper extends My_Model_Mapper_Abstract
      */
     public function delete ($object)
     {
+        $st = Zend_Db_Table::getDefaultAdapter()->prepare('delete from base_product where id=?');
         if ($object instanceof TonerModel)
         {
-            $whereClause = [
-                "{$this->col_id} = ?" => $object->id,
-            ];
+            $st->execute([$object->id]);
         }
         else
         {
-            $whereClause = [
-                "{$this->col_id} = ?" => $object,
-            ];
+            $st->execute([$object]);
         }
-
-        $rowsAffected = $this->getDbTable()->delete($whereClause);
-
+        $rowsAffected = $st->rowCount();
         return $rowsAffected;
     }
 
@@ -609,7 +604,8 @@ FROM toners
     toners.tonerColorId,
     toner_colors.name as tonerColor,
     toners.imageFile,
-    dl.devices as device_list
+    dl.devices as device_list,
+    dl.json as json_device_list
 FROM toners
     JOIN manufacturers ON manufacturers.id = toners.manufacturerId
     join _view_cheapest_toner_cost on (_view_cheapest_toner_cost.tonerId = toners.id AND _view_cheapest_toner_cost.dealerId = {$dealerId})

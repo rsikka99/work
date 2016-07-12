@@ -102,9 +102,50 @@ function editRow(id) {
 
         $(tonerForm).on('toner-form.saved', function (event, tonerId)
         {
-            $('#toner-'+id).load('/hardware-library/toner/infinite?reload='+id);
+            $('#toner-'+id).replaceWith('/hardware-library/toner/infinite?reload='+id);
         });
 
         tonerForm.show();
+    });
+}
+
+function addToner() {
+    require(['app/legacy/hardware-library/manage-devices/TonerForm'], function (TonerForm)
+    {
+        var tonerForm = new TonerForm({
+            isAllowed: isSaveAndApproveAdmin
+        });
+
+        $(tonerForm).on('toner-form.saved', function (event, tonerId)
+        {
+            $('#result-panel').load('/hardware-library/toner/infinite?reload='+tonerId);
+        });
+
+        tonerForm.show();
+    });
+}
+
+function deleteToner(id) {
+    $.get('/hardware-library/toner/infinite', {delete:id}, function(response) {
+        $('#toner-'+id).replaceWith('');
+    });
+}
+
+function editDevice(id, tonerId) {
+    require(['app/legacy/hardware-library/manage-devices/DeviceModal'], function (DeviceModal)
+    {
+        var editDeviceModal = new DeviceModal({
+            "deviceId"      : id,
+            "isAllowed"     : isSaveAndApproveAdmin,
+            "onModalClose"  : function ()
+            {
+            }
+        });
+
+        $(editDeviceModal).on('DeviceModal.saved', function ()
+        {
+            $('#toner-'+tonerId).replaceWith('/hardware-library/toner/infinite?reload='+tonerId);
+        });
+        editDeviceModal.show();
     });
 }
