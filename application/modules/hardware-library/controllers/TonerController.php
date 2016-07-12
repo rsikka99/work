@@ -44,6 +44,11 @@ class HardwareLibrary_TonerController extends Action
     }
 
     private function outputInfiniteRow($line) {
+        $devices=[];
+        $json = json_decode($line['json_device_list'], true);
+        foreach ($json as $d) {
+            $devices[] = '<a href="javascript:;" onclick="editDevice('.$d['id'].', '.$line['id'].')">'.$d['name'].'</a>';
+        }
 ?>
         <div class="toner-item row" id="toner-<?= $line['id'] ?>">
             <div class="toner-image col-sm-3">
@@ -63,7 +68,11 @@ class HardwareLibrary_TonerController extends Action
             </div>
             <div class="toner-info col-sm-5">
                 <table class="table">
-                    <tr><th>Devices: </th><td><?= $line['device_list'] ?></td></tr>
+<?php if (!empty($line['device_list'])) { ?>
+                    <tr><th>Devices: </th><td><?= implode('<br>',$devices) ?></td></tr>
+<?php } else { ?>
+                    <tr><th>Admin: </th><td><a class="btn btn-warning" href="javascript:" onclick="if (window.confirm('Delete this toner?')) deleteToner(<?= $line['id'] ?>)">Delete</a></td></tr>
+<?php } ?>
                 </table>
             </div>
         </div>
@@ -72,6 +81,11 @@ class HardwareLibrary_TonerController extends Action
 
     public function infiniteAction ()
     {
+        if (\MPSToolbox\Legacy\Services\NavigationService::$userId != 1) {
+            header('Location: /hardware-library/all-toners');
+            exit();
+        }
+
         if ($this->getRequest()->getMethod()=='POST') {
             $this->_helper->viewRenderer->setNoRender(true);
             $this->_helper->layout->disableLayout();
@@ -117,6 +131,15 @@ class HardwareLibrary_TonerController extends Action
             foreach($arr as $line) {
                 $this->outputInfiniteRow($line);
             }
+            return;
+        }
+
+        $delete = $this->getParam('delete');
+        if ($delete) {
+            $this->_helper->viewRenderer->setNoRender(true);
+            $this->_helper->layout->disableLayout();
+            $tonerMapper = TonerMapper::getInstance();
+            $tonerMapper->delete($delete);
             return;
         }
 
