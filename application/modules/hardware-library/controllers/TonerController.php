@@ -67,7 +67,7 @@ class HardwareLibrary_TonerController extends Action
                 </table>
             </div>
         </div>
-<?
+<?php
     }
 
     public function infiniteAction ()
