@@ -582,8 +582,8 @@ FROM toners
      * @return array
      *
      */
-    public function fetchTonersForDealer($orders = null, $count = 25, $offset = 0, $filterManufacturerId = false, $filterTonerSku = false, $filterTonerColorId = false) {
-        if (!$filterManufacturerId && !$filterTonerColorId && !$filterTonerSku) {
+    public function fetchTonersForDealer($orders = null, $count = 25, $offset = 0, $filterManufacturerId = false, $filterTonerSku = false, $filterTonerColorId = false, $filterId=false) {
+        if (!$filterManufacturerId && !$filterTonerColorId && !$filterTonerSku && !$filterId) {
             return [];
         }
 
@@ -607,10 +607,13 @@ FROM toners
     if (_view_cheapest_toner_cost.isUsingDealerPricing=0, null, _view_cheapest_toner_cost.cost) AS dealerCost,
     toners.yield,
     toners.tonerColorId,
+    toner_colors.name as tonerColor,
+    toners.imageFile,
     dl.devices as device_list
 FROM toners
     JOIN manufacturers ON manufacturers.id = toners.manufacturerId
     join _view_cheapest_toner_cost on (_view_cheapest_toner_cost.tonerId = toners.id AND _view_cheapest_toner_cost.dealerId = {$dealerId})
+    join toner_colors on toners.tonerColorId = toner_colors.id
     left join device_list dl on toners.id=dl.toner_id
     left join oem_manufacturers oem on toners.manufacturerId=oem.manufacturerId
     LEFT JOIN dealer_toner_attributes ON (dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId})
@@ -643,6 +646,11 @@ FROM toners
         {
             $filterTonerSku = $db->quote("%$filterTonerSku%", 'TEXT');
             $sql .= " AND (toners.{$this->col_sku} LIKE {$filterTonerSku} OR dealer_toner_attributes.dealerSku LIKE {$filterTonerSku})";
+        }
+
+        if ($filterId)
+        {
+            $sql .= " AND (toners.id=".intval($filterId).")";
         }
 
         if ($orders)
