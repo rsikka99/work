@@ -47,7 +47,7 @@ class HardwareDistributorsForm extends \My_Form_Form {
             $distributors[] = [
                 'name'=>'Synnex',
                 'sku'=>$line['SYNNEX_SKU'],
-                'price'=>$line['Unit_Cost'],
+                'price'=>$line['Contract_Price'],
                 'stock'=>$line['Qty_on_Hand'],
             ];
         }
@@ -99,7 +99,7 @@ class HardwareDistributorsForm extends \My_Form_Form {
     'Synnex' as supplier,
     synnex_products.Manufacturer_Part as sku,
     synnex_products.SYNNEX_SKU as part_number,
-    synnex_prices.Unit_Cost as price
+    synnex_prices.Contract_Price as price
   from
     ext_hardware_service
     join synnex_products on synnex_products.Manufacturer_Part =  ext_hardware_service.vpn and SYNNEX_CAT_Code like '010%'

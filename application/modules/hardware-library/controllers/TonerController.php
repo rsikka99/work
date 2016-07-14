@@ -198,7 +198,7 @@ class HardwareLibrary_TonerController extends Action
             $form->distributors[] = [
                 'name'=>'Synnex',
                 'sku'=>$line['SYNNEX_SKU'],
-                'price'=>$line['Unit_Cost'],
+                'price'=>$line['Contract_Price'],
                 'stock'=>$line['Qty_on_Hand'],
             ];
         }
