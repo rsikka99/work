@@ -2,6 +2,8 @@
 
 namespace MPSToolbox\Forms;
 
+use MPSToolbox\Legacy\Entities\DealerEntity;
+
 class SkuDistributorsForm extends \My_Form_Form {
     public function loadDefaultDecorators ()
     {
@@ -19,17 +21,16 @@ class SkuDistributorsForm extends \My_Form_Form {
                 $dealer = \MPSToolbox\Legacy\Mappers\DealerMapper::getInstance()->find($dealerId);
                 $distributors[] = [
                     'name' => $dealer->dealerName,
-                    'sku' => $e->dealerSku,
-                    'price' => $e->cost,
+                    'sku' => $e['dealerSku'],
+                    'price' => $e['cost'],
                     'stock' => '',
                 ];
             }
         }
-        return $distributors;
-        /**
+
         #--
-        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from ingram_products p join ingram_prices c using (ingram_part_number) where dealerId='.$dealerId.' and (computerId=:id or peripheralId=:id)');
-        $st->execute(['id'=>$hardwareId]);
+        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from ingram_products p join ingram_prices c using (ingram_part_number) where dealerId='.$dealerId.' and skuId=?');
+        $st->execute([$skuId]);
         foreach ($st->fetchAll() as $line) {
             $distributors[] = [
                 'name'=>'Ingram Micro',
@@ -39,8 +40,8 @@ class SkuDistributorsForm extends \My_Form_Form {
             ];
         }
         #--
-        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from synnex_products p join synnex_prices c using (SYNNEX_SKU) where dealerId='.$dealerId.' and (computerId=:id or peripheralId=:id)');
-        $st->execute(['id'=>$hardwareId]);
+        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from synnex_products p join synnex_prices c using (SYNNEX_SKU) where dealerId='.$dealerId.' and skuId=?');
+        $st->execute([$skuId]);
         foreach ($st->fetchAll() as $line) {
             $distributors[] = [
                 'name'=>'Synnex',
@@ -51,8 +52,8 @@ class SkuDistributorsForm extends \My_Form_Form {
         }
         #--
         $rate = \MPSToolbox\Services\CurrencyService::getInstance()->getRate();
-        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from techdata_products p join techdata_prices c using (Matnr) where dealerId='.$dealerId.' and (computerId=:id or peripheralId=:id)');
-        $st->execute(['id'=>$hardwareId]);
+        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from techdata_products p join techdata_prices c using (Matnr) where dealerId='.$dealerId.' and skuId=?');
+        $st->execute([$skuId]);
         foreach ($st->fetchAll() as $line) {
             $distributors[] = [
                 'name'=>'Tech Data',
@@ -63,7 +64,6 @@ class SkuDistributorsForm extends \My_Form_Form {
         }
         #--
         return $distributors;
-        **/
     }
 
     public static function getServices($hardwareId)

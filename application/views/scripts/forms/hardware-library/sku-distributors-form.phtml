@@ -1,16 +1,16 @@
 <?php
 
-use MPSToolbox\Forms\HardwareDistributorsForm;
+use MPSToolbox\Forms\SkuDistributorsForm;
 
-/* @var $form \MPSToolbox\Forms\HardwareDistributorsForm */
+/* @var $form \MPSToolbox\Forms\SkuDistributorsForm */
 $form = $this->element;
 
-if (!$form->getView()->hardwareId) {
+if (!$form->getView()->skuId) {
     return;
 }
 
-$distributors = HardwareDistributorsForm::getDistributors($form->getView()->hardwareId);
-$services = HardwareDistributorsForm::getServices($form->getView()->hardwareId);
+$distributors = SkuDistributorsForm::getDistributors($form->getView()->skuId);
+$services = SkuDistributorsForm::getServices($form->getView()->skuId);
 
 ?>
 <div class="row">
@@ -110,7 +110,7 @@ $services = HardwareDistributorsForm::getServices($form->getView()->hardwareId);
         $('#service-tbody').html(tr);
     }
     function deleteService(id) {
-        $.post('<?= str_replace('/load-forms','/delete-service',$_SERVER['REQUEST_URI']) ?>', {id:id, hardwareId:<?= $form->getView()->hardwareId ?>}, updateServices, 'json');
+        $.post('<?= str_replace('/load-forms','/delete-service',$_SERVER['REQUEST_URI']) ?>', {id:id, skuId:<?= $form->getView()->skuId ?>}, updateServices, 'json');
     }
     function addService() {
         var supplier = $('#service-supplier').val();
@@ -119,7 +119,7 @@ $services = HardwareDistributorsForm::getServices($form->getView()->hardwareId);
             alert('Enter a SKU');
             return;
         }
-        $.post('<?= str_replace('/load-forms','/add-service',$_SERVER['REQUEST_URI']) ?>', {supplier:supplier, sku:sku, hardwareId:<?= $form->getView()->hardwareId ?>}, updateServices, 'json');
+        $.post('<?= str_replace('/load-forms','/add-service',$_SERVER['REQUEST_URI']) ?>', {supplier:supplier, sku:sku, skuId:<?= $form->getView()->skuId ?>}, updateServices, 'json');
         $('#service-supplier').val('');
         $('#service-sku').val('');
         $('#service-tfoot').hide();
