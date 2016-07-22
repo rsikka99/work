@@ -1,0 +1,89 @@
+<?php
+
+/* @var $form \MPSToolbox\Forms\HardwareQuoteForm */
+$form = $this->element;
+
+#$dealerSettings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::with('ShopSettings')->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+#$shopSettings = $dealerSettings->shopSettings;
+
+?>
+
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
+<div class="clearfix">
+    <fieldset class="col-md-10 col-md-offset-1">
+        <div class="form-group <?= ($form->getElement('dealerSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('dealerSku'), ['col-md-4']) ?>
+            <div class="col-md-6">
+                <?= $this->RenderFormText($form->getElement('dealerSku')) ?>
+                <?= $this->RenderFormDescription($form->getElement('dealerSku')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('dealerSku')) ?>
+            </div>
+        </div>
+
+        <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('cost'), ['col-md-4']) ?>
+
+            <div class="col-md-6">
+                <?= $this->RenderFormText($form->getElement('cost'), null, \MPSToolbox\Services\CurrencyService::getSymbol()) ?>
+                <?= $this->RenderFormDescription($form->getElement('cost')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('cost')) ?>
+            </div>
+        </div>
+
+        <div class="form-group <?= ($form->getElement('fixedPrice')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('fixedPrice'), ['col-md-4']) ?>
+            <div class="col-md-6">
+                <?= $this->RenderFormText($form->getElement('fixedPrice'), null, \MPSToolbox\Services\CurrencyService::getSymbol()) ?>
+                <?= $this->RenderFormDescription($form->getElement('fixedPrice')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('fixedPrice')) ?>
+            </div>
+        </div>
+
+        <div class="form-group <?= ($form->getElement('online')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('online'), ['col-md-4']) ?>
+            <div class="col-md-6">
+                <?= $this->RenderFormBootstrapSwitch($form->getElement('online'), ['js-yes-no-switch']) ?>
+                <?= $this->RenderFormDescription($form->getElement('online')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('online')) ?>
+            </div>
+        </div>
+
+        <div class="form-group <?= ($form->getElement('dataSheetUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('dataSheetUrl'), ['col-md-4']) ?>
+            <div class="col-md-6">
+                <?= $this->RenderFormText($form->getElement('dataSheetUrl')) ?>
+                <?= $this->RenderFormDescription($form->getElement('dataSheetUrl')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('dataSheetUrl')) ?>
+            </div>
+        </div>
+
+        <div class="form-group <?= ($form->getElement('reviewsUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('reviewsUrl'), ['col-md-4']) ?>
+            <div class="col-md-6">
+                <?= $this->RenderFormText($form->getElement('reviewsUrl')) ?>
+                <?= $this->RenderFormDescription($form->getElement('reviewsUrl')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('reviewsUrl')) ?>
+            </div>
+        </div>
+
+        <div class="form-group <?= ($form->getElement('onlineDescription')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('onlineDescription'), ['col-md-4']) ?>
+            <div class="col-md-6">
+                <?= $this->RenderFormTextArea($form->getElement('onlineDescription')) ?>
+                <?= $this->RenderFormDescription($form->getElement('onlineDescription')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('onlineDescription')) ?>
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+<script>
+    function calcClick() {
+        $.get('<?= str_replace('/load-forms','/rent-calc',$_SERVER['REQUEST_URI']) ?>', {id:<?= intval($form->getView()->hardwareId) ?>}, function(r) {
+            showCalc(r.hardware, r.service);
+        }, 'json');
+    }
+</script>
+
+<?= $this->RenderFormClose($form) ?>
+

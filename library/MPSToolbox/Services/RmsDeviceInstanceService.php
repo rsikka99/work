@@ -24,10 +24,7 @@ class RmsDeviceInstanceService {
 select di.id from rms_device_instances di
   left join dealer_master_device_attributes a on a.masterDeviceId=di.masterDeviceId and a.dealerId={$dealerId}
 where di.masterDeviceId not in (
-  select master_device_id
-  from device_toners dt
-    join master_devices msub on dt.master_device_id=msub.id
-    join toners t on dt.toner_id=t.id and t.manufacturerId = msub.manufacturerId
+  select printing_device from oem_printing_device_consumable
 )
 and `ignore`=0
 and (a.isLeased is null or a.isLeased=0)
@@ -38,13 +35,24 @@ and {$where}
         }
 
         $sql = "
-select di.id, md.tonerConfigId, t.tonerColorId, v1.cost
+select di.id, md.tonerConfigId, t.colorId, v1.cost
 from rms_device_instances di
-  join master_devices md on di.masterDeviceId=md.id
-  join device_toners dt on dt.master_device_id=md.id
-  join toners t on dt.toner_id=t.id
+  join base_printer md on di.masterDeviceId=md.id
+  join oem_printing_device_consumable dt on dt.printing_device=md.id
+  join base_printer_cartridge t on dt.printer_consumable=t.id
   left join dealer_toner_attributes a on t.id=a.tonerId and a.dealerId={$dealerId}
   left join _view_dist_stock_price_grouped v1 on t.id=v1.tonerId and v1.dealerId={$dealerId}
+where {$where} and `ignore`=0
+        ";
+
+        $sql = "
+select di.id, md.tonerConfigId, t.colorId, v1.cost
+from rms_device_instances di
+  join base_printer md on di.masterDeviceId=md.id
+  join oem_printing_device_consumable dt on dt.printing_device=md.id
+  join base_printer_cartridge t on dt.printer_consumable=t.id
+  left join dealer_toner_attributes a on t.id=a.tonerId and a.dealerId={$dealerId}
+  left join (select min(cost) as cost, dist, tonerId, dealerId from _view_dist_stock_price group by tonerId, dealerId) as v1 on v1.tonerId=t.id and v1.dealerId={$dealerId}
 where {$where} and `ignore`=0
         ";
         $st = $db->query($sql);
@@ -55,7 +63,7 @@ where {$where} and `ignore`=0
             if ($line['tonerConfigId'] == 1) { //monochrome
                 $monoDevices[$line['id']][] = $line;
             } else {
-                $colorDevices[$line['id']][$line['tonerColorId']][] = $line;
+                $colorDevices[$line['id']][$line['colorId']][] = $line;
             }
         }
         foreach ($monoDevices as $id=>$arr) {

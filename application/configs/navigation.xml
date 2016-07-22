@@ -373,6 +373,10 @@
                     <label>Orders</label>
                     <uri>/ecommerce/orders</uri>
                 </orders>
+                <catalog>
+                    <label>Catalog</label>
+                    <uri>/ecommerce/catalog</uri>
+                </catalog>
             </pages>
         </ecommerce>
 
@@ -389,21 +393,6 @@
                     <route>hardware-library.all-devices</route>
                     <resource>quotegen__devicesetup__index</resource>
                 </viewalldevices>
-                <computers>
-                    <label>Computers</label>
-                    <route>hardware-library.computers</route>
-                    <resource>hardware-library__computers__index</resource>
-                </computers>
-                <peripherals>
-                    <label>Peripherals</label>
-                    <route>hardware-library.peripherals</route>
-                    <resource>hardware-library__peripherals__index</resource>
-                </peripherals>
-                <services>
-                    <label>Services</label>
-                    <route>hardware-library.services</route>
-                    <resource>hardware-library__services__index</resource>
-                </services>
                 <alldevices>
                     <label>All Devices</label>
                     <route>hardware-library.devices</route>

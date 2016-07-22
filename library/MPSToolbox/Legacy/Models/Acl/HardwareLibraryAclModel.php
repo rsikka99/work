@@ -20,6 +20,7 @@ class HardwareLibraryAclModel
     const RESOURCE_HARDWARE_LIBRARY_COMPUTERS_WILDCARD        = 'hardware-library__computers__%';
     const RESOURCE_HARDWARE_LIBRARY_PERIPHERALS_WILDCARD        = 'hardware-library__peripherals__%';
     const RESOURCE_HARDWARE_LIBRARY_SERVICES_WILDCARD        = 'hardware-library__services__%';
+    const RESOURCE_HARDWARE_LIBRARY_SKU_WILDCARD        = 'hardware-library__sku__%';
     const RESOURCE_HARDWARE_LIBRARY_MANAGE_DEVICES_WILDCARD = 'hardware-library__manage-devices__%';
 
     /**
@@ -44,6 +45,7 @@ class HardwareLibraryAclModel
         $acl->addResource(self::RESOURCE_HARDWARE_LIBRARY_COMPUTERS_WILDCARD);
         $acl->addResource(self::RESOURCE_HARDWARE_LIBRARY_PERIPHERALS_WILDCARD);
         $acl->addResource(self::RESOURCE_HARDWARE_LIBRARY_SERVICES_WILDCARD);
+        $acl->addResource(self::RESOURCE_HARDWARE_LIBRARY_SKU_WILDCARD);
         $acl->addResource(self::RESOURCE_HARDWARE_LIBRARY_MANAGE_DEVICES_WILDCARD);
         $acl->addResource(self::RESOURCE_HARDWARE_LIBRARY_INDEX_INDEX);
         $acl->addResource(self::RESOURCE_HARDWARE_LIBRARY_QUOTEINDEX_INDEX);
@@ -68,6 +70,7 @@ class HardwareLibraryAclModel
         $acl->allow(AppAclModel::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_HARDWARE_LIBRARY_COMPUTERS_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
         $acl->allow(AppAclModel::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_HARDWARE_LIBRARY_PERIPHERALS_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
         $acl->allow(AppAclModel::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_HARDWARE_LIBRARY_SERVICES_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
+        $acl->allow(AppAclModel::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_HARDWARE_LIBRARY_SKU_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
         $acl->allow(AppAclModel::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_HARDWARE_LIBRARY_MANAGE_DEVICES_WILDCARD, AppAclModel::PRIVILEGE_VIEW);
 
         /**

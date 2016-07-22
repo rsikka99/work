@@ -1,0 +1,55 @@
+<?php
+
+/* @var $form \MPSToolbox\Forms\SkuAttributesForm */
+$form = $this->element;
+
+$properties = $form->getProperties();
+$n = ceil(count($properties)/3);
+
+function outputField($that, $prop, $form) {
+?>
+<div class="form-group <?= ($form->getElement($prop['name'])->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+    <?= $that->RenderFormLabel($form->getElement($prop['name']), ['col-md-6']) ?>
+
+    <div class="col-md-6">
+        <?php
+    switch ($prop['type']) {
+        case 'checkbox': echo $that->RenderFormBootstrapSwitch($form->getElement($prop['name']), ['js-yes-no-switch']); break;
+        case 'select': echo $that->RenderFormSelect($form->getElement($prop['name'])); break;
+        case 'date': echo $that->RenderFormDatePicker($form->getElement($prop['name']), ['js-date-picker']); break;
+        default: echo $that->RenderFormText($form->getElement($prop['name'])); break;
+    }
+    echo $that->RenderFormDescription($form->getElement($prop['name']));
+    echo $that->RenderFormElementErrors($form->getElement($prop['name']));
+
+        ?>
+    </div>
+</div>
+<?
+}
+
+?>
+
+<?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
+
+<div class="clearfix">
+    <fieldset class="col-md-12">
+        <div class="row">
+            <!-- -->
+            <div class="col-md-4">
+<? for ($i=0;$i<$n;$i++) if (isset($properties[$i])) outputField($this, $properties[$i], $form) ?>
+            </div>
+            <!-- -->
+            <div class="col-md-4">
+<? for ($i=$n;$i<$n+$n;$i++) if (isset($properties[$i])) outputField($this, $properties[$i], $form) ?>
+            </div>
+            <!-- -->
+            <div class="col-md-4">
+<? for ($i=$n+$n;$i<$n+$n+$n;$i++) if (isset($properties[$i])) outputField($this, $properties[$i], $form) ?>
+            </div>
+            <!-- -->
+        </div>
+    </fieldset>
+</div>
+
+<?= $this->RenderFormClose($form) ?>

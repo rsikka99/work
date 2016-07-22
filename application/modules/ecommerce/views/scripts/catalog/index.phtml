@@ -1,0 +1,215 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <h2>&nbsp;</h2>
+            <div id="categories-div">
+                <img src="/img/spinner_32.gif">
+            </div>
+            <div>
+                <br><br><br>
+                <a href="javascript:" onclick="$(this).hide();$('#addCategory').show()">+ add category</a>
+                <div id="addCategory" style="display:none">
+                    <form method="post">
+                        <select class="form-control" name="add" required="required">
+                            <?= $this->addCategory ?>
+                        </select>
+                        <p class="text-right">
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9">
+
+            <div id="main-loading" style="display:none"><img src="/img/spinner_32.gif"></div>
+            <div id="main-div" style="display:none;">
+
+                <p class="alert" id="p-alert" style="display:none"></p>
+
+                <h2 id="main-h2"></h2>
+
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active" id="category-li"><a id="category-btn" href="#category-tab" role="tab" data-toggle="tab">Category properties</a></li>
+                    <li role="presentation" id="products-li"><a id="products-btn" href="#products-tab" role="tab" data-toggle="tab">Products</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="category-tab" style="border:1px solid #ccc;padding:15px;">
+                        <form action="#" onsubmit="submitCategory(this); return false;">
+
+                            <input type="hidden" name="id" id="category-id">
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Name: </label>
+                                        <input required="required" type="text" class="form-control" value="" id="category-name" name="name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Order priority: </label>
+                                        <input required="required" type="number" step="1" min="0" class="form-control" value="" id="category-orderBy" name="orderBy">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Taxable:</label>
+                                        <select class="form-control" name="taxable" id="category-taxable">
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Margins: </label>
+                                        <table class="table">
+                                            <colgroup>
+                                                <col width="50%">
+                                                <col width="50%">
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Margin %</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="category-margins">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="products-tab" style="border:1px solid #ccc;padding:15px;">
+                        <p class="text-right" id="add-btn" style="display:none">
+                            <a href="javascript:;" class="btn btn-primary" onclick="editSku(0)">Add</a>
+                        </p>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>VPN</th>
+                                    <th>Manufacturer</th>
+                                    <th>Name</th>
+                                    <th>Your SKU</th>
+                                    <th>Your Cost</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-tbody">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var dealerSkuName         = '<?= My_Brand::$dealerSku; ?>';
+    var selectedCategory      = false;
+
+    require(['jquery'], function ($) {
+        require(['bootstrap.treeview'], function ($) {
+            loadTree();
+        });
+    });
+
+    function loadTree() {
+        $.get('/ecommerce/catalog/categories', [], function(r) { showTree(r); }, 'json');
+    }
+    var last_parent = false;
+    function showTree(data) {
+        var $c = $("#categories-div");
+        $c.treeview({data:data, levels:99, showCheckbox:false});
+        $c.on('nodeSelected',function (event, node) {
+            if (node.nodes) {
+                if (last_parent) $('#categories-div').treeview('collapseNode', [ last_parent, {} ]);
+                $c.treeview('expandNode', [ node.nodeId, { levels: 2 } ]);
+                last_parent = node.nodeId;
+            } else {
+                window.selectedCategory = node.href;
+
+                $('#p-alert').hide();
+                $('#main-div').hide();
+                $('#main-loading').show();
+                $.get('/ecommerce/catalog/category', {id: window.selectedCategory}, function(r) {
+                    $('#main-h2').text(r.name);
+                    $('#category-id').val(node.href);
+                    $('#category-name').val(r.name);
+                    $('#category-orderBy').val(r.orderBy);
+                    $('#category-taxable').val(r.taxable);
+                    $('#category-margins').html(r.margins);
+
+                    if (r.showProducts) {
+                        $('#products-li').show();
+                        $('#products-tbody').html(r.products);
+                    } else {
+                        $('#products-li').hide();
+                        $('#category-btn').tab('show');
+                    }
+
+                    if (r.showAdd) {
+                        $('#add-btn').show();
+                    } else {
+                        $('#add-btn').hide();
+                    }
+
+                    $('#main-div').show();
+                    $('#main-loading').hide();
+                }, 'json');
+            }
+        });
+    }
+
+    function reloadProducts() {
+        $.get('/ecommerce/catalog/reload', {category: window.selectedCategory}, function(r) {
+            $('#products-tbody').html(r);
+        }, 'html');
+    }
+
+    function submitCategory(form) {
+        $('#p-alert').hide();
+        var data = $(form).serialize();
+        $.post('/ecommerce/catalog/category', data, function(r) {
+            if (r.ok) {
+                $('#category-name').val($('#category-name').val());
+                $('#p-alert').addClass('alert-success').html('Changes saved').show();
+            } else {
+                $('#p-alert').addClass('alert-error').html('Saving failed').show();
+            }
+        }, 'json');
+    }
+
+    function editPrinter(id) {
+        require(['app/legacy/hardware-library/manage-devices/DeviceModal'], function (DeviceModal) {
+            var deviceModal = new DeviceModal({ isAllowed: <?= \MPSToolbox\Legacy\Services\NavigationService::$userId==1?'true':'false' ?>, deviceId  : id });
+            deviceModal.show();
+        });
+    }
+
+    function editSku(id) {
+        require(['app/legacy/hardware-library/SkuModal'], function (SkuModal) {
+            var skuModal = new SkuModal({ isAllowed: <?= \MPSToolbox\Legacy\Services\NavigationService::$userId==1?'true':'false' ?>, skuId  : id, categoryId : window.selectedCategory });
+            skuModal.show();
+            if (!window.skuSaveSuccessBound) {
+                window.skuSaveSuccessBound = true;
+                $(window).on("skuSaveSuccess", reloadProducts);
+            }
+        });
+    }
+
+    function deleteSku(id) {
+        if (!window.confirm('Delete this SKU?')) return;
+        $.post('/ecommerce/catalog/delete', {id:id, category:selectedCategory }, function(r) {
+            $('#products-tbody').html(r);
+        }, 'html');
+    }
+
+</script>

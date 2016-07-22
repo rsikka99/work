@@ -1,0 +1,161 @@
+<?php
+
+$dealerSettings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::with('ShopSettings')->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+$shopSettings = $dealerSettings->shopSettings;
+
+?>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h1 class="modal-title text-center">SKU Management</h1>
+        </div>
+        <div class="modal-body">
+
+
+            <div id="alertMessage"></div>
+            <!-- SKU Details -->
+            <form class="form-horizontal">
+
+                <input type="hidden" name="categoryId" id="categoryId" value="<?= $this->categoryId ?>">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="manufacturerId">Manufacturer</label>
+
+                            <div class="col-md-9">
+                                <select class="form-control" type="text" id="manufacturerId" name="manufacturerId" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?> value="<?= $this->sku['manufacturerId'] ?>"><option></option><?php foreach ($this->manufacturers as $line) { ?><option value="<?php echo $line->id ?>" <?= $this->sku['manufacturerId']==$line->id?'selected="selected"':'' ?>><?php echo $line->fullname==$line->displayname?$line->fullname:$line->displayname." ({$line->fullname})" ?></option><?php } ?></select>
+                                <script> $(document).ready(function() { $('#manufacturerId').select2({}); }); </script>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="modelName">Model Name</label>
+                            <div class="col-md-9">
+                                <input class="form-control" type="text" id="modelName" value="<?= $this->sku['name']; ?>" name="modelName" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="modelName">Vendor Part Number (SKU)</label>
+                            <div class="col-md-9">
+                                <input class="form-control" type="text" id="sku" value="<?= $this->sku['sku']; ?>" name="sku" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="modelName">Weight (KG)</label>
+                            <div class="col-md-9">
+                                <input class="form-control" type="text" id="weight" value="<?= $this->sku['weight']; ?>" name="weight" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="modelName">UPC Code</label>
+                            <div class="col-md-9">
+                                <input class="form-control" type="text" id="UPC" value="<?= $this->sku['UPC']; ?>" name="UPC" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <?php $first = true; ?>
+
+                        <?php if ($this->skuAttributes) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#skuAttributesTab" id="skuAttributesTopTab" data-toggle="tab">Attributes</a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($this->skuQuote) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#skuQuoteTab" id="skuQuoteTopTab" data-toggle="tab">Quote</a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($this->skuImage) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#skuImageTab" id="skuImageTopTab" data-toggle="tab">Image</a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($this->skuDistributors) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#skuDistributorsTab" id="skuDistributorsTopTab" data-toggle="tab">Distributors</a>
+                            </li>
+                        <?php endif; ?>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="modal-body">
+
+            <!-- End Of Sku Details -->
+
+
+            <div class="tab-content">
+                <?php $first = true; ?>
+
+                <?php if ($this->skuAttributes) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="skuAttributesTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->skuAttributes ?>
+                    </div>
+                <?php endif ?>
+
+                <?php if ($this->skuQuote) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="skuQuoteTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->skuQuote ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($this->skuImage) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="skuImageTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->skuImage ?>
+                    </div>
+                <?php endif ?>
+
+                <?php if ($this->skuDistributors) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="skuDistributorsTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->skuDistributors ?>
+                    </div>
+                <?php endif ?>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <ul class="pager">
+                <li class="next">
+                    <a href="#" data-dismiss="modal">Close</a>
+                    <span class="divider-vertical"></span>
+                    <button class="btn btn-primary js-save-sku-modal" type="button">Save</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<?php if (($shopSettings->shopifyName!='') && ($this->sku)) { ?>
+    <script>
+        $('.js-save-sku-modal').click(function() {
+            window.setTimeout('sync_shopify(<?= $this->sku->id ?>, <?= Zend_Auth::getInstance()->getIdentity()->dealerId ?>)',1000);
+        });
+    </script>
+<?php } ?>
