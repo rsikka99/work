@@ -16,7 +16,14 @@ class PrintFleet {
 
     public function __construct($rmsUri) {
         $this->uri = parse_url($rmsUri);
-        $this->base_path = 'https://'.$this->uri['host'].'/restapi/3.6.5';
+        switch ($this->uri['host']) {
+            case 'mps.partsnow.com':
+                $this->base_path = 'https://'.$this->uri['host'].'/restapi/3.6.5';
+                break;
+            case 'pagetrac.com':
+                $this->base_path = 'https://'.$this->uri['host'].'/restapi/3.7.1';
+                break;
+        }
     }
 
     /** @var \cdyweb\http\BaseAdapter */
@@ -63,7 +70,14 @@ class PrintFleet {
     public function auth() {
         $http = $this->getHttp();
         $http->appendRequestHeader('Accept','application/json');
-        $http->appendRequestHeader('X-API-KEY','eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJvZmYiOmZhbHNlLCJzdWIiOiJOb3JtIE1jQ29ua2V5IChQYXJ0cyBOb3cpIiwiYXVkIjoiYWM4ZDkxNGQtYzUxNS00ODMxLTgxZTgtNzE1NDBiN2I0NzUzIiwiaWF0IjoxNDUzODY5NDM4LCJuYmYiOjE0NTM3NjY0MDAsImV4cCI6bnVsbH0.jKrQ14BJTRXUDrP6F3xevVROuRAXsHDSX8dc4GOnO56XP_7N1F7MYZMCB3f7BrYqeA9gESZ4UkHCAlewNCReUg');
+        switch ($this->uri['host']) {
+            case 'mps.partsnow.com':
+                $http->appendRequestHeader('X-API-KEY', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJvZmYiOmZhbHNlLCJzdWIiOiJOb3JtIE1jQ29ua2V5IChQYXJ0cyBOb3cpIiwiYXVkIjoiYWM4ZDkxNGQtYzUxNS00ODMxLTgxZTgtNzE1NDBiN2I0NzUzIiwiaWF0IjoxNDUzODY5NDM4LCJuYmYiOjE0NTM3NjY0MDAsImV4cCI6bnVsbH0.jKrQ14BJTRXUDrP6F3xevVROuRAXsHDSX8dc4GOnO56XP_7N1F7MYZMCB3f7BrYqeA9gESZ4UkHCAlewNCReUg');
+                break;
+            case 'pagetrac.com':
+                $http->appendRequestHeader('X-API-KEY', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJvZmYiOmZhbHNlLCJpc3MiOm51bGwsInN1YiI6IlJlbnQgdGhlIFByaW50ZXIiLCJhdWQiOiI1NGZlOTczOC05ZWJmLTRmNDAtOTdjYi00NzcxZTMwNWE1MjUiLCJpYXQiOjE0Njg1MDk4MTIsIm5iZiI6bnVsbCwiZXhwIjpudWxsfQ.L2NIa2PKmExuU9zuJzPYq82T2zDekgRdCCjtayGv5ydcSo-s-DBE3uMZYnpRV6FWWBmDG7DlCKg2-bYnPK-plA');
+                break;
+        }
         $http->setBasicAuth($this->uri['user'],$this->uri['pass']);
         try {
             $http->put($this->base_path . '/auth');
