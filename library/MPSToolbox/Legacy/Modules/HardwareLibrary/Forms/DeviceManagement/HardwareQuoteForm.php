@@ -87,13 +87,6 @@ class HardwareQuoteForm extends \My_Form_Form
             'maxlength'  => 255,
             'required'   => false,
             'allowEmpty' => false,
-            'validators' => [
-                new FieldDependsOnValue('isSelling', '1', [
-                    new Zend_Validate_NotEmpty(),
-                    new Zend_Validate_Float(),
-                    new Zend_Validate_GreaterThan(0),
-                ]),
-            ],
         ]);
         $this->addElement('text_currency', 'rent', [
             'label'      => 'Rent per month',
