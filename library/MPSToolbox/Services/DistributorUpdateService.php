@@ -2,6 +2,11 @@
 
 namespace MPSToolbox\Services;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Cookie\CookieJar;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\TransferException;
+use Psr\Http\Message\RequestInterface;
 use Tangent\Ftp\NcFtp;
 use Tangent\Logger\Logger;
 
@@ -10,6 +15,7 @@ class DistributorUpdateService {
     const SUPPLIER_INGRAM   = 1;
     const SUPPLIER_SYNNEX   = 2;
     const SUPPLIER_TECHDATA = 3;
+    const SUPPLIER_GENUINE = 4;
 
     /** @var  \Zend_Filter_Compress_Zip */
     private $zipAdapter;
@@ -75,6 +81,192 @@ class DistributorUpdateService {
                 $this->updateTechData($dealerSupplier);
                 break;
             }
+            case self::SUPPLIER_GENUINE : {
+                $this->updateGenuine($dealerSupplier);
+                break;
+            }
+        }
+    }
+
+    private function updateGenuine($dealerSupplier) {
+        $base_uri = trim($dealerSupplier['url'], '/');
+
+        require_once(APPLICATION_BASE_PATH.'/library/My/MyCookieJar.php');
+        $jar = new \MyCookieJar();
+
+        $client = new Client([
+            //'debug' => true,
+            'verify' => APPLICATION_BASE_PATH.'/docs/cacert.pem',
+            'cookies' => $jar,
+            'headers' => [
+                'Accept'=>'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language'=>'en-US,en;q=0.5',
+                'Accept-Encoding'=>'gzip, deflate',
+                'Connection'=>'keep-alive',
+                'User-Agent'=>'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0',
+            ]
+        ]);
+        try {
+            /**/
+            $r = $client->get($base_uri.'/landing.asp?autopage=/Default.asp');
+            if ($r->getStatusCode() != 200) {
+                error_log($dealerSupplier['url'] . ' > ' . $r->getStatusCode());
+                return;
+            }
+            /**/
+
+            $r = $client->post(
+                $base_uri.'/security_logonScript_siteFront.asp?' . http_build_query([
+                    'action' => 'logon',
+                    'pageredir' => '/default.asp',
+                    'parent_c_id' => '',
+                    'returnpage' => 'landing.asp?'
+                ]),
+                array(
+                    'allow_redirects' => false,
+                    'headers' => [
+                        'Referer'=>$base_uri.'/landing.asp?autopage=/Default.asp',
+                    ],
+                    'form_params' => [
+                            'username' => $dealerSupplier['user'],
+                            'password' => $dealerSupplier['pass'],
+                            'B1' => 'GO!',
+                            'logontype' => 'customer',
+                    ]
+                )
+            );
+            if ($r->getStatusCode() != 302) {
+                error_log($dealerSupplier['url'] . '/security_logonScript_siteFront.asp > ' . $r->getStatusCode());
+                return;
+            }
+
+            $redirect = $r->getHeaderLine('Location');
+            $r = $client->get($redirect, [
+                'allow_redirects' => false,
+                'headers' => [
+                ],
+            ]);
+            if ($r->getStatusCode() != 200) {
+                error_log($redirect. ' > ' . $r->getStatusCode());
+                return;
+            }
+
+            $r = $client->get(str_replace('https','http',$base_uri).'/product_list.asp?' . http_build_query(['downloadasfile' => '1', '' => '']), [
+                'allow_redirects' => true,
+                'headers' => [
+                ],
+            ]);
+            if ($r->getStatusCode() != 200) {
+                error_log($dealerSupplier['url'] . '/product_list.asp > ' . $r->getStatusCode());
+                return;
+            }
+
+            if ($r->getHeaderLine('Content-Type')!='application/csv; charset=utf-8; Charset=utf-8') {
+                error_log($dealerSupplier['url'] . '/product_list.asp > ' . $r->getHeaderLine('Content-Type'));
+                return;
+            }
+
+            $str = $r->getBody()->getContents();
+
+            $fp = fopen('php://memory', 'r+');
+            fwrite($fp, $str);
+            rewind($fp);
+
+            #===============================================
+
+            $db = \Zend_Db_Table::getDefaultAdapter();
+            $manufacturers = [];
+            foreach ($db->query('select * from manufacturers order by displayname')->fetchAll() as $line) {
+                $n = strtoupper($line['displayname']);
+                $manufacturers[$n] = $line['id'];
+                if ($n=='KONICA') $manufacturers['KONICA/MINOLTA'] = $line['id'];
+                if ($n=='OKI') $manufacturers['OKIDATA'] = $line['id'];
+            }
+
+            $skus = [];
+            foreach ($db->query('select * from base_product p join base_printer_consumable c on p.id=c.id join base_printer_cartridge a on p.id=a.id')->fetchAll() as $line) {
+                $sku = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['sku']));
+                $skus[$line['manufacturerId']][$sku] = $line;
+            }
+
+            //$fp = fopen('Product_Listing.csv','rb');
+            $cols = fgetcsv($fp);
+
+            $i = 0;
+
+            $st1 = $db->prepare("replace into base_product set userId=1, dateCreated=now(), isSystemProduct=1, imageUrl=?, base_type=?, manufacturerId=?, sku=?, name=?, weight=?, UPC=?");
+            $st1a = $db->prepare("update base_product set imageUrl=? where id=?");
+            $st2 = $db->prepare("replace into base_printer_consumable set id=?, cost=?, pageYield=?, quantity=?, type=?");
+            $st3 = $db->prepare("replace into base_printer_cartridge set id=?, colorId=?");
+
+            $st4 = $db->prepare("replace into compatible_printer_consumable set oem=?, compatible=?");
+
+            $st5 = $db->prepare("replace into dealer_toner_attributes set tonerId=?, dealerId=?, cost=?, dealerSku=?");
+
+            $exists = [];
+
+            while($line = fgetcsv($fp)) {
+                $line = array_combine($cols, $line);
+                $line['brand'] = strip_tags($line['brand']);
+                if ($line['category']=='reset-chips') continue;
+                if ($line['type']=='ORIGINAL') continue;
+                if ($line['brand']=='Generic') continue;
+
+                $line['yield'] = str_replace(',','',$line['yield']);
+                if (!is_numeric($line['yield'])) continue;
+                $pair = explode(' ', $line['nm'], 2);
+                $brand = strtoupper($pair[0]);
+                if ($brand=='FRANCOTYP') continue;
+                if ($brand=='KM') continue;
+                if ($brand=='KODAK') continue;
+                if ($brand=='MITA') continue;
+                if ($brand=='NEOPOST') continue;
+                $oem_mfg_id = $manufacturers[$brand];
+
+                $oem_lines=[];
+                foreach (explode(',', $line['oem']) as $n) {
+                    $n = str_replace('-','',trim($n));
+                    if (empty($n)) continue;
+                    if (isset($skus[$oem_mfg_id][$n])) {
+                        $oem_lines[] = $skus[$oem_mfg_id][$n];
+                    }
+                }
+                if (empty($oem_lines)) continue;
+
+                if (!isset($manufacturers[strtoupper($line['brand'])])) {
+                    #var_dump($line);
+                    #die($line['brand']);
+                    error_log('unknown brand: '.$line['brand']);
+                    continue;
+                }
+                $comp_mfg_id = $manufacturers[strtoupper($line['brand'])];
+
+                $imgUrl = 'http://store.genuinesupply.ca/images/'.$line['lg_pic'];
+                $n = str_replace('-','',trim($line['sku']));
+                if (isset($skus[$comp_mfg_id][$n])) {
+                    $base_id = $skus[$comp_mfg_id][$n]['id'];
+                    $st1a->execute([$imgUrl, $base_id]);
+                } else {
+                    $oem_line = current($oem_lines);
+                    $st1->execute([$imgUrl, $oem_line['base_type'], $comp_mfg_id, $line['sku'], '', $oem_line['weight'], $line['upc']]);
+                    $base_id = $db->lastInsertId();
+                    $st2->execute([$base_id, $line['cust_price'], $line['yield'], $oem_line['quantity'], $oem_line['type']]);
+                    $st3->execute([$base_id, $oem_line['colorId']]);
+                }
+
+                foreach ($oem_lines as $oem_line) {
+                    $st4->execute([$oem_line['id'], $base_id]);
+                }
+
+                $st5->execute([$base_id, $dealerSupplier['dealerId'], $line['cust_price'], $line['sku']]);
+                $i++;
+            }
+
+            echo "{$i} lines processed\n";
+
+
+        } catch (RequestException $ex) {
+            error_log($ex->getMessage());
         }
     }
 
@@ -452,10 +644,6 @@ class DistributorUpdateService {
         $filename=dirname($zip_filename).'/'.$txt_filename;
         echo "processing {$filename} for dealer {$dealerSupplier['dealerId']}\n";
         $fp = fopen($filename, 'rb');
-
-        $sql=['Qty_on_Hand=0'];
-        for ($i=1;$i<=16;$i++) $sql[]="`Warehouse_Qty_on_Hand_{$i}`=0";
-        $db->query('update synnex_products set '.implode(',', $sql));
 
         $update_products_statement = false;
         $insert_products_statement = false;
