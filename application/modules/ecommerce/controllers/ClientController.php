@@ -7,6 +7,7 @@ class Ecommerce_ClientController extends Action
     public function indexAction() {
         $this->_pageTitle = ['E-commerce - Client Settings'];
 
+        $service = new \MPSToolbox\Services\PriceLevelService();
         $db = Zend_Db_Table::getDefaultAdapter();
 
         $clientId = $this->getRequest()->getParam('client');
@@ -46,14 +47,10 @@ class Ecommerce_ClientController extends Action
 
         $this->view->clients = \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->fetchAll(["dealerId=?"=>$dealerId]);
 
-        $st = $db->query('select id, name, margin, id IN (SELECT priceLevelId FROM clients) as is_used from dealer_price_levels where dealerId='.intval($dealerId).' order by `margin`');
-        $this->view->price_levels = $st->fetchAll();
+        $this->view->price_levels = $service->listByDealer($dealerId);
         if (empty($this->view->price_levels)) {
-            $db->query("insert into dealer_price_levels set name='Base', margin='30', dealerId=".intval($dealerId));
-            $id = $db->lastInsertId();
-            $db->query('update clients set priceLevelId='.intval($id).' where dealerId='.intval($dealerId));
-            $st = $db->query('select id, name, margin, id IN (SELECT priceLevelId FROM clients) as is_used from dealer_price_levels where dealerId='.intval($dealerId).' order by `margin`');
-            $this->view->price_levels = $st->fetchAll();
+            $service->insert($dealerId, 'Base', 30, true);
+            $this->view->price_levels = $service->listByDealer($dealerId);
         }
     }
 

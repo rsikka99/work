@@ -10,22 +10,21 @@ class Ecommerce_DealerController extends Action
         $db = Zend_Db_Table::getDefaultAdapter();
         $dealerId = \MPSToolbox\Legacy\Entities\DealerEntity::getDealerId();
 
+        $service = new \MPSToolbox\Services\PriceLevelService();
+
         if (($this->getRequest()->getMethod()=='POST') || $this->getRequest()->getParam('delete')) {
             if ($this->getRequest()->getParam('section')=='price_levels') {
                 $price_level_add = $this->getRequest()->getParam('price_level_add');
                 $price_level_edit = $this->getRequest()->getParam('price_level_edit');
                 $price_level_delete = $this->getRequest()->getParam('delete');
                 if ($price_level_add) {
-                    $st = $db->prepare('insert into dealer_price_levels set dealerId=:dealerId, name=:name, margin=:margin');
-                    $st->execute(['dealerId'=>$dealerId, 'name'=>$price_level_add['name'], 'margin'=>$price_level_add['margin']]);
+                    $service->insert($dealerId, $price_level_add['name'], $price_level_add['margin']);
                 }
                 if ($price_level_edit) {
-                    $st = $db->prepare('update dealer_price_levels set name=:name, margin=:margin where id=:id');
-                    $st->execute($price_level_edit);
+                    $service->update($price_level_edit['id'], $price_level_edit['name'], $price_level_edit['margin']);
                 }
                 if ($price_level_delete) {
-                    $st = $db->prepare('delete from dealer_price_levels where id=:id');
-                    $st->execute(['id'=>$price_level_delete]);
+                    $service->delete($price_level_delete);
                 }
             }
             if ($this->getRequest()->getParam('section')=='main') {
@@ -71,14 +70,11 @@ class Ecommerce_DealerController extends Action
         $st = $db->query('select * from suppliers left join dealer_suppliers on suppliers.id = dealer_suppliers.supplierId and dealerId='.intval($dealerId));
         $this->view->distributors = $st->fetchAll();
 
-        $st = $db->query('select id, name, margin, id IN (SELECT priceLevelId FROM clients) as is_used from dealer_price_levels where dealerId='.intval($dealerId).' order by `margin`');
-        $this->view->price_levels = $st->fetchAll();
+
+        $this->view->price_levels = $service->listByDealer($dealerId);
         if (empty($this->view->price_levels)) {
-            $db->query("insert into dealer_price_levels set name='Base', margin='30', dealerId=".intval($dealerId));
-            $id = $db->lastInsertId();
-            $db->query('update clients set priceLevelId='.intval($id).' where dealerId='.intval($dealerId));
-            $st = $db->query('select id, name, margin, id IN (SELECT priceLevelId FROM clients) as is_used from dealer_price_levels where dealerId='.intval($dealerId).' order by `margin`');
-            $this->view->price_levels = $st->fetchAll();
+            $service->insert($dealerId, 'Base', 30, true);
+            $this->view->price_levels = $service->listByDealer($dealerId);
         }
     }
 }

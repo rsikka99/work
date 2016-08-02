@@ -152,23 +152,22 @@ class Ecommerce_CatalogController extends Action {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        $id = intval($this->getParam('id'));
+        $categoryId = intval($this->getParam('id'));
         $dealerId = intval(\MPSToolbox\Entities\DealerEntity::getDealerId());
         $db = Zend_Db_Table::getDefaultAdapter();
 
+        $service = new \MPSToolbox\Services\PriceLevelService();
+
         if ($this->getRequest()->isPost()) {
             $st = $db->prepare('replace into dealer_category set categoryId=?, dealerId=?, name=?, taxable=?, orderBy=?');
-            $st->execute([$id, $dealerId, $this->getParam('name'), $this->getParam('taxable'), $this->getParam('orderBy')]);
+            $st->execute([$categoryId, $dealerId, $this->getParam('name'), $this->getParam('taxable'), $this->getParam('orderBy')]);
 
-            $st = $db->prepare('replace into dealer_category_price_level set categoryId=?, priceLevelId=?, margin=?');
-            foreach ($this->getParam('margin') as $priceLevelId=>$margin) {
-                $st->execute([$id, $priceLevelId, $margin]);
-            }
+            $service->replaceCategoryPriceLevel($dealerId, $categoryId, $this->getParam('margin'));
             echo json_encode(['ok'=>true]);
             return;
         }
 
-        $dealer_price_levels = $db->query('select dealer_price_levels.*, dealer_category_price_level.margin as category_margin from dealer_price_levels left join dealer_category_price_level on dealer_category_price_level.categoryId='.$id.' and dealer_price_levels.id=dealer_category_price_level.priceLevelId where dealerId='.$dealerId.' order by margin');
+        $dealer_price_levels = $service->listByDealerAndCategory($dealerId, $categoryId);
         $margins = '';
         foreach ($dealer_price_levels as $price_line) {
             $margins .= '<tr>';
@@ -179,10 +178,10 @@ class Ecommerce_CatalogController extends Action {
 
         $editFunction = 'editSku';
         $showAdd = true;
-        $products = $this->getProducts($db, $id, $dealerId, $editFunction, $showAdd);
+        $products = $this->getProducts($db, $categoryId, $dealerId, $editFunction, $showAdd);
 
-        $category = $db->query('select * from base_category where id='.$id)->fetch(PDO::FETCH_ASSOC);
-        $dealer_category = $db->query('select * from dealer_category where dealerId='.$dealerId.' and categoryId='.$id)->fetch(PDO::FETCH_ASSOC);
+        $category = $db->query('select * from base_category where id='.$categoryId)->fetch(PDO::FETCH_ASSOC);
+        $dealer_category = $db->query('select * from dealer_category where dealerId='.$dealerId.' and categoryId='.$categoryId)->fetch(PDO::FETCH_ASSOC);
 
         $result=[
             'name'=>    isset($dealer_category['name'])     ? $dealer_category['name'] : $category['name'],
