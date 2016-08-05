@@ -25,9 +25,8 @@ function outputField($that, $prop, $form) {
         ?>
     </div>
 </div>
-<?
+<?php
 }
-
 ?>
 
 <?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
@@ -37,15 +36,15 @@ function outputField($that, $prop, $form) {
         <div class="row">
             <!-- -->
             <div class="col-md-4">
-<? for ($i=0;$i<$n;$i++) if (isset($properties[$i])) outputField($this, $properties[$i], $form) ?>
+<?php for ($i=0;$i<$n;$i++) if (isset($properties[$i])) outputField($this, $properties[$i], $form) ?>
             </div>
             <!-- -->
             <div class="col-md-4">
-<? for ($i=$n;$i<$n+$n;$i++) if (isset($properties[$i])) outputField($this, $properties[$i], $form) ?>
+<?php for ($i=$n;$i<$n+$n;$i++) if (isset($properties[$i])) outputField($this, $properties[$i], $form) ?>
             </div>
             <!-- -->
             <div class="col-md-4">
-<? for ($i=$n+$n;$i<$n+$n+$n;$i++) if (isset($properties[$i])) outputField($this, $properties[$i], $form) ?>
+<?php for ($i=$n+$n;$i<$n+$n+$n;$i++) if (isset($properties[$i])) outputField($this, $properties[$i], $form) ?>
             </div>
             <!-- -->
         </div>
