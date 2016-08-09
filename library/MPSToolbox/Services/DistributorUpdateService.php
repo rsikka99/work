@@ -375,7 +375,7 @@ class DistributorUpdateService {
         echo "{$filename}\n";
         $fp = fopen($filename, 'rb');
 
-        $db->query('update techdata_products set Qty=0');
+        //$db->query('update techdata_products set Qty=0');
 
         $insert_product_statement = false;
         $update_product_statement = false;
@@ -416,7 +416,10 @@ class DistributorUpdateService {
 
             $line['Qty'] = isset($qty[$line['Matnr']]) ? $qty[$line['Matnr']] : 0;
             $_md5 = md5(implode(',',$line));
-            if (isset($exists[$line['Matnr']]) && ($exists[$line['Matnr']]==$_md5)) continue;
+            if (isset($exists[$line['Matnr']]) && ($exists[$line['Matnr']]==$_md5)) {
+                unset($exists[$line['Matnr']]);
+                continue;
+            }
 
             $line['_md5'] = $_md5;
             $line['ManufPartNo'] = $manufPartNo;
@@ -435,10 +438,21 @@ class DistributorUpdateService {
                 $update_product_statement = $db->prepare($sql);
             }
 
-            if (isset($exists[$line['Matnr']])) $update_product_statement->execute($line);
-            else $insert_product_statement->execute($line);
+            if (isset($exists[$line['Matnr']])) {
+                $update_product_statement->execute($line);
+                unset($exists[$line['Matnr']]);
+            } else {
+                $insert_product_statement->execute($line);
+            }
         }
         fclose($fp);
+
+        $st1 = $db->prepare('delete from techdata_products where Matnr=?');
+        $st2 = $db->prepare('delete from techdata_prices where Matnr=?');
+        foreach ($exists as $matnr=>$md5) {
+            $st1->execute([$matnr]);
+            $st2->execute([$matnr]);
+        }
 
         #---
 
