@@ -17,6 +17,11 @@ use My_Model_Abstract;
 class DeviceModel extends My_Model_Abstract
 {
     /**
+     * @var bool
+     */
+    public $isSelling;
+
+    /**
      * @var int
      */
     public $masterDeviceId;
@@ -108,6 +113,11 @@ class DeviceModel extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
+        if (isset($params->isSelling) && !is_null($params->isSelling))
+        {
+            $this->isSelling = $params->isSelling;
+        }
+
         if (isset($params->masterDeviceId) && !is_null($params->masterDeviceId))
         {
             $this->masterDeviceId = $params->masterDeviceId;
@@ -158,6 +168,7 @@ class DeviceModel extends My_Model_Abstract
     public function toArray ()
     {
         return [
+            "isSelling"      => $this->isSelling,
             "masterDeviceId" => $this->masterDeviceId,
             "dealerId"       => $this->dealerId,
             "oemSku"         => $this->oemSku,

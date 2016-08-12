@@ -608,30 +608,18 @@ class ManageMasterDevicesService
         $deviceMapper = DeviceMapper::getInstance();
         try
         {
-            if ($validatedData['isSelling'] == 1)
-            {
-                $device = new DeviceModel(['masterDeviceId' => $this->masterDeviceId, 'dealerId' => $this->_dealerId]);
-                $device->populate($validatedData);
-                $device->saveObject();
+            $device = new DeviceModel(['masterDeviceId' => $this->masterDeviceId, 'dealerId' => $this->_dealerId]);
+            $device->populate($validatedData);
+            $device->saveObject();
 
-                //@todo make this generic for all vendors
-                #--
-                $st=\Zend_Db_Table::getDefaultAdapter()->prepare('update ingram_products set masterDeviceId=:masterDeviceId where `vendor_part_number`=:vpn');
-                $st->execute(['masterDeviceId'=>$this->masterDeviceId, 'vpn'=>$validatedData['oemSku']]);
-                #--
-                $st=\Zend_Db_Table::getDefaultAdapter()->prepare('update ingram_products set masterDeviceId=:masterDeviceId where `vendor_part_number` like :like');
-                $st->execute(['masterDeviceId'=>$this->masterDeviceId, 'like'=>$validatedData['oemSku'].'#%']);
-                #--
-            }
-            else
-            {
-                $device = $deviceMapper->find([$this->masterDeviceId, $this->_dealerId]);
-
-                if ($device)
-                {
-                    $deviceMapper->delete($device);
-                }
-            }
+            //@todo make this generic for all vendors
+            #--
+            $st=\Zend_Db_Table::getDefaultAdapter()->prepare('update ingram_products set masterDeviceId=:masterDeviceId where `vendor_part_number`=:vpn');
+            $st->execute(['masterDeviceId'=>$this->masterDeviceId, 'vpn'=>$validatedData['oemSku']]);
+            #--
+            $st=\Zend_Db_Table::getDefaultAdapter()->prepare('update ingram_products set masterDeviceId=:masterDeviceId where `vendor_part_number` like :like');
+            $st->execute(['masterDeviceId'=>$this->masterDeviceId, 'like'=>$validatedData['oemSku'].'#%']);
+            #--
         }
         catch (Exception $e)
         {
@@ -770,8 +758,9 @@ class ManageMasterDevicesService
             if ($device)
             {
                 $this->_hardwareQuoteForm->populate($device->toArray());
-                $this->_hardwareQuoteForm->populate(['isSelling' => true]);
-                $this->isQuoteDevice = true;
+                if ($device->isSelling) {
+                    $this->isQuoteDevice = true;
+                }
             }
         }
 
