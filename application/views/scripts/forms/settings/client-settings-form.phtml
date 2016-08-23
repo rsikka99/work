@@ -58,7 +58,7 @@ foreach ($roles as $role) {
                     </div>
                 </div>
 
-<? if ($is_pricing_administrator) { ?>
+<?php if ($is_pricing_administrator) { ?>
                 <div class="form-group <?= ($currentFleetSettingsForm->getElement('currentLevel')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                     <?= $this->RenderFormLabel($currentFleetSettingsForm->getElement('currentLevel'), ['col-md-6']) ?>
 
@@ -67,7 +67,7 @@ foreach ($roles as $role) {
                         <?= $this->RenderFormElementErrors($currentFleetSettingsForm->getElement('currentLevel')) ?>
                     </div>
                 </div>
-<? } ?>
+<?php } ?>
 
                 <div class="form-group <?= ($currentFleetSettingsForm->getElement('currentMonochromeRankSetArray')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                     <?= $this->RenderFormLabel($currentFleetSettingsForm->getElement('currentMonochromeRankSetArray'), ['col-md-6']) ?>
@@ -127,7 +127,7 @@ foreach ($roles as $role) {
                     </div>
                 </div>
 
-<? if ($is_pricing_administrator) { ?>
+<?php if ($is_pricing_administrator) { ?>
                 <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedLevel')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                     <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedLevel'), ['col-md-6']) ?>
 
@@ -136,7 +136,7 @@ foreach ($roles as $role) {
                         <?= $this->RenderFormElementErrors($proposedFleetSettingsForm->getElement('proposedLevel')) ?>
                     </div>
                 </div>
-<? } ?>
+<?php } ?>
 
                 <div class="form-group <?= ($proposedFleetSettingsForm->getElement('proposedMonochromeRankSetArray')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                     <?= $this->RenderFormLabel($proposedFleetSettingsForm->getElement('proposedMonochromeRankSetArray'), ['col-md-6']) ?>

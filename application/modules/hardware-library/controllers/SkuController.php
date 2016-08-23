@@ -74,45 +74,13 @@ class HardwareLibrary_SkuController extends Action {
         #--
 
         if (!empty($sku['sku']) && !empty($sku['manufacturerId'])) {
-            $or=[];
-            foreach ($db->query('select name from techdata_manufacturer where manufacturerId='.intval($sku['manufacturerId']))->fetchAll() as $line) $or[]="Manufacturer like '{$line['name']}'";
-            if (!empty($or)) {
-                $st = $db->prepare("UPDATE techdata_products SET skuId=? WHERE (" . implode(' or ', $or) . ") AND ManufPartNo LIKE ?");
-                $st->execute([$sku['id'], $sku['sku'] . '%']);
-                if ($st->rowCount()>0) {
-                    $line = $db->query('select * from techdata_products where skuId='.intval($sku['id']))->fetch();
-                    if ($line) {
-                        $st = $db->prepare('UPDATE base_product SET weight=? WHERE id=?');
-                        $st->execute([0.453592 * $line['Weight'], $sku['id']]);
-                    }
-                }
-            }
-
-            $or=[];
-            foreach ($db->query('select name from ingram_manufacturer where manufacturerId='.intval($sku['manufacturerId']))->fetchAll() as $line) $or[]="vendor_name like '{$line['name']}'";
-            if (!empty($or)) {
-                $st = $db->prepare("UPDATE ingram_products SET skuId=? WHERE (" . implode(' or ', $or) . ") AND vendor_part_number LIKE ?");
-                $st->execute([$sku['id'], $sku['sku'] . '%']);
-                if ($st->rowCount()>0) {
-                    $line = $db->query('select * from ingram_products where skuId='.intval($sku['id']))->fetch();
-                    if ($line) {
-                        $st = $db->prepare('UPDATE base_product SET UPC=?, weight=? WHERE id=?');
-                        $st->execute([$line['upc_code'], 0.453592 * $line['weight'], $sku['id']]);
-                    }
-                }
-            }
-
-            $or=[];
-            foreach ($db->query('select name from synnex_manufacturer where manufacturerId='.intval($sku['manufacturerId']))->fetchAll() as $line) $or[]="Manufacturer_name like '{$line['name']}'";
-            if (!empty($or)) {
-                $st = $db->prepare("UPDATE synnex_products SET skuId=? WHERE (" . implode(' or ', $or) . ") AND Manufacturer_part LIKE ?");
-                $st->execute([$sku['id'], $sku['sku'] . '%']);
-                if ($st->rowCount()>0) {
-                    $line = $db->query('select * from synnex_products where skuId='.intval($sku['id']))->fetch();
-                    if ($line) {
-                        $st = $db->prepare('UPDATE base_product SET UPC=?, weight=? WHERE id=?');
-                        $st->execute([$line['UPC_Code'], 0.453592 * $line['Ship_Weight'], $sku['id']]);
-                    }
+            $st = $db->prepare("UPDATE supplier_product SET baseProductId=? WHERE manufacturerId={$sku['manufacturerId']} AND vpn LIKE ?");
+            $st->execute([$sku['id'], $sku['sku'] . '%']);
+            if ($st->rowCount()>0) {
+                $line = $db->query('select * from supplier_product where baseProductId='.intval($sku['id']))->fetch();
+                if ($line) {
+                    $st = $db->prepare('UPDATE base_product SET UPC=?, weight=? WHERE id=?');
+                    $st->execute([$line['upc'], $line['weight'], $sku['id']]);
                 }
             }
         }

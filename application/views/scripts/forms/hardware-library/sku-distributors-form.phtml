@@ -8,9 +8,8 @@ $form = $this->element;
 if (!$form->getView()->skuId) {
     return;
 }
-
 $distributors = SkuDistributorsForm::getDistributors($form->getView()->skuId);
-$services = SkuDistributorsForm::getServices($form->getView()->skuId);
+$services = []; //SkuDistributorsForm::getServices($form->getView()->skuId);
 
 ?>
 <div class="row">

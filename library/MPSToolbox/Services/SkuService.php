@@ -201,6 +201,7 @@ class SkuService
         if (!isset($this->_distributorsForm)) {
             $this->_distributorsForm = new SkuDistributorsForm(null, $this->_isAllowed);
             if ($this->sku) {
+                $this->_distributorsForm->skuId = $this->sku['id'];
                 $this->_distributorsForm->populate($this->sku);
             }
         }

@@ -129,19 +129,17 @@ class TonerService
             $tonerMapper->save($toner);
         }
 
-        $st=\Zend_Db_Table::getDefaultAdapter()->prepare('update ingram_products set tonerId=:tonerId where tonerId is null and `vendor_part_number`=:vpn');
-        $st->execute(['tonerId'=>$toner->id, 'vpn'=>$data['sku']]);
-
-        $st=\Zend_Db_Table::getDefaultAdapter()->prepare("update ingram_products set tonerId=:tonerId where tonerId is null and `vendor_part_number` like :like");
-        $st->execute(['tonerId'=>$toner->id, 'like'=>"{$data['sku']}#%"]);
-
-        if (!$data['weight']) {
-            $st = \Zend_Db_Table::getDefaultAdapter()->prepare('UPDATE toners t SET weight = 0.453592 * (select weight from ingram_products where tonerId=t.id) WHERE id=:tonerId');
-            $st->execute(['tonerId'=>$toner->id]);
-        }
-        if (!$data['upc']) {
-            $st = \Zend_Db_Table::getDefaultAdapter()->prepare('UPDATE toners t SET upc = (select upc_code from ingram_products where tonerId=t.id) WHERE id=:tonerId');
-            $st->execute(['tonerId'=>$toner->id]);
+        $st=\Zend_Db_Table::getDefaultAdapter()->prepare('update supplier_product set baseProductId=? where manufacturerId=? and vpn=?');
+        $st->execute([$toner->id, $data['manufacturerId'], $data['sku']]);
+        if ($st->rowCount()>0) {
+            if (!$data['weight']) {
+                $st = \Zend_Db_Table::getDefaultAdapter()->prepare('UPDATE base_product t SET weight = (SELECT weight FROM supplier_product WHERE baseProductId=t.id) WHERE id=:tonerId');
+                $st->execute(['tonerId' => $toner->id]);
+            }
+            if (!$data['upc']) {
+                $st = \Zend_Db_Table::getDefaultAdapter()->prepare('UPDATE base_product t SET upc = (SELECT upc FROM supplier_product WHERE baseProductId=t.id) WHERE id=:tonerId');
+                $st->execute(['tonerId' => $toner->id]);
+            }
         }
 
         return $toner;
@@ -411,15 +409,15 @@ class TonerService
         $db = \Zend_Db_Table::getDefaultAdapter();
         $st = $db->query(
 "
-select a.cost, ingram_prices.customer_price as ingramPrice
+select a.cost, supplier_price.price
 from toners t
   left join dealer_toner_attributes a on t.id=a.tonerId and a.dealerId={$this->dealerId}
-  left join ingram_products on ingram_products.tonerId = t.id
-  left join ingram_prices on ingram_prices.ingram_part_number = ingram_products.ingram_part_number
+  left join supplier_product on supplier_product.baseProductId = t.id
+  left join supplier_price on using (supplierId, supplierSku)
 where t.id = ".intval($tonerId)
         );
         $line = $st->fetch();
-        if ($line['ingramPrice'] && (!$line['cost'] || ($line['ingramPrice']<$line['cost']))) $line['cost'] = $line['ingramPrice'];
+        if ($line['price'] && (!$line['cost'] || ($line['price']<$line['cost']))) $line['cost'] = $line['price'];
         return $line['cost'];
     }
 

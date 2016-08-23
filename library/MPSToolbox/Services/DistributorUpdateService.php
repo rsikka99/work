@@ -12,10 +12,21 @@ use Tangent\Logger\Logger;
 
 class DistributorUpdateService {
 
+    private $insert_product;
+    private $insert_price;
+    private $update_product;
+    private $update_price;
+    private $base_product_statement;
+    private $sku_statement;
+
+    private $supplier_product = [];
+    private $supplier_price = [];
+
     const SUPPLIER_INGRAM   = 1;
     const SUPPLIER_SYNNEX   = 2;
     const SUPPLIER_TECHDATA = 3;
     const SUPPLIER_GENUINE = 4;
+    const SUPPLIER_ACM = 5;
 
     /** @var  \Zend_Filter_Compress_Zip */
     private $zipAdapter;
@@ -68,6 +79,103 @@ class DistributorUpdateService {
     }
 
     public function updatePrices($dealerSupplier) {
+        $this->timerStart = time();
+        ob_end_flush();
+        ob_implicit_flush();
+
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        #$db->query('delete from supplier_price');
+        #$db->query('delete from supplier_product');
+
+        #--
+        $this->insert_product = $db->prepare("
+                  insert into supplier_product SET
+supplierId={$dealerSupplier['supplierId']},
+supplierSku=:supplierSku,
+manufacturer=:manufacturer,
+manufacturerId=:manufacturerId,
+vpn=:vpn,
+`name`=:name,
+msrp=:msrp,
+weight=:weight,
+length=:length,
+width=:width,
+height=:height,
+upc=:upc,
+description=:description,
+isStock=:isStock,
+qty=:qty,
+category=:category,
+categoryId=:categoryId,
+dateCreated=:dateCreated,
+_md5=:_md5");
+
+        $this->insert_price = $db->prepare("
+                  insert into supplier_price SET
+supplierId={$dealerSupplier['supplierId']},
+supplierSku=:supplierSku,
+dealerId=:dealerId,
+price=:price,
+promotion=:promotion,
+_md5=:_md5");
+
+        $this->update_product = $db->prepare("
+                  UPDATE supplier_product SET
+manufacturer=:manufacturer,
+manufacturerId=:manufacturerId,
+vpn=:vpn,
+`name`=:name,
+msrp=:msrp,
+weight=:weight,
+length=:length,
+width=:width,
+height=:height,
+upc=:upc,
+description=:description,
+isStock=:isStock,
+qty=:qty,
+category=:category,
+categoryId=:categoryId,
+dateCreated=:dateCreated,
+_md5=:_md5
+                  WHERE supplierSku=:supplierSku and supplierId={$dealerSupplier['supplierId']}");
+
+        $this->update_price = $db->prepare("
+                  UPDATE supplier_price SET
+price=:price,
+promotion=:promotion,
+_md5=:_md5
+                    WHERE dealerId=:dealerId and supplierSku=:supplierSku and supplierId={$dealerSupplier['supplierId']}");
+
+
+        $this->base_product_statement = $db->prepare('update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?');
+        $this->sku_statement = $db->prepare('update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?');
+
+        #--
+        $dealerId = intval($dealerSupplier['dealerId']);
+
+        $this->supplier_product = [];
+        $cursor = $db->query('select supplierSku, _md5 from supplier_product where supplierId='.$dealerSupplier['supplierId']);
+        while($line = $cursor->fetch()) {
+            $this->supplier_product[$line['supplierSku']] = $line['_md5'] ? $line['_md5'] : 'x';
+        }
+        $cursor->closeCursor();
+
+        $this->supplier_price = [];
+        $cursor = $db->query('select supplierSku, _md5 from supplier_price where dealerId='.$dealerId.' and supplierId='.$dealerSupplier['supplierId']);
+        while($line = $cursor->fetch()) {
+            $this->supplier_price[$line['supplierSku']] = $line['_md5'] ? $line['_md5'] : 'x';
+        }
+        $cursor->closeCursor();
+
+        $cursor = null;
+        gc_collect_cycles();
+
+        echo "supplier_product: ".count($this->supplier_product)."\n";
+        echo "supplier_price: ".count($this->supplier_price)."\n";
+        #--
+
+
         switch($dealerSupplier['supplierId']) {
             case self::SUPPLIER_INGRAM : {
                 $this->updateIngram($dealerSupplier);
@@ -85,7 +193,200 @@ class DistributorUpdateService {
                 $this->updateGenuine($dealerSupplier);
                 break;
             }
+            case self::SUPPLIER_ACM : {
+                $this->updateAcm($dealerSupplier);
+                break;
+            }
         }
+        gc_collect_cycles();
+    }
+
+    private function populate($product, $price) {
+        #--
+        if (!empty($product)) {
+            $sku = $product['supplierSku'];
+            $product['_md5'] = md5(json_encode($product));
+            if (isset($this->supplier_product[$sku])) {
+                $db_md5 = $this->supplier_product[$sku];
+                if ($db_md5 != $product['_md5']) {
+                    $this->update_product->execute($product);
+                    #echo "updated product {$sku} because {$line['_md5']} != {$product['_md5']}\n";
+                }
+            } else {
+                #echo "inserting product {$sku}\n";
+                $this->insert_product->execute($product);
+                $this->supplier_product[$sku] = $product;
+                #echo count($this->supplier_product)."\n";
+            }
+        }
+
+        #--
+        if (!empty($price)) {
+            $sku = $price['supplierSku'];
+            $price['_md5'] = md5(json_encode($price));
+            if (isset($this->supplier_price[$sku])) {
+                $db_md5 = $this->supplier_price[$sku];
+                if ($db_md5 != $price['_md5']) {
+                    $this->update_price->execute($price);
+                }
+            } else {
+                $this->insert_price->execute($price);
+                $this->supplier_price[$sku] = $price['_md5'];
+            }
+        }
+    }
+
+    private function updateAcm($dealerSupplier) {
+        $dealerId = intval($dealerSupplier['dealerId']);
+
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $filename = APPLICATION_BASE_PATH . '/data/cache/' . sprintf('acm-%s.txt', $dealerId);
+        try {
+            if (!file_exists($filename) || (filemtime($filename) < strtotime('-6 DAY'))) {
+                $ftp = $this->getFtpClient();
+                $ftp->get($dealerSupplier['url'].'/ACM_2_Customer/ProductList_'.date('Ymd').'.txt', $dealerSupplier['user'], $dealerSupplier['pass'], $filename);
+            }
+        } catch (\Exception $ex) {
+            print_r($ex);
+            Logger::logException($ex);
+            return false;
+        }
+
+        echo "processing {$filename} for dealer {$dealerId}\n";
+        $fp = fopen($filename, 'rb');
+
+        gc_collect_cycles();
+        echo "1. ".round(memory_get_usage()/(1024*1024))." MB\n";
+
+        $manufacturers = [];
+        foreach ($db->query('select * from manufacturers order by fullname')->fetchAll() as $line) {
+            $n = strtoupper($line['fullname']);
+            $manufacturers[$n] = $line['id'];
+            if ($n=='COPYSTAR') $manufacturers['ROYAL COPYSTAR'] = $line['id'];
+        }
+
+        //Brand	Product Group	Product Type	ACM#	OEM#	Product Description	Model	Branch 110 Inventory	Branch 130 Inventory	Branch 150 Inventory	Branch 160 Inventory
+        //Total Inventory	Price	UOM	CustNo
+        $columns = fgetcsv($fp, null, "\t");
+
+        $oem_cartridges = [];
+
+        while ($line = fgetcsv($fp, null, "\t")) {
+            while (count($line) > count($columns)) {
+                array_pop($line);
+            }
+            $line = array_combine($columns, $line);
+
+            if ($line['UOM']!='EA') {
+                #echo "???? {$line['UOM']} \n";
+                #var_dump($line);
+                #continue;
+            }
+
+            if (strpos($line['Product Group'], 'ECOPlus')===0) {
+                $line['Product Description'] = $line['Brand'].' '.trim($line['OEM#']).' | '.trim($line['Product Description']);
+                $line['Brand'] = 'ECOPlus';
+                $line['OEM#'] = $line['ACM#'];
+            } else if (substr($line['Product Description'],0,4)!='OEM ') {
+                $line['Product Description'] = $line['Brand'].' '.trim($line['OEM#']).' | '.trim($line['Product Description']);
+                $line['Brand'] = 'ACM';
+                $line['OEM#'] = $line['ACM#'];
+            }
+
+            $manufacturerId = null;
+            $brand = strtoupper(preg_replace('#,.*$#','',$line['Brand']));
+            if (isset($manufacturers[$brand])) $manufacturerId = $manufacturers[$brand];
+            else {
+                switch ($line['Brand']) {
+                    case 'ECOPlus' : break;
+                    case 'ACM' : break;
+                    default : die($line['Brand']);
+                }
+            }
+
+            $vpn = $line['OEM#'];
+            $name = '';
+            $e = explode(',', $vpn);
+            if (count($e)>1) {
+                $vpn = trim($e[0]);
+                $name = trim(array_pop($e));
+                #echo "{$vpn} : {$name}\n";
+                if ((strpos($vpn, '-')!==false) || (stripos($vpn, 'type')!==false) || ((strlen($name)>strlen($vpn)) && (stripos($name, 'type')===false))) {
+                    $vpn = $name;
+                    $name = trim($e[0]);
+                    #echo ">>> {$vpn} : {$name}\n";
+                }
+
+            }
+
+            $product_data = [
+                'supplierSku'=>trim($line['ACM#']),
+                'manufacturer'=>$line['Brand'],
+                'manufacturerId'=>$manufacturerId,
+                'vpn'=>$vpn,
+                'name'=>$name,
+                'msrp'=>null,
+                'weight'=>null,
+                'length'=>null,
+                'width'=>null,
+                'height'=>null,
+                'upc'=>null,
+                'description'=>trim($line['Product Description']).'; Models: '.trim($line['Model']),
+                'isStock'=>intval($line['Total Inventory'])>0?1:0,
+                'qty'=>json_encode([
+                    'Branch 110 Inventory'=>$line['Branch 110 Inventory'],
+                    'Branch 130 Inventory'=>$line['Branch 130 Inventory'],
+                    'Branch 150 Inventory'=>$line['Branch 150 Inventory'],
+                    'Branch 160 Inventory'=>$line['Branch 160 Inventory'],
+                    'Total Inventory'=>$line['Total Inventory']]),
+                'category'=>trim($line['Product Group']).' | '.trim($line['Product Type']),
+                'categoryId'=>null,
+                'dateCreated'=>null,
+            ];
+
+            $price_data = [
+                'supplierSku'=>trim($line['ACM#']),
+                'dealerId'=>$dealerId,
+                'price'=>trim($line['Price']),
+                'promotion'=>null,
+            ];
+
+            try {
+                $this->populate($product_data, $price_data);
+            } catch (\Exception $ex) {
+                var_dump($product_data);
+                die ('xxx '.$ex->getMessage());
+            }
+
+            if ((substr($line['Product Description'],0,4)=='OEM ') && $manufacturerId) {
+                $oem_cartridges[$manufacturerId][$vpn] = trim($line['ACM#']);
+            }
+
+        }
+
+        gc_collect_cycles();
+        echo "2. ".round(memory_get_usage()/(1024*1024))." MB\n";
+
+
+        $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku from base_product join base_printer_consumable using (id)");
+        while ($line = $cursor->fetch(\PDO::FETCH_ASSOC)) {
+            $sku = $line['sku'];
+            $manufacturerId = $line['manufacturerId'];
+            if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
+                $sku = $match[1];
+            }
+            if (isset($oem_cartridges[$manufacturerId][$sku])) {
+                //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
+                $this->base_product_statement->execute([$line['id'], $oem_cartridges[$manufacturerId][$sku]]);
+            }
+        }
+        $cursor->closeCursor();
+
+        gc_collect_cycles();
+        echo "3. ".round(memory_get_usage()/(1024*1024))." MB\n";
+
+        echo time() - $this->timerStart."s\n";
+        return true;
     }
 
     private function updateGenuine($dealerSupplier) {
@@ -262,6 +563,7 @@ class DistributorUpdateService {
                 $i++;
             }
 
+            gc_collect_cycles();
             echo "{$i} lines processed\n";
 
 
@@ -310,8 +612,10 @@ class DistributorUpdateService {
         if (empty($price_file)) { echo "price_file?\n"; return null; }
         if (empty($stock_file)) { echo "stock_file?\n"; return null; }
 
+        gc_collect_cycles();
         echo "1. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
+        #----
         $columns = [
             'Matnr',
             'ManufPartNo',
@@ -331,61 +635,28 @@ class DistributorUpdateService {
             $line = array_combine($columns, $line);
             $qty[$line['Matnr']] = $line['Qty'];
         }
-        fclose($filename);
+        fclose($fp);
 
+        gc_collect_cycles();
         echo "2. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
-        $columns = [
-            'Matnr',
-            'ShortDescription',
-            'LongDescription',
-            'ManufPartNo',
-            'Manufacturer',
-            'ManufacturerGlobalDescr',
-            'GTIN',
-            'ProdFamilyID',
-            'ProdFamily',
-            'ProdClassID',
-            'ProdClass',
-            'ProdSubClassID',
-            'ProdSubClass',
-            'ArticleCreationDate',
-            'CNETavailable',
-            'CNETid',
-            'ListPrice',
-            'Weight',
-            'Length',
-            'Width',
-            'Heigth',
-            'NoReturn',
-            'MayRequireAuthorization',
-            'EndUserInformation',
-            'FreightPolicyException'
-        ];
-
-        $exists = [];
-        $cursor = $db->query('select Matnr, _md5 from techdata_products');
-        while($line = $cursor->fetch()) {
-            $exists[$line['Matnr']] = $line['_md5'] ? $line['_md5'] : 'x';
-        }
-
-        echo "3. ".round(memory_get_usage()/(1024*1024))." MB\n";
-
+        #----
         $filename=dirname($zip_filename).'/'.$product_file;
         echo "{$filename}\n";
         $fp = fopen($filename, 'rb');
 
-        //$db->query('update techdata_products set Qty=0');
-
-        $insert_product_statement = false;
-        $update_product_statement = false;
-        $insert_price_statement = false;
-        $update_price_statement = false;
-
-        $relevant_mattnr = [];
         $category_mattnr = [];
 
-        $hdr = fgetcsv($fp, null, "\t");
+        $manufacturers=[];
+        foreach ($db->query('select * from techdata_manufacturer') as $line) {
+            $reg = '#^'.str_replace('%','.*',strtoupper($line['name'])).'$#i';
+            $manufacturers[$reg] = $line['manufacturerId'];
+        }
+
+        //Matnr	ShortDescription	LongDescription	ManufPartNo	Manufacturer	ManufacturerGlobalDescr	GTIN	ProdFamilyID	ProdFamily	ProdClassID	ProdClass	ProdSubClassID	ProdSubClass
+        //ArticleCreationDate	CNETavailable	CNETid	ListPrice	Weight	Length	Width	Heigth	NoReturn	MayRequireAuthorization	EndUserInformation	FreightPolicyException
+        $columns = fgetcsv($fp, null, "\t");
+        $matnrs=[];
         while ($line = fgetcsv($fp, null, "\t")) {
             while (count($line)>count($columns)) {
                 array_pop($line);
@@ -410,60 +681,60 @@ class DistributorUpdateService {
             }
             if (!$is_relevant) continue;
 
+            $matnrs[$line['Matnr']] = true;
+continue;
+
             $manufPartNo = preg_replace('/#\w\w\w$/', '', preg_replace('#\?\w+$#', '', $line['ManufPartNo']));
-            $relevant_mattnr[$line['Matnr']] = $line['Matnr'];
             $category_mattnr[$line['ProdFamilyID']][$line['ProdClassID']][$manufPartNo] =  $line['Matnr'];
+            $qty = isset($qty[$line['Matnr']]) ? $qty[$line['Matnr']] : 0;
+            $price = isset($price[$line['Matnr']]) ? $price[$line['Matnr']] : ['CustBestPrice'=>'0','Promotion'=>null];
 
-            $line['Qty'] = isset($qty[$line['Matnr']]) ? $qty[$line['Matnr']] : 0;
-            $_md5 = md5(implode(',',$line));
-            if (isset($exists[$line['Matnr']]) && ($exists[$line['Matnr']]==$_md5)) {
-                unset($exists[$line['Matnr']]);
-                continue;
+            $manufacturerId = null;
+            foreach ($manufacturers as $mfg_reg=>$mfg_id) {
+                if (preg_match($mfg_reg, $line['Manufacturer'])) {
+                    $manufacturerId = $mfg_id;
+                }
             }
 
-            $line['_md5'] = $_md5;
-            $line['ManufPartNo'] = $manufPartNo;
+            $product_data = [
+                'supplierSku'=>trim($line['Matnr']),
+                'manufacturer'=>$line['Manufacturer'],
+                'manufacturerId'=>$manufacturerId,
+                'vpn'=>$manufPartNo,
+                'name'=>$line['ShortDescription'],
+                'msrp'=>$line['ListPrice'],
+                'weight'=>$line['Weight'] ? $line['Weight']*0.453592 : null,
+                'length'=>$line['Length'] ? $line['Length']*2.54/100 : null,
+                'width'=>$line['Width'] ? $line['Width']*2.54/100 : null,
+                'height'=>$line['Heigth'] ? $line['Heigth']*2.54/100 : null,
+                'upc'=>$line['GTIN'],
+                'description'=>trim($line['LongDescription']),
+                'isStock'=>intval($qty)>0?1:0,
+                'qty'=>$qty,
+                'category'=>$line['ProdFamily'].' | '.$line['ProdClass'].' | '.$line['ProdSubClass'],
+                'categoryId'=>$line['ProdSubClassID'],
+                'dateCreated'=>$line['ArticleCreationDate'],
+            ];
 
-            if (!$insert_product_statement) {
-                $sql = [];
-                foreach ($line as $key => $value) $sql[] = "`$key`=:{$key}";
-                $sql = 'insert INTO techdata_products SET ' . implode(', ', $sql);
-                $insert_product_statement = $db->prepare($sql);
+            try {
+                $this->populate($product_data, null);
+            } catch (\Exception $ex) {
+                var_dump($product_data);
+                die ('xxx '.$ex->getMessage());
             }
 
-            if (!$update_product_statement) {
-                $sql = [];
-                foreach ($line as $key => $value) if ($key!='Matnr') $sql[] = "`$key`=:{$key}";
-                $sql = 'update techdata_products SET ' . implode(', ', $sql) . ' where Matnr=:Matnr';
-                $update_product_statement = $db->prepare($sql);
+            if ($manufacturerId) {
+                $category_mattnr[$line['ProdFamilyID']][$line['ProdClassID']][$manufacturerId][$manufPartNo] = $line['Matnr'];
             }
 
-            if (isset($exists[$line['Matnr']])) {
-                $update_product_statement->execute($line);
-                unset($exists[$line['Matnr']]);
-            } else {
-                $insert_product_statement->execute($line);
-            }
+            unset($this->supplier_product[$line['Matnr']]);
         }
         fclose($fp);
 
-        $st1 = $db->prepare('delete from techdata_products where Matnr=?');
-        $st2 = $db->prepare('delete from techdata_prices where Matnr=?');
-        foreach ($exists as $matnr=>$md5) {
-            $st1->execute([$matnr]);
-            $st2->execute([$matnr]);
-        }
+        gc_collect_cycles();
+        echo "3. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
-        #---
-
-        $exists = [];
-        $cursor = $db->query('select Matnr, _md5 from techdata_prices where dealerId='.intval($dealerSupplier['dealerId']));
-        while($line = $cursor->fetch()) {
-            $exists[$line['Matnr']] = $line['_md5'] ? $line['_md5'] : 'x';
-        }
-
-        echo "4. ".round(memory_get_usage()/(1024*1024))." MB\n";
-
+        #----
         $columns = [
             'Matnr',
             'CustBestPrice',
@@ -480,80 +751,82 @@ class DistributorUpdateService {
             }
             $line = array_combine($columns, $line);
 
-            if (!isset($relevant_mattnr[$line['Matnr']])) {
-                continue;
-            }
+            if (!isset($matnrs[$line['Matnr']])) continue;
 
-            $_md5 = md5(implode(',',$line));
-            if (isset($exists[$line['Matnr']]) && ($exists[$line['Matnr']]==$_md5)) continue;
-
-            if (!$insert_price_statement) {
-                $sql = 'insert into techdata_prices set CustBestPrice=?, Promotion=?, _md5=?, dealerId=?, Matnr=?';
-                $insert_price_statement = $db->prepare($sql);
-            }
-
-            if (!$update_price_statement) {
-                $sql = 'update techdata_prices set CustBestPrice=?, Promotion=?, _md5=? where dealerId=? and Matnr=?';
-                $update_price_statement = $db->prepare($sql);
-            }
-
-            $arr=[
-                $line['CustBestPrice'],
-                $line['Promotion'],
-                $_md5,
-                $dealerSupplier['dealerId'],
-                $line['Matnr'],
+            $price_data = [
+                'supplierSku'=>$line['Matnr'],
+                'dealerId'=>$dealerSupplier['dealerId'],
+                'price'=>$line['CustBestPrice'],
+                'promotion'=>$line['Promotion']=='N'?0:1,
             ];
 
-            if (isset($exists[$line['Matnr']])) $update_price_statement->execute($arr);
-            else $insert_price_statement->execute($arr);
+            try {
+                $this->populate(null, $price_data);
+            } catch (\Exception $ex) {
+                var_dump($price_data);
+                die ('xxx '.$ex->getMessage());
+            }
         }
-        fclose($filename);
+        fclose($fp);
 
-        echo "5. ".round(memory_get_usage()/(1024*1024))." MB\n";
+        gc_collect_cycles();
+        echo "4. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
         #--
-        $toner_statement = $db->prepare("update techdata_products set tonerId=? where ProdFamilyID='SUPPLIESA' and ProdClassID='PERIPHERA' and Matnr=?");
-        $weight_statement = $db->prepare('update base_product set weight=(select 0.453592 * Weight from techdata_products where Matnr=?) where weight is null and id=?');
+        $st1 = $db->prepare('delete from supplier_product where supplierSku=? and supplierId='.$dealerSupplier['supplierId']);
+        $st2 = $db->prepare('delete from supplier_price where supplierSku=? and dealerId='.$dealerSupplier['dealerId'].' and supplierId='.$dealerSupplier['supplierId']);
+        foreach ($this->supplier_product as $supplierSku=>$md5) {
+            $st1->execute([$supplierSku]);
+            $st2->execute([$supplierSku]);
+        }
+
+        #--
+
         $toner_count = 0;
         $weight_count = 0;
-        foreach($db->query("select base_product.id, sku, weight from base_product join base_printer_consumable using (id)")->fetchAll() as $line) {
+        $cursor = $db->query("select base_product.id, manufacturerId, sku, weight from base_product join base_printer_consumable using (id)");
+        while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
             $sku = $line['sku'];
+            $manufacturerId = $line['manufacturerId'];
             if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
                 $sku = $match[1];
             }
-            if (isset($category_mattnr['SUPPLIESA']['PERIPHERA'][$sku])) {
-                $matnr = $category_mattnr['SUPPLIESA']['PERIPHERA'][$sku];
-                $toner_statement->execute([$line['id'], $matnr]);
-                $toner_count += $toner_statement->rowCount();
-                if (empty($line['weight'])) {
-                    $weight_statement->execute([$matnr, $line['id']]);
-                    $weight_count += $weight_statement->rowCount();
+            if (isset($category_mattnr['SUPPLIESA']['PERIPHERA'][$manufacturerId][$sku])) {
+                $matnr = $category_mattnr['SUPPLIESA']['PERIPHERA'][$manufacturerId][$sku];
+                //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
+                $this->base_product_statement->execute([$line['id'], $matnr]);
+                $toner_count += $this->base_product_statement->rowCount();
+                if (empty($line['sku']) || empty($line['weight']) || empty($line['upc'])) {
+                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
+                    $this->sku_statement->execute([$matnr, $matnr, $matnr, $line['id']]);
+                    $weight_count += $this->sku_statement->rowCount();
                 }
             }
         }
+        $cursor->closeCursor();
         echo " toner_count:{$toner_count} --- weight_count:{$weight_count}\n";
 
-        $device_statement = $db->prepare("update techdata_products set masterDeviceId=? where ProdFamilyID='PERIPHERA' and ProdClassID='PRINTERSP' and Matnr=?");
-        $sku_statement = $db->prepare('update base_product set sku=(select ManufPartNo from techdata_products where Matnr=?), weight=(select 0.453592 * Weight from techdata_products where Matnr=?) where id=?');
-        foreach($db->query('select base_product.id, base_product.weight, oemSku, sku from base_product left join devices on base_product.id=devices.masterDeviceId and devices.oemSku is not null group by base_product.id') as $line) {
+        $cursor = $db->query('select base_product.id, base_product.manufacturerId, base_product.weight, oemSku, sku from base_product left join devices on base_product.id=devices.masterDeviceId and devices.oemSku is not null group by base_product.id');
+        while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
             $sku = $line['sku'] ? $line['sku'] : $line['oemSku'];
+            $manufacturerId = $line['manufacturerId'];
             if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
                 $sku = $match[1];
             }
-            if (isset($category_mattnr['PERIPHERA']['PRINTERSP'][$sku])) {
-                $matnr = $category_mattnr['PERIPHERA']['PRINTERSP'][$sku];
-                $device_statement->execute([$line['id'], $matnr]);
-                if (empty($line['sku']) || empty($line['weight'])) {
-                    $sku_statement->execute([$matnr, $matnr, $line['id']]);
+            if (isset($category_mattnr['PERIPHERA']['PRINTERSP'][$manufacturerId][$sku])) {
+                $matnr = $category_mattnr['PERIPHERA']['PRINTERSP'][$manufacturerId][$sku];
+                $this->base_product_statement->execute([$line['id'], $matnr]);
+                if (empty($line['sku']) || empty($line['weight']) || empty($line['upc'])) {
+                    $this->sku_statement->execute([$matnr, $matnr, $matnr, $line['id']]);
                 }
             }
         }
+        $cursor->closeCursor();
         #--
 
+        gc_collect_cycles();
         echo "6. ".round(memory_get_usage()/(1024*1024))." MB\n";
-
-        echo 'done! '.time();
+        echo time() - $this->timerStart."s\n";
         return true;
     }
 
@@ -655,29 +928,18 @@ class DistributorUpdateService {
             'Warehouse_Qty_on_Hand_16',
             'MFG_Drop_Ship_Warehouse_QTY',
         ];
+
         $filename=dirname($zip_filename).'/'.$txt_filename;
         echo "processing {$filename} for dealer {$dealerSupplier['dealerId']}\n";
         $fp = fopen($filename, 'rb');
 
-        $update_products_statement = false;
-        $insert_products_statement = false;
-        $update_price_statement = false;
-        $insert_price_statement = false;
-
+        gc_collect_cycles();
         echo "1. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
-        $exists = [];
-        $cursor = $db->query('select SYNNEX_SKU, _md5 from synnex_products');
-        while($line = $cursor->fetch()) {
-            $exists[$line['SYNNEX_SKU']] = $line['_md5'] ? $line['_md5'] : 'x';
+        $manufacturers=[];
+        foreach ($db->query('select * from synnex_manufacturer') as $line) {
+            $manufacturers[$line['name']] = $line['manufacturerId'];
         }
-        $cursor->closeCursor();
-        $cursor = null;
-        gc_collect_cycles();
-
-        echo "exists_products: ".count($exists)."\n";
-
-        echo "2. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
         //ignore header line
         fgetcsv($fp, null, '~');
@@ -712,197 +974,127 @@ class DistributorUpdateService {
             if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '551') continue; //Digital Signage
             if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '552') continue; //Security
 
-            $price_data = [
-                'Contract_Price' => $line['Contract_Price'],
-                'Unit_Cost' => $line['Unit_Cost'],
-                'Promotion_Flag' => $line['Promotion_Flag'],
-                'Promotion_Comment' => $line['Promotion_Comment'],
-                'Promotion_Expiration_Date' => $line['Promotion_Expiration_Date'],
-                'dealerId' => $dealerSupplier['dealerId'],
-                'SYNNEX_SKU' => $line['SYNNEX_SKU'],
+            $manufacturerId = null;
+            if (isset($manufacturers[$line['Manufacturer_Name']])) $manufacturerId = $manufacturers[$line['Manufacturer_Name']];
+
+            $vpn = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['Manufacturer_Part']));
+
+            $sku_Created_Date = \DateTime::createFromFormat('Ymd', $line['SKU_Created_Date']);
+
+            $product_data = [
+                'supplierSku'=>$line['SYNNEX_SKU'],
+                'manufacturer'=>$line['Manufacturer_Name'],
+                'manufacturerId'=>$manufacturerId,
+                'vpn'=>$vpn,
+                'name'=>$line['Part_Description'],
+                'msrp'=>$line['MSRP'],
+                'weight'=>0.453592 * floatval($line['Ship_Weight']),
+                'length'=>$line['Length'] * 2.54 / 100,
+                'width'=>$line['Width'] * 2.54 / 100,
+                'height'=>$line['Height'] * 2.54 / 100,
+                'upc'=>$line['UPC_Code'],
+                'description'=>trim($line['Part_Description']),
+                'isStock'=>intval($line['Qty_on_Hand'])>0?1:0,
+                'qty'=>json_encode([
+                    'Warehouse_Qty_on_Hand_1'=>$line['Warehouse_Qty_on_Hand_1'],
+                    'Warehouse_Qty_on_Hand_2'=>$line['Warehouse_Qty_on_Hand_2'],
+                    'Warehouse_Qty_on_Hand_3'=>$line['Warehouse_Qty_on_Hand_3'],
+                    'Warehouse_Qty_on_Hand_4'=>$line['Warehouse_Qty_on_Hand_4'],
+                    'Warehouse_Qty_on_Hand_5'=>$line['Warehouse_Qty_on_Hand_5'],
+                    'Warehouse_Qty_on_Hand_6'=>$line['Warehouse_Qty_on_Hand_6'],
+                    'Warehouse_Qty_on_Hand_7'=>$line['Warehouse_Qty_on_Hand_7'],
+                    'Warehouse_Qty_on_Hand_8'=>$line['Warehouse_Qty_on_Hand_8'],
+                    'Warehouse_Qty_on_Hand_9'=>$line['Warehouse_Qty_on_Hand_9'],
+                    'Warehouse_Qty_on_Hand_10'=>$line['Warehouse_Qty_on_Hand_10'],
+                    'Warehouse_Qty_on_Hand_11'=>$line['Warehouse_Qty_on_Hand_11'],
+                    'Warehouse_Qty_on_Hand_12'=>$line['Warehouse_Qty_on_Hand_12'],
+                    'Warehouse_Qty_on_Hand_13'=>$line['Warehouse_Qty_on_Hand_13'],
+                    'Warehouse_Qty_on_Hand_14'=>$line['Warehouse_Qty_on_Hand_14'],
+                    'Warehouse_Qty_on_Hand_15'=>$line['Warehouse_Qty_on_Hand_15'],
+                    'Warehouse_Qty_on_Hand_16'=>$line['Warehouse_Qty_on_Hand_16'],
+                    'MFG_Drop_Ship_Warehouse_QTY'=>$line['MFG_Drop_Ship_Warehouse_QTY'],
+                    'Qty_on_Hand'=>$line['Qty_on_Hand']]),
+                'category'=>$line['SYNNEX_CAT_Code'],
+                'categoryId'=>$line['SYNNEX_CAT_Code'],
+                'dateCreated'=>$sku_Created_Date?$sku_Created_Date->format('Y-m-d'):null,
             ];
 
-            foreach (['Contract_Price', 'Unit_Cost', 'Promotion_Flag', 'Promotion_Comment', 'Promotion_Expiration_Date'] as $key) {
-                unset($line[$key]);
-            }
-
-            $_md5 = md5(implode(',', array_values($line)));
-            $line['_md5'] = $_md5;
-
-            if (!$update_products_statement) {
-                $sql = [];
-                foreach ($line as $key => $value) if ($key != 'SYNNEX_SKU') $sql[] = "`$key`=:{$key}";
-                $update_products_statement = $db->prepare('UPDATE synnex_products SET ' . implode(', ', $sql) . ' WHERE SYNNEX_SKU=:SYNNEX_SKU');
-            }
-            if (!$insert_products_statement) {
-                $sql = [];
-                foreach ($line as $key => $value) $sql[] = "`$key`=:{$key}";
-                $insert_products_statement = $db->prepare('INSERT INTO synnex_products SET ' . implode(', ', $sql));
-            }
-
-            if (isset($exists[$line['SYNNEX_SKU']])) {
-                if ($exists[$line['SYNNEX_SKU']] != $_md5) {
-                    $update_products_statement->execute($line);
-                }
-                unset($exists[$line['SYNNEX_SKU']]);
-            } else {
-                $insert_products_statement->execute($line);
-            }
-
-        }
-
-        #==
-        $delete_product_statement = $db->prepare('delete from synnex_products where SYNNEX_SKU=?');
-        $delete_price_statement = $db->prepare('delete from synnex_products where SYNNEX_SKU=?');
-        foreach ($exists as $id=>$hash) {
-            $delete_product_statement->execute([$id]);
-            $delete_price_statement->execute([$id]);
-        }
-        echo count($exists)." products deleted\n";
-        #==
-
-
-        echo "3. ".round(memory_get_usage()/(1024*1024))." MB\n";
-
-        $exists = [];
-        $cursor = $db->query('select SYNNEX_SKU, _md5 from synnex_prices where dealerId='.intval($dealerSupplier['dealerId']));
-        while($line = $cursor->fetch()) {
-            $exists[$line['SYNNEX_SKU']] = $line['_md5'] ? $line['_md5'] : 'x';
-        }
-        $cursor->closeCursor();
-        $cursor = null;
-        gc_collect_cycles();
-
-        echo "exists_prices {$dealerSupplier['dealerId']}: ".count($exists)."\n";
-
-        echo "4. ".round(memory_get_usage()/(1024*1024))." MB\n";
-
-        $skus = [];
-
-        fseek($fp, 0);
-        //ignore header line
-        fgetcsv($fp, null, '~');
-        while ($line = fgetcsv($fp, null, '~')) {
-
-            while (count($line) > count($columns)) {
-                array_pop($line);
-            }
-            $line = array_combine($columns, $line);
-
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '001') continue; //Accessories / Cables
-            //if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '002') continue; //Computers  / Portables
-            //if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '003') continue; //Digital Cameras / Keyboards / Input Device
-            //if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '005') continue; //Monitor / Display / Projector
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '006') continue; //Network Hardware
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '007') continue; //Audio / Video / Output Devices
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '008') continue; //Power Equipment
-            //if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '009') continue; //Printers
-            //if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '010') continue; //Service / Support
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '011') continue; //Software
-            //if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '012') continue; //Storage Devices
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '013') continue; //Computer Components
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '311') continue; //To Be Determined
-            //if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '350') continue; //Office Machines & Supplies
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '544') continue; //TV & Video
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '545') continue; //Home Audio
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '546') continue; //Portable Electronics
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '547') continue; //Projectors
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '548') continue; //Appliances
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '549') continue; //Photo
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '550') continue; //Telecom
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '551') continue; //Digital Signage
-            if (substr($line['SYNNEX_CAT_Code'], 0, 3) == '552') continue; //Security
-
             $price_data = [
-                'Contract_Price' => $line['Contract_Price'],
-                'Unit_Cost' => $line['Unit_Cost'],
-                'Promotion_Flag' => $line['Promotion_Flag'],
-                'Promotion_Comment' => $line['Promotion_Comment'],
-                'Promotion_Expiration_Date' => $line['Promotion_Expiration_Date'],
-                'dealerId' => $dealerSupplier['dealerId'],
-                'SYNNEX_SKU' => $line['SYNNEX_SKU'],
+                'supplierSku'=>$line['SYNNEX_SKU'],
+                'dealerId'=>$dealerSupplier['dealerId'],
+                'price'=>trim($line['Contract_Price']),
+                'promotion'=>$line['Promotion_Flag']=='Y'?1:0,
             ];
 
-            if (!$update_price_statement) {
-                $sql = 'UPDATE synnex_prices SET
-                  `Contract_Price`=:Contract_Price,
-                  `Unit_Cost`=:Unit_Cost,
-                  `Promotion_Flag`=:Promotion_Flag,
-                  `Promotion_Comment`=:Promotion_Comment,
-                  `Promotion_Expiration_Date`=:Promotion_Expiration_Date,
-                  `_md5`=:_md5
-                 WHERE
-                  `SYNNEX_SKU`=:SYNNEX_SKU AND dealerId=:dealerId';
-                $update_price_statement = $db->prepare($sql);
-            }
-            if (!$insert_price_statement) {
-                $sql = 'INSERT INTO synnex_prices SET
-                  `Contract_Price`=:Contract_Price,
-                  `Unit_Cost`=:Unit_Cost,
-                  `Promotion_Flag`=:Promotion_Flag,
-                  `Promotion_Comment`=:Promotion_Comment,
-                  `Promotion_Expiration_Date`=:Promotion_Expiration_Date,
-                  `_md5`=:_md5,
-                  `SYNNEX_SKU`=:SYNNEX_SKU,
-                  dealerId=:dealerId';
-                $insert_price_statement = $db->prepare($sql);
+
+            try {
+                $this->populate($product_data, $price_data);
+            } catch (\Exception $ex) {
+                var_dump($product_data);
+                die ('xxx '.$ex->getMessage());
             }
 
-            $_md5 = md5(implode(',', array_values($price_data)));
-            $price_data['_md5'] = $_md5;
-
-            if (isset($exists[$line['SYNNEX_SKU']])) {
-                if ($exists[$line['SYNNEX_SKU']] != $_md5) {
-                    $update_price_statement->execute($price_data);
-                }
-            } else {
-                $insert_price_statement->execute($price_data);
-            }
-
-            $sku = $line['Manufacturer_Part'];
-            if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
-                $sku = $match[1];
-            }
             $cat = substr($line['SYNNEX_CAT_Code'], 0, 6);
-            $skus[$cat][$sku] = $line['SYNNEX_SKU'];
+            $skus[$cat][$manufacturerId][$vpn] = $line['SYNNEX_SKU'];
+
+            unset($this->supplier_product[$line['SYNNEX_SKU']]);
         }
 
+        #==
+        $st1 = $db->prepare('delete from supplier_product where supplierSku=? and supplierId='.$dealerSupplier['supplierId']);
+        $st2 = $db->prepare('delete from supplier_price where supplierSku=? and dealerId='.$dealerSupplier['dealerId'].' and supplierId='.$dealerSupplier['supplierId']);
+        $c = count($this->supplier_product);
+        foreach ($this->supplier_product as $supplierSku=>$md5) {
+            $st1->execute([$supplierSku]);
+            $st2->execute([$supplierSku]);
+        }
+        echo "{$c} products deleted\n";
+        #==
+
+        gc_collect_cycles();
         echo "5. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
-        $toner_statement = $db->prepare('update synnex_products set tonerId=? where SYNNEX_SKU=?');
-        $weight_statement = $db->prepare('update base_product set weight=(select 0.453592 * Ship_Weight from synnex_products where SYNNEX_SKU=?) where id=?');
-        $upc_statement = $db->prepare('update base_product set upc=(select UPC_Code from synnex_products where SYNNEX_SKU=?) where id=?');
-        foreach($db->query("select base_product.id, sku, weight, upc from base_product join base_printer_consumable using (id)")->fetchAll() as $line) {
+        //xxx
+        $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, weight, upc from base_product join base_printer_consumable using (id)");
+        while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
+            $manufacturerId = $line['manufacturerId'];
             $sku = $line['sku'];
             if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
                 $sku = $match[1];
             }
-            if (isset($skus['009088'][$sku])) {
-                $toner_statement->execute([$line['id'], $skus['009088'][$sku]]);
-                if (empty($line['weight'])) $weight_statement->execute([$skus['009088'][$sku], $line['id']]);
-                if (empty($line['upc'])) $upc_statement->execute([$skus['009088'][$sku], $line['id']]);
+            if (isset($skus['009088'][$manufacturerId][$sku])) {
+                $supplierSku = $skus['009088'][$manufacturerId][$sku];
+                //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
+                $this->base_product_statement->execute([$line['id'], $supplierSku]);
+                if (empty($line['sku']) || empty($line['weight']) || empty($line['upc'])) {
+                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
+                    $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
+                }
             }
         }
+        $cursor->closeCursor();
 
-        $device_statement = $db->prepare('update synnex_products set masterDeviceId=? where SYNNEX_SKU=?');
-        $sku_statement = $db->prepare('update base_product set sku=(select Manufacturer_Part from synnex_products where SYNNEX_SKU=?), upc=(select UPC_Code from synnex_products where SYNNEX_SKU=?), weight=(select 0.453592 * Ship_Weight from synnex_products where SYNNEX_SKU=?) where id=?');
-        foreach($db->query('select base_product.id, base_product.weight, base_product.upc, oemSku, sku from base_product left join devices on base_product.id=devices.masterDeviceId and devices.oemSku is not null group by base_product.id') as $line) {
+        $cursor = $db->query('select base_product.id, base_product.manufacturerId, base_product.weight, base_product.upc, oemSku, sku from base_product left join devices on base_product.id=devices.masterDeviceId and devices.oemSku is not null group by base_product.id');
+        while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
+            $manufacturerId = $line['manufacturerId'];
             $sku = $line['sku'] ? $line['sku'] : $line['oemSku'];
             if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
                 $sku = $match[1];
             }
-            if (isset($skus['009053'][$sku])) {
-                $synnex_sku = $skus['009053'][$sku];
-                $device_statement->execute([$line['id'], $synnex_sku]);
+            if (isset($skus['009053'][$manufacturerId][$sku])) {
+                $supplierSku = $skus['009053'][$manufacturerId][$sku];
+                $this->base_product_statement->execute([$line['id'], $supplierSku]);
                 if (empty($line['sku']) || empty($line['weight']) || empty($line['upc'])) {
-                    $sku_statement->execute([$synnex_sku, $synnex_sku, $synnex_sku, $line['id']]);
+                    $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
                 }
             }
         }
+        $cursor->closeCursor();
 
+        gc_collect_cycles();
         echo "6. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
-        echo 'done! '.time();
+        echo time() - $this->timerStart."s\n";
         return true;
     }
 
@@ -927,6 +1119,12 @@ class DistributorUpdateService {
             print_r($ex);
             Logger::logException($ex);
             return false;
+        }
+
+        $manufacturers=[];
+        foreach ($db->query('select * from ingram_manufacturer') as $line) {
+            $reg = '#^'.str_replace('%','.*',strtoupper($line['name'])).'$#i';
+            $manufacturers[$reg] = $line['manufacturerId'];
         }
 
         $columns = [
@@ -954,38 +1152,13 @@ class DistributorUpdateService {
 'NEW_ITEM_RECEIPT_FLAG', // - Y=Stock has been received; (BLANK FIELD)=Stock has not been received.  Indicates if first stock has been received.
 'SUBSTITUTE_PART_NUMBER', // - 7 Positions, Alphanumeric, followed by 5 spaces; (Blank Field)=No substitute part number
         ];
-        $fp = fopen(dirname($zip_filename).'/PRICE.TXT', 'rb');
-
-        $db->query("update ingram_products set `status`='*', `AVAILABILITY_FLAG`='N'");
-
-        $insert_product_statement = false;
-        $update_product_statement = false;
-        $insert_price_statement = false;
-        $update_price_statement = false;
-        $toner_statement = false;
-        $hp_toner_statement = false;
-        $masterDevice_statement = false;
-        $hp_device_statement = false;
-        $computer_statement = false;
-        $peripheral_statement = false;
-        $weight_statement = false;
-        $upc_statement = false;
-
-        $exists_products = [];
-        $cursor = $db->query('select INGRAM_PART_NUMBER, _md5 from ingram_products');
-        while($line = $cursor->fetch()) {
-            $exists_products[$line['INGRAM_PART_NUMBER']] = $line['_md5'] ? $line['_md5'] : 'x';
-        }
-        echo "exists_products: ".count($exists_products)."\n";
-
-        $exists_prices = [];
-        $cursor = $db->query('select INGRAM_PART_NUMBER, _md5 from ingram_prices where dealerId='.intval($dealerSupplier['dealerId']));
-        while($line = $cursor->fetch()) {
-            $exists_prices[$line['INGRAM_PART_NUMBER']] = $line['_md5'] ? $line['_md5'] : 'x';
-        }
-        echo "exists_prices {$dealerSupplier['dealerId']}: ".count($exists_prices)."\n";
 
         $skus = [];
+
+        gc_collect_cycles();
+        echo "1. ".round(memory_get_usage()/(1024*1024))." MB\n";
+
+        $fp = fopen(dirname($zip_filename).'/PRICE.TXT', 'rb');
         while ($line = fgetcsv($fp)) {
             $line = array_combine($columns, $line);
 
@@ -1001,129 +1174,113 @@ class DistributorUpdateService {
                 case 'A':
                 case 'C':
                 {
-                    $price_data =false;
-                    if (($line['ACTION_INDICATOR']=='A') || ($line['PRICE_CHANGE_FLAG']=='Y')) {
-                        $price_data = [
-                            'CUSTOMER_PRICE' => $line['CUSTOMER_PRICE'],
-                            'SPECIAL_PRICE_FLAG' => $line['SPECIAL_PRICE_FLAG'],
-                            'INGRAM_PART_NUMBER' => $line['INGRAM_PART_NUMBER'],
-                            'dealerId' => $dealerSupplier['dealerId'],
-                        ];
-                    }
+                    $vpn = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['VENDOR_PART_NUMBER']));
 
-                    foreach (['ACTION_INDICATOR', 'PRICE_CHANGE_FLAG', 'CUSTOMER_PRICE', 'SPECIAL_PRICE_FLAG'] as $key) {
-                        unset($line[$key]);
-                    }
-
-                    $_md5 = md5(implode(',',array_values($line)));
-                    $line['_md5'] = $_md5;
-
-                    if (!$update_product_statement) {
-                        $sql = [];
-                        foreach ($line as $key => $value) if ($key!='INGRAM_PART_NUMBER') {
-                            $sql[] = "`$key`=:{$key}";
+                    $manufacturerId = null;
+                    foreach ($manufacturers as $reg=>$id) {
+                        if (preg_match($reg, $line['VENDOR_NAME'])) {
+                            $manufacturerId = $id;
                         }
-                        $sql = 'update ingram_products SET ' . implode(', ', $sql).' where INGRAM_PART_NUMBER=:INGRAM_PART_NUMBER';
-                        $update_product_statement = $db->prepare($sql);
-                    }
-                    if (!$insert_product_statement) {
-                        $sql = [];
-                        foreach ($line as $key => $value) {
-                            $sql[] = "`$key`=:{$key}";
-                        }
-                        $sql = 'insert INTO ingram_products SET ' . implode(', ', $sql);
-                        $insert_product_statement = $db->prepare($sql);
                     }
 
-                    if (isset($exists_products[$line['INGRAM_PART_NUMBER']])) {
-                        if ($exists_products[$line['INGRAM_PART_NUMBER']] != $_md5) {
-                            $update_product_statement->execute($line);
-                        }
-                        unset($exists_products[$line['INGRAM_PART_NUMBER']]);
-                    } else {
-                        $insert_product_statement->execute($line);
+                    $product_data = [
+                        'supplierSku'=>$line['INGRAM_PART_NUMBER'],
+                        'manufacturer'=>$line['VENDOR_NAME'],
+                        'manufacturerId'=>$manufacturerId,
+                        'vpn'=>$vpn,
+                        'name'=>null,
+                        'msrp'=>$line['RETAIL_PRICE'],
+                        'weight'=>0.453592 * floatval($line['WEIGHT']),
+                        'length'=>$line['LENGTH'] * 2.54 / 100,
+                        'width'=>$line['WIDTH'] * 2.54 / 100,
+                        'height'=>$line['HEIGHT'] * 2.54 / 100,
+                        'upc'=>$line['UPC_CODE'],
+                        'description'=>trim($line['INGRAM_PART_DESCRIPTION_LINE_1'].' '.$line['INGRAM_PART_DESCRIPTION_LINE_2']),
+                        'isStock'=>$line['AVAILABILITY_FLAG']=='Y'?1:0,
+                        'qty'=>null,
+                        'category'=>$line['INGRAM_MICRO_CATEGORY'],
+                        'categoryId'=>$line['INGRAM_MICRO_CATEGORY'],
+                        'dateCreated'=>null,
+                    ];
+
+                    $price_data = [
+                        'supplierSku'=>$line['INGRAM_PART_NUMBER'],
+                        'dealerId'=>$dealerSupplier['dealerId'],
+                        'price'=>trim($line['CUSTOMER_PRICE']),
+                        'promotion'=>$line['SPECIAL_PRICE_FLAG']=='*'?1:0,
+                    ];
+
+
+                    try {
+                        $this->populate($product_data, $price_data);
+                    } catch (\Exception $ex) {
+                        var_dump($product_data);
+                        die ('xxx '.$ex->getMessage());
                     }
 
-                    #---
+                    $skus[$line['INGRAM_MICRO_CATEGORY']][$manufacturerId][$vpn] = $line['INGRAM_PART_NUMBER'];
 
-                    $_md5 = md5(implode('',array_values($price_data)));
-                    $price_data['_md5'] = $_md5;
-
-                    if (!$insert_price_statement) {
-                        $sql = 'insert INTO ingram_prices SET CUSTOMER_PRICE=:CUSTOMER_PRICE, SPECIAL_PRICE_FLAG=:SPECIAL_PRICE_FLAG, INGRAM_PART_NUMBER=:INGRAM_PART_NUMBER, dealerId=:dealerId, _md5=:_md5';
-                        $insert_price_statement = $db->prepare($sql);
-                    }
-                    if (!$update_price_statement) {
-                        $sql = 'update ingram_prices SET CUSTOMER_PRICE=:CUSTOMER_PRICE, SPECIAL_PRICE_FLAG=:SPECIAL_PRICE_FLAG, _md5=:_md5 where INGRAM_PART_NUMBER=:INGRAM_PART_NUMBER and dealerId=:dealerId';
-                        $update_price_statement = $db->prepare($sql);
-                    }
-
-                    if (isset($exists_prices[$line['INGRAM_PART_NUMBER']])) {
-                        if ($exists_prices[$line['INGRAM_PART_NUMBER']] != $_md5) {
-                            $update_price_statement->execute($price_data);
-                        }
-                    } else {
-                        $insert_price_statement->execute($price_data);
-                    }
-
-                    $sku = $line['VENDOR_PART_NUMBER'];
-                    if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
-                        $sku = $match[1];
-                    }
-                    $skus[$line['INGRAM_MICRO_CATEGORY']][$sku] = $line['INGRAM_PART_NUMBER'];
-                    break;
-                }
-
-                case 'D':
-                {
-                    $db->prepare('DELETE FROM ingram_products WHERE INGRAM_PART_NUMBER=:pn')->execute(['pn'=>$line['INGRAM_PART_NUMBER']]);
+                    unset($this->supplier_product[$line['INGRAM_PART_NUMBER']]);
                     break;
                 }
             }
         }
 
-        $delete_product_statement = $db->prepare('delete from ingram_products where ingram_part_number=?');
-        $delete_price_statement = $db->prepare('delete from ingram_prices where ingram_part_number=?');
-        foreach ($exists_products as $id=>$hash) {
-            $delete_product_statement->execute([$id]);
-            $delete_price_statement->execute([$id]);
-        }
+        gc_collect_cycles();
+        echo "2. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
-        $toner_statement = $db->prepare('update ingram_products set tonerId=? where INGRAM_PART_NUMBER=?');
-        $weight_statement = $db->prepare('update base_product set weight=(select 0.453592 * WEIGHT from ingram_products where INGRAM_PART_NUMBER=?) where id=?');
-        $upc_statement = $db->prepare('update base_product set upc=(select UPC_CODE from ingram_products where INGRAM_PART_NUMBER=?) where id=?');
-        foreach($db->query("select base_product.id, sku, weight, upc from base_product join base_printer_consumable using (id)")->fetchAll() as $line) {
+        $st1 = $db->prepare('delete from supplier_product where supplierSku=? and supplierId='.$dealerSupplier['supplierId']);
+        $st2 = $db->prepare('delete from supplier_price where supplierSku=? and dealerId='.$dealerSupplier['dealerId'].' and supplierId='.$dealerSupplier['supplierId']);
+        $c = count($this->supplier_product);
+        foreach ($this->supplier_product as $supplierSku=>$md5) {
+            $st1->execute([$supplierSku]);
+            $st2->execute([$supplierSku]);
+        }
+        echo "{$c} products deleted\n";
+
+        $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, weight, upc from base_product join base_printer_consumable using (id)");
+        while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
+            $manufacturerId = $line['manufacturerId'];
             $sku = $line['sku'];
             if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
                 $sku = $match[1];
             }
-            if (isset($skus['1010'][$sku])) {
-                $toner_statement->execute([$line['id'], $skus['1010'][$sku]]);
-                if (empty($line['weight'])) $weight_statement->execute([$skus['1010'][$sku], $line['id']]);
-                if (empty($line['upc'])) $upc_statement->execute([$skus['1010'][$sku], $line['id']]);
+            if (isset($skus['1010'][$manufacturerId][$sku])) {
+                $supplierSku = $skus['1010'][$manufacturerId][$sku];
+                //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
+                $this->base_product_statement->execute([$line['id'], $supplierSku]);
+                if (empty($line['sku']) || empty($line['weight']) || empty($line['upc'])) {
+                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
+                    $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
+                }
             }
         }
+        $cursor->closeCursor();
 
-        $device_statement = $db->prepare('update ingram_products set masterDeviceId=? where INGRAM_PART_NUMBER=?');
-        $sku_statement = $db->prepare('update base_product set sku=(select VENDOR_PART_NUMBER from ingram_products where INGRAM_PART_NUMBER=?), weight=(select 0.453592 * WEIGHT from ingram_products where INGRAM_PART_NUMBER=?), upc=(select UPC_CODE from ingram_products where INGRAM_PART_NUMBER=?) where id=?');
-        foreach($db->query('select base_product.id, base_product.weight, base_product.upc, oemSku, sku from base_product left join devices on base_product.id=devices.masterDeviceId and devices.oemSku is not null group by base_product.id') as $line) {
+        $cursor = $db->query('select base_product.id, base_product.manufacturerId, base_product.weight, base_product.upc, oemSku, sku from base_product left join devices on base_product.id=devices.masterDeviceId and devices.oemSku is not null group by base_product.id');
+        while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
+            $manufacturerId = $line['manufacturerId'];
             $sku = $line['sku'] ? $line['sku'] : $line['oemSku'];
             if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
                 $sku = $match[1];
             }
-            if (isset($skus['0701'][$sku])) {
-                $ingram_part_number = $skus['0701'][$sku];
-                $device_statement->execute([$line['id'], $ingram_part_number]);
-                if (empty($line['sku']) || empty($line['weight']) || empty($line['upc'])) $sku_statement->execute([$ingram_part_number, $ingram_part_number, $ingram_part_number, $line['id']]);
-            }
-            if (isset($skus['0733'][$sku])) {
-                $ingram_part_number = $skus['0733'][$sku];
-                $device_statement->execute([$line['id'], $ingram_part_number]);
-                if (empty($line['sku']) || empty($line['weight']) || empty($line['upc'])) $sku_statement->execute([$ingram_part_number, $ingram_part_number, $ingram_part_number, $line['id']]);
+            foreach (['0701', '0733'] as $catId) {
+                if (isset($skus[$catId][$manufacturerId][$sku])) {
+                    $supplierSku = $skus[$catId][$manufacturerId][$sku];
+                    $this->base_product_statement->execute([$line['id'], $supplierSku]);
+                    if (empty($line['sku']) || empty($line['weight']) || empty($line['upc'])) {
+                        $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
+                    }
+                }
             }
         }
+        $cursor->closeCursor();
 
-        echo 'done! '.time();
+
+        gc_collect_cycles();
+        echo "3. ".round(memory_get_usage()/(1024*1024))." MB\n";
+
+        echo time() - $this->timerStart."s\n";
         return true;
     }
 

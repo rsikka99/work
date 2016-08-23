@@ -603,7 +603,7 @@ class ManageMasterDevicesService
      *
      * @return boolean
      */
-    public function saveHardwareQuote ($validatedData)
+    public function saveHardwareQuote ($validatedData, $manufacturerId)
     {
         $deviceMapper = DeviceMapper::getInstance();
         try
@@ -612,13 +612,9 @@ class ManageMasterDevicesService
             $device->populate($validatedData);
             $device->saveObject();
 
-            //@todo make this generic for all vendors
             #--
-            $st=\Zend_Db_Table::getDefaultAdapter()->prepare('update ingram_products set masterDeviceId=:masterDeviceId where `vendor_part_number`=:vpn');
-            $st->execute(['masterDeviceId'=>$this->masterDeviceId, 'vpn'=>$validatedData['oemSku']]);
-            #--
-            $st=\Zend_Db_Table::getDefaultAdapter()->prepare('update ingram_products set masterDeviceId=:masterDeviceId where `vendor_part_number` like :like');
-            $st->execute(['masterDeviceId'=>$this->masterDeviceId, 'like'=>$validatedData['oemSku'].'#%']);
+            $st=\Zend_Db_Table::getDefaultAdapter()->prepare('update supplier_product set baseProductId=? where manufacturerId=? and vpn=?');
+            $st->execute([$this->masterDeviceId, $manufacturerId, $validatedData['oemSku']]);
             #--
         }
         catch (Exception $e)

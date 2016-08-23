@@ -759,43 +759,27 @@ WHERE `toners`.`id` IN ({$tonerIdList})
         return $query->fetchAll();
     }
 
-    private function getTonerAggr($db, $dealerId, $toners, $suppliers) {
+    private function getTonerAggr($db, $dealerId, $toners) {
+        if (empty($toners)) return [];
+
         $ids = [];
         foreach ($toners as $line) {
             $ids[] = $line['id'];
         }
 
         $dist = $db->query(
-            'select 1 as dist, dealer_toner_attributes.tonerId, 1 as stock, dealer_toner_attributes.dealerId, dealer_toner_attributes.cost
+            'select 1 as dist, dealer_toner_attributes.tonerId, 1 as stock, dealer_toner_attributes.cost
     from
       dealer_toner_attributes
     where cost is not null and dealerId='.$dealerId.' and tonerId in ('.implode(',', $ids).')')->fetchAll();
 
-        $dist = array_merge($dist, isset($suppliers[1]) ? $db->query(
+        $dist = array_merge($dist, $db->query(
             '
-select 2 as dist, ingram_products.tonerId, ingram_products.availability_flag as stock, ingram_prices.dealerId, ingram_prices.customer_price as cost
+select 1+supplierId, baseProductId as tonerId, isStock as stock, price as cost
     from
-      ingram_products
-      join ingram_prices on ingram_products.ingram_part_number = ingram_prices.ingram_part_number
-    where dealerId='.$dealerId.' and tonerId in ('.implode(',', $ids).')')->fetchAll() : []);
-
-        $dist = array_merge($dist, isset($suppliers[2]) ? $db->query(
-            '
-select 3 as dist, synnex_products.tonerId, synnex_products.Qty_on_Hand as stock, synnex_prices.dealerId, synnex_prices.Contract_Price as cost
-    from
-      synnex_products
-      join synnex_prices on synnex_products.SYNNEX_SKU = synnex_prices.SYNNEX_SKU
-    where dealerId='.$dealerId.' and tonerId in ('.implode(',', $ids).')')->fetchAll() : []);
-
-        $dist = array_merge($dist, isset($suppliers[3]) ? $db->query(
-            '
-select 4 as dist, techdata_products.tonerId, techdata_products.Qty as stock, techdata_prices.dealerId, currency_exchange.rate * techdata_prices.CustBestPrice as cost
-    from
-      techdata_products
-      join techdata_prices on techdata_products.Matnr = techdata_prices.Matnr
-      join dealers on dealers.id = techdata_prices.dealerId
-      join currency_exchange on currency_exchange.currency = dealers.currency
-    where dealerId='.$dealerId.' and tonerId in ('.implode(',', $ids).')')->fetchAll() : []);
+      supplier_product
+      join supplier_price using (supplierId, supplierSku)
+    where dealerId='.$dealerId.' and baseProductId in ('.implode(',', $ids).')')->fetchAll());
 
         $aggr = [];
         foreach ($toners as $toner) {
@@ -810,10 +794,8 @@ select 4 as dist, techdata_products.tonerId, techdata_products.Qty as stock, tec
         usort($aggr, function($a, $b) {
             $dist_a = $a['dist'];
             $dist_b = $b['dist'];
-            if (is_numeric($dist_a['stock'])) $stock_a = $dist_a['stock']>0; else $stock_a = ($dist_a['stock'] == 'Y');
-            if (is_numeric($dist_b['stock'])) $stock_b = $dist_a['stock']>0; else $stock_b = ($dist_a['stock'] == 'Y');
-            if ($stock_a && !$stock_b) return -1;
-            if ($stock_b && !$stock_a) return 1;
+            if ($a['stock'] && !$b['stock']) return -1;
+            if ($b['stock'] && !$a['stock']) return 1;
 
             $toner_a = $a['toner'];
             $toner_b = $b['toner'];
@@ -903,15 +885,10 @@ select 4 as dist, techdata_products.tonerId, techdata_products.Qty as stock, tec
             $color_toners[$line['tonerColorId']][] = $line;
         };
 
-        $suppliers=[];
-        foreach ($db->query('select supplierId from dealer_suppliers where dealerId='.$dealerId) as $line) {
-            $suppliers[$line['supplierId']] = $line['supplierId'];
-        }
-
         $lines = [];
 
         if (!empty($monochrome_toners)) {
-            $arr = $this->getTonerAggr($db, $dealerId, $monochrome_toners, $suppliers);
+            $arr = $this->getTonerAggr($db, $dealerId, $monochrome_toners);
             if (!empty($arr)) {
                 $line = current($arr);
                 $lines[1] = $line;
@@ -919,7 +896,7 @@ select 4 as dist, techdata_products.tonerId, techdata_products.Qty as stock, tec
         }
         if (!empty($color_toners)) {
             foreach ($color_toners as $i=>$t) {
-                $arr = $this->getTonerAggr($db, $dealerId, $t, $suppliers);
+                $arr = $this->getTonerAggr($db, $dealerId, $t);
                 if (!empty($arr)) {
                     $line = current($arr);
                     $lines[$i] = $line;

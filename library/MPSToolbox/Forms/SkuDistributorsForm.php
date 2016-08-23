@@ -5,6 +5,8 @@ namespace MPSToolbox\Forms;
 use MPSToolbox\Legacy\Entities\DealerEntity;
 
 class SkuDistributorsForm extends \My_Form_Form {
+    public $skuId;
+
     public function loadDefaultDecorators ()
     {
         $this->setDecorators([['ViewScript', ['viewScript' => 'forms/hardware-library/sku-distributors-form.phtml']]]);
@@ -29,49 +31,32 @@ class SkuDistributorsForm extends \My_Form_Form {
         }
 
         #--
-        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from ingram_products p join ingram_prices c using (ingram_part_number) where dealerId='.$dealerId.' and skuId=?');
+        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select s.name as supplier_name, supplierSku, price, isStock from supplier_product p join suppliers s on p.supplierId=s.id join supplier_price c using (supplierId, supplierSku) where dealerId='.$dealerId.' and baseProductId=?');
         $st->execute([$skuId]);
         foreach ($st->fetchAll() as $line) {
             $distributors[] = [
-                'name'=>'Ingram Micro',
-                'sku'=>$line['ingram_part_number'],
-                'price'=>$line['customer_price'],
-                'stock'=>$line['availability_flag'],
-            ];
-        }
-        #--
-        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from synnex_products p join synnex_prices c using (SYNNEX_SKU) where dealerId='.$dealerId.' and skuId=?');
-        $st->execute([$skuId]);
-        foreach ($st->fetchAll() as $line) {
-            $distributors[] = [
-                'name'=>'Synnex',
-                'sku'=>$line['SYNNEX_SKU'],
-                'price'=>$line['Contract_Price'],
-                'stock'=>$line['Qty_on_Hand'],
-            ];
-        }
-        #--
-        $rate = \MPSToolbox\Services\CurrencyService::getInstance()->getRate();
-        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from techdata_products p join techdata_prices c using (Matnr) where dealerId='.$dealerId.' and skuId=?');
-        $st->execute([$skuId]);
-        foreach ($st->fetchAll() as $line) {
-            $distributors[] = [
-                'name'=>'Tech Data',
-                'sku'=>$line['Matnr'],
-                'price'=>$rate*$line['CustBestPrice'],
-                'stock'=>$line['Qty'],
+                'name'=>$line['supplier_name'],
+                'sku'=>$line['supplierSku'],
+                'price'=>$line['price'],
+                'stock'=>$line['isStock'],
             ];
         }
         #--
         return $distributors;
     }
 
+    /**
+     * @param $hardwareId
+     * @return array
+     * @todo
+     */
     public static function getServices($hardwareId)
     {
         $result = [];
         $db = \Zend_Db_Table::getDefaultAdapter();
-
         $dealerId = DealerEntity::getDealerId();
+
+        /**
 
         foreach($db->query(
             "
@@ -110,6 +95,7 @@ class SkuDistributorsForm extends \My_Form_Form {
             [$hardwareId])->fetchAll() as $line) {
             $result[] = $line;
         }
+        **/
 
         return $result;
     }

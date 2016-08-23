@@ -59,58 +59,43 @@ class Ecommerce_OrdersController extends Action {
                     $db = Zend_Db_Table::getDefaultAdapter();
 
                     foreach ($order->line_items as $item) {
-
-                        $tonerId = $db->query('select tonerId from dealer_toner_attributes where webId='.$item['id'])->fetchColumn(0);
-                        $masterDeviceId = $db->query('select masterDeviceId from devices where webId='.$item['id'])->fetchColumn(0);
-                        $computerId = $db->query('select ext_hardware.id from ext_hardware join ext_computer on ext_hardware.id = ext_computer.id join ext_dealer_hardware on ext_hardware.id=ext_dealer_hardware.id and webId='.$item['id'])->fetchColumn(0);
-                        $peripheralId = $db->query('select ext_hardware.id from ext_hardware join ext_peripheral on ext_hardware.id = ext_peripheral.id join ext_dealer_hardware on ext_hardware.id=ext_dealer_hardware.id and webId='.$item['id'])->fetchColumn(0);
-
-                        $ingram = null;
-                        $synnex = null;
-                        $techdata = null;
-                        if ($tonerId) {
-                            $ingram = $db->query("select 'Ingram' as distributor, ingram_products.ingram_part_number as partnumber, availability_flag as available, customer_price as price from ingram_products join ingram_prices on ingram_products.ingram_part_number = ingram_prices.ingram_part_number where dealerId={$dealerId} and tonerId={$tonerId}")->fetch();
-                            $synnex = $db->query("select 'Synnex' as distributor, synnex_products.SYNNEX_SKU as partnumber, if (Qty_on_Hand>0,'Y','N') as available, Contract_Price as price from synnex_products join synnex_prices on synnex_products.SYNNEX_SKU = synnex_prices.SYNNEX_SKU where dealerId={$dealerId} and tonerId={$tonerId}")->fetch();
-                            $rate = \MPSToolbox\Services\CurrencyService::getInstance()->getRate();
-                            $techdata = $db->query("select 'Tech Data' as distributor, techdata_products.Matnr as partnumber, if (Qty>0,'Y','N') as available, {$rate} * CustBestPrice as price from techdata_products join techdata_prices on techdata_products.Matnr = techdata_prices.Matnr where dealerId={$dealerId} and tonerId={$tonerId}")->fetch();
+                        $id = $db->query('select tonerId from dealer_toner_attributes where webId='.$item['id'])->fetchColumn(0);
+                        if (!$id) $id = $db->query('select masterDeviceId from devices where webId='.$item['id'])->fetchColumn(0);
+                        if (!$id) $id = $db->query('select id from base_product join dealer_sku on base_product.id=dealer_sku.skuId where webId='.$item['id'])->fetchColumn(0);
+                        if ($id) {
+                            $products = $db->query("select vpn, price, suppliers.name as sname from supplier_product join supplier_price using (supplierId,supplierSku) join suppliers on supplier_product.supplierId=suppliers.id where dealerId={$dealerId} and baseProductId={$id}")->fetchAll();
                         }
 
-                        $the_distributor = null;
-
-                        $found = [];
-                        if ($ingram) $found[] = $ingram;
-                        if ($synnex) $found[] = $synnex;
-                        if ($techdata) $found[] = $techdata;
-                        if (count($found)==0) {
+                        $the_product = null;
+                        if (count($products)==0) {
                             //noop
-                        } else if (count($found)==1) {
-                            $the_distributor = $found[0];
+                        } else if (count($products)==1) {
+                            $the_product = $products[0];
                         } else {
                             $in_stock = [];
-                            foreach ($found as $line) {
-                                if ($line['available']=='Y') $in_stock = $line;
+                            foreach ($products as $line) {
+                                if ($line['isStock']) $in_stock[] = $line;
                             }
 
                             if (count($in_stock) == 1) {
-                                $the_distributor = $in_stock[0];
+                                $the_product = $in_stock[0];
                             } else {
                                 $by_price = [];
-                                foreach ($found as $line) {
+                                foreach ($products as $line) {
                                     $by_price[$line['price']] = $line;
                                 }
                                 ksort($by_price);
-                                $the_distributor = current($by_price);
+                                $the_product = $by_price[0];
                             }
                         }
-
 
                         $result['products'][] = [
                             $item['name'],
                             $item['sku'],
                             '$'.$item['price'],
-                            $the_distributor?$the_distributor['distributor']:'',
-                            $the_distributor?$the_distributor['partnumber']:'',
-                            $the_distributor?'$'.$the_distributor['price']:'',
+                            $the_product?$the_product['sname']:'',
+                            $the_product?$the_product['vpn']:'',
+                            $the_product?'$'.$the_product['price']:'',
                         ];
                     }
                 }

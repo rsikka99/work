@@ -47,49 +47,36 @@ class DistributorsForm extends \My_Form_Form
         }
         $dealerId = DealerEntity::getDealerId();
         #--
-        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from ingram_products p join ingram_prices c using (ingram_part_number) where dealerId='.$dealerId.' and masterDeviceId=:masterDeviceId');
-        $st->execute(['masterDeviceId'=>$masterDevice->id]);
+        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select s.name as supplier_name, supplierSku, price, isStock from supplier_product p join suppliers s on p.supplierId=s.id join supplier_price c using (supplierId, supplierSku) where dealerId='.$dealerId.' and baseProductId=?');
+        $st->execute([$masterDevice->id]);
         foreach ($st->fetchAll() as $line) {
             $distributors[] = [
-                'name'=>'Ingram Micro',
-                'sku'=>$line['ingram_part_number'],
-                'price'=>$line['customer_price'],
-                'stock'=>$line['availability_flag'],
+                'name'=>$line['supplier_name'],
+                'sku'=>$line['supplierSku'],
+                'price'=>$line['price'],
+                'stock'=>$line['isStock'],
             ];
         }
-        #--
-        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from synnex_products p join synnex_prices c using (SYNNEX_SKU) where dealerId='.$dealerId.' and masterDeviceId=:masterDeviceId');
-        $st->execute(['masterDeviceId'=>$masterDevice->id]);
-        foreach ($st->fetchAll() as $line) {
-            $distributors[] = [
-                'name'=>'Synnex',
-                'sku'=>$line['SYNNEX_SKU'],
-                'price'=>$line['Contract_Price'],
-                'stock'=>$line['Qty_on_Hand'],
-            ];
-        }
-        #--
-        $rate = \MPSToolbox\Services\CurrencyService::getInstance()->getRate();
-        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select * from techdata_products p join techdata_prices c using (Matnr) where dealerId='.$dealerId.' and masterDeviceId=:masterDeviceId');
-        $st->execute(['masterDeviceId'=>$masterDevice->id]);
-        foreach ($st->fetchAll() as $line) {
-            $distributors[] = [
-                'name'=>'Tech Data',
-                'sku'=>$line['Matnr'],
-                'price'=>$rate*$line['CustBestPrice'],
-                'stock'=>$line['Qty'],
-            ];
-        }
+
+        //@todo apply rate to price
+        //$rate = \MPSToolbox\Services\CurrencyService::getInstance()->getRate();
+
         #--
         return $distributors;
     }
+
+    /**
+     * @param $masterDeviceId
+     * @return array
+     * @todo
+     */
     public static function getServices($masterDeviceId)
     {
         $result = [];
         $db = \Zend_Db_Table::getDefaultAdapter();
-
         $dealerId = DealerEntity::getDealerId();
 
+        /**
         foreach($db->query(
 "
   select
@@ -127,6 +114,7 @@ class DistributorsForm extends \My_Form_Form
             [$masterDeviceId])->fetchAll() as $line) {
             $result[] = $line;
         }
+        **/
 
         return $result;
     }

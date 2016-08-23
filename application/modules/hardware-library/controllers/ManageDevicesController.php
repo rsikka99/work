@@ -665,7 +665,7 @@ class HardwareLibrary_ManageDevicesController extends Action
 
                     if (count($validData['hardwareQuote']) > 0)
                     {
-                        if (!$manageMasterDeviceService->saveHardwareQuote($validData['hardwareQuote']))
+                        if (!$manageMasterDeviceService->saveHardwareQuote($validData['hardwareQuote'], $manufacturerId))
                         {
                             $this->sendJsonError("Failed to save Hardware Quote");
                         }
