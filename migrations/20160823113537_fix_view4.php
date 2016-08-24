@@ -29,7 +29,7 @@ class FixView4 extends AbstractMigration
         $this->execute('drop view if exists _view_dist_stock_price');
         $this->execute('
 create view _view_dist_stock_price as
-select 1 as dist, dealer_toner_attributes.tonerId, null as stock, dealer_toner_attributes.dealerId, dealer_toner_attributes.cost
+select 1 as dist, dealer_toner_attributes.tonerId, 1 as stock, dealer_toner_attributes.dealerId, dealer_toner_attributes.cost
     from
       dealer_toner_attributes
     where cost is not null
