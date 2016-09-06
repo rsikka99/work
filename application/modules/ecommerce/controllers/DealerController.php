@@ -21,10 +21,10 @@ class Ecommerce_DealerController extends Action
                     $service->insert($dealerId, $price_level_add['name'], $price_level_add['margin']);
                 }
                 if ($price_level_edit) {
-                    $service->update($price_level_edit['id'], $price_level_edit['name'], $price_level_edit['margin']);
+                    $service->update($dealerId, $price_level_edit['id'], $price_level_edit['name'], $price_level_edit['margin']);
                 }
                 if ($price_level_delete) {
-                    $service->delete($price_level_delete);
+                    $service->delete($dealerId, $price_level_delete);
                 }
             }
             if ($this->getRequest()->getParam('section')=='main') {
