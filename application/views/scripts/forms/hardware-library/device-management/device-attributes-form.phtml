@@ -81,10 +81,6 @@ $form = $this->element;
                     </div>
                 </div>
 
-            </div>
-<!-- -->
-            <div class="col-md-4">
-
                 <div class="form-group <?= ($form->getElement('isFax')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                     <?= $this->RenderFormLabel($form->getElement('isFax'), ['col-md-6']) ?>
 
@@ -94,6 +90,11 @@ $form = $this->element;
                         <?= $this->RenderFormElementErrors($form->getElement('isFax')) ?>
                     </div>
                 </div>
+
+            </div>
+<!-- -->
+            <div class="col-md-4">
+
                 <div class="form-group <?= ($form->getElement('isA3')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                     <?= $this->RenderFormLabel($form->getElement('isA3'), ['col-md-6']) ?>
 
@@ -113,7 +114,7 @@ $form = $this->element;
                         <?= $this->RenderFormElementErrors($form->getElement('isCapableOfReportingTonerLevels')) ?>
                     </div>
                 </div>
-
+<?php /** ?>
                 <div class="form-group <?= ($form->getElement('jitCompatibleMasterDevice')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                     <?= $this->RenderFormLabel($form->getElement('jitCompatibleMasterDevice'), ['col-md-6']) ?>
 
@@ -123,6 +124,8 @@ $form = $this->element;
                         <?= $this->RenderFormElementErrors($form->getElement('jitCompatibleMasterDevice')) ?>
                     </div>
                 </div>
+<?php /**/ ?>
+
                 <div class="form-group <?= ($form->getElement('isSmartphone')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                     <?= $this->RenderFormLabel($form->getElement('isSmartphone'), ['col-md-6']) ?>
 
@@ -140,6 +143,36 @@ $form = $this->element;
                         <?= $this->RenderFormBootstrapSwitch($form->getElement('additionalTrays'), ['js-yes-no-switch']) ?>
                         <?= $this->RenderFormDescription($form->getElement('additionalTrays')) ?>
                         <?= $this->RenderFormElementErrors($form->getElement('additionalTrays')) ?>
+                    </div>
+                </div>
+
+                <div class="form-group <?= ($form->getElement('isStapling')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('isStapling'), ['col-md-6']) ?>
+
+                    <div class="col-md-6">
+                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isStapling'), ['js-yes-no-switch']) ?>
+                        <?= $this->RenderFormDescription($form->getElement('isStapling')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('isStapling')) ?>
+                    </div>
+                </div>
+
+                <div class="form-group <?= ($form->getElement('isBinding')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('isBinding'), ['col-md-6']) ?>
+
+                    <div class="col-md-6">
+                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isBinding'), ['js-yes-no-switch']) ?>
+                        <?= $this->RenderFormDescription($form->getElement('isBinding')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('isBinding')) ?>
+                    </div>
+                </div>
+
+                <div class="form-group <?= ($form->getElement('isFolding')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('isFolding'), ['col-md-6']) ?>
+
+                    <div class="col-md-6">
+                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isFolding'), ['js-yes-no-switch']) ?>
+                        <?= $this->RenderFormDescription($form->getElement('isFolding')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('isFolding')) ?>
                     </div>
                 </div>
 
@@ -203,27 +236,19 @@ $form = $this->element;
                         <?= $this->RenderFormElementErrors($form->getElement('isWalkup')) ?>
                     </div>
                 </div>
-<?php /** ?>
-                <div class="form-group <?= ($form->getElement('isStapling')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('isStapling'), ['col-md-6']) ?>
+
+                <div class="form-group <?= ($form->getElement('isFloorStanding')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                    <?= $this->RenderFormLabel($form->getElement('isFloorStanding'), ['col-md-6']) ?>
 
                     <div class="col-md-6">
-                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isStapling'), ['js-yes-no-switch']) ?>
-                        <?= $this->RenderFormDescription($form->getElement('isStapling')) ?>
-                        <?= $this->RenderFormElementErrors($form->getElement('isStapling')) ?>
+                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isFloorStanding'), ['js-yes-no-switch']) ?>
+                        <?= $this->RenderFormDescription($form->getElement('isFloorStanding')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('isFloorStanding')) ?>
                     </div>
                 </div>
 
-                <div class="form-group <?= ($form->getElement('isBinding')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('isBinding'), ['col-md-6']) ?>
 
-                    <div class="col-md-6">
-                        <?= $this->RenderFormBootstrapSwitch($form->getElement('isBinding'), ['js-yes-no-switch']) ?>
-                        <?= $this->RenderFormDescription($form->getElement('isBinding')) ?>
-                        <?= $this->RenderFormElementErrors($form->getElement('isBinding')) ?>
-                    </div>
-                </div>
-
+                <?php /** ?>
                 <div class="form-group <?= ($form->getElement('isTouchscreen')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                     <?= $this->RenderFormLabel($form->getElement('isTouchscreen'), ['col-md-6']) ?>
 

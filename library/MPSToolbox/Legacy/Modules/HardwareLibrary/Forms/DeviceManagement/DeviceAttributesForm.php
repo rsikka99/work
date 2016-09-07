@@ -86,12 +86,12 @@ class DeviceAttributesForm extends \My_Form_Form
             'label'    => 'Can Print A3',
             'disabled' => !$this->_isAllowedToEditFields,
         ]);
-
+/**
         $this->addElement('checkbox', 'jitCompatibleMasterDevice', [
             'label' => My_Brand::$jit . ' Compatible',
             'disabled' => !$this->_isAllowedToEditFields,
         ]);
-
+/**/
         $this->addElement('checkbox', 'isSmartphone', [
             'label'    => 'Smartphone/tablet printing',
             'disabled' => !$this->_isAllowedToEditFields,
@@ -116,7 +116,7 @@ class DeviceAttributesForm extends \My_Form_Form
             'label'    => 'Walk-up USB Printing',
             'disabled' => !$this->_isAllowedToEditFields,
         ]);
-/**
+
         $this->addElement('checkbox', 'isStapling', [
             'label'    => 'Stapling',
             'disabled' => !$this->_isAllowedToEditFields,
@@ -127,6 +127,17 @@ class DeviceAttributesForm extends \My_Form_Form
             'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
+        $this->addElement('checkbox', 'isFolding', [
+            'label'    => 'Folding',
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+        $this->addElement('checkbox', 'isFloorStanding', [
+            'label'    => 'Floor Standing',
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
+
+/**
         $this->addElement('checkbox', 'isTouchscreen', [
             'label'    => 'Has Touchscreen',
             'disabled' => !$this->_isAllowedToEditFields,

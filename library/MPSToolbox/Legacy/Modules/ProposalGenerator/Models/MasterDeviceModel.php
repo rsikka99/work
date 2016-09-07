@@ -109,6 +109,8 @@ class MasterDeviceModel extends My_Model_Abstract
     public $isPIN=0;
     public $isAccessCard=0;
     public $isWalkup=0;
+    public $isFloorStanding=0;
+    public $isFolding=0;
     public $isStapling=0;
     public $isBinding=0;
     public $isTouchscreen=0;
@@ -379,6 +381,8 @@ class MasterDeviceModel extends My_Model_Abstract
         if (isset($params->isPIN) && !is_null($params->isPIN)) $this->isPIN = $params->isPIN;
         if (isset($params->isAccessCard) && !is_null($params->isAccessCard)) $this->isAccessCard = $params->isAccessCard;
         if (isset($params->isWalkup) && !is_null($params->isWalkup)) $this->isWalkup = $params->isWalkup;
+        if (isset($params->isFloorStanding) && !is_null($params->isFloorStanding)) $this->isFloorStanding = $params->isFloorStanding;
+        if (isset($params->isFolding) && !is_null($params->isFolding)) $this->isFolding = $params->isFolding;
         if (isset($params->isStapling) && !is_null($params->isStapling)) $this->isStapling = $params->isStapling;
         if (isset($params->isBinding) && !is_null($params->isBinding)) $this->isBinding = $params->isBinding;
         if (isset($params->isTouchscreen) && !is_null($params->isTouchscreen)) $this->isTouchscreen = $params->isTouchscreen;
@@ -495,6 +499,8 @@ class MasterDeviceModel extends My_Model_Abstract
             "isPIN"                                => $this->isPIN,
             "isAccessCard"                                => $this->isAccessCard,
             "isWalkup"                                => $this->isWalkup,
+            "isFloorStanding"                                => $this->isFloorStanding,
+            "isFolding"                                => $this->isFolding,
             "isStapling"                                => $this->isStapling,
             "isBinding"                                => $this->isBinding,
             "isTouchscreen"                                => $this->isTouchscreen,
@@ -552,6 +558,8 @@ class MasterDeviceModel extends My_Model_Abstract
             "isPIN"                                => $this->isPIN,
             "isAccessCard"                                => $this->isAccessCard,
             "isWalkup"                                => $this->isWalkup,
+            "isFolding"                                => $this->isFolding,
+            "isFloorStanding"                                => $this->isFloorStanding,
             "isStapling"                                => $this->isStapling,
             "isBinding"                                => $this->isBinding,
             "isTouchscreen"                                => $this->isTouchscreen,
