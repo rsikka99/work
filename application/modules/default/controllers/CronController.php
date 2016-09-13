@@ -1,9 +1,16 @@
 <?php
 
-use \MPSToolbox\Entities\RmsUpdateEntity;
-use \MPSToolbox\Entities\TonerColorEntity;
-
 class Default_CronController extends \Tangent\Controller\Action {
+
+    public function fmauditAction() {
+
+        //set_time_limit(0);
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout->disableLayout();
+
+        $service = new \MPSToolbox\Services\RmsUpdateService();
+        $service->updateFmaudit();
+    }
 
     public function rmsUpdateAction() {
         set_time_limit(0);
@@ -19,11 +26,11 @@ class Default_CronController extends \Tangent\Controller\Action {
         foreach ($clients as $client) {
             if (empty($client['deviceGroup'])) continue;
             if ($onlyClientId && ($onlyClientId!=$client['clientId'])) continue;
-            if (!$onlyClientId && ($client['monitoringEnabled']==0)) continue;
+            //if (!$onlyClientId && ($client['monitoringEnabled']==0)) continue;
 
             echo "updating client: {$client['clientId']}<br>\n";
             if (preg_match('#^\w+-\w+-\w+-\w+-\w+$#', $client['deviceGroup'])) {
-                $devices = $service->update($client['clientId'], new \MPSToolbox\Api\PrintFleet($client['rmsUri']), $client['deviceGroup']);
+                $devices = $service->updateFromPrintfleet($client['clientId'], new \MPSToolbox\Api\PrintFleet($client['rmsUri']), $client['deviceGroup']);
                 $settings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings($client['dealerId']);
                 $service->checkDevices($devices, $client, $settings->shopSettings);
             }

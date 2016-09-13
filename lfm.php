@@ -59,7 +59,7 @@ try {
     $clients = $lfm->client();
     foreach ($clients['ClientDetails'] as $client) {
         var_dump($client);
-        $printers = $lfm->getPrinterSupplyHistoryForClient($client['ClientName'], date('Y-m-d 00:00'), date('Y-m-d 23:59'));
+        $printers = $lfm->getPrintersForClient($client['ClientName']); //, date('Y-m-d 00:00'), date('Y-m-d 23:59'));
         var_dump($printers);
     }
 

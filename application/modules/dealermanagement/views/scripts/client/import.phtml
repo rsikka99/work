@@ -28,14 +28,14 @@
         $("#tree").on('nodeChecked',function (event, node) {
             window.ids[window.ids.length] = node.href;
             var str='';
-            $.each(window.ids, function(i,e) { str+=e+' ' });
+            $.each(window.ids, function(i,e) { str+=e+';;' });
             $('#input-ids').val($.trim(str));
         }).on('nodeUnchecked', function(event, node) {
             var new_ids=[];
             $.each(window.ids, function(i,e) { if (e!=node.href) new_ids[new_ids.length]=e });
             window.ids = new_ids;
             var str='';
-            $.each(window.ids, function(i,e) { str+=e+' ' });
+            $.each(window.ids, function(i,e) { str+=e+';;' });
             $('#input-ids').val($.trim(str));
         });
     }

@@ -413,7 +413,7 @@ select a.cost, supplier_price.price
 from toners t
   left join dealer_toner_attributes a on t.id=a.tonerId and a.dealerId={$this->dealerId}
   left join supplier_product on supplier_product.baseProductId = t.id
-  left join supplier_price on using (supplierId, supplierSku)
+  left join supplier_price using (supplierId, supplierSku)
 where t.id = ".intval($tonerId)
         );
         $line = $st->fetch();

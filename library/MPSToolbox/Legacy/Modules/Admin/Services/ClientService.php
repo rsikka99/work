@@ -260,6 +260,33 @@ class ClientService
         }
     }
 
+    public function importFromFmaudit(array $ids, $csv_filename) {
+        $dealerId = DealerEntity::getDealerId();
+        $result = [];
+        $inserted = false;
+        foreach ($ids as $name) {
+            $name = trim($name);
+            if (!empty($name)) {
+                $client = ClientMapper::getInstance()->findByName($dealerId, $name);
+                if (!$client) {
+                    $client = new ClientModel();
+                    $client->dealerId = $dealerId;
+                    $client->companyName = $name;
+                    ClientMapper::getInstance()->insert($client);
+                    $inserted = true;
+                    $result[$client->id] = 'i';
+                } else {
+                    $result[$client->id] = 'u';
+                }
+            }
+        }
+        if ($inserted) {
+            $rmsUpdateService = new RmsUpdateService();
+            $rmsUpdateService->updateFmauditCsv($dealerId, $csv_filename);
+        }
+        return $result;
+    }
+
     public function importFromPrintFleet(PrintFleet $printFleet, array $ids) {
         $result = [];
         $arr = [];
@@ -308,7 +335,7 @@ class ClientService
             $address->id ? AddressMapper::getInstance()->save($address) : AddressMapper::getInstance()->insert($address);
 
             if ($group_result=='i') {
-                $rmsUpdateService->update($client->id, $printFleet, $group['id']);
+                $rmsUpdateService->updateFromPrintfleet($client->id, $printFleet, $group['id']);
             }
         }
         return $result;

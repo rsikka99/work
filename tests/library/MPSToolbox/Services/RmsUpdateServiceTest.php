@@ -514,7 +514,6 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
         );
 
         $service = new \MPSToolbox\Services\RmsUpdateService();
-        $service->setPrintFleet(new \MPSToolbox\Api\PrintFleet('http://foo:bar@localhost/'));
         $clients = $service->getRmsClients();
         $client=current($clients);
 
@@ -532,7 +531,7 @@ class RmsUpdateServiceTest extends My_DatabaseTestCase {
         $instance->setMasterDevice(\MPSToolbox\Entities\MasterDeviceEntity::find(1));
         $instance->save();
 
-        $result = $service->update($client['clientId'], $printFleet, $client['deviceGroup']);
+        $result = $service->updateFromPrintfleet($client['clientId'], $printFleet, $client['deviceGroup']);
         $this->assertEquals(1, count($result));
         $this->assertTrue($result[0] instanceof \MPSToolbox\Entities\RmsUpdateEntity);
     }

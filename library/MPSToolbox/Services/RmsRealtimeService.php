@@ -7,6 +7,7 @@ use MPSToolbox\Entities\RmsDeviceInstanceEntity;
 use MPSToolbox\Entities\RmsUpdateEntity;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\MasterDeviceMapper;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper;
+use MPSToolbox\Settings\Entities\DealerSettingsEntity;
 
 class RmsRealtimeService {
 
@@ -32,7 +33,6 @@ class RmsRealtimeService {
         $clients = $rmsUpdateService->getRmsClients();
         $check_clients = [];
 
-        $db = \Zend_Db_Table::getDefaultAdapter();
         foreach ($xml->Device as $device) {
 
             $result++;
@@ -107,104 +107,110 @@ class RmsRealtimeService {
         }
 
         foreach ($check_clients as $client_line) {
-            $clientId = $client_line['clientId'];
-            $sql = "SELECT DISTINCT(scanDate) AS scanDate FROM rms_realtime WHERE scanDate>='" . date('Y-m-d', strtotime('-365 DAY')) . "' AND rmsDeviceInstanceId IN (SELECT id FROM rms_device_instances WHERE clientId=" . intval($clientId) . ") ORDER BY scanDate";
-            $st = $db->query($sql);
-            $arr = $st->fetchAll();
-            if (count($arr) > 1) {
-                $line = array_shift($arr);
-                $startDate = $line['scanDate'];
-                $line = array_pop($arr);
-                $endDate = $line['scanDate'];
-                if ($startDate && $endDate && ($startDate != $endDate)) {
-                    $sql = "select * from rms_realtime r join rms_device_instances i on r.rmsDeviceInstanceId=i.id where clientId={$clientId} and (scanDate='{$startDate}' or scanDate='{$endDate}') order by scanDate";
-                    $st = $db->query($sql);
-                    $data = [];
-                    foreach ($st->fetchAll() as $line) {
-                        $data[$line['rmsDeviceInstanceId']][$line['scanDate']] = $line;
-                    }
-                    foreach ($data as $rmsDeviceInstanceId => $row) {
-                        if (count($row) != 2) {
-                            unset($data[$rmsDeviceInstanceId]);
-                        }
-                    }
-                    $devices = [];
-                    foreach ($data as $rmsDeviceInstanceId => $row) {
-                        $from = array_shift($row);
-                        $until = array_shift($row);
-                        if (!$until['masterDeviceId']) continue;
-                        $masterDevice = MasterDeviceMapper::getInstance()->find($until['masterDeviceId']);
-                        if (!$masterDevice) continue;
-
-                        $data = [
-                            'rmsDeviceInstanceId' => $rmsDeviceInstanceId,
-                            'clientId' => $until['clientId'],
-                            'assetId' => $until['assetId'],
-                            'ipAddress' => $until['ipAddress'],
-                            'serialNumber' => $until['serialNumber'],
-                            'location' => $until['location'],
-                            'rawDeviceName' => $until['rawDeviceName'],
-                            'masterDeviceId' => $until['masterDeviceId'],
-                            'rmsProviderId' => $until['rmsProviderId'],
-                            'isColor' => $masterDevice->isColor,
-                            'isCopier' => $masterDevice->isCopier,
-                            'isFax' => $masterDevice->isFax,
-                            'isLeased' => $masterDevice->isLeased($client_line['dealerId']),
-                            'isDuplex' => $masterDevice->isDuplex,
-                            'isA3' => $masterDevice->isA3,
-                            'reportsTonerLevels' => $masterDevice->isCapableOfReportingTonerLevels,
-                            'launchDate' => $masterDevice->launchDate,
-                            'ppmBlack' => $masterDevice->ppmBlack,
-                            'ppmColor' => $masterDevice->ppmColor,
-                            'wattsPowerNormal' => $masterDevice->wattsPowerNormal,
-                            'wattsPowerIdle' => $masterDevice->wattsPowerIdle,
-                            'tonerLevelBlack' => $until['tonerLevelBlack'],
-                            'tonerLevelCyan' => $until['tonerLevelCyan'],
-                            'tonerLevelMagenta' => $until['tonerLevelMagenta'],
-                            'tonerLevelYellow' => $until['tonerLevelYellow'],
-                            #'pageCoverageMonochrome',
-                            #'pageCoverageCyan',
-                            #'pageCoverageMagenta',
-                            #'pageCoverageYellow',
-                            #'pageCoverageColor',
-                            #'mpsDiscoveryDate',
-                            #'isManaged',
-                            'monitorStartDate' => $from['scanDate'],
-                            'monitorEndDate' => $until['scanDate'],
-                            'startMeterBlack' => $from['lifeCountBlack'],
-                            'endMeterBlack' => $until['lifeCountBlack'],
-                            'startMeterColor' => $from['lifeCountColor'],
-                            'endMeterColor' => $until['lifeCountColor'],
-                            'startMeterPrintBlack' => $from['printCountBlack'],
-                            'endMeterPrintBlack' => $until['printCountBlack'],
-                            'startMeterPrintColor' => $from['printCountColor'],
-                            'endMeterPrintColor' => $until['printCountColor'],
-                            'startMeterCopyBlack' => $from['copyCountBlack'],
-                            'endMeterCopyBlack' => $until['copyCountBlack'],
-                            'startMeterCopyColor' => $from['copyCountColor'],
-                            'endMeterCopyColor' => $until['copyCountColor'],
-                            'startMeterFax' => $from['faxCount'],
-                            'endMeterFax' => $until['faxCount'],
-                            'startMeterScan' => $from['scanCount'],
-                            'endMeterScan' => $until['scanCount'],
-                            #'startMeterPrintA3Black'
-                            #'endMeterPrintA3Black',
-                            #'startMeterPrintA3Color',
-                            #'endMeterPrintA3Color',
-                            'startMeterLife' => $from['lifeCount'],
-                            'endMeterLife' => $until['lifeCount'],
-                        ];
-                        $rmsUpdateService->replaceRmsUpdate($data);
-
-                        //$instance = RmsDeviceInstanceEntity::find($rmsDeviceInstanceId);
-                        $devices[] = RmsUpdateEntity::find($rmsDeviceInstanceId);
-                    }
-                    $settings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings($client_line['dealerId']);
-                    $rmsUpdateService->checkDevices($devices, $client_line, $settings->shopSettings);
-                }
-             }
+            $this->toRmsUpdate($rmsUpdateService, $client_line);
         }
         return $result;
+    }
+
+    public function toRmsUpdate(RmsUpdateService $rmsUpdateService, $client_line) {
+        $clientId = $client_line['clientId'];
+
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $sql = "SELECT DISTINCT(scanDate) AS scanDate FROM rms_realtime WHERE scanDate>='" . date('Y-m-d', strtotime('-365 DAY')) . "' AND rmsDeviceInstanceId IN (SELECT id FROM rms_device_instances WHERE clientId=" . intval($clientId) . ") ORDER BY scanDate";
+        $st = $db->query($sql);
+        $arr = $st->fetchAll();
+        if (count($arr) > 1) {
+            $line = array_shift($arr);
+            $startDate = $line['scanDate'];
+            $line = array_pop($arr);
+            $endDate = $line['scanDate'];
+            if ($startDate && $endDate && ($startDate != $endDate)) {
+                $sql = "select * from rms_realtime r join rms_device_instances i on r.rmsDeviceInstanceId=i.id where clientId={$clientId} and (scanDate='{$startDate}' or scanDate='{$endDate}') order by scanDate";
+                $st = $db->query($sql);
+                $data = [];
+                foreach ($st->fetchAll() as $line) {
+                    $data[$line['rmsDeviceInstanceId']][$line['scanDate']] = $line;
+                }
+                foreach ($data as $rmsDeviceInstanceId => $row) {
+                    if (count($row) != 2) {
+                        unset($data[$rmsDeviceInstanceId]);
+                    }
+                }
+                $devices = [];
+                foreach ($data as $rmsDeviceInstanceId => $row) {
+                    $from = array_shift($row);
+                    $until = array_shift($row);
+                    if (!$until['masterDeviceId']) continue;
+                    $masterDevice = MasterDeviceMapper::getInstance()->find($until['masterDeviceId']);
+                    if (!$masterDevice) continue;
+
+                    $data = [
+                        'rmsDeviceInstanceId' => $rmsDeviceInstanceId,
+                        'clientId' => $until['clientId'],
+                        'assetId' => $until['assetId'],
+                        'ipAddress' => $until['ipAddress'],
+                        'serialNumber' => $until['serialNumber'],
+                        'location' => $until['location'],
+                        'rawDeviceName' => $until['rawDeviceName'],
+                        'masterDeviceId' => $until['masterDeviceId'],
+                        'rmsProviderId' => $until['rmsProviderId'],
+                        'isColor' => $masterDevice->isColor,
+                        'isCopier' => $masterDevice->isCopier,
+                        'isFax' => $masterDevice->isFax,
+                        'isLeased' => $masterDevice->isLeased($client_line['dealerId']),
+                        'isDuplex' => $masterDevice->isDuplex,
+                        'isA3' => $masterDevice->isA3,
+                        'reportsTonerLevels' => $masterDevice->isCapableOfReportingTonerLevels,
+                        'launchDate' => $masterDevice->launchDate,
+                        'ppmBlack' => $masterDevice->ppmBlack,
+                        'ppmColor' => $masterDevice->ppmColor,
+                        'wattsPowerNormal' => $masterDevice->wattsPowerNormal,
+                        'wattsPowerIdle' => $masterDevice->wattsPowerIdle,
+                        'tonerLevelBlack' => $until['tonerLevelBlack'],
+                        'tonerLevelCyan' => $until['tonerLevelCyan'],
+                        'tonerLevelMagenta' => $until['tonerLevelMagenta'],
+                        'tonerLevelYellow' => $until['tonerLevelYellow'],
+                        #'pageCoverageMonochrome',
+                        #'pageCoverageCyan',
+                        #'pageCoverageMagenta',
+                        #'pageCoverageYellow',
+                        #'pageCoverageColor',
+                        #'mpsDiscoveryDate',
+                        #'isManaged',
+                        'monitorStartDate' => $from['scanDate'],
+                        'monitorEndDate' => $until['scanDate'],
+                        'startMeterBlack' => $from['lifeCountBlack'],
+                        'endMeterBlack' => $until['lifeCountBlack'],
+                        'startMeterColor' => $from['lifeCountColor'],
+                        'endMeterColor' => $until['lifeCountColor'],
+                        'startMeterPrintBlack' => $from['printCountBlack'],
+                        'endMeterPrintBlack' => $until['printCountBlack'],
+                        'startMeterPrintColor' => $from['printCountColor'],
+                        'endMeterPrintColor' => $until['printCountColor'],
+                        'startMeterCopyBlack' => $from['copyCountBlack'],
+                        'endMeterCopyBlack' => $until['copyCountBlack'],
+                        'startMeterCopyColor' => $from['copyCountColor'],
+                        'endMeterCopyColor' => $until['copyCountColor'],
+                        'startMeterFax' => $from['faxCount'],
+                        'endMeterFax' => $until['faxCount'],
+                        'startMeterScan' => $from['scanCount'],
+                        'endMeterScan' => $until['scanCount'],
+                        #'startMeterPrintA3Black'
+                        #'endMeterPrintA3Black',
+                        #'startMeterPrintA3Color',
+                        #'endMeterPrintA3Color',
+                        'startMeterLife' => $from['lifeCount'],
+                        'endMeterLife' => $until['lifeCount'],
+                    ];
+                    $rmsUpdateService->replaceRmsUpdate($data);
+
+                    //$instance = RmsDeviceInstanceEntity::find($rmsDeviceInstanceId);
+                    $devices[] = RmsUpdateEntity::find($rmsDeviceInstanceId);
+                }
+                $settings = DealerSettingsEntity::getDealerSettings($client_line['dealerId']);
+                $rmsUpdateService->checkDevices($devices, $client_line, $settings->shopSettings);
+            }
+        }
     }
 
     public function replaceRmsRealtime($data) {

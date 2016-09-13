@@ -192,6 +192,10 @@ class ClientMapper extends My_Model_Mapper_Abstract
         return $this->fetch(['deviceGroup=?'=>$id]);
     }
 
+    public function findByName($dealerId, $name) {
+        return $this->fetch(['dealerId=?'=>$dealerId,'companyName=?'=>$name]);
+    }
+
     /**
      * Fetches all clients
      *
