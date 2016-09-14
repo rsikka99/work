@@ -87,8 +87,14 @@ class HardwareLibrary_SkuController extends Action {
 
         #--
 
-        $st = $db->prepare('replace into base_sku set id=?, properties=?');
-        $st->execute([$sku['id'], $sku['properties']]);
+        $line = $db->query('select * from base_sku where id='.intval($sku['id']))->fetch();
+        if ($line) {
+            $st = $db->prepare('update base_sku SET properties=? where id=?');
+            $st->execute([$sku['properties'], $sku['id']]);
+        } else {
+            $st = $db->prepare('REPLACE INTO base_sku SET id=?, properties=?');
+            $st->execute([$sku['id'], $sku['properties']]);
+        }
 
         if ($quote) {
             $dealerId = \MPSToolbox\Entities\DealerEntity::getDealerId();
@@ -111,6 +117,7 @@ class HardwareLibrary_SkuController extends Action {
                 $dealerId
             ]);
         }
+        return $sku;
     }
 
     protected function delete($id) {
@@ -246,18 +253,18 @@ class HardwareLibrary_SkuController extends Action {
 
                 try
                 {
-                    if ($validData['hardwareImage']['imageUrl'] && (0!==strcmp($validData['skuImage']['imageUrl'], $sku->imageUrl))) {
-                        $service->downloadImageFromImageUrl($validData['skuImage']['imageUrl']);
+                    if ($validData['skuImage']['imageUrl'] && (0!==strcmp($validData['skuImage']['imageUrl'], $sku['imageUrl']))) {
+                        $sku['imageFile'] = $service->downloadImageFromImageUrl($validData['skuImage']['imageUrl']);
                     } else {
-                        $validData['hardwareImage']['imageUrl'] = $sku->imageUrl;
+                        $validData['skuImage']['imageUrl'] = $sku['imageUrl'];
                     }
-                    $this->saveSku($sku, $validData['skuQuote']);
+                    $sku = $this->saveSku($sku, $validData['skuQuote']);
 
                     $this->sendJson([
-                            "skuId" => $sku->id,
+                            "skuId" => $sku['id'],
                             "message" => "Successfully updated sku",
-                            'imageFile' => $sku->imageFile]
-                    );
+                            'imageFile' => $sku['imageFile']
+                    ]);
                 }
                 catch (\Exception $e)
                 {

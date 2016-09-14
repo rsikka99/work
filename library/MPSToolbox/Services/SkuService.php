@@ -133,10 +133,10 @@ class SkuService
     }
 
     public function downloadImageFromImageUrl($url=null) {
-        if (!$url) $url = $this->hardware->imageUrl;
-        if (!$url) return;
+        if (!$url) $url = $this->sku['imageUrl'];
+        if (!$url) return $this->sku['imageFile'];
         $image_info = @getimagesize($url);
-        if (!$image_info || ($image_info[0]<1)) return;
+        if (!$image_info || ($image_info[0]<1)) return $this->sku['imageFile'];
         $ext=null;
         switch ($image_info['mime']) {
             case 'image/jpeg' :
@@ -149,7 +149,7 @@ class SkuService
                 $ext='gif';
                 break;
         }
-        if (!$ext) return;
+        if (!$ext) return $this->sku['imageFile'];
 
         $file = $this->sku['imageFile'];
         if ($file) {
@@ -163,6 +163,7 @@ class SkuService
         $filePath       = PUBLIC_PATH . $publicFilePath;
         file_put_contents($filePath, file_get_contents($url));
         $this->sku['imageFile'] = $file;
+        return $this->sku['imageFile'];
     }
 
     /**

@@ -13,8 +13,10 @@ class Ecommerce_CatalogController extends Action {
             if ($add) {
                 $db->query("replace into dealer_category set categoryId={$add}, dealerId={$dealerId}");
             }
-            header('Location: '.$_SERVER['REQUEST_URL']);
-            exit();
+            $this->_helper->layout()->disableLayout();
+            $this->_helper->viewRenderer->setNoRender(true);
+            $this->redirect($_SERVER['REQUEST_URI']);
+            return;
         }
 
         $this->_pageTitle = ['E-commerce - Catalog'];

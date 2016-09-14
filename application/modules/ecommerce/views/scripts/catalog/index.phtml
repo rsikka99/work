@@ -205,7 +205,7 @@
                     $('body').append('' +
                         '<img ' +
                         'style="display:none" ' +
-                        'src="http://proxy.mpstoolbox.com/shopify/sync_sku.php?origin='+window.location.hostname+'&id='+id+'&dealerId=<?= \MPSToolbox\Legacy\Entities\DealerEntity::getDealerId() ?>&_='+$.now()+'">'
+                        'src="http://proxy.mpstoolbox.com/shopify/sync_sku.php?origin='+window.location.hostname+'&id='+skuModal.skuId+'&dealerId=<?= \MPSToolbox\Legacy\Entities\DealerEntity::getDealerId() ?>&_='+$.now()+'">'
                     );
                 });
             }
