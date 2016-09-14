@@ -254,6 +254,7 @@ class HardwareLibrary_SkuController extends Action {
                 try
                 {
                     if ($validData['skuImage']['imageUrl'] && (0!==strcmp($validData['skuImage']['imageUrl'], $sku['imageUrl']))) {
+                        $sku['imageUrl'] = $validData['skuImage']['imageUrl'];
                         $sku['imageFile'] = $service->downloadImageFromImageUrl($validData['skuImage']['imageUrl']);
                     } else {
                         $validData['skuImage']['imageUrl'] = $sku['imageUrl'];
