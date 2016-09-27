@@ -22,17 +22,37 @@ class Default_CronController extends \Tangent\Controller\Action {
         $service = new \MPSToolbox\Services\RmsUpdateService();
 
         $clients = $service->getRmsClients();
+        $providers = $service->getDealerRmsProviders();
 
-        foreach ($clients as $client) {
-            if (empty($client['deviceGroup'])) continue;
+        foreach ($clients as $client) if (!empty($client['rmsUri'])) {
             if ($onlyClientId && ($onlyClientId!=$client['clientId'])) continue;
-            //if (!$onlyClientId && ($client['monitoringEnabled']==0)) continue;
 
-            echo "updating client: {$client['clientId']}<br>\n";
-            if (preg_match('#^\w+-\w+-\w+-\w+-\w+$#', $client['deviceGroup'])) {
-                $devices = $service->updateFromPrintfleet($client['clientId'], new \MPSToolbox\Api\PrintFleet($client['rmsUri']), $client['deviceGroup']);
-                $settings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings($client['dealerId']);
-                $service->checkDevices($devices, $client, $settings->shopSettings);
+            echo "rms update {$client['clientId']}\n";
+
+            $settings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings($client['dealerId']);
+            $rmsProviderId = isset($providers[$client['dealerId']]) ? $providers[$client['dealerId']] : null;
+
+            if (preg_match('#email\=fmaudit\@tangentmtw\.com#',$settings->shopSettings->rmsUri)) {
+                $rmsProviderId = 8; //FM Audit 4.x
+            }
+            if (!empty($root) && preg_match('#^\w+-\w+-\w+-\w+-\w+$#', $root)) {
+                $rmsProviderId = 6; //PrintFleet 3.x
+            }
+
+            switch ($rmsProviderId) {
+                case 6: { // PrintFleet 3.x
+                    echo "updating PrintFleet client: {$client['clientId']}<br>\n";
+                    $devices = $service->updateFromPrintfleet($client['clientId'], new \MPSToolbox\Api\PrintFleet($client['rmsUri']), $client['deviceGroup']);
+                    $service->checkDevices($devices, $client, $settings->shopSettings);
+                    break;
+                }
+                case 9: { // Lexmark
+                    echo "updating Lexmark client: {$client['clientId']}<br>\n";
+                    $url = parse_url($client['rmsUri']);
+                    $lfm = new \MPSToolbox\Api\LFM($url);
+                    $service->updateLfm($client['dealerId'], $lfm, $client['rmsGroup'], $client['companyName']);
+                    break;
+                }
             }
         }
     }

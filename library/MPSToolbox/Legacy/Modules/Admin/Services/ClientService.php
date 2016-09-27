@@ -2,6 +2,8 @@
 namespace MPSToolbox\Legacy\Modules\Admin\Services;
 
 use Exception;
+use MPSToolbox\Api\FMAudit;
+use MPSToolbox\Api\LFM;
 use MPSToolbox\Api\PrintFleet;
 use MPSToolbox\Legacy\Entities\DealerEntity;
 use MPSToolbox\Legacy\Modules\Admin\Forms\ClientForm;
@@ -260,6 +262,25 @@ class ClientService
         }
     }
 
+    private function getFmAudit() {
+        $service = new \MPSToolbox\Services\RmsUpdateService();
+        $rmsUri = $service->getRmsUri();
+        if (!$rmsUri) {
+            echo 'Error: RMS Uri not specified by root administrator';
+            return false;
+        }
+        $dealer_url = parse_url($rmsUri);
+        $dealer_login = \GuzzleHttp\Psr7\parse_query($dealer_url['query']);
+
+        $fmAudit = new \MPSToolbox\Api\FMAudit("{$dealer_url['scheme']}://{$dealer_url['host']}/");
+        if (!$fmAudit->login('fmaudit@tangentmtw.com', $dealer_login['password'])) {
+            error_log('Cannot login to FM Audit!');
+            return false;
+        }
+
+        return $fmAudit;
+    }
+
     public function importFromFmaudit(array $ids, $csv_filename) {
         $dealerId = DealerEntity::getDealerId();
         $result = [];
@@ -267,6 +288,70 @@ class ClientService
         foreach ($ids as $name) {
             $name = trim($name);
             if (!empty($name)) {
+                $firstLetter = strtoupper(substr($name, 0, 1));
+                if (!preg_match('#[A-Z]#', $firstLetter)) $firstLetter='%23';
+                $fmaudit = $this->getFmAudit();
+                $response = $fmaudit->get('/AccountSelector/ListAccountsDetailedAsList?startsWith='.$firstLetter);
+                $html = $response->getBody()->getContents();
+
+                $client_url='';
+                $contact_url='';
+                $client_data=[];
+                preg_match_all('#href\="(\/AccountSelector\/Select\?accountId=[^"]+)"[^>]+text="([^"]+)"#', $html, $matches, PREG_SET_ORDER);
+                foreach ($matches as $match) {
+                    if ($match[2] == $name) {
+                        $client_url = html_entity_decode($match[1]);
+                    }
+                }
+                if ($client_url) {
+                    $response = $fmaudit->post($client_url, ['X-Requested-With', 'XMLHttpRequest']);
+                    if ($response->getStatusCode() == 200) {
+                        $response = $fmaudit->get('/Account');
+                        $html = $response->getBody()->getContents();
+
+                        preg_match_all('#name\="([^"]+)"[^>]+value="([^"]+)"#', $html, $matches, PREG_SET_ORDER);
+                        foreach ($matches as $match) {
+                            $client_data[$match[1]] = $match[2];
+                        }
+
+                        if (preg_match('#<select[^>]+name="Country"(.+)</select>#Usi', $html, $match)) {
+                            if (preg_match('#\<option selected\="selected" value\="([^"]+)"#', $match[1], $match2)) {
+                                $client_data['Country']=$match2[1];
+                            }
+                        }
+
+                        if (preg_match('#href\="(\/Contacts\?AccountId\=\d+)"#', $html, $match)) {
+                            $contact_url = str_replace('/Contacts','/Contacts/List',$match[1]);
+                        }
+                    }
+                }
+                if ($contact_url) {
+                    $response = $fmaudit->post($contact_url, [
+                        'X-Requested-With'=>'XMLHttpRequest',
+                        'page'=>'1',
+                        'pageSize'=>'25',
+                        'searchTerm'=>'',
+                        'sortBy'=>'',
+                        'totalRows'=>'0',
+                    ]);
+                    if ($response->getStatusCode()==200) {
+                        $chunks = explode('ci-gridrow', $response->getBody()->getContents());
+                        foreach($chunks as $chunk) {
+                            if (strpos($chunk, '>Primary Contact<')!==false) {
+                                $divs = explode('<div', $chunk);
+                                foreach ($divs as $div) {
+                                    if (preg_match('#id\="(email|name|title|phone)#', $div, $match1)) {
+                                        if (preg_match('#\>([^<]+)\<#', $div, $match2)) {
+                                            $key = 'contact_'.$match1[1];
+                                            $client_data[$key] = $match2[1];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 $client = ClientMapper::getInstance()->findByName($dealerId, $name);
                 if (!$client) {
                     $client = new ClientModel();
@@ -278,11 +363,65 @@ class ClientService
                 } else {
                     $result[$client->id] = 'u';
                 }
+                if (!empty($client_data)) {
+                    $address = $client->getAddress();
+                    if (!$address) {
+                        $address = new AddressModel(['clientId'=>$client->id]);
+                    }
+                    if (!empty($client_data['Street'])) $address->addressLine1 = $client_data['Street'];
+                    if (!empty($client_data['City'])) $address->city = $client_data['City'];
+                    if (!empty($client_data['Country'])) $address->countryId = CountryMapper::getInstance()->nameToId($client_data['Country']);
+                    if (!empty($client_data['PostalCode'])) $address->postCode = $client_data['PostalCode'];
+                    if (!empty($client_data['State'])) $address->region = $client_data['State'];
+                    $address->id ? AddressMapper::getInstance()->save($address) : AddressMapper::getInstance()->insert($address);
+
+                    $contact = $client->getContact();
+                    if (!$contact) {
+                        $contact = new ContactModel(['clientId'=>$client->id]);
+                    }
+                    if (!empty($client_data['contact_email'])) $contact->email = $client_data['contact_email'];
+                    if (!empty($client_data['contact_email'])) $contact->emailSupply = $client_data['contact_email'];
+                    if (!empty($client_data['contact_phone'])) $contact->phoneNumber = $client_data['contact_phone'];
+                    if (!empty($client_data['contact_name'])) {
+                        $e = explode(' ', $client_data['contact_name']);
+                        $contact->lastName = array_pop($e);
+                        $contact->firstName = implode(' ', $e);
+                    }
+                    $contact->id ? ContactMapper::getInstance()->save($contact) : ContactMapper::getInstance()->insert($contact);
+                }
             }
         }
         if ($inserted) {
             $rmsUpdateService = new RmsUpdateService();
             $rmsUpdateService->updateFmauditCsv($dealerId, $csv_filename);
+        }
+        return $result;
+    }
+
+    public function importFromLexmark(LFM $lfm, $clientId, array $ids) {
+        $dealerId = DealerEntity::getDealerId();
+        $printers = $lfm->getPrintersForClient($clientId);
+        $inserted = false;
+        $result = [];
+        foreach ($printers['PrinterDetails'] as $printer) {
+            $assetTag = $printer['AssetTag'];
+            if ($assetTag && in_array($assetTag, $ids)) {
+                $client = ClientMapper::getInstance()->findByName($dealerId, $assetTag);
+                if (!$client) {
+                    $client = new ClientModel();
+                    $client->dealerId = $dealerId;
+                    $client->companyName = $assetTag;
+                    ClientMapper::getInstance()->insert($client);
+                    $inserted = true;
+                    $result[$client->id] = 'i';
+                } else {
+                    $result[$client->id] = 'u';
+                }
+            }
+        }
+        if ($inserted) {
+            $rmsUpdateService = new RmsUpdateService();
+            $rmsUpdateService->updateLfm($dealerId, $lfm, $clientId);
         }
         return $result;
     }

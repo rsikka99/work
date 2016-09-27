@@ -3,6 +3,8 @@
 namespace MPSToolbox\Services;
 use cdyweb\http\Exception\RequestException;
 
+use MPSToolbox\Api\FMAudit;
+use MPSToolbox\Api\LFM;
 use MPSToolbox\Api\PrintFleet;
 use MPSToolbox\Entities\ClientEntity;
 use MPSToolbox\Entities\DealerEntity;
@@ -74,74 +76,17 @@ class RmsUpdateService {
 
                 if (!file_exists($csv_filename) || (filemtime($csv_filename) < (strtotime('-1 DAY')+3600))) {
                     echo "downloading report for {$template}\n";
-                    $opt=[
-                        'base_uri' => "{$dealer_url['scheme']}://{$dealer_url['host']}/",
-                        'allow_redirects' => false,
-                        'verify'=>false,
-                        'cookies' => true,
-                        'debug'=>true,
-                        'headers' => [
-                            'User-Agent'=>'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0',
-                            'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                            'Accept-Encoding'=>'gzip, deflate',
-                            'Accept-Language'=>'en-US,en;q=0.5',
-                            'Connection'=>'keep-alive',
-                        ]
-                    ];
-                    $client = new \GuzzleHttp\Client($opt);
-
-                    /**/
-                    $response = $client->get('Login');
-                    if ($response->getStatusCode()!='200') {
-                        error_log('Response code != 200');
+                    $fmAudit = new FMAudit("{$dealer_url['scheme']}://{$dealer_url['host']}/");
+                    if (!$fmAudit->login('fmaudit@tangentmtw.com', $dealer_login['password'])) {
+                        error_log('Cannot login to FM Audit!');
                         continue;
                     }
-
-                    $content = $response->getBody()->getContents();
-                    if (!preg_match('#"__RequestVerificationToken" type="hidden" value="([^"]+)"#',$content,$match)) {
-                        error_log('__RequestVerificationToken not found');
-                    }
-                    $requestVerificationToken = $match[1];
-
-                    if (!preg_match('#var publicKeyExponent \= Base64\.decode\("([^"]+)"\)#',$content,$match)) {
-                        error_log('publicKeyExponent not found');
-                    }
-                    $publicKeyExponent = new \phpseclib\Math\BigInteger(base64_decode($match[1]), 256);
-
-                    if (!preg_match('#var publicKeyModulus \= Base64\.decode\("([^"]+)"\)#',$content,$match)) {
-                        error_log('publicKeyModulus not found');
-                    }
-                    $publicKeyModulus = new \phpseclib\Math\BigInteger(base64_decode($match[1]), 256);
-
-                    $rsa = new \phpseclib\Crypt\RSA();
-                    $rsa->loadKey(['e'=>$publicKeyExponent, 'n'=>$publicKeyModulus]);
-                    $rsa->setPublicKey();
-                    $rsa->setEncryptionMode(\phpseclib\Crypt\RSA::ENCRYPTION_PKCS1);
-                    $encryptedPassword = base64_encode($rsa->encrypt($dealer_login['password']));
-
-                    $response = $client->post('Login', [
-                        'form_params' => [
-                            '__RequestVerificationToken'=>$requestVerificationToken,
-                            'email'=>'fmaudit@tangentmtw.com',
-                            'passhash'=>$encryptedPassword,
-                            'password'=>'',
-                        ]
-                    ]);
-                    if ($response->getStatusCode()!='302') {
-                        error_log('Unexpected status code: '.$response->getStatusCode());
-                        continue;
-                    }
-                    if ($response->getHeaderLine('Location')!='/') {
-                        error_log('Unexpected Location: '.$response->getHeaderLine('Location'));
-                        continue;
-                    }
-                    /**/
 
                     $link_url = parse_url($link);
                     $link_query = \GuzzleHttp\Psr7\parse_query($link_url['query']);
                     unset($link_query['Auth']);
 
-                    $response = $client->get("{$link_url['scheme']}://{$link_url['host']}{$link_url['path']}?".http_build_query($link_query));
+                    $response = $fmAudit->get("{$link_url['scheme']}://{$link_url['host']}{$link_url['path']}?".http_build_query($link_query));
                     /**/
 
                     //$response = $client->get($link);
@@ -162,6 +107,161 @@ class RmsUpdateService {
                 }
             }
             $message->moveToMailBox('[Gmail]/archive');
+        }
+    }
+
+    public function updateLfm($dealerId, LFM $lfm, $clientId, $onlyAssetTag=null) {
+        $client_lookup = [];
+        foreach ($this->getRmsClients() as $line) if ($line['dealerId']==$dealerId) {
+            $clientName = $line['companyName'];
+            $client_lookup[$clientName] = $line;
+        }
+
+        $printers = $lfm->getPrintersForClient($clientId);
+        $counts = $lfm->getPrinterCountHistoryForClient($clientId);
+        $supplies = $lfm->getPrinterSupplyHistoryForClient($clientId);
+        //$status = $lfm->getPrinterStatusHistoryForClient($clientId);
+
+        $manufacturers = [];
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        foreach ($db->query('select * from manufacturers') as $line) {
+            $n = preg_quote($line['fullname']);
+            $manufacturers[$n] = $line['id'];
+            if ($line['displayname']!=$line['fullname']) {
+                $n = preg_quote($line['displayname']);
+                $manufacturers[$n] = $line['id'];
+            }
+        }
+
+        $toRmsUpdate = [];
+
+        foreach ($printers['PrinterDetails'] as $printer) {
+            $assetTag = $printer['AssetTag'];
+            if (!$assetTag) continue;
+            if ($onlyAssetTag && ($onlyAssetTag!=$assetTag)) continue;
+
+            $client=false;
+            if (isset($client_lookup[$assetTag])) $client = $client_lookup[$assetTag];
+            if (!$client) continue;
+
+            $device_instance = RmsDeviceInstanceEntity::findOne($client['clientId'], $printer['IPAddress'], $printer['SerialNumber'], $printer['PrinterId']);
+
+            if (!$device_instance) {
+                echo "new device instance!!! {$printer['PrinterId']} {$printer['ModelName']} {$printer['IPAddress']} {$printer['SerialNumber']} <br>\n";
+            } else {
+                echo "updating device: {$printer['PrinterId']} {$printer['ModelName']} {$printer['IPAddress']} {$printer['SerialNumber']} <br>\n";
+            }
+
+            $printerCounts = false;
+            foreach ($counts['PrinterCountRecordDetails'] as $detail) {
+                if ($detail['PrinterId'] != $printer['PrinterId']) continue;
+                $printerCounts = $detail;
+            }
+            if (!$printerCounts) {
+                echo "No counts for this printer!\n";
+                continue;
+            }
+
+            $black = false;
+            $cyan = false;
+            $yellow = false;
+            $magenta = false;
+
+            foreach ($supplies['PrinterSupplyDetails'] as $detail) {
+                if ($detail['PrinterId']!=$printer['PrinterId']) continue;
+                if ($detail['SupplyTypeDescription']!='Toner') continue;
+                switch ($detail['Color']) {
+                    case 'Black' : $black = $detail; break;
+                    case 'Cyan' : $cyan = $detail; break;
+                    case 'Yellow' : $yellow = $detail; break;
+                    case 'Magenta' : $magenta = $detail; break;
+                }
+            }
+
+            $reportsTonerLevels = $black && ($black['LevelRemaining']>0);
+            $isColor = $cyan && ($cyan['LevelRemaining']>0);
+            $fullDeviceName = $printer['ModelName'];
+
+            $masterDevice = null;
+            $masterDeviceId = null;
+            if ($device_instance && $device_instance->getMasterDevice()) {
+                $masterDevice = MasterDeviceMapper::getInstance()->find($device_instance->getMasterDevice()->getId());
+            }
+
+            /**/
+            $manufacturer='';
+            $modelName='';
+            if (!$masterDevice) {
+                foreach ($manufacturers as $n=>$id) {
+                    if (preg_match('#^('.$n.') (.+)$#i', $printer['ModelName'], $match)) {
+                        $manufacturer = $match[1];
+                        $modelName = $match[2];
+                        $masterDevice = $this->tryToMap($manufacturer, $modelName);
+                    }
+                }
+            }
+
+            if ($masterDevice) {
+                $fullDeviceName = $masterDevice->getFullDeviceName();
+                $masterDeviceId = $masterDevice->id;
+            }
+
+            $data=[
+                'rmsDeviceInstanceId' => $device_instance ? $device_instance->getId() : null,
+                'clientId'=>$client['clientId'],
+                'assetId'=>$printer['PrinterId'],
+                'ipAddress'=>$printer['IPAddress'],
+                'serialNumber'=>$printer['SerialNumber'],
+                'location'=>$printer['Location'],
+                'rawDeviceName'=>$printer['ModelName'],
+                'fullDeviceName'=>$fullDeviceName,
+                'manufacturer'=>$manufacturer,
+                'modelName'=>$modelName,
+                'masterDeviceId'=>$masterDeviceId,
+                'rmsProviderId'=>9, //Lexmark
+                'isColor'=>$isColor?1:0,
+                'isCopier'=>'0',
+                'isFax'=>'0',
+                'reportsTonerLevels'=>$reportsTonerLevels ?'1':'0',
+                'ppmBlack'=>$masterDevice ? $masterDevice->ppmBlack : null,
+                'ppmColor'=>$masterDevice ? $masterDevice->ppmColor : null,
+                'wattsPowerNormal'=>$masterDevice ? $masterDevice->wattsPowerNormal : null,
+                'wattsPowerIdle'=>$masterDevice ? $masterDevice->wattsPowerIdle : null,
+                'tonerLevelBlack'=>$black ? $black['PercentageRemaining'] : null,
+                'tonerLevelCyan'=>$cyan ? $cyan['PercentageRemaining'] : null,
+                'tonerLevelMagenta'=>$magenta ? $magenta['PercentageRemaining'] : null,
+                'tonerLevelYellow'=>$yellow ? $yellow['PercentageRemaining'] : null,
+                'endMeterBlack'=>$printerCounts?$printerCounts['MonoCount']:null,
+                'endMeterColor'=>$printerCounts?$printerCounts['ColorCount']:null,
+                'endMeterPrintBlack'=>null,
+                'endMeterPrintColor'=>null,
+                'endMeterCopyBlack'=>null,
+                'endMeterCopyColor'=>null,
+                'endMeterFax'=>null,
+                'endMeterScan'=>null,
+                'endMeterLife'=>$printerCounts?$printerCounts['LifeCount']:null,
+            ];
+
+            $dt = \DateTime::createFromFormat('mdY H:i:s', $printerCounts['ScanTime']);
+            $ymd = $dt->format('Y-m-d');
+
+            //'clientId','assetId','ipAddress','serialNumber','masterDeviceId','location','rawDeviceName','fullDeviceName','manufacturer','modelName','reportDate'
+            //echo "toDeviceInstance: {$line['Manufacturer']} {$line['Model']} ({$line['IP Address']}) > {$line['Last Audit Date']}\n";
+            $data['rmsDeviceInstanceId'] = $this->toDeviceInstance($data, $dt->format('Y-m-d'));
+
+            //'rmsDeviceInstanceId','scanDate','rmsProviderId','tonerLevelBlack','tonerLevelCyan','tonerLevelMagenta','tonerLevelYellow','lifeCountBlack','lifeCountColor','printCountBlack','printCountColor','copyCountBlack','copyCountColor','faxCount','scanCount','lifeCount'
+            if ($ymd == date('Y-m-d')) {
+                $this->toRealtime($data, $ymd);
+                $toRmsUpdate[$client['clientId']] = $client;
+            }
+
+            //$result[] = RmsUpdateEntity::find($data['rmsDeviceInstanceId']);
+        }
+
+        $rmsRealtimeService = new RmsRealtimeService();
+        foreach ($toRmsUpdate as $client) {
+            echo "to RMS Update: {$client['companyName']}\n";
+            $rmsRealtimeService->toRmsUpdate($this, $client);
         }
     }
 
@@ -470,10 +570,22 @@ WHERE ds.dealerId = {$dealerId}
         return $line['rmsUri'];
     }
 
+    public function getDealerRmsProviders() {
+        $result = [];
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $arr = $db->query('select dealerId, rmsProviderId, count(*) as n from dealer_rms_providers group by dealerId')->fetchAll();
+        foreach ($arr as $line) {
+            if ($line['n']==1) {
+                $result[$line['dealerId']] = $line['rmsProviderId'];
+            }
+        }
+        return $result;
+    }
+
     public function getRmsClients() {
         $db = \Zend_Db_Table::getDefaultAdapter();
         return $db->fetchAll('
-SELECT c.id as clientId, c.companyName, c.dealerId, c.deviceGroup, c.ecomMonochromeRank, c.ecomColorRank, c.templateNum, c.monitoringEnabled, ss.rmsUri
+SELECT c.id as clientId, c.companyName, c.dealerId, c.deviceGroup, c.ecomMonochromeRank, c.ecomColorRank, c.templateNum, c.monitoringEnabled, ss.rmsUri, ss.rmsGroup
 FROM `clients` c
 JOIN `dealer_settings` ds ON c.dealerId = ds.dealerId
 JOIN `shop_settings` ss ON ds.shopSettingsId = ss.id

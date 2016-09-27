@@ -2,16 +2,14 @@
 
 namespace MPSToolbox\Api;
 
-use PhpOffice\PhpWord\Exception\Exception;
-
 class LFM {
 
     public $host = null;
     public $format = 'json';
     public $debug = false;
 
-    public $username = '';
-    public $password = '';
+    public $user = '';
+    public $pass = '';
 
     /**
      * @var \GuzzleHttp\Client
@@ -19,7 +17,7 @@ class LFM {
     private $session = null;
 
     public function __construct($attributes) {
-        foreach(['host','username','password','debug'] as $k)
+        foreach(['host','user','pass','debug'] as $k)
         if (isset($attributes[$k])) {
             $this->$k = $attributes[$k];
         }
@@ -52,13 +50,13 @@ class LFM {
                 /**/
                 $auth_response = $this->session->get($response->getHeaderLine('Location'));
                 if ($auth_response->getStatusCode() != 200) {
-                    throw new Exception('Cannot connect to LFM auth page, status code='.$response->getStatusCode());
+                    throw new \Exception('Cannot connect to LFM auth page, status code='.$response->getStatusCode());
                 }
 
                 $auth_response = $this->session->post('/j_spring_security_check', [
                     'form_params' => [
-                        'j_username'=>$this->username,
-                        'j_password'=>$this->password,
+                        'j_username'=>$this->user,
+                        'j_password'=>$this->pass,
                     ]
                 ]);
                 if (($auth_response->getStatusCode()==302) || ($auth_response->getStatusCode()==301)) {
@@ -68,12 +66,12 @@ class LFM {
 
                     }
                 } else {
-                    throw new Exception('Login failed, status code='.$response->getStatusCode());
+                    throw new \Exception('Login failed, status code='.$response->getStatusCode());
                 }
             }
         }
         if ($response->getStatusCode() != 200) {
-            throw new Exception('Request failed, status code='.$response->getStatusCode());
+            throw new \Exception('Request failed, status code='.$response->getStatusCode());
         }
 
         $body = $response->getBody()->getContents();
@@ -104,7 +102,13 @@ class LFM {
         $query = ['clientid'=>$clientid];
         if ($start) $query['start'] = $start;
         if ($limit) $query['limit'] = $limit;
-        return $this->request('getprintersforclient', $query);
+        $result = $this->request('getprintersforclient', $query);
+
+        if (isset($result['PrinterDetails']['PrinterId'])) {
+            $result['PrinterDetails'] = [$result['PrinterDetails']];
+        }
+
+        return $result;
     }
 
     public function getPrinterCountHistoryForClient($clientid, $starttime=null, $endtime=null, $start=null, $limit=null) {
@@ -113,7 +117,13 @@ class LFM {
         if ($limit) $query['limit'] = $limit;
         if ($limit) $query['starttime'] = $starttime;
         if ($limit) $query['endtime'] = $endtime;
-        return $this->request('getprintercounthistoryforclient', $query);
+        $result = $this->request('getprintercounthistoryforclient', $query);
+
+        if (isset($result['PrinterCountRecordDetails']['PrinterId'])) {
+            $result['PrinterCountRecordDetails'] = [$result['PrinterCountRecordDetails']];
+        }
+
+        return $result;
     }
 
     public function getPrinterStatusHistoryForClient($clientid, $starttime=null, $endtime=null, $start=null, $limit=null) {
@@ -122,7 +132,13 @@ class LFM {
         if ($limit) $query['limit'] = $limit;
         if ($limit) $query['starttime'] = $starttime;
         if ($limit) $query['endtime'] = $endtime;
-        return $this->request('getprinterstatushistoryforclient', $query);
+        $result = $this->request('getprinterstatushistoryforclient', $query);
+
+        if (isset($result['PrinterStatusDetails']['PrinterId'])) {
+            $result['PrinterStatusDetails'] = [$result['PrinterStatusDetails']];
+        }
+
+        return $result;
     }
 
     public function getPrinterSupplyHistoryForClient($clientid, $starttime=null, $endtime=null, $start=null, $limit=null) {
@@ -131,7 +147,13 @@ class LFM {
         if ($limit) $query['limit'] = $limit;
         if ($limit) $query['starttime'] = $starttime;
         if ($limit) $query['endtime'] = $endtime;
-        return $this->request('getprintersupplyhistoryforclient', $query);
+        $result = $this->request('getprintersupplyhistoryforclient', $query);
+
+        if (isset($result['PrinterSupplyDetails']['PrinterId'])) {
+            $result['PrinterSupplyDetails'] = [$result['PrinterSupplyDetails']];
+        }
+
+        return $result;
     }
 
 

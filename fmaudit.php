@@ -2,7 +2,7 @@
 
 #--
 parse_str(implode('&', array_slice($argv, 1)), $_GET);
-if (empty($_GET['host'])) die('host?');
+if (empty($_GET['uri'])) die('uri?');
 if (empty($_GET['user'])) die('user?');
 if (empty($_GET['pass'])) die('pass?');
 unset($_GET['action']);
@@ -53,18 +53,11 @@ $mpsSession->selectedRmsUploadId=1;
 
 try {
 
-    $lfm = new \MPSToolbox\Api\LFM($_GET);
-    //var_dump($lfm->licensed());
-    //var_dump($lfm->version());
-    $clients = $lfm->client();
-    var_dump($clients);
+    $fmaudit = new \MPSToolbox\Api\FMAudit($_GET['uri']);
+    if (!$fmaudit->login($_GET['user'], $_GET['pass'])) die('Login failed');
 
-    foreach ($clients['ClientDetails'] as $client) {
-        $printers = $lfm->getPrintersForClient($client['ClientName']); //, date('Y-m-d 00:00'), date('Y-m-d 23:59'));
-        var_dump($printers);
-    }
-
-    #var_dump($lfm->getPrintersForClient());
+    $html = $fmaudit->get('/AccountSelector/ListAccountsDetailedAsList?startsWith=Z');
+    die($html->getBody()->getContents());
 
 } catch (Exception $ex) {
     var_dump($ex);

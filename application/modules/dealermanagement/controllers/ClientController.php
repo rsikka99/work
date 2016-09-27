@@ -329,77 +329,165 @@ class Dealermanagement_ClientController extends Action
         return $printFleet;
     }
 
+    private function getLfm() {
+        $service = new \MPSToolbox\Services\RmsUpdateService();
+        $rmsUri = $service->getRmsUri();
+        if (!$rmsUri) {
+            echo 'Error: RMS Uri not specified by root administrator';
+            return false;
+        }
+        $url = parse_url($rmsUri);
+        $lfm = new \MPSToolbox\Api\LFM($url);
+        if (!$lfm->version()) {
+            echo 'Error: Cannot connect with LFM';
+            return false;
+        }
+        return $lfm;
+    }
+
     public function importAction() {
         $dealerId = \MPSToolbox\Legacy\Entities\DealerEntity::getDealerId();
         $dealer = \MPSToolbox\Legacy\Mappers\DealerMapper::getInstance()->find($dealerId);
 
+        $clients = ClientMapper::getInstance()->fetchClientListForDealer(\MPSToolbox\Legacy\Entities\DealerEntity::getDealerId());
+
         $settings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings();
         $root = $settings->shopSettings->rmsGroup;
+
+        $rmsProviderId = null;
+        $providers = \MPSToolbox\Legacy\Modules\Admin\Mappers\DealerRmsProviderMapper::getInstance()->fetchAllForDealer($dealerId);
+        if (count($providers)==1) {
+            /** @var \MPSToolbox\Legacy\Modules\Admin\Models\DealerRmsProviderModel $provider */
+            $provider = current($providers);
+            $rmsProviderId = $provider->rmsProviderId;
+        }
+
+        if (preg_match('#email\=fmaudit\@tangentmtw\.com#',$settings->shopSettings->rmsUri)) {
+            $rmsProviderId = 8; //FM Audit 4.x
+        }
+        if (!empty($root) && preg_match('#^\w+-\w+-\w+-\w+-\w+$#', $root)) {
+            $rmsProviderId = 6; //PrintFleet 3.x
+        }
 
         $ajax = $this->getRequest()->getParam('ajax');
         if ($ajax) {
             $this->_helper->layout()->disableLayout();
             $this->_helper->viewRenderer->setNoRender(true);
 
-            if (preg_match('#email\=fmaudit\@tangentmtw\.com#',$settings->shopSettings->rmsUri)) {
-                $tree=[];
-                $csv_filename = APPLICATION_BASE_PATH . '/data/cache/' . $dealer->dealerName .'.csv';
-                if (file_exists($csv_filename)) {
-                    $clients = ClientMapper::getInstance()->fetchClientListForDealer(\MPSToolbox\Legacy\Entities\DealerEntity::getDealerId());
-                    $fp = fopen($csv_filename,'rb');
-                    $cols = fgetcsv($fp);
-                    $accounts = [];
-                    while ($line = fgetcsv($fp)) {
-                        $line = array_combine($cols, $line);
-                        if (!empty($line['Last Audit Date'])) {
-                            $accounts[$line['Account']] = isset($accounts[$line['Account']]) ? $accounts[$line['Account']] + 1 : 1;
-                        }
-                    }
-                    foreach ($accounts as $text=>$count) {
-                        $icon = 'glyphicon glyphicon glyphicon-user';
+            switch ($rmsProviderId) {
+                case 9: { //Lexmark
+                    $tree = [];
+                    try {
+                        $lfm = $this->getLfm();
+                        $printers = $lfm->getPrintersForClient($root);
 
-                        $state=['expanded'=>true];
-                        foreach ($clients as $client) {
-                            if ($client->companyName == $text) {
-                                $state['checked'] = true;
+                        $groups = [];
+                        foreach ($printers['PrinterDetails'] as $printer) {
+                            $assetTag = $printer['AssetTag'];
+                            if ($assetTag) {
+                                $groups[$assetTag] = (isset($groups[$assetTag])) ? $groups[$assetTag] + 1 : 1;
                             }
                         }
 
-                        $tree[] = ['text' => $text.' ('.$count.')', 'icon' => $icon, 'state' => $state, 'selectable' => false, 'href' => $text];
+                        foreach ($groups as $groupName=>$count) {
+                            $icon = 'glyphicon glyphicon glyphicon-user';
+                            $state = ['expanded' => true];
+                            foreach ($clients as $client) {
+                                if ($client->companyName == $groupName) {
+                                    $state['checked'] = true;
+                                }
+                            }
+
+                            $tree[] = ['text' => $groupName . ' (' . $count . ')', 'icon' => $icon, 'state' => $state, 'selectable' => false, 'href' => $groupName];
+                        }
+                    } catch (Exception $ex) {
+                        echo '<div class="alert alert-danger">Error: '.$ex->getMessage().'</div>';
                     }
+                    echo '<div id="tree"></div><script> showTree(' . json_encode($tree) . '); </script>';
+                    break;
                 }
-                echo '<div id="tree"></div><script> showTree(' . json_encode($tree) . '); </script>';
-            } else if ($root) {
-                $printFleet = $this->getPrintFleet();
-                if ($printFleet) {
-                    $groups = $printFleet->groups();
-                    $tree = $this->recursiveGroupTable($groups, $root);
-                    if ($tree) {
-                        echo '<div id="tree"></div><script> showTree(' . json_encode($tree) . '); </script>';
-                    } else {
-                        echo '<div id="tree">No RMS groups found</div>';
+
+                case 8: { //FM Audit 4.x
+                    $tree = [];
+                    $csv_filename = APPLICATION_BASE_PATH . '/data/cache/' . $dealer->dealerName . '.csv';
+                    if (file_exists($csv_filename)) {
+                        $fp = fopen($csv_filename, 'rb');
+                        $cols = fgetcsv($fp);
+                        $accounts = [];
+                        while ($line = fgetcsv($fp)) {
+                            $line = array_combine($cols, $line);
+                            if (!empty($line['Last Audit Date'])) {
+                                $accounts[$line['Account']] = isset($accounts[$line['Account']]) ? $accounts[$line['Account']] + 1 : 1;
+                            }
+                        }
+                        foreach ($accounts as $text => $count) {
+                            $icon = 'glyphicon glyphicon glyphicon-user';
+
+                            $state = ['expanded' => true];
+                            foreach ($clients as $client) {
+                                if ($client->companyName == $text) {
+                                    $state['checked'] = true;
+                                }
+                            }
+
+                            $tree[] = ['text' => $text . ' (' . $count . ')', 'icon' => $icon, 'state' => $state, 'selectable' => false, 'href' => $text];
+                        }
                     }
+                    echo '<div id="tree"></div><script> showTree(' . json_encode($tree) . '); </script>';
+                    break;
                 }
-            } else {
-                echo '<div id="tree" class="label label-danger">No RMS configured</div>';
+                case 6: { //PrintFleet 3.x
+                    $printFleet = $this->getPrintFleet();
+                    if ($printFleet) {
+                        $groups = $printFleet->groups();
+                        $tree = $this->recursiveGroupTable($groups, $root);
+                        if ($tree) {
+                            echo '<div id="tree"></div><script> showTree(' . json_encode($tree) . '); </script>';
+                        } else {
+                            echo '<div id="tree">No RMS groups found</div>';
+                        }
+                    }
+                    break;
+                }
+                default : {
+                    echo '<div id="tree" class="alert alert-danger">No RMS configured</div>';
+                }
             }
             return;
         }
+
+        #-------------------------------------------------------------------------------
+
         if ($this->getRequest()->getMethod()=='POST') {
             $ids = $this->getParam('ids');
             if (!empty($ids)) {
                 $result = [];
-                if (preg_match('#email\=fmaudit\@tangentmtw\.com#',$settings->shopSettings->rmsUri)) {
-                    $service = new ClientService();
-                    $csv_filename = APPLICATION_BASE_PATH . '/data/cache/' . $dealer->dealerName .'.csv';
-                    $result = $service->importFromFmaudit(explode(';;', $ids), $csv_filename);
-                } else if ($root) {
-                    $printFleet = $this->getPrintFleet();
-                    if ($printFleet) {
+
+                switch ($rmsProviderId) {
+                    case 9: { //Lexmark
+                        $lfm = $this->getLfm();
+                        if ($lfm) {
+                            $service = new ClientService();
+                            $result = $service->importFromLexmark($lfm, $root, explode(';;', $ids));
+                        }
+                        break;
+                    }
+                    case 8: { //FM Audit 4.x
                         $service = new ClientService();
-                        $result = $service->importFromPrintFleet($printFleet, explode(';;', $ids));
+                        $csv_filename = APPLICATION_BASE_PATH . '/data/cache/' . $dealer->dealerName . '.csv';
+                        $result = $service->importFromFmaudit(explode(';;', $ids), $csv_filename);
+                        break;
+                    }
+                    case 6: { //PrintFleet 3.x
+                        $printFleet = $this->getPrintFleet();
+                        if ($printFleet) {
+                            $service = new ClientService();
+                            $result = $service->importFromPrintFleet($printFleet, explode(';;', $ids));
+                        }
+                        break;
                     }
                 }
+
                 $this->redirect('/dealermanagement/client/imported?' . http_build_query(['result' => json_encode($result)]));
                 return;
             }
