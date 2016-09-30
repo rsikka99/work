@@ -373,7 +373,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         $oem_cartridges = [];
 
         $skus = [];
-        foreach ($db->query('select * from base_product p join base_printer_consumable c on p.id=c.id')->fetchAll() as $line) {
+        foreach ($db->query('select * from base_product p join base_printer_consumable c using(id) left join base_printer_cartridge a using(id)')->fetchAll() as $line) {
             $sku = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['sku']));
             $skus[$line['manufacturerId']][$sku] = $line;
         }
@@ -612,7 +612,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         }
 
         $skus = [];
-        foreach ($db->query('select * from base_product p join base_printer_consumable c on p.id=c.id')->fetchAll() as $line) {
+        foreach ($db->query('select * from base_product p join base_printer_consumable c using(id) left join base_printer_cartridge a using(id)')->fetchAll() as $line) {
             $sku = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['sku']));
             $skus[$line['manufacturerId']][$sku] = $line;
         }
@@ -803,7 +803,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
 
             $skus = [];
-            foreach ($db->query('select * from base_product p join base_printer_consumable c on p.id=c.id')->fetchAll() as $line) {
+            foreach ($db->query('select * from base_product p join base_printer_consumable c using(id) left join base_printer_cartridge a using(id)')->fetchAll() as $line) {
                 $sku = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['sku']));
                 $skus[$line['manufacturerId']][$sku] = $line;
             }
