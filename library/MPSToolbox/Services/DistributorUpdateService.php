@@ -37,6 +37,8 @@ class DistributorUpdateService {
     const SUPPLIER_TECHDATA = 3;
     const SUPPLIER_GENUINE = 4;
     const SUPPLIER_ACM = 5;
+    const SUPPLIER_DH = 6;
+    const SUPPLIER_CLOVER = 7;
 
     /** @var  \Zend_Filter_Compress_Zip */
     private $zipAdapter;
@@ -215,6 +217,14 @@ _md5=:_md5
                 $this->updateAcm($dealerSupplier);
                 break;
             }
+            case self::SUPPLIER_DH : {
+                $this->updateDH($dealerSupplier);
+                break;
+            }
+            case self::SUPPLIER_CLOVER : {
+                $this->updateClover($dealerSupplier);
+                break;
+            }
         }
         gc_collect_cycles();
 
@@ -363,7 +373,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         $oem_cartridges = [];
 
         $skus = [];
-        foreach ($db->query('select * from base_product p join base_printer_consumable c on p.id=c.id join base_printer_cartridge a on p.id=a.id')->fetchAll() as $line) {
+        foreach ($db->query('select * from base_product p join base_printer_consumable c on p.id=c.id')->fetchAll() as $line) {
             $sku = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['sku']));
             $skus[$line['manufacturerId']][$sku] = $line;
         }
@@ -566,7 +576,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $this->compatibleStatements['st1']->execute([$imgUrl, $oem_line['base_type'], $comp_mfg_id, $supplierSku, $name, $weight, $upc]);
             $base_id = $db->lastInsertId();
             $this->compatibleStatements['st2']->execute([$base_id, $price, $yield, $oem_line['quantity'], $oem_line['type']]);
-            $this->compatibleStatements['st3']->execute([$base_id, $oem_line['colorId']]);
+            if ($oem_line['colorId']) $this->compatibleStatements['st3']->execute([$base_id, $oem_line['colorId']]);
         } else {
             $base_id = $skus[$comp_mfg_id][$supplierSku]['id'];
         }
@@ -578,6 +588,125 @@ Dealers: " . implode(', ', $affected_dealers) . "
         $this->compatibleStatements['st5']->execute([$base_id, $dealerId, $price, $supplierSku]);
     }
 
+    private function updateDH($dealerSupplier) {
+
+    }
+    private function updateClover($dealerSupplier) {
+
+        $comp_mfg_id = 63; //Clover Technologies
+
+        $csv_filename = APPLICATION_BASE_PATH . '/data/cache/'.$dealerSupplier['url'];
+        if (!file_exists($csv_filename)) {
+            error_log('file not found: '.$csv_filename);
+            return;
+        }
+
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $manufacturers = [];
+        foreach ($db->query('select * from manufacturers order by displayname')->fetchAll() as $line) {
+            $n = strtoupper($line['fullname']);
+            $manufacturers[$n] = $line['id'];
+            $n = strtoupper($line['displayname']);
+            $manufacturers[$n] = $line['id'];
+            if ($n=='FUJI XEROX') $manufacturers['FUJIFILM'] = $line['id'];
+        }
+
+        $skus = [];
+        foreach ($db->query('select * from base_product p join base_printer_consumable c on p.id=c.id')->fetchAll() as $line) {
+            $sku = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['sku']));
+            $skus[$line['manufacturerId']][$sku] = $line;
+        }
+
+        $fp = fopen($csv_filename,'rb');
+        $cols = fgetcsv($fp, null, ';', '"', '""');
+
+        $i = 0;
+        while($line = fgetcsv($fp, null, ';', '"', '""')) {
+            $line = array_combine($cols, $line);
+
+            if (empty($line['Page Yield']) || ($line['Page Yield']==' - ')) {
+                continue;
+            }
+
+            $ignore = false;
+            switch (trim($line['OEM'])) {
+                case '':
+                case 'PITNEY BOW':
+                case 'PB/IMAG':
+                case 'OTHER':
+                case 'Olivetti':
+                case 'Muratec':
+                case 'LENOVO':
+                case 'Kodak':
+                case 'ZEBRA':
+                case 'XER-KM-OKI':
+                case 'SOURCETECH':
+                    $ignore = true;
+            }
+            switch (trim($line['Type'])) {
+                case 'Ink Postage':
+                case 'Switch/Router':
+                case 'Hard Drive':
+                case 'Belt':
+                case 'Sensor':
+                case 'Processor':
+                case 'Cable':
+                case '3D Filament':
+                case 'Memory':
+                case 'Ribbon':
+                    $ignore = true;
+            }
+            if ($ignore) continue;
+
+            $line['Page Yield'] = str_replace(',','',$line['Page Yield']);
+            if (!is_numeric($line['Page Yield'])) {
+                error_log("{$line['Page Yield']} ???");
+                continue;
+            }
+
+            if (!isset($manufacturers[strtoupper($line['OEM'])])) {
+                #var_dump($line);
+                #die($line['brand']);
+                error_log('unknown brand: '.$line['OEM']);
+                continue;
+            }
+            $oem_mfg_id = $manufacturers[strtoupper($line['OEM'])];
+
+            $oem_lines=[];
+            foreach (explode(',', $line['OEM Part #']) as $n) {
+                $n = str_replace('-','',trim($n));
+                if (empty($n)) continue;
+                if (preg_match('#^(.+)\([A-Z]\)$#', $n, $match)) {
+                    $n = $match[1];
+                }
+                if (isset($skus[$oem_mfg_id][$n])) {
+                    $oem_lines[] = $skus[$oem_mfg_id][$n];
+                }
+            }
+            if (empty($oem_lines)) {
+                //error_log("unknown OEM part: {$line['OEM']} {$line['OEM Part #']}");
+                continue;
+            }
+
+            $imgUrl = $line['Image URL'];
+            $supplierSku = str_replace('-','',trim($line['Item #']));
+
+            $name = '';
+            $weight = $line['Weight'];
+            $upc = $line['UPC Code'];
+            $price = $line['Price'];
+            $yield = $line['Page Yield'];
+            $dealerId = $dealerSupplier['dealerId'];
+            $this->populateCompatible($db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $yield, $oem_lines, $dealerId);
+
+            $i++;
+        }
+
+        gc_collect_cycles();
+        echo "{$i} lines processed\n";
+
+        $this->total_result['products_total'] = $i;
+    }
     private function updateGenuine($dealerSupplier) {
         $base_uri = trim($dealerSupplier['url'], '/');
 
@@ -674,7 +803,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
 
             $skus = [];
-            foreach ($db->query('select * from base_product p join base_printer_consumable c on p.id=c.id join base_printer_cartridge a on p.id=a.id')->fetchAll() as $line) {
+            foreach ($db->query('select * from base_product p join base_printer_consumable c on p.id=c.id')->fetchAll() as $line) {
                 $sku = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['sku']));
                 $skus[$line['manufacturerId']][$sku] = $line;
             }
