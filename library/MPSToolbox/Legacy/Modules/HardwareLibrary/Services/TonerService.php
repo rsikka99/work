@@ -70,6 +70,7 @@ class TonerService
             // This allows null to be saved to the database.
             $dealerTonerAttributes->cost      = ($data['dealerCost'] == '' ? new Zend_Db_Expr("NULL") : $data['dealerCost']);
             $dealerTonerAttributes->dealerSku = ($data['dealerSku'] == '' ? new Zend_Db_Expr("NULL") : $data['dealerSku']);
+            $dealerTonerAttributes->sellPrice = ($data['sellPrice'] == '' ? new Zend_Db_Expr("NULL") : $data['sellPrice']);
 
             // If these are NULL we want to remove it from the database
             if ($dealerTonerAttributes->cost == new Zend_Db_Expr("NULL") && $dealerTonerAttributes->dealerSku == new Zend_Db_Expr("NULL"))

@@ -28,6 +28,11 @@ class DealerTonerAttributeModel extends My_Model_Abstract
     public $cost;
 
     /**
+     * @var Float
+     */
+    public $sellPrice;
+
+    /**
      * @var string
      */
     public $dealerSku;
@@ -84,6 +89,11 @@ class DealerTonerAttributeModel extends My_Model_Abstract
             $this->dealerSku = $params->dealerSku;
         }
 
+        if (isset($params->sellPrice) && !is_null($params->sellPrice))
+        {
+            $this->sellPrice = $params->sellPrice;
+        }
+
         if (isset($params->level1) && !is_null($params->level1)) $this->level1 = $params->level1;
         if (isset($params->level2) && !is_null($params->level2)) $this->level2 = $params->level2;
         if (isset($params->level3) && !is_null($params->level3)) $this->level3 = $params->level3;
@@ -107,6 +117,7 @@ class DealerTonerAttributeModel extends My_Model_Abstract
             "tonerId"   => $this->tonerId,
             "dealerId"  => $this->dealerId,
             "cost"      => $this->cost,
+            "sellPrice"      => $this->sellPrice,
             "dealerSku" => $this->dealerSku,
             "level1" => $this->level1,
             "level2" => $this->level2,

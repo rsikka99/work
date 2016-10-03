@@ -54,10 +54,13 @@ class AvailableTonersForm extends \My_Form_Form
 
         if ($tonerModel instanceof TonerModel)
         {
+            $a = $tonerModel->getDealerTonerAttribute($dealerId);
+
             $data               = $tonerModel->toArray();
             $data['cost']       = $tonerModel->getLocalCost();
-            $data['dealerSku']  = $tonerModel->getDealerTonerAttribute($dealerId)->dealerSku;
-            $data['dealerCost'] = $tonerModel->getDealerTonerAttribute($dealerId)->cost;
+            $data['dealerSku']  = $a->dealerSku;
+            $data['dealerCost'] = $a->cost;
+            $data['sellPrice'] = $a->sellPrice;
 
             $this->setDefaults($data);
         }
@@ -212,6 +215,22 @@ class AvailableTonersForm extends \My_Form_Form
          */
         $this->addElement('text_currency', 'dealerCost', [
             'label'      => 'Your Cost',
+            'required'   => false,
+            'maxlength'  => 255,
+            'validators' => [
+                [
+                    'validator' => 'greaterThan',
+                    'options'   => ['min' => 0],
+                ],
+                'Float',
+            ]
+        ]);
+
+        /**
+         * Dealer sell price
+         */
+        $this->addElement('text_currency', 'sellPrice', [
+            'label'      => 'Sell Price',
             'required'   => false,
             'maxlength'  => 255,
             'validators' => [
