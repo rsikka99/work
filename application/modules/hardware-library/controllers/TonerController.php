@@ -161,7 +161,7 @@ class HardwareLibrary_TonerController extends Action
             $toner = TonerMapper::getInstance()->find($tonerId);
         }
 
-        $isAdmin = $this->view->IsAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, AppAclModel::PRIVILEGE_ADMIN);
+        $isAdmin = \MPSToolbox\Legacy\Services\NavigationService::$userId == 1;  //$this->view->IsAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, AppAclModel::PRIVILEGE_ADMIN);
         $isAllowed                 = ((!$toner instanceof TonerModel || !$toner->isSystemDevice || $isAdmin) ? true : false);
         $this->view->isSystemDevice = $toner && $toner->isSystemDevice;
         $this->view->isAdmin = $isAdmin;
@@ -230,7 +230,9 @@ class HardwareLibrary_TonerController extends Action
                     $creatingToner = true;
                 }
 
-                $form = new AvailableTonersForm($dealerId, $toner, null, true);
+                $isAdmin = \MPSToolbox\Legacy\Services\NavigationService::$userId == 1;  //$this->view->IsAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, AppAclModel::PRIVILEGE_ADMIN);
+                $isAllowed                 = ((!$toner instanceof TonerModel || !$toner->isSystemDevice || $isAdmin) ? true : false);
+                $form = new AvailableTonersForm($dealerId, $toner, null, $isAllowed);
 
                 if ($form->isValid($postData))
                 {
