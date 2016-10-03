@@ -42,7 +42,7 @@ class SkuQuoteForm extends \My_Form_Form
         * Cost
         */
         $this->addElement('text_currency', 'fixedPrice', [
-            'label'      => 'Fixed selling price',
+            'label'      => 'Sell price',
             'maxlength'  => 255,
             'required'   => false,
             'allowEmpty' => true,

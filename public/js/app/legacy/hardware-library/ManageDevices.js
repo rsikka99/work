@@ -8,6 +8,7 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
     var $deviceListGrid = $("#devicesGrid");
     var $deviceListGridParent = $deviceListGrid.parent();
     var $canSellCheckbox = $("#can-sell");
+    var $pricedCheckbox = $("#priced");
     var $unapprovedCheckbox = $("#unapproved");
     var $incompleteCheckbox = $("#incomplete");
     var $searchColumnDropdown = $("#filter-index");
@@ -143,6 +144,11 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
             filterCanSell    : function ()
             {
                 return ($canSellCheckbox.length > 0 && $canSellCheckbox[0].checked) ? 'true' : 'false';
+
+            },
+            filterPriced    : function ()
+            {
+                return ($pricedCheckbox.length > 0 && $pricedCheckbox[0].checked) ? 'true' : 'false';
 
             },
             filterUnapproved : function ()

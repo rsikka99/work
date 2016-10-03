@@ -520,8 +520,8 @@ WHERE {$and} `device_toners`.`master_device_id` = :masterDeviceId
         return $arr;
     }
 
-    public function countTonersForDealer($filterManufacturerId = false, $filterTonerSku = false, $filterTonerColorId = false) {
-        if (!$filterManufacturerId && !$filterTonerColorId && !$filterTonerSku) {
+    public function countTonersForDealer($filterManufacturerId = false, $filterTonerSku = false, $filterTonerColorId = false, $filterTonerPriced = false) {
+        if (!$filterManufacturerId && !$filterTonerColorId && !$filterTonerSku && !$filterTonerPriced) {
             return 0;
         }
 
@@ -562,6 +562,11 @@ FROM toners
             $sql .= " AND (toners.{$this->col_sku} LIKE {$filterTonerSku} OR dealer_toner_attributes.dealerSku LIKE {$filterTonerSku})";
         }
 
+        if ($filterTonerPriced)
+        {
+            $sql .= " AND dealer_toner_attributes.sellPrice>0";
+        }
+
         $stmt   = $db->query($sql);
         $arr = $stmt->fetch();
         return $arr['c'];
@@ -577,8 +582,8 @@ FROM toners
      * @return array
      *
      */
-    public function fetchTonersForDealer($orders = null, $count = 25, $offset = 0, $filterManufacturerId = false, $filterTonerSku = false, $filterTonerColorId = false, $filterId=false) {
-        if (!$filterManufacturerId && !$filterTonerColorId && !$filterTonerSku && !$filterId) {
+    public function fetchTonersForDealer($orders = null, $count = 25, $offset = 0, $filterManufacturerId = false, $filterTonerSku = false, $filterTonerColorId = false, $filterId=false, $filterTonerPriced=false) {
+        if (!$filterManufacturerId && !$filterTonerColorId && !$filterTonerSku && !$filterId && !$filterTonerPriced) {
             return [];
         }
 
@@ -642,6 +647,11 @@ FROM toners
         {
             $filterTonerSku = $db->quote("%$filterTonerSku%", 'TEXT');
             $sql .= " AND (toners.{$this->col_sku} LIKE {$filterTonerSku} OR dealer_toner_attributes.dealerSku LIKE {$filterTonerSku})";
+        }
+
+        if ($filterTonerPriced)
+        {
+            $sql .= " AND dealer_toner_attributes.sellPrice>0";
         }
 
         if ($filterId)

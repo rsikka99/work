@@ -84,8 +84,10 @@ class Api_DevicesController extends Action
      */
     public function gridListAction ()
     {
+        $dealerId = \MPSToolbox\Entities\DealerEntity::getDealerId();
         $postData          = $this->getAllParams();
         $filterCanSell     = ($this->_getParam('filterCanSell', null) == 'true') ? true : false;
+        $filterPriced     = ($this->_getParam('filterPriced', null) == 'true') ? true : false;
         $filterUnapproved  = ($this->_getParam('filterUnapproved', null) == 'true') ? true : false;
         $filterIncomplete  = ($this->_getParam('filterIncomplete', null) == 'true') ? true : false;
         $filterSearchIndex = $this->_getParam('filterSearchIndex', null);
@@ -115,6 +117,12 @@ class Api_DevicesController extends Action
         if ($filterUnapproved)
         {
             $dataAdapter->addFilter(new \Tangent\Grid\Filter\IsNot('isSystemDevice', true));
+        }
+        if ($filterPriced)
+        {
+            $dataAdapter->addFilter(new \Tangent\Grid\Filter\In('master_devices.id',"
+                select masterDeviceId from devices where dealerId={$dealerId} and sellPrice>0
+            "));
         }
         if ($filterIncomplete)
         {

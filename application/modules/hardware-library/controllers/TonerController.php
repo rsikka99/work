@@ -436,6 +436,7 @@ class HardwareLibrary_TonerController extends Action
     {
         $filterManufacturerId = $this->_getParam('filterManufacturerId', false);
         $filterTonerSku       = $this->_getParam('filterTonerSku', false);
+        $filterTonerPriced       = $this->_getParam('filterTonerPriced', false);
         $filterTonerColorId   = $this->_getParam('filterTonerColorId', false);
 
         $jqGridParameters = [
@@ -464,7 +465,7 @@ class HardwareLibrary_TonerController extends Action
 
         if ($jqGridService->sortingIsValid())
         {
-            $count = $tonerMapper->countTonersForDealer($filterManufacturerId,$filterTonerSku,$filterTonerColorId);
+            $count = $tonerMapper->countTonersForDealer($filterManufacturerId,$filterTonerSku,$filterTonerColorId,$filterTonerPriced);
             $jqGridService->setRecordCount($count);
 
             // Validate current page number since we don't want to be out of bounds
@@ -508,7 +509,9 @@ class HardwareLibrary_TonerController extends Action
                 $startRecord,
                 $filterManufacturerId,
                 $filterTonerSku,
-                $filterTonerColorId
+                $filterTonerColorId,
+                false,
+                $filterTonerPriced
             ));
 
             // Send back jqGrid JSON data

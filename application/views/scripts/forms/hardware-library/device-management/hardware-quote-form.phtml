@@ -47,11 +47,19 @@ $shopSettings = $dealerSettings->shopSettings;
 
         <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
             <?= $this->RenderFormLabel($form->getElement('cost'), ['col-md-4']) ?>
-
             <div class="col-md-6">
-                <?= $this->RenderFormText($form->getElement('cost'), null, \MPSToolbox\Services\CurrencyService::getSymbol()) ?>
+                <?= $this->RenderFormCurrency($form->getElement('cost')) ?>
                 <?= $this->RenderFormDescription($form->getElement('cost')) ?>
                 <?= $this->RenderFormElementErrors($form->getElement('cost')) ?>
+            </div>
+        </div>
+
+        <div class="form-group <?= ($form->getElement('sellPrice')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+            <?= $this->RenderFormLabel($form->getElement('sellPrice'), ['col-md-4']) ?>
+            <div class="col-md-6">
+                <?= $this->RenderFormCurrency($form->getElement('sellPrice')) ?>
+                <?= $this->RenderFormDescription($form->getElement('sellPrice')) ?>
+                <?= $this->RenderFormElementErrors($form->getElement('sellPrice')) ?>
             </div>
         </div>
 

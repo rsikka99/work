@@ -21,6 +21,7 @@ require([
         var $filterManufacturer = $(".js-filter-manufacturer");
         var $filterTonerColor = $(".js-filter-toner-color");
         var $filterTonerSku = $(".js-filter-toner-sku");
+        var $filterTonerPriced = $(".js-filter-toner-priced");
         var $resetFilterButton = $(".js-reset-filter");
 
         /**
@@ -49,6 +50,11 @@ require([
         });
 
         $filterTonerSku.on("change", function ()
+        {
+            $tonersGrid.trigger('reloadGrid');
+        });
+
+        $filterTonerPriced.on("click", function ()
         {
             $tonersGrid.trigger('reloadGrid');
         });
@@ -98,6 +104,10 @@ require([
                     filterTonerSku      : function ()
                     {
                         return $filterTonerSku.val();
+                    },
+                    filterTonerPriced      : function ()
+                    {
+                        return (($filterTonerPriced.length == 1) && ($filterTonerPriced[0].checked))?1:'';
                     }
                 },
                 colModel    : [
