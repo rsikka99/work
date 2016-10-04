@@ -343,6 +343,7 @@ define([
                 },
                 manufacturerId      : $("#manufacturerId").val(),
                 modelName           : $("#modelName").val(),
+                sku                 : $("#sku").val(),
                 "tonerIds"          : function ()
                 {
                     return deviceModalInstance.$assignedTonersGrid.getTonerList().join(",");

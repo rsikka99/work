@@ -44,24 +44,6 @@ class HardwareQuoteForm extends \My_Form_Form
         ]);
 
         /*
-         * Your SKU
-         */
-        $this->addElement('text', 'oemSku', [
-            'label'      => 'OEM SKU',
-            'maxlength'  => 255,
-            'required'   => false,
-            'filters'    => ['StringTrim', 'StripTags'],
-            'allowEmpty' => false,
-            'validators' => [
-                new FieldDependsOnValue('isSelling', '1', [
-                    new Zend_Validate_NotEmpty()
-                ], [
-                    'validator' => 'StringLength',
-                    'options'   => [1, 255]
-                ]),
-            ],
-        ]);
-        /*
          * Dealer SKU
          */
         $this->addElement('text', 'dealerSku', [

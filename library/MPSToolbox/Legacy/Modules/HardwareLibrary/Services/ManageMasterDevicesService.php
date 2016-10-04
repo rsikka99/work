@@ -446,6 +446,13 @@ class ManageMasterDevicesService
                     $masterDevice->populate($validatedData);
                     $masterDevice->recalculateMaximumRecommendedMonthlyPageVolume();
                     $masterDeviceMapper->save($masterDevice);
+
+                    #--
+                    if (!empty($validatedData['sku'])) {
+                        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('UPDATE supplier_product SET baseProductId=? WHERE manufacturerId=? AND vpn=?');
+                        $st->execute([$this->masterDeviceId, $validatedData['manufacturerId'], $validatedData['sku']]);
+                    }
+                    #--
                 }
             }
 
@@ -611,11 +618,6 @@ class ManageMasterDevicesService
             $device = new DeviceModel(['masterDeviceId' => $this->masterDeviceId, 'dealerId' => $this->_dealerId]);
             $device->populate($validatedData);
             $device->saveObject();
-
-            #--
-            $st=\Zend_Db_Table::getDefaultAdapter()->prepare('update supplier_product set baseProductId=? where manufacturerId=? and vpn=?');
-            $st->execute([$this->masterDeviceId, $manufacturerId, $validatedData['oemSku']]);
-            #--
         }
         catch (Exception $e)
         {

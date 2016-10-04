@@ -73,12 +73,6 @@ class QuoteDeviceForm extends \My_Form_Form
                 'ignore'   => true,
             ]);
 
-            $this->addElement('text', 'oemSku', [
-                'label'    => 'OEM SKU',
-                'disabled' => true,
-                'ignore'   => true,
-            ]);
-
             $this->addElement('text', 'dealerSku', [
                 'label'    => My_Brand::$dealerSku,
                 'disabled' => true,

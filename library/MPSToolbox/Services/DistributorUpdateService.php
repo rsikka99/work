@@ -1091,7 +1091,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
                 $this->base_product_statement->execute([$line['id'], $matnr]);
                 $toner_count += $this->base_product_statement->rowCount();
-                if (empty($line['sku']) || empty($line['weight']) || empty($line['upc'])) {
+                if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
                     //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
                     $this->sku_statement->execute([$matnr, $matnr, $matnr, $line['id']]);
                     $weight_count += $this->sku_statement->rowCount();
@@ -1101,9 +1101,10 @@ Dealers: " . implode(', ', $affected_dealers) . "
         $cursor->closeCursor();
         echo " toner_count:{$toner_count} --- weight_count:{$weight_count}\n";
 
-        $cursor = $db->query('select base_product.id, base_product.manufacturerId, base_product.weight, oemSku, sku from base_product left join devices on base_product.id=devices.masterDeviceId and devices.oemSku is not null group by base_product.id');
+        $cursor = $db->query("select * from base_product where base_type='printer'");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
-            $sku = $line['sku'] ? $line['sku'] : $line['oemSku'];
+            $sku = $line['sku'];
+            if (!$sku) continue;
             $manufacturerId = $line['manufacturerId'];
             if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
                 $sku = $match[1];
@@ -1111,7 +1112,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             if (isset($category_mattnr['PERIPHERA']['PRINTERSP'][$manufacturerId][$sku])) {
                 $matnr = $category_mattnr['PERIPHERA']['PRINTERSP'][$manufacturerId][$sku];
                 $this->base_product_statement->execute([$line['id'], $matnr]);
-                if (empty($line['sku']) || empty($line['weight']) || empty($line['upc'])) {
+                if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
                     $this->sku_statement->execute([$matnr, $matnr, $matnr, $line['id']]);
                 }
             }
@@ -1364,7 +1365,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $supplierSku = $skus['009088'][$manufacturerId][$sku];
                 //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
                 $this->base_product_statement->execute([$line['id'], $supplierSku]);
-                if (empty($line['sku']) || empty($line['weight']) || empty($line['upc'])) {
+                if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
                     //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
                     $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
                 }
@@ -1372,17 +1373,19 @@ Dealers: " . implode(', ', $affected_dealers) . "
         }
         $cursor->closeCursor();
 
-        $cursor = $db->query('select base_product.id, base_product.manufacturerId, base_product.weight, base_product.upc, oemSku, sku from base_product left join devices on base_product.id=devices.masterDeviceId and devices.oemSku is not null group by base_product.id');
+        $cursor = $db->query("select * from base_product where base_type='printer'");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
             $manufacturerId = $line['manufacturerId'];
-            $sku = $line['sku'] ? $line['sku'] : $line['oemSku'];
+            $sku = $line['sku'];
+            if (!$sku) continue;
+
             if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
                 $sku = $match[1];
             }
             if (isset($skus['009053'][$manufacturerId][$sku])) {
                 $supplierSku = $skus['009053'][$manufacturerId][$sku];
                 $this->base_product_statement->execute([$line['id'], $supplierSku]);
-                if (empty($line['sku']) || empty($line['weight']) || empty($line['upc'])) {
+                if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
                     $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
                 }
             }
@@ -1553,7 +1556,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $supplierSku = $skus['1010'][$manufacturerId][$sku];
                 //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
                 $this->base_product_statement->execute([$line['id'], $supplierSku]);
-                if (empty($line['sku']) || empty($line['weight']) || empty($line['upc'])) {
+                if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
                     //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
                     $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
                 }
@@ -1561,10 +1564,12 @@ Dealers: " . implode(', ', $affected_dealers) . "
         }
         $cursor->closeCursor();
 
-        $cursor = $db->query('select base_product.id, base_product.manufacturerId, base_product.weight, base_product.upc, oemSku, sku from base_product left join devices on base_product.id=devices.masterDeviceId and devices.oemSku is not null group by base_product.id');
+        $cursor = $db->query("select * from base_product where base_type='printer'");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
             $manufacturerId = $line['manufacturerId'];
-            $sku = $line['sku'] ? $line['sku'] : $line['oemSku'];
+            $sku = $line['sku'];
+            if (empty($sku)) continue;
+
             if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
                 $sku = $match[1];
             }

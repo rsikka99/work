@@ -455,9 +455,9 @@ class MasterDeviceMapper extends My_Model_Mapper_Abstract
                 'id',
                 'modelName',
                 'isSystemDevice',
+                'sku as oemSku',
             ];
             $deviceColumns       = [
-                'oemSku',
                 'dealerSku',
                 'online',
                 'rent',

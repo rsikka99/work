@@ -25,16 +25,6 @@ $shopSettings = $dealerSettings->shopSettings;
             </div>
         </div>
 
-        <div class="form-group <?= ($form->getElement('oemSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-            <?= $this->RenderFormLabel($form->getElement('oemSku'), ['col-md-4']) ?>
-
-            <div class="col-md-6">
-                <?= $this->RenderFormText($form->getElement('oemSku')) ?>
-                <?= $this->RenderFormDescription($form->getElement('oemSku')) ?>
-                <?= $this->RenderFormElementErrors($form->getElement('oemSku')) ?>
-            </div>
-        </div>
-
         <div class="form-group <?= ($form->getElement('dealerSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
             <?= $this->RenderFormLabel($form->getElement('dealerSku'), ['col-md-4']) ?>
 

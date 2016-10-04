@@ -337,6 +337,7 @@ class HardwareLibrary_ManageDevicesController extends Action
         }
         else if ($masterDevice instanceof MasterDeviceModel)
         {
+            $this->view->sku            = $masterDevice->sku;
             $this->view->modelName      = $masterDevice->modelName;
             $this->view->manufacturerId = $masterDevice->manufacturerId;
         }
@@ -418,6 +419,7 @@ class HardwareLibrary_ManageDevicesController extends Action
             $masterDeviceId = $this->getParam('masterDeviceId', false);
             $modelName      = $this->getParam('modelName', false);
             $manufacturerId = $this->getParam('manufacturerId', false);
+            $sku            = $this->getParam('sku', false);
             $approve        = ($this->getParam('approve', false) === 'true' ? true : false);
 
             $masterDevice = MasterDeviceMapper::getInstance()->find($masterDeviceId);
@@ -556,7 +558,8 @@ class HardwareLibrary_ManageDevicesController extends Action
                                     $validData['deviceImage'],
                                     [
                                         "manufacturerId" => $manufacturerId,
-                                        "modelName"      => $modelName
+                                        "modelName"      => $modelName,
+                                        "sku"            => $sku
                                     ]
                                 ),
                                 $approve

@@ -30,9 +30,14 @@ $shopSettings = $dealerSettings->shopSettings;
                 </div>
                 <div class="form-group">
                     <label class="control-label col-md-2" for="modelName">Model Name</label>
-
                     <div class="col-md-6">
                         <input class="form-control" type="text" id="modelName" value="<?= $this->modelName; ?>" name="modelName" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="modelName">OEM SKU</label>
+                    <div class="col-md-6">
+                        <input class="form-control" type="text" id="sku" value="<?= $this->sku; ?>" name="sku" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
                     </div>
                 </div>
             </form>
