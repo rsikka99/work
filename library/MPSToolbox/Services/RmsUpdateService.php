@@ -71,8 +71,9 @@ class RmsUpdateService {
                 $dealer = $dealers[$template]['dealer'];
                 $dealer_url = $dealers[$template]['url'];
                 $dealer_login = \GuzzleHttp\Psr7\parse_query($dealer_url['query']);
-                $xls_filename = APPLICATION_BASE_PATH . '/data/cache/' . $template .'.xlsx';
-                $csv_filename = APPLICATION_BASE_PATH . '/data/cache/' . $template .'.csv';
+                $template_file = str_replace(' ','_',$template);
+                $xls_filename = APPLICATION_BASE_PATH . '/data/cache/' . $template_file .'.xlsx';
+                $csv_filename = APPLICATION_BASE_PATH . '/data/cache/' . $template_file .'.csv';
 
                 if (!file_exists($csv_filename) || (filemtime($csv_filename) < (strtotime('-1 DAY')+3600))) {
                     echo "downloading report for {$template}\n";
@@ -100,7 +101,7 @@ class RmsUpdateService {
                     unset($client);
 
                     echo "converting xls to csv...\n";
-                    exec('xlsx2csv "'.$xls_filename.'" > "'.$csv_filename.'"');
+                    exec('xlsx2csv '.$xls_filename.' '.$csv_filename);
                 }
                 if (file_exists($csv_filename) && (filesize($csv_filename)>0)) {
                     $this->updateFmauditCsv($dealer->id, $csv_filename);
