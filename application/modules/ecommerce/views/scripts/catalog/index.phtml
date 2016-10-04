@@ -85,9 +85,17 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="products-tab" style="border:1px solid #ccc;padding:15px;">
-                        <p class="text-right" id="add-btn" style="display:none">
-                            <a href="javascript:;" class="btn btn-primary" onclick="editSku(0)">Add</a>
-                        </p>
+                        <div id="add-btn" class="row" style="display:none">
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Add <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="javascript:;" onclick="addFromSupplier()">Search Distributor SKU</a></li>
+                                    <li><a href="javascript:;" onclick="editSku(0 ,'')">Add From Scratch</a></li>
+                                </ul>
+                            </div>
+                        </div>
                         <table class="table">
                             <thead>
                                 <tr>
@@ -110,15 +118,64 @@
     </div>
 </div>
 
+<div class="modal" tabindex="-1" role="dialog" id="addFromSupplier" style="width:600px;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Add Product From Distributor</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label>Search by VPN or description</label>
+                    <input type="text" class="form-control" id="supplier-search">
+                </div>
+
+                <table id="supplier-results" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>VPN</th>
+                            <th>Description</th>
+                            <th>UPC</th>
+                            <th class="text-right">Price</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4">no results</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 
     var dealerSkuName         = '<?= My_Brand::$dealerSku; ?>';
     var selectedCategory      = false;
 
-    require(['jquery'], function ($) {
+    require(['jquery', 'jquery.typewatch'], function ($) {
         require(['bootstrap.treeview'], function ($) {
             loadTree();
         });
+
+        $('#supplier-search').typeWatch({
+            callback     : function (value)
+            {
+                $('#supplier-search').trigger('change');
+            },
+            wait         : 750,
+            highlight    : true,
+            captureLength: 3
+        }).change(supplierSearchChange);
     });
 
     function loadTree() {
@@ -194,9 +251,47 @@
         });
     }
 
-    function editSku(id) {
+    function addFromSupplier() {
+        $('#supplier-search').val('');
+        $('#supplier-results tbody').html('<tr><td colspan="4">no results</td></tr>');
+        $('#addFromSupplier').modal();
+        $('#addFromSupplier').css('margin-top','-150px');
+    }
+
+    function supplierSearchChange() {
+        var q = $('#supplier-search').val();
+        $('#supplier-results tbody').html('<tr><td colspan="4">loading...</td></tr>');
+        $.post('/ecommerce/catalog/search-sku', {q:q}, function(response) {
+            if (response.length>0) {
+                var tr='';
+                var count=0;
+                var more=0;
+                $.each(response, function(i,e) {
+                    if (++count>10) {
+                        more++;
+                    } else {
+                        tr += '<tr>' +
+                        '<td>' + e.vpn + '</td>' +
+                        '<td>' + e.description + '</td>' +
+                        '<td>' + e.upc + '</td>' +
+                        '<td class="text-right">$' + e.price + '</td>' +
+                        '<td><a href="javascript:;" class="btn btn-primary" onclick="$(\'#addFromSupplier\').modal(\'hide\');editSku(0 ,\''+ e.id +'\')">Select</a></td>' +
+                        '<tr>';
+                    }
+                });
+                if (more>0) {
+                    tr += '<tr><td colspan="5" class="text-center"><b>'+more+' additional results found, be more specific please.</b></td><tr>';
+                }
+                $('#supplier-results tbody').html(tr);
+            } else {
+                $('#supplier-results tbody').html('<tr><td colspan="4">no results found for: '+q+'</td></tr>');
+            }
+        }, 'json');
+    }
+
+    function editSku(id, fromSupplier) {
         require(['app/legacy/hardware-library/SkuModal'], function (SkuModal) {
-            var skuModal = new SkuModal({ isAllowed: <?= \MPSToolbox\Legacy\Services\NavigationService::$userId==1?'true':'false' ?>, skuId  : id, categoryId : window.selectedCategory });
+            var skuModal = new SkuModal({ isAllowed: <?= \MPSToolbox\Legacy\Services\NavigationService::$userId==1?'true':'false' ?>, skuId  : id, fromSupplier: fromSupplier, categoryId : window.selectedCategory });
             skuModal.show();
             if (!window.skuSaveSuccessBound) {
                 window.skuSaveSuccessBound = true;

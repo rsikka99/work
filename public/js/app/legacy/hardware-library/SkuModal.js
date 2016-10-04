@@ -23,10 +23,11 @@ define([
 
         var settings = _.extend({
             skuId      : 0,
+            fromSupplier: '',
             categoryId : 0,
             isAllowed     : false,
             onModalClose  : false
-        }, _.pick(options, ['skuId', 'categoryId', 'isAllowed', 'onModalClose']) || {});
+        }, _.pick(options, ['skuId', 'fromSupplier', 'categoryId', 'isAllowed', 'onModalClose']) || {});
 
         /**
          * Create Modal
@@ -40,6 +41,7 @@ define([
          */
         this.$modal = $modal;
         this.skuId = settings.skuId;
+        this.fromSupplier = settings.fromSupplier;
         this.categoryId = settings.categoryId;
         this.isAllowed = (settings.isAllowed == 'true' || settings.isAllowed == '1'); //!(settings.isAllowed == 'undefined' || settings.isAllowed == 'false');
         this.isCreating = (this.skuId === 0);
@@ -92,6 +94,7 @@ define([
         $modal.load(this.urls.loadForms,
             {
                 skuId: this.skuId,
+                fromSupplier: this.fromSupplier,
                 categoryId : this.categoryId
             },
             function ()

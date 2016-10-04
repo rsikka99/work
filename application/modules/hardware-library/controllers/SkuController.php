@@ -11,6 +11,7 @@ class HardwareLibrary_SkuController extends Action {
     protected $identity;
 
     public $skuId;
+    public $fromSupplier;
 
     public function init ()
     {
@@ -28,8 +29,27 @@ class HardwareLibrary_SkuController extends Action {
     }
 
     protected function getSku() {
-        if (!$this->skuId) return null;
         $db = Zend_Db_Table::getDefaultAdapter();
+        if (!$this->skuId) {
+            if ($this->fromSupplier) {
+                $pair=explode(';', $this->fromSupplier,2);
+                if (count($pair)==2) {
+                    $st = $db->prepare('select * from supplier_product join supplier_price using (supplierId, supplierSku) where supplierId=? and supplierSku=?');
+                    $st->execute($pair);
+                    $line = $st->fetch(PDO::FETCH_ASSOC);
+                    if ($line) {
+                        return [
+                            'manufacturerId'=>$line['manufacturerId'],
+                            'weight'=>$line['weight'],
+                            'name'=>$line['description'],
+                            'sku'=>$line['vpn'],
+                            'UPC'=>$line['upc'],
+                        ];
+                    }
+                }
+            }
+            return null;
+        }
         return $db->query('select * from base_product join base_sku using (id) where base_product.id='.intval($this->skuId))->fetch();
     }
 
@@ -180,6 +200,7 @@ class HardwareLibrary_SkuController extends Action {
 
         $this->_helper->layout()->disableLayout();
         $this->skuId = $this->_getParam('skuId', false);
+        $this->fromSupplier = $this->_getParam('fromSupplier', false);
         $sku = $this->getSku();
         $isAllowed = (!$sku->isSystemProduct || $this->isAdmin) ? true : false;
 

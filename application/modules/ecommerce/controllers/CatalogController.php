@@ -221,4 +221,15 @@ class Ecommerce_CatalogController extends Action {
         echo $this->getProducts($db, $category, $dealerId, $ef, $sa);
     }
 
+    public function searchSkuAction() {
+        $dealerId = \MPSToolbox\Legacy\Entities\DealerEntity::getDealerId();
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        $q = "%{$this->getParam('q')}%";
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $st = $db->prepare("select concat(supplierId,';',supplierSku) as id, vpn, description, upc, price from supplier_product join supplier_price using (supplierId, supplierSku) where baseProductId is null and dealerId=? and (vpn like ? or description like ?) group by vpn");
+        $st->execute([$dealerId, $q, $q]);
+        echo json_encode($st->fetchAll());
+    }
+
 }
