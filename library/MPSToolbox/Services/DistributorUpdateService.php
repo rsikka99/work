@@ -25,6 +25,7 @@ class DistributorUpdateService {
     /** @var  \PDOStatement */
     private $sku_statement;
 
+    private $remaining_product = [];
     private $supplier_product = [];
     private $supplier_price = [];
 
@@ -165,9 +166,16 @@ _md5=:_md5
         $dealerId = intval($dealerSupplier['dealerId']);
 
         $this->supplier_product = [];
-        $cursor = $db->query('select supplierSku, _md5 from supplier_product where supplierId='.$dealerSupplier['supplierId'].' and supplierSku in (select supplierSku from supplier_price where dealerId='.$dealerId.')');
+        $cursor = $db->query('select supplierSku, _md5 from supplier_product where supplierId='.$dealerSupplier['supplierId']);
         while($line = $cursor->fetch()) {
             $this->supplier_product[$line['supplierSku']] = $line['_md5'] ? $line['_md5'] : 'x';
+        }
+        $cursor->closeCursor();
+
+        $this->remaining_product = [];
+        $cursor = $db->query('select supplierSku, _md5 from supplier_product where supplierId='.$dealerSupplier['supplierId'].' and supplierSku in (select supplierSku from supplier_price where dealerId='.$dealerId.')');
+        while($line = $cursor->fetch()) {
+            $this->remaining_product[$line['supplierSku']] = $line['_md5'] ? $line['_md5'] : 'x';
         }
         $cursor->closeCursor();
 
@@ -181,6 +189,9 @@ _md5=:_md5
         $cursor = null;
         gc_collect_cycles();
 
+        echo "dealer: {$dealerSupplier['dealerId']}\n";
+        echo "supplier: {$dealerSupplier['supplierId']}\n";
+        echo "remaining_product: ".count($this->remaining_product)."\n";
         echo "supplier_product: ".count($this->supplier_product)."\n";
         echo "supplier_price: ".count($this->supplier_price)."\n";
         #--
@@ -302,8 +313,8 @@ _md5=:_md5
 
         $st1 = $db->prepare('delete from supplier_product where supplierSku=? and supplierId='.$supplierId);
         $st2 = $db->prepare('delete from supplier_price where supplierSku=? and dealerId='.$dealerId.' and supplierId='.$supplierId);
-        $c = count($this->supplier_product);
-        foreach ($this->supplier_product as $supplierSku=>$md5) {
+        $c = count($this->remaining_product);
+        foreach ($this->remaining_product as $supplierSku=>$md5) {
 
             if (isset($online_sku[$supplierSku])) {
                 $baseProductId = intval($online_sku[$supplierSku]);
@@ -1031,7 +1042,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $category_mattnr[$line['ProdFamilyID']][$line['ProdClassID']][$manufacturerId][$manufPartNo] = $line['Matnr'];
             }
 
-            unset($this->supplier_product[$line['Matnr']]);
+            unset($this->remaining_product[$line['Matnr']]);
         }
         fclose($fp);
 
@@ -1258,6 +1269,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $manufacturers[$line['name']] = $line['manufacturerId'];
         }
 
+        $skus = [];
+
         //ignore header line
         fgetcsv($fp, null, '~');
 
@@ -1351,10 +1364,11 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 die ('xxx '.$ex->getMessage());
             }
 
-            $cat = substr($line['SYNNEX_CAT_Code'], 0, 6);
-            $skus[$cat][$manufacturerId][$vpn] = $line['SYNNEX_SKU'];
+            #$cat = substr($line['SYNNEX_CAT_Code'], 0, 6);
+            #$skus[$cat][$manufacturerId][$vpn] = $line['SYNNEX_SKU'];
+            $skus[$manufacturerId][$vpn] = $line['SYNNEX_SKU'];
 
-            unset($this->supplier_product[$line['SYNNEX_SKU']]);
+            unset($this->remaining_product[$line['SYNNEX_SKU']]);
         }
 
         #==
@@ -1365,15 +1379,15 @@ Dealers: " . implode(', ', $affected_dealers) . "
         echo "5. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
         //xxx
-        $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, weight, UPC from base_product join base_printer_consumable using (id)");
+        $cursor = $db->query("select id, manufacturerId, sku, weight, UPC from base_product");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
             $manufacturerId = $line['manufacturerId'];
             $sku = $line['sku'];
             if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
                 $sku = $match[1];
             }
-            if (isset($skus['009088'][$manufacturerId][$sku])) {
-                $supplierSku = $skus['009088'][$manufacturerId][$sku];
+            if (isset($skus[$manufacturerId][$sku])) {
+                $supplierSku = $skus[$manufacturerId][$sku];
                 //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
                 $this->base_product_statement->execute([$line['id'], $supplierSku]);
                 if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
@@ -1384,6 +1398,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         }
         $cursor->closeCursor();
 
+        /**
         $cursor = $db->query("select * from base_product where base_type='printer'");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
             $manufacturerId = $line['manufacturerId'];
@@ -1404,6 +1419,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
         }
         $cursor->closeCursor();
+        **/
 
         gc_collect_cycles();
         echo "6. ".round(memory_get_usage()/(1024*1024))." MB\n";
@@ -1547,7 +1563,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
                     $skus[$line['INGRAM_MICRO_CATEGORY']][$manufacturerId][$vpn] = $line['INGRAM_PART_NUMBER'];
 
-                    unset($this->supplier_product[$line['INGRAM_PART_NUMBER']]);
+                    unset($this->remaining_product[$line['INGRAM_PART_NUMBER']]);
                     break;
                 }
             }
