@@ -165,7 +165,7 @@ _md5=:_md5
         $dealerId = intval($dealerSupplier['dealerId']);
 
         $this->supplier_product = [];
-        $cursor = $db->query('select supplierSku, _md5 from supplier_product where supplierId='.$dealerSupplier['supplierId']);
+        $cursor = $db->query('select supplierSku, _md5 from supplier_product where supplierId='.$dealerSupplier['supplierId'].' and supplierSku in (select supplierSku from supplier_price where dealerId='.$dealerId.')');
         while($line = $cursor->fetch()) {
             $this->supplier_product[$line['supplierSku']] = $line['_md5'] ? $line['_md5'] : 'x';
         }
@@ -601,6 +601,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
             return;
         }
 
+        echo "processing {$csv_filename} for dealer {$dealerSupplier['dealerId']}\n";
+
         $db = \Zend_Db_Table::getDefaultAdapter();
         $manufacturers = [];
         foreach ($db->query('select * from manufacturers order by displayname')->fetchAll() as $line) {
@@ -790,6 +792,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $fp = fopen('php://memory', 'r+');
             fwrite($fp, $str);
             rewind($fp);
+
+            echo "processing {$dealerSupplier['url']}/product_list.asp for dealer {$dealerSupplier['dealerId']}\n";
 
             #===============================================
 
@@ -1079,7 +1083,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
         $toner_count = 0;
         $weight_count = 0;
-        $cursor = $db->query("select base_product.id, manufacturerId, sku, weight from base_product join base_printer_consumable using (id)");
+        $cursor = $db->query("select base_product.id, manufacturerId, sku, weight, UPC from base_product join base_printer_consumable using (id)");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
             $sku = $line['sku'];
             $manufacturerId = $line['manufacturerId'];
@@ -1130,8 +1134,11 @@ Dealers: " . implode(', ', $affected_dealers) . "
     {
         $db = \Zend_Db_Table::getDefaultAdapter();
         $zip_filename = APPLICATION_BASE_PATH . '/data/cache/' . sprintf('synnex-%s.zip', $dealerSupplier['dealerId']);
+        echo "starting with zip file {$zip_filename} for dealer {$dealerSupplier['dealerId']}\n";
+
         try {
             if (!file_exists($zip_filename) || (filemtime($zip_filename) < strtotime('-6 DAY'))) {
+                echo "downloading zip file {$zip_filename} for dealer {$dealerSupplier['dealerId']}\n";
                 $ftp = $this->getFtpClient();
                 $ftp->get($dealerSupplier['url'], $dealerSupplier['user'], $dealerSupplier['pass'], $zip_filename);
             }
@@ -1145,8 +1152,12 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $zip->open($zip_filename);
             $finfo = $zip->statIndex(0);
             $txt_filename = $finfo['name'];
-            $zip->extractTo(dirname($zip_filename));
+            $zip_result = ($txt_filename!='') && $zip->extractTo(dirname($zip_filename));
             $zip->close();
+
+            if (!$zip_result) {
+                throw new \Exception('Zip extract failed: '.$zip_filename.' >> '.$txt_filename);
+            }
 
             $zip = null;
             $ftp = null;
@@ -1231,8 +1242,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
         ];
 
         $filename=dirname($zip_filename).'/'.$txt_filename;
-        if (!file_exists($filename) || (filesize($filename)==0)) {
-            error_log("file not found: {$filename}\n");
+        if (!$txt_filename || !is_file($filename) || !file_exists($filename) || (filesize($filename)==0)) {
+            error_log("txt file not found: {$filename}\n");
             return false;
         }
 
@@ -1354,7 +1365,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         echo "5. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
         //xxx
-        $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, weight, upc from base_product join base_printer_consumable using (id)");
+        $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, weight, UPC from base_product join base_printer_consumable using (id)");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
             $manufacturerId = $line['manufacturerId'];
             $sku = $line['sku'];
@@ -1382,11 +1393,13 @@ Dealers: " . implode(', ', $affected_dealers) . "
             if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
                 $sku = $match[1];
             }
-            if (isset($skus['009053'][$manufacturerId][$sku])) {
-                $supplierSku = $skus['009053'][$manufacturerId][$sku];
-                $this->base_product_statement->execute([$line['id'], $supplierSku]);
-                if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
-                    $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
+            foreach (['009053','009058','009059','009060'] as $n) {
+                if (isset($skus[$n][$manufacturerId][$sku])) {
+                    $supplierSku = $skus[$n][$manufacturerId][$sku];
+                    $this->base_product_statement->execute([$line['id'], $supplierSku]);
+                    if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
+                        $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
+                    }
                 }
             }
         }
@@ -1545,7 +1558,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
         $this->deleteRemainingProducts($dealerSupplier['supplierId'], $dealerSupplier['dealerId']);
 
-        $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, weight, upc from base_product join base_printer_consumable using (id)");
+        $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, weight, UPC from base_product join base_printer_consumable using (id)");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
             $manufacturerId = $line['manufacturerId'];
             $sku = $line['sku'];
