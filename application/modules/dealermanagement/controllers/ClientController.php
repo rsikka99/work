@@ -432,8 +432,11 @@ class Dealermanagement_ClientController extends Action
 
                             $tree[] = ['text' => $text . ' (' . $count . ')', 'icon' => $icon, 'state' => $state, 'selectable' => false, 'href' => $text];
                         }
+                        echo '<div id="tree"></div><script> showTree(' . json_encode($tree) . '); </script>';
+                    } else {
+                        echo '<div class="panel panel-danger">File not found: '.$csv_filename.'</div>';
                     }
-                    echo '<div id="tree"></div><script> showTree(' . json_encode($tree) . '); </script>';
+
                     break;
                 }
                 case 6: { //PrintFleet 3.x
