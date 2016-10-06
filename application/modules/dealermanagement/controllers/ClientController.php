@@ -409,7 +409,7 @@ class Dealermanagement_ClientController extends Action
 
                 case 8: { //FM Audit 4.x
                     $tree = [];
-                    $csv_filename = APPLICATION_BASE_PATH . '/data/cache/' . $dealer->dealerName . '.csv';
+                    $csv_filename = APPLICATION_BASE_PATH . '/data/cache/' . str_replace(' ','_',$dealer->dealerName) . '.csv';
                     if (file_exists($csv_filename)) {
                         $fp = fopen($csv_filename, 'rb');
                         $cols = fgetcsv($fp);
