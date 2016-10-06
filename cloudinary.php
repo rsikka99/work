@@ -131,14 +131,9 @@ where id=?
                 }
 
                 echo "uploading: {$filename}\n";
-                $upload_result = $cloudinary->upload($filename);
+                $upload_result = $cloudinary->upload($filename, ['tags'=>"{$tag},{$mfg},{$baseProductId},{$line['sku']}"]);
                 if (!empty($upload_result['public_id'])) {
                     $handle = $upload_result['public_id'];
-                    $update_result = $api->update($handle, ['tags'=>"{$tag},{$mfg},{$baseProductId},{$line['sku']}"]);
-                    if ($update_result->rate_limit_remaining<10) {
-                        echo "rate_limit low: {$update_result->rate_limit_remaining}";
-                        sleep(1);
-                    }
                     if (!isset($exists[$baseProductId])) {
                         echo "insert into cloud_file: {$handle}\n";
                         $st1->execute([

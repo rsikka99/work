@@ -64,15 +64,14 @@ class ImageService {
         $filename = $local_dir.'/'.$baseProductId.'_'.time().'.'.$ext;
         rename($tmpfname, APPLICATION_BASE_PATH.$filename);
 
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $mfg = $db->query('select fullname from manufacturers m where m.id=(select manufacturerId from base_product p where p.id='.intval($baseProductId).')')->fetchColumn(0);
+        $sku = $db->query('select sku from base_product where id='.intval($baseProductId))->fetchColumn(0);
+
         $cloud = Cloudinary::getInstance();
-        $cloud_result = $cloud->upload(APPLICATION_BASE_PATH.$filename);
+        $cloud_result = $cloud->upload(APPLICATION_BASE_PATH.$filename, ['tags'=>"{$tag},{$mfg},{$baseProductId},{$sku}"]);
 
         if (!empty($cloud_result['public_id'])) {
-            $db = \Zend_Db_Table::getDefaultAdapter();
-            $mfg = $db->query('select fullname from manufacturers m where m.id=(select manufacturerId from base_product p where p.id='.intval($baseProductId).')')->fetchColumn(0);
-            if ($tag && $mfg) {
-                $update_result = $cloud->getApi()->update($cloud_result['public_id'], ['tags'=>"{$tag},{$mfg}"]);
-            }
 
             $st1 = $db->prepare("
 INSERT INTO cloud_file SET

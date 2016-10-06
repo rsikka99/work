@@ -33,8 +33,8 @@ class Cloudinary {
      * @param $filename
      * @return array
      */
-    public function upload($filename) {
-        return \Cloudinary\Uploader::upload($filename);
+    public function upload($filename, $options=array()) {
+        return \Cloudinary\Uploader::upload($filename, $options);
     }
 
 }
