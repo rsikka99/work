@@ -97,6 +97,9 @@ where id=?
     }
 
     foreach ($db->query('select id, base_type, manufacturerId, imageFile from base_product')->fetchAll() as $line) {
+        if (isset($exists[$line['id']])) {
+            continue;
+        }
         $mfg = $man[$line['manufacturerId']];
         if (empty($line['imageFile'])) continue;
 
