@@ -133,7 +133,7 @@ where id=?
                 $upload_result = $cloudinary->upload($filename);
                 if (!empty($upload_result['public_id'])) {
                     $handle = $upload_result['public_id'];
-                    $update_result = $api->update($handle, ['tags',"{$tag},{$mfg}"]);
+                    $update_result = $api->update($handle, ['tags'=>"{$tag},{$mfg}"]);
                     if ($update_result->rate_limit_remaining<10) {
                         echo "rate_limit low: {$update_result->rate_limit_remaining}";
                         sleep(1);
