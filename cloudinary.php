@@ -96,6 +96,9 @@ where id=?
         $exists[$line['baseProductId']] = $line;
     }
 
+    $api_count=0;
+    $api_next_batch=false;
+
     foreach ($db->query('select id, base_type, manufacturerId, imageFile, sku from base_product')->fetchAll() as $line) {
         $baseProductId = $line['id'];
         if (isset($exists[$baseProductId])) {
@@ -128,10 +131,12 @@ where id=?
                 if (isset($exists[$baseProductId])) {
                     echo "deleting existing cloud image: {$exists[$baseProductId]['handle']}\n";
                     $api->delete_resources($exists[$baseProductId]['handle']);
+                    $api_count++;
                 }
 
                 echo "uploading: {$filename}\n";
                 $upload_result = $cloudinary->upload($filename, ['tags'=>"{$tag},{$mfg},{$baseProductId},{$line['sku']}"]);
+                $api_count++;
                 if (!empty($upload_result['public_id'])) {
                     $handle = $upload_result['public_id'];
                     if (!isset($exists[$baseProductId])) {
@@ -163,6 +168,17 @@ where id=?
                     echo "uploading failed! {$filename}\n";
                 }
             }
+        }
+
+        if ($api_count>495) {
+            $api_next_batch = strtotime('+1 HOUR');
+            while (time()<$api_next_batch) {
+                echo "waiting until ".date('H:i', $api_next_batch)."...\n";
+                sleep(60);
+            }
+            echo "Here we go again!\n";
+            $api_count = 0;
+            $api_next_batch = false;
         }
     }
 
