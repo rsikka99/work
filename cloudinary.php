@@ -97,7 +97,8 @@ where id=?
     }
 
     foreach ($db->query('select id, base_type, manufacturerId, imageFile from base_product')->fetchAll() as $line) {
-        if (isset($exists[$line['id']])) {
+        $baseProductId = $line['id'];
+        if (isset($exists[$baseProductId])) {
             continue;
         }
         $mfg = $man[$line['manufacturerId']];
@@ -122,27 +123,27 @@ where id=?
             $localFile = str_replace(APPLICATION_BASE_PATH,'',$fn);
             $i = getimagesize($filename);
             if ($i[0] && $i[1]) {
-                echo "processing id {$line['id']} > {$filename}\n";
+                echo "processing id {$baseProductId} > {$filename}\n";
 
-                if (isset($exists[$line['id']])) {
-                    echo "deleting existing cloud image: {$exists[$line['id']]['handle']}\n";
-                    $api->delete_resources($exists[$line['id']]['handle']);
+                if (isset($exists[$baseProductId])) {
+                    echo "deleting existing cloud image: {$exists[$baseProductId]['handle']}\n";
+                    $api->delete_resources($exists[$baseProductId]['handle']);
                 }
 
                 echo "uploading: {$filename}\n";
                 $upload_result = $cloudinary->upload($filename);
                 if (!empty($upload_result['public_id'])) {
                     $handle = $upload_result['public_id'];
-                    $update_result = $api->update($handle, ['tags'=>"{$tag},{$mfg}"]);
+                    $update_result = $api->update($handle, ['tags'=>"{$tag},{$mfg},{$baseProductId}"]);
                     if ($update_result->rate_limit_remaining<10) {
                         echo "rate_limit low: {$update_result->rate_limit_remaining}";
                         sleep(1);
                     }
-                    if (!isset($exists[$line['id']])) {
+                    if (!isset($exists[$baseProductId])) {
                         echo "insert into cloud_file: {$handle}\n";
                         $st1->execute([
                             $localFile,
-                            $line['id'],
+                            $baseProductId,
                             $handle,
                             $upload_result['format'],
                             $upload_result['secure_url'],
@@ -151,7 +152,7 @@ where id=?
                             $upload_result['height'],
                         ]);
                     } else {
-                        echo "update cloud_file {$exists[$line['id']]['id']}: {$handle}\n";
+                        echo "update cloud_file {$exists[$baseProductId]['id']}: {$handle}\n";
                         $st2->execute([
                             $localFile,
                             $handle,
@@ -160,7 +161,7 @@ where id=?
                             $upload_result['bytes'],
                             $upload_result['width'],
                             $upload_result['height'],
-                            $exists[$line['id']]['id']
+                            $exists[$baseProductId]['id']
                         ]);
                     }
                 } else {
