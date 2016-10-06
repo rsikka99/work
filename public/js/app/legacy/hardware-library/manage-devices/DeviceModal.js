@@ -370,10 +370,6 @@ define([
                 // This calls our custom event called saveSuccess
                 deviceModalInstance.displayAlert("success", "Successfully updated device");
 
-                if (xhr.imageFile) {
-                    $('#imageDiv').html('<a href="/img/devices/'+xhr.imageFile+'" target="_blank" class="thumbnail"><img src="/img/devices/'+xhr.imageFile+'" style="max-width:300px;max-height:300px"></a>');
-                }
-
                 var masterDeviceManagement = $("#masterDeviceManagement");
                 masterDeviceManagement.trigger("saveSuccess", [deviceModalInstance.deviceId]);
                 if (approve)

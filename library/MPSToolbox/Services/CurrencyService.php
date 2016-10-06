@@ -90,7 +90,7 @@ class CurrencyService {
     public function getObjectValue(\My_Model_Abstract $object, $table, $field) {
         $base = $object->$field;
         if ($this->currency == 'USD') return $base;
-        $cv = $this->db->query("select * from currency_value where `table`='{$table}' and `id`={$object->id} and `field`='{$field}' and `currency`='{$this->currency}'")->fetch();
+        $cv = $this->db->query("select * from currency_value where `table`='{$table}' and `id`=".intval($object->id)." and `field`='{$field}' and `currency`='{$this->currency}'")->fetch();
         if ($cv) {
             return $cv['value'];
         }

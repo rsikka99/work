@@ -262,10 +262,6 @@ define([
 
                 modalInstance.displayAlert("success", "Successfully updated sku");
 
-                if (xhr.imageFile) {
-                    $('#imageDiv').html('<a href="/img/sku/'+xhr.imageFile+'" target="_blank" class="thumbnail"><img src="/img/sku/'+xhr.imageFile+'" style="max-width:300px;max-height:300px"></a>');
-                }
-
                 $(window).trigger("skuSaveSuccess", modalInstance.skuId);
             },
             error   : function (xhr)

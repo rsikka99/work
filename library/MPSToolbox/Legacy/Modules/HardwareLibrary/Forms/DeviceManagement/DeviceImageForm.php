@@ -13,6 +13,9 @@ use Zend_Form;
  */
 class DeviceImageForm extends \My_Form_Form
 {
+
+    public $images;
+
     protected $_isAllowedToEditFields = false;
 
     /**

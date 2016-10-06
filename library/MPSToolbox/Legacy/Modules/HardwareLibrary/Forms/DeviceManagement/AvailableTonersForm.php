@@ -28,6 +28,8 @@ class AvailableTonersForm extends \My_Form_Form
      */
     protected $tonerModel;
 
+    public $images;
+
     /**
      * @var string
      */

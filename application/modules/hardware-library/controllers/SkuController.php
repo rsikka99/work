@@ -274,18 +274,20 @@ class HardwareLibrary_SkuController extends Action {
 
                 try
                 {
+                    /**
                     if ($validData['skuImage']['imageUrl'] && (0!==strcmp($validData['skuImage']['imageUrl'], $sku['imageUrl']))) {
                         $sku['imageUrl'] = $validData['skuImage']['imageUrl'];
                         $sku['imageFile'] = $service->downloadImageFromImageUrl($validData['skuImage']['imageUrl']);
                     } else {
                         $validData['skuImage']['imageUrl'] = $sku['imageUrl'];
                     }
+                    **/
                     $sku = $this->saveSku($sku, $validData['skuQuote']);
 
                     $this->sendJson([
                             "skuId" => $sku['id'],
                             "message" => "Successfully updated sku",
-                            'imageFile' => $sku['imageFile']
+                            //'imageFile' => $sku['imageFile']
                     ]);
                 }
                 catch (\Exception $e)
@@ -324,4 +326,50 @@ class HardwareLibrary_SkuController extends Action {
         ]);
     }
     **/
+
+    public function addImageAction() {
+        $baseProductId = $this->getParam('baseProductId');
+        $url = $this->getParam('url');
+        $result = [];
+        if ($url) {
+            $i = new \MPSToolbox\Services\ImageService();
+            $cloud_url = $i->addImage($baseProductId, $url, \MPSToolbox\Services\ImageService::LOCAL_SKU_DIR, \MPSToolbox\Services\ImageService::TAG_SKU);
+            if ($cloud_url) {
+                $urls = $i->getImageUrls($baseProductId);
+                $tr='';
+                foreach ($urls as $id=>$url) {
+                    $tr.='<tr>
+                        <td><img src="'.$url.'" style="width:150px;max-height:150px">
+                        <a href="javascript:;" onclick="deleteImage('.$id.')" style="color:red">delete</a></td>
+                    </tr>';
+                }
+                if (!$tr) $tr='<tr><td>no images</td></tr>';
+                $result['tr'] = $tr;
+            } else {
+                $result['error'] = 'Download from URL failed: '.$i->lastError;
+            }
+        } else {
+            $result['error'] = 'No URL provided';
+        }
+        $this->sendJson($result);
+    }
+
+    public function deleteImageAction() {
+        $baseProductId = $this->getParam('baseProductId');
+        $id = $this->getParam('id');
+        $i = new \MPSToolbox\Services\ImageService();
+        $i->deleteImageById($id);
+        $urls = $i->getImageUrls($baseProductId);
+        $tr='';
+        foreach ($urls as $id=>$url) {
+            $tr.='<tr>
+                        <td><img src="'.$url.'" style="width:150px;max-height:150px">
+                        <a href="javascript:;" onclick="deleteImage('.$id.')" style="color:red">delete</a></td>
+                    </tr>';
+        }
+        if (!$tr) $tr='<tr><td>no images</td></tr>';
+        $result['tr'] = $tr;
+        $this->sendJson($result);
+    }
+
 }

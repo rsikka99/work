@@ -13,6 +13,8 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DealerTonerAttributeModel
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DeviceTonerModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
+use MPSToolbox\Services\ImageService;
+use PhpOffice\PhpWord\Writer\ODText\Element\Image;
 use Tangent\Accounting;
 use Zend_Auth;
 use Zend_Db_Expr;
@@ -126,8 +128,8 @@ class TonerService
         $tonerMapper->insert($toner);
 
         if ($data['imageUrl']) {
-            $this->downloadImageFromImageUrl($toner, $data['imageUrl']);
-            $tonerMapper->save($toner);
+            $i = new ImageService();
+            $i->addImage($toner->id, $data['imageUrl'], ImageService::LOCAL_TONER_DIR, ImageService::TAG_TONER);
         }
 
         $st=\Zend_Db_Table::getDefaultAdapter()->prepare('update supplier_product set baseProductId=? where manufacturerId=? and vpn=?');
@@ -183,9 +185,8 @@ class TonerService
             if ($this->isMasterHardwareAdministrator || $toner->isSystemDevice == 0)
             {
                 if ($data['imageUrl'] && (0!==strcmp($data['imageUrl'], $toner->imageUrl))) {
-                    $this->downloadImageFromImageUrl($toner, $data['imageUrl']);
-                } else {
-                    $data['imageUrl'] = $toner->imageUrl;
+                    $i = new ImageService();
+                    $i->addImage($tonerId, $data['imageUrl'], ImageService::LOCAL_TONER_DIR, ImageService::TAG_TONER);
                 }
 
                 $toner->sku            = $data['sku'];

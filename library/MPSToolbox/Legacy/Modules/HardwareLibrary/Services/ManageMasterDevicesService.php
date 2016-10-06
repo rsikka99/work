@@ -40,6 +40,7 @@ use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceConfigurationModel;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceConfigurationOptionModel;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\DeviceModel;
 use MPSToolbox\Legacy\Modules\QuoteGenerator\Models\OptionModel;
+use MPSToolbox\Services\ImageService;
 use Tangent\Logger\Logger;
 use Zend_Auth;
 use Zend_Db_Expr;
@@ -438,9 +439,8 @@ class ManageMasterDevicesService
                     }
 
                     if ($validatedData['imageUrl'] && (0!==strcmp($validatedData['imageUrl'], $masterDevice->imageUrl))) {
-                        $this->downloadImageFromImageUrl($masterDevice, $validatedData['imageUrl']);
-                    } else {
-                        $validatedData['imageUrl'] = $masterDevice->imageUrl;
+                        $i = new ImageService();
+                        $i->addImage($masterDevice->id, $validatedData['imageUrl'], ImageService::LOCAL_DEVICES_DIR, ImageService::TAG_DEVICE);
                     }
 
                     $masterDevice->populate($validatedData);
@@ -713,6 +713,8 @@ class ManageMasterDevicesService
             else if ($masterDevice)
             {
                 $this->_deviceImageForm->populate($masterDevice->toArray());
+                $i = new ImageService();
+                $this->_deviceImageForm->images = $i->getImageUrls($masterDevice->id);
             }
         }
 

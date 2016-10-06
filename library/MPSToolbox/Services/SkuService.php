@@ -194,6 +194,11 @@ class SkuService
             if ($this->sku) {
                 $this->_imageForm->populate($this->sku);
             }
+            $this->_imageForm->images=[];
+            if ($this->sku['id']) {
+                $i = new ImageService();
+                $this->_imageForm->images = $i->getImageUrls($this->sku['id']);
+            }
         }
         return $this->_imageForm;
     }

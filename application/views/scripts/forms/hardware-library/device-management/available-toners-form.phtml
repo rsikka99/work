@@ -15,116 +15,19 @@ $toner = $form->getView()->toner;
 
 <?= $this->RenderFormOpen($form) ?>
 
-<ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#General" aria-controls="home" role="tab" data-toggle="tab">General</a></li>
-    <li role="presentation"><a href="#Dealer" aria-controls="profile" role="tab" data-toggle="tab">Dealer</a></li>
-    <li role="presentation"><a href="#Distributors" aria-controls="messages" role="tab" data-toggle="tab">Distributors</a></li>
-    <li role="presentation"><a href="#Image" aria-controls="settings" role="tab" data-toggle="tab">Image</a></li>
-</ul>
+<div>
 
-<div class="tab-content">
-    <div role="tabpanel" class="tab-pane" id="Dealer">
-        <fieldset>
-            <div class="row">
-                <div class="col-md-4 col-md-push-1">
-                    <div class="form-group <?= ($form->getElement('dealerSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                        <?= $this->RenderFormLabel($form->getElement('dealerSku')) ?>
-                        <?= $this->RenderFormText($form->getElement('dealerSku')) ?>
-                        <?= $this->RenderFormDescription($form->getElement('dealerSku')) ?>
-                        <?= $this->RenderFormElementErrors($form->getElement('dealerSku')) ?>
-                    </div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#General" aria-controls="General" role="tab" data-toggle="tab">General</a></li>
+        <li role="presentation"><a href="#Dealer" aria-controls="Dealer" role="tab" data-toggle="tab">Dealer</a></li>
+        <li role="presentation"><a href="#Distributors" aria-controls="Distributors" role="tab" data-toggle="tab">Distributors</a></li>
+        <li role="presentation"><a href="#Images" aria-controls="Images" role="tab" data-toggle="tab">Images</a></li>
+    </ul>
 
-                    <div class="form-group <?= ($form->getElement('dealerCost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                        <?= $this->RenderFormLabel($form->getElement('dealerCost')) ?>
-                        <?= $this->RenderFormCurrency($form->getElement('dealerCost')) ?>
-                        <?= $this->RenderFormDescription($form->getElement('dealerCost')) ?>
-                        <?= $this->RenderFormElementErrors($form->getElement('dealerCost')) ?>
-                    </div>
-
-                    <div class="form-group <?= ($form->getElement('sellPrice')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                        <?= $this->RenderFormLabel($form->getElement('sellPrice')) ?>
-                        <?= $this->RenderFormCurrency($form->getElement('sellPrice')) ?>
-                        <?= $this->RenderFormDescription($form->getElement('sellPrice')) ?>
-                        <?= $this->RenderFormElementErrors($form->getElement('sellPrice')) ?>
-                    </div>
-
-                </div>
-            </div>
-        </fieldset>
-    </div>
-    <div role="tabpanel" class="tab-pane" id="Distributors">
-        <div class="row">
-            <div class="col-md-10 col-md-push-1">
-                <table class="table">
-                    <colgroup>
-                        <col width="40%" />
-                        <col width="20%" />
-                        <col width="20%" />
-                        <col width="20%" />
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th>Distributor</th>
-                            <th>Distributor SKU</th>
-                            <th>Price</th>
-                            <th>Stock</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-        <?php foreach ($form->distributors as $line) { ?>
-                        <tr>
-                            <td><?= $line['name'] ?></td>
-                            <td><?= $line['sku'] ?></td>
-                            <td><?= $line['price'] ?></td>
-                            <td><?= $line['stock'] ?></td>
-                        </tr>
-        <?php } ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div role="tabpanel" class="tab-pane" id="Image">
-        <fieldset>
-            <div class="row">
-                <div class="col-md-4 col-md-push-1">
-                    <div class="form-group <?= ($form->getElement('imageUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                        <?= $this->RenderFormLabel($form->getElement('imageUrl')) ?>
-                        <?= $this->RenderFormText($form->getElement('imageUrl')) ?>
-                        <?= $this->RenderFormDescription($form->getElement('imageUrl')) ?>
-                        <?= $this->RenderFormElementErrors($form->getElement('imageUrl')) ?>
-                    </div>
-
-                    <?php if ($id && $form->_isAllowedToEditFields) { ?>
-                        <div class="form-group">
-                            <?= $this->RenderFormLabel($form->getElement('imageFile')) ?>
-                            <input id="fileupload" type="file" name="imageFile" data-url="<?= $this->url(['id' => $id], 'hardware-library.toners.image'); ?>">
-                        </div>
-                    <?php } ?>
-                </div>
-                <div class="col-md-4 col-md-push-3">
-                    <div id="imageDiv">
-                        <?php if ($filename) { ?>
-                            <a href="<?= IMG_CDN ?>/img/toners/<?php echo $filename ?>" target="_blank" class="thumbnail">
-                                <img src="<?= IMG_CDN ?>/img/toners/<?php echo $filename ?>" style="max-width:250px;max-height:250px">
-                            </a>
-                        <?php } else {
-
-                            switch($toner->manufacturerId) {
-                                case 47: // lmi
-                                case 61: // zero waste
-                                    echo '<img src="'.IMG_CDN.'/img/toners/default_'.$toner->manufacturerId.'.jpg" style="max-width:250px;max-height:250px">';
-                            }
-
-                        } ?>
-                    </div>
-                </div>
-            </div>
-        </fieldset>
-    </div>
-    <div role="tabpanel" class="tab-pane active" id="General">
-
-        <div class="clearfix">
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="General">
             <fieldset>
                 <div class="row">
                     <div class="col-md-4 col-md-push-1">
@@ -132,22 +35,22 @@ $toner = $form->getView()->toner;
 
                             <?= $this->RenderFormLabel($form->getElement('manufacturerId')) ?>
 
-    <?php if ($form->_isAllowedToEditFields) { ?>
-                            <select class="form-control" type="text" id="manufacturerId" name="manufacturerId">
-                                <option></option>
-    <?php
-        foreach (\MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper::getInstance()->fetchTonerManufacturersForDealer() as $line) {
-            ?><option value="<?= $line['id'] ?>" <?= $form->getElement('manufacturerId')->getValue()==$line['id']?'selected="selected"':'' ?>><?= $line['fullname'] ?></option>
-    <?php } ?>
-                            </select>
-    <?php } else {
-        $mfgId = $form->getElement('manufacturerId')->getValue();
-        $mfg = \MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper::getInstance()->find($mfgId);
-    ?>
-                            <select class="form-control" type="text" id="manufacturerId" name="manufacturerId" disabled="disabled">
-                                <option value="<?= $mfgId ?>"><?= $mfg->fullname ?></option>
-                            </select>
-    <?php } ?>
+                            <?php if ($form->_isAllowedToEditFields) { ?>
+                                <select class="form-control" type="text" id="manufacturerId" name="manufacturerId">
+                                    <option></option>
+                                    <?php
+                                    foreach (\MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper::getInstance()->fetchTonerManufacturersForDealer() as $line) {
+                                        ?><option value="<?= $line['id'] ?>" <?= $form->getElement('manufacturerId')->getValue()==$line['id']?'selected="selected"':'' ?>><?= $line['fullname'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            <?php } else {
+                                $mfgId = $form->getElement('manufacturerId')->getValue();
+                                $mfg = \MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper::getInstance()->find($mfgId);
+                                ?>
+                                <select class="form-control" type="text" id="manufacturerId" name="manufacturerId" disabled="disabled">
+                                    <option value="<?= $mfgId ?>"><?= $mfg->fullname ?></option>
+                                </select>
+                            <?php } ?>
                             <script> require(['jquery', 'select2'], function ($) { $('#manufacturerId').select2(); }); </script>
 
                             <?= $this->RenderFormDescription($form->getElement('manufacturerId')) ?>
@@ -214,21 +117,154 @@ $toner = $form->getView()->toner;
 
             </fieldset>
         </div>
+        <div role="tabpanel" class="tab-pane" id="Dealer">
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-4 col-md-push-1">
+                        <div class="form-group <?= ($form->getElement('dealerSku')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                            <?= $this->RenderFormLabel($form->getElement('dealerSku')) ?>
+                            <?= $this->RenderFormText($form->getElement('dealerSku')) ?>
+                            <?= $this->RenderFormDescription($form->getElement('dealerSku')) ?>
+                            <?= $this->RenderFormElementErrors($form->getElement('dealerSku')) ?>
+                        </div>
+
+                        <div class="form-group <?= ($form->getElement('dealerCost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                            <?= $this->RenderFormLabel($form->getElement('dealerCost')) ?>
+                            <?= $this->RenderFormCurrency($form->getElement('dealerCost')) ?>
+                            <?= $this->RenderFormDescription($form->getElement('dealerCost')) ?>
+                            <?= $this->RenderFormElementErrors($form->getElement('dealerCost')) ?>
+                        </div>
+
+                        <div class="form-group <?= ($form->getElement('sellPrice')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                            <?= $this->RenderFormLabel($form->getElement('sellPrice')) ?>
+                            <?= $this->RenderFormCurrency($form->getElement('sellPrice')) ?>
+                            <?= $this->RenderFormDescription($form->getElement('sellPrice')) ?>
+                            <?= $this->RenderFormElementErrors($form->getElement('sellPrice')) ?>
+                        </div>
+
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="Distributors">
+            <div class="row">
+                <div class="col-md-10 col-md-push-1">
+                    <table class="table">
+                        <colgroup>
+                            <col width="40%" />
+                            <col width="20%" />
+                            <col width="20%" />
+                            <col width="20%" />
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>Distributor</th>
+                            <th>Distributor SKU</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($form->distributors as $line) { ?>
+                            <tr>
+                                <td><?= $line['name'] ?></td>
+                                <td><?= $line['sku'] ?></td>
+                                <td><?= $line['price'] ?></td>
+                                <td><?= $line['stock'] ?></td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="Images">
+            <fieldset>
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <?php if ($toner->id) { ?>
+                        <table class="table" id="images-table">
+                            <?php if (!empty($form->images)) foreach ($form->images as $image_id=>$url) { ?>
+                                <tr>
+                                    <td>
+                                        <img src="<?= $url ?>" style="width:150px;max-height:150px">
+                                        <a href="javascript:;" onclick="deleteImage(<?= $image_id ?>)" style="color:red">delete</a>
+                                    </td>
+                                </tr>
+                            <?php } else { ?>
+                                <tr>
+                                    <td>
+                                        <?php
+                                        switch($toner->manufacturerId) {
+                                            case 47: // lmi
+                                            case 61: // zero waste
+                                                echo '<img src="'.IMG_CDN.'/img/toners/default_'.$toner->manufacturerId.'.jpg" style="max-width:250px;max-height:250px">';
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+
+                    </div><div class="col-md-6">
+                        <p>
+                            <label>Add from URL:</label>
+                            <input type="text" class="form-control" id="image-url">
+                            <a href="javascript:;" onclick="addImage()" class="btn btn-primary">Add</a>
+                        </p>
+                    </div>
+                </div>
+
+
+                <script>
+                    function deleteImage(id) {
+                        $.post('/hardware-library/toner/delete-image', {baseProductId:<?= $toner->id ?> ,id:id}, function(response) {
+                            if (response.error) {
+                                alert(response.error);
+                            }
+                            if (response.tr) {
+                                $('#images-table').html(response.tr);
+                            }
+                        }, 'json');
+                    }
+                    function addImage() {
+                        var url = $('#image-url').val();
+                        $.post('/hardware-library/toner/add-image', {baseProductId:<?= $toner->id ?> ,url:url}, function(response) {
+                            if (response.error) {
+                                alert(response.error);
+                            } else {
+                                $('#image-url').val('');
+                            }
+                            if (response.tr) {
+                                $('#images-table').html(response.tr);
+                            }
+                        }, 'json');
+                    }
+                </script>
+                <?php } else { ?>
+                <div class="row">
+                    <div class="col-md-6 col-md-push-1">
+                        <div class="form-group <?= ($form->getElement('imageUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                        <?= $this->RenderFormLabel($form->getElement('imageUrl')) ?>
+                        <?= $this->RenderFormText($form->getElement('imageUrl')) ?>
+                        <?= $this->RenderFormDescription($form->getElement('imageUrl')) ?>
+                        <?= $this->RenderFormElementErrors($form->getElement('imageUrl')) ?>
+                        </div>
+                    </div>
+                </div>
+                <?php }?>
+
+            </fieldset>
+        </div>
     </div>
 
+</div>
 
+<fieldset>
+    <?= $this->RenderFormHidden($form->getElement('saveAndApproveHdn')) ?>
+    <input type="hidden" id="tonerId" value="<?= $id ?>" name="tonerId">
+</fieldset>
 
-    <fieldset>
-        <?= $this->RenderFormHidden($form->getElement('saveAndApproveHdn')) ?>
-        <input type="hidden" id="tonerId" value="<?= $id ?>" name="tonerId">
-    </fieldset>
 <?= $this->RenderFormClose($form) ?>
-
-<script>
-    $(function () {
-        $('#fileupload').fileupload({
-            dataType: 'json',
-            done: uploadDone
-        });
-    });
-</script>

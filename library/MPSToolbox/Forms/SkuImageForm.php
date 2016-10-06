@@ -4,6 +4,9 @@ namespace MPSToolbox\Forms;
 
 class SkuImageForm extends \My_Form_Form
 {
+    /** @var array */
+    public $images;
+
     protected $_isAllowedToEditFields = false;
 
     /**

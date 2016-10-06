@@ -179,6 +179,9 @@ class HardwareLibrary_TonerController extends Action
                     'stock' => '',
                 ];
             }
+
+            $i=new \MPSToolbox\Services\ImageService();
+            $form->images = $i->getImageUrls($toner->id);
         }
         #--
         $st = \Zend_Db_Table::getDefaultAdapter()->prepare('select s.name as supplier_name, supplierSku, price, isStock from supplier_product p join suppliers s on p.supplierId=s.id join supplier_price c using (supplierId, supplierSku) where dealerId='.$dealerId.' and baseProductId=:tonerId');
@@ -575,5 +578,50 @@ class HardwareLibrary_TonerController extends Action
 
 
         $this->sendJson($tonerColorList);
+    }
+
+    public function addImageAction() {
+        $baseProductId = $this->getParam('baseProductId');
+        $url = $this->getParam('url');
+        $result = [];
+        if ($url) {
+            $i = new \MPSToolbox\Services\ImageService();
+            $cloud_url = $i->addImage($baseProductId, $url, \MPSToolbox\Services\ImageService::LOCAL_TONER_DIR, \MPSToolbox\Services\ImageService::TAG_TONER);
+            if ($cloud_url) {
+                $urls = $i->getImageUrls($baseProductId);
+                $tr='';
+                foreach ($urls as $id=>$url) {
+                    $tr.='<tr>
+                        <td><img src="'.$url.'" style="width:150px;max-height:150px">
+                        <a href="javascript:;" onclick="deleteImage('.$id.')" style="color:red">delete</a></td>
+                    </tr>';
+                }
+                if (!$tr) $tr='<tr><td>no images</td></tr>';
+                $result['tr'] = $tr;
+            } else {
+                $result['error'] = 'Download from URL failed: '.$i->lastError;
+            }
+        } else {
+            $result['error'] = 'No URL provided';
+        }
+        $this->sendJson($result);
+    }
+
+    public function deleteImageAction() {
+        $baseProductId = $this->getParam('baseProductId');
+        $id = $this->getParam('id');
+        $i = new \MPSToolbox\Services\ImageService();
+        $i->deleteImageById($id);
+        $urls = $i->getImageUrls($baseProductId);
+        $tr='';
+        foreach ($urls as $id=>$url) {
+            $tr.='<tr>
+                        <td><img src="'.$url.'" style="width:150px;max-height:150px">
+                        <a href="javascript:;" onclick="deleteImage('.$id.')" style="color:red">delete</a></td>
+                    </tr>';
+        }
+        if (!$tr) $tr='<tr><td>no images</td></tr>';
+        $result['tr'] = $tr;
+        $this->sendJson($result);
     }
 }

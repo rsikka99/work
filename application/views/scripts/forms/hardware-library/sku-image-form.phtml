@@ -15,38 +15,72 @@ $form->getElement('imageUrl')->setValue('');
 <?= $this->RenderFormOpen($form, ['form-horizontal']) ?>
 <div class="clearfix">
     <fieldset class="col-md-10 col-md-offset-1">
+<?php if ($id) { ?>
+
         <div class="row">
             <div class="col-md-6">
 
-                <div class="form-group <?= ($form->getElement('imageUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-                    <?= $this->RenderFormLabel($form->getElement('imageUrl'), ['col-md-4']) ?>
+            <table class="table" id="images-table">
+                <?php foreach ($form->images as $image_id=>$url) { ?>
+                    <tr>
+                        <td>
+                            <img src="<?= $url ?>" style="width:150px;max-height:150px">
+                            <a href="javascript:;" onclick="deleteImage(<?= $image_id ?>)" style="color:red">delete</a>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </table>
 
-                    <div class="col-md-8">
-                        <?= $this->RenderFormText($form->getElement('imageUrl')) ?>
-                        <?= $this->RenderFormDescription($form->getElement('imageUrl')) ?>
-                        <?= $this->RenderFormElementErrors($form->getElement('imageUrl')) ?>
-                    </div>
+                </div><div class="col-md-6">
+            <p>
+                <label>Add from URL:</label>
+                <input type="text" class="form-control" id="image-url">
+                <a href="javascript:;" onclick="addImage()" class="btn btn-primary">Add</a>
+            </p>
                 </div>
-<?php if ($id) { ?>
-                <div class="form-group">
-                    <?= $this->RenderFormLabel($form->getElement('imageFile'), ['col-md-4']) ?>
-
-                    <div class="col-md-8">
-                        <input id="fileupload" type="file" name="imageFile" data-url="<?= $this->url(['id' => $id]); ?>">
-                    </div>
-                </div>
-<?php } ?>
             </div>
+
+
+<script>
+    function deleteImage(id) {
+        $.post('/hardware-library/sku/delete-image', {baseProductId:<?= $id ?> ,id:id}, function(response) {
+            if (response.error) {
+                alert(response.error);
+            }
+            if (response.tr) {
+                $('#images-table').html(response.tr);
+            }
+        }, 'json');
+    }
+    function addImage() {
+        var url = $('#image-url').val();
+        $.post('/hardware-library/sku/add-image', {baseProductId:<?= $id ?> ,url:url}, function(response) {
+            if (response.error) {
+                alert(response.error);
+            } else {
+                $('#image-url').val('');
+            }
+            if (response.tr) {
+                $('#images-table').html(response.tr);
+            }
+        }, 'json');
+    }
+</script>
+
+<?php } else { ?>
+        <div class="row">
             <div class="col-md-6">
-                <div id="imageDiv">
-                    <?php if ($filename) { ?>
-                        <a href="<?= IMG_CDN ?>/img/sku/<?php echo $filename ?>" target="_blank" class="thumbnail">
-                            <img src="<?= IMG_CDN ?>/img/sku/<?php echo $filename ?>" style="max-width:300px;max-height:300px">
-                        </a>
-                    <?php } ?>
+    <div class="form-group <?= ($form->getElement('imageUrl')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+        <?= $this->RenderFormLabel($form->getElement('imageUrl'), ['col-md-4']) ?>
+        <div class="col-md-8">
+            <?= $this->RenderFormText($form->getElement('imageUrl')) ?>
+            <?= $this->RenderFormDescription($form->getElement('imageUrl')) ?>
+            <?= $this->RenderFormElementErrors($form->getElement('imageUrl')) ?>
+        </div>
+    </div>
                 </div>
             </div>
-        </div>
+<?php } ?>
     </fieldset>
 </div>
 <?= $this->RenderFormClose($form) ?>

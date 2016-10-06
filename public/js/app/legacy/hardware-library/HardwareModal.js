@@ -268,10 +268,6 @@ define([
 
                 hardwareModalInstance.displayAlert("success", "Successfully updated hardware");
 
-                if (xhr.imageFile) {
-                    $('#imageDiv').html('<a href="/img/hardware/'+xhr.imageFile+'" target="_blank" class="thumbnail"><img src="/img/hardware/'+xhr.imageFile+'" style="max-width:300px;max-height:300px"></a>');
-                }
-
                 var hardwareManagement = $("#hardwareManagement");
                 $(window).trigger("hardwareSaveSuccess", hardwareModalInstance.hardwareId);
             },
