@@ -96,7 +96,7 @@ where id=?
         $exists[$line['baseProductId']] = $line;
     }
 
-    foreach ($db->query('select id, base_type, manufacturerId, imageFile from base_product')->fetchAll() as $line) {
+    foreach ($db->query('select id, base_type, manufacturerId, imageFile, sku from base_product')->fetchAll() as $line) {
         $baseProductId = $line['id'];
         if (isset($exists[$baseProductId])) {
             continue;
@@ -134,7 +134,7 @@ where id=?
                 $upload_result = $cloudinary->upload($filename);
                 if (!empty($upload_result['public_id'])) {
                     $handle = $upload_result['public_id'];
-                    $update_result = $api->update($handle, ['tags'=>"{$tag},{$mfg},{$baseProductId}"]);
+                    $update_result = $api->update($handle, ['tags'=>"{$tag},{$mfg},{$baseProductId},{$line['sku']}"]);
                     if ($update_result->rate_limit_remaining<10) {
                         echo "rate_limit low: {$update_result->rate_limit_remaining}";
                         sleep(1);
