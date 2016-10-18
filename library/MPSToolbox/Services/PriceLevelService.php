@@ -17,8 +17,8 @@ class PriceLevelService {
 
     public function update($dealerId, $id, $name, $margin) {
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $st = $db->prepare('update dealer_price_levels set name=?, margin=? where id=?');
-        $st->execute([$id, $name, $margin]);
+        $st = $db->prepare('update dealer_price_levels set `name`=?, margin=? where id=?');
+        $st->execute([$name, $margin, $id]);
         $this->shopifyUpdate($dealerId);
     }
 
