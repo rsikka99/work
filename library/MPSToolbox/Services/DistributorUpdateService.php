@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\TransferException;
 use Psr\Http\Message\RequestInterface;
 use Tangent\Ftp\NcFtp;
 use Tangent\Logger\Logger;
+use XBase\Table;
 
 class DistributorUpdateService {
 
@@ -46,6 +47,23 @@ class DistributorUpdateService {
 
     /** @var  NcFtp */
     private $ftpClient;
+
+    public function expandYield($str) {
+        if (empty($str)) return null;
+        if (preg_match('#^(.+)ml$#i', $str, $match)) {
+            $str = trim($match[1]);
+        }
+        $str=preg_replace('#,(\d\d\d)#','$1',$str);
+        if (is_numeric($str)) {
+            return intval($str);
+        }
+        if (preg_match('#^(.+)k$#i', $str, $match)) {
+            $f = floatval($match[1]);
+            return round(1000 * $f);
+        }
+        error_log('cannot parse yield: '.$str);
+        return 0;
+    }
 
     /**
      * @return NcFtp
@@ -116,6 +134,7 @@ upc=:upc,
 description=:description,
 isStock=:isStock,
 qty=:qty,
+package=:package,
 category=:category,
 categoryId=:categoryId,
 dateCreated=:dateCreated,
@@ -145,6 +164,7 @@ upc=:upc,
 description=:description,
 isStock=:isStock,
 qty=:qty,
+package=:package,
 category=:category,
 categoryId=:categoryId,
 dateCreated=:dateCreated,
@@ -276,7 +296,7 @@ _md5=:_md5
                 $this->insert_product->execute($product);
                 $this->total_result['products_added'] += $this->insert_product->rowCount();
 
-                $this->supplier_product[$sku] = $product;
+                $this->supplier_product[$sku] = md5(json_encode($product));
                 #echo count($this->supplier_product)."\n";
             }
         }
@@ -459,6 +479,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 'height'=>null,
                 'upc'=>null,
                 'description'=>trim($line['Product Description']).'; Models: '.trim($line['Model']),
+                'package'=>null,
                 'isStock'=>intval($line['Total Inventory'])>0?1:0,
                 'qty'=>json_encode([
                     'Branch 110 Inventory'=>$line['Branch 110 Inventory'],
@@ -513,8 +534,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
                     ],$match[1]));
                 $e=explode('/',$yield);
                 if (count($e)>1) $yield=array_pop($e);
-                $yield=trim(str_replace(['.','K'],['','000'],$yield));
-                if (empty($yield)) continue;
+                $yield=$this->expandYield($yield); //trim(str_replace(['.','K'],['','000'],$yield));
+                if (!$yield) continue;
 
                 $brand = $line['CompatibleBrand'];
                 if (isset($manufacturers[$brand])) $oem_mfg_id = $manufacturers[$brand];
@@ -593,6 +614,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         }
 
         foreach ($oem_lines as $oem_line) {
+            echo "{$oem_line['id']} > {$base_id} \n";
             $this->compatibleStatements['st4']->execute([$oem_line['id'], $base_id]);
         }
 
@@ -671,8 +693,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
             if ($ignore) continue;
 
-            $line['Page Yield'] = str_replace(',','',$line['Page Yield']);
-            if (!is_numeric($line['Page Yield'])) {
+            $line['Page Yield'] = $this->expandYield($line['Page Yield']); //str_replace(',','',$line['Page Yield']);
+            if (!$line['Page Yield']) {
                 error_log("{$line['Page Yield']} ???");
                 continue;
             }
@@ -738,14 +760,15 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 'User-Agent'=>'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0',
             ]
         ]);
+
         try {
+
             /**/
             $r = $client->get($base_uri.'/landing.asp?autopage=/Default.asp');
             if ($r->getStatusCode() != 200) {
                 error_log($dealerSupplier['url'] . ' > ' . $r->getStatusCode());
                 return;
             }
-            /**/
 
             $r = $client->post(
                 $base_uri.'/security_logonScript_siteFront.asp?' . http_build_query([
@@ -806,6 +829,9 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
             echo "processing {$dealerSupplier['url']}/product_list.asp for dealer {$dealerSupplier['dealerId']}\n";
 
+            /**/
+            //$fp = fopen(APPLICATION_BASE_PATH.'/data/cache/Product_Listing.csv','rb');
+            /**/
             #===============================================
 
             $db = \Zend_Db_Table::getDefaultAdapter();
@@ -823,11 +849,9 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $skus[$line['manufacturerId']][$sku] = $line;
             }
 
-            //$fp = fopen('Product_Listing.csv','rb');
             $cols = fgetcsv($fp);
 
             $i = 0;
-
             while($line = fgetcsv($fp)) {
                 $line = array_combine($cols, $line);
                 $line['brand'] = strip_tags($line['brand']);
@@ -835,8 +859,11 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 if ($line['type']=='ORIGINAL') continue;
                 if ($line['brand']=='Generic') continue;
 
-                $line['yield'] = str_replace(',','',$line['yield']);
-                if (!is_numeric($line['yield'])) continue;
+                if (empty($line['yield']) || (strtolower($line['yield'])=='n/a')) continue;
+                if (preg_match('#([\d,]+) page#i',$line['yield'], $match)) $line['yield'] = $match[1];
+                $line['yield'] = $this->expandYield($line['yield']); //str_replace(',','',$line['yield']);
+                if (!$line['yield']) continue;
+
                 $pair = explode(' ', $line['nm'], 2);
                 $brand = strtoupper($pair[0]);
                 if ($brand=='FRANCOTYP') continue;
@@ -889,6 +916,292 @@ Dealers: " . implode(', ', $affected_dealers) . "
     }
 
     private function updateTechData($dealerSupplier) {
+        if (strpos($dealerSupplier['url'], 'https://www.techdata.ca') === 0) {
+            return $this->updateTechDataNA($dealerSupplier);
+        }
+        return $this->updateTechDataSA($dealerSupplier);
+    }
+    private function updateTechDataNA($dealerSupplier) {
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $zip_filename = APPLICATION_BASE_PATH . '/data/cache/' . sprintf('techdata-%s.zip', $dealerSupplier['dealerId']);
+        echo "starting with zip file {$zip_filename} for dealer {$dealerSupplier['dealerId']}\n";
+
+        try {
+            if (!file_exists($zip_filename) || (filemtime($zip_filename) < strtotime('-6 DAY'))) {
+                echo "downloading zip file {$zip_filename} for dealer {$dealerSupplier['dealerId']}\n";
+                $url = $dealerSupplier['url'].'?Auto=Y&UserID='.$dealerSupplier['user'].'&Password='.$dealerSupplier['pass'].'&Type=Price&Name=ProdCod.zip';
+                $client = new Client(['verify'=>false]);
+                $response = $client->get($url);
+                file_put_contents($zip_filename, $response->getBody());
+            }
+
+            if (!file_exists($zip_filename) || (filesize($zip_filename)==0)) {
+                error_log('zip download failed');
+                return false;
+            }
+
+            echo "extracting zip file {$zip_filename} for dealer {$dealerSupplier['dealerId']}\n";
+            $zip = $this->getZipAdapter();
+            $zip->open($zip_filename);
+            #$finfo = $zip->statIndex(0);
+            $txt_filename = dirname($zip_filename).'/products.dbf'; //$finfo['name'];
+            $zip_result = $zip->extractTo(dirname($zip_filename));
+            $zip->close();
+
+            if (!$zip_result) {
+                throw new \Exception('Zip extract failed: '.$zip_filename.' >> '.$txt_filename);
+            }
+
+            $zip = null;
+            $ftp = null;
+
+        } catch (\Exception $ex) {
+            print_r($ex);
+            Logger::logException($ex);
+            return false;
+        }
+
+        if (!is_file($txt_filename) || !file_exists($txt_filename) || (filesize(dirname($zip_filename)==0))) {
+            return false;
+        }
+
+        gc_collect_cycles();
+        echo "1. ".round(memory_get_usage()/(1024*1024))." MB\n";
+
+        $comcat = [];
+        $table = new Table(dirname($zip_filename).'/comcat.dbf');
+        while($record = $table->nextRecord()) {
+            $grp = $record->forceGetString('grp');
+            $cat = $record->forceGetString('cat');
+            $comcat[$grp][$cat] = $record->forceGetString('descr');
+        }
+
+        $manuf = [];
+        $table = new Table(dirname($zip_filename).'/manuf.dbf');
+        while($record = $table->nextRecord()) {
+            $vend_code = $record->forceGetString('vend_code');
+            $manuf[$vend_code] = $record->forceGetString('vend_name');
+        }
+
+        $manufacturers=[];
+        foreach ($db->query('select * from techdata_manufacturer') as $line) {
+            $manufacturers[$line['name']] = $line['manufacturerId'];
+        }
+        foreach ($db->query('select * from manufacturers') as $line) {
+            $manufacturers[$line['fullname'].'%'] = $line['id'];
+            $manufacturers[$line['displayname'].'%'] = $line['id'];
+        }
+        $manufacturer_lookup = [];
+
+        $i=0;$j=0;
+        $table = new Table($txt_filename);
+        while($record = $table->nextRecord()) {
+            if (++$i % 50000 == 0) {
+                echo "{$j}/{$i} >> ".round(memory_get_usage()/(1024*1024))." MB\n";
+            }
+            $manufacturerId = null;
+            $manufacturerName = $vend_code = $record->forceGetString('vend_code');
+            if (isset($manuf[$vend_code])) $manufacturerName = $manuf[$vend_code];
+
+            if (isset($manufacturer_lookup[$vend_code])) {
+                $manufacturerId = $manufacturer_lookup[$vend_code];
+            } else {
+
+                foreach ($manufacturers as $mfg_name => $mfg_id) {
+                    if (preg_match('#' . str_replace('%', '.*', $mfg_name) . '#i', $manufacturerName)) {
+                        $manufacturerId = $mfg_id;
+                    }
+                }
+                $manufacturer_lookup[$vend_code] = $manufacturerId;
+            }
+
+            $vpn = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$record->forceGetString('manu_part')));
+
+            $grp = $record->forceGetString('grp');
+            $cat = $record->forceGetString('cat');
+            $part_num = $record->forceGetString('part_num');
+
+            if (is_numeric($grp)) continue;
+            //if ($grp=='CK') continue; //	Computer- Chromebook
+            //if ($grp=='F5') continue; //	Periph- Graphic Tablets
+            if ($grp=='G5') continue; //	Storage- Drive Enclosure
+            if ($grp=='I2') continue; //	Periph- Power Equipment
+            if ($grp=='J5') continue; //	Periph- Audio Devices
+            if ($grp=='J8') continue; //	Component- I/O Adapters
+            //if ($grp=='MD') continue; //	Computer- Mini Desktop PC
+            if ($grp=='N2') continue; //	Network- LAN/WAN Bus Adapters
+            if ($grp=='N4') continue; //	Network- Transceivers/Converters
+            if ($grp=='O5') continue; //	Network- Wiring Closet/Rack
+            if ($grp=='O7') continue; //	Network- Modules
+            if ($grp=='S9') continue; //	S/W- Inter/Intra/Extranet
+            //if ($grp=='T4') continue; //	Computer- Hybrid Tablets
+            //if ($grp=='B4') continue; //	Computer- Bare Bones Desktop
+            //if ($grp=='C2') continue; //	Periph- Monitors/Displays
+            if ($grp=='E1') continue; //	Misc- Education
+            if ($grp=='F6') continue; //	Periph- Mounting Kits
+            if ($grp=='G7') continue; //	Storage- Floppy/ZIP Drives
+            if ($grp=='G8') continue; //	Storage- Hard Drives
+            if ($grp=='I3') continue; //	Periph- UPS Systems
+            //if ($grp=='M3') continue; //	Computer- Workstation PC
+            if ($grp=='N3') continue; //	Network- Serial I/O
+            if ($grp=='O2') continue; //	Cables/Testing/Tools
+            if ($grp=='O3') continue; //	Modems
+            if ($grp=='P4') continue; //	Component- Sound Cards/Kits
+            if ($grp=='S7') continue; //	S/W- Developer Tools
+            if ($grp=='S8') continue; //	S/W- Communication
+            if ($grp=='T1') continue; //	Security/Surveillance
+            //if ($grp=='G6') continue; //	Storage- DVD Drives
+            if ($grp=='G9') continue; //	Storage- Tape Drives
+            //if ($grp=='H2') continue; //	Periph- Multifunction Device
+            //if ($grp=='J2') continue; //	Storage- Portable Flash Memory Drives
+            if ($grp=='J3') continue; //	Component- Memory
+            if ($grp=='J4') continue; //	Storage- Adapters & I/F
+            //if ($grp=='J9') continue; //	Storage- Media
+            //if ($grp=='L1') continue; //	Periph- Projectors
+            //if ($grp=='M4') continue; //	Computer- Tower Server
+            //if ($grp=='M6') continue; //	Computer- Server Rackmount
+            //if ($grp=='MP') continue; //	Computer- Blade PC
+            if ($grp=='O1') continue; //	Network- Telephony
+            //if ($grp=='P3') continue; //	Storage- Servers
+            if ($grp=='P5') continue; //	Periph- Switch Boxes
+            //if ($grp=='S1') continue; //	S/W- O/S & Enhancements
+            if ($grp=='S2') continue; //	S/W- Networking
+            //if ($grp=='Y1') continue; //	Office Equipment
+            //if ($grp=='Z1') continue; //	Canada Only - Floor Standing Printers
+            if ($grp=='B2') continue; //	Computer- Mainboards
+            if ($grp=='C1') continue; //	Periph- Control Devices
+            if ($grp=='C3') continue; //	Component- Video Adapters
+            if ($grp=='C4') continue; //	Consumer Electronics
+            //if ($grp=='CX') continue; //	Computer- Chromebox
+            if ($grp=='F7') continue; //	Periph- Cellular Accessory
+            if ($grp=='G1') continue; //	Storage- Blu-ray Drives
+            //if ($grp=='H3') continue; //	Periph- Copiers
+            if ($grp=='J6') continue; //	Periph- Cameras
+            //if ($grp=='M9') continue; //	Computer- Thin Client/Terminal
+            //if ($grp=='MX') continue; //	Computer- AIO Desktop PC
+            if ($grp=='N9') continue; //	Network- Host Connectivity
+            if ($grp=='O8') continue; //	Network- Multislot Chassis
+            if ($grp=='O9') continue; //	Network- PS/Components/Device SW
+            if ($grp=='P6') continue; //	(POS) Point of Sale/Data Capture
+            if ($grp=='Q1') continue; //	Books - Printed Material
+            //if ($grp=='S0') continue; //	S/W- Business
+            //if ($grp=='T2') continue; //	Computer- Convertible Tablets
+            if ($grp=='C5') continue; //	Mobile- Cellular Phones
+            //if ($grp=='F2') continue; //	Periph- Scanners & Microfilm Devices
+            //if ($grp=='F3') continue; //	Periph- Keyboards/Keypads
+            //if ($grp=='J7') continue; //	Periph- Desk Accessories
+            //if ($grp=='M0') continue; //	Computer- Server RM Multiprocessor
+            //if ($grp=='M1') continue; //	Computer- Desktop PC
+            //if ($grp=='M2') continue; //	Computer- Desktop Tower
+            //if ($grp=='M5') continue; //	Computer- Tower Server Multiprocessor
+            //if ($grp=='M7') continue; //	Computer- Notebook
+            //if ($grp=='MB') continue; //	Computer- BladeServer
+            if ($grp=='N5') continue; //	Network- Infrastructure
+            if ($grp=='S4') { //	S/W- Graphics/Desktop Publish
+                if ($cat=='B4') continue;
+            }
+            if ($grp=='S6') continue; //	S/W- Games
+            //if ($grp=='SA') continue; //	S/W- AntiVirus/SPAM
+            if ($grp=='SV') continue; //	S/W- Virtualization
+            //if ($grp=='T3') continue; //	Computer- Slate Tablets
+            if ($grp=='V7') continue; //	Mobile- Accessories
+            if ($grp=='B3') continue; //	Computer- Chassis
+            //if ($grp=='C6') continue; //	Mobile- Smart Phones
+            if ($grp=='E2') continue; //	Misc- Other
+            //if ($grp=='F4') continue; //	Periph- Pointing Devices
+            //if ($grp=='G3') continue; //	Storage- CD-ROM/Optical Drives
+            //if ($grp=='G4') continue; //	Storage- Disk Array Systems
+            //if ($grp=='H4') continue; //	Periph- FAX Machines
+            //if ($grp=='H5') continue; //	Periph- Printer Options
+            //if ($grp=='H6') continue; //	Periph- Printers
+            //if ($grp=='K1') continue; //	Misc- Services & Agreements
+            if ($grp=='O6') continue; //	Network- LAN/WAN/INET Hub Devices
+            //if ($grp=='P1') continue; //	Periph- Notebook/Tablet/PDA Options
+            if ($grp=='P2') continue; //	Component- Processors
+            if ($grp=='S3') continue; //	S/W- Home/Education
+            //if ($grp=='S5') continue; //	S/W- Utilities
+
+            $product_data = [
+                'supplierSku'=>$part_num,
+                'manufacturer'=>$manufacturerName,
+                'manufacturerId'=>$manufacturerId,
+                'vpn'=>$vpn,
+                'name'=>$record->forceGetString('descr'),
+                'msrp'=>$record->getFloat('retail'),
+                'weight'=>0,
+                'length'=>0,
+                'width'=>0,
+                'height'=>0,
+                'upc'=>$record->forceGetString('upc'),
+                'description'=>$record->forceGetString('descr'),
+                'package'=>null,
+                'isStock'=>intval($record->forceGetString('qty'))>0?1:0,
+                'qty'=>json_encode([
+                    'qty'=>$record->forceGetString('qty'),
+                    'columbus'=>$record->forceGetString('columbus'),
+                    'vancouver'=>$record->forceGetString('vancouver'),
+                    'orbitor'=>$record->forceGetString('orbitor'),
+                ]),
+                'category'=>$comcat[$grp][$cat],
+                'categoryId'=>"{$grp}/{$cat}",
+                'dateCreated'=>null,
+            ];
+
+            $price_data = [
+                'supplierSku'=>$part_num,
+                'dealerId'=>$dealerSupplier['dealerId'],
+                'price'=>trim($record->getString('list_price')),
+                'promotion'=>0,
+            ];
+
+            try {
+                $this->populate($product_data, $price_data);
+                $j++;
+            } catch (\Exception $ex) {
+                var_dump($product_data);
+                die ('xxx '.$ex->getMessage());
+            }
+
+            $skus[$manufacturerId][$vpn] = $part_num;
+            unset($this->remaining_product[$part_num]);
+        }
+
+        #==
+        $this->deleteRemainingProducts($dealerSupplier['supplierId'], $dealerSupplier['dealerId']);
+        #==
+
+        gc_collect_cycles();
+        echo "5. ".round(memory_get_usage()/(1024*1024))." MB\n";
+
+        //xxx
+        $cursor = $db->query("select id, manufacturerId, sku, weight, UPC from base_product");
+        while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
+            $manufacturerId = $line['manufacturerId'];
+            $sku = $line['sku'];
+            if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
+                $sku = $match[1];
+            }
+            if (isset($skus[$manufacturerId][$sku])) {
+                $supplierSku = $skus[$manufacturerId][$sku];
+                //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
+                $this->base_product_statement->execute([$line['id'], $supplierSku]);
+                #if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
+                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
+                #    $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
+                #}
+            }
+        }
+        $cursor->closeCursor();
+
+        gc_collect_cycles();
+        echo "6. ".round(memory_get_usage()/(1024*1024))." MB\n";
+
+        echo time() - $this->timerStart."s\n";
+        return true;
+    }
+
+    private function updateTechDataSA($dealerSupplier) {
+
         $db = \Zend_Db_Table::getDefaultAdapter();
         $zip_filename = APPLICATION_BASE_PATH . '/data/temp/'.$dealerSupplier['url'];
 
@@ -1023,6 +1336,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 'width'=>$line['Width'] ? $line['Width']*2.54/100 : null,
                 'height'=>$line['Heigth'] ? $line['Heigth']*2.54/100 : null,
                 'upc'=>$line['GTIN'],
+                'package'=>null,
                 'description'=>trim($line['LongDescription']),
                 'isStock'=>intval($qty)>0?1:0,
                 'qty'=>$qty,
@@ -1324,6 +1638,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 'height'=>$line['Height'] * 2.54 / 100,
                 'upc'=>$line['UPC_Code'],
                 'description'=>trim($line['Part_Description']),
+                'package'=>$line['Kit_Stand_Alone_Flag'],
                 'isStock'=>intval($line['Qty_on_Hand'])>0?1:0,
                 'qty'=>json_encode([
                     'Warehouse_Qty_on_Hand_1'=>$line['Warehouse_Qty_on_Hand_1'],
@@ -1539,6 +1854,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                         'height'=>$line['HEIGHT'] * 2.54 / 100,
                         'upc'=>$line['UPC_CODE'],
                         'description'=>trim($line['INGRAM_PART_DESCRIPTION_LINE_1'].' '.$line['INGRAM_PART_DESCRIPTION_LINE_2']),
+                        'package'=>$line['MEDIA_TYPE'],
                         'isStock'=>$line['AVAILABILITY_FLAG']=='Y'?1:0,
                         'qty'=>null,
                         'category'=>$line['INGRAM_MICRO_CATEGORY'],

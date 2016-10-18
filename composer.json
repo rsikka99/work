@@ -29,7 +29,8 @@
     "cdyweb/shopify-client"       : "0.1.5",
     "phpseclib/phpseclib"         : "*",
     "tedivm/fetch"                : "0.7.1",
-    "cloudinary/cloudinary_php"   : "dev-master"
+    "cloudinary/cloudinary_php"   : "dev-master",
+    "hisamu/php-xbase"            : "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "3.7.x",

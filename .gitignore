@@ -14,9 +14,3 @@ public/downloads/*.docx
 
 # Ignore the vendor folder
 /vendor/
-
-
-
-
-
-composer.lock
