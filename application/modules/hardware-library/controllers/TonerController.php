@@ -44,6 +44,9 @@ class HardwareLibrary_TonerController extends Action
     }
 
     private function outputInfiniteRow($line) {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $cloud = $db->query("select * from cloud_file where type='image' and baseProductId={$line['id']} order by orderby limit 1")->fetch();
+
         $devices=[];
         $json = json_decode($line['json_device_list'], true);
         foreach ($json as $d) {
@@ -52,9 +55,11 @@ class HardwareLibrary_TonerController extends Action
 ?>
         <div class="toner-item row" id="toner-<?= $line['id'] ?>">
             <div class="toner-image col-sm-3">
+                <?php if ($cloud) { ?>
                 <a href="javascript:" onclick="editRow(<?= $line['id'] ?>);" class="thumbnail">
-                    <img src="<?= $line['imageFile']?'/img/toners/'.$line['imageFile']:'about:blank' ?>">
+                    <img src="<?= $cloud['url'] ?>" style="max-width:100%">
                 </a>
+                <?php } ?>
             </div>
             <div class="toner-info col-sm-4">
                 <table class="table">
@@ -69,7 +74,7 @@ class HardwareLibrary_TonerController extends Action
             <div class="toner-info col-sm-5">
                 <table class="table">
 <?php if (!empty($line['device_list'])) { ?>
-                    <tr><th>Devices: </th><td><?= implode('<br>',$devices) ?></td></tr>
+                    <tr><th>Devices: </th><td><?= $line['device_list'] ?></td></tr>
 <?php } else { ?>
                     <tr><th>Admin: </th><td><a class="btn btn-warning" href="javascript:" onclick="if (window.confirm('Delete this toner?')) deleteToner(<?= $line['id'] ?>)">Delete</a></td></tr>
 <?php } ?>
@@ -249,6 +254,7 @@ class HardwareLibrary_TonerController extends Action
                     }
                     else
                     {
+                        /**
                         if (isset($formData['tonerColorId']) && ((int)$toner->tonerColorId !== (int)$formData['tonerColorId']))
                         {
                             $deviceToners = DeviceTonerMapper::getInstance()->fetchDeviceTonersByTonerId($toner->id);
@@ -265,6 +271,7 @@ class HardwareLibrary_TonerController extends Action
                                 ]);
                             }
                         }
+                        **/
 
                         if (!empty($formData['cost']) && !\MPSToolbox\Services\CurrencyService::isUSD()) {
                             $toner = TonerMapper::getInstance()->find($tonerId);
