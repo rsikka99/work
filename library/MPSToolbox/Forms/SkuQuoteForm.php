@@ -60,6 +60,12 @@ class SkuQuoteForm extends \My_Form_Form
             'required'   => false,
             'allowEmpty' => true,
         ]);
+        $this->addElement('text', 'tags', [
+            'label'      => 'Tags',
+            'maxlength'  => 255,
+            'required'   => false,
+            'allowEmpty' => true,
+        ]);
         $this->addElement('checkbox', 'online', [
             'label'      => 'Is visible online',
             'required'   => false,

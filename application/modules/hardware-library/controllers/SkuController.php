@@ -120,9 +120,9 @@ class HardwareLibrary_SkuController extends Action {
             $dealerId = \MPSToolbox\Entities\DealerEntity::getDealerId();
             $line = $db->query('select * from dealer_sku where skuId='.intval($sku['id']).' and dealerId='.intval($dealerId))->fetch();
             if ($line) {
-                $st = $db->prepare('update dealer_sku set dealerSku=?, cost=?, fixedPrice=?, taxable=?, dataSheetUrl=?, reviewsUrl=?, online=?, onlineDescription=? where skuId=? and dealerId=?');
+                $st = $db->prepare('update dealer_sku set dealerSku=?, cost=?, fixedPrice=?, taxable=?, dataSheetUrl=?, reviewsUrl=?, online=?, onlineDescription=?, tags=? where skuId=? and dealerId=?');
             } else {
-                $st = $db->prepare('replace into dealer_sku set dealerSku=?, cost=?, fixedPrice=?, taxable=?, dataSheetUrl=?, reviewsUrl=?, online=?, onlineDescription=?, skuId=?, dealerId=?');
+                $st = $db->prepare('replace into dealer_sku set dealerSku=?, cost=?, fixedPrice=?, taxable=?, dataSheetUrl=?, reviewsUrl=?, online=?, onlineDescription=?, tags=?, skuId=?, dealerId=?');
             }
             $st->execute([
                 $quote['dealerSku'],
@@ -133,6 +133,7 @@ class HardwareLibrary_SkuController extends Action {
                 $quote['reviewsUrl'],
                 $quote['online'],
                 $quote['onlineDescription'],
+                $quote['tags'],
                 $sku['id'],
                 $dealerId
             ]);
