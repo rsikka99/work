@@ -1,0 +1,115 @@
+<?php
+
+use MPSToolbox\Forms\SkuAddOnsForm;
+
+/* @var $form \MPSToolbox\Forms\SkuAddOnsForm */
+$form = $this->element;
+
+if (!$form->getView()->skuId) {
+    return;
+}
+$arr = SkuAddOnsForm::getAddOns($form->getView()->skuId);
+
+?>
+<div class="row">
+    <div class="col-md-3">
+        <h5>Add-ons</h5>
+    </div>
+    <div class="col-md-9">
+        <table class="table">
+            <colgroup>
+                <col width="25%" />
+                <col width="25%" />
+                <col width="25%" />
+                <col width="25%" />
+            </colgroup>
+            <thead>
+            <tr>
+                <th>VPN</th>
+                <th>Manufacturer</th>
+                <th>Name</th>
+                <th class="text-right">Cost</th>
+            </tr>
+            </thead>
+            <tbody id="addon-tbody">
+            <?php foreach ($arr as $line) { ?>
+                <tr>
+                    <td><?= $line['sku'] ?></td>
+                    <td><?= $line['mfg'] ?></td>
+                    <td><?= $line['name'] ?></td>
+                    <td class="text-right"><?= $line['cost'] ?></td>
+                    <td><a href="javascript:" onclick="deleteAddon(<?= $line['id'] ?>)">delete</a></td>
+                </tr>
+            <?php } ?>
+            </tbody>
+            <tfoot id="addon-tfoot" style="display:none">
+            <tr>
+                <td class="text-right">Add: </td>
+                <td colspan="2">
+                    <select class="form-control" id="addon-add-category" onchange="showProducts(this.value)">
+                        <option value=""> - select category - </option>
+<?php
+$db = Zend_Db_Table::getDefaultAdapter();
+$base_category = [];
+foreach ($db->query('select * from base_category order by parent')->fetchAll() as $line) {
+    $base_category[$line['id']] = $line;
+}
+$dealerId = \MPSToolbox\Legacy\Entities\DealerEntity::getDealerId();
+foreach ($db->query('select * from dealer_category where dealerId='.$dealerId.' order by orderby') as $line) {
+    $cat = $base_category[$line['categoryId']];
+    $name = $line['name']?$line['name']:$cat['name'];
+    if ($cat['parent']) $name = $base_category[$cat['parent']]['name'].' - '.$name;
+    echo '<option value="'.$line['categoryId'].'">'.$name.'</option>';
+}
+?>
+                    </select>
+                    <select class="form-control" id="addon-add-product">
+                        <option value=""> - select product - </option>
+                    </select>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" onclick="addAddon()">Add</button>
+                    &nbsp;&nbsp;
+                    <a href="javascript:;" onclick="$('#addon-tfoot').hide()">cancel</a>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+        <a href="javascript:;" class="btn btn-default" onclick="$('#addon-tfoot').show()">+ Add</a>
+    </div>
+</div>
+<script>
+    function showProducts(catId) {
+        $('#addon-add-product').load('<?= str_replace('/load-forms','/show-products',$_SERVER['REQUEST_URI']) ?>?catId='+catId);
+    }
+    function updateAddons(response) {
+        var tr = '';
+        $.each(response, function(i,e) {
+            tr += '<tr>';
+            tr += '<td>'+e.sku+'</td>';
+            tr += '<td>'+e.mfg+'</td>';
+            tr += '<td>'+e.name+'</td>';
+            tr += '<td class="text-right">'+e.cost+'</td>';
+            tr += '<td><a href="javascript:" onclick="deleteAddon('+ e.id+')">delete</a></td>';
+            tr += '</tr>';
+        });
+        $('#addon-tbody').html(tr);
+    }
+    function deleteAddon(id) {
+        $.post('<?= str_replace('/load-forms','/delete-addon',$_SERVER['REQUEST_URI']) ?>', {id:id, skuId:<?= $form->getView()->skuId ?>}, updateAddons, 'json');
+    }
+    function addAddon() {
+        var product = $('#addon-add-product').val();
+        if (product=='') {
+            alert('Select a product');
+            return;
+        }
+        $.post('<?= str_replace('/load-forms','/add-addon',$_SERVER['REQUEST_URI']) ?>', {product:product, skuId:<?= $form->getView()->skuId ?>}, updateAddons, 'json');
+        $('#addon-add-category').val('');
+        $('#addon-add-product').val('');
+        $('#addon-tfoot').hide();
+    }
+</script>
+
+
+

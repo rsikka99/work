@@ -122,11 +122,14 @@ class Ecommerce_CatalogController extends Action {
             }
             default : {
                 $arr = $db->query("
-                  select base_product.id, base_product.userId, base_product.sku, manufacturers.displayname as mfg, base_product.name, dealer_sku.dealerSku, dealer_sku.cost from base_product
+                  select base_product.id, base_product.userId, base_product.sku, manufacturers.displayname as mfg, base_product.name, dealer_sku.dealerSku, dealer_sku.cost, pp.price as supplier_cost
+                    from base_product
                     join base_sku using (id)
                     join manufacturers on base_product.manufacturerId=manufacturers.id
-                    left join dealer_sku on dealer_sku.skuId=base_product.id and dealer_sku.dealerId={$dealerId}
-                    where categoryId={$id} and (base_product.userId=1 or base_product.userId={$userId})
+                    join dealer_sku on dealer_sku.skuId=base_product.id and dealer_sku.dealerId={$dealerId}
+                    left join supplier_product_price pp on base_product.id=pp.baseProductId and pp.dealerId={$dealerId} and pp.price=(select min(spp.price) from supplier_product_price spp where spp.baseProductId=pp.baseProductId and spp.dealerId={$dealerId})
+                    where base_product.categoryId={$id}
+                    group by base_product.id
                 ")->fetchAll();
                 $editFunction = 'editSku';
                 $showAdd = true;
@@ -140,7 +143,7 @@ class Ecommerce_CatalogController extends Action {
             $products .= '<td>'.$line['mfg'].'</td>';
             $products .= '<td>'.$line['name'].'</td>';
             $products .= '<td>'.$line['dealerSku'].'</td>';
-            $products .= '<td>'.$line['cost'].'</td>';
+            $products .= '<td class="text-right">$'.($line['cost']>0?$line['cost']:number_format($line['supplier_cost'],2)).'</td>';
             $products .= '<td>';
             $products .= '<a href="#" onclick="'.$editFunction.'('.$line['id'].'); return false;"><i class="fa fa-pencil-square-o"></i></a>';
             if ($showAdd && (($userId==1) || ($userId=$line['userId']))) $products .= '&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" onclick="deleteSku('.$line['id'].'); return false;"><i class="text-danger fa fa-remove"></i></a>';

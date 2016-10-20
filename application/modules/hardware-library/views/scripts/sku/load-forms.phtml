@@ -85,6 +85,12 @@ $shopSettings = $dealerSettings->shopSettings;
                                 <a href="#skuQuoteTab" id="skuQuoteTopTab" data-toggle="tab">Quote</a>
                             </li>
                         <?php endif; ?>
+                        <?php if ($this->skuAddOns) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#skuAddOnsTab" id="skuAddOnsTopTab" data-toggle="tab">Add-ons</a>
+                            </li>
+                        <?php endif; ?>
                         <?php if ($this->skuImage) : ?>
                             <li <?= ($first) ? 'class="active"' : '' ?>>
                                 <?php $first = ($first) ? false : $first ?>
@@ -121,6 +127,13 @@ $shopSettings = $dealerSettings->shopSettings;
                     <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="skuQuoteTab">
                         <?php $first = ($first) ? false : $first ?>
                         <?= $this->skuQuote ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($this->skuAddOns) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="skuAddOnsTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->skuAddOns ?>
                     </div>
                 <?php endif; ?>
 

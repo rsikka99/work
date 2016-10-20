@@ -2,6 +2,7 @@
 
 namespace MPSToolbox\Services;
 
+use MPSToolbox\Forms\SkuAddOnsForm;
 use MPSToolbox\Forms\SkuImageForm;
 use MPSToolbox\Forms\SkuAttributesForm;
 use MPSToolbox\Forms\SkuQuoteForm;
@@ -50,6 +51,7 @@ class SkuService
         $formsToShow['skuQuote'] = $this->getSkuQuoteForm();
         $formsToShow['skuImage']  = $this->getSkuImageForm();
         $formsToShow['skuDistributors']  = $this->getSkuDistributorsForm();
+        $formsToShow['skuAddOns']  = $this->getSkuAddOnsForm();
         return $formsToShow;
     }
 
@@ -238,6 +240,20 @@ class SkuService
         }
 
         return $this->_skuQuoteForm;
+    }
+
+    public function getSkuAddOnsForm ()
+    {
+        if (!isset($this->_skuAddOnsForm))
+        {
+            $this->_skuAddOnsForm = new SkuAddOnsForm();
+            if ($this->sku) {
+                $this->_skuAddOnsForm->skuId = $this->sku['id'];
+                $this->_skuAddOnsForm->populate($this->sku);
+            }
+        }
+
+        return $this->_skuAddOnsForm;
     }
 
 }
