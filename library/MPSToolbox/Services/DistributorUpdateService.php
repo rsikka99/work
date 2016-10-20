@@ -1821,9 +1821,12 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $line = array_combine($columns, $line);
 
             if (
-                ($line['INGRAM_MICRO_CATEGORY'] != '1010') &&
-                ($line['INGRAM_MICRO_CATEGORY'] != '0701') &&
-                ($line['INGRAM_MICRO_CATEGORY'] != '0733')
+                ($line['INGRAM_MICRO_CATEGORY'] != '9045') && // monitor
+                ($line['INGRAM_MICRO_CATEGORY'] != '0011') && // notebook
+                ($line['INGRAM_MICRO_CATEGORY'] != '1221') && // service
+                ($line['INGRAM_MICRO_CATEGORY'] != '1010') && // ink & toner
+                ($line['INGRAM_MICRO_CATEGORY'] != '0701') && // printers
+                ($line['INGRAM_MICRO_CATEGORY'] != '0733')    // printers
             ) continue;
 
             foreach ($line as $k=>$v) $line[$k] = trim($v);
