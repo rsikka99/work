@@ -61,6 +61,38 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Margins: </label>
+
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label>Manufacturer:</label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <select id="category-margin-manufacturer" name="manufacturer" class="form-control" onchange="mfgOrTypeChanged()"></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label>Type:</label>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <select id="category-margin-type" name="type" class="form-control" onchange="mfgOrTypeChanged()"></select>
+                                            </div>
+                                        </div>
+
+                                        <hr>
+
+                                        <div class="row" id="use-category-margins" style="display:none">
+                                            <div class="col-sm-3">
+                                            </div>
+                                            <div class="col-sm-9 checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="useDefaultMargins" id="useDefaultMargins" onclick="useDefaultMarginsClick()" value="1">
+                                                    Use category margins
+                                                </label>
+                                            </div>
+                                        </div>
+
                                         <table class="table">
                                             <colgroup>
                                                 <col width="50%">
@@ -203,6 +235,7 @@
                     $('#category-orderBy').val(r.orderBy);
                     $('#category-taxable').val(r.taxable);
                     $('#category-margins').html(r.margins);
+                    $('#category-margins input').removeAttr('disabled');
 
                     if (r.showProducts) {
                         $('#products-li').show();
@@ -217,6 +250,10 @@
                     } else {
                         $('#add-btn').hide();
                     }
+
+                    $('#category-margin-manufacturer').html(r.mfgSelect);
+                    $('#category-margin-type').html(r.typeSelect);
+                    $('#use-category-margins').hide();
 
                     $('#main-div').show();
                     $('#main-loading').hide();
@@ -312,6 +349,37 @@
         $.post('/ecommerce/catalog/delete', {id:id, category:selectedCategory }, function(r) {
             $('#products-tbody').html(r);
         }, 'html');
+    }
+
+    function mfgOrTypeChanged() {
+        var mfg = $('#category-margin-manufacturer').val();
+        var type = $('#category-margin-type').val();
+        $.get('/ecommerce/catalog/mfg-or-type', {id: window.selectedCategory, mfg:mfg, type:type}, function(r) {
+            $('#category-margins').html(r.margins);
+            if ((mfg!='') || (type!='')) {
+                if (r.useDefaultMargins) {
+                    $('#useDefaultMargins')[0].checked = true;
+                    $('#category-margins input').attr('disabled','disabled');
+                } else {
+                    $('#useDefaultMargins')[0].checked = false;
+                    $('#category-margins input').removeAttr('disabled');
+                }
+                $('#use-category-margins').show();
+            } else {
+                $('#use-category-margins').hide();
+                $('#category-margins input').removeAttr('disabled');
+            }
+        });
+    }
+    function useDefaultMarginsClick() {
+        var checked = $('#useDefaultMargins')[0].checked;
+        if (checked) {
+            $('#category-margins input').attr('disabled','disabled');
+            $('#category-margins input').each(function(i,e) { var $e = $(e); $e.val($e.attr('data-default')); });
+        } else {
+            $('#category-margins input').removeAttr('disabled');
+            $('#category-margins input').each(function(i,e) { var $e = $(e); $e.val($e.attr('data-actual')); });
+        }
     }
 
 </script>

@@ -58,8 +58,11 @@
 
 <?= $this->headScript(); ?>
 <?= ($this->App()->useAnalytics && APPLICATION_ENV == 'production') ? $this->partial('google-analytics.phtml') : ""; ?>
+
+<?php /** ?>
 <?= ($this->App()->useChatTab && APPLICATION_ENV == 'production') ? $this->partial('zopim-chat.phtml') : ""; ?>
 <?= ($this->App()->useFeedbackTab) ? $this->partial('zendesk-support.phtml') : ""; ?>
+<?php /**/ ?>
 
 <script>
     function notifyTodo(item, n) {

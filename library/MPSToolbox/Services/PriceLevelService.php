@@ -35,19 +35,35 @@ class PriceLevelService {
         return $st->fetchAll();
     }
 
-    public function replaceCategoryPriceLevel($dealerId, $categoryId, $arr) {
+    public function replaceCategoryPriceLevel($dealerId, $categoryId, $manufacturerId, $type, $arr) {
+        $this->deleteCategoryPriceLevel($dealerId, $categoryId, $manufacturerId, $type);
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $st = $db->prepare('replace into dealer_category_price_level set categoryId=?, priceLevelId=?, margin=?');
+        $st = $db->prepare('insert into dealer_category_price_level set categoryId=?, priceLevelId=?, manufacturerId=?, type=?, margin=?');
         foreach ($arr as $priceLevelId=>$margin) {
-            $st->execute([$categoryId, $priceLevelId, $margin]);
+            $st->execute([$categoryId, $priceLevelId, $manufacturerId, $type, $margin]);
         }
         $this->shopifyUpdate($dealerId);
     }
 
-    public function listByDealerAndCategory($dealerId, $categoryId) {
+    public function deleteCategoryPriceLevel($dealerId, $categoryId, $manufacturerId, $type) {
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $dealer_price_levels = $db->query('select dealer_price_levels.*, dealer_category_price_level.margin as category_margin from dealer_price_levels left join dealer_category_price_level on dealer_category_price_level.categoryId='.$categoryId.' and dealer_price_levels.id=dealer_category_price_level.priceLevelId where dealerId='.$dealerId.' order by margin');
-        return $dealer_price_levels->fetchAll();
+        $db->query("delete from dealer_category_price_level where categoryId={$categoryId} and priceLevelId in (select id from dealer_price_levels where dealerId={$dealerId}) and `manufacturerId` ".($manufacturerId?"={$manufacturerId}":"is null")." and `type` ".($type?"='{$type}'":"is null"));
+    }
+
+    public function listByDealerAndCategory($dealerId, $categoryId, $manufacturerId, $type) {
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        return $db->query(
+"
+  select dealer_price_levels.*, dealer_category_price_level.margin as category_margin
+    from dealer_price_levels
+      left join dealer_category_price_level on
+        dealer_category_price_level.categoryId={$categoryId}
+        and dealer_category_price_level.manufacturerId ".($manufacturerId?"={$manufacturerId}":"is null")."
+        and dealer_category_price_level.`type` ".($type?"='{$type}'":"is null")."
+        and dealer_price_levels.id=dealer_category_price_level.priceLevelId
+    where dealerId={$dealerId} order by margin
+"
+        )->fetchAll();
     }
 
     public function shopifyUpdate($dealerId) {
