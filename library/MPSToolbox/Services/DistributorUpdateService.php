@@ -622,6 +622,161 @@ Dealers: " . implode(', ', $affected_dealers) . "
     }
 
     private function updateDH($dealerSupplier) {
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $price_txt = APPLICATION_BASE_PATH . '/data/cache/ITEMLIST-'.$dealerSupplier['dealerId'];
+        if (file_exists($price_txt)) {
+            unlink($price_txt);
+        }
+        try {
+            echo "downloading {$dealerSupplier['url']}/ITEMLIST for dealer {$dealerSupplier['dealerId']}\n";
+            $ftp = $this->getFtpClient();
+            $parts = parse_url($dealerSupplier['url']);
+            $ftp->ext_get($parts['host'], 'ITEMLIST', $dealerSupplier['user'], $dealerSupplier['pass'], $price_txt);
+
+            if (!file_exists($price_txt) || (filesize($price_txt)==0)) {
+                error_log('price file not downloaded');
+                return false;
+            }
+        } catch (\Exception $ex) {
+            print_r($ex);
+            Logger::logException($ex);
+            return false;
+        }
+
+        $manufacturers=[];
+        /**
+        foreach ($db->query('select * from ingram_manufacturer') as $line) {
+            $reg = '#^'.str_replace('%','.*',strtoupper($line['name'])).'$#i';
+            $manufacturers[$reg] = $line['manufacturerId'];
+        }
+        **/
+        foreach ($db->query('select * from manufacturers') as $line) {
+            $reg = '#^'.strtoupper($line['fullname']).'.*$#i';
+            $manufacturers[$reg] = $line['id'];
+            $reg = '#^'.strtoupper($line['displayname']).'.*$#i';
+            $manufacturers[$reg] = $line['id'];
+        }
+
+        $columns = [
+            'Stock Status', // - I=Instock, O=Out of stock
+            'Qty Avail All Branches', // Max 999
+            'Rebate Flag', // Yes when exists; ? otherwise
+            'Rebate End Date', // 99/99/99
+            'D&H Item Number', // D&H part number; potentially the same as manufacturer's part number. No special characters or punctuation allowed
+            'Manuf.Item Number', // Manufacturer’s part number.
+            'UPC', // Universal Product Code
+            'Subcategory Code', // D&H Product category code
+            'Vendor Name', // Manufacturer
+            'Unit Cost', // 5.2 Example: 00010.00 = $10.00
+            'Rebate Amount', // Zeroes when rebate is not applied. Example: 00010.00 = $10.00
+            'Handling charge', // 5.2 Example: 00010.00 = $10.00
+            'Freight', // 5.2 Based on UPS zone 5
+            'Ship Via', // Ups
+            'Weight', // Example: 0003 = 3 pounds.
+            'Short Description', // Brief item description.
+            'Long Description', // Detailed item description. Same as short description if detailed description not available.
+        ];
+
+        $skus = [];
+
+        gc_collect_cycles();
+        echo "1. ".round(memory_get_usage()/(1024*1024))." MB\n";
+
+        $fp = fopen($price_txt, 'rb');
+        while ($line = fgetcsv($fp, null, '|')) {
+            $line = array_combine($columns, $line);
+
+/**
+            if (
+                ($line['Subcategory Code'] != '7566') && // toner
+                ($line['Subcategory Code'] != '0733')    // xx
+            ) {
+                var_dump($line);
+                die();
+            }
+**/
+
+            foreach ($line as $k=>$v) $line[$k] = trim($v);
+
+            $vpn = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['Manuf.Item Number']));
+
+            $manufacturerId = null;
+            foreach ($manufacturers as $reg=>$id) {
+                if (preg_match($reg, $line['Vendor Name'])) {
+                    $manufacturerId = $id;
+                }
+            }
+
+            $product_data = [
+                'supplierSku'=>$line['D&H Item Number'],
+                'manufacturer'=>$line['Vendor Name'],
+                'manufacturerId'=>$manufacturerId,
+                'vpn'=>$vpn,
+                'name'=>$line['Short Description'],
+                'msrp'=>null,
+                'weight'=>0.453592 * floatval($line['Weight']),
+                'length'=>null,
+                'width'=>null,
+                'height'=>null,
+                'upc'=>$line['UPC'],
+                'description'=>$line['Long Description'],
+                'package'=>null,
+                'isStock'=>$line['Stock Status']=='I'?1:0,
+                'qty'=>json_encode([
+                    'All Branches'=>$line['Qty Avail All Branches']
+                ]),
+                'category'=>$line['Subcategory Code'],
+                'categoryId'=>$line['Subcategory Code'],
+                'dateCreated'=>null,
+            ];
+
+            $price_data = [
+                'supplierSku'=>$line['D&H Item Number'],
+                'dealerId'=>$dealerSupplier['dealerId'],
+                'price'=>trim($line['Unit Cost']),
+                'promotion'=>$line['Rebate Flag']=='y'?1:0,
+            ];
+
+            try {
+                $this->populate($product_data, $price_data);
+            } catch (\Exception $ex) {
+                var_dump($product_data);
+                die ('xxx '.$ex->getMessage());
+            }
+
+            $skus[$manufacturerId][$vpn] = $line['D&H Item Number'];
+            unset($this->remaining_product[$line['D&H Item Number']]);
+        }
+
+        gc_collect_cycles();
+        echo "2. ".round(memory_get_usage()/(1024*1024))." MB\n";
+
+        $this->deleteRemainingProducts($dealerSupplier['supplierId'], $dealerSupplier['dealerId']);
+
+        $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, weight, UPC from base_product");
+        while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
+            $manufacturerId = $line['manufacturerId'];
+            $sku = $line['sku'];
+            if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
+                $sku = $match[1];
+            }
+            if (isset($skus[$manufacturerId][$sku])) {
+                $supplierSku = $skus[$manufacturerId][$sku];
+                //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
+                $this->base_product_statement->execute([$line['id'], $supplierSku]);
+                if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
+                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
+                    $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
+                }
+            }
+        }
+        $cursor->closeCursor();
+
+        gc_collect_cycles();
+        echo "3. ".round(memory_get_usage()/(1024*1024))." MB\n";
+
+        echo time() - $this->timerStart."s\n";
+        return true;
 
     }
     private function updateClover($dealerSupplier) {
