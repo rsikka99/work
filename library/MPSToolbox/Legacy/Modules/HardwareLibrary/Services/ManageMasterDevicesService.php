@@ -6,6 +6,7 @@ use Exception;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\AvailableOptionsForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\AvailableTonersForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeleteForm;
+use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeviceAddonsForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeviceAttributesForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DeviceImageForm;
 use MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\DistributorsForm;
@@ -68,6 +69,7 @@ class ManageMasterDevicesService
      */
     public $data;
 
+    protected $_addonsForm;
     protected $_suppliesAndServiceForm;
     protected $_deviceAttributesForm;
     protected $_hardwareOptimizationForm;
@@ -113,7 +115,7 @@ class ManageMasterDevicesService
         $showHardwareOptimization = true,
         $showHardwareQuote = true,
         $showAvailableOptions = true,
-        $showHardwareConfigurations = true,
+        $showAddons = true,
         $showDeviceImage = true,
         $showHistory = true,
         $showDistributors = true
@@ -142,9 +144,10 @@ class ManageMasterDevicesService
             $formsToShow['availableOptionsForm'] = $this->getAvailableOptionsForm();
         }
 
-        if ($showHardwareConfigurations)
+        if ($showAddons)
         {
-            $formsToShow['hardwareConfigurations'] = true;
+            $formsToShow['addons'] = true;
+            $formsToShow['addons'] = $this->getAddonsForm();
         }
 
         if ($showSupplies)
@@ -627,6 +630,16 @@ class ManageMasterDevicesService
         }
 
         return true;
+    }
+
+    public function getAddonsForm() {
+        if (!isset($this->_addonsForm))
+        {
+            $this->_addonsForm = new DeviceAddonsForm();
+            $this->_addonsForm->masterDeviceId = $this->masterDeviceId;
+        }
+
+        return $this->_addonsForm;
     }
 
 

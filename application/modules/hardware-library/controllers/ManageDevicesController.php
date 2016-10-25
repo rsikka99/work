@@ -342,7 +342,7 @@ class HardwareLibrary_ManageDevicesController extends Action
             $this->view->manufacturerId = $masterDevice->manufacturerId;
         }
 
-        $forms = $service->getForms(true, true, true, true, true, true, true);
+        $forms = $service->getForms(true, true, true, true, true, true, true, $this->_isAdmin, true);
 
         // If we wanted to use custom data we would need to set the views modelName and manufacturerId to the custom data values
         foreach ($forms as $formName => $form)
@@ -1101,6 +1101,65 @@ class HardwareLibrary_ManageDevicesController extends Action
         if (!$tr) $tr='<tr><td>no images</td></tr>';
         $result['tr'] = $tr;
         $this->sendJson($result);
+    }
+
+    public function showProductsAction() {
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout->disableLayout();
+        echo '<option value=""> - select product - </option>';
+
+        $catId = $this->getParam('catId');
+        if (!$catId) return;
+
+        $dealerId = \MPSToolbox\Legacy\Entities\DealerEntity::getDealerId();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        foreach ($db->query("select base_product.id, base_product.sku, manufacturers.displayname as mfg, base_product.name
+                    from base_product
+                    join base_sku using (id)
+                    join manufacturers on base_product.manufacturerId=manufacturers.id
+                    join dealer_sku on dealer_sku.skuId=base_product.id and dealer_sku.dealerId={$dealerId}
+                    where base_product.categoryId={$catId}
+                    group by base_product.id") as $line) {
+            echo '<option value="'.$line['id'].'">'.$line['mfg'].' '.$line['name'].' ('.$line['sku'].')</option>';
+        }
+    }
+
+    private function listAddons($db, $dealerId, $baseProductId) {
+        $result = $db->query("
+          select base_product.id, base_product.sku, manufacturers.displayname as mfg, base_product.name, dealer_sku.cost, pp.price as supplier_cost
+                    from base_product
+                    join base_sku using (id)
+                    join dealer_sku_addon on base_product.id = dealer_sku_addon.addOnId
+                    join manufacturers on base_product.manufacturerId=manufacturers.id
+                    left join dealer_sku on dealer_sku.skuId=base_product.id and dealer_sku.dealerId={$dealerId}
+                    left join supplier_product_price pp on base_product.id=pp.baseProductId and pp.dealerId={$dealerId} and pp.price=(select min(spp.price) from supplier_product_price spp where spp.baseProductId=pp.baseProductId and spp.dealerId={$dealerId})
+                    where dealer_sku_addon.baseProductId={$baseProductId}
+                    group by base_product.id
+
+        ")->fetchAll();
+
+        foreach ($result as $i=>$line) {
+            $result[$i]['cost'] = '$'. ($result[$i]['cost']>0 ? $result[$i]['cost'] : number_format($result[$i]['supplier_cost'],2));
+        }
+        return $result;
+    }
+
+    public function deleteAddonAction() {
+        $baseProductId = intval($this->getParam('masterDeviceId'));
+        $addOnId = intval($this->getParam('id'));
+        $dealerId = \MPSToolbox\Entities\DealerEntity::getDealerId();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->query("delete from dealer_sku_addon where baseProductId={$baseProductId} and addOnId={$addOnId} and dealerId={$dealerId}");
+        $this->sendJson($this->listAddons($db, $dealerId, $baseProductId));
+    }
+
+    public function addAddonAction() {
+        $baseProductId = intval($this->getParam('masterDeviceId'));
+        $addOnId = intval($this->getParam('product'));
+        $dealerId = \MPSToolbox\Entities\DealerEntity::getDealerId();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->query("replace into dealer_sku_addon set baseProductId={$baseProductId}, addOnId={$addOnId}, dealerId={$dealerId}");
+        $this->sendJson($this->listAddons($db, $dealerId, $baseProductId));
     }
 
 }

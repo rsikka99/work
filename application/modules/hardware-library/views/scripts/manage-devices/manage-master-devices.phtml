@@ -87,6 +87,13 @@ $shopSettings = $dealerSettings->shopSettings;
                             </li>
                         <?php endif; ?>
 
+                        <?php if ($this->addons) : ?>
+                            <li <?= ($first) ? 'class="active"' : '' ?>>
+                                <?php $first = ($first) ? false : $first ?>
+                                <a href="#addonsTab" id="addonsTopTab" data-toggle="tab">Add-ons</a>
+                            </li>
+                        <?php endif; ?>
+
                         <?php if (false && $this->hardwareConfigurations) : ?>
                             <li <?= ($first) ? 'class="active"' : '' ?>>
                                 <?php $first = ($first) ? false : $first ?>
@@ -347,6 +354,13 @@ $shopSettings = $dealerSettings->shopSettings;
                         </div>
                     </div>
                 <?php endif; ?>
+
+                <?php if ($this->addons) : ?>
+                    <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="addonsTab">
+                        <?php $first = ($first) ? false : $first ?>
+                        <?= $this->addons ?>
+                    </div>
+                <?php endif ?>
 
                 <?php if ($this->deviceImage) : ?>
                     <div class="tab-pane <?= ($first) ? 'active' : '' ?>" id="deviceImageTab">
