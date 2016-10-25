@@ -165,10 +165,3 @@ $shopSettings = $dealerSettings->shopSettings;
     </div>
 </div>
 
-<?php if (($shopSettings->shopifyName!='') && ($this->sku)) { ?>
-    <script>
-        $('.js-save-sku-modal').click(function() {
-            window.setTimeout('sync_shopify(<?= $this->sku->id ?>, <?= Zend_Auth::getInstance()->getIdentity()->dealerId ?>)',1000);
-        });
-    </script>
-<?php } ?>
