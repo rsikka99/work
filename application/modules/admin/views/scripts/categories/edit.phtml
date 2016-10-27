@@ -1,0 +1,54 @@
+<?php
+
+$parents = [];
+if (empty($this->edit['parent'])) {
+    $has_children=false;
+    foreach ($this->base_category as $line) if ($line['parent']==$this->edit['id']) {
+        $has_children=true;
+    }
+    if (!$has_children) {
+        $parents = $this->base_category;
+    }
+}
+
+?>
+
+<div class="container">
+    <div class="col-sm-6">
+        <form method="post">
+            <div class="form-group">
+                <label>Category Parent:</label>
+                <select name="parent" class="form-control">
+                    <option></option>
+                    <?php foreach ($parents as $line) if (empty($line['parent']) && ($line['id']!=$this->edit['id'])) echo '<option '.($this->edit['parent']==$line['id']?'selected="selected"':'').' value="'.$line['id'].'">'.$line['name'].'</option>'; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Category Name:</label>
+                <input type="text" name="name" class="form-control" required="required" value="<?= $this->edit['name'] ?>">
+            </div>
+            <div class="form-group">
+                <label>Properties</label>
+                <table class="table table-striped" id="the-table">
+                </table>
+            </div>
+            <div class="form-group">
+                <a href="/admin/categories">Cancel</a>
+                &nbsp;&nbsp;&nbsp;
+                <button class="btn btn-primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    require(['jquery'], function ($) {
+        var prop = <?= $this->edit['properties'] ? $this->edit['properties'] : '[]' ?>;
+        $(document).ready(function () {
+            var $tbl = $('#the-table');
+            $.each(prop, function (i, e) {
+                $tbl.append('<tr><td>' + e.name + '</td><td>' + e.attributes.label + '</td></tr>');
+            });
+        });
+    });
+</script>
