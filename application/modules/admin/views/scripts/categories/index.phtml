@@ -12,18 +12,19 @@ foreach ($this->base_category as $line) {
 <div class="container">
     <div class="col-sm-6">
 
+        <?php if ($this->error) echo '<div class="alert alert-danger">'.$this->error.'</div>'; ?>
+
         <p class="text-right">
             <a href="/admin/categories/add" class="btn btn-primary">Add</a>
         </p>
 
         <table class="table table-hover">
             <colgroup>
-                <col width="40%">
-                <col width="40%">
+                <col width="80%">
                 <col width="20%">
             </colgroup>
         <?php foreach ($tree as $line) { ?>
-            <tr><td><a href="javascript:;" onclick="$('.tree-child').hide();$('.tree<?= $line['id'] ?>').fadeIn();"><?= $line['name'] ?> (<?= count($line['children']) ?>)</a></td><td></td><td>
+            <tr><td><a href="javascript:;" onclick="$('.tree-child').hide();$('.tree<?= $line['id'] ?>').fadeIn();"><?= $line['name'] ?> (<?= count($line['children']) ?>)</a></td><td>
                     <a href="/admin/categories/edit?id=<?= $line['id'] ?>">Edit</a>
                     &nbsp;&nbsp;
                     <?php if (empty($line['children'])) { ?>
@@ -31,7 +32,7 @@ foreach ($this->base_category as $line) {
                     <?php } ?>
                 </td></tr>
             <?php foreach ($line['children'] as $line2) { ?>
-                <tr class="tree-child tree<?= $line['id'] ?>" style="display:none"><td></td><td><?= $line2['name'] ?></td><td>
+                <tr class="tree-child tree<?= $line['id'] ?>" style="display:none"><td> - &nbsp;<?= $line2['name'] ?></td><td>
                         <a href="/admin/categories/edit?id=<?= $line2['id'] ?>">Edit</a>
                         &nbsp;&nbsp;
                         <a href="/admin/categories?delete=<?= $line2['id'] ?>" onclick="return window.confirm('Delete this category')">Delete</a>
