@@ -34,8 +34,17 @@ class Admin_CategoriesController extends Action
         $this->view->base_category = $db->query('select * from base_category order by name')->fetchAll();
 
         if ($this->getRequest()->getMethod()=='POST') {
-            $st = $db->prepare('insert into base_category set name=?, parent=?');
-            $st->execute([$this->getParam('name'), $this->getParam('parent')?$this->getParam('parent'):null]);
+            if ($this->getParam('id')) {
+                $id = max(1,intval($this->getParam('id')));
+                $e = $db->query('select id from base_category where id='.$id)->fetchColumn(0);
+                if (!$e) {
+                    $st = $db->prepare('INSERT INTO base_category SET id=?, name=?, parent=?');
+                    $st->execute([$id, $this->getParam('name'), $this->getParam('parent') ? $this->getParam('parent') : null]);
+                }
+            } else {
+                $st = $db->prepare('INSERT INTO base_category SET name=?, parent=?');
+                $st->execute([$this->getParam('name'), $this->getParam('parent') ? $this->getParam('parent') : null]);
+            }
             header('Location: /admin/categories');
             exit();
         }

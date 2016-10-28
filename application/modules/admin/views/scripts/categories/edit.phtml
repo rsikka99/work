@@ -16,6 +16,10 @@ if (empty($this->edit['parent'])) {
 <div class="container">
     <form method="post" onsubmit="submitForm(this); return true;">
         <div class="form-group">
+            <label>Category ID:</label>
+            <input type="number" name="id" value="<?= $this->edit['id'] ?>" <?= $this->edit['id']?'disabled="disabled"':'' ?>>
+        </div>
+        <div class="form-group">
             <label>Category Parent:</label>
             <select name="parent" class="form-control">
                 <option></option>
