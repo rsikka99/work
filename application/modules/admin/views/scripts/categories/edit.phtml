@@ -1,0 +1,221 @@
+<?php
+
+$parents = [];
+if (empty($this->edit['parent'])) {
+    $has_children=false;
+    foreach ($this->base_category as $line) if ($line['parent']==$this->edit['id']) {
+        $has_children=true;
+    }
+    if (!$has_children) {
+        $parents = $this->base_category;
+    }
+}
+
+?>
+
+<div class="container">
+    <form method="post" onsubmit="submitForm(this); return true;">
+        <div class="form-group">
+            <label>Category Parent:</label>
+            <select name="parent" class="form-control">
+                <option></option>
+                <?php foreach ($parents as $line) if (empty($line['parent']) && ($line['id']!=$this->edit['id'])) echo '<option '.($this->edit['parent']==$line['id']?'selected="selected"':'').' value="'.$line['id'].'">'.$line['name'].'</option>'; ?>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Category Name:</label>
+            <input type="text" name="name" class="form-control" required="required" value="<?= $this->edit['name'] ?>">
+        </div>
+        <input type="hidden" name="properties" id="properties">
+        <div class="form-group">
+            <label>Properties</label>
+            <table class="table table-striped" id="the-table">
+                <thead>
+                    <tr>
+                        <th>Handle</th>
+                        <th>Label</th>
+                        <th>Type</th>
+                        <th>Options</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <label>
+                Add property
+                <select id="selectAddProperty" onchange="addProperty(this.value)">
+                </select>
+            </label>
+        </div>
+
+        <hr>
+
+        <div class="form-group text-right">
+            <a href="/admin/categories">Cancel</a>
+            &nbsp;&nbsp;&nbsp;
+            <button class="btn btn-primary" type="submit">Save</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    var prop = <?= $this->edit['properties'] ? $this->edit['properties'] : '[]' ?>;
+    var type_labels = {
+        'checkbox':'Checkbox',
+        'select':'Dropdown',
+        'text':'Text',
+        'text_int':'Number',
+        'text_float':'Decimal'
+    };
+    var editing = false;
+    var editIndex = 0;
+
+    function optionsToString(o) {
+        var opt = '';
+        $.each(o, function(ii,ee) { opt+= (opt?', ':'') + ee; });
+        return opt;
+    }
+
+    require(['jquery'], function ($) {
+        window.$ = $;
+        $(document).ready(updateTable);
+    });
+
+    function submitForm(form) {
+        var json=JSON.stringify(window.prop);
+        form.properties.value = json;
+    }
+
+    function updateTable() {
+        var tbl = '';
+        var opt = '';
+        var addOptions = '<option value="" selected="selected"></option><option value="'+window.prop.length+'">At the end</option>';
+        for (var i=0;i<window.prop.length; i++) {
+            var e = window.prop[i];
+            opt = '';
+            if ((e.type=='select') && e.attributes.multiOptions) opt = optionsToString(e.attributes.multiOptions);
+            tbl += '<tr id="line'+i+'">' +
+            '<td>' + e.name + '</td>' +
+            '<td>' + e.attributes.label + '</td>' +
+            '<td>' + type_labels[e.type] + '</td>' +
+            '<td>' + opt + '</td>' +
+            '<td><a href="javascript:;" onclick="editLine('+i+')">edit</a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="if (window.confirm(\'Delete property '+e.name+'?\')) deleteLine('+i+')">delete</a></td>' +
+            '</tr>';
+            addOptions += '<option value="'+i+'">Before '+e.name+'</option>';
+        }
+        $('#the-table tbody').html(tbl);
+        $('#selectAddProperty').html(addOptions);
+    }
+
+    function addProperty(pos) {
+        if (editing) {
+            doneEditing();
+        }
+        var newItem = {
+            "name":"",
+            "type":"text",
+            "attributes":{
+                "label":"",
+                "required":false,
+                "allowEmpty":true
+            }
+        };
+        var newProp = [];
+        for (var i=0;i<prop.length; i++) {
+            if (pos==i) newProp[newProp.length] = newItem;
+            newProp[newProp.length] = prop[i];
+        }
+        if (pos==prop.length) newProp[newProp.length] = newItem;
+        window.prop = newProp;
+        editLine(pos);
+    }
+
+    function editLine(i) {
+        if (editing) {
+            cancelEditing();
+        }
+
+        updateTable();
+        window.editing = true;
+        window.editIndex = i;
+
+        var types='';
+        $.each(type_labels, function(k,v) { types+='<option value="'+k+'">'+v+'</option>' });
+
+        $('#line'+i).replaceWith('<tr>' +
+        '<td><input id="input-name" type="text" class="form-control"></td>' +
+        '<td><input id="input-label" type="text" class="form-control"></td>' +
+        '<td><select id="input-type" class="form-control">'+types+'</select></td>' +
+        '<td><input id="input-options" type="text" class="form-control"></td>' +
+        '<td><a href="javascript:;" onclick="doneEditing()">Okay</a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="cancelEditing()">Cancel</a></td>' +
+        '</tr>');
+
+        var e = window.prop[i];
+        opt = '';
+        if ((e.type=='select') && e.attributes.multiOptions) opt = optionsToString(e.attributes.multiOptions);
+        $('#input-name').val(e.name);
+        $('#input-label').val(e.attributes.label);
+        $('#input-type').val(e.type);
+        $('#input-options').val(opt);
+
+    }
+
+    function doneEditing() {
+        var editingRow = window.prop[window.editIndex];
+        var name = $('#input-name').val();
+        var label = $('#input-label').val();
+        var type = $('#input-type').val();
+        var options = $('#input-options').val();
+        if ((name=='') || (label=='')) {
+            cancelEditing();
+            return;
+        }
+        var newItem = {
+            "name":name,
+            "type":type,
+            "attributes":{
+                "label":label,
+                "required":false,
+                "allowEmpty":true
+            }
+        };
+        if (type=='select') {
+            newItem.attributes.multiOptions={};
+            $.each(options.split(','), function (i,e) {
+                newItem.attributes.multiOptions[e] = $.trim(e);
+            });
+        }
+        window.prop[window.editIndex] = newItem;
+        window.editing = false;
+        updateTable();
+    }
+
+    function cancelEditing() {
+        window.editing = false;
+        var editingRow = window.prop[window.editIndex];
+        if (editingRow.name=='') {
+            deleteLine(window.editIndex);
+        }
+        updateTable();
+    }
+
+    function deleteLine(n) {
+        if (editing) {
+            cancelEditing();
+        }
+
+        var newProp = [];
+        for (var i=0;i<prop.length; i++) {
+            if (n!=i) newProp[newProp.length] = prop[i];
+        }
+        window.prop = newProp;
+        updateTable();
+    }
+
+
+</script>
