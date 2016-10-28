@@ -1,14 +1,12 @@
 <?php
 
 $parents = [];
-if (empty($this->edit['parent'])) {
-    $has_children=false;
-    foreach ($this->base_category as $line) if ($line['parent']==$this->edit['id']) {
-        $has_children=true;
-    }
-    if (!$has_children) {
-        $parents = $this->base_category;
-    }
+$has_children=false;
+if ($this->edit['id']) foreach ($this->base_category as $line) if ($line['parent']==$this->edit['id']) {
+    $has_children=true;
+}
+if (!$has_children) {
+    $parents = $this->base_category;
 }
 
 ?>
