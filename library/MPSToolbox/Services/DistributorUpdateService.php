@@ -41,6 +41,7 @@ class DistributorUpdateService {
     const SUPPLIER_ACM = 5;
     const SUPPLIER_DH = 6;
     const SUPPLIER_CLOVER = 7;
+    const SUPPLIER_ARLI = 8;
 
     /** @var  \Zend_Filter_Compress_Zip */
     private $zipAdapter;
@@ -254,6 +255,10 @@ _md5=:_md5
             }
             case self::SUPPLIER_CLOVER : {
                 $this->updateClover($dealerSupplier);
+                break;
+            }
+            case self::SUPPLIER_ARLI : {
+                $this->updateArli($dealerSupplier);
                 break;
             }
         }
@@ -779,6 +784,146 @@ Dealers: " . implode(', ', $affected_dealers) . "
         return true;
 
     }
+
+    private function updateArli($dealerSupplier) {
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $xls_file = APPLICATION_BASE_PATH . '/data/cache/arli-'.$dealerSupplier['dealerId'].'.xlsx';
+        $csv_file = APPLICATION_BASE_PATH . '/data/cache/arli-'.$dealerSupplier['dealerId'].'.csv';
+        if (file_exists($xls_file)) {
+            unlink($xls_file);
+        }
+        if (!file_exists($csv_file) || (filemtime($csv_file)<time()-(60*60*24*6))) try {
+            echo "downloading {$dealerSupplier['url']} for dealer {$dealerSupplier['dealerId']}\n";
+            $ftp = $this->getFtpClient();
+            $ftp->get($dealerSupplier['url'], $dealerSupplier['user'], $dealerSupplier['pass'], $xls_file);
+
+            if (!file_exists($xls_file) || (filesize($xls_file)==0)) {
+                error_log('xls file not downloaded');
+                return false;
+            }
+
+            echo "converting xls to csv...\n";
+            if (file_exists('c:/')) exec('xlsx2csv.py '.$xls_file.' '.$csv_file);
+            else exec('xlsx2csv '.$xls_file.' '.$csv_file);
+
+            if (!file_exists($csv_file) || (filesize($csv_file)==0)) {
+                error_log('csv file not downloaded');
+                return false;
+            }
+        } catch (\Exception $ex) {
+            print_r($ex);
+            Logger::logException($ex);
+            return false;
+        }
+        echo "processing {$csv_file} for dealer {$dealerSupplier['dealerId']}\n";
+
+        $manufacturers=[];
+        $prefixes=[];
+        foreach ($db->query('select * from arli_manufacturer') as $line) {
+            $manufacturers[$line['name']] = $line['manufacturerId'];
+            $prefixes[$line['prefix']] = $line['manufacturerId'];
+        }
+
+        $skus = [];
+
+        gc_collect_cycles();
+        echo "1. ".round(memory_get_usage()/(1024*1024))." MB\n";
+
+        $fp = fopen($csv_file, 'rb');
+
+        $columns = fgetcsv($fp);
+        while ($line = fgetcsv($fp)) {
+            if (empty($line) || empty($line[0])) continue;
+
+            $line = array_combine($columns, $line);
+            foreach ($line as $k=>$v) $line[$k] = trim($v);
+
+            $manufacturerId = null;
+
+            $vpn = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['Item Number']));
+            foreach ($prefixes as $prefix=>$mfg) {
+                if (strpos($vpn, $prefix)===0) {
+                    $vpn = substr($vpn,3);
+                    $manufacturerId = $mfg;
+                }
+            }
+            if (isset($manufacturers[$line['prodline']])) {
+                $manufacturerId = $manufacturers[$line['prodline']];
+            }
+
+            $product_data = [
+                'supplierSku'=>$line['Item Number'],
+                'manufacturer'=>$line['prodline'],
+                'manufacturerId'=>$manufacturerId,
+                'vpn'=>$vpn,
+                'name'=>$line['Product Description'],
+                'msrp'=>$line['SRP-List'],
+                'weight'=>0.453592 * floatval($line['Weight']),
+                'length'=>$line['Length(in)'] ? $line['Length(in)']*2.54/100 : null,
+                'width'=>$line['width(in)'] ? $line['width(in)']*2.54/100 : null,
+                'height'=>$line['height(in)'] ? $line['height(in)']*2.54/100 : null,
+                'upc'=>$line['UPC'],
+                'description'=>$line['Extended Desc'],
+                'package'=>null,
+                'isStock'=>$line['QtyAvail']>0?1:0,
+                'qty'=>json_encode([
+                    'QtyAvail'=>$line['QtyAvail']
+                ]),
+                'category'=>$line['MainCategory'].'/'.$line['SubCategory'],
+                'categoryId'=>$line['SubCategory'],
+                'dateCreated'=>null,
+            ];
+
+            $price_data = [
+                'supplierSku'=>$line['Item Number'],
+                'dealerId'=>$dealerSupplier['dealerId'],
+                'price'=>trim($line['Price']),
+                'promotion'=>0,
+            ];
+
+            try {
+                $this->populate($product_data, $price_data);
+            } catch (\Exception $ex) {
+                var_dump($product_data);
+                die ('xxx '.$ex->getMessage());
+            }
+
+            $skus[$manufacturerId][$vpn] = $line['Item Number'];
+            unset($this->remaining_product[$line['Item Number']]);
+        }
+
+        /**/
+        gc_collect_cycles();
+        echo "2. ".round(memory_get_usage()/(1024*1024))." MB\n";
+
+        $this->deleteRemainingProducts($dealerSupplier['supplierId'], $dealerSupplier['dealerId']);
+
+        $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, weight, UPC from base_product");
+        while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
+            $manufacturerId = $line['manufacturerId'];
+            $sku = $line['sku'];
+            if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
+                $sku = $match[1];
+            }
+            if (isset($skus[$manufacturerId][$sku])) {
+                $supplierSku = $skus[$manufacturerId][$sku];
+                //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
+                $this->base_product_statement->execute([$line['id'], $supplierSku]);
+                if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
+                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
+                    $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
+                }
+            }
+        }
+        $cursor->closeCursor();
+
+        gc_collect_cycles();
+        echo "3. ".round(memory_get_usage()/(1024*1024))." MB\n";
+
+        echo time() - $this->timerStart."s\n";
+        return true;
+    }
+
     private function updateClover($dealerSupplier) {
 
         $comp_mfg_id = 63; //Clover Technologies
