@@ -14,6 +14,7 @@ function outputField($that, $prop, $form) {
     <div class="col-md-6">
         <?php
     switch ($prop['type']) {
+        case 'multiCheckbox': echo $that->RenderFormCheckbox($form->getElement($prop['name'])); break;
         case 'checkbox': echo $that->RenderFormBootstrapSwitch($form->getElement($prop['name']), ['js-yes-no-switch']); break;
         case 'select': echo $that->RenderFormSelect($form->getElement($prop['name'])); break;
         case 'date': echo $that->RenderFormDatePicker($form->getElement($prop['name']), ['js-date-picker']); break;
