@@ -160,12 +160,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cloudinary/cloudinary_php.git",
-                "reference": "a15a8cf7bca9ecb1070edc1eea4a43c32fddd2dc"
+                "reference": "327f2db5767ceb8a19d51785e1b60e86674a6a2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cloudinary/cloudinary_php/zipball/a15a8cf7bca9ecb1070edc1eea4a43c32fddd2dc",
-                "reference": "a15a8cf7bca9ecb1070edc1eea4a43c32fddd2dc",
+                "url": "https://api.github.com/repos/cloudinary/cloudinary_php/zipball/327f2db5767ceb8a19d51785e1b60e86674a6a2e",
+                "reference": "327f2db5767ceb8a19d51785e1b60e86674a6a2e",
                 "shasum": ""
             },
             "require": {
@@ -204,7 +204,7 @@
                 "image management",
                 "sdk"
             ],
-            "time": "2016-08-14 15:10:18"
+            "time": "2016-10-27 22:02:47"
         },
         {
             "name": "doctrine/annotations",
@@ -276,16 +276,16 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "v1.6.0",
+            "version": "v1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "f8af318d14bdb0eff0336795b428b547bd39ccb6"
+                "reference": "b6f544a20f4807e81f7044d31e679ccbb1866dc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/f8af318d14bdb0eff0336795b428b547bd39ccb6",
-                "reference": "f8af318d14bdb0eff0336795b428b547bd39ccb6",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/b6f544a20f4807e81f7044d31e679ccbb1866dc3",
+                "reference": "b6f544a20f4807e81f7044d31e679ccbb1866dc3",
                 "shasum": ""
             },
             "require": {
@@ -342,7 +342,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2015-12-31 16:37:02"
+            "time": "2016-10-29 11:16:17"
         },
         {
             "name": "doctrine/collections",
@@ -982,12 +982,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hisamu/php-xbase.git",
-                "reference": "5be81896c50cac893ea3db347a426137c4d9e9eb"
+                "reference": "9bd899cca5a90746e6dc48deb31c85f8fa386724"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hisamu/php-xbase/zipball/5be81896c50cac893ea3db347a426137c4d9e9eb",
-                "reference": "5be81896c50cac893ea3db347a426137c4d9e9eb",
+                "url": "https://api.github.com/repos/hisamu/php-xbase/zipball/9bd899cca5a90746e6dc48deb31c85f8fa386724",
+                "reference": "9bd899cca5a90746e6dc48deb31c85f8fa386724",
                 "shasum": ""
             },
             "require": {
@@ -1016,7 +1016,7 @@
                 "dbase",
                 "foxpro"
             ],
-            "time": "2016-04-19 12:51:23"
+            "time": "2016-10-17 22:52:33"
         },
         {
             "name": "illuminate/container",
@@ -1862,7 +1862,7 @@
         },
         {
             "name": "symfony/class-loader",
-            "version": "v2.8.12",
+            "version": "v2.8.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/class-loader.git",
@@ -1915,7 +1915,7 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.8.12",
+            "version": "v2.8.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
@@ -1968,16 +1968,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.12",
+            "version": "v2.8.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "d7a5a88178f94dcc29531ea4028ea614e35452d4"
+                "reference": "7350016c8abcab897046f1aead2b766b84d3eff8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/d7a5a88178f94dcc29531ea4028ea614e35452d4",
-                "reference": "d7a5a88178f94dcc29531ea4028ea614e35452d4",
+                "url": "https://api.github.com/repos/symfony/console/zipball/7350016c8abcab897046f1aead2b766b84d3eff8",
+                "reference": "7350016c8abcab897046f1aead2b766b84d3eff8",
                 "shasum": ""
             },
             "require": {
@@ -2025,7 +2025,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-09-28 00:10:16"
+            "time": "2016-10-06 01:43:09"
         },
         {
             "name": "symfony/debug",
@@ -2247,16 +2247,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.12",
+            "version": "v2.8.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "e7540734bad981fe59f8ef14b6fc194ae9df8d9c"
+                "reference": "396784cd06b91f3db576f248f2402d547a077787"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/e7540734bad981fe59f8ef14b6fc194ae9df8d9c",
-                "reference": "e7540734bad981fe59f8ef14b6fc194ae9df8d9c",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/396784cd06b91f3db576f248f2402d547a077787",
+                "reference": "396784cd06b91f3db576f248f2402d547a077787",
                 "shasum": ""
             },
             "require": {
@@ -2292,7 +2292,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-09-02 01:57:56"
+            "time": "2016-10-21 20:59:10"
         },
         {
             "name": "szymach/c-pchart",

@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
+use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\RequestInterface;
 use Tangent\Ftp\NcFtp;
 use Tangent\Logger\Logger;
@@ -1050,6 +1051,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
         $client = new Client([
             //'debug' => true,
+            'base_uri' => $base_uri,
             'verify' => APPLICATION_BASE_PATH.'/docs/cacert.pem',
             'cookies' => $jar,
             'headers' => [
@@ -1062,21 +1064,24 @@ Dealers: " . implode(', ', $affected_dealers) . "
         ]);
 
         try {
-
             /**/
-            $r = $client->get($base_uri.'/landing.asp?autopage=/Default.asp');
+            $uri = new Uri($base_uri.'/landing.asp?autopage=/Default.asp');
+            $r = $client->get($uri, [ 'allow_redirects' => false]);
             if ($r->getStatusCode() != 200) {
                 error_log($dealerSupplier['url'] . ' > ' . $r->getStatusCode());
                 return;
             }
 
-            $r = $client->post(
-                $base_uri.'/security_logonScript_siteFront.asp?' . http_build_query([
+            echo "landing.asp ok\n";
+
+            $uri = new Uri($base_uri.'/security_logonScript_siteFront.asp?' . http_build_query([
                     'action' => 'logon',
                     'pageredir' => '/default.asp',
                     'parent_c_id' => '',
                     'returnpage' => 'landing.asp?'
-                ]),
+                ]));
+
+            $r = $client->post($uri,
                 array(
                     'allow_redirects' => false,
                     'headers' => [
@@ -1095,7 +1100,14 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 return;
             }
 
+            echo "security_logonScript_siteFront.asp ok\n";
+
             $redirect = $r->getHeaderLine('Location');
+            if (strpos($redirect, 'err=1')!==false) {
+                error_log("LOGIN FAILED");
+                return;
+            }
+
             $r = $client->get($redirect, [
                 'allow_redirects' => false,
                 'headers' => [
@@ -1105,6 +1117,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 error_log($redirect. ' > ' . $r->getStatusCode());
                 return;
             }
+
+            echo "{$redirect} ok\n";
 
             $r = $client->get(str_replace('https','http',$base_uri).'/product_list.asp?' . http_build_query(['downloadasfile' => '1', '' => '']), [
                 'allow_redirects' => true,
@@ -1117,7 +1131,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
 
             if ($r->getHeaderLine('Content-Type')!='application/csv; charset=utf-8; Charset=utf-8') {
-                error_log($dealerSupplier['url'] . '/product_list.asp > ' . $r->getHeaderLine('Content-Type'));
+                error_log($dealerSupplier['url'] . '/product_list.asp > Content-Type!=csv > ' . $r->getHeaderLine('Content-Type'));
                 return;
             }
 
@@ -1212,6 +1226,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
         } catch (RequestException $ex) {
             error_log($ex->getMessage());
+            die();
         }
     }
 

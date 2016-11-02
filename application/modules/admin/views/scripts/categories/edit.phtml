@@ -69,6 +69,7 @@ if (!$has_children) {
     var prop = <?= $this->edit['properties'] ? $this->edit['properties'] : '[]' ?>;
     var type_labels = {
         'checkbox':'Checkbox',
+        'multiCheckbox':'Multiple Checkboxes',
         'select':'Dropdown',
         'text':'Text',
         'text_int':'Number',
@@ -101,6 +102,7 @@ if (!$has_children) {
             var e = window.prop[i];
             opt = '';
             if ((e.type=='select') && e.attributes.multiOptions) opt = optionsToString(e.attributes.multiOptions);
+            if ((e.type=='multiCheckbox') && e.attributes.multiOptions) opt = optionsToString(e.attributes.multiOptions);
             tbl += '<tr id="line'+i+'">' +
             '<td>' + e.name + '</td>' +
             '<td>' + e.attributes.label + '</td>' +
@@ -160,6 +162,7 @@ if (!$has_children) {
         var e = window.prop[i];
         opt = '';
         if ((e.type=='select') && e.attributes.multiOptions) opt = optionsToString(e.attributes.multiOptions);
+        if ((e.type=='multiCheckbox') && e.attributes.multiOptions) opt = optionsToString(e.attributes.multiOptions);
         $('#input-name').val(e.name);
         $('#input-label').val(e.attributes.label);
         $('#input-type').val(e.type);
@@ -186,7 +189,7 @@ if (!$has_children) {
                 "allowEmpty":true
             }
         };
-        if (type=='select') {
+        if ((type=='select') || (type=='multiCheckbox')) {
             newItem.attributes.multiOptions={};
             $.each(options.split(','), function (i,e) {
                 newItem.attributes.multiOptions[e] = $.trim(e);
