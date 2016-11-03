@@ -238,7 +238,7 @@ class UserRoleMapper extends My_Model_Mapper_Abstract
      *
      * @param number $userId
      *
-     * @return number
+     * @return UserRoleModel[]
      */
     public function fetchAllRolesForUser ($userId)
     {

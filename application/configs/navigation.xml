@@ -377,6 +377,10 @@
                     <label>Catalog</label>
                     <uri>/ecommerce/catalog</uri>
                 </catalog>
+                <quotes>
+                    <label>Quotes</label>
+                    <uri>/ecommerce/quotes</uri>
+                </quotes>
             </pages>
         </ecommerce>
 

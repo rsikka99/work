@@ -41,7 +41,8 @@ requirejs.config({
         'select2'                : 'lib/select2/select2.min',
         'underscore'             : 'lib/underscore/underscore.min',
         'uri'                    : 'lib/jqGrid/jquery.jqGrid.min',
-		
+        'jquery-datetimepicker'  : '//cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.full',
+
 		'jquery.ui.widget' 		 : 'lib/fileupload/vendor/jquery.ui.widget',
 		'jquery.iframe-transport': 'lib/fileupload/jquery.iframe-transport',
 		'jquery.fileupload' 	 : 'lib/fileupload/jquery.fileupload'
