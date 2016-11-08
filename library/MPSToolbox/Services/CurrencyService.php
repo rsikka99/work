@@ -87,10 +87,16 @@ class CurrencyService {
         return $this->rate;
     }
 
-    public function getObjectValue(\My_Model_Abstract $object, $table, $field) {
-        $base = $object->$field;
+    public function getObjectValue($object, $table, $field) {
+        if (is_array($object)) {
+            $base = $object[$field];
+            $id = $object['id'];
+        } else {
+            $base = $object->$field;
+            $id = $object->id;
+        }
         if ($this->currency == 'USD') return $base;
-        $cv = $this->db->query("select * from currency_value where `table`='{$table}' and `id`=".intval($object->id)." and `field`='{$field}' and `currency`='{$this->currency}'")->fetch();
+        $cv = $this->db->query("select * from currency_value where `table`='{$table}' and `id`=".intval($id)." and `field`='{$field}' and `currency`='{$this->currency}'")->fetch();
         if ($cv) {
             return $cv['value'];
         }
@@ -98,11 +104,16 @@ class CurrencyService {
         return $rate * $base;
     }
 
-    public function setObjectValue(\My_Model_Abstract $object, $table, $field, $value) {
-        $this->db->query("replace into currency_value set `table`='{$table}', `id`={$object->id}, `field`='{$field}', `currency`='{$this->currency}', `value`={$value}");
+    public function setObjectValue($object, $table, $field, $value) {
+        if (is_array($object)) {
+            $id = $object['id'];
+        } else {
+            $id = $object->id;
+        }
+        $this->db->query("replace into currency_value set `table`='{$table}', `id`={$id}, `field`='{$field}', `currency`='{$this->currency}', `value`={$value}");
         $rate = $this->getRate();
         $usd = $value / $rate;
-        $this->db->query("update `{$table}` set `{$field}`={$usd} where `id`={$object->id}");
+        $this->db->query("update `{$table}` set `{$field}`={$usd} where `id`={$id}");
     }
 
 }

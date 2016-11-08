@@ -106,13 +106,10 @@ class TonerService
     public function createToner ($data)
     {
         $tonerMapper = TonerMapper::getInstance();
-        $toner       = new TonerModel($data);
 
-        if ($toner->tonerColorId==1) {
-            $toner->type = 'Monochrome Toner';
-        } else {
-            $toner->type = 'Color Toner';
-        }
+        $data['yield'] = $data['pageYield'];
+        $data['tonerColorId'] = $data['colorId'];
+        $toner       = new TonerModel($data);
 
         if ($this->isMasterHardwareAdministrator)
         {
@@ -178,23 +175,19 @@ class TonerService
     public function updateToner ($tonerId, $data)
     {
         $tonerMapper = TonerMapper::getInstance();
-        $toner       = $tonerMapper->find($tonerId);
+        $toner       = $tonerMapper->base_find($tonerId);
 
         if ($toner instanceof TonerModel)
         {
             if ($this->isMasterHardwareAdministrator || $toner->isSystemDevice == 0)
             {
-                if ($data['imageUrl'] && (0!==strcmp($data['imageUrl'], $toner->imageUrl))) {
-                    $i = new ImageService();
-                    $i->addImage($tonerId, $data['imageUrl'], ImageService::LOCAL_TONER_DIR, ImageService::TAG_TONER);
-                }
-
+                $toner->type           = $data['type'];
                 $toner->sku            = $data['sku'];
                 $toner->cost           = $data['cost'];
                 $toner->yield          = $data['yield'];
+                $toner->mlYield        = $data['mlYield'];
                 $toner->tonerColorId   = $data['tonerColorId'];
                 $toner->manufacturerId = $data['manufacturerId'];
-                $toner->imageUrl       = $data['imageUrl'];
                 $toner->name           = $data['name'];
                 $toner->weight         = $data['weight'];
                 $toner->UPC            = $data['UPC'];

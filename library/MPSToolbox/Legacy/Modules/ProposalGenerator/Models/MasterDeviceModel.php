@@ -122,6 +122,7 @@ class MasterDeviceModel extends My_Model_Abstract
 
     public $productLine;
 
+    public $tech;
     public $weight;
     public $UPC;
 
@@ -394,6 +395,7 @@ class MasterDeviceModel extends My_Model_Abstract
         if (isset($params->productLine) && !is_null($params->productLine)) $this->productLine = $params->productLine;
         if (isset($params->weight) && !is_null($params->weight)) $this->weight = $params->weight;
         if (isset($params->UPC) && !is_null($params->UPC)) $this->UPC = $params->UPC;
+        if (isset($params->tech) && !is_null($params->tech)) $this->tech = $params->tech;
 
         if (isset($params->dealerWebId) && !is_null($params->dealerWebId)) $this->dealerWebId = $params->dealerWebId;
 
@@ -511,6 +513,7 @@ class MasterDeviceModel extends My_Model_Abstract
             "productLine"                                => $this->productLine,
             "weight"                                => $this->weight,
             "UPC"                                => $this->UPC,
+            "tech"                                => $this->tech,
             "maximumRecommendedMonthlyPageVolume" => $this->maximumRecommendedMonthlyPageVolume,
             "isReplacementDevice"                 => $this->isReplacementDevice,
             "wattsPowerNormal"                    => $this->wattsPowerNormal,
@@ -548,6 +551,7 @@ class MasterDeviceModel extends My_Model_Abstract
 
     public function toPrinterData() {
         return [
+            "tech"                       => $this->tech,
             "tonerConfigId"                       => $this->tonerConfigId,
             "isCopier"                            => $this->isCopier,
             "isFax"                               => $this->isFax,

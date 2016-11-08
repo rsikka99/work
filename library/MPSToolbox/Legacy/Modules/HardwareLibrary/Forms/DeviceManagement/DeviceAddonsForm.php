@@ -20,7 +20,6 @@ class DeviceAddonsForm extends \My_Form_Form {
             $sql="
           select base_product.id, base_product.sku, manufacturers.displayname as mfg, base_product.name, dealer_sku.cost, pp.price as supplier_cost
                     from base_product
-                    join base_sku using (id)
                     join dealer_sku_addon on base_product.id = dealer_sku_addon.addOnId
                     join manufacturers on base_product.manufacturerId=manufacturers.id
                     left join dealer_sku on dealer_sku.skuId=base_product.id and dealer_sku.dealerId={$dealerId}
@@ -32,7 +31,7 @@ class DeviceAddonsForm extends \My_Form_Form {
             $result = $db->query($sql)->fetchAll();
 
             foreach ($result as $i=>$line) {
-                $result[$i]['cost'] = '$'. ($result[$i]['cost']>0 ? $result[$i]['cost'] : number_format($result[$i]['supplier_cost'],2));
+                $result[$i]['cost'] = '$'. ($result[$i]['cost']>0 ? number_format($result[$i]['cost'],2) : number_format($result[$i]['supplier_cost'],2));
             }
         }
         return $result;

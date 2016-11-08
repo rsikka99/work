@@ -36,7 +36,7 @@ $arr = DeviceAddonsForm::getAddOns($form->masterDeviceId);
                 <tr>
                     <td><?= $line['sku'] ?></td>
                     <td><?= $line['mfg'] ?></td>
-                    <td><?= $line['name'] ?></td>
+                    <td><?= $line['name']?$line['name']:$line['sku'] ?></td>
                     <td class="text-right"><?= $line['cost'] ?></td>
                     <td><a href="javascript:" onclick="deleteAddon(<?= $line['id'] ?>)">delete</a></td>
                 </tr>
@@ -82,13 +82,16 @@ $arr = DeviceAddonsForm::getAddOns($form->masterDeviceId);
     function addonShowProducts(catId) {
         $('#addon-add-product').load('/hardware-library/manage-devices/show-products?catId='+catId);
     }
+    function loadAddons() {
+        $.post('/hardware-library/manage-devices/load-addons', {masterDeviceId:<?= $form->masterDeviceId ?>}, updateAddons, 'json');
+    }
     function updateAddons(response) {
         var tr = '';
         $.each(response, function(i,e) {
             tr += '<tr>';
             tr += '<td>'+e.sku+'</td>';
             tr += '<td>'+e.mfg+'</td>';
-            tr += '<td>'+e.name+'</td>';
+            tr += '<td>'+(e.name ? e.name : e.sku)+'</td>';
             tr += '<td class="text-right">'+e.cost+'</td>';
             tr += '<td><a href="javascript:" onclick="deleteAddon('+ e.id+')">delete</a></td>';
             tr += '</tr>';
@@ -96,7 +99,10 @@ $arr = DeviceAddonsForm::getAddOns($form->masterDeviceId);
         $('#addon-tbody').html(tr);
     }
     function deleteAddon(id) {
-        $.post('/hardware-library/manage-devices/delete-addon', {id:id, masterDeviceId:<?= $form->masterDeviceId ?>}, updateAddons, 'json');
+        $.post('/hardware-library/manage-devices/delete-addon', {id:id, masterDeviceId:<?= $form->masterDeviceId ?>}, function(r) {
+            updateAddons(r);
+            if (window.deviceModalInstance) window.deviceModalInstance.updateSupplies();
+        }, 'json');
     }
     function addAddon() {
         var product = $('#addon-add-product').val();

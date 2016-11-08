@@ -74,7 +74,7 @@ class HardwareLibrary_TonerController extends Action
             <div class="toner-info col-sm-5">
                 <table class="table">
 <?php if (!empty($line['device_list'])) { ?>
-                    <tr><th>Devices: </th><td><?= $line['device_list'] ?></td></tr>
+                    <tr><th>Devices: </th><td><?= implode(', ', $devices) ?></td></tr>
 <?php } else { ?>
                     <tr><th>Admin: </th><td><a class="btn btn-warning" href="javascript:" onclick="if (window.confirm('Delete this toner?')) deleteToner(<?= $line['id'] ?>)">Delete</a></td></tr>
 <?php } ?>
@@ -168,7 +168,7 @@ class HardwareLibrary_TonerController extends Action
 
         $isAdmin = \MPSToolbox\Legacy\Services\NavigationService::$userId == 1;  //$this->view->IsAllowed(ProposalgenAclModel::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, AppAclModel::PRIVILEGE_ADMIN);
         $isAllowed                 = ((!$toner instanceof TonerModel || !$toner->isSystemDevice || $isAdmin) ? true : false);
-        $this->view->isSystemDevice = $toner && $toner->isSystemDevice;
+        $this->view->isSystemDevice = !empty($toner) && $toner->isSystemDevice;
         $this->view->isAdmin = $isAdmin;
         $this->view->isAllowed = $isAllowed;
         $form = new AvailableTonersForm($dealerId, $toner, null, $isAllowed);;
@@ -227,7 +227,7 @@ class HardwareLibrary_TonerController extends Action
                 {
                     $toner = TonerMapper::getInstance()->find($tonerId);
 
-                    if (!$toner instanceof TonerModel)
+                    if (empty($toner))
                     {
                         $this->sendJsonError('Invalid toner ID');
                     }
@@ -254,32 +254,11 @@ class HardwareLibrary_TonerController extends Action
                     }
                     else
                     {
-                        /**
-                        if (isset($formData['tonerColorId']) && ((int)$toner->tonerColorId !== (int)$formData['tonerColorId']))
-                        {
-                            $deviceToners = DeviceTonerMapper::getInstance()->fetchDeviceTonersByTonerId($toner->id);
-                            if (count($deviceToners) > 0)
-                            {
-                                $this->getResponse()->setHttpResponseCode(500);
-                                $this->sendJson([
-                                    'message'       => 'Validation Error',
-                                    'errorMessages' => [
-                                        'tonerColorId' => [
-                                            'assignedToner' => 'You cannot change the color of a toner while it\'s assigned to devices',
-                                        ]
-                                    ],
-                                ]);
-                            }
-                        }
-                        **/
-
-                        if (!empty($formData['cost']) && !\MPSToolbox\Services\CurrencyService::isUSD()) {
-                            $toner = TonerMapper::getInstance()->find($tonerId);
-                            $toner->setLocalCost($formData['cost']);
-                            unset($formData['cost']);
-                        }
-
                         $toner = $tonerService->updateToner($tonerId, $formData);
+                        if (!empty($formData['cost']) && !\MPSToolbox\Services\CurrencyService::isUSD()) {
+                            \MPSToolbox\Services\CurrencyService::getInstance()->setObjectValue(['id'=>$tonerId], 'base_printer_consumable', 'cost', $formData['cost']);
+                        }
+
 
                         if (!$toner instanceof TonerModel)
                         {
@@ -298,120 +277,6 @@ class HardwareLibrary_TonerController extends Action
                     $this->sendJson([
                         'message' => 'Toner saved successfully',
                         'tonerId' => $toner->id,
-                    ]);
-                }
-                else
-                {
-                    $this->getResponse()->setHttpResponseCode(500);
-                    $this->sendJson([
-                        'message'       => 'Validation Error',
-                        'errorMessages' => $form->getMessages(),
-                    ]);
-                }
-            }
-            catch (Exception $e)
-            {
-                \Tangent\Logger\Logger::logException($e);
-                $this->getResponse()->setHttpResponseCode(500);
-                $this->sendJson([
-                    'message' => 'Unhandled Exception',
-                    'uid'     => \Tangent\Logger\Logger::getUniqueId(),
-                ]);
-            }
-        }
-        else
-        {
-            $this->sendJsonError('Invalid Method');
-        }
-    }
-
-    public function imageAction() {
-        $tonerId = $this->_getParam('id', false);
-        $toner = TonerMapper::getInstance()->find($tonerId);
-        if (!$toner) {
-            $this->sendJsonError('not found');
-            return;
-        }
-
-        $isAllowed = ((!$toner instanceof TonerModel || !$toner->isSystemDevice || $this->isMasterHardwareAdmin) ? true : false);
-        if (!$isAllowed) {
-            $this->sendJsonError('not allowed');
-            return;
-        }
-        $dealerId      = Zend_Auth::getInstance()->getIdentity()->dealerId;
-        $userId        = Zend_Auth::getInstance()->getIdentity()->id;
-        $tonerService = new TonerService($userId, $dealerId, $this->isMasterHardwareAdmin);
-        foreach ($_FILES as $upload) {
-            $tonerService->uploadImage($toner, $upload);
-            TonerMapper::getInstance()->save($toner);
-        }
-
-        $result = array(
-            'filename'=>$toner->imageFile
-        );
-        $this->sendJson($result);
-    }
-
-    /**
-     * Handles creating and saving dealer toner information
-     *
-     * @throws Zend_Controller_Response_Exception
-     */
-    public function saveDealerAttributesAction ()
-    {
-        if ($this->getRequest()->isPost())
-        {
-            try
-            {
-                $userId   = Zend_Auth::getInstance()->getIdentity()->id;
-                $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
-                $creating = false;
-                $postData = $this->getRequest()->getPost();
-
-                $tonerId = $this->getParam('tonerId', false);
-                if ((int)$tonerId > 0)
-                {
-                    $dealerTonerAttribute = DealerTonerAttributeMapper::getInstance()->find([$tonerId, $dealerId]);
-
-                    if (!$dealerTonerAttribute instanceof DealerTonerAttributeModel)
-                    {
-                        $dealerTonerAttribute = new DealerTonerAttributeModel();
-                        $creating             = true;
-                    }
-                }
-                else
-                {
-                    $this->sendJsonError('You must provide a toner id');
-                }
-
-                $form = new AvailableTonersForm($dealerId, $dealerTonerAttribute);
-
-                if ($form->isValid($postData))
-                {
-                    $formData = $form->getValues();
-
-                    $tonerService = new TonerService($userId, $dealerId, $this->isMasterHardwareAdmin);
-
-                    if ($creating)
-                    {
-                        $dealerTonerAttribute = $tonerService->createToner($formData);
-                    }
-                    else
-                    {
-                        $dealerTonerAttribute = $tonerService->updateToner($tonerId, $formData);
-
-                        if (!$dealerTonerAttribute instanceof TonerModel)
-                        {
-                            throw new Exception("An unhandled error occurred while saving the toner");
-                        }
-                    }
-
-                    /**
-                     * Send success message
-                     */
-                    $this->sendJson([
-                        'message' => 'Toner saved successfully',
-                        'tonerId' => $dealerTonerAttribute->id,
                     ]);
                 }
                 else

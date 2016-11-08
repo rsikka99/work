@@ -86,7 +86,7 @@ define([
             },
             function ()
             {
-                $modal.find('.modal-title').text((that.isCreatingNewToner) ? 'Add New Toner' : 'Edit Toner');
+                $modal.find('.modal-title').text((that.isCreatingNewToner) ? 'Add New Supply' : 'Edit Supply');
 
                 /**
                  * Button on-click handlers
@@ -195,7 +195,3 @@ define([
     return TonerForm;
 });
 
-function uploadDone (e, result) {
-    var filename = result._response.result.filename;
-    $('#imageDiv').html('<a href="<?= IMG_CDN ?>/img/toners/'+filename+'" target="_blank" class="thumbnail"><img src="<?= IMG_CDN ?>/img/toners/'+filename+'" style="max-width:300px;max-height:300px"></a>');
-}

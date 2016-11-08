@@ -2,11 +2,14 @@
 
 namespace MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement;
 
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\DealerTonerAttributeMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerColorMapper;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerMapper;
+use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\DealerTonerAttributeModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerColorModel;
 use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\TonerModel;
+use MPSToolbox\Services\CurrencyService;
 use My_Brand;
 use Tangent\Validate\UniqueTonerVpn;
 use Zend_Form;
@@ -26,7 +29,7 @@ class AvailableTonersForm extends \My_Form_Form
     /**
      * @var TonerModel
      */
-    protected $tonerModel;
+    protected $toner;
 
     public $images;
 
@@ -45,24 +48,26 @@ class AvailableTonersForm extends \My_Form_Form
      * @param null $options
      * @param bool $isAllowedToEditFields
      */
-    public function __construct ($dealerId = null, $tonerModel = null, $options = null, $isAllowedToEditFields = false)
+    public function __construct ($dealerId = null, TonerModel $toner = null, $options = null, $isAllowedToEditFields = false)
     {
         $this->_isAllowedToEditFields = $isAllowedToEditFields;
 
         $this->dealerId   = $dealerId;
-        $this->tonerModel = $tonerModel;
+        $this->toner = $toner;
 
         parent::__construct($options);
 
-        if ($tonerModel instanceof TonerModel)
+        if (!empty($toner))
         {
-            $a = $tonerModel->getDealerTonerAttribute($dealerId);
+            //$a = $tonerModel->getDealerTonerAttribute($dealerId);
+            $attr = DealerTonerAttributeMapper::getInstance()->find([ $toner->id, $dealerId]);
+            if (empty($attr)) $attr = new DealerTonerAttributeModel();
 
-            $data               = $tonerModel->toArray();
-            $data['cost']       = $tonerModel->getLocalCost();
-            $data['dealerSku']  = $a->dealerSku;
-            $data['dealerCost'] = $a->cost;
-            $data['sellPrice'] = $a->sellPrice;
+            $data               = $toner->toArray();
+            $data['cost']       = number_format(CurrencyService::getInstance()->getObjectValue($toner, 'base_printer_consumable', 'cost'),2);
+            $data['dealerSku']  = $attr->dealerSku;
+            $data['dealerCost'] = $attr->cost;
+            $data['sellPrice'] = $attr->sellPrice;
 
             $this->setDefaults($data);
         }
@@ -97,15 +102,16 @@ class AvailableTonersForm extends \My_Form_Form
 
         /**
          * Toner Color
-         */
+         *
         $tonerColorValidator = new \Zend_Validate_Db_RecordExists([
             'table' => 'toner_colors',
             'field' => 'id',
         ]);
         $tonerColorValidator->setMessage("Invalid toner color selected", \Zend_Validate_Db_Abstract::ERROR_NO_RECORD_FOUND);
+         */
 
         $colors    = TonerColorMapper::getInstance()->fetchAll();
-        $colorList = [0 => 'Select Color...'];
+        $colorList = ['' => ''];
         foreach ($colors as $color)
         {
             $colorList[$color->id] = $color->name;
@@ -113,10 +119,21 @@ class AvailableTonersForm extends \My_Form_Form
 
         $this->addElement('select', 'tonerColorId', [
             'label'        => 'Color',
-            'required'     => $this->_isAllowedToEditFields,
-            'validators' => [$tonerColorValidator],
+            'required'     => false,
+            'validators' => [],
             'disabled' => !$this->_isAllowedToEditFields,
             'multiOptions' => $colorList
+        ]);
+
+        $typeList = [];
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        foreach ($db->query('select distinct(`type`) as t from base_printer_consumable order by t') as $row) $typeList[$row['t']] = $row['t'];
+        $this->addElement('select', 'type', [
+            'label'        => 'Type',
+            'required'     => $this->_isAllowedToEditFields,
+            'validators' => [],
+            'disabled' => !$this->_isAllowedToEditFields,
+            'multiOptions' => $typeList
         ]);
 
         /**
@@ -138,12 +155,8 @@ class AvailableTonersForm extends \My_Form_Form
         /**
          * OEM SKU
          */
-        $tonerMapper = TonerMapper::getInstance();
-
-        $dbNoRecordExistsValidator = $tonerMapper->getDbNoRecordExistsValidator($this->tonerModel);
+        $dbNoRecordExistsValidator = new UniqueTonerVpn('manufacturerId', ($this->toner) ? $this->toner->id : null);
         $dbNoRecordExistsValidator->setMessage("VPN is already in use");
-
-        $dbNoRecordExistsValidator = new UniqueTonerVpn('manufacturerId', ($this->tonerModel) ? $this->tonerModel->id : null);
 
         $this->addElement('text', 'sku', [
             'label'      => 'VPN (Vendor Product Number/SKU)',
@@ -179,13 +192,18 @@ class AvailableTonersForm extends \My_Form_Form
          */
         $this->addElement('text_int', 'yield', [
             'label'      => 'Yield',
-            'required'   => $this->_isAllowedToEditFields,
+            'required'   => false,
             'maxlength'  => 255,
             'validators' => [
-                [
-                    'validator' => 'greaterThan',
-                    'options'   => ['min' => 0]
-                ],
+                'Int'
+            ],
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+        $this->addElement('text_int', 'mlYield', [
+            'label'      => 'Yield',
+            'required'   => false,
+            'maxlength'  => 255,
+            'validators' => [
                 'Int'
             ],
             'disabled' => !$this->_isAllowedToEditFields,

@@ -41,17 +41,6 @@ from rms_device_instances di
   join oem_printing_device_consumable dt on dt.printing_device=md.id
   join base_printer_cartridge t on dt.printer_consumable=t.id
   left join dealer_toner_attributes a on t.id=a.tonerId and a.dealerId={$dealerId}
-  left join _view_dist_stock_price_grouped v1 on t.id=v1.tonerId and v1.dealerId={$dealerId}
-where {$where} and `ignore`=0
-        ";
-
-        $sql = "
-select di.id, md.tonerConfigId, t.colorId, v1.cost
-from rms_device_instances di
-  join base_printer md on di.masterDeviceId=md.id
-  join oem_printing_device_consumable dt on dt.printing_device=md.id
-  join base_printer_cartridge t on dt.printer_consumable=t.id
-  left join dealer_toner_attributes a on t.id=a.tonerId and a.dealerId={$dealerId}
   left join (select min(cost) as cost, dist, tonerId, dealerId from _view_dist_stock_price group by tonerId, dealerId) as v1 on v1.tonerId=t.id and v1.dealerId={$dealerId}
 where {$where} and `ignore`=0
         ";

@@ -20,24 +20,53 @@ $shopSettings = $dealerSettings->shopSettings;
             <div id="alertMessage"></div>
             <!-- Device Details -->
             <form class="form-horizontal">
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="manufacturerId">Manufacturer</label>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="manufacturerId">Manufacturer</label>
+                            <div class="col-md-9">
+                                <select class="form-control" type="text" id="manufacturerId" name="manufacturerId" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?> value="<?= $this->manufacturerId ?>"><option></option><?php foreach ($this->manufacturers as $line) { ?><option value="<?php echo $line->id ?>" <?= $this->manufacturerId==$line->id?'selected="selected"':'' ?>><?php echo $line->fullname==$line->displayname?$line->fullname:$line->displayname." ({$line->fullname})" ?></option><?php } ?></select>
+                                <script> $(document).ready(function() { $('#manufacturerId').select2({}); }); </script>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="modelName">Model Name</label>
+                            <div class="col-md-9">
+                                <input class="form-control" type="text" id="modelName" value="<?= $this->modelName; ?>" name="modelName" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="modelName">Technology</label>
+                            <div class="col-md-9">
+                                <select class="form-control" name="tech" id="tech" onchange="updateMainSupplyHeader()">
+                                    <option value="Other">Other</option>
+                                    <option <?= $this->masterDevice && $this->masterDevice->tech=='Laser'?'selected="selected"':'' ?> value="Laser">Laser</option>
+                                    <option <?= $this->masterDevice && $this->masterDevice->tech=='Ink'?'selected="selected"':'' ?> value="Ink">Ink</option>
+                                    <option <?= $this->masterDevice && $this->masterDevice->tech=='LED'?'selected="selected"':'' ?> value="LED">LED</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="sku">OEM SKU</label>
+                            <div class="col-md-9">
+                                <input class="form-control" type="text" id="sku" value="<?= $this->masterDevice ? $this->masterDevice->sku : ''; ?>" name="sku" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="UPC">UPC</label>
+                            <div class="col-md-9">
+                                <input class="form-control" type="text" id="UPC" value="<?= $this->masterDevice ? $this->masterDevice->UPC : ''; ?>" name="UPC" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="weight">Weight</label>
+                            <div class="col-md-9">
+                                <input class="form-control" type="text" id="weight" value="<?= $this->masterDevice ? $this->masterDevice->weight : ''; ?>" name="weight" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                            </div>
+                        </div>
 
-                    <div class="col-md-6">
-                        <select class="form-control" type="text" id="manufacturerId" name="manufacturerId" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?> value="<?= $this->manufacturerId ?>"><option></option><?php foreach ($this->manufacturers as $line) { ?><option value="<?php echo $line->id ?>" <?= $this->manufacturerId==$line->id?'selected="selected"':'' ?>><?php echo $line->fullname==$line->displayname?$line->fullname:$line->displayname." ({$line->fullname})" ?></option><?php } ?></select>
-                        <script> $(document).ready(function() { $('#manufacturerId').select2({}); }); </script>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="modelName">Model Name</label>
-                    <div class="col-md-6">
-                        <input class="form-control" type="text" id="modelName" value="<?= $this->modelName; ?>" name="modelName" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="modelName">OEM SKU</label>
-                    <div class="col-md-6">
-                        <input class="form-control" type="text" id="sku" value="<?= $this->sku; ?>" name="sku" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
                     </div>
                 </div>
             </form>
@@ -140,90 +169,142 @@ $shopSettings = $dealerSettings->shopSettings;
                         <?= $this->suppliesAndService; ?>
 
                         <div class="clearfix">
-                            <h3>
-                                Assigned Toners
-                                <?php if ($this->isAllowed || $this->IsAllowed(HardwareLibraryAclModel::RESOURCE_HARDWARE_LIBRARY_QUOTEINDEX_INDEX, AppAclModel::PRIVILEGE_VIEW)) : ?>
-                                    <button type="button" class="btn btn-success btn-xs pull-right js-assign-toners-button">
-                                        <i class="fa fa-fw fa-plus-circle"></i> Assign Toners
+                            <?php if ($this->isAllowed || $this->IsAllowed(HardwareLibraryAclModel::RESOURCE_HARDWARE_LIBRARY_QUOTEINDEX_INDEX, AppAclModel::PRIVILEGE_VIEW)) : ?>
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-success btn-xs js-assign-toners-button" onclick="$(this).hide(); $('#search-supply-div').show()">
+                                        <i class="fa fa-fw fa-plus-circle"></i> Assign Supply
                                     </button>
-                                <?php endif; ?>
+                                    <div id="search-supply-div" style="display:none">
+                                        SKU: <input id="search-supply" style="width:500px;" />
+                                        <script>
+                                            require(['jquery', 'select2'], function ($) {
+                                                $('#search-supply').select2({
+                                                    minimumInputLength: 3,
+                                                    dropdownCssClass: "bigdrop",
+                                                    formatResult: function(line) {
+                                                        var markup = '<div class="row" style="border-bottom:1px solid #ccc">' +
+                                                            '<div class="col-sm-3">' +
+                                                                line.text+
+                                                            '</div>' +
+                                                            '<div class="col-sm-3">' +
+                                                                line.type+
+                                                            '</div>' +
+                                                            '<div class="col-sm-3">' +
+                                                                line.color+
+                                                            '</div>' +
+                                                                line.yield+
+                                                            '</div>';
+                                                        return markup;
+                                                    },
+                                                    escapeMarkup: function (m) { return m; },
+                                                    ajax: {
+                                                        url: "/hardware-library/manage-devices/search-supply",
+                                                        dataType: 'json',
+                                                        quietMillis: 250,
+                                                        cache: true,
+                                                        data: function (term, page) { return { q: term, page: page, mfg:$('#manufacturerId').val() }; },
+                                                        results: function (data, page) { return data; }
+                                                    }
+                                                });
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <h3>
+                                Supplies
                             </h3>
                         </div>
 
                         <div class="form-group">
                             <div>
-                                <input name="assignedTonersMistakes" type="hidden" value="undefined">
+                                <input name="assignedTonersMistakes" value="undefined" type="hidden">
                             </div>
                         </div>
 
-                        <div class="js-assigned-toners-grid"></div>
+                        <div>
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#supplies1" aria-controls="supplies1" role="tab" data-toggle="tab" id="main-supply-header">Main OEM Cartridges</a></li>
+                                <li role="presentation"><a href="#supplies2" aria-controls="supplies2" role="tab" data-toggle="tab">Other OEM Supplies</a></li>
+                                <li role="presentation"><a href="#supplies3" aria-controls="supplies3" role="tab" data-toggle="tab">Compatible Supplies</a></li>
+                            </ul>
 
-
-                        <div class="modal fade assign-toners-modal js-assign-toners-modal" id="assign-toners-modal">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h2 class="modal-title text-center">Available Toners</h2>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        <form class="form-horizontal">
-                                            <fieldset>
-                                                <div class="form-group">
-                                                    <label class="control-label col-lg-2 col-md-3 col-sm-4" for="toner-manufacturer-filter">Manufacturer</label>
-
-                                                    <div class="col-lg-10 col-md-9 col-sm-8">
-                                                        <select onchange="$('#toners-grid').trigger('reloadGrid');" class="form-control js-filter-manufacturer" type="text" id="assign-toners-manufacturer-filter" name="assign-toners-manufacturer-filter">
-                                                            <option></option>
-                                                            <?php foreach (\MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\ManufacturerMapper::getInstance()->fetchAllOemManufacturers() as $line) { ?>
-                                                                <option value="<?php echo $line['id'] ?>"><?php echo $line['fullname']==$line['displayname']?$line['fullname']:$line['displayname']." ({$line['fullname']})" ?></option>
-                                                            <?php } ?>
-                                                        </select>
-                                                        <script> require(['jquery', 'select2'], function ($) { $('#assign-toners-manufacturer-filter').select2({allowClear: true, placeholder:'select' }); }); </script>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="control-label col-lg-2 col-md-3 col-sm-4" for="assign-toners-filter-sku">VPN/SKU</label>
-
-                                                    <div class="col-lg-10 col-md-9 col-sm-8">
-                                                        <input class="form-control js-filter-toner-sku" id="assign-toners-filter-sku" name="assign-toners-filter-sku" type="text" title="Filter SKU" placeholder="Any VPN/SKU" />
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="control-label col-lg-2 col-md-3 col-sm-4" for="assign-toners-filter-color">Toner Color</label>
-
-                                                    <div class="col-lg-10 col-md-9 col-sm-8">
-                                                        <input class="form-control js-filter-toner-color" id="assign-toners-filter-color" name="assign-toners-filter-color" type="text" title="Toner Color">
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <div class="col-lg-10 col-lg-push-2 col-md-9 col-md-push-3 col-sm-8 col-sm-push-4">
-                                                        <button class="btn btn-xs btn-default js-reset-filter" id="assign-toners-reset-filter" type="reset">
-                                                            <i class="fa fa-fw fa-times"></i> Reset
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </fieldset>
-                                        </form>
-
-                                        <hr>
-
-                                        <div class="js-assign-toners-grid"></div>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <input type="button" class="btn btn-default" value="Close" data-dismiss='modal' />
-                                    </div>
-
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="supplies1" style="padding:10px">
+                                    <table id="main-supplies-table" class="table table-hover table-bordered">
+                                        <colgroup>
+                                            <col width="15%" />
+                                            <col width="10%" />
+                                            <col width="30%" />
+                                            <col width="15%" />
+                                            <col width="10%" />
+                                            <col width="20%" />
+                                        </colgroup>
+                                        <thead>
+                                            <th>Color</th>
+                                            <th>SKU</th>
+                                            <th>Machine Compatibility</th>
+                                            <th>Yield</th>
+                                            <th>Your Cost</th>
+                                            <th>Action</th>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="supplies2" style="padding:10px">
+                                    <table id="other-supplies-table" class="table table-hover table-bordered">
+                                        <colgroup>
+                                            <col width="15%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="25%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="20%" />
+                                        </colgroup>
+                                        <thead>
+                                            <th>Type</th>
+                                            <th>Color</th>
+                                            <th>SKU</th>
+                                            <th>Machine Compatibility</th>
+                                            <th>Yield</th>
+                                            <th>Your Cost</th>
+                                            <th>Action</th>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="supplies3" style="padding:10px">
+                                    <table id="compatible-supplies-table" class="table table-hover table-bordered">
+                                        <colgroup>
+                                            <col width="15%" />
+                                            <col width="15%" />
+                                            <col width="15%" />
+                                            <col width="15%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="20%" />
+                                        </colgroup>
+                                        <thead>
+                                            <th>Manufacturer</th>
+                                            <th>Type</th>
+                                            <th>Color</th>
+                                            <th>SKU</th>
+                                            <th>Yield</th>
+                                            <th>Your Cost</th>
+                                            <th>Action</th>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
                 <?php endif; ?>
 
@@ -438,6 +519,20 @@ $shopSettings = $dealerSettings->shopSettings;
         </div>
     </div>
 </div>
+
+<script>
+    function updateMainSupplyHeader() {
+        var $h = $('#main-supply-header');
+        switch ($('#tech').val()) {
+            case 'Laser': $h.text('Main OEM Toner Cartridges'); break;
+            case 'LED': $h.text('Main OEM Toner Cartridges'); break;
+            case 'Ink': $h.text('Main OEM Ink Cartridges'); break;
+            case 'Other': $h.text('Main OEM Cartridges'); break;
+        }
+    }
+    updateMainSupplyHeader();
+</script>
+
 
 <?php if ($shopSettings->shopifyName!='') { ?>
     <script>

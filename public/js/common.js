@@ -38,7 +38,7 @@ requirejs.config({
         'moment.timezone'        : 'lib/moment/moment-timezone.min',
         'numeral'                : 'lib/numeral/numeral.min',
         'riot'                   : 'lib/riot/riot.min',
-        'select2'                : 'lib/select2/select2.min',
+        'select2'                : 'lib/select2/select2',
         'underscore'             : 'lib/underscore/underscore.min',
         'uri'                    : 'lib/jqGrid/jquery.jqGrid.min',
         'jquery-datetimepicker'  : '//cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.full',

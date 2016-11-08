@@ -92,10 +92,6 @@ class MPSToolbox_Legacy_Modules_ProposalGenerator_Mappers_TonerMapperTest extend
 
     }
 
-    public function test_getDbNoRecordExistsValidator() {
-
-    }
-
     public function test_findCompatibleToners() {
         $this->user2();
         $mapper = TonerMapper::getInstance();

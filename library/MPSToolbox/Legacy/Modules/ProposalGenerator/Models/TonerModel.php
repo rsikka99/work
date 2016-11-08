@@ -232,7 +232,6 @@ class TonerModel extends My_Model_Abstract
         if (isset($params->type) && !is_null($params->type)) $this->type = $params->type;
         if (isset($params->compatiblePrinters) && !is_null($params->compatiblePrinters)) $this->compatiblePrinters = $params->compatiblePrinters;
         if (isset($params->mlYield) && !is_null($params->mlYield)) $this->mlYield = $params->mlYield;
-
     }
 
     public function __get($property) {
@@ -246,18 +245,15 @@ class TonerModel extends My_Model_Abstract
         return $this->calculatedCost * CurrencyService::getInstance()->getRate();
     }
 
+    public function isMainType() {
+        return in_array($this->type, ['Inkjet Cartridge','Laser Cartridge','Printhead','Monochrome Toner','Color Toner']);
+    }
+
     /**
      * @return array
      */
     public function toArray ()
     {
-        if (empty($this->type)) {
-            if ($this->tonerColorId==1) {
-                $this->type = 'Monochrome Toner';
-            } else {
-                $this->type = 'Color Toner';
-            }
-        }
         return [
             "id"             => $this->id,
             "userId"         => $this->userId,
@@ -281,7 +277,7 @@ class TonerModel extends My_Model_Abstract
     public function toProductArray ()
     {
         return [
-            "base_type"      => 'printer_cartridge',
+            "base_type"      => $this->tonerColorId ? 'printer_cartridge' : 'printer_consumable',
             "userId"         => $this->userId,
             "isSystemProduct" => $this->isSystemDevice,
             "sku"            => $this->sku,
@@ -296,17 +292,10 @@ class TonerModel extends My_Model_Abstract
 
     public function toConsumableArray ()
     {
-        if (empty($this->type)) {
-            if ($this->tonerColorId==1) {
-                $this->type = 'Monochrome Toner';
-            } else {
-                $this->type = 'Color Toner';
-            }
-        }
         return [
-            "cost"           => $this->cost,
+            "cost"               => $this->cost,
             "pageYield"          => $this->yield,
-            "type" => $this->type,
+            "type"               => $this->type,
             "compatiblePrinters" => $this->compatiblePrinters,
         ];
     }

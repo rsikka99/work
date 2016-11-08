@@ -191,10 +191,6 @@ class DeviceAttributesForm extends \My_Form_Form
             'allowEmpty' => true,
             'validators' => [
                 'Int',
-                [
-                    'validator' => 'Between',
-                    'options'   => ['min' => 1, 'max' => 1000],
-                ],
             ],
         ]);
 
@@ -234,18 +230,12 @@ class DeviceAttributesForm extends \My_Form_Form
             'id'         => 'wattsPowerNormal',
             'maxlength'  => 8,
             'disabled'   => !$this->_isAllowedToEditFields,
-            'allowEmpty' => !$this->_isAllowedToEditFields,
-            'required'   => $this->_isAllowedToEditFields,
         ]);
 
         if ($this->_isAllowedToEditFields)
         {
             $this->getElement('wattsPowerNormal')->setValidators([
                 'float',
-                [
-                    'validator' => 'Between',
-                    'options'   => ['min' => 1, 'max' => 10000]
-                ],
             ]);
         }
 
@@ -257,8 +247,6 @@ class DeviceAttributesForm extends \My_Form_Form
             'id'         => 'wattsPowerIdle',
             'maxlength'  => 8,
             'disabled'   => !$this->_isAllowedToEditFields,
-            'allowEmpty' => !$this->_isAllowedToEditFields,
-            'required'   => $this->_isAllowedToEditFields,
         ]);
 
         if ($this->_isAllowedToEditFields)
@@ -266,10 +254,6 @@ class DeviceAttributesForm extends \My_Form_Form
 
             $this->getElement('wattsPowerIdle')->setValidators([
                 'float',
-                [
-                    'validator' => 'Between',
-                    'options'   => ['min' => 1, 'max' => 10000],
-                ],
             ]);
         }
     }

@@ -20,15 +20,16 @@ define([
         DeviceModal_InstanceIdCounter++;
         this.id = DeviceModal_InstanceIdCounter;
         var deviceModalInstance = this;
-
+        window.deviceModalInstance = this;
 
         var settings = _.extend({
+            supplies: [],
             rmsUploadRowId: 0,
             rmsDeviceInstanceId: 0,
             deviceId      : 0,
             isAllowed     : false,
             onModalClose  : false
-        }, _.pick(options, ['rmsUploadRowId', 'rmsDeviceInstanceId', 'deviceId', 'isAllowed', 'onModalClose']) || {});
+        }, _.pick(options, ['supplies','rmsUploadRowId', 'rmsDeviceInstanceId', 'deviceId', 'isAllowed', 'onModalClose']) || {});
 
         /**
          * Create Modal
@@ -41,6 +42,7 @@ define([
          * Class Members
          */
         this.$modal = $modal;
+        this.supplies = settings.supplies;
         this.rmsUploadRowId = settings.rmsUploadRowId;
         this.rmsDeviceInstanceId = settings.rmsDeviceInstanceId;
         this.deviceId = settings.deviceId;
@@ -59,12 +61,6 @@ define([
         $modal.on('hide.bs.modal', function ()
         {
             $modal.removeClass('fade');
-
-            if (deviceModalInstance.assignedTonersDataTable)
-                deviceModalInstance.assignedTonersDataTable.destroy();
-
-            if (deviceModalInstance.assignTonersModal && deviceModalInstance.assignTonersModal.assignTonersDataTable)
-                deviceModalInstance.assignTonersModal.assignTonersDataTable.destroy();
 
             // Timeout was needed as the modal wasn't being destroyed
             window.setTimeout(function ()
@@ -104,18 +100,6 @@ define([
             modalOptions.width = 960;
         }
 
-        $modal.on('DeviceModal.unassign-toner', function (event, tonerId, $element)
-        {
-            deviceModalInstance.unassignToner(tonerId);
-            $element.removeClass('btn-danger js-unassign-toner').addClass('btn-success js-assign-toner').text('Assign');
-        });
-
-        $modal.on('DeviceModal.assign-toner', function (event, tonerId, $element)
-        {
-            deviceModalInstance.assignToner(tonerId);
-            $element.removeClass('btn-success js-assign-toner').addClass('btn-danger js-unassign-toner').text('Unassign');
-        });
-
         $modal.load(this.urls.loadForms,
             {
                 masterDeviceId: this.deviceId,
@@ -147,52 +131,38 @@ define([
                     }
                 });
 
-                require(['app/components/jqGrid/DeviceModal/AssignedTonersGrid'], function (AssignedTonersGrid)
+                deviceModalInstance.updateSupplies();
+                deviceModalInstance.updateTabs();
+
+                $modal.find('#search-supply').on('change', function() {
+                    deviceModalInstance.supplies.push($modal.find('#search-supply').val());
+                    deviceModalInstance.updateSupplies();
+                });
+
+                $modal.find('.js-save-device-modal').on('click', function ()
                 {
-                    deviceModalInstance.$assignedTonersGrid = new AssignedTonersGrid(deviceModalInstance.$modal.find('.js-assigned-toners-grid'), {
-                        "deviceId"     : function ()
-                        {
-                            return deviceModalInstance.deviceId;
-                        },
-                        "tonerConfigId": function ()
-                        {
-                            return deviceModalInstance.$modal.find('select[name="tonerConfigId"]').val();
-                        },
-                        "isAllowed"    : deviceModalInstance.isAllowed,
-                        "url"          : deviceModalInstance.urls.assignedToners
-                    });
+                    deviceModalInstance.saveChanges(false);
+                });
 
-                    deviceModalInstance.loadAvailableOptions();
+                $modal.find('.js-save-and-approve-device-modal').on('click', function ()
+                {
+                    deviceModalInstance.saveChanges(true);
+                });
 
-                    // FIXME lrobert: Implement favorite configurations
-                    //deviceModalInstance.loadFavoriteConfigurations();
+                var $leasedTonerControlGroupElement = $modal.find('input[name="leasedTonerYield"]').parent('.form-group');
+                var $isLeased = $modal.find('input[type="checkbox"][name="isLeased"]');
 
-                    var $assignTonersButton = jQuery('.js-assign-toners-button');
-                    deviceModalInstance.assignTonersModal = new AssignTonersModal({
-                        "deviceModalInstance": deviceModalInstance,
-                        "assignTonersModal"  : $modal.find('.js-assign-toners-modal')
-                    });
+                if ($isLeased.prop('checked'))
+                {
+                    $leasedTonerControlGroupElement.show();
+                }
+                else
+                {
+                    $leasedTonerControlGroupElement.hide();
+                }
 
-                    $assignTonersButton.on('click', function ()
-                    {
-                        deviceModalInstance.assignTonersModal.show();
-                    });
-
-                    deviceModalInstance.updateTabs();
-
-                    $modal.find('.js-save-device-modal').on('click', function ()
-                    {
-                        deviceModalInstance.saveChanges(false);
-                    });
-
-                    $modal.find('.js-save-and-approve-device-modal').on('click', function ()
-                    {
-                        deviceModalInstance.saveChanges(true);
-                    });
-
-                    var $leasedTonerControlGroupElement = $modal.find('input[name="leasedTonerYield"]').parent('.form-group');
-                    var $isLeased = $modal.find('input[type="checkbox"][name="isLeased"]');
-
+                $isLeased.on("change", function ()
+                {
                     if ($isLeased.prop('checked'))
                     {
                         $leasedTonerControlGroupElement.show();
@@ -201,19 +171,8 @@ define([
                     {
                         $leasedTonerControlGroupElement.hide();
                     }
-
-                    $isLeased.on("change", function ()
-                    {
-                        if ($isLeased.prop('checked'))
-                        {
-                            $leasedTonerControlGroupElement.show();
-                        }
-                        else
-                        {
-                            $leasedTonerControlGroupElement.hide();
-                        }
-                    });
                 });
+
             }
         );
     };
@@ -344,9 +303,12 @@ define([
                 manufacturerId      : $("#manufacturerId").val(),
                 modelName           : $("#modelName").val(),
                 sku                 : $("#sku").val(),
+                weight              : $("#weight").val(),
+                UPC                 : $("#UPC").val(),
+                tech                : $("#tech").val(),
                 "tonerIds"          : function ()
                 {
-                    return deviceModalInstance.$assignedTonersGrid.getTonerList().join(",");
+                    return deviceModalInstance.supplies.join(",");
                 },
                 approve             : approve,
                 suppliesAndService  : function ()
@@ -479,6 +441,52 @@ define([
             .attr("class", "alert alert-" + type)
             .html("<span>" + message + "</span>")
             .show();
+    };
+
+    DeviceModal.prototype.updateSupplies = function() {
+        var mfgId = $("#manufacturerId").val();
+        var modalInstance = this;
+        $.post('/hardware-library/manage-devices/supplies', {supplies: modalInstance.supplies, deviceId: this.deviceId, mfgId: mfgId}, function(r) {
+            modalInstance.supplies = r.supplies;
+            $.each(['main','other','compatible'], function (i,n) {
+                var tr='';
+                $.each(r[n], function(j,line) {
+                    tr+='<tr>';
+                    $.each(line, function(k,cell) {
+                        tr+='<td>'+cell+'</td>';
+                    });
+                    tr+='</tr>';
+                });
+                $('#'+n+'-supplies-table tbody').html(tr);
+            });
+            $('.edit-supply').click(function() {
+                var id = $(this).attr('data-id');
+                modalInstance.editSupply(id);
+            });
+            $('.edit-device').click(function() {
+                var id = $(this).attr('data-id');
+                modalInstance.editDevice(id);
+            });
+            $('.unassign-supply').click(function() {
+                if (!window.confirm('Unassign this supply?')) return;
+                var id = $(this).attr('data-id');
+                var new_supplies = [];
+                $(modalInstance.supplies).each(function(i,e) {
+                    if (e!=id) new_supplies.push(e);
+                });
+                modalInstance.supplies = new_supplies;
+                modalInstance.updateSupplies();
+            });
+            $('.addon-supply').click(function() {
+                var $el = $(this);
+                $el.text('working...');
+                var id = $(this).attr('data-id');
+                $.post('/hardware-library/manage-devices/addon-supply', { id:id, deviceId:modalInstance.deviceId }, function(r) {
+                    $el.remove();
+                    loadAddons();
+                }, 'json');
+            });
+        }, 'json');
     };
 
     /**
@@ -637,210 +645,42 @@ define([
         });
     };
 
-    /**
-     * Event Handler to add  a toner id to the tonerList variable.
-     *
-     * Requires deviceModalInstance to be bound to the event data
-     *
-     * @param event
-     */
-    DeviceModal.prototype.assignTonerButtonHandler = function (event)
-    {
-        var $element = $(this);
-        var tonerId = $element.data('toner-id');
-        event.data.deviceModalInstance.$modal.trigger('DeviceModal.assign-toner', [tonerId, $element]);
-    };
+    DeviceModal.prototype.editSupply = function(tonerId) {
 
-    /**
-     * Event Handler to remove a toner id to the tonerList variable.
-     *
-     * Requires deviceModalInstance to be bound to the event data
-     *
-     * @param event
-     */
-    DeviceModal.prototype.unassignTonerButtonHandler = function (event)
-    {
-        var $element = $(this);
-        var tonerId = $element.data('toner-id');
-        event.data.deviceModalInstance.$modal.trigger('DeviceModal.unassign-toner', [tonerId, $element]);
-    };
-
-    /**
-     * Adds a toner to the list
-     *
-     * @param tonerId
-     */
-    DeviceModal.prototype.assignToner = function (tonerId)
-    {
-        this.$assignedTonersGrid.addToner(parseInt(tonerId));
-    };
-
-    /**
-     * Removes a toner from the list
-     *
-     * @param tonerId
-     */
-    DeviceModal.prototype.unassignToner = function (tonerId)
-    {
-        this.$assignedTonersGrid.removeToner(tonerId);
-    };
-
-    /**
-     * Reloads the assigned and available toner grids
-     */
-    DeviceModal.prototype.reloadTonersGrids = function ()
-    {
-        this.$assignedTonersGrid.reloadGrid();
-        this.assignTonersModal.$assignTonersGrid.trigger('reloadGrid');
-    };
-
-    DeviceModal.prototype.loadFavoriteConfigurations = function ()
-    {
         var deviceModalInstance = this;
 
-        var $hardwareConfigurationsTable = $('#hardwareConfigurations');
-        var $hardwareConfigurationsForm = $('#hardwareConfigurationsForm');
-
-        /**
-         * Hardware Configurations
-         */
-        $hardwareConfigurationsTable.jqGrid(
-            {
-                url         : deviceModalInstance.urls.deviceConfigurationList,
-                datatype    : 'json',
-                postData    : {
-                    "masterDeviceId": function ()
-                    {
-                        return deviceModalInstance.deviceId;
-                    }
-                },
-                colModel    : [
-//@formatter:off
-{ width: 130, name: 'id',          index: 'id',          label: 'ID',                 hidden: true                   },
-{ width: 268, name: 'name',        index: 'name',        label: 'Configuration Name', sortable: true, editable: true },
-{ width: 630, name: 'description', index: 'description', label: 'Description',        sortable: true, editable: true }
-//@formatter:on
-                ],
-                jsonReader  : {
-                    repeatitems: false
-                },
-                height      : 'auto',
-                rowNum      : 15,
-                pager       : '#hardwareConfigurations_Pager',
-                toppager    : true,
-                gridComplete: function ()
-                {
-                }
-            }
-        );
-
-        /**
-         * Hide the top paging
-         */
-        $('#hardwareConfigurations_toppager_center').hide();
-
-        /**
-         * Add to the top pager the create, edit and delete buttons
-         */
-        $hardwareConfigurationsTable
-            .navGrid('#hardwareConfigurations_toppager', {
-                edit   : false,
-                add    : false,
-                del    : false,
-                search : false,
-                refresh: false
-            })
-        /**
-         * Create New button
-         */
-            .navButtonAdd('#hardwareConfigurations_toppager', {
-                caption      : "Create New",
-                buttonicon   : "ui-icon-plus",
-                onClickButton: function ()
-                {
-                    $hardwareConfigurationsForm.load(deviceModalInstance.urls.reloadHardwareConfigForm,
-                        {
-                            "masterDeviceId": function ()
-                            {
-                                return deviceModalInstance.deviceId;
-                            }
-                        },
-                        function ()
-                        {
-                            deviceModalInstance.clearForm("hardwareConfigurationsForm");
-                        }
-                    );
-                    $('#hardwareConfigurationsTitle').html("Add New Configuration");
-                    $("#hardwareConfigurationsModal").modal('show');
-                },
-                position     : "last"
-            })
-        /**
-         * Edit Button
-         */
-            .navButtonAdd('#hardwareConfigurations_toppager', {
-                caption      : "Edit",
-                buttonicon   : "ui-icon-pencil",
-                onClickButton: function ()
-                {
-                    var selectedRow = $hardwareConfigurationsTable.jqGrid('getGridParam', 'selrow');
-                    if (selectedRow)
-                    {
-                        $hardwareConfigurationsForm.load(deviceModalInstance.urls.reloadHardwareConfigForm,
-                            {
-                                "id"            : function ()
-                                {
-                                    return selectedRow;
-                                },
-                                "masterDeviceId": function ()
-                                {
-                                    return deviceModalInstance.deviceId;
-                                }
-                            },
-                            function ()
-                            {
-                                $('#hardwareConfigurationsid').val(selectedRow);
-                            }
-                        );
-                        $('#hardwareConfigurationsTitle').html("Edit Configuration");
-                        $('#hardwareConfigurationsModal').modal('show');
-                    }
-                    else
-                    {
-                        $("#alertMessageModal").modal().show()
-                    }
-                },
-                position     : "last"
-            })
-        /**
-         * Delete Button
-         */
-            .navButtonAdd('#hardwareConfigurations_toppager', {
-                caption      : "Delete",
-                buttonicon   : "ui-icon-trash",
-                onClickButton: function ()
-                {
-                    var selectedRow = $hardwareConfigurationsTable.jqGrid('getGridParam', 'selrow');
-                    if (selectedRow)
-                    {
-                        $('#deleteId').val(selectedRow);
-                        $('#deleteFormName').val('hardwareConfigurations');
-                        $('#deleteModal').modal('show');
-                    }
-                    else
-                    {
-                        $("#alertMessageModal").modal().show()
-                    }
-                },
-                position     : "last"
+        require([
+            'app/legacy/hardware-library/manage-devices/TonerForm'
+        ], function (TonerForm)
+        {
+            var tonerForm = new TonerForm({
+                "tonerId"      : tonerId
             });
+
+            $(tonerForm).on('toner-form.saved', function (event, tonerId)
+            {
+                deviceModalInstance.updateSupplies();
+            });
+
+            tonerForm.show();
+        });
     };
 
+    DeviceModal.prototype.editDevice = function(deviceId) {
+
+        var deviceModalInstance = this;
+        var isAllowed = deviceModalInstance.isAllowed;
+
+        deviceModalInstance.$modal.modal('hide');
+        window.setTimeout(function() {
+            var newForm = new DeviceModal({
+                isAllowed    : isAllowed,
+                deviceId      : deviceId
+            });
+            newForm.show();
+        }, 150);
+    };
 
     return DeviceModal;
 });
 
-function uploadDone (e, result) {
-    var filename = result._response.result.filename;
-    $('#imageDiv').html('<a href="<?= IMG_CDN ?>/img/devices/'+filename+'" target="_blank" class="thumbnail"><img src="<?= IMG_CDN ?>/img/devices/'+filename+'" style="max-width:300px;max-height:300px"></a>');
-}

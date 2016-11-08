@@ -235,17 +235,24 @@ class ManageMasterDevicesService
 
         if ($masterDeviceId)
         {
-            foreach (TonerMapper::getInstance()->fetchTonersAssignedToDevice($masterDeviceId) as $toner)
+            foreach (TonerMapper::getInstance()->fetchOemSupplyIdsForDevice($masterDeviceId) as $toner_id)
             {
-                $currentToners[(int)$toner->id] = $toner;
+                $toner = TonerMapper::getInstance()->base_find($toner_id);
+                if ($toner && $toner->isMainType()) {
+                    $currentToners[(int)$toner->id] = $toner;
+                }
             }
         }
 
         if ($tonerIds)
         {
-            foreach (TonerMapper::getInstance()->find($tonerIds) as $toner)
+            //foreach (TonerMapper::getInstance()->find($tonerIds) as $toner)
+            foreach ($tonerIds as $toner_id)
             {
-                $newTonerIds[(int)$toner->id] = $toner;
+                $toner = TonerMapper::getInstance()->base_find($toner_id);
+                if ($toner && $toner->isMainType()) {
+                    $newTonerIds[(int)$toner->id] = $toner;
+                }
             }
 
             // Existing Toners
@@ -322,7 +329,7 @@ class ManageMasterDevicesService
         /**
          * Some devices cannot be assigned certain colors (IE Black devices can only have black toners)
          */
-        foreach ($assignedTonerColors as $assignedTonerColorId => $isAssigned)
+        if ((count($tonerConfigurationColors)==1) && (current($tonerConfigurationColors)==1)) foreach ($assignedTonerColors as $assignedTonerColorId => $isAssigned)
         {
             if ($isAssigned && !in_array($assignedTonerColorId, $tonerConfigurationColors))
             {
@@ -1202,6 +1209,7 @@ class ManageMasterDevicesService
 
         $deviceTonerMapper = DeviceTonerMapper::getInstance();
 
+        /**
         $toners         = [];
         $affectedToners = [];
 
@@ -1224,14 +1232,15 @@ class ManageMasterDevicesService
                 }
             }
         }
+        **/
 
         $deviceTonerModel                   = new DeviceTonerModel();
         $deviceTonerModel->master_device_id = $masterDeviceId;
         $deviceTonerModel->isSystemDevice   = $approve;
         $deviceTonerModel->userId           = Zend_Auth::getInstance()->getIdentity()->id;
-        foreach ($affectedToners as $toner)
+        foreach ($tonerIds as $toner_id)
         {
-            $deviceTonerModel->toner_id = $toner->id;
+            $deviceTonerModel->toner_id = $toner_id;
             $deviceTonerMapper->insert($deviceTonerModel);
 
             $sql = "insert into `history` set `userId`={$identity->id}, `masterDeviceId`={$masterDeviceId}, `action`='Assigned Toner: {$toner->sku}'";

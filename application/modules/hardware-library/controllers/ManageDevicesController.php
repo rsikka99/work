@@ -337,12 +337,17 @@ class HardwareLibrary_ManageDevicesController extends Action
         }
         else if ($masterDevice instanceof MasterDeviceModel)
         {
-            $this->view->sku            = $masterDevice->sku;
             $this->view->modelName      = $masterDevice->modelName;
             $this->view->manufacturerId = $masterDevice->manufacturerId;
         }
 
-        $forms = $service->getForms(true, true, true, true, true, true, true, $this->_isAdmin, true);
+        $isSelling = false;
+        if ($masterDevice) {
+            $device = DeviceMapper::getInstance()->find([$masterDevice->id, $this->_identity->dealerId]);
+            $isSelling = $device->isSelling;
+        }
+
+        $forms = $service->getForms(true, true, true, true, true, $isSelling, true, $this->_isAdmin, true);
 
         // If we wanted to use custom data we would need to set the views modelName and manufacturerId to the custom data values
         foreach ($forms as $formName => $form)
@@ -355,31 +360,6 @@ class HardwareLibrary_ManageDevicesController extends Action
         $this->view->tonerColors                 = TonerColorMapper::getInstance()->fetchAll();
         $this->view->masterDevice                = $masterDevice;
         $this->view->isMasterDeviceAdministrator = $this->_isAdmin;
-    }
-
-    public function imageAction() {
-        $masterDeviceId = $this->_getParam('id', false);
-        $masterDevice = MasterDeviceMapper::getInstance()->find($masterDeviceId);
-        if (!$masterDevice) {
-            $this->sendJsonError('not found');
-            return;
-        }
-
-        $isAllowed = ((!$masterDevice instanceof MasterDeviceModel || !$masterDevice->isSystemDevice || $this->_isAdmin) ? true : false);
-        if (!$isAllowed) {
-            $this->sendJsonError('not allowed');
-            return;
-        }
-        $manageMasterDeviceService = new ManageMasterDevicesService($masterDeviceId, $this->_identity->dealerId, $isAllowed, $this->_isAdmin);
-        foreach ($_FILES as $upload) {
-            $manageMasterDeviceService->uploadImage($masterDevice, $upload);
-            MasterDeviceMapper::getInstance()->save($masterDevice);
-        }
-
-        $result = array(
-           'filename'=>$masterDevice->imageFile
-        );
-        $this->sendJson($result);
     }
 
     public function deleteServiceAction() {
@@ -419,7 +399,6 @@ class HardwareLibrary_ManageDevicesController extends Action
             $masterDeviceId = $this->getParam('masterDeviceId', false);
             $modelName      = $this->getParam('modelName', false);
             $manufacturerId = $this->getParam('manufacturerId', false);
-            $sku            = $this->getParam('sku', false);
             $approve        = ($this->getParam('approve', false) === 'true' ? true : false);
 
             $masterDevice = MasterDeviceMapper::getInstance()->find($masterDeviceId);
@@ -454,20 +433,20 @@ class HardwareLibrary_ManageDevicesController extends Action
             /**
              * Validate Toners
              */
-            $tonerIds = explode(',', $this->getParam('tonerIds', ''));
+            $str = $this->getParam('tonerIds', '');
+            if (!empty($str)) {
+                $tonerIds = explode(',', $str);
+                $tonerErrorMessages = $manageMasterDeviceService->validateToners(
+                    $tonerIds,
+                    ($postData['suppliesAndService']['tonerConfigId']) ?: $masterDevice->tonerConfigId,
+                    $manufacturerId,
+                    $masterDeviceId
+                );
 
-            $tonerErrorMessages = $manageMasterDeviceService->validateToners(
-                $tonerIds,
-                ($postData['suppliesAndService']['tonerConfigId']) ?: $masterDevice->tonerConfigId,
-                $manufacturerId,
-                $masterDeviceId
-            );
-
-            if (!$postData['suppliesAndService']['isLeased'] && $tonerErrorMessages !== true)
-            {
-                $suppliesErrors['suppliesAndService']['errorMessages']['assignedTonersMistakes'] = $tonerErrorMessages;
+                if (!$postData['suppliesAndService']['isLeased'] && $tonerErrorMessages !== true) {
+                    $suppliesErrors['suppliesAndService']['errorMessages']['assignedTonersMistakes'] = $tonerErrorMessages;
+                }
             }
-
 
             /**
              * Validate Supplies And Service Form
@@ -559,7 +538,10 @@ class HardwareLibrary_ManageDevicesController extends Action
                                     [
                                         "manufacturerId" => $manufacturerId,
                                         "modelName"      => $modelName,
-                                        "sku"            => $sku
+                                        "sku"            => $this->getParam('sku', ''),
+                                        "UPC"            => $this->getParam('UPC', ''),
+                                        "weight"            => $this->getParam('weight', ''),
+                                        "tech"            => $this->getParam('tech', ''),
                                     ]
                                 ),
                                 $approve
@@ -570,45 +552,39 @@ class HardwareLibrary_ManageDevicesController extends Action
                             $this->sendJsonError("Failed to save Supplies & Service and Device Attributes");
                         }
 
-                        if ($tonerIds)
+                        if (!empty($tonerIds))
                         {
+
                             $tonerIdsToAdd    = [];
                             $finalTonerIdList = [];
                             $tonerIdsToDelete = [];
                             $currentToners    = [];
-                            $newTonerIds      = [];
 
-                            foreach (TonerMapper::getInstance()->find($tonerIds) as $toner)
-                            {
-                                $newTonerIds[(int)$toner->id] = true;
-                            }
-
-                            //foreach (TonerMapper::getInstance()->fetchTonersAssignedToDevice($masterDeviceId) as $toner)
-                            foreach (TonerMapper::getInstance()->fetchTonersAssignedToDeviceForCurrentDealer($masterDeviceId) as $line)
-                            {
-                                $currentToners[$line['id']] = true;
-                            }
+                            #foreach ($db->query("select printer_consumable from oem_printing_device_consumable where printing_device={$masterDeviceId}") as $line) {
+                            #    $currentToners[] = $line['printer_consumable'];
+                            #}
+                            $currentToners = TonerMapper::getInstance()->fetchOemSupplyIdsForDevice($masterDeviceId);
 
                             // Existing Toners
-                            foreach (array_keys($currentToners) as $id)
+                            foreach ($currentToners as $id)
                             {
-                                if (isset($newTonerIds[$id]))
+                                if (in_array($id, $tonerIds))
                                 {
-                                    $finalTonerIdList[$id] = true;
+                                    $finalTonerIdList[] = $id;
                                 }
                                 else
                                 {
-                                    $tonerIdsToDelete[$id] = true;
+                                    $tonerIdsToDelete[] = $id;
                                 }
                             }
 
                             // Toners being added
-                            foreach (array_keys($newTonerIds) as $id)
+                            foreach ($tonerIds as $id)
                             {
-                                if (!isset($finalTonerIdList[$id]))
+                                if (!in_array($id, $finalTonerIdList))
                                 {
-                                    $tonerIdsToAdd[$id]    = true;
-                                    $finalTonerIdList[$id] = true;
+                                    $tonerIdsToAdd[]    = $id;
+                                    $finalTonerIdList[] = $id;
                                 }
                             }
 
@@ -617,7 +593,6 @@ class HardwareLibrary_ManageDevicesController extends Action
                              */
                             if (count($tonerIdsToDelete) > 0)
                             {
-                                $tonerIdsToDelete   = array_keys($tonerIdsToDelete);
                                 $removeTonersResult = $manageMasterDeviceService->removeToners($manageMasterDeviceService->masterDeviceId, $tonerIdsToDelete);
                                 if (!$removeTonersResult)
                                 {
@@ -630,7 +605,6 @@ class HardwareLibrary_ManageDevicesController extends Action
                              */
                             if (count($tonerIdsToAdd) > 0)
                             {
-                                $tonerIdsToAdd   = array_keys($tonerIdsToAdd);
                                 $addTonersResult = $manageMasterDeviceService->addToners($manageMasterDeviceService->masterDeviceId, $tonerIdsToAdd, $approve);
                                 if (!$addTonersResult)
                                 {
@@ -1128,18 +1102,16 @@ class HardwareLibrary_ManageDevicesController extends Action
         $result = $db->query("
           select base_product.id, base_product.sku, manufacturers.displayname as mfg, base_product.name, dealer_sku.cost, pp.price as supplier_cost
                     from base_product
-                    join base_sku using (id)
                     join dealer_sku_addon on base_product.id = dealer_sku_addon.addOnId
                     join manufacturers on base_product.manufacturerId=manufacturers.id
                     left join dealer_sku on dealer_sku.skuId=base_product.id and dealer_sku.dealerId={$dealerId}
                     left join supplier_product_price pp on base_product.id=pp.baseProductId and pp.dealerId={$dealerId} and pp.price=(select min(spp.price) from supplier_product_price spp where spp.baseProductId=pp.baseProductId and spp.dealerId={$dealerId})
                     where dealer_sku_addon.baseProductId={$baseProductId}
                     group by base_product.id
-
         ")->fetchAll();
 
         foreach ($result as $i=>$line) {
-            $result[$i]['cost'] = '$'. ($result[$i]['cost']>0 ? $result[$i]['cost'] : number_format($result[$i]['supplier_cost'],2));
+            $result[$i]['cost'] = '$'. ($result[$i]['cost']>0 ? number_format($result[$i]['cost'],2) : number_format($result[$i]['supplier_cost'],2));
         }
         return $result;
     }
@@ -1160,6 +1132,202 @@ class HardwareLibrary_ManageDevicesController extends Action
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->query("replace into dealer_sku_addon set baseProductId={$baseProductId}, addOnId={$addOnId}, dealerId={$dealerId}");
         $this->sendJson($this->listAddons($db, $dealerId, $baseProductId));
+    }
+
+    public function loadAddonsAction() {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $dealerId = \MPSToolbox\Entities\DealerEntity::getDealerId();
+        $baseProductId = intval($this->getParam('masterDeviceId'));
+        $this->sendJson($this->listAddons($db, $dealerId, $baseProductId));
+    }
+
+    public function searchSupplyAction() {
+        $result = ['results'=>[]];
+        $mfg = intval($this->getParam('mfg'));
+        $q = trim(strip_tags($this->getParam('q')));
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $st = $db->prepare('
+          select base_product.id, sku, `type`, pageYield, mlYield, toner_colors.name as color
+          from base_product
+            join base_printer_consumable using(id)
+            left join base_printer_cartridge using(id)
+             left join toner_colors on base_printer_cartridge.colorId=toner_colors.id
+          where sku like ? and manufacturerId=?');
+        $st->execute(["%{$q}%", $mfg]);
+        foreach ($st->fetchAll() as $line) {
+            $yield = '';
+            if ($line['mlYield']) $yield = number_format($line['mlYield']).'ml';
+            if ($line['pageYield']) $yield = number_format($line['pageYield']).' pages';
+
+            $result['results'][] = [
+                'id'=>$line['id'],
+                'text'=>$line['sku'],
+                'type'=>$line['type'],
+                'color'=>ucwords(strtolower($line['color'])),
+                'yield'=>$yield,
+            ];
+        }
+        $this->sendJson($result);
+    }
+
+    public function addonSupplyAction() {
+        $dealerId = \MPSToolbox\Entities\DealerEntity::getDealerId();
+        $addOnId = $this->getParam('id');
+        $deviceId = $this->getParam('deviceId');
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $a = $db->query('select * from dealer_toner_attributes where tonerId=? and dealerId=?', [ $addOnId, $dealerId ])->fetch();
+        if (!$a) {
+            $db->query('replace into dealer_toner_attributes set tonerId=?, dealerId=?', [ $addOnId, $dealerId ]);
+            $a = $db->query('select * from dealer_toner_attributes where tonerId=? and dealerId=?', [ $addOnId, $dealerId ])->fetch();
+        }
+        $db->query('replace into dealer_sku_addon set dealerId=?, baseProductId=?, addOnId=?', [$dealerId, $deviceId, $addOnId]);
+        $sync_result = file_get_contents('http://proxy.mpstoolbox.com/shopify/sync_toner.php?id='.$addOnId.'&dealerId='.$dealerId.'&origin='.$_SERVER['HTTP_HOST']);
+        $sync_result = file_get_contents('http://proxy.mpstoolbox.com/shopify/sync_device.php?id='.$deviceId.'&dealerId='.$dealerId.'&origin='.$_SERVER['HTTP_HOST']);
+        $this->sendJson(['ok'=>true]);
+    }
+
+    public function suppliesAction() {
+        $result = [
+            'supplies'=>[],
+            'main'=>[],
+            'other'=>[],
+            'compatible'=>[],
+        ];
+
+        $mfgId = $this->getParam('mfgId');
+        $supplies = $this->getParam('supplies');
+        $deviceId = intval($this->getParam('deviceId'));
+
+        $dealerId = \MPSToolbox\Legacy\Entities\DealerEntity::getDealerId();
+
+        $device = DeviceMapper::getInstance()->find([$deviceId, $dealerId]);
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+
+        $addons = [];
+        if ($deviceId) {
+            foreach ($db->query("select * from dealer_sku_addon where dealerId={$dealerId} and baseProductId={$deviceId}") as $row) {
+                $addons[$row['addOnId']] = $row['addOnId'];
+            }
+        }
+
+        $select_sql = "select base_product.id, manufacturerId, `type`, toner_colors.name as color, manufacturers.displayname as mfg, sku, pageYield, mlYield, device_list.json as device_json, _view_dist_stock_price_grouped.cost from base_product
+                join base_printer_consumable using(id)
+                left join base_printer_cartridge using(id)
+                left join manufacturers on base_product.manufacturerId=manufacturers.id
+                left join toner_colors on base_printer_cartridge.colorId=toner_colors.id
+                left join device_list on base_product.id=device_list.toner_id
+                left join _view_dist_stock_price_grouped on _view_dist_stock_price_grouped.tonerId=base_product.id and dealerId={$dealerId}
+";
+        if (empty($supplies) && !empty($deviceId)) {
+            $arr = $db->query("
+            {$select_sql}
+            where base_product.id in (select printer_consumable from oem_printing_device_consumable where printing_device={$deviceId})
+            or (
+                base_product.id in (select compatible from compatible_printer_consumable where oem in (select printer_consumable from oem_printing_device_consumable where printing_device={$deviceId}))
+                and base_product.manufacturerId in (select manufacturerId from dealer_toner_vendors where dealerId={$dealerId})
+            )
+            ");
+        } else if (!empty($supplies)) {
+            $supplies = implode(',', $supplies);
+            $sql = "
+            {$select_sql}
+            where base_product.id in ({$supplies})
+            or (
+                base_product.id in (select compatible from compatible_printer_consumable where oem in ({$supplies}))
+                and base_product.manufacturerId in (select manufacturerId from dealer_toner_vendors where dealerId={$dealerId})
+            )";
+            $arr =  $db->query($sql);
+        }
+
+        foreach ($arr as $line) {
+
+            $devices='';
+            $is_span=false;
+            foreach (json_decode("[{$line['device_json']}]", true) as $d) {
+                if ($devices) $devices.=', ';
+                if (!$is_span && (strlen(strip_tags($devices))>50)) {
+                    $devices.='<a href="javascript:;" onclick="$(this).hide();$(\'#span-'.$line['id'].'\').show()">...</a><span style="display:none" id="span-'.$line['id'].'">';
+                    $is_span=true;
+                }
+                $devices.='<a href="javascript:;" data-id="'.$d['id'].'" class="edit-device">'.$d['name'].'</a>';
+            }
+            if ($is_span) $devices.='</span>';
+
+            $line['color'] = str_replace([
+                'Black',
+                'Cyan',
+                'Magenta',
+                'Yellow',
+            ],[
+                '<i class="fa fa-fw fa-2x fa-toner-color-black" title="Black"></i>Black',
+                '<i class="fa fa-fw fa-2x fa-toner-color-cyan" title="Cyan"></i>Cyan',
+                '<i class="fa fa-fw fa-2x fa-toner-color-magenta" title="Magenta"></i>Magenta',
+                '<i class="fa fa-fw fa-2x fa-toner-color-yellow" title="Yellow"></i>Yellow',
+            ], ucfirst(strtolower($line['color'])));
+
+            $yield = '';
+            if ($line['mlYield']) $yield = number_format($line['mlYield']).'ml';
+            if ($line['pageYield']) $yield = number_format($line['pageYield']).' pages';
+
+            if ($line['manufacturerId']==$mfgId) {
+                $result['supplies'][] = $line['id'];
+
+                $actions='';
+                if ($this->_isAdmin) {
+                    $actions.='<a href="javascript:;" class="unassign-supply" data-id="'.$line['id'].'">Unassign</a>&nbsp;&nbsp;&nbsp;';
+                    if ($device->isSelling && !isset($addons[$line['id']])) {
+                        $actions.='<a href="javascript:;" class="addon-supply" data-id="'.$line['id'].'">Add to Add-ons</a>';
+                    }
+                }
+
+                switch ($line['type']) {
+                    case 'Inkjet Cartridge':
+                    case 'Laser Cartridge':
+                    case 'Printhead':
+                    case 'Monochrome Toner':
+                    case 'Color Toner':
+                        $result['main'][] = [
+                            $line['color'],
+                            '<a href="javascript:;" class="edit-supply" data-id="'.$line['id'].'">'.$line['sku'].'</a>',
+                            $devices,
+                            $yield,
+                            $line['cost']?'<div class="text-right">$'.number_format($line['cost'],2).'</div>':'<div style="width:100%;text-align:center"><i class="fa fa-fw fa-warning text-danger" title="No cost assigned"></i></div>',
+                            $actions
+                        ];
+                        break;
+                    default:
+                        $result['other'][] = [
+                            $line['type']?$line['type']:'Unknown',
+                            $line['color'],
+                            '<a href="javascript:;" class="edit-supply" data-id="'.$line['id'].'">'.$line['sku'].'</a>',
+                            $devices,
+                            $yield,
+                            $line['cost']?'<div class="text-right">$'.number_format($line['cost'],2).'</div>':'<div style="width:100%;text-align:center"><i class="fa fa-fw fa-warning text-warning" title="No cost assigned"></i></div>',
+                            $actions
+                        ];
+                        break;
+                }
+            } else {
+                $actions='';
+                if ($this->_isAdmin) {
+                    if ($device->isSelling && !isset($addons[$line['id']])) {
+                        $actions.='<a href="javascript:;" class="addon-supply" data-id="'.$line['id'].'">Add to Add-ons</a>';
+                    }
+                }
+                $result['compatible'][] = [
+                    $line['mfg'],
+                    $line['type']?$line['type']:'Unknown',
+                    $line['color'],
+                    '<a href="javascript:;" class="edit-supply" data-id="'.$line['id'].'">'.$line['sku'].'</a>',
+                    $yield,
+                    $line['cost']?'<div class="text-right">$'.number_format($line['cost'],2).'</div>':'<div style="width:100%;text-align:center"><i class="fa fa-fw fa-warning text-warning" title="No cost assigned"></i></div>',
+                    $actions
+                ];
+            }
+        }
+
+        $this->sendJson($result);
     }
 
 }

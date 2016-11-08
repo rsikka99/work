@@ -81,13 +81,15 @@ class TonerMapper extends My_Model_Mapper_Abstract
         $st = $db->prepare('insert into base_printer_consumable set '.implode(',', $sql));
         $st->execute(array_values($consumableArray));
 
-        $cartridgeData = $object->toCartridgeArray();
-        $sql=["`id`={$object->id}"];
-        foreach (array_keys($cartridgeData) as $k) {
-            $sql[] = "`{$k}`=?";
+        if ($productData['base_type']=='printer_cartridge') {
+            $cartridgeData = $object->toCartridgeArray();
+            $sql = ["`id`={$object->id}"];
+            foreach (array_keys($cartridgeData) as $k) {
+                $sql[] = "`{$k}`=?";
+            }
+            $st = $db->prepare('INSERT INTO base_printer_cartridge SET ' . implode(',', $sql));
+            $st->execute(array_values($cartridgeData));
         }
-        $st = $db->prepare('insert into base_printer_cartridge set '.implode(',', $sql));
-        $st->execute(array_values($cartridgeData));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -124,13 +126,18 @@ class TonerMapper extends My_Model_Mapper_Abstract
         $st = $db->prepare('update base_printer_consumable set '.implode(',', $sql)." where `id`={$object->id}");
         $st->execute(array_values($consumableArray));
 
-        $cartridgeData = $object->toCartridgeArray();
-        $sql=[];
-        foreach (array_keys($cartridgeData) as $k) {
-            $sql[] = "`{$k}`=?";
+        if ($productData['base_type']=='printer_cartridge') {
+            $cartridgeData = $object->toCartridgeArray();
+            $sql = [];
+            foreach (array_keys($cartridgeData) as $k) {
+                $sql[] = "`{$k}`=?";
+            }
+            $st = $db->prepare('replace into base_printer_cartridge set ' . implode(',', $sql) . ", `id`={$object->id}");
+            $st->execute(array_values($cartridgeData));
+        } else {
+            $st = $db->prepare("delete from base_printer_cartridge where `id`={$object->id}");
+            $st->execute([]);
         }
-        $st = $db->prepare('update base_printer_cartridge set '.implode(',', $sql)." where `id`={$object->id}");
-        $st->execute(array_values($cartridgeData));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -160,6 +167,22 @@ class TonerMapper extends My_Model_Mapper_Abstract
         }
         $rowsAffected = $st->rowCount();
         return $rowsAffected;
+    }
+
+    public function base_find($id) {
+        $result = $this->getItemFromCache($id);
+        if ($result instanceof TonerModel) return $result;
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $data = $db->query('select * from base_product join base_printer_consumable using(id) left join base_printer_cartridge using(id) where base_product.id='.intval($id))->fetch(\PDO::FETCH_ASSOC);
+        if (empty($data)) return null;
+
+        $data['yield'] = $data['pageYield'];
+        $data['tonerColorId'] = $data['colorId'];
+        $object = new TonerModel($data);
+
+        $this->saveItemToCache($object);
+        return $object;
     }
 
     /**
@@ -207,26 +230,7 @@ class TonerMapper extends My_Model_Mapper_Abstract
         }
         else
         {
-            // Get the item from the cache and return it if we find it.
-            $result = $this->getItemFromCache($ids);
-            if ($result instanceof TonerModel)
-            {
-                return $result;
-            }
-
-            // Assuming we don't have a cached object, lets go get it.
-            $result = $this->getDbTable()->find($ids);
-            if (0 == count($result))
-            {
-                return false;
-            }
-            $row    = $result->current();
-            $object = new TonerModel($row->toArray());
-
-            // Save the object into the cache
-            $this->saveItemToCache($object);
-
-            return $object;
+            return $this->base_find(intval($ids));
         }
     }
 
@@ -476,6 +480,15 @@ WHERE `device_toners`.`master_device_id` = :masterDeviceId
         return $toners;
     }
 
+    public function fetchOemSupplyIdsForDevice($masterDeviceId) {
+        $result = [];
+        $db = $this->getDbTable()->getAdapter();
+        foreach ($db->query("select printer_consumable from oem_printing_device_consumable where printing_device={$masterDeviceId}") as $line) {
+            $result[] = $line['printer_consumable'];
+        }
+        return $result;
+    }
+
     public function fetchTonersAssignedToDeviceForCurrentDealer($masterDeviceId, $justCount=false)
     {
         $db = $this->getDbTable()->getAdapter();
@@ -610,7 +623,7 @@ FROM toners
     toner_colors.name as tonerColor,
     toners.imageFile,
     dl.devices as device_list,
-    dl.json as json_device_list
+    concat('[',dl.json,']') as json_device_list
 FROM toners
     JOIN manufacturers ON manufacturers.id = toners.manufacturerId
     join _view_cheapest_toner_cost on (_view_cheapest_toner_cost.tonerId = toners.id AND _view_cheapest_toner_cost.dealerId = {$dealerId})
@@ -1092,29 +1105,6 @@ select 1+supplierId, baseProductId as tonerId, isStock as stock, price as cost
 
         return $fieldList;
 
-    }
-
-    /**
-     * Gets a Zend_Validate_Db_NoRecordExists to be used in a form
-     *
-     * @param TonerModel $tonerModel
-     *
-     * @return \Zend_Validate_Db_NoRecordExists
-     */
-    public function getDbNoRecordExistsValidator ($manufacturerId, $tonerModel = null)
-    {
-        $noRecordExistsArray          = [];
-        $noRecordExistsArray['table'] = $this->getTableName();
-        $noRecordExistsArray['field'] = $this->col_sku;
-
-        if ($tonerModel)
-        {
-            // Exclude the current toner
-            $whereClause                    = Zend_Db_Table::getDefaultAdapter()->quoteInto("{$this->col_id} != ?", $tonerModel->id);
-            $noRecordExistsArray['exclude'] = Zend_Db_Table::getDefaultAdapter()->quoteInto("{$this->col_id} != ?", $tonerModel->id);
-        }
-
-        return new Zend_Validate_Db_NoRecordExists($noRecordExistsArray);
     }
 
     /**

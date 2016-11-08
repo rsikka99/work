@@ -359,8 +359,3 @@ define([
 
     return SkuModal;
 });
-
-function uploadDone (e, result) {
-    var filename = result._response.result.filename;
-    $('#imageDiv').html('<a href="/img/sku/'+filename+'" target="_blank" class="thumbnail"><img src="/img/sku/'+filename+'" style="max-width:300px;max-height:300px"></a>');
-}
