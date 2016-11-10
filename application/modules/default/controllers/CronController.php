@@ -67,8 +67,10 @@ class Default_CronController extends \Tangent\Controller\Action {
 
         $dealerSuppliers = $service->getDealerSuppliers();
         $requestedDealer = $this->getRequest()->getParam('dealerId');
+        $requestedSupplier = $this->getRequest()->getParam('supplierId');
         foreach ($dealerSuppliers as $dealerSupplier) {
             if ($requestedDealer && ($requestedDealer!=$dealerSupplier['dealerId'])) continue;
+            if ($requestedSupplier && ($requestedSupplier!=$dealerSupplier['supplierId'])) continue;
             $service->updatePrices($dealerSupplier);
         }
 
