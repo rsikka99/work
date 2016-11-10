@@ -1276,9 +1276,9 @@ class HardwareLibrary_ManageDevicesController extends Action
                 $actions='';
                 if ($this->_isAdmin) {
                     $actions.='<a href="javascript:;" class="unassign-supply" data-id="'.$line['id'].'">Unassign</a>&nbsp;&nbsp;&nbsp;';
-                    if ($device->isSelling && !isset($addons[$line['id']])) {
-                        $actions.='<a href="javascript:;" class="addon-supply" data-id="'.$line['id'].'">Add to Add-ons</a>';
-                    }
+                }
+                if ($device->isSelling && !isset($addons[$line['id']])) {
+                    $actions.='<a href="javascript:;" class="addon-supply" data-id="'.$line['id'].'">Add to Add-ons</a>';
                 }
 
                 switch ($line['type']) {
@@ -1310,10 +1310,8 @@ class HardwareLibrary_ManageDevicesController extends Action
                 }
             } else {
                 $actions='';
-                if ($this->_isAdmin) {
-                    if ($device->isSelling && !isset($addons[$line['id']])) {
-                        $actions.='<a href="javascript:;" class="addon-supply" data-id="'.$line['id'].'">Add to Add-ons</a>';
-                    }
+                if ($device->isSelling && !isset($addons[$line['id']])) {
+                    $actions.='<a href="javascript:;" class="addon-supply" data-id="'.$line['id'].'">Add to Add-ons</a>';
                 }
                 $result['compatible'][] = [
                     $line['mfg'],
