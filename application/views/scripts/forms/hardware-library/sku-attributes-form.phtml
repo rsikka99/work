@@ -7,21 +7,30 @@ $properties = $form->getProperties();
 $n = ceil(count($properties)/3);
 
 function outputField($that, $prop, $form) {
+    $el = $form->getElement($prop['name']);
+    if (empty($el)) {
 ?>
-<div class="form-group <?= ($form->getElement($prop['name'])->hasErrors()) ? 'has-error has-feedback' : '' ?>">
-    <?= $that->RenderFormLabel($form->getElement($prop['name']), ['col-md-6']) ?>
+    <div class="form-group has-error has-feedback">
+        Error: <?= json_encode($prop); ?>
+    </div>
+<?php
+        return;
+    }
+?>
+<div class="form-group <?= ($el->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+    <?= $that->RenderFormLabel($el, ['col-md-6']) ?>
 
     <div class="col-md-6">
         <?php
     switch ($prop['type']) {
-        case 'multiCheckbox': echo $that->RenderFormCheckbox($form->getElement($prop['name'])); break;
-        case 'checkbox': echo $that->RenderFormBootstrapSwitch($form->getElement($prop['name']), ['js-yes-no-switch']); break;
-        case 'select': echo $that->RenderFormSelect($form->getElement($prop['name'])); break;
-        case 'date': echo $that->RenderFormDatePicker($form->getElement($prop['name']), ['js-date-picker']); break;
-        default: echo $that->RenderFormText($form->getElement($prop['name'])); break;
+        case 'multiCheckbox': echo $that->RenderFormCheckbox($el); break;
+        case 'checkbox': echo $that->RenderFormBootstrapSwitch($el, ['js-yes-no-switch']); break;
+        case 'select': echo $that->RenderFormSelect($el); break;
+        case 'date': echo $that->RenderFormDatePicker($el, ['js-date-picker']); break;
+        default: echo $that->RenderFormText($el); break;
     }
-    echo $that->RenderFormDescription($form->getElement($prop['name']));
-    echo $that->RenderFormElementErrors($form->getElement($prop['name']));
+    echo $that->RenderFormDescription($el);
+    echo $that->RenderFormElementErrors($el);
 
         ?>
     </div>
