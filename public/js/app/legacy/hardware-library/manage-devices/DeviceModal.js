@@ -133,6 +133,7 @@ define([
 
                 deviceModalInstance.updateSupplies();
                 deviceModalInstance.updateTabs();
+                deviceModalInstance.loadAvailableOptions();
 
                 $modal.find('#search-supply').on('change', function() {
                     deviceModalInstance.supplies.push($modal.find('#search-supply').val());
