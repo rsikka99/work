@@ -204,11 +204,6 @@ class Bootstrap extends Tangent\Bootstrap
         $view->headLink()->prependStylesheet($view->baseUrl(sprintf('css/reports/reports_dealer_%s.css', $dealerId)));
         $view->headLink()->prependStylesheet($view->theme('/css/site/styles.css'));
         $view->headLink()->prependStylesheet($view->baseUrl('/css/site/styles.css'));
-
-        /**
-         * Common.js used for require.js setup
-         */
-        $view->headScript()->prependFile($view->baseUrl('/js/common.js?_='.date('dmY')));
     }
 
     /**
