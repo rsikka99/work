@@ -106,9 +106,6 @@ class TonerService
     public function createToner ($data)
     {
         $tonerMapper = TonerMapper::getInstance();
-
-        $data['yield'] = $data['pageYield'];
-        $data['tonerColorId'] = $data['colorId'];
         $toner       = new TonerModel($data);
 
         if ($this->isMasterHardwareAdministrator)
