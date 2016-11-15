@@ -260,7 +260,7 @@ class Ecommerce_CatalogController extends Action {
         $this->_helper->viewRenderer->setNoRender(true);
         $q = "%{$this->getParam('q')}%";
         $db = Zend_Db_Table::getDefaultAdapter();
-        $st = $db->prepare("select concat(supplierId,';',supplierSku) as id, vpn, description, upc, price from supplier_product join supplier_price using (supplierId, supplierSku) where baseProductId is null and dealerId=? and (vpn like ? or description like ?) group by vpn");
+        $st = $db->prepare("select baseProductId, concat(supplierId,';',supplierSku) as id, vpn, description, upc, price from supplier_product join supplier_price using (supplierId, supplierSku) where dealerId=? and (vpn like ? or description like ?) group by vpn");
         $st->execute([$dealerId, $q, $q]);
         echo json_encode($st->fetchAll());
     }

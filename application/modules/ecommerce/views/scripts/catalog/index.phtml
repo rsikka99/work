@@ -193,6 +193,7 @@
 
     var dealerSkuName         = '<?= My_Brand::$dealerSku; ?>';
     var selectedCategory      = false;
+    var lastSearch = '';
 
     require(['jquery', 'jquery.typewatch'], function ($) {
         require(['bootstrap.treeview'], function ($) {
@@ -202,7 +203,10 @@
         $('#supplier-search').typeWatch({
             callback     : function (value)
             {
-                $('#supplier-search').trigger('change');
+                if (value!=window.lastSearch) {
+                    window.lastSearch = value;
+                    $('#supplier-search').trigger('change');
+                }
             },
             wait         : 750,
             highlight    : true,
@@ -307,12 +311,14 @@
                     if (++count>10) {
                         more++;
                     } else {
+                        var baseProductId = e.baseProductId ? e.baseProductId : 0;
+                        var fromSupplier = baseProductId ? 0 : e.id;
                         tr += '<tr>' +
                         '<td>' + e.vpn + '</td>' +
                         '<td>' + e.description + '</td>' +
                         '<td>' + e.upc + '</td>' +
                         '<td class="text-right">$' + e.price + '</td>' +
-                        '<td><a href="javascript:;" class="btn btn-primary" onclick="$(\'#addFromSupplier\').modal(\'hide\');editSku(0 ,\''+ e.id +'\')">Select</a></td>' +
+                        '<td><a href="javascript:;" class="btn btn-primary" onclick="$(\'#addFromSupplier\').modal(\'hide\');editSku('+baseProductId+','+ fromSupplier +')">Select</a></td>' +
                         '<tr>';
                     }
                 });
