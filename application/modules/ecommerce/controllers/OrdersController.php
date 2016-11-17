@@ -65,9 +65,9 @@ class Ecommerce_OrdersController extends Action {
                     $db = Zend_Db_Table::getDefaultAdapter();
 
                     foreach ($order->line_items as $item) {
-                        $id = $db->query('select tonerId from dealer_toner_attributes where webId='.$item['id'])->fetchColumn(0);
-                        if (!$id) $id = $db->query('select masterDeviceId from devices where webId='.$item['id'])->fetchColumn(0);
-                        if (!$id) $id = $db->query('select skuId from dealer_sku where webId='.$item['id'])->fetchColumn(0);
+                        $id = $db->query('select tonerId from dealer_toner_attributes where webId='.$item['product_id'])->fetchColumn(0);
+                        if (!$id) $id = $db->query('select masterDeviceId from devices where webId='.$item['product_id'])->fetchColumn(0);
+                        if (!$id) $id = $db->query('select skuId from dealer_sku where webId='.$item['product_id'])->fetchColumn(0);
                         if ($id) {
                             $products = $db->query("select vpn, price, isStock, suppliers.name as sname from supplier_product join supplier_price using (supplierId,supplierSku) join suppliers on supplier_product.supplierId=suppliers.id where dealerId={$dealerId} and baseProductId={$id}")->fetchAll();
                         }
@@ -107,7 +107,7 @@ class Ecommerce_OrdersController extends Action {
                             $item['sku'],
                             '$'.$item['price'],
                             $the_product?$the_product['sname']:'',
-                            $the_product?$the_product['vpn']:'('.$item['id'].')',
+                            $the_product?$the_product['vpn']:'('.$item['product_id'].')',
                             $the_product?'$'.$the_product['price']:'',
                         ];
                     }
