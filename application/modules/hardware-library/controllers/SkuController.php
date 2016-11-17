@@ -141,6 +141,17 @@ class HardwareLibrary_SkuController extends Action {
         return $sku;
     }
 
+    public function syncSkuAction() {
+        $id = $this->getParam('id');
+        $dealerId = \MPSToolbox\Entities\DealerEntity::getDealerId();
+        $client = new \GuzzleHttp\Client([]);
+        $response = $client->get('http://proxy.mpstoolbox.com/shopify/sync_sku.php?origin='.$_SERVER['HTTP_HOST'].'&id='.$id.'&dealerId='.$dealerId.'&_='.time());
+
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout->disableLayout();
+        echo $response->getBody()->getContents();
+    }
+
     protected function delete($id) {
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->query("delete from base_product where base_type='sku' and id=".$id);

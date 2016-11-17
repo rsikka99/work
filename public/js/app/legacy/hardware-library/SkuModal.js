@@ -262,6 +262,8 @@ define([
 
                 modalInstance.displayAlert("success", "Successfully updated sku");
 
+                $.post('/hardware-library/sku/sync-sku', {'id':modalInstance.skuId});
+
                 $(window).trigger("skuSaveSuccess", modalInstance.skuId);
             },
             error   : function (xhr)

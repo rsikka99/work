@@ -254,19 +254,12 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
         });
 });
 
-function online_click(that, id, dealerId) {
+function online_click(that, id) {
     $(that).parent().css('background-color','#00ae5a');
     $.get('/api/devices/online', {id:id, online:that.checked}, function () {
         $(that).parent().animate({backgroundColor:'#ffffff'}, function() {
-            sync_shopify(id, dealerId);
+            $.post('/hardware-library/manage-devices/sync-device', {'id':id});
         });
     });
 }
 
-function sync_shopify(id, dealerId) {
-    $('body').append('' +
-        '<img ' +
-        'style="display:none" ' +
-        'src="http://proxy.mpstoolbox.com/shopify/sync_device.php?origin='+window.location.hostname+'&id='+id+'&dealerId='+dealerId+'&_='+$.now()+'">'
-    );
-}

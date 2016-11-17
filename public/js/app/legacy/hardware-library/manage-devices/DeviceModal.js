@@ -340,7 +340,9 @@ define([
                     masterDeviceManagement.trigger("approveSuccess", [deviceModalInstance.deviceId]);
                 }
 
-                $(deviceModalInstance).trigger('DeviceModal.saved', [deviceModalInstance.deviceId])
+                $(deviceModalInstance).trigger('DeviceModal.saved', [deviceModalInstance.deviceId]);
+
+                $.post('/hardware-library/manage-devices/sync-device', {'id':deviceModalInstance.deviceId});
 
                 if (xhr.history) {
                     var str='';

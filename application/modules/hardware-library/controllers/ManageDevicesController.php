@@ -656,6 +656,7 @@ class HardwareLibrary_ManageDevicesController extends Action
                         "message" => "Successfully updated master device",
                         'history' => \MPSToolbox\Legacy\Modules\HardwareLibrary\Forms\DeviceManagement\HistoryForm::getHistory($masterDevice)
                     ]);
+
                 }
                 catch (Exception $e)
                 {
@@ -666,6 +667,17 @@ class HardwareLibrary_ManageDevicesController extends Action
         }
 
         $this->sendJsonError('This method only accepts POST');
+    }
+
+    public function syncDeviceAction() {
+        $id = $this->getParam('id');
+        $dealerId = \MPSToolbox\Entities\DealerEntity::getDealerId();
+        $client = new \GuzzleHttp\Client([]);
+        $response = $client->get('http://proxy.mpstoolbox.com/shopify/sync_device.php?origin='.$_SERVER['HTTP_HOST'].'&id='.$id.'&dealerId='.$dealerId.'&_='.time());
+
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout->disableLayout();
+        echo $response->getBody()->getContents();
     }
 
     /**
