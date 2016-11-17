@@ -44,26 +44,32 @@ class Ecommerce_OrdersController extends Action {
 
                     $result['customer'][] = ['Register date', $order->customer['created_at']];
                     $result['customer'][] = ['Number of orders', $order->customer['orders_count']];
-                    $result['customer'][] = ['First name', $order->customer['first_name']];
-                    $result['customer'][] = ['Last name', $order->customer['last_name']];
-                    $result['customer'][] = ['Company', $order->shipping_address['company']];
+                    $result['customer'][] = ['First name', trim($order->customer['first_name'])];
+                    $result['customer'][] = ['Last name', trim($order->customer['last_name'])];
                     $result['customer'][] = ['Email', "<a href='{$order->customer['email']}'>{$order->customer['email']}</a>"];
-                    $result['customer'][] = ['Phone', $order->shipping_address['phone']];
+                    $result['customer'][] = ['Phone', trim($order->billing_address['phone'])];
+                    $result['customer'][] = ['Billing address', trim($order->billing_address['address1'].', '.$order->billing_address['address2'],', ')];
+                    $result['customer'][] = ['Company', trim($order->billing_address['company'])];
+                    $result['customer'][] = ['City', trim($order->billing_address['city'])];
+                    $result['customer'][] = ['Region', trim($order->billing_address['province'])];
+                    $result['customer'][] = ['Postal code', trim($order->billing_address['zip'])];
+                    $result['customer'][] = ['Country', trim($order->billing_address['country'])];
                     $result['customer'][] = ['&nbsp;','&nbsp;'];
                     $result['customer'][] = ['Shipping address', trim($order->shipping_address['address1'].', '.$order->shipping_address['address2'],', ')];
-                    $result['customer'][] = ['City', $order->shipping_address['city']];
-                    $result['customer'][] = ['Region', $order->shipping_address['province']];
-                    $result['customer'][] = ['Country', $order->shipping_address['country']];
-                    $result['customer'][] = ['Postal code', $order->shipping_address['zip']];
+                    $result['customer'][] = ['Company', trim($order->shipping_address['company'])];
+                    $result['customer'][] = ['City', trim($order->shipping_address['city'])];
+                    $result['customer'][] = ['Region', trim($order->shipping_address['province'])];
+                    $result['customer'][] = ['Postal code', trim($order->shipping_address['zip'])];
+                    $result['customer'][] = ['Country', trim($order->shipping_address['country'])];
 
                     $db = Zend_Db_Table::getDefaultAdapter();
 
                     foreach ($order->line_items as $item) {
                         $id = $db->query('select tonerId from dealer_toner_attributes where webId='.$item['id'])->fetchColumn(0);
                         if (!$id) $id = $db->query('select masterDeviceId from devices where webId='.$item['id'])->fetchColumn(0);
-                        if (!$id) $id = $db->query('select id from base_product join dealer_sku on base_product.id=dealer_sku.skuId where webId='.$item['id'])->fetchColumn(0);
+                        if (!$id) $id = $db->query('select skuId from dealer_sku where webId='.$item['id'])->fetchColumn(0);
                         if ($id) {
-                            $products = $db->query("select vpn, price, suppliers.name as sname from supplier_product join supplier_price using (supplierId,supplierSku) join suppliers on supplier_product.supplierId=suppliers.id where dealerId={$dealerId} and baseProductId={$id}")->fetchAll();
+                            $products = $db->query("select vpn, price, isStock, suppliers.name as sname from supplier_product join supplier_price using (supplierId,supplierSku) join suppliers on supplier_product.supplierId=suppliers.id where dealerId={$dealerId} and baseProductId={$id}")->fetchAll();
                         }
 
                         $the_product = null;
@@ -79,6 +85,13 @@ class Ecommerce_OrdersController extends Action {
 
                             if (count($in_stock) == 1) {
                                 $the_product = $in_stock[0];
+                            } else if (count($in_stock) > 1) {
+                                $by_price = [];
+                                foreach ($in_stock as $line) {
+                                    $by_price[$line['price']] = $line;
+                                }
+                                ksort($by_price);
+                                $the_product = $by_price[0];
                             } else {
                                 $by_price = [];
                                 foreach ($products as $line) {
@@ -94,7 +107,7 @@ class Ecommerce_OrdersController extends Action {
                             $item['sku'],
                             '$'.$item['price'],
                             $the_product?$the_product['sname']:'',
-                            $the_product?$the_product['vpn']:'',
+                            $the_product?$the_product['vpn']:'('.$item['id'].')',
                             $the_product?'$'.$the_product['price']:'',
                         ];
                     }
