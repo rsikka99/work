@@ -54,13 +54,15 @@ class Ecommerce_OrdersController extends Action {
                     $result['customer'][] = ['Region', trim($order->billing_address['province'])];
                     $result['customer'][] = ['Postal code', trim($order->billing_address['zip'])];
                     $result['customer'][] = ['Country', trim($order->billing_address['country'])];
-                    $result['customer'][] = ['&nbsp;','&nbsp;'];
-                    $result['customer'][] = ['Shipping address', trim($order->shipping_address['address1'].', '.$order->shipping_address['address2'],', ')];
-                    $result['customer'][] = ['Company', trim($order->shipping_address['company'])];
-                    $result['customer'][] = ['City', trim($order->shipping_address['city'])];
-                    $result['customer'][] = ['Region', trim($order->shipping_address['province'])];
-                    $result['customer'][] = ['Postal code', trim($order->shipping_address['zip'])];
-                    $result['customer'][] = ['Country', trim($order->shipping_address['country'])];
+                    if ($order->shipping_address['address1']) {
+                        $result['customer'][] = ['&nbsp;', '&nbsp;'];
+                        $result['customer'][] = ['Shipping address', trim($order->shipping_address['address1'] . ', ' . $order->shipping_address['address2'], ', ')];
+                        $result['customer'][] = ['Company', trim($order->shipping_address['company'])];
+                        $result['customer'][] = ['City', trim($order->shipping_address['city'])];
+                        $result['customer'][] = ['Region', trim($order->shipping_address['province'])];
+                        $result['customer'][] = ['Postal code', trim($order->shipping_address['zip'])];
+                        $result['customer'][] = ['Country', trim($order->shipping_address['country'])];
+                    }
 
                     $db = Zend_Db_Table::getDefaultAdapter();
 
