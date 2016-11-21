@@ -101,7 +101,7 @@ class RmsUpdateService {
                     unset($client);
 
                     echo "converting xls to csv...\n";
-                    exec('xlsx2csv '.$xls_filename.' '.$csv_filename);
+                    exec('/usr/local/bin/xlsx2csv '.$xls_filename.' '.$csv_filename);
                 }
                 if (file_exists($csv_filename) && (filesize($csv_filename)>0)) {
                     $this->updateFmauditCsv($dealer->id, $csv_filename);
