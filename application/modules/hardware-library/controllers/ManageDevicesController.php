@@ -671,6 +671,7 @@ class HardwareLibrary_ManageDevicesController extends Action
 
     public function syncDeviceAction() {
         $id = $this->getParam('id');
+        /**/
         $dealerId = \MPSToolbox\Entities\DealerEntity::getDealerId();
         $client = new \GuzzleHttp\Client([]);
         $response = $client->get('http://proxy.mpstoolbox.com/shopify/sync_device.php?origin='.$_SERVER['HTTP_HOST'].'&id='.$id.'&dealerId='.$dealerId.'&_='.time());
@@ -678,6 +679,14 @@ class HardwareLibrary_ManageDevicesController extends Action
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_helper->layout->disableLayout();
         echo $response->getBody()->getContents();
+        /**
+        $settings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings();
+        $shop = $settings->shopSettings->shopifyName;
+        if ($shop) {
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $db->query('REPLACE INTO sync_queue SET `type`=?, id=?, shop=?', ['device', $id, $shop]);
+        }
+        **/
     }
 
     /**

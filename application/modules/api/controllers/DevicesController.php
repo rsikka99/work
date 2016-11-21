@@ -89,7 +89,9 @@ class Api_DevicesController extends Action
         $filterCanSell     = ($this->_getParam('filterCanSell', null) == 'true') ? true : false;
         $filterPriced     = ($this->_getParam('filterPriced', null) == 'true') ? true : false;
         $filterUnapproved  = ($this->_getParam('filterUnapproved', null) == 'true') ? true : false;
-        $filterIncomplete  = ($this->_getParam('filterIncomplete', null) == 'true') ? true : false;
+        $filterIncomplete1  = ($this->_getParam('filterIncomplete1', null) == 'true') ? true : false;
+        $filterIncomplete2  = ($this->_getParam('filterIncomplete2', null) == 'true') ? true : false;
+        $filterIncomplete3  = ($this->_getParam('filterIncomplete3', null) == 'true') ? true : false;
         $filterSearchIndex = $this->_getParam('filterSearchIndex', null);
         $filterSearchValue = $this->_getParam('filterSearchValue', null);
 
@@ -124,17 +126,20 @@ class Api_DevicesController extends Action
                 select masterDeviceId from devices where dealerId={$dealerId} and sellPrice>0
             "));
         }
-        if ($filterIncomplete)
-        {
+        if ($filterIncomplete1) {
             $dataAdapter->addFilter(new \Tangent\Grid\Filter\NotIn('master_devices.id',
-                'select master_device_id
-  from device_toners dt
-    join master_devices msub on dt.master_device_id=msub.id
-    join toners t on dt.toner_id=t.id and t.manufacturerId = msub.manufacturerId'
+                'SELECT master_device_id
+  FROM device_toners dt
+    JOIN master_devices msub ON dt.master_device_id=msub.id
+    JOIN toners t ON dt.toner_id=t.id AND t.manufacturerId = msub.manufacturerId'
             ));
-            $dataAdapter->addFilter(new \Tangent\Grid\Filter\In('master_devices.id',
-                'select id from master_devices where imageFile is null'
+        }
+        if ($filterIncomplete2) {
+            $dataAdapter->addFilter(new \Tangent\Grid\Filter\NotIn('master_devices.id',
+                'SELECT baseProductId FROM cloud_file'
             ));
+        }
+        if ($filterIncomplete3) {
             $dataAdapter->addFilter(new \Tangent\Grid\Filter\In('master_devices.id',
                 'select id from master_devices where isA3=0 and isAccessCard=0 and isADF=0 and isBinding=0 and isCapableOfReportingTonerLevels=0 and isDuplex=0 and isFax=0 and isPIN=0 and isSmartphone=0 and isStapling=0 and isTouchscreen=0 and isUSB=0 and isWalkup=0 and isWired=0 and isWireless=0'
             ));

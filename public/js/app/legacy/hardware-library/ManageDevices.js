@@ -10,7 +10,9 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
     var $canSellCheckbox = $("#can-sell");
     var $pricedCheckbox = $("#priced");
     var $unapprovedCheckbox = $("#unapproved");
-    var $incompleteCheckbox = $("#incomplete");
+    var $incomplete1Checkbox = $("#incomplete1");
+    var $incomplete2Checkbox = $("#incomplete2");
+    var $incomplete3Checkbox = $("#incomplete3");
     var $searchColumnDropdown = $("#filter-index");
     var $searchTextInput = $("#filter-value");
 
@@ -156,9 +158,19 @@ require(['jquery', 'jqgrid', 'bootstrap.modal.manager'], function ($)
                 return ($unapprovedCheckbox.length > 0 && $unapprovedCheckbox[0].checked) ? 'true' : 'false';
 
             },
-            filterIncomplete : function ()
+            filterIncomplete1 : function ()
             {
-                return ($incompleteCheckbox.length > 0 && $incompleteCheckbox[0].checked) ? 'true' : 'false';
+                return ($incomplete1Checkbox.length > 0 && $incomplete1Checkbox[0].checked) ? 'true' : 'false';
+
+            },
+            filterIncomplete2 : function ()
+            {
+                return ($incomplete2Checkbox.length > 0 && $incomplete2Checkbox[0].checked) ? 'true' : 'false';
+
+            },
+            filterIncomplete3 : function ()
+            {
+                return ($incomplete3Checkbox.length > 0 && $incomplete3Checkbox[0].checked) ? 'true' : 'false';
 
             },
             filterSearchIndex: function ()
