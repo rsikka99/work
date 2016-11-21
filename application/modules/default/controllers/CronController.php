@@ -68,18 +68,23 @@ class Default_CronController extends \Tangent\Controller\Action {
         $dealerSuppliers = $service->getDealerSuppliers();
         $requestedDealer = $this->getRequest()->getParam('dealerId');
         $requestedSupplier = $this->getRequest()->getParam('supplierId');
+        $dealers = [];
         foreach ($dealerSuppliers as $dealerSupplier) {
             if ($requestedDealer && ($requestedDealer!=$dealerSupplier['dealerId'])) continue;
             if ($requestedSupplier && ($requestedSupplier!=$dealerSupplier['supplierId'])) continue;
             $service->updatePrices($dealerSupplier);
+            $dealers[$dealerSupplier['dealerId']] = $dealerSupplier['dealerId'];
         }
 
-        $db = Zend_Db_Table::getDefaultAdapter();
-        $arr = $db->query("
-SELECT dealers.id FROM dealers join `dealer_settings` on dealers.id=dealer_settings.dealerId join shop_settings on dealer_settings.`shopSettingsId`=shop_settings.id where shop_settings.shopifyName<>''
-        ")->fetchAll();
-        foreach ($arr as $line) {
-            file_get_contents('http://proxy.mpstoolbox.com/shopify/dist_update.php?dealerId='.$line['id'].'&origin='.$_SERVER['HTTP_HOST']);
+        if (php_sapi_name() == "cli") {
+            $_SERVER['HTTP_HOST'] = 'cli';
+            if (!file_exists('c:/')) {
+                $_SERVER['HTTP_HOST'] = 'staging.mpstoolbox.com';
+            }
+        }
+
+        foreach ($dealers as $dealerId) {
+            file_get_contents('http://proxy.mpstoolbox.com/shopify/dist_update.php?dealerId='.$dealerId.'&origin='.$_SERVER['HTTP_HOST']);
         }
     }
 
@@ -95,7 +100,9 @@ select master_device_id
     join master_devices msub on dt.master_device_id=msub.id
     join toners t on dt.toner_id=t.id and t.manufacturerId = msub.manufacturerId
 )
-or imageUrl is null
+or m.id not in (
+  select baseProductId from cloud_file
+)
 or (isA3=0 and isAccessCard=0 and isADF=0 and isBinding=0 and isCapableOfReportingTonerLevels=0 and isDuplex=0 and isFax=0 and isPIN=0 and isSmartphone=0 and isStapling=0 and isTouchscreen=0 and isUSB=0 and isWalkup=0 and isWired=0 and isWireless=0)
 group by manufacturerId
 order by fullName')->fetchAll();
