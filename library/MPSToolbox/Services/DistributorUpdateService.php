@@ -252,7 +252,7 @@ _md5=:_md5
                 break;
             }
             case self::SUPPLIER_ACM : {
-                $this->updateAcm($dealerSupplier);
+                //$this->updateAcm($dealerSupplier);
                 break;
             }
             case self::SUPPLIER_DH : {
