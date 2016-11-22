@@ -2349,7 +2349,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                         die ('xxx '.$ex->getMessage());
                     }
 
-                    $skus[$line['INGRAM_MICRO_CATEGORY']][$manufacturerId][$vpn] = $line['INGRAM_PART_NUMBER'];
+                    $skus[$manufacturerId][$vpn] = $line['INGRAM_PART_NUMBER'];
 
                     unset($this->remaining_product[$line['INGRAM_PART_NUMBER']]);
                     break;
@@ -2362,41 +2362,20 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
         $this->deleteRemainingProducts($dealerSupplier['supplierId'], $dealerSupplier['dealerId']);
 
-        $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, weight, UPC from base_product join base_printer_consumable using (id)");
+        $cursor = $db->query("select id, manufacturerId, sku, weight, UPC from base_product");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
             $manufacturerId = $line['manufacturerId'];
             $sku = $line['sku'];
             if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
                 $sku = $match[1];
             }
-            if (isset($skus['1010'][$manufacturerId][$sku])) {
-                $supplierSku = $skus['1010'][$manufacturerId][$sku];
+            if (isset($skus[$manufacturerId][$sku])) {
+                $supplierSku = $skus[$manufacturerId][$sku];
                 //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
                 $this->base_product_statement->execute([$line['id'], $supplierSku]);
                 if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
                     //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
                     $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
-                }
-            }
-        }
-        $cursor->closeCursor();
-
-        $cursor = $db->query("select * from base_product where base_type='printer'");
-        while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
-            $manufacturerId = $line['manufacturerId'];
-            $sku = $line['sku'];
-            if (empty($sku)) continue;
-
-            if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
-                $sku = $match[1];
-            }
-            foreach (['0701', '0733'] as $catId) {
-                if (isset($skus[$catId][$manufacturerId][$sku])) {
-                    $supplierSku = $skus[$catId][$manufacturerId][$sku];
-                    $this->base_product_statement->execute([$line['id'], $supplierSku]);
-                    if (empty($line['sku']) || empty($line['weight']) || empty($line['upc'])) {
-                        $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
-                    }
                 }
             }
         }
