@@ -38,7 +38,7 @@ class SkuDistributorsForm extends \My_Form_Form {
                 'name'=>$line['supplier_name'],
                 'sku'=>$line['supplierSku'],
                 'price'=>$line['price'],
-                'stock'=>$line['isStock'],
+                'stock'=>$line['isStock']?'<span style="color:#00572d">Yes</span>':'<span style="color:#880000">No</span>',
             ];
         }
         #--
