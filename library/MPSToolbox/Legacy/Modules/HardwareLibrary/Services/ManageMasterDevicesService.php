@@ -453,16 +453,23 @@ class ManageMasterDevicesService
                         $i->addImage($masterDevice->id, $validatedData['imageUrl'], ImageService::LOCAL_DEVICES_DIR, ImageService::TAG_DEVICE);
                     }
 
+                    #--
+                    if (!empty($validatedData['sku'])) {
+                        $db = \Zend_Db_Table::getDefaultAdapter();
+                        $st = $db->prepare('UPDATE supplier_product SET baseProductId=? WHERE manufacturerId=? AND vpn=?');
+                        $st->execute([$masterDevice->id, $validatedData['manufacturerId'], $validatedData['sku']]);
+                        if (empty($validatedData['UPC'])) {
+                            $validatedData['UPC'] = $db->query("select upc from supplier_product where baseProductId=? and upc<>'' and upc is not null", [$masterDevice->id])->fetchColumn(0);
+                        }
+                        if (empty($validatedData['weight']) || ($validatedData['weight']==0)) {
+                            $validatedData['weight'] = $db->query("select weight from supplier_product where baseProductId=? and weight<>'0.000' and weight is not null", [$masterDevice->id])->fetchColumn(0);
+                        }
+                    }
+                    #--
+
                     $masterDevice->populate($validatedData);
                     $masterDevice->recalculateMaximumRecommendedMonthlyPageVolume();
                     $masterDeviceMapper->save($masterDevice);
-
-                    #--
-                    if (!empty($validatedData['sku'])) {
-                        $st = \Zend_Db_Table::getDefaultAdapter()->prepare('UPDATE supplier_product SET baseProductId=? WHERE manufacturerId=? AND vpn=?');
-                        $st->execute([$this->masterDeviceId, $validatedData['manufacturerId'], $validatedData['sku']]);
-                    }
-                    #--
                 }
             }
 
