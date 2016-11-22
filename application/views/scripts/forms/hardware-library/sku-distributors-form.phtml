@@ -9,7 +9,6 @@ if (!$form->getView()->skuId) {
     return;
 }
 $distributors = SkuDistributorsForm::getDistributors($form->getView()->skuId);
-$services = []; //SkuDistributorsForm::getServices($form->getView()->skuId);
 
 ?>
 <div class="row">
@@ -45,85 +44,6 @@ $services = []; //SkuDistributorsForm::getServices($form->getView()->skuId);
         </table>
     </div>
 </div>
-<hr>
-<div class="row">
-    <div class="col-md-3">
-        <h5>Service</h5>
-    </div>
-    <div class="col-md-9">
-        <table class="table">
-            <colgroup>
-                <col width="40%" />
-                <col width="20%" />
-                <col width="20%" />
-                <col width="10%" />
-                <col width="10%" />
-            </colgroup>
-            <thead>
-            <tr>
-                <th>Distributor</th>
-                <th>Vendor SKU</th>
-                <th>Distributor SKU</th>
-                <th>Price</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody id="service-tbody">
-            <?php foreach ($services as $line) { ?>
-                <tr>
-                    <td><?= $line['supplier'] ?></td>
-                    <td><?= $line['sku'] ?></td>
-                    <td><?= $line['part_number'] ?></td>
-                    <td><?= $line['price'] ?></td>
-                    <td><a href="javascript:" onclick="deleteService(<?= $line['id'] ?>)">delete</a></td>
-                </tr>
-            <?php } ?>
-            </tbody>
-            <tfoot id="service-tfoot" style="display:none">
-            <tr>
-                <td class="text-right">SKU/VPN: </td>
-                <td><input class="form-control" type="text" id="service-sku"></td>
-                <td colspan="2">
-                    <button type="button" class="btn btn-primary" onclick="addService()">Add</button>
-                    &nbsp;&nbsp;
-                    <a href="javascript:;" onclick="$('#service-tfoot').hide()">cancel</a>
-                </td>
-            </tr>
-            </tfoot>
-        </table>
-        <a href="javascript:;" class="btn btn-default" onclick="$('#service-tfoot').show()">+ Add</a>
-    </div>
-</div>
-<script>
-    function updateServices(response) {
-        var tr = '';
-        $.each(response, function(i,e) {
-            tr += '<tr>';
-            tr += '<td>'+e.supplier+'</td>';
-            tr += '<td>'+e.sku+'</td>';
-            tr += '<td>'+e.part_number+'</td>';
-            tr += '<td>'+e.price+'</td>';
-            tr += '<td><a href="javascript:" onclick="deleteService('+ e.id+')">delete</a></td>';
-            tr += '</tr>';
-        });
-        $('#service-tbody').html(tr);
-    }
-    function deleteService(id) {
-        $.post('<?= str_replace('/load-forms','/delete-service',$_SERVER['REQUEST_URI']) ?>', {id:id, skuId:<?= $form->getView()->skuId ?>}, updateServices, 'json');
-    }
-    function addService() {
-        var supplier = $('#service-supplier').val();
-        var sku = $.trim($('#service-sku').val());
-        if (sku=='') {
-            alert('Enter a SKU');
-            return;
-        }
-        $.post('<?= str_replace('/load-forms','/add-service',$_SERVER['REQUEST_URI']) ?>', {supplier:supplier, sku:sku, skuId:<?= $form->getView()->skuId ?>}, updateServices, 'json');
-        $('#service-supplier').val('');
-        $('#service-sku').val('');
-        $('#service-tfoot').hide();
-    }
-</script>
 
 
 
