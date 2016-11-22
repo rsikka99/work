@@ -59,7 +59,11 @@ class RenderFormEmail extends RenderFormAbstract
                 }
             }
 
-            $html [] = sprintf('<input type="email" name="%1$s" value="%2$s" %3$s>', $element->getName(), $element->getValue(), $serializedAttributes);
+            $html [] = sprintf('<input type="email" name="%1$s" value="%2$s" %3$s>',
+                $element->getName(),
+                htmlentities($element->getValue(), ENT_QUOTES, 'UTF-8'),
+                $serializedAttributes
+            );
 
             if ($hasAddOns)
             {

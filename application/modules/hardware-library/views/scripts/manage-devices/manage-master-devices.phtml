@@ -29,13 +29,13 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
                         <div class="form-group">
                             <label class="control-label col-md-3" for="modelName">Model Name</label>
                             <div class="col-md-9">
-                                <input class="form-control" type="text" id="modelName" value="<?= $this->modelName; ?>" name="modelName" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                                <input class="form-control" type="text" id="modelName" value="<?= htmlentities($this->modelName, ENT_QUOTES, 'UTF-8') ?>" name="modelName" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3" for="modelName">Technology</label>
                             <div class="col-md-9">
-                                <select class="form-control" name="tech" id="tech" onchange="updateMainSupplyHeader()">
+                                <select class="form-control" name="tech" id="tech" onchange="updateMainSupplyHeader()" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
                                     <option value="Other">Other</option>
                                     <option <?= $this->masterDevice && $this->masterDevice->tech=='Laser'?'selected="selected"':'' ?> value="Laser">Laser</option>
                                     <option <?= $this->masterDevice && $this->masterDevice->tech=='Ink'?'selected="selected"':'' ?> value="Ink">Ink</option>
@@ -48,19 +48,19 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
                         <div class="form-group">
                             <label class="control-label col-md-3" for="sku">OEM SKU</label>
                             <div class="col-md-9">
-                                <input class="form-control" type="text" id="sku" value="<?= $this->masterDevice ? $this->masterDevice->sku : ''; ?>" name="sku" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                                <input class="form-control" type="text" id="sku" value="<?= htmlentities($this->masterDevice ? $this->masterDevice->sku : '', ENT_QUOTES, 'UTF-8') ?>" name="sku" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3" for="UPC">UPC</label>
                             <div class="col-md-9">
-                                <input class="form-control" type="text" id="UPC" value="<?= $this->masterDevice ? $this->masterDevice->UPC : ''; ?>" name="UPC" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                                <input class="form-control" type="text" id="UPC" value="<?= htmlentities($this->masterDevice ? $this->masterDevice->UPC : '', ENT_QUOTES, 'UTF-8') ?>" name="UPC" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3" for="weight">Weight (Kg)</label>
                             <div class="col-md-9">
-                                <input class="form-control" type="text" id="weight" value="<?= $this->masterDevice ? $this->masterDevice->weight : ''; ?>" name="weight" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
+                                <input class="form-control" type="text" id="weight" value="<?= htmlentities($this->masterDevice ? $this->masterDevice->weight : '', ENT_QUOTES, 'UTF-8') ?>" name="weight" <?= (!$this->isAllowed ? 'disabled="disabled"' : "") ?>>
                             </div>
                         </div>
 

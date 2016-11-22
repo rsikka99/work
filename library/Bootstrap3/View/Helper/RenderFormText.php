@@ -71,7 +71,7 @@ class RenderFormText extends RenderFormAbstract
             $html [] = sprintf(
                 '<input type="'.$type.'" name="%1$s" value="%2$s" title="%3$s" %4$s id="%5$s">',
                 $element->getName(),
-                $element->getValue(),
+                htmlentities($element->getValue(), ENT_QUOTES, 'UTF-8'),
                 $element->getDescription(),
                 $serializedAttributes,
                 $element->getId()
