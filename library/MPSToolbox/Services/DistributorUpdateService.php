@@ -2249,6 +2249,12 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $reg = '#^'.str_replace('%','.*',strtoupper($line['name'])).'$#i';
             $manufacturers[$reg] = $line['manufacturerId'];
         }
+        foreach ($db->query('select * from manufacturers') as $line) {
+            $reg = '#^'.strtoupper($line['fullname']).'.*$#i';
+            $manufacturers[$reg] = $line['id'];
+            $reg = '#^'.strtoupper($line['displayname']).'.*$#i';
+            $manufacturers[$reg] = $line['id'];
+        }
 
         $columns = [
 'ACTION_INDICATOR', // - A=ADD (New Record); C=CHANGE (Record Changed); D=DELETE (Discontinued)
