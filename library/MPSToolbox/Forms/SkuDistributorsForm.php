@@ -19,7 +19,7 @@ class SkuDistributorsForm extends \My_Form_Form {
         if ($skuId) {
             $db = \Zend_Db_Table::getDefaultAdapter();
             $e = $db->query('select * from dealer_sku where skuId='.intval($skuId).' and dealerId='.intval($dealerId))->fetch();
-            if ($e) {
+            if ($e && ($e['cost']>0)) {
                 $dealer = \MPSToolbox\Legacy\Mappers\DealerMapper::getInstance()->find($dealerId);
                 $distributors[] = [
                     'name' => $dealer->dealerName,
