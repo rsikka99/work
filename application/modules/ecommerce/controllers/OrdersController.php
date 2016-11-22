@@ -93,14 +93,14 @@ class Ecommerce_OrdersController extends Action {
                                     $by_price[$line['price']] = $line;
                                 }
                                 ksort($by_price);
-                                $the_product = $by_price[0];
+                                $the_product = array_shift($by_price);
                             } else {
                                 $by_price = [];
                                 foreach ($products as $line) {
                                     $by_price[$line['price']] = $line;
                                 }
                                 ksort($by_price);
-                                $the_product = $by_price[0];
+                                $the_product = array_shift($by_price);
                             }
                         }
 
