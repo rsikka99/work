@@ -2296,6 +2296,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $line = array_combine($columns, $line);
 
             if (
+                ($line['INGRAM_MICRO_CATEGORY'] != '0001') && // desktop
+                ($line['INGRAM_MICRO_CATEGORY'] != '0303') && // monitor
                 ($line['INGRAM_MICRO_CATEGORY'] != '9045') && // monitor
                 ($line['INGRAM_MICRO_CATEGORY'] != '0011') && // notebook
                 ($line['INGRAM_MICRO_CATEGORY'] != '1221') && // service
