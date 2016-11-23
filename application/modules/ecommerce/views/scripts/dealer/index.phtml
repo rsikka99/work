@@ -44,13 +44,15 @@ if (empty($shopSettings->supplyNotifyMessage3)) $shopSettings->supplyNotifyMessa
                 <table class="table table-hover">
                     <colgroup>
                         <col width="40%">
-                        <col width="40%">
+                        <col width="30%">
+                        <col width="10%">
                         <col width="20%">
                     </colgroup>
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th>Margin (%)</th>
+                            <th>Default</th>
                             <th class="text-right"><a href="javascript:;" onclick="$('#tr-add').show()">add</a></th>
                         </tr>
                     </thead>
@@ -59,6 +61,7 @@ if (empty($shopSettings->supplyNotifyMessage3)) $shopSettings->supplyNotifyMessa
                         <tr>
                             <td><?= $line['name'] ?></td>
                             <td><?= $line['margin'] ?></td>
+                            <td><?= $line['isDefault']?'Default':'' ?></td>
                             <td>
                                 <a href="javascript:;" onclick='editPriceLevel(this, <?= json_encode($line) ?>)'>edit</a>
                                 <?php if (!$line['is_used']) { ?>
@@ -82,6 +85,7 @@ if (empty($shopSettings->supplyNotifyMessage3)) $shopSettings->supplyNotifyMessa
                         var tr = '<tr>';
                         tr+= '<td><input type="hidden" class="form-control" name="price_level_edit[id]" value="'+data.id+'"><input type="text" class="form-control" value="'+data.name+'" name="price_level_edit[name]"></td>';
                         tr+= '<td><input type="number" class="form-control" name="price_level_edit[margin]" value="'+data.margin+'" min="0" max="999" step="0.01"></td>';
+                        tr+= '<td>'+(data.isDefault=='1'?'<input type="hidden" name="price_level_edit[isDefault]" value="1">':'<input type="checkbox" value="1" name="price_level_edit[isDefault]">')+'</td>';
                         tr+= '<td><button class="btn btn-primary" type="submit">Save</button></td>';
                         tr+= '</tr>';
                         $(ahref).parent().parent().replaceWith(tr);

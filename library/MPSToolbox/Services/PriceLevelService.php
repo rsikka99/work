@@ -6,19 +6,23 @@ class PriceLevelService {
 
     public function insert($dealerId, $name, $margin, $isDefault = false) {
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $st = $db->prepare('insert into dealer_price_levels set dealerId=:dealerId, name=:name, margin=:margin');
-        $st->execute(['dealerId'=>$dealerId, 'name'=>$name, 'margin'=>$margin]);
+        $st = $db->prepare('insert into dealer_price_levels set dealerId=:dealerId, name=:name, margin=:margin, isDefault=:isDefault');
+        $st->execute(['dealerId'=>$dealerId, 'name'=>$name, 'margin'=>$margin, 'isDefault'=>$isDefault]);
         $id = $db->lastInsertId();
         if ($isDefault) {
             $db->query('update clients set priceLevelId='.intval($id).' where priceLevelId is null and dealerId='.intval($dealerId));
+            $db->query('update dealer_price_levels set isDeault=0 where dealerId=? and id<>?', [$dealerId, $id]);
         }
         $this->shopifyUpdate($dealerId);
     }
 
-    public function update($dealerId, $id, $name, $margin) {
+    public function update($dealerId, $id, $name, $margin, $isDefault = false) {
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $st = $db->prepare('update dealer_price_levels set `name`=?, margin=? where id=?');
-        $st->execute([$name, $margin, $id]);
+        $st = $db->prepare('update dealer_price_levels set `name`=?, margin=?, isDefault=? where id=?');
+        $st->execute([$name, $margin, $isDefault, $id]);
+        if ($isDefault) {
+            $db->query('update dealer_price_levels set isDefault=0 where dealerId=? and id<>?', [$dealerId, $id]);
+        }
         $this->shopifyUpdate($dealerId);
     }
 
@@ -31,7 +35,7 @@ class PriceLevelService {
 
     public function listByDealer($dealerId) {
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $st = $db->query('select id, name, margin, id IN (SELECT priceLevelId FROM clients) as is_used from dealer_price_levels where dealerId='.intval($dealerId).' order by `margin`');
+        $st = $db->query('select id, name, margin, isDefault, id IN (SELECT priceLevelId FROM clients) as is_used from dealer_price_levels where dealerId='.intval($dealerId).' order by `margin`');
         return $st->fetchAll();
     }
 

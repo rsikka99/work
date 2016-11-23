@@ -21,7 +21,7 @@ class Ecommerce_DealerController extends Action
                     $service->insert($dealerId, $price_level_add['name'], $price_level_add['margin']);
                 }
                 if ($price_level_edit) {
-                    $service->update($dealerId, $price_level_edit['id'], $price_level_edit['name'], $price_level_edit['margin']);
+                    $service->update($dealerId, $price_level_edit['id'], $price_level_edit['name'], $price_level_edit['margin'], isset($price_level_edit['isDefault'])?1:0);
                 }
                 if ($price_level_delete) {
                     $service->delete($dealerId, $price_level_delete);

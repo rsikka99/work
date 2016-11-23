@@ -49,6 +49,13 @@ class ClientMapper extends My_Model_Mapper_Abstract
      */
     public function insert ($object)
     {
+        if ($object->dealerId && !$object->priceLevelId) {
+            $db = \Zend_Db_Table::getDefaultAdapter();
+            $object->priceLevelId = $db->query('select id from dealer_price_levels where dealerId=? and isDefault=1', [$object->dealerId])->fetchColumn(0);
+            if (!$object->priceLevelId) {
+                $object->priceLevelId = $db->query('select id from dealer_price_levels order by margin desc limit 1', [$object->dealerId])->fetchColumn(0);
+            }
+        }
         // Get an array of data to save
         $data = $object->toArray();
 
