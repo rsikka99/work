@@ -38,6 +38,8 @@ class ClientService
      */
     protected $_form;
 
+    protected $clientId;
+
     /**
      * Gets the client form
      *
@@ -49,9 +51,8 @@ class ClientService
     {
         if (!isset($this->_form))
         {
-            $this->_form = new ClientForm($dealerManagement);
+            $this->_form = new ClientForm($dealerManagement, null, $this->clientId);
         }
-
         return $this->_form;
     }
 
@@ -65,7 +66,7 @@ class ClientService
      */
     public function create ($data)
     {
-        $clientId = false;
+        $this->clientId = $clientId = false;
         $data     = $this->validateAndFilterData($data);
         if ($data !== false)
         {
@@ -75,7 +76,7 @@ class ClientService
             {
                 $client            = new ClientModel($data);
                 $clientId          = ClientMapper::getInstance()->insert($client);
-                $data ['clientId'] = $clientId;
+                $this->clientId    =  $data ['clientId'] = $clientId;
                 $contact           = new ContactModel($data);
                 if (!$contact->isEmpty())
                 {
@@ -112,6 +113,7 @@ class ClientService
      */
     public function update ($data, $clientId)
     {
+        $this->clientId = $clientId;
         $success = false;
         $data    = $this->validateAndFilterData($data);
         if ($data !== false)
@@ -210,13 +212,11 @@ class ClientService
     {
         $valid = true;
         $form  = $this->getForm();
-
         if (!$form->isValid($formData))
         {
             $valid = false;
         }
         $validData = $formData;
-
 
         if ($valid)
         {
@@ -233,6 +233,7 @@ class ClientService
      */
     public function populateForm ($clientId)
     {
+        $this->clientId = $clientId;
         $client  = ClientMapper::getInstance()->find($clientId);
         $address = AddressMapper::getInstance()->getAddressByClientId($clientId);
         $contact = ContactMapper::getInstance()->getContactByClientId($clientId);

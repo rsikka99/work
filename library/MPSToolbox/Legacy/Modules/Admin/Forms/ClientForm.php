@@ -2,6 +2,7 @@
 
 namespace MPSToolbox\Legacy\Modules\Admin\Forms;
 
+use MPSToolbox\Entities\DealerEntity;
 use MPSToolbox\Legacy\Mappers\DealerMapper;
 use MPSToolbox\Legacy\Models\Acl\AdminAclModel;
 use MPSToolbox\Legacy\Models\Acl\AppAclModel;
@@ -11,6 +12,32 @@ use Zend_Form;
 use Zend_Validate_Int;
 use Zend_Validate_Regex;
 use Zend_Validate_StringLength;
+
+class ClientEmailValidator implements \Zend_Validate_Interface {
+
+    public $clientId;
+
+    public function __construct($clientId) {
+        $this->clientId = $clientId;
+    }
+
+    private $message = null;
+    public function isValid($value) {
+        $dealerId = DealerEntity::getDealerId();
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $exists = $db->query('select clientId from contacts where email=? and clientId in (select clientId from clients where dealerId=?)', [$value, $dealerId])->fetchColumn(0);
+        if ($exists && (!$this->clientId || ($exists!=$this->clientId))) {
+            $this->message = 'This e-mail address is already registered by one of your other clients.';
+            return false;
+        } else {
+            return true;
+        }
+    }
+    public function getMessages() {
+        $result = $this->message ? ['email'=>$this->message] : null;
+        return $result;
+    }
+}
 
 /**
  * Class ClientForm
@@ -24,14 +51,16 @@ class ClientForm extends \My_Form_Form
      */
     protected $_dealerManagement;
 
+    public $clientId = false;
+
     /**
      * @param bool       $dealerManagement
      * @param null|array $options
      */
-    public function __construct ($dealerManagement = false, $options = null)
+    public function __construct ($dealerManagement = false, $options = null, $clientId = null)
     {
         $this->_dealerManagement = $dealerManagement;
-
+        $this->clientId = $clientId;
         parent::__construct($options);
     }
 
@@ -137,6 +166,11 @@ class ClientForm extends \My_Form_Form
             'label'       => 'E-mail address',
             'placeholder' => '',
             'filters'     => ['StringTrim'],
+            'validators' => [
+                [
+                    new ClientEmailValidator($this->clientId)
+                ]
+            ],
         ]);
 
         $this->addElement('text', 'website', [
