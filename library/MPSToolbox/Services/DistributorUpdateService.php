@@ -1714,6 +1714,15 @@ Dealers: " . implode(', ', $affected_dealers) . "
         echo "1. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
         #----
+        $currency_exchange = 1;
+        $dealer_currency = $db->query('select currency from dealers where id=?', [$dealerSupplier['dealerId']])->fetchColumn(0);
+        if ($dealer_currency!='USD') {
+            echo "dealer currency: {$dealer_currency}\n";
+            $currency_exchange = floatval($db->query('select rate from currency_exchange where currency=?', [$dealer_currency])->fetchColumn(0));
+            echo "dealer currency exchange: {$currency_exchange}\n";
+        }
+
+        #----
         $columns = [
             'Matnr',
             'ManufPartNo',
@@ -1854,7 +1863,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $price_data = [
                 'supplierSku'=>$line['Matnr'],
                 'dealerId'=>$dealerSupplier['dealerId'],
-                'price'=>$line['CustBestPrice'],
+                'price'=>$currency_exchange * $line['CustBestPrice'],
                 'promotion'=>$line['Promotion']=='N'?0:1,
             ];
 
