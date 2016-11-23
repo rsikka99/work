@@ -2298,8 +2298,10 @@ Dealers: " . implode(', ', $affected_dealers) . "
             if (
                 ($line['INGRAM_MICRO_CATEGORY'] != '0001') && // desktop
                 ($line['INGRAM_MICRO_CATEGORY'] != '0303') && // monitor
+                ($line['INGRAM_MICRO_CATEGORY'] != '9920') && // cases
                 ($line['INGRAM_MICRO_CATEGORY'] != '9045') && // monitor
                 ($line['INGRAM_MICRO_CATEGORY'] != '0011') && // notebook
+                ($line['INGRAM_MICRO_CATEGORY'] != '1241') && // service
                 ($line['INGRAM_MICRO_CATEGORY'] != '1221') && // service
                 ($line['INGRAM_MICRO_CATEGORY'] != '1010') && // ink & toner
                 ($line['INGRAM_MICRO_CATEGORY'] != '0701') && // printers
