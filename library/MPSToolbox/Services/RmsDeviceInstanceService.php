@@ -42,7 +42,7 @@ from rms_device_instances di
   join base_printer_cartridge t on dt.printer_consumable=t.id
   left join dealer_toner_attributes a on t.id=a.tonerId and a.dealerId={$dealerId}
   left join (select min(cost) as cost, dist, tonerId, dealerId from _view_dist_stock_price group by tonerId, dealerId) as v1 on v1.tonerId=t.id and v1.dealerId={$dealerId}
-where {$where} and `ignore`=0
+where {$where} and `ignore`=0 and t.colorId in (1,2,3,4)
         ";
         $st = $db->query($sql);
 
