@@ -409,14 +409,21 @@ class ClientService
             if ($assetTag && in_array($assetTag, $ids)) {
                 $client = ClientMapper::getInstance()->findByName($dealerId, $assetTag);
                 if (!$client) {
+                    $client = ClientMapper::getInstance()->fetchByRmsId($dealerId, $assetTag);
+                }
+                if (!$client) {
                     $client = new ClientModel();
                     $client->dealerId = $dealerId;
                     $client->companyName = $assetTag;
+                    $client->deviceGroup = $assetTag;
                     ClientMapper::getInstance()->insert($client);
                     $inserted = true;
                     $result[$client->id] = 'i';
                 } else {
+                    $client->companyName = $assetTag;
+                    $client->deviceGroup = $assetTag;
                     $result[$client->id] = 'u';
+                    ClientMapper::getInstance()->save($client);
                 }
             }
         }

@@ -50,7 +50,7 @@ class Default_CronController extends \Tangent\Controller\Action {
                     echo "updating Lexmark client: {$client['clientId']}<br>\n";
                     $url = parse_url($client['rmsUri']);
                     $lfm = new \MPSToolbox\Api\LFM($url);
-                    $service->updateLfm($client['dealerId'], $lfm, $client['rmsGroup'], $client['companyName']);
+                    $service->updateLfm($client['dealerId'], $lfm, $client['rmsGroup'], $client['deviceGroup']?$client['deviceGroup']:$client['companyName']);
                     break;
                 }
             }
