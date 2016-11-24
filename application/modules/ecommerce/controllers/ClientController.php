@@ -31,6 +31,11 @@ class Ecommerce_ClientController extends Action
                 $client->ecomColorRank = implode(',',$this->getRequest()->getParam('ecomColorRank'));
                 \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->save($client);
                 #--
+                if (!empty($client->webId)) {
+                    $g = new \GuzzleHttp\Client([]);
+                    $g->get('http://proxy.mpstoolbox.com/shopify/sync_customer.php?id='.$client->id.'&dealerId='.$dealerId.'&origin='.$_SERVER['HTTP_HOST']);
+                }
+                #--
                 $this->_flashMessenger->addMessage(["success" => "Your changes are saved"]);
                 $this->redirect('/ecommerce/client');
                 return;

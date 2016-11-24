@@ -204,6 +204,12 @@ class Dealermanagement_ClientController extends Action
             {
                 // Update Client
                 $clientId = $clientService->update($values, $clientId);
+
+                if (!empty($client->webId)) {
+                    $g = new \GuzzleHttp\Client([]);
+                    $g->get('http://proxy.mpstoolbox.com/shopify/sync_customer.php?id='.$client->id.'&dealerId='.$dealerId.'&origin='.$_SERVER['HTTP_HOST']);
+                }
+
             }
             catch (Exception $e)
             {
