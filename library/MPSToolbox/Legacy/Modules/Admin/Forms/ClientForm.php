@@ -26,13 +26,19 @@ class ClientEmailValidator implements \Zend_Validate_Interface {
         $dealerId = DealerEntity::getDealerId();
         $db = \Zend_Db_Table::getDefaultAdapter();
         $exists = $db->query('select clientId from contacts where email=? and clientId in (select clientId from clients where dealerId=?)', [$value, $dealerId])->fetchColumn(0);
-        if ($exists && (!$this->clientId || ($exists!=$this->clientId))) {
-            $this->message = 'This e-mail address is already registered by one of your other clients.';
-            return false;
-        } else {
-            return true;
+        if ($exists) {
+            if (!$this->clientId) {
+                $this->message = 'This e-mail address is already registered by one of your other clients: '.$exists;
+                return false;
+            }
+            if ($exists!=$this->clientId) {
+                $this->message = 'You cannot change the email address to that of another client: '.$exists.' ('.$this->clientId.')';
+                return false;
+            }
         }
+        return true;
     }
+
     public function getMessages() {
         $result = $this->message ? ['email'=>$this->message] : null;
         return $result;
