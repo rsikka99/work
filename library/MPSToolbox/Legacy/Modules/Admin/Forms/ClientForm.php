@@ -25,7 +25,7 @@ class ClientEmailValidator implements \Zend_Validate_Interface {
     public function isValid($value) {
         $dealerId = DealerEntity::getDealerId();
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $exists = $db->query('select clientId from contacts where email=? and clientId in (select clientId from clients where dealerId=?)', [$value, $dealerId])->fetchColumn(0);
+        $exists = $db->query('select clientId from contacts where email=? and clientId in (select id from clients where dealerId=?)', [$value, $dealerId])->fetchColumn(0);
         if ($exists) {
             if (!$this->clientId) {
                 $this->message = 'This e-mail address is already registered by one of your other clients: '.$exists;
