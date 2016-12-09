@@ -234,7 +234,7 @@ class AvailableTonersForm extends \My_Form_Form
          * Dealer Cost
          */
         $this->addElement('text_currency', 'dealerCost', [
-            'label'      => 'Your Cost',
+            'label'      => 'Your MPS Cost',
             'required'   => false,
             'maxlength'  => 255,
             'validators' => [
@@ -250,7 +250,7 @@ class AvailableTonersForm extends \My_Form_Form
          * Dealer sell price
          */
         $this->addElement('text_currency', 'sellPrice', [
-            'label'      => 'Sell Price',
+            'label'      => 'Online Sell Price',
             'required'   => false,
             'maxlength'  => 255,
             'validators' => [

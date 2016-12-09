@@ -175,6 +175,7 @@ class HardwareLibrary_TonerController extends Action
         $form->distributors=[];
         #--
         if ($toner) {
+            /**
             $attr = $toner->getDealerTonerAttribute($dealerId);
             if ($attr->cost) {
                 $form->distributors[] = [
@@ -184,6 +185,7 @@ class HardwareLibrary_TonerController extends Action
                     'stock' => '',
                 ];
             }
+            **/
 
             $i=new \MPSToolbox\Services\ImageService();
             $form->images = $i->getImageUrls($toner->id);
