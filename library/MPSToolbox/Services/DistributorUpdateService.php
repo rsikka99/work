@@ -661,7 +661,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                     }
                 }
                 if (empty($oem_lines)) {
-                    error_log('oem not found for compatible: '.print_r($line,true));
+                    //error_log('oem not found for compatible: '.print_r($line,true));
                     continue;
                 }
 
@@ -752,7 +752,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         }
 
         foreach ($oem_lines as $oem_line) {
-            echo "{$oem_line['id']} > {$base_id} \n";
+            //echo "{$oem_line['id']} > {$base_id} \n";
             $this->compatibleStatements['st4']->execute([$oem_line['id'], $base_id]);
         }
 
@@ -1257,7 +1257,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 }
             }
 
-            //$db, $supplierId,$supplierSku,$oemManufacturer,$oemManufacturerId,$consumableManufacturer,$consumableManufacturerId,$oemSku,$title,$type,$color,$yield,$upc,$imageUrl,$compatible
+            //$db, $supplierId,$supplierSku,$status,$oemManufacturer,$oemManufacturerId,$consumableManufacturer,$consumableManufacturerId,$oemSku,$title,$type,$color,$yield,$upc,$imageUrl,$compatible
             $this->populateSupplierConsumable(
                 $db,
                 self::SUPPLIER_CLOVER,
@@ -1343,97 +1343,113 @@ Dealers: " . implode(', ', $affected_dealers) . "
         ]);
 
         try {
-            /**/
-            $uri = new Uri($base_uri.'/landing.asp?autopage=/Default.asp');
-            $r = $client->get($uri, [ 'allow_redirects' => false]);
-            if ($r->getStatusCode() != 200) {
-                error_log($dealerSupplier['url'] . ' > ' . $r->getStatusCode());
-                return;
-            }
+            if (isset($_GET['test'])) {
+                echo "TEST: Product_Listing.csv\n";
+                $fp = fopen(APPLICATION_BASE_PATH.'/data/cache/Product_Listing.csv','rb');
+            } else {
+                /**/
+                $uri = new Uri($base_uri . '/landing.asp?autopage=/Default.asp');
+                $r = $client->get($uri, ['allow_redirects' => false]);
+                if ($r->getStatusCode() != 200) {
+                    error_log($dealerSupplier['url'] . ' > ' . $r->getStatusCode());
+                    return;
+                }
 
-            echo "landing.asp ok\n";
+                echo "landing.asp ok\n";
 
-            $uri = new Uri($base_uri.'/security_logonScript_siteFront.asp?' . http_build_query([
-                    'action' => 'logon',
-                    'pageredir' => '/default.asp',
-                    'parent_c_id' => '',
-                    'returnpage' => 'landing.asp?'
-                ]));
+                $uri = new Uri($base_uri . '/security_logonScript_siteFront.asp?' . http_build_query([
+                        'action' => 'logon',
+                        'pageredir' => '/default.asp',
+                        'parent_c_id' => '',
+                        'returnpage' => 'landing.asp?'
+                    ]));
 
-            $r = $client->post($uri,
-                array(
-                    'allow_redirects' => false,
-                    'headers' => [
-                        'Referer'=>$base_uri.'/landing.asp?autopage=/Default.asp',
-                    ],
-                    'form_params' => [
+                $r = $client->post($uri,
+                    array(
+                        'allow_redirects' => false,
+                        'headers' => [
+                            'Referer' => $base_uri . '/landing.asp?autopage=/Default.asp',
+                        ],
+                        'form_params' => [
                             'username' => $dealerSupplier['user'],
                             'password' => $dealerSupplier['pass'],
                             'B1' => 'GO!',
                             'logontype' => 'customer',
-                    ]
-                )
-            );
-            if ($r->getStatusCode() != 302) {
-                error_log($dealerSupplier['url'] . '/security_logonScript_siteFront.asp > ' . $r->getStatusCode());
-                return;
+                        ]
+                    )
+                );
+                if ($r->getStatusCode() != 302) {
+                    error_log($dealerSupplier['url'] . '/security_logonScript_siteFront.asp > ' . $r->getStatusCode());
+                    return;
+                }
+
+                echo "security_logonScript_siteFront.asp ok\n";
+
+                $redirect = $r->getHeaderLine('Location');
+                if (strpos($redirect, 'err=1') !== false) {
+                    error_log("LOGIN FAILED");
+                    return;
+                }
+
+                $r = $client->get($redirect, [
+                    'allow_redirects' => false,
+                    'headers' => [
+                    ],
+                ]);
+                if ($r->getStatusCode() != 200) {
+                    error_log($redirect . ' > ' . $r->getStatusCode());
+                    return;
+                }
+
+                echo "{$redirect} ok\n";
+
+                $r = $client->get(str_replace('https', 'http', $base_uri) . '/product_list.asp?' . http_build_query(['downloadasfile' => '1', '' => '']), [
+                    'allow_redirects' => true,
+                    'headers' => [
+                    ],
+                ]);
+                if ($r->getStatusCode() != 200) {
+                    error_log($dealerSupplier['url'] . '/product_list.asp > ' . $r->getStatusCode());
+                    return;
+                }
+
+                if ($r->getHeaderLine('Content-Type') != 'application/csv; charset=utf-8; Charset=utf-8') {
+                    error_log($dealerSupplier['url'] . '/product_list.asp > Content-Type!=csv > ' . $r->getHeaderLine('Content-Type'));
+                    return;
+                }
+
+                $str = $r->getBody()->getContents();
+
+                $fp = fopen('php://memory', 'r+');
+                fwrite($fp, $str);
+                rewind($fp);
+
+                echo "processing {$dealerSupplier['url']}/product_list.asp for dealer {$dealerSupplier['dealerId']}\n";
             }
-
-            echo "security_logonScript_siteFront.asp ok\n";
-
-            $redirect = $r->getHeaderLine('Location');
-            if (strpos($redirect, 'err=1')!==false) {
-                error_log("LOGIN FAILED");
-                return;
-            }
-
-            $r = $client->get($redirect, [
-                'allow_redirects' => false,
-                'headers' => [
-                ],
-            ]);
-            if ($r->getStatusCode() != 200) {
-                error_log($redirect. ' > ' . $r->getStatusCode());
-                return;
-            }
-
-            echo "{$redirect} ok\n";
-
-            $r = $client->get(str_replace('https','http',$base_uri).'/product_list.asp?' . http_build_query(['downloadasfile' => '1', '' => '']), [
-                'allow_redirects' => true,
-                'headers' => [
-                ],
-            ]);
-            if ($r->getStatusCode() != 200) {
-                error_log($dealerSupplier['url'] . '/product_list.asp > ' . $r->getStatusCode());
-                return;
-            }
-
-            if ($r->getHeaderLine('Content-Type')!='application/csv; charset=utf-8; Charset=utf-8') {
-                error_log($dealerSupplier['url'] . '/product_list.asp > Content-Type!=csv > ' . $r->getHeaderLine('Content-Type'));
-                return;
-            }
-
-            $str = $r->getBody()->getContents();
-
-            $fp = fopen('php://memory', 'r+');
-            fwrite($fp, $str);
-            rewind($fp);
-
-            echo "processing {$dealerSupplier['url']}/product_list.asp for dealer {$dealerSupplier['dealerId']}\n";
-
-            /**/
-            //$fp = fopen(APPLICATION_BASE_PATH.'/data/cache/Product_Listing.csv','rb');
-            /**/
             #===============================================
 
             $db = \Zend_Db_Table::getDefaultAdapter();
             $manufacturers = [];
             foreach ($db->query('select * from manufacturers order by displayname')->fetchAll() as $line) {
-                $n = strtoupper($line['displayname']);
-                $manufacturers[$n] = $line['id'];
+                $n = strtoupper($line['fullname']);
                 if ($n=='KONICA') $manufacturers['KONICA/MINOLTA'] = $line['id'];
                 if ($n=='OKI') $manufacturers['OKIDATA'] = $line['id'];
+                if ($n=='LANIER') $manufacturers['LANIER WORLDWIDE'] = $line['id'];
+                if ($n=='KODAK') $manufacturers['DANKA OFFICE IMAGING (KODAK)'] = $line['id'];
+                if ($n=='PITNEY BOWES') $manufacturers['IMAGISTICS-PITNEY BOWES'] = $line['id'];
+                if ($n=='KONICA MINOLTA') $manufacturers['KM'] = $line['id'];
+                if ($n=='PANSONIC') $manufacturers['PANASONIC'] = $line['id'];
+                $manufacturers[$n] = $line['id'];
+                $n = strtoupper($line['displayname']);
+                if ($n=='HP') $manufacturers['HEWLETT PACKARD'] = $line['id'];
+                if ($n=='KONICA') $manufacturers['KONICA/MINOLTA'] = $line['id'];
+                if ($n=='OKI') $manufacturers['OKIDATA'] = $line['id'];
+                if ($n=='LANIER') $manufacturers['LANIER WORLDWIDE'] = $line['id'];
+                if ($n=='KODAK') $manufacturers['DANKA OFFICE IMAGING (KODAK)'] = $line['id'];
+                if ($n=='PITNEY BOWES') $manufacturers['IMAGISTICS-PITNEY BOWES'] = $line['id'];
+                if ($n=='KONICA MINOLTA') $manufacturers['KM'] = $line['id'];
+                if ($n=='PANSONIC') $manufacturers['PANASONIC'] = $line['id'];
+                $manufacturers[$n] = $line['id'];
             }
 
             $skus = [];
@@ -1448,23 +1464,162 @@ Dealers: " . implode(', ', $affected_dealers) . "
             while($line = fgetcsv($fp)) {
                 $line = array_combine($cols, $line);
                 $line['brand'] = strip_tags($line['brand']);
-                if ($line['category']=='reset-chips') continue;
+                #--
+
+                $imgUrl = 'http://store.genuinesupply.ca/images/'.$line['lg_pic'];
+                $supplierSku = str_replace('-','',trim($line['sku']));
+
+                $comp_mfg_id = null;
+                if (isset($manufacturers[strtoupper($line['brand'])])) $comp_mfg_id = $manufacturers[strtoupper($line['brand'])];
+
+                $dmatch=null;
+                preg_match('#^(\d+)mm x (\d+)mm x (\d+)mm$#',$line['dimension'], $dmatch);
+
+                $product_data = [
+                    'supplierSku'=>$supplierSku,
+                    'manufacturer'=>$line['brand'],
+                    'manufacturerId'=>$comp_mfg_id,
+                    'vpn'=>$line['sku'],
+                    'name'=>$line['ds'],
+                    'msrp'=>$line['msrp'],
+                    'weight'=>0.453592 * floatval($line['weight']),
+                    'length'=>$dmatch?intval($dmatch[1])/1000:null,
+                    'width'=>$dmatch?intval($dmatch[2])/1000:null,
+                    'height'=>$dmatch?intval($dmatch[3])/1000:null,
+                    'upc'=>$line['upc'],
+                    'description'=>$line['ds'],
+                    'package'=>$line['contents'],
+                    'isStock'=>preg_match('#In Stock#', $line['calc_inv_message'])?1:0,
+                    'qty'=>json_encode([]),
+                    'category'=>$line['category'],
+                    'categoryId'=>$line['category'],
+                    'dateCreated'=>null,
+                ];
+
+                $price_data = [
+                    'supplierSku'=>$supplierSku,
+                    'dealerId'=>$dealerSupplier['dealerId'],
+                    'price'=>trim($line['cust_price']),
+                    'promotion'=>0,
+                ];
+
+                try {
+                    $this->populate($product_data, $price_data);
+                } catch (\Exception $ex) {
+                    var_dump($product_data);
+                    die ('xxxx '.$ex->getMessage());
+                }
+                #--
+
+                if ($line['type']=='New') continue;
                 if ($line['type']=='ORIGINAL') continue;
                 if ($line['brand']=='Generic') continue;
 
-                if (empty($line['yield']) || (strtolower($line['yield'])=='n/a')) continue;
-                if (preg_match('#([\d,]+) page#i',$line['yield'], $match)) $line['yield'] = $match[1];
-                $line['yield'] = $this->expandYield($line['yield']); //str_replace(',','',$line['yield']);
-                if (!$line['yield']) continue;
+                switch ($line['category']) {
+                    case 'laser-toner-cartridges' :
+                    case 'laser-drum-units' :
+                    case 'Ink Cartridges' :
+                    case 'drums,laser-drum-units' :
+                    case 'thermal-films' :
+                    case 'drums' :
+                    case 'drums,kits' :
+                    case 'kits' :
+                    case 'fuser-heat-rollers' :
+                    case 'fuser-pressure-rollers' :
+                    case 'feed-delivery-components' :
+                    case 'waste-toner-receptacles' :
+                    case 'copier-toner-cartridges' :
+                    case 'ribbons' :
+                    case 'developer' :
+                    case 'fuser-cleaning-components' :
+                    case 'kits,fuser-cleaning-components' :
+                    case 'kits,fuser-pressure-rollers' :
+                    case 'solid-ink' :
+                    {
+                        break;
+                    }
+                    default: {
+                        echo "ignoring: {$line['category']}\n";
+                        continue;
+                    }
+                }
 
-                $pair = explode(' ', $line['nm'], 2);
-                $brand = strtoupper($pair[0]);
-                if ($brand=='FRANCOTYP') continue;
-                if ($brand=='KM') continue;
-                if ($brand=='KODAK') continue;
-                if ($brand=='MITA') continue;
-                if ($brand=='NEOPOST') continue;
-                $oem_mfg_id = $manufacturers[$brand];
+                $brand = false;
+                $oem_mfg_id = false;
+                foreach ($manufacturers as $mfg_name=>$mfg_id) {
+                    if (preg_match('#^('.preg_quote($mfg_name).')#i', $line['nm'], $brand_match)) {
+                        $brand = $brand_match[1];
+                        $oem_mfg_id = $mfg_id;
+                    }
+                }
+                if (!$oem_mfg_id) {
+                    echo "brand? {$line['nm']}\n";
+                    continue;
+                }
+
+                $status = 'Compatible';
+                if ($line['type']=='New') $status='OEM';
+                if ($line['type']=='Remanufactured') $status='Remanufactured';
+
+                $compatible = [];
+                $str = $line['ds'];
+                if (preg_match('#^(.+)- [\w ]+$#i', $str, $match)) {
+                    $str = trim($match[1]);
+                }
+                //echo "$str\n";
+                $e = explode(',', $str);
+                $printer_brand = $brand;
+                $printer_mfg_id = $oem_mfg_id;
+                foreach ($e as $s) {
+                    $s = trim($s);
+                    $ee = explode(' ', $s);
+                    if (count($ee)==1) {
+                        if (!empty($s)) {
+                            $compatible[] = ['brand'=>$printer_brand, 'manufacturerId'=>$printer_mfg_id, 'model'=>$s];
+                        }
+                    } else {
+                        foreach ($manufacturers as $mfg_name=>$mfg_id) {
+                            if (preg_match('#^('.preg_quote($mfg_name).') (.+)$#i', $s, $brand_match)) {
+                                $printer_brand = $brand_match[1];
+                                $printer_mfg_id = $mfg_id;
+                                $s = trim($brand_match[2]);
+                                break;
+                            }
+                        }
+                        if (!empty($s)) {
+                            $compatible[] = ['brand' => $printer_brand, 'manufacturerId' => $printer_mfg_id, 'model' => $s];
+                        }
+                    }
+                }
+
+                //$db, $supplierId,$supplierSku,$status,$oemManufacturer,$oemManufacturerId,$consumableManufacturer,$consumableManufacturerId,$oemSku,$title,$type,$color,$yield,$upc,$imageUrl,$compatible
+                $this->populateSupplierConsumable(
+                    $db,
+                    self::SUPPLIER_GENUINE,
+                    $supplierSku,
+                    $status,
+                    $brand,
+                    $oem_mfg_id,
+                    $line['brand'],
+                    $comp_mfg_id,
+                    $line['oem'],
+                    $line['ds'],
+                    $line['category'],
+                    $line['colour'],
+                    $line['yield'],
+                    $line['upc'],
+                    $imgUrl,
+                    $compatible
+                );
+
+                #--
+
+                if (!empty($line['yield']) && (strtolower($line['yield'])!='n/a')) {
+                    if (preg_match('#([\d,]+) page#i', $line['yield'], $match)) $line['yield'] = $match[1];
+                    $line['yield'] = $this->expandYield($line['yield']); //str_replace(',','',$line['yield']);
+                } else {
+                    $line['yield'] = 0;
+                }
 
                 $oem_lines=[];
                 foreach (explode(',', $line['oem']) as $n) {
@@ -1483,9 +1638,6 @@ Dealers: " . implode(', ', $affected_dealers) . "
                     continue;
                 }
                 $comp_mfg_id = $manufacturers[strtoupper($line['brand'])];
-
-                $imgUrl = 'http://store.genuinesupply.ca/images/'.$line['lg_pic'];
-                $supplierSku = str_replace('-','',trim($line['sku']));
 
                 $name = '';
                 $weight = $line['weight'];
