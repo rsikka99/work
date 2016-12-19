@@ -27,6 +27,10 @@ class DistributorUpdateService {
     /** @var  \PDOStatement */
     private $sku_statement;
 
+    private $dealerSupplier;
+    private $supplierId;
+    private $dealerId;
+
     private $remaining_product = [];
     private $supplier_product = [];
     private $supplier_price = [];
@@ -122,12 +126,16 @@ class DistributorUpdateService {
         ob_end_flush();
         ob_implicit_flush();
 
+        $this->dealerSupplier = $dealerSupplier;
+        $this->supplierId = $this->dealerSupplier['supplierId'];
+        $this->dealerId = intval($this->dealerSupplier['dealerId']);
+
         $db = \Zend_Db_Table::getDefaultAdapter();
 
         #--
         $this->insert_product = $db->prepare("
                   insert into supplier_product SET
-supplierId={$dealerSupplier['supplierId']},
+supplierId={$this->supplierId},
 supplierSku=:supplierSku,
 manufacturer=:manufacturer,
 manufacturerId=:manufacturerId,
@@ -150,7 +158,7 @@ _md5=:_md5");
 
         $this->insert_price = $db->prepare("
                   insert into supplier_price SET
-supplierId={$dealerSupplier['supplierId']},
+supplierId={$this->supplierId},
 supplierSku=:supplierSku,
 dealerId=:dealerId,
 price=:price,
@@ -177,38 +185,36 @@ category=:category,
 categoryId=:categoryId,
 dateCreated=:dateCreated,
 _md5=:_md5
-                  WHERE supplierSku=:supplierSku and supplierId={$dealerSupplier['supplierId']}");
+                  WHERE supplierSku=:supplierSku and supplierId={$this->supplierId}");
 
         $this->update_price = $db->prepare("
                   UPDATE supplier_price SET
 price=:price,
 promotion=:promotion,
 _md5=:_md5
-                    WHERE dealerId=:dealerId and supplierSku=:supplierSku and supplierId={$dealerSupplier['supplierId']}");
+                    WHERE dealerId=:dealerId and supplierSku=:supplierSku and supplierId={$this->supplierId}");
 
 
-        $this->base_product_statement = $db->prepare('update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?');
-        $this->sku_statement = $db->prepare('update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?');
+        $this->base_product_statement = $db->prepare('update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?');
+        $this->sku_statement = $db->prepare('update base_product set sku=(select vpn from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?');
 
         #--
-        $dealerId = intval($dealerSupplier['dealerId']);
-
         $this->supplier_product = [];
-        $cursor = $db->query('select supplierSku, _md5 from supplier_product where supplierId='.$dealerSupplier['supplierId']);
+        $cursor = $db->query('select supplierSku, _md5 from supplier_product where supplierId='.$this->supplierId);
         while($line = $cursor->fetch()) {
             $this->supplier_product[$line['supplierSku']] = $line['_md5'] ? $line['_md5'] : 'x';
         }
         $cursor->closeCursor();
 
         $this->remaining_product = [];
-        $cursor = $db->query('select supplierSku, _md5 from supplier_product where supplierId='.$dealerSupplier['supplierId'].' and supplierSku in (select supplierSku from supplier_price where dealerId='.$dealerId.')');
+        $cursor = $db->query('select supplierSku, _md5 from supplier_product where supplierId='.$this->supplierId.' and supplierSku in (select supplierSku from supplier_price where dealerId='.$this->dealerId.')');
         while($line = $cursor->fetch()) {
             $this->remaining_product[$line['supplierSku']] = $line['_md5'] ? $line['_md5'] : 'x';
         }
         $cursor->closeCursor();
 
         $this->supplier_price = [];
-        $cursor = $db->query('select supplierSku, _md5 from supplier_price where dealerId='.$dealerId.' and supplierId='.$dealerSupplier['supplierId']);
+        $cursor = $db->query('select supplierSku, _md5 from supplier_price where dealerId='.$this->dealerId.' and supplierId='.$this->supplierId);
         while($line = $cursor->fetch()) {
             $this->supplier_price[$line['supplierSku']] = $line['_md5'] ? $line['_md5'] : 'x';
         }
@@ -217,8 +223,8 @@ _md5=:_md5
         $cursor = null;
         gc_collect_cycles();
 
-        echo "dealer: {$dealerSupplier['dealerId']}\n";
-        echo "supplier: {$dealerSupplier['supplierId']}\n";
+        echo "dealer: {$this->dealerId}\n";
+        echo "supplier: {$this->supplierId}\n";
         echo "remaining_product: ".count($this->remaining_product)."\n";
         echo "supplier_product: ".count($this->supplier_product)."\n";
         echo "supplier_price: ".count($this->supplier_price)."\n";
@@ -235,55 +241,55 @@ _md5=:_md5
             'prices_total'=>0,
         ];
 
-        switch($dealerSupplier['supplierId']) {
+        switch($this->supplierId) {
             case self::SUPPLIER_INGRAM : {
-                $this->updateIngram($dealerSupplier);
+                $this->updateIngram();
                 break;
             }
             case self::SUPPLIER_SYNNEX : {
-                $this->updateSynnex($dealerSupplier);
+                $this->updateSynnex();
                 break;
             }
             case self::SUPPLIER_TECHDATA : {
-                $this->updateTechDataNA($dealerSupplier);
+                $this->updateTechDataNA();
                 break;
             }
             case self::SUPPLIER_GENUINE : {
-                $this->updateGenuine($dealerSupplier);
+                $this->updateGenuine();
                 break;
             }
             case self::SUPPLIER_ACM : {
-                $this->updateAcm($dealerSupplier);
+                $this->updateAcm();
                 break;
             }
             case self::SUPPLIER_DH : {
-                $this->updateDH($dealerSupplier);
+                $this->updateDH();
                 break;
             }
             case self::SUPPLIER_CLOVER : {
-                $this->updateClover($dealerSupplier);
+                $this->updateClover();
                 break;
             }
             case self::SUPPLIER_ARLI : {
-                $this->updateArli($dealerSupplier);
+                $this->updateArli();
                 break;
             }
             case self::SUPPLIER_TECHDATA_SA : {
-                $this->updateTechDataSA($dealerSupplier);
+                $this->updateTechDataSA();
                 break;
             }
         }
         gc_collect_cycles();
 
         if ($this->total_result['products_total']==0) {
-            $this->total_result['products_total'] = $db->query('SELECT count(*) FROM supplier_product WHERE supplierId=' . intval($dealerSupplier['supplierId']))->fetchColumn(0);
-            $this->total_result['prices_total'] = $db->query('SELECT count(*) FROM supplier_price WHERE dealerId=' . intval($dealerId) . ' AND supplierId=' . intval($dealerSupplier['supplierId']))->fetchColumn(0);
+            $this->total_result['products_total'] = $db->query('SELECT count(*) FROM supplier_product WHERE supplierId=' . intval($this->supplierId))->fetchColumn(0);
+            $this->total_result['prices_total'] = $db->query('SELECT count(*) FROM supplier_price WHERE dealerId=' . intval($this->dealerId) . ' AND supplierId=' . intval($this->supplierId))->fetchColumn(0);
         }
 
         $db->query("
           insert into distributor_import_result set
-              `dealerId`={$dealerId},
-              `supplierId`={$dealerSupplier['supplierId']},
+              `dealerId`={$this->dealerId},
+              `supplierId`={$this->supplierId},
               `products_added`={$this->total_result['products_added']},
               `products_deleted`={$this->total_result['products_deleted']},
               `products_updated`={$this->total_result['products_updated']},
@@ -336,19 +342,19 @@ _md5=:_md5
         }
     }
 
-    private function deleteRemainingProducts($supplierId, $dealerId) {
+    private function deleteRemainingProducts() {
         $db = \Zend_Db_Table::getDefaultAdapter();
 
         $online_sku=[];
-        foreach ($db->query('select supplierSku, baseProductId from supplier_product where supplierId='.$supplierId.' and baseProductId in (select masterDeviceId from devices where online=1)') as $online_line) {
+        foreach ($db->query('select supplierSku, baseProductId from supplier_product where supplierId='.$this->supplierId.' and baseProductId in (select masterDeviceId from devices where online=1)') as $online_line) {
             $online_sku[$online_line['supplierSku']] = $online_line['baseProductId'];
         }
-        foreach ($db->query('select supplierSku, baseProductId from supplier_product where supplierId='.$supplierId.' and baseProductId in (select skuId from dealer_sku where online=1)') as $online_line) {
+        foreach ($db->query('select supplierSku, baseProductId from supplier_product where supplierId='.$this->supplierId.' and baseProductId in (select skuId from dealer_sku where online=1)') as $online_line) {
             $online_sku[$online_line['supplierSku']] = $online_line['baseProductId'];
         }
 
-        $st1 = $db->prepare('delete from supplier_product where supplierSku=? and supplierId='.$supplierId);
-        $st2 = $db->prepare('delete from supplier_price where supplierSku=? and dealerId='.$dealerId.' and supplierId='.$supplierId);
+        $st1 = $db->prepare('delete from supplier_product where supplierSku=? and supplierId='.$this->supplierId);
+        $st2 = $db->prepare('delete from supplier_price where supplierSku=? and dealerId='.$this->dealerId.' and supplierId='.$this->supplierId);
         $c = count($this->remaining_product);
         foreach ($this->remaining_product as $supplierSku=>$md5) {
 
@@ -357,8 +363,8 @@ _md5=:_md5
                 $base_product = $db->query('select * from base_product where id='.$baseProductId)->fetch();
                 $base_product_mfg = $db->query('select fullname from manufacturers where id='.intval($base_product['manufacturerId']))->fetchColumn(0);
                 $affected_dealers = [];
-                foreach ($db->query('select dealerName from dealers where id in (select dealerId from dealer_suppliers where supplierId='.$supplierId.') and id in (select dealerId from devices where online=1 and masterDeviceId='.$baseProductId.')') as $dealer_line) $affected_dealers[$dealer_line['dealerName']] = $dealer_line['dealerName'];
-                foreach ($db->query('select dealerName from dealers where id in (select dealerId from dealer_suppliers where supplierId='.$supplierId.') and id in (select dealerId from dealer_sku where online=1 and skuId='.$baseProductId.')') as $dealer_line) $affected_dealers[$dealer_line['dealerName']] = $dealer_line['dealerName'];
+                foreach ($db->query('select dealerName from dealers where id in (select dealerId from dealer_suppliers where supplierId='.$this->supplierId.') and id in (select dealerId from devices where online=1 and masterDeviceId='.$baseProductId.')') as $dealer_line) $affected_dealers[$dealer_line['dealerName']] = $dealer_line['dealerName'];
+                foreach ($db->query('select dealerName from dealers where id in (select dealerId from dealer_suppliers where supplierId='.$this->supplierId.') and id in (select dealerId from dealer_sku where online=1 and skuId='.$baseProductId.')') as $dealer_line) $affected_dealers[$dealer_line['dealerName']] = $dealer_line['dealerName'];
                 if (!empty($affected_dealers)) {
                     $msg = "
 This product has been deleted by a distributor but is currently online:
@@ -382,15 +388,13 @@ Dealers: " . implode(', ', $affected_dealers) . "
         $this->total_result['prices_deleted'] = $c;
     }
 
-    private function updateAcm($dealerSupplier) {
-        $dealerId = intval($dealerSupplier['dealerId']);
-
+    private function updateAcm() {
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $filename = APPLICATION_BASE_PATH . '/data/cache/' . sprintf('acm-%s.txt', $dealerId);
+        $filename = APPLICATION_BASE_PATH . '/data/cache/' . sprintf('acm-%s.txt', $this->dealerId);
         try {
             if (!file_exists($filename) || (filemtime($filename) < strtotime('-6 DAY'))) {
                 $ftp = $this->getFtpClient();
-                $ftp->get($dealerSupplier['url'].'/ACM_2_Customer/ProductList_'.date('Ymd').'.txt', $dealerSupplier['user'], $dealerSupplier['pass'], $filename);
+                $ftp->get($this->dealerSupplier['url'].'/ACM_2_Customer/ProductList_'.date('Ymd').'.txt', $this->dealerSupplier['user'], $this->dealerSupplier['pass'], $filename);
             }
         } catch (\Exception $ex) {
             print_r($ex);
@@ -398,7 +402,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             return false;
         }
 
-        echo "processing {$filename} for dealer {$dealerId}\n";
+        echo "processing {$filename} for dealer {$this->dealerId}\n";
         $fp = fopen($filename, 'rb');
 
         gc_collect_cycles();
@@ -557,7 +561,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
             $price_data = [
                 'supplierSku'=>$supplierSku,
-                'dealerId'=>$dealerId,
+                'dealerId'=>$this->dealerId,
                 'price'=>trim($line['Price']),
                 'promotion'=>null,
             ];
@@ -673,7 +677,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $imgUrl = 'http://www.acmtech.com/Pictures/Pic_Small/'.substr($supplierSku,0,2).'/'.$supplierSku.'.jpg';
                 //continue;
 
-                $this->populateCompatible($db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, null, null, $line['Price'], $pageYield, $oem_lines, $dealerId, $mlYield);
+                $this->populateCompatible($db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, null, null, $line['Price'], $pageYield, $oem_lines, $mlYield);
             }
         }
 
@@ -690,7 +694,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $sku = $match[1];
             }
             if (isset($oem_cartridges[$manufacturerId][$sku])) {
-                //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
+                //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
                 $this->base_product_statement->execute([$line['id'], $oem_cartridges[$manufacturerId][$sku]]);
             }
         }
@@ -703,20 +707,20 @@ Dealers: " . implode(', ', $affected_dealers) . "
         return true;
     }
 
-    private function populateSupplierConsumable(\Zend_Db_Adapter_Abstract $db, $supplierId,$supplierSku,$status,$oemManufacturer,$oemManufacturerId,$consumableManufacturer,$consumableManufacturerId,$oemSku,$title,$type,$color,$yield,$upc,$imageUrl,$compatible) {
+    private function populateSupplierConsumable(\Zend_Db_Adapter_Abstract $db, $supplierSku,$status,$oemManufacturer,$oemManufacturerId,$consumableManufacturer,$consumableManufacturerId,$oemSku,$title,$type,$color,$yield,$upc,$imageUrl,$compatible) {
         if (empty($this->supplierConsumableStatements)) {
             $this->supplierConsumableStatements['st1'] = $db->prepare('replace into supplier_consumable set supplierId=?,supplierSku=?,status=?,oemManufacturer=?,oemManufacturerId=?,consumableManufacturer=?,consumableManufacturerId=?,oemSku=?,title=?,type=?,color=?,yield=?,upc=?,imageUrl=?');
             $this->supplierConsumableStatements['st2a'] = $db->prepare('delete from supplier_consumable_compatible where supplierId=? and supplierSku=?');
             $this->supplierConsumableStatements['st2'] = $db->prepare('replace into supplier_consumable_compatible set supplierId=?,supplierSku=?,brand=?,manufacturerId=?,model=?');
         }
-        $this->supplierConsumableStatements['st1']->execute([$supplierId,$supplierSku,$status,$oemManufacturer,$oemManufacturerId,$consumableManufacturer,$consumableManufacturerId,$oemSku,$title,$type,$color,$yield,$upc,$imageUrl]);
-        $this->supplierConsumableStatements['st2a']->execute([$supplierId,$supplierSku]);
+        $this->supplierConsumableStatements['st1']->execute([$this->supplierId,$supplierSku,$status,$oemManufacturer,$oemManufacturerId,$consumableManufacturer,$consumableManufacturerId,$oemSku,$title,$type,$color,$yield,$upc,$imageUrl]);
+        $this->supplierConsumableStatements['st2a']->execute([$this->supplierId,$supplierSku]);
         foreach ($compatible as $line) {
-            $this->supplierConsumableStatements['st2']->execute([$supplierId,$supplierSku,$line['brand'],$line['manufacturerId'],$line['model']]);
+            $this->supplierConsumableStatements['st2']->execute([$this->supplierId,$supplierSku,$line['brand'],$line['manufacturerId'],$line['model']]);
         }
     }
 
-    private function populateCompatible(\Zend_Db_Adapter_Abstract $db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $pageYield, $oem_lines, $dealerId, $mlYield=null) {
+    private function populateCompatible(\Zend_Db_Adapter_Abstract $db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $pageYield, $oem_lines, $mlYield=null) {
         if (empty($this->compatibleStatements)) {
             $this->compatibleStatements['st1'] = $db->prepare("REPLACE INTO base_product SET userId=1, dateCreated=now(), isSystemProduct=1, imageUrl=?, base_type=?, manufacturerId=?, sku=?, name=?, weight=?, UPC=?");
             $this->compatibleStatements['st1a'] = $db->prepare("update base_product SET imageUrl=?, base_type=?, manufacturerId=?, sku=?, name=?, weight=?, UPC=? where id=?");
@@ -725,6 +729,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $this->compatibleStatements['st3a'] = $db->prepare("delete from base_printer_cartridge where id=?");
             $this->compatibleStatements['st4'] = $db->prepare("REPLACE INTO compatible_printer_consumable SET oem=?, compatible=?");
             $this->compatibleStatements['st5'] = $db->prepare("REPLACE INTO dealer_toner_attributes SET tonerId=?, dealerId=?, cost=?, dealerSku=?");
+            $this->compatibleStatements['st6'] = $db->prepare("update supplier_product set baseProductId=? where supplierId=? and supplierSku=?");
         }
 
         if (!$comp_mfg_id) die('comp_mfg_id?');
@@ -756,20 +761,22 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $this->compatibleStatements['st4']->execute([$oem_line['id'], $base_id]);
         }
 
-        $this->compatibleStatements['st5']->execute([$base_id, $dealerId, $price, $supplierSku]);
+        $this->compatibleStatements['st5']->execute([$base_id, $this->dealerId, $price, $supplierSku]);
+        $this->compatibleStatements['st6']->execute([$base_id, $this->supplierId, $supplierSku]);
+        return $base_id;
     }
 
-    private function updateDH($dealerSupplier) {
+    private function updateDH() {
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $price_txt = APPLICATION_BASE_PATH . '/data/cache/ITEMLIST-'.$dealerSupplier['dealerId'];
+        $price_txt = APPLICATION_BASE_PATH . '/data/cache/ITEMLIST-'.$this->dealerId;
         if (file_exists($price_txt)) {
             unlink($price_txt);
         }
         try {
-            echo "downloading {$dealerSupplier['url']}/ITEMLIST for dealer {$dealerSupplier['dealerId']}\n";
+            echo "downloading {$this->dealerSupplier['url']}/ITEMLIST for dealer {$this->dealerId}\n";
             $ftp = $this->getFtpClient();
-            $parts = parse_url($dealerSupplier['url']);
-            $ftp->ext_get($parts['host'], 'ITEMLIST', $dealerSupplier['user'], $dealerSupplier['pass'], $price_txt);
+            $parts = parse_url($this->dealerSupplier['url']);
+            $ftp->ext_get($parts['host'], 'ITEMLIST', $this->dealerSupplier['user'], $this->dealerSupplier['pass'], $price_txt);
 
             if (!file_exists($price_txt) || (filesize($price_txt)==0)) {
                 error_log('price file not downloaded');
@@ -870,7 +877,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
             $price_data = [
                 'supplierSku'=>$line['D&H Item Number'],
-                'dealerId'=>$dealerSupplier['dealerId'],
+                'dealerId'=>$this->dealerId,
                 'price'=>trim($line['Unit Cost']),
                 'promotion'=>$line['Rebate Flag']=='y'?1:0,
             ];
@@ -889,7 +896,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         gc_collect_cycles();
         echo "2. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
-        $this->deleteRemainingProducts($dealerSupplier['supplierId'], $dealerSupplier['dealerId']);
+        $this->deleteRemainingProducts();
 
         $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, weight, UPC from base_product");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
@@ -900,10 +907,10 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
             if (isset($skus[$manufacturerId][$sku])) {
                 $supplierSku = $skus[$manufacturerId][$sku];
-                //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
+                //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
                 $this->base_product_statement->execute([$line['id'], $supplierSku]);
                 if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
-                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
+                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
                     $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
                 }
             }
@@ -918,17 +925,17 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
     }
 
-    private function updateArli($dealerSupplier) {
+    private function updateArli() {
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $xls_file = APPLICATION_BASE_PATH . '/data/cache/arli-'.$dealerSupplier['dealerId'].'.xlsx';
-        $csv_file = APPLICATION_BASE_PATH . '/data/cache/arli-'.$dealerSupplier['dealerId'].'.csv';
+        $xls_file = APPLICATION_BASE_PATH . '/data/cache/arli-'.$this->dealerId.'.xlsx';
+        $csv_file = APPLICATION_BASE_PATH . '/data/cache/arli-'.$this->dealerId.'.csv';
         if (file_exists($xls_file)) {
             unlink($xls_file);
         }
         if (!file_exists($csv_file) || (filemtime($csv_file)<time()-(60*60*24*6))) try {
-            echo "downloading {$dealerSupplier['url']} for dealer {$dealerSupplier['dealerId']}\n";
+            echo "downloading {$this->dealerSupplier['url']} for dealer {$this->dealerId}\n";
             $ftp = $this->getFtpClient();
-            $ftp->get($dealerSupplier['url'], $dealerSupplier['user'], $dealerSupplier['pass'], $xls_file);
+            $ftp->get($this->dealerSupplier['url'], $this->dealerSupplier['user'], $this->dealerSupplier['pass'], $xls_file);
 
             if (!file_exists($xls_file) || (filesize($xls_file)==0)) {
                 error_log('xls file not downloaded');
@@ -948,7 +955,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             Logger::logException($ex);
             return false;
         }
-        echo "processing {$csv_file} for dealer {$dealerSupplier['dealerId']}\n";
+        echo "processing {$csv_file} for dealer {$this->dealerId}\n";
 
         $manufacturers=[];
         $prefixes=[];
@@ -1009,7 +1016,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
             $price_data = [
                 'supplierSku'=>$line['Item Number'],
-                'dealerId'=>$dealerSupplier['dealerId'],
+                'dealerId'=>$this->dealerId,
                 'price'=>trim($line['Price']),
                 'promotion'=>0,
             ];
@@ -1029,7 +1036,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         gc_collect_cycles();
         echo "2. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
-        $this->deleteRemainingProducts($dealerSupplier['supplierId'], $dealerSupplier['dealerId']);
+        $this->deleteRemainingProducts();
 
         $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, weight, UPC from base_product");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
@@ -1040,10 +1047,10 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
             if (isset($skus[$manufacturerId][$sku])) {
                 $supplierSku = $skus[$manufacturerId][$sku];
-                //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
+                //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
                 $this->base_product_statement->execute([$line['id'], $supplierSku]);
                 if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
-                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
+                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
                     $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
                 }
             }
@@ -1057,15 +1064,15 @@ Dealers: " . implode(', ', $affected_dealers) . "
         return true;
     }
 
-    private function updateClover($dealerSupplier) {
+    private function updateClover() {
 
-        $csv_filename = APPLICATION_BASE_PATH . '/data/cache/'.$dealerSupplier['url'];
+        $csv_filename = APPLICATION_BASE_PATH . '/data/cache/'.$this->dealerSupplier['url'];
         if (!file_exists($csv_filename)) {
             error_log('file not found: '.$csv_filename);
             return;
         }
 
-        echo "processing {$csv_filename} for dealer {$dealerSupplier['dealerId']}\n";
+        echo "processing {$csv_filename} for dealer {$this->dealerId}\n";
 
         $db = \Zend_Db_Table::getDefaultAdapter();
         $manufacturers = [];
@@ -1194,7 +1201,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
             $price_data = [
                 'supplierSku'=>$line['Item #'],
-                'dealerId'=>$dealerSupplier['dealerId'],
+                'dealerId'=>$this->dealerId,
                 'price'=>trim($line['Price']),
                 'promotion'=>0,
             ];
@@ -1257,10 +1264,9 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 }
             }
 
-            //$db, $supplierId,$supplierSku,$status,$oemManufacturer,$oemManufacturerId,$consumableManufacturer,$consumableManufacturerId,$oemSku,$title,$type,$color,$yield,$upc,$imageUrl,$compatible
+            //$db, $supplierSku,$status,$oemManufacturer,$oemManufacturerId,$consumableManufacturer,$consumableManufacturerId,$oemSku,$title,$type,$color,$yield,$upc,$imageUrl,$compatible
             $this->populateSupplierConsumable(
                 $db,
-                self::SUPPLIER_CLOVER,
                 $line['Item #'],
                 $status,
                 $line['OEM'],
@@ -1311,8 +1317,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $upc = $line['UPC Code'];
             $price = $line['Price'];
             $yield = $line['Page Yield'];
-            $dealerId = $dealerSupplier['dealerId'];
-            $this->populateCompatible($db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $yield, $oem_lines, $dealerId);
+            $this->populateCompatible($db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $yield, $oem_lines);
 
             $i++;
         }
@@ -1322,8 +1327,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
         $this->total_result['products_total'] = $i;
     }
-    private function updateGenuine($dealerSupplier) {
-        $base_uri = trim($dealerSupplier['url'], '/');
+    private function updateGenuine() {
+        $base_uri = trim($this->dealerSupplier['url'], '/');
 
         require_once(APPLICATION_BASE_PATH.'/library/My/MyCookieJar.php');
         $jar = new \MyCookieJar();
@@ -1351,7 +1356,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $uri = new Uri($base_uri . '/landing.asp?autopage=/Default.asp');
                 $r = $client->get($uri, ['allow_redirects' => false]);
                 if ($r->getStatusCode() != 200) {
-                    error_log($dealerSupplier['url'] . ' > ' . $r->getStatusCode());
+                    error_log($this->dealerSupplier['url'] . ' > ' . $r->getStatusCode());
                     return;
                 }
 
@@ -1371,15 +1376,15 @@ Dealers: " . implode(', ', $affected_dealers) . "
                             'Referer' => $base_uri . '/landing.asp?autopage=/Default.asp',
                         ],
                         'form_params' => [
-                            'username' => $dealerSupplier['user'],
-                            'password' => $dealerSupplier['pass'],
+                            'username' => $this->dealerSupplier['user'],
+                            'password' => $this->dealerSupplier['pass'],
                             'B1' => 'GO!',
                             'logontype' => 'customer',
                         ]
                     )
                 );
                 if ($r->getStatusCode() != 302) {
-                    error_log($dealerSupplier['url'] . '/security_logonScript_siteFront.asp > ' . $r->getStatusCode());
+                    error_log($this->dealerSupplier['url'] . '/security_logonScript_siteFront.asp > ' . $r->getStatusCode());
                     return;
                 }
 
@@ -1412,12 +1417,12 @@ Dealers: " . implode(', ', $affected_dealers) . "
                     ],
                 ]);
                 if ($r->getStatusCode() != 200) {
-                    error_log($dealerSupplier['url'] . '/product_list.asp > ' . $r->getStatusCode());
+                    error_log($this->dealerSupplier['url'] . '/product_list.asp > ' . $r->getStatusCode());
                     return;
                 }
 
                 if ($r->getHeaderLine('Content-Type') != 'application/csv; charset=utf-8; Charset=utf-8') {
-                    error_log($dealerSupplier['url'] . '/product_list.asp > Content-Type!=csv > ' . $r->getHeaderLine('Content-Type'));
+                    error_log($this->dealerSupplier['url'] . '/product_list.asp > Content-Type!=csv > ' . $r->getHeaderLine('Content-Type'));
                     return;
                 }
 
@@ -1427,7 +1432,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 fwrite($fp, $str);
                 rewind($fp);
 
-                echo "processing {$dealerSupplier['url']}/product_list.asp for dealer {$dealerSupplier['dealerId']}\n";
+                echo "processing {$this->dealerSupplier['url']}/product_list.asp for dealer {$this->dealerId}\n";
             }
             #===============================================
 
@@ -1471,18 +1476,6 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $line['brand'] = strip_tags($line['brand']);
                 #--
 
-                #==================
-                $tmpSku = str_replace('-','',trim($line['sku']));
-                $db->query("update base_product set sku='{$line['sku']}' where manufacturerId=73 and sku='{$tmpSku}'");
-                $db->query("update supplier_consumable set supplierSku='{$line['sku']}' where supplierId=4 and supplierSku='{$tmpSku}'");
-                $db->query("update supplier_consumable_compatible set supplierSku='{$line['sku']}' where supplierId=4 and supplierSku='{$tmpSku}'");
-                $db->query("update supplier_price set supplierSku='{$line['sku']}' where supplierId=4 and supplierSku='{$tmpSku}'");
-                $db->query("update supplier_product set supplierSku='{$line['sku']}' where supplierId=4 and supplierSku='{$tmpSku}'");
-                continue;
-                #==================
-
-
-
                 $imgUrl = 'http://store.genuinesupply.ca/images/'.$line['lg_pic'];
 
                 $comp_mfg_id = null;
@@ -1514,7 +1507,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
                 $price_data = [
                     'supplierSku'=>$line['sku'],
-                    'dealerId'=>$dealerSupplier['dealerId'],
+                    'dealerId'=>$this->dealerId,
                     'price'=>trim($line['cust_price']),
                     'promotion'=>0,
                 ];
@@ -1608,10 +1601,9 @@ Dealers: " . implode(', ', $affected_dealers) . "
                     }
                 }
 
-                //$db, $supplierId,$supplierSku,$status,$oemManufacturer,$oemManufacturerId,$consumableManufacturer,$consumableManufacturerId,$oemSku,$title,$type,$color,$yield,$upc,$imageUrl,$compatible
+                //$db, $supplierSku,$status,$oemManufacturer,$oemManufacturerId,$consumableManufacturer,$consumableManufacturerId,$oemSku,$title,$type,$color,$yield,$upc,$imageUrl,$compatible
                 $this->populateSupplierConsumable(
                     $db,
-                    self::SUPPLIER_GENUINE,
                     $line['sku'],
                     $status,
                     $brand,
@@ -1660,8 +1652,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $upc = $line['upc'];
                 $price = $line['cust_price'];
                 $yield = $line['yield'];
-                $dealerId = $dealerSupplier['dealerId'];
-                $this->populateCompatible($db, $skus, $comp_mfg_id, $line['sku'], $imgUrl, $name, $weight, $upc, $price, $yield, $oem_lines, $dealerId);
+                $this->populateCompatible($db, $skus, $comp_mfg_id, $line['sku'], $imgUrl, $name, $weight, $upc, $price, $yield, $oem_lines);
 
                 $i++;
             }
@@ -1677,15 +1668,15 @@ Dealers: " . implode(', ', $affected_dealers) . "
         }
     }
 
-    private function updateTechDataNA($dealerSupplier) {
+    private function updateTechDataNA() {
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $zip_filename = APPLICATION_BASE_PATH . '/data/cache/' . sprintf('techdata-%s.zip', $dealerSupplier['dealerId']);
-        echo "starting with zip file {$zip_filename} for dealer {$dealerSupplier['dealerId']}\n";
+        $zip_filename = APPLICATION_BASE_PATH . '/data/cache/' . sprintf('techdata-%s.zip', $this->dealerId);
+        echo "starting with zip file {$zip_filename} for dealer {$this->dealerId}\n";
 
         try {
             if (!file_exists($zip_filename) || (filemtime($zip_filename) < strtotime('-6 DAY'))) {
-                echo "downloading zip file {$zip_filename} for dealer {$dealerSupplier['dealerId']}\n";
-                $url = $dealerSupplier['url'].'?Auto=Y&UserID='.$dealerSupplier['user'].'&Password='.$dealerSupplier['pass'].'&Type=Price&Name=ProdCod.zip';
+                echo "downloading zip file {$zip_filename} for dealer {$this->dealerId}\n";
+                $url = $this->dealerSupplier['url'].'?Auto=Y&UserID='.$this->dealerSupplier['user'].'&Password='.$this->dealerSupplier['pass'].'&Type=Price&Name=ProdCod.zip';
                 $client = new Client(['verify'=>false]);
                 $response = $client->get($url);
                 file_put_contents($zip_filename, $response->getBody());
@@ -1696,7 +1687,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 return false;
             }
 
-            echo "extracting zip file {$zip_filename} for dealer {$dealerSupplier['dealerId']}\n";
+            echo "extracting zip file {$zip_filename} for dealer {$this->dealerId}\n";
             $zip = $this->getZipAdapter();
             $zip->open($zip_filename);
             #$finfo = $zip->statIndex(0);
@@ -1905,7 +1896,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
             $price_data = [
                 'supplierSku'=>$part_num,
-                'dealerId'=>$dealerSupplier['dealerId'],
+                'dealerId'=>$this->dealerId,
                 'price'=>trim($record->getString('list_price')),
                 'promotion'=>0,
             ];
@@ -1923,7 +1914,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         }
 
         #==
-        $this->deleteRemainingProducts($dealerSupplier['supplierId'], $dealerSupplier['dealerId']);
+        $this->deleteRemainingProducts();
         #==
 
         gc_collect_cycles();
@@ -1939,10 +1930,10 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
             if (isset($skus[$manufacturerId][$sku])) {
                 $supplierSku = $skus[$manufacturerId][$sku];
-                //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
+                //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
                 $this->base_product_statement->execute([$line['id'], $supplierSku]);
                 #if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
-                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
+                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
                 #    $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
                 #}
             }
@@ -1956,10 +1947,10 @@ Dealers: " . implode(', ', $affected_dealers) . "
         return true;
     }
 
-    private function updateTechDataSA($dealerSupplier) {
+    private function updateTechDataSA() {
 
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $zip_filename = APPLICATION_BASE_PATH . '/data/temp/'.$dealerSupplier['url'];
+        $zip_filename = APPLICATION_BASE_PATH . '/data/temp/'.$this->dealerSupplier['url'];
 
         $product_file='';
         $price_file='';
@@ -1968,7 +1959,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         try {
             if (!file_exists($zip_filename) || (filemtime($zip_filename) < strtotime('-6 DAY'))) {
                 #$ftp = $this->getFtpClient();
-                #$ftp->get($dealerSupplier['url'], $dealerSupplier['user'], $dealerSupplier['pass'], $zip_filename);
+                #$ftp->get($this->dealerSupplier['url'], $this->dealerSupplier['user'], $this->dealerSupplier['pass'], $zip_filename);
                 echo "file not found: {$zip_filename}\n";
                 return null;
             }
@@ -2002,7 +1993,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
         #----
         $currency_exchange = 1;
-        $dealer_currency = $db->query('select currency from dealers where id=?', [$dealerSupplier['dealerId']])->fetchColumn(0);
+        $dealer_currency = $db->query('select currency from dealers where id=?', [$this->dealerId])->fetchColumn(0);
         if ($dealer_currency!='USD') {
             echo "dealer currency: {$dealer_currency}\n";
             $currency_exchange = floatval($db->query('select rate from currency_exchange where currency=?', [$dealer_currency])->fetchColumn(0));
@@ -2149,7 +2140,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
             $price_data = [
                 'supplierSku'=>$line['Matnr'],
-                'dealerId'=>$dealerSupplier['dealerId'],
+                'dealerId'=>$this->dealerId,
                 'price'=>$currency_exchange * $line['CustBestPrice'],
                 'promotion'=>$line['Promotion']=='N'?0:1,
             ];
@@ -2167,7 +2158,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         echo "4. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
         #--
-        $this->deleteRemainingProducts($dealerSupplier['supplierId'], $dealerSupplier['dealerId']);
+        $this->deleteRemainingProducts();
 
         #--
 
@@ -2182,11 +2173,11 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
             if (isset($category_mattnr['SUPPLIESA']['PERIPHERA'][$manufacturerId][$sku])) {
                 $matnr = $category_mattnr['SUPPLIESA']['PERIPHERA'][$manufacturerId][$sku];
-                //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
+                //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
                 $this->base_product_statement->execute([$line['id'], $matnr]);
                 $toner_count += $this->base_product_statement->rowCount();
                 if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
-                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
+                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
                     $this->sku_statement->execute([$matnr, $matnr, $matnr, $line['id']]);
                     $weight_count += $this->sku_statement->rowCount();
                 }
@@ -2220,17 +2211,17 @@ Dealers: " . implode(', ', $affected_dealers) . "
         return true;
     }
 
-    private function updateSynnex($dealerSupplier)
+    private function updateSynnex()
     {
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $zip_filename = APPLICATION_BASE_PATH . '/data/cache/' . sprintf('synnex-%s.zip', $dealerSupplier['dealerId']);
-        echo "starting with zip file {$zip_filename} for dealer {$dealerSupplier['dealerId']}\n";
+        $zip_filename = APPLICATION_BASE_PATH . '/data/cache/' . sprintf('synnex-%s.zip', $this->dealerId);
+        echo "starting with zip file {$zip_filename} for dealer {$this->dealerId}\n";
 
         try {
             if (!file_exists($zip_filename) || (filemtime($zip_filename) < strtotime('-6 DAY'))) {
-                echo "downloading zip file {$zip_filename} for dealer {$dealerSupplier['dealerId']}\n";
+                echo "downloading zip file {$zip_filename} for dealer {$this->dealerId}\n";
                 $ftp = $this->getFtpClient();
-                $ftp->get($dealerSupplier['url'], $dealerSupplier['user'], $dealerSupplier['pass'], $zip_filename);
+                $ftp->get($this->dealerSupplier['url'], $this->dealerSupplier['user'], $this->dealerSupplier['pass'], $zip_filename);
             }
 
             if (!file_exists($zip_filename)) {
@@ -2337,7 +2328,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             return false;
         }
 
-        echo "processing {$filename} for dealer {$dealerSupplier['dealerId']}\n";
+        echo "processing {$filename} for dealer {$this->dealerId}\n";
         $fp = fopen($filename, 'rb');
 
         gc_collect_cycles();
@@ -2431,7 +2422,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
             $price_data = [
                 'supplierSku'=>$line['SYNNEX_SKU'],
-                'dealerId'=>$dealerSupplier['dealerId'],
+                'dealerId'=>$this->dealerId,
                 'price'=>trim($line['Contract_Price']),
                 'promotion'=>$line['Promotion_Flag']=='Y'?1:0,
             ];
@@ -2452,7 +2443,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         }
 
         #==
-        $this->deleteRemainingProducts($dealerSupplier['supplierId'], $dealerSupplier['dealerId']);
+        $this->deleteRemainingProducts();
         #==
 
         gc_collect_cycles();
@@ -2468,10 +2459,10 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
             if (isset($skus[$manufacturerId][$sku])) {
                 $supplierSku = $skus[$manufacturerId][$sku];
-                //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
+                //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
                 $this->base_product_statement->execute([$line['id'], $supplierSku]);
                 if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
-                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
+                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
                     $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
                 }
             }
@@ -2508,9 +2499,9 @@ Dealers: " . implode(', ', $affected_dealers) . "
         return true;
     }
 
-    private function updateIngram($dealerSupplier) {
+    private function updateIngram() {
         $db = \Zend_Db_Table::getDefaultAdapter();
-        $zip_filename = APPLICATION_BASE_PATH . '/data/cache/'.sprintf('ingram-%s.zip', $dealerSupplier['dealerId']);
+        $zip_filename = APPLICATION_BASE_PATH . '/data/cache/'.sprintf('ingram-%s.zip', $this->dealerId);
         $price_txt = dirname($zip_filename).'/PRICE.TXT';
         if (file_exists($price_txt)) {
             unlink($price_txt);
@@ -2518,7 +2509,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         try {
             if (!file_exists($zip_filename) || (filemtime($zip_filename)<strtotime('-6 DAY'))) {
                 $ftp = $this->getFtpClient();
-                $ftp->get("{$dealerSupplier['url']}/PRICE.ZIP", $dealerSupplier['user'], $dealerSupplier['pass'], $zip_filename);
+                $ftp->get("{$this->dealerSupplier['url']}/PRICE.ZIP", $this->dealerSupplier['user'], $this->dealerSupplier['pass'], $zip_filename);
             }
 
             if (!file_exists($zip_filename)) {
@@ -2642,7 +2633,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
                     $price_data = [
                         'supplierSku'=>$line['INGRAM_PART_NUMBER'],
-                        'dealerId'=>$dealerSupplier['dealerId'],
+                        'dealerId'=>$this->dealerId,
                         'price'=>trim($line['CUSTOMER_PRICE']),
                         'promotion'=>$line['SPECIAL_PRICE_FLAG']=='*'?1:0,
                     ];
@@ -2666,7 +2657,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         gc_collect_cycles();
         echo "2. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
-        $this->deleteRemainingProducts($dealerSupplier['supplierId'], $dealerSupplier['dealerId']);
+        $this->deleteRemainingProducts();
 
         $cursor = $db->query("select id, manufacturerId, sku, weight, UPC from base_product");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
@@ -2677,10 +2668,10 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
             if (isset($skus[$manufacturerId][$sku])) {
                 $supplierSku = $skus[$manufacturerId][$sku];
-                //update supplier_product set baseProductId=? where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?
+                //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
                 $this->base_product_statement->execute([$line['id'], $supplierSku]);
                 if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
-                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$dealerSupplier['supplierId'].' and `supplierSku`=?) where id=?
+                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
                     $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
                 }
             }
