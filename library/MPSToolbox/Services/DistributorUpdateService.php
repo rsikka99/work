@@ -1391,6 +1391,9 @@ Dealers: " . implode(', ', $affected_dealers) . "
                     return;
                 }
 
+                if ($redirect=='http://store.genuinesupply.ca//default.asp') {
+                    $redirect = 'http://store.genuinesupply.ca/';
+                }
                 $r = $client->get($redirect, [
                     'allow_redirects' => false,
                     'headers' => [
