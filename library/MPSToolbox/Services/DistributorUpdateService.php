@@ -1175,7 +1175,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 'supplierSku'=>$line['Item #'],
                 'manufacturer'=>$brand,
                 'manufacturerId'=>$comp_mfg_id,
-                'vpn'=>$line['OEM Part #'],
+                'vpn'=>$line['Item #'],
                 'name'=>$line['Title'],
                 'msrp'=>null,
                 'weight'=>0.453592 * floatval($line['Weight']),
@@ -1429,6 +1429,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             #===============================================
 
             $db = \Zend_Db_Table::getDefaultAdapter();
+
             $manufacturers = [];
             foreach ($db->query('select * from manufacturers order by displayname')->fetchAll() as $line) {
                 $n = strtoupper($line['fullname']);
@@ -1463,11 +1464,23 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $i = 0;
             while($line = fgetcsv($fp)) {
                 $line = array_combine($cols, $line);
+                foreach ($line as $k=>$v) $line[$k] = trim($v);
                 $line['brand'] = strip_tags($line['brand']);
                 #--
 
+                #==================
+                $tmpSku = str_replace('-','',trim($line['sku']));
+                $db->query("update base_product set sku='{$line['sku']}' where manufacturerId=73 and sku='{$tmpSku}'");
+                $db->query("update supplier_consumable set supplierSku='{$line['sku']}' where supplierId=4 and supplierSku='{$tmpSku}'");
+                $db->query("update supplier_consumable_compatible set supplierSku='{$line['sku']}' where supplierId=4 and supplierSku='{$tmpSku}'");
+                $db->query("update supplier_price set supplierSku='{$line['sku']}' where supplierId=4 and supplierSku='{$tmpSku}'");
+                $db->query("update supplier_product set supplierSku='{$line['sku']}' where supplierId=4 and supplierSku='{$tmpSku}'");
+                continue;
+                #==================
+
+
+
                 $imgUrl = 'http://store.genuinesupply.ca/images/'.$line['lg_pic'];
-                $supplierSku = str_replace('-','',trim($line['sku']));
 
                 $comp_mfg_id = null;
                 if (isset($manufacturers[strtoupper($line['brand'])])) $comp_mfg_id = $manufacturers[strtoupper($line['brand'])];
@@ -1476,7 +1489,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 preg_match('#^(\d+)mm x (\d+)mm x (\d+)mm$#',$line['dimension'], $dmatch);
 
                 $product_data = [
-                    'supplierSku'=>$supplierSku,
+                    'supplierSku'=>$line['sku'],
                     'manufacturer'=>$line['brand'],
                     'manufacturerId'=>$comp_mfg_id,
                     'vpn'=>$line['sku'],
@@ -1497,7 +1510,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 ];
 
                 $price_data = [
-                    'supplierSku'=>$supplierSku,
+                    'supplierSku'=>$line['sku'],
                     'dealerId'=>$dealerSupplier['dealerId'],
                     'price'=>trim($line['cust_price']),
                     'promotion'=>0,
@@ -1596,7 +1609,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $this->populateSupplierConsumable(
                     $db,
                     self::SUPPLIER_GENUINE,
-                    $supplierSku,
+                    $line['sku'],
                     $status,
                     $brand,
                     $oem_mfg_id,
@@ -1645,7 +1658,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $price = $line['cust_price'];
                 $yield = $line['yield'];
                 $dealerId = $dealerSupplier['dealerId'];
-                $this->populateCompatible($db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $yield, $oem_lines, $dealerId);
+                $this->populateCompatible($db, $skus, $comp_mfg_id, $line['sku'], $imgUrl, $name, $weight, $upc, $price, $yield, $oem_lines, $dealerId);
 
                 $i++;
             }
