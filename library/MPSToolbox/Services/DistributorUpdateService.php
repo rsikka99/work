@@ -703,8 +703,12 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
             $consumableManufacturer = $line['Brand'];
             $consumableManufacturerId = $manufacturerId;
+            if (($line['Product Group']=='ECOPlus') || (strpos($line['Product Description'], 'ECOPLUS ')===0)) {
+                $consumableManufacturer = 'ECOPlus';
+                $consumableManufacturerId = $manufacturers['ECOPLUS'];
+            }
             if ($status=='Compatible') {
-                if (strpos($line['Product Description'], 'ECOPLUS ')===0) {
+                if (($line['Product Group']=='ECOPlus') || (strpos($line['Product Description'], 'ECOPLUS ')===0)) {
                     $consumableManufacturer = 'ECOPlus';
                     $consumableManufacturerId = $manufacturers['ECOPLUS'];
                 } else {
