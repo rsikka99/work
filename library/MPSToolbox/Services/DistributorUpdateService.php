@@ -700,6 +700,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             if (strpos($line['Product Description'], 'ECOPLUS REMAN ')===0) $status='Remanufactured';
             if (strpos($line['Product Type'], 'OEM ')===0) $status='OEM';
             if (strpos($line['Product Description'], 'OEM ')===0) $status='OEM';
+            if (strpos($line['Product Description'], 'COMPATIBLE ')===0) $status='Compatible';
 
             $consumableManufacturer = $line['Brand'];
             $consumableManufacturerId = $manufacturerId;
