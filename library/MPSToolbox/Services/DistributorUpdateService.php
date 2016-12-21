@@ -390,6 +390,47 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
     private function updateAcm() {
         $db = \Zend_Db_Table::getDefaultAdapter();
+
+        #--
+        $product_model = [];
+        $product_oem = [];
+        $product_price = [];
+
+        $fp = fopen(APPLICATION_BASE_PATH . '/data/cache/' . 'Product Model.txt','rb');
+        $col=false;
+        while ($line=fgetcsv($fp, null, "\t")) {
+            foreach ($line as $i=>$s) $line[$i] = trim($s);
+            if (!$col) {
+                $col = ['ACM#','MODEL','BRAND'];
+            } else {
+                $line = array_combine($col, $line);
+                $product_model[$line['ACM#']][] = $line;
+            }
+        }
+
+        $fp = fopen(APPLICATION_BASE_PATH . '/data/cache/' . 'Product OEM.TXT','rb');
+        $col=false;
+        while ($line=fgetcsv($fp, null, "\t")) {
+            foreach ($line as $i=>$s) $line[$i] = trim($s);
+            if (!$col) {
+                $col = ['ACM#','OEM#'];
+            } else {
+                $product_oem[$line[0]][] = $line[1];
+            }
+        }
+
+        $fp = fopen(APPLICATION_BASE_PATH . '/data/cache/' . 'Product Price.txt','rb');
+        $col=false;
+        while ($line=fgetcsv($fp, null, "\t")) {
+            foreach ($line as $i=>$s) $line[$i] = trim($s);
+            if (!$col) {
+                $col = ['ACM#','ATTRIBUTE1','PRODUCT TYPE','DESCRIPTION','YIELD','UOM','PRICE','WEIGHT'];
+            } else {
+                $product_price[$line[0]] = array_combine($col, $line);
+            }
+        }
+        #--
+
         $filename = APPLICATION_BASE_PATH . '/data/cache/' . sprintf('acm-%s.txt', $this->dealerId);
         try {
             if (!file_exists($filename) || (filemtime($filename) < strtotime('-6 DAY'))) {
@@ -430,7 +471,6 @@ Dealers: " . implode(', ', $affected_dealers) . "
         }
 
         $rename_statement = $db->prepare('update base_product set name=?, sku=? where id=?');
-
         while ($line = fgetcsv($fp, null, "\t")) {
             while (count($line) > count($columns)) {
                 array_pop($line);
@@ -461,6 +501,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                     break;
             }
 
+            /**
             if (strpos($line['Product Group'], 'ECOPlus')===0) {
                 $line['CompatibleSkus'] = $line['OEM#'];
                 $line['CompatibleBrand'] = strtoupper(preg_replace('#,.*$#','',$line['Brand']));
@@ -474,14 +515,13 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $line['Brand'] = 'ACM Technologies';
                 $line['OEM#'] = $supplierSku;
             }
+            **/
 
             $manufacturerId = null;
             $brand = strtoupper(preg_replace('#,.*$#','',$line['Brand']));
             if (isset($manufacturers[$brand])) $manufacturerId = $manufacturers[$brand];
             else {
                 switch ($line['Brand']) {
-                    #case 'ECOPlus' : break;
-                    #case 'ACM' : break;
                     case 'Star Micronics' :
                     case 'Dymo' :
                     case 'Miscellaneous' :
@@ -493,9 +533,15 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 }
             }
 
-            $vpn = $line['OEM#'];
-            $name = '';
-            $e = explode(',', $vpn);
+            if (isset($product_oem[$supplierSku])) {
+                $e = $product_oem[$supplierSku];
+                $name = '';
+                $vpn = implode(', ', $e);
+            } else {
+                $vpn = $line['OEM#'];
+                $name = '';
+                $e = explode(',', $vpn);
+            }
             if (count($e)>1) {
                 $vpn_length = 0;
                 foreach ($e as $i=>$n) {
@@ -528,14 +574,19 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 }
             }
 
+            $weight = null;
+            if (isset($product_price[$supplierSku])) {
+                $weight = $product_price[$supplierSku]['WEIGHT'] * 0.453592;
+            }
+
             $product_data = [
                 'supplierSku'=>$supplierSku,
                 'manufacturer'=>$line['Brand'],
                 'manufacturerId'=>$manufacturerId,
                 'vpn'=>$vpn,
                 'name'=>$name,
-                'msrp'=>null,
-                'weight'=>null,
+                'msrp'=>trim($line['Price']),
+                'weight'=>$weight,
                 'length'=>null,
                 'width'=>null,
                 'height'=>null,
@@ -554,11 +605,6 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 'dateCreated'=>null,
             ];
 
-            #if (isset($product_info[$supplierSku])) {
-            #    $nfo = $product_info[$supplierSku];
-            #    $product_data['weight'] = 0.453592 * $nfo['WEIGHT'];
-            #}
-
             $price_data = [
                 'supplierSku'=>$supplierSku,
                 'dealerId'=>$this->dealerId,
@@ -573,25 +619,25 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 error_log('xxx '.$ex->getMessage());
             }
 
-            if ((substr($line['Product Description'],0,4)=='OEM ') && $manufacturerId) {
-                $oem_cartridges[$manufacturerId][$vpn] = $supplierSku;
-            }
-
             #-----
             $pageYield = 0;
             $mlYield = 0;
 
-            $pair = explode(' | ', $line['Product Description']);
-            $d = array_pop($pair);
-            $parts = explode(', ', $d);
-            $part_type = $parts[0];
-            $part_color = isset($parts[1])?$parts[1]:'';
-            $part_yield = isset($parts[2])?$parts[2]:'';
-            $part_memo = isset($parts[3])?$parts[3]:'';
+            if (isset($product_price[$supplierSku])) {
+                $part_yield = $product_price[$supplierSku]['YIELD'];
+            } else {
+                $pair = explode(' | ', $line['Product Description']);
+                $d = array_pop($pair);
+                $parts = explode(', ', $d);
+                $part_type = $parts[0];
+                $part_color = isset($parts[1]) ? $parts[1] : '';
+                $part_yield = isset($parts[2]) ? $parts[2] : '';
+                $part_memo = isset($parts[3]) ? $parts[3] : '';
 
-            if (preg_match('#^(.*) YIELD#i', $part_color)) {
-                $part_yield = $part_color;
-                $part_color = '';
+                if (preg_match('#^(.*) YIELD#i', $part_color)) {
+                    $part_yield = $part_color;
+                    $part_color = '';
+                }
             }
 
             if (preg_match('#^(.*)ML#i', $part_yield, $match)) {
@@ -616,7 +662,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $e = explode('/', $str);
                 if (count($e) > 1) $str = array_pop($e);
                 if (preg_match('#([0-9.,]*) ?(K|M)#', $str, $match2)) {
-                    $str = $match2[1];
+                    $str = $match2[1].$match2[2];
                 }
                 $pageYield = $this->expandYield($str);
                 if (!$pageYield) {
@@ -625,6 +671,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             } else {
                 //error_log('no yield? '.$d);
             }
+
             #-----
             if ($is_consumable && substr($line['Product Description'],0,4)=='OEM ') {
                 $e = explode(', ',strtoupper($line['Brand']));
@@ -646,22 +693,88 @@ Dealers: " . implode(', ', $affected_dealers) . "
                     }
                 }
             }
-            //continue;
-            #-----
-            if (!empty($line['CompatibleSkus']) && !empty($line['CompatibleBrand'])) {
-                $brand = $line['CompatibleBrand'];
-                if (isset($manufacturers[$brand])) $oem_mfg_id = $manufacturers[$brand];
-                else {
-                    error_log('unknown oem brand: ' . $line['CompatibleBrand']);
-                    continue;
-                }
 
+            $status = 'Compatible';
+            if (strpos($line['Product Type'], 'Reman ')===0) $status='Remanufactured';
+            if (strpos($line['Product Description'], 'REMAN ')===0) $status='Remanufactured';
+            if (strpos($line['Product Description'], 'ECOPLUS REMAN ')===0) $status='Remanufactured';
+            if (strpos($line['Product Type'], 'OEM ')===0) $status='OEM';
+            if (strpos($line['Product Description'], 'OEM ')===0) $status='OEM';
+
+            $consumableManufacturer = $line['Brand'];
+            $consumableManufacturerId = $manufacturerId;
+            if ($status=='Compatible') {
+                if (strpos($line['Product Description'], 'ECOPLUS ')===0) {
+                    $consumableManufacturer = 'ECOPlus';
+                    $consumableManufacturerId = $manufacturers['ECOPLUS'];
+                } else {
+                    $consumableManufacturer = 'ACM Technologies';
+                    $consumableManufacturerId = $manufacturers['ACM TECHNOLOGIES'];
+                }
+            }
+
+            $imgUrl = 'http://www.acmtech.com/Pictures/Pic_Small/'.substr($supplierSku,0,2).'/'.$supplierSku.'.jpg';
+            $title = $line['Product Description'];
+            $type = $line['Product Type'];
+            $color = '';
+            if (isset($product_price[$supplierSku])) {
+                $title = $product_price[$supplierSku]['DESCRIPTION'];
+                $type = $product_price[$supplierSku]['PRODUCT TYPE'];
+                $color = $product_price[$supplierSku]['ATTRIBUTE1'];
+            }
+
+            $compatible = [];
+            if (isset($product_model[$supplierSku])) {
+                foreach ($product_model[$supplierSku] as $pm) {
+                    $n = strtoupper($pm['BRAND']);
+                    if ($n!='NULL') {
+                        if (!isset($manufacturers[$n])) {
+                            $oem_mfg_id = null;
+                        } else {
+                            $oem_mfg_id = $manufacturers[$n];
+                        }
+                        $compatible[] = ['brand' => $pm['BRAND'], 'manufacturerId' => $oem_mfg_id, 'model' => $pm['MODEL']];
+                    }
+                }
+            } else {
+                $e = explode(', ', $line['Model']);
+                foreach ($e as $model) {
+                    $compatible[] = ['brand'=>$line['Brand'], 'manufacturerId'=>$manufacturerId, 'model'=>trim($model)];
+                }
+            }
+
+            //$db, $supplierSku,$status,$oemManufacturer,$oemManufacturerId,$consumableManufacturer,$consumableManufacturerId,$oemSku,$title,$type,$color,$yield,$upc,$imageUrl,$compatible
+            $this->populateSupplierConsumable(
+                $db,
+                $supplierSku,
+                $status,
+                $line['Brand'],
+                $manufacturerId,
+                $consumableManufacturer,
+                $consumableManufacturerId,
+                $line['OEM#'],
+                $title,
+                $type,
+                $color,
+                $part_yield,
+                null,
+                $imgUrl,
+                $compatible
+            );
+
+            #-----
+            if (($status=='Compatible') && $is_consumable) {
                 $oem_lines = [];
-                foreach (explode(',', $line['CompatibleSkus']) as $n) {
+                if (isset($product_oem[$supplierSku])) {
+                    $e = $product_oem[$supplierSku];
+                } else {
+                    $e = explode(', ', $line['OEM#']);
+                }
+                foreach ($e as $n) {
                     $n = str_replace('-', '', trim($n));
                     if (empty($n)) continue;
-                    if (isset($skus[$oem_mfg_id][$n])) {
-                        $oem_lines[] = $skus[$oem_mfg_id][$n];
+                    if (isset($skus[$manufacturerId][$n])) {
+                        $oem_lines[] = $skus[$manufacturerId][$n];
                     }
                 }
                 if (empty($oem_lines)) {
@@ -669,22 +782,16 @@ Dealers: " . implode(', ', $affected_dealers) . "
                     continue;
                 }
 
-                if (!isset($manufacturers[strtoupper($line['Brand'])])) {
-                    error_log('unknown compatible brand: '.$line['Brand']);
-                    continue;
-                }
-                $comp_mfg_id = $manufacturers[strtoupper($line['Brand'])];
-                $imgUrl = 'http://www.acmtech.com/Pictures/Pic_Small/'.substr($supplierSku,0,2).'/'.$supplierSku.'.jpg';
-                //continue;
-
-                $this->populateCompatible($db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, null, null, $line['Price'], $pageYield, $oem_lines, $mlYield);
+                $this->populateCompatible($db, $skus, $consumableManufacturerId, $supplierSku, $imgUrl, $name, null, null, $line['Price'], $pageYield, $oem_lines, $mlYield);
+            }
+            #---
+            if (($status=='OEM') && $is_consumable) {
+                $oem_cartridges[$manufacturerId][$vpn] = $supplierSku;
             }
         }
 
         gc_collect_cycles();
         echo "2. ".round(memory_get_usage()/(1024*1024))." MB\n";
-        die();
-
 
         $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku from base_product join base_printer_consumable using (id)");
         while ($line = $cursor->fetch(\PDO::FETCH_ASSOC)) {
@@ -732,7 +839,10 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $this->compatibleStatements['st6'] = $db->prepare("update supplier_product set baseProductId=? where supplierId=? and supplierSku=?");
         }
 
-        if (!$comp_mfg_id) die('comp_mfg_id?');
+        if (!$comp_mfg_id) {
+            error_log('comp_mfg_id?');
+            return;
+        }
 
         if (!isset($skus[$comp_mfg_id][$supplierSku])) {
             $oem_line = current($oem_lines);
