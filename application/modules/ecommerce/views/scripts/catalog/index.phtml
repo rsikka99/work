@@ -193,7 +193,6 @@
 
     var dealerSkuName         = '<?= My_Brand::$dealerSku; ?>';
     var selectedCategory      = false;
-    var lastSearch = '';
 
     require(['jquery', 'jquery.typewatch'], function ($) {
         require(['bootstrap.treeview'], function ($) {
@@ -203,10 +202,7 @@
         $('#supplier-search').typeWatch({
             callback     : function (value)
             {
-                if (value!=window.lastSearch) {
-                    window.lastSearch = value;
-                    $('#supplier-search').trigger('change');
-                }
+                $('#supplier-search').trigger('change');
             },
             wait         : 750,
             highlight    : true,
@@ -293,14 +289,20 @@
     }
 
     function addFromSupplier() {
-        $('#supplier-search').val('');
-        $('#supplier-results tbody').html('<tr><td colspan="4">no results</td></tr>');
+        //$('#supplier-search').val('');
+        //$('#supplier-results tbody').html('<tr><td colspan="4">no results</td></tr>');
         $('#addFromSupplier').modal();
         $('#addFromSupplier').css('margin-top','-150px');
+        window.lastSearch = '';
     }
+
+    var lastSearch = '';
 
     function supplierSearchChange() {
         var q = $('#supplier-search').val();
+        if (lastSearch==q) return;
+        lastSearch = q;
+
         $('#supplier-results tbody').html('<tr><td colspan="4">loading...</td></tr>');
         $.post('/ecommerce/catalog/search-sku', {q:q}, function(response) {
             if (response.length>0) {

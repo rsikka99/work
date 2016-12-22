@@ -240,8 +240,20 @@ class Ecommerce_CatalogController extends Action {
         $db = Zend_Db_Table::getDefaultAdapter();
         $dealerId = \MPSToolbox\Entities\DealerEntity::getDealerId();
         $userId = \MPSToolbox\Legacy\Services\NavigationService::$userId;
-        $sql= "delete from base_product where categoryId=".intval($category)." and base_type='sku' ".($userId!=1?' and userId='.intval($userId):'')." and id=".intval($id);
-        $db->query($sql);
+        #--
+        $webId = $db->query('select webId from dealer_sku where dealerId=? and skuId=?', [$dealerId, $id])->fetchColumn(0);
+        if ($webId) {
+            $client = new \GuzzleHttp\Client([]);
+            $response = $client->get('http://proxy.mpstoolbox.com/shopify/delete_sku.php?origin='.$_SERVER['HTTP_HOST'].'&webId='.$webId.'&dealerId='.$dealerId.'&_='.time());
+        }
+        #--
+        $dealer_skus = $db->query('select * from dealer_sku where skuId=?', [$id]);
+        if (count($dealer_skus)>1) {
+            $db->query('delete from dealer_sku where skuId=? and dealerId=?', [$id, $dealerId]);
+        } else {
+            $db->query('delete from base_product where categoryId=? and base_type=? and id=?', [$category, 'sku', $id]);
+        }
+        #--
         echo $this->getProducts($db, $category, $dealerId, $ef, $sa);
     }
 

@@ -41,7 +41,7 @@ class HardwareLibrary_SkuController extends Action {
                         return [
                             'manufacturerId'=>$line['manufacturerId'],
                             'weight'=>$line['weight'],
-                            'name'=>$line['description'],
+                            'name'=>$line['name']?$line['name']:$line['description'],
                             'sku'=>$line['vpn'],
                             'UPC'=>$line['upc'],
                         ];
@@ -94,13 +94,15 @@ class HardwareLibrary_SkuController extends Action {
         #--
 
         if (!empty($sku['sku']) && !empty($sku['manufacturerId'])) {
-            $st = $db->prepare("UPDATE supplier_product SET baseProductId=? WHERE manufacturerId={$sku['manufacturerId']} AND vpn LIKE ?");
-            $st->execute([$sku['id'], $sku['sku'] . '%']);
+            $st = $db->prepare("UPDATE supplier_product SET baseProductId=? WHERE manufacturerId={$sku['manufacturerId']} AND vpn=?");
+            $st->execute([$sku['id'], $sku['sku']]);
             if ($st->rowCount()>0) {
-                $line = $db->query('select * from supplier_product where baseProductId='.intval($sku['id']))->fetch();
-                if ($line) {
-                    $st = $db->prepare('UPDATE base_product SET UPC=?, weight=? WHERE id=?');
-                    $st->execute([$line['upc'], $line['weight'], $sku['id']]);
+                if (empty($sku['UPC']) || empty($sku['weight'])) {
+                    $line = $db->query('SELECT * FROM supplier_product WHERE baseProductId=' . intval($sku['id']))->fetch();
+                    if ($line) {
+                        $st = $db->prepare('UPDATE base_product SET UPC=?, weight=? WHERE id=?');
+                        $st->execute([$line['upc'], $line['weight'], $sku['id']]);
+                    }
                 }
             }
         }
