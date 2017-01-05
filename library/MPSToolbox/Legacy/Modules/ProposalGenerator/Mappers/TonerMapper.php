@@ -543,7 +543,7 @@ WHERE {$and} `device_toners`.`master_device_id` = :masterDeviceId
         $sql      = "
 SELECT
     count(*) as c
-FROM toners
+FROM base_product toners join base_printer_consumable using(id) left join base_printer_cartridge using(id)
     JOIN manufacturers ON manufacturers.id = toners.manufacturerId
     left join dealer_toner_attributes on dealer_toner_attributes.tonerId=toners.id and dealer_toner_attributes.dealerId = {$dealerId}
     where (toners.manufacturerId in (select manufacturerId from dealer_toner_vendors where dealer_toner_vendors.dealerId = {$dealerId}) or toners.manufacturerId in (select manufacturerId from master_devices))
@@ -563,7 +563,7 @@ FROM toners
         if ($filterTonerColorId)
         {
             $filterTonerColorId = $db->quote($filterTonerColorId, 'INTEGER');
-            $sql .= " AND toners.{$this->col_tonerColorId} = {$filterTonerColorId}";
+            $sql .= " AND colorId = {$filterTonerColorId}";
         }
 
         /**
@@ -572,7 +572,7 @@ FROM toners
         if ($filterTonerSku)
         {
             $filterTonerSku = $db->quote("%$filterTonerSku%", 'TEXT');
-            $sql .= " AND (toners.{$this->col_sku} LIKE {$filterTonerSku} OR dealer_toner_attributes.dealerSku LIKE {$filterTonerSku})";
+            $sql .= " AND (sku LIKE {$filterTonerSku} OR dealer_toner_attributes.dealerSku LIKE {$filterTonerSku})";
         }
 
         if ($filterTonerPriced)
@@ -606,28 +606,29 @@ FROM toners
         $rate = CurrencyService::getInstance()->getRate();
 
         $db       = $this->getDbTable()->getAdapter();
+
         $sql      = "SELECT
     toners.id                                 AS id,
     if (oem.manufacturerId,1,0)               as is_oem,
-    toners.isSystemDevice                     AS isSystemDevice,
+    toners.isSystemProduct                    AS isSystemDevice,
     manufacturers.id                          AS manufacturerId,
     manufacturers.fullname                    AS manufacturer,
     toners.sku                                AS systemSku,
     dealer_toner_attributes.dealerSku         AS dealerSku,
     toners.name                               AS toner_name,
-    toners.cost                               AS base_systemCost,
-    COALESCE(cv1.value, toners.cost*{$rate})  as systemCost,
+    base_printer_consumable.cost              AS base_systemCost,
+    COALESCE(cv1.value, base_printer_consumable.cost*{$rate})  as systemCost,
     if (_view_cheapest_toner_cost.isUsingDealerPricing=0, null, _view_cheapest_toner_cost.cost) AS dealerCost,
-    toners.yield,
-    toners.tonerColorId,
-    toner_colors.name as tonerColor,
+    pageYield                                 as yield,
+    colorId                                   as tonerColorId,
+    toner_colors.name                         as tonerColor,
     toners.imageFile,
     dl.devices as device_list,
     concat('[',dl.json,']') as json_device_list
-FROM toners
+FROM base_product toners join base_printer_consumable using(id) left join base_printer_cartridge using(id)
     JOIN manufacturers ON manufacturers.id = toners.manufacturerId
-    join _view_cheapest_toner_cost on (_view_cheapest_toner_cost.tonerId = toners.id AND _view_cheapest_toner_cost.dealerId = {$dealerId})
-    join toner_colors on toners.tonerColorId = toner_colors.id
+    left join _view_cheapest_toner_cost on (_view_cheapest_toner_cost.tonerId = toners.id AND _view_cheapest_toner_cost.dealerId = {$dealerId})
+    left join toner_colors on colorId = toner_colors.id
     left join device_list dl on toners.id=dl.toner_id
     left join oem_manufacturers oem on toners.manufacturerId=oem.manufacturerId
     LEFT JOIN dealer_toner_attributes ON (dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId})
@@ -650,7 +651,7 @@ FROM toners
         if ($filterTonerColorId)
         {
             $filterTonerColorId = $db->quote($filterTonerColorId, 'INTEGER');
-            $sql .= " AND toners.{$this->col_tonerColorId} = {$filterTonerColorId}";
+            $sql .= " AND colorId = {$filterTonerColorId}";
         }
 
         /**
@@ -659,7 +660,7 @@ FROM toners
         if ($filterTonerSku)
         {
             $filterTonerSku = $db->quote("%$filterTonerSku%", 'TEXT');
-            $sql .= " AND (toners.{$this->col_sku} LIKE {$filterTonerSku} OR dealer_toner_attributes.dealerSku LIKE {$filterTonerSku})";
+            $sql .= " AND (sku LIKE {$filterTonerSku} OR dealer_toner_attributes.dealerSku LIKE {$filterTonerSku})";
         }
 
         if ($filterTonerPriced)

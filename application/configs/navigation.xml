@@ -483,7 +483,7 @@
                     <resource>proposalgen__admin__managematchups</resource>
                 </managematchups>
                 <viewalltoners>
-                    <label>Toners</label>
+                    <label>Printer Supplies</label>
                     <route>hardware-library.all-toners</route>
                     <resource>hardware-library__toner__index</resource>
                 </viewalltoners>

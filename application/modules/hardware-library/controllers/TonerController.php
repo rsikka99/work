@@ -40,7 +40,7 @@ class HardwareLibrary_TonerController extends Action
             header('Location: /hardware-library/toner/infinite');
             exit();
         }
-        $this->_pageTitle = ['All Toners'];
+        $this->_pageTitle = ['Printer Supplies'];
     }
 
     private function outputInfiniteRow($line) {
@@ -148,7 +148,7 @@ class HardwareLibrary_TonerController extends Action
             return;
         }
 
-        $this->_pageTitle = ['All Toners'];
+        $this->_pageTitle = ['Printer Supplies'];
     }
 
     /**

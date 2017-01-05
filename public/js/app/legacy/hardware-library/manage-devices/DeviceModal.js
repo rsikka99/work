@@ -2,12 +2,11 @@ define([
     'jquery',
     'underscore',
     'require',
-    './AssignTonersModal',
     'app/Templates',
     'accounting',
     'jqgrid',
     'bootstrap.modal.manager'
-], function ($, _, require, AssignTonersModal, Template, accounting)
+], function ($, _, require, Template, accounting)
 {
     'use strict';
     var DeviceModal_InstanceIdCounter = 0;
@@ -26,10 +25,12 @@ define([
             supplies: [],
             rmsUploadRowId: 0,
             rmsDeviceInstanceId: 0,
+            new_mfg:0,
+            new_name:'',
             deviceId      : 0,
             isAllowed     : false,
             onModalClose  : false
-        }, _.pick(options, ['supplies','rmsUploadRowId', 'rmsDeviceInstanceId', 'deviceId', 'isAllowed', 'onModalClose']) || {});
+        }, _.pick(options, ['supplies','rmsUploadRowId', 'rmsDeviceInstanceId', 'new_mfg','new_name','deviceId', 'isAllowed', 'onModalClose']) || {});
 
         /**
          * Create Modal
@@ -42,6 +43,8 @@ define([
          * Class Members
          */
         this.$modal = $modal;
+        this.new_mfg = settings.new_mfg;
+        this.new_name = settings.new_name;
         this.supplies = settings.supplies;
         this.rmsUploadRowId = settings.rmsUploadRowId;
         this.rmsDeviceInstanceId = settings.rmsDeviceInstanceId;
@@ -104,7 +107,9 @@ define([
             {
                 masterDeviceId: this.deviceId,
                 rmsUploadRowId: this.rmsUploadRowId,
-                rmsDeviceInstanceId: this.rmsDeviceInstanceId
+                rmsDeviceInstanceId: this.rmsDeviceInstanceId,
+                new_mfg: this.new_mfg,
+                new_name: this.new_name
             },
             function ()
             {

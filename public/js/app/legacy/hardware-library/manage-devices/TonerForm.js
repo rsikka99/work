@@ -1,9 +1,10 @@
 define([
     'jquery',
+    'underscore',
     './TonerService',
     'bootstrap.modal.manager',
      '../../../components/Select2/TonerColor'
-], function ($, TonerService)
+], function ($, _, TonerService)
 {
     'use strict';
     var TonerForm_InstanceIdCounter = 0;

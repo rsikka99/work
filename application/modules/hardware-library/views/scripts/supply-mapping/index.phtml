@@ -1,0 +1,154 @@
+<style>
+    .found,
+    .not-found,
+    .not-linked {
+        border-radius: 3px;
+        display:inline-block;
+        color:white;
+        padding:5px;
+    }
+    .found a,
+    .not-found a,
+    .not-linked a {
+        color:white;
+    }
+    .found {
+        background-color:#00B000;
+    }
+    .not-found {
+        background-color:#B00000;
+    }
+    .not-linked {
+        background-color:#f0ad4e;
+    }
+    .is-supply {
+        text-decoration:underline;
+    }
+    .is-alias {
+        font-style: italic;
+    }
+
+</style>
+<div class="container">
+
+    <p>
+        <label>Distributor:</label>
+        <select class="form-control" onchange="window.location.href='/hardware-library/supply-mapping?supplierId='+this.value">
+            <option></option>
+        <?php foreach ($this->suppliers as $line) { ?>
+            <option <?= @$_GET['supplierId']==$line['id']?'selected="selected"':'' ?> value="<?= $line['id'] ?>"><?= $line['name'] ?></option>
+        <?php } ?>
+        </select>
+    </p>
+
+    <hr>
+
+    <table class="table">
+        <tbody>
+<?php foreach ($this->lines as $line) { ?>
+            <tr>
+                <td><?= $line['cmfg'] ?></td>
+                <td><?= $line['mfg'] ?></td>
+                <td><?= $line['type'] ?></td>
+                <td><?= $line['oemSku'] ?></td>
+                <td><?= $line['sku'] ?></td>
+                <td><?= $line['cmp_pr'] ?></td>
+            </tr>
+<?php } ?>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="unknown-device-modal" style="width:600px">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <table class="table">
+                    <colgroup>
+                        <col width="30%">
+                        <col width="60%">
+                        <col width="10%">
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td id="unknown-device-model"></td>
+                            <td id="unknown-device-select"></td>
+                            <td id="unknown-device-ok"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+    function unknown_device(el) {
+        var $el = $(el);
+        $('#unknown-device-model').text($el.attr('data-mfg')+' '+$el.attr('data-model'));
+        $('#unknown-device-select').html('<input type="text" class="form-control" id="unknown-device-input"></select>');
+        $('#unknown-device-ok').html('');
+        $('#unknown-device-input').select2({
+            minimumInputLength: 3,
+            dropdownCssClass: "bigdrop",
+            ajax: {
+                url: "/hardware-library/supply-mapping/search-printer",
+                dataType: 'json',
+                quietMillis: 250,
+                cache: true,
+                data: function (term, page) { return { q: term, page: page, mfg:$el.attr('data-mfg-id') }; },
+                results: function (data, page) { return data; }
+            }
+        }).change(function() {
+            var value = this.value;
+            $('#unknown-device-ok').html('<button type="button" class="btn btn-default" id="unknown-device-done">OK</button>');
+            $('#unknown-device-done').click(function() {
+                $('#unknown-device-modal').modal('hide');
+                if (value==0) {
+                    newDeviceModel($el.attr('data-mfg-id'), $el.attr('data-model'), $el.attr('data-supplies').split(','));
+                }
+            });
+        });
+        $('#unknown-device-modal').modal();
+    }
+
+    require(['jquery'], function ($) {
+    });
+
+    function newDeviceModel(new_mfg, new_name, supplies) {
+        require(['app/legacy/hardware-library/manage-devices/DeviceModal'], function (DeviceModal)
+        {
+            var editDeviceModal = new DeviceModal({
+                "deviceId"      : null,
+                "isAllowed"     : true,
+                "new_mfg" : new_mfg,
+                "new_name" : new_name,
+                "supplies" : supplies
+            });
+            $(editDeviceModal).on('DeviceModal.saved', function (event, masterDeviceId) {
+                window.location.href=window.location.href;
+            });
+            editDeviceModal.show();
+        });
+    }
+
+    function editToner(tonerId) {
+        require(['app/legacy/hardware-library/manage-devices/TonerForm'], function (TonerForm)
+        {
+            var tonerForm = new TonerForm({
+                tonerId: tonerId
+            });
+
+            $(tonerForm).on('toner-form.saved', function (event, tonerId)
+            {
+                window.location.href=window.location.href;
+            });
+
+            tonerForm.show();
+        });
+    }
+
+</script>

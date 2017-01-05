@@ -18,19 +18,12 @@ define(['jquery', 'select2'], function ($)
             }
         }, options || {});
 
-        // This can only be attached to text inputs
-        if ($element.is('input[type="text"]'))
-        {
-            $element.select2({
-                placeholder  : settings.placeholder,
-                allowClear   : true,
-                data         : [{id:1,text:'BLACK'},{id:2,text:'CYAN'},{id:3,text:'MAGENTA'},{id:4,text:'YELLOW'},{id:5,text:'3 COLOR'},{id:5,text:'4 COLOR'}]
-            });
-        }
-        else
-        {
-            console.log('You cannot attach a tonerColor select to a non text input element.');
-        }
+
+        $element.select2({
+            placeholder  : settings.placeholder,
+            allowClear   : true
+        });
+
     };
 
     $.fn.selectTonerColor = function (options)

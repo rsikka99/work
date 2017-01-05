@@ -306,6 +306,8 @@ class HardwareLibrary_ManageDevicesController extends Action
         $masterDeviceId = $this->_getParam('masterDeviceId', false);
         $rmsUploadRowId = $this->_getParam('rmsUploadRowId', false);
         $rmsDeviceInstanceId = $this->_getParam('rmsDeviceInstanceId', false);
+        $new_name = $this->_getParam('new_name', false);
+        $new_mfg = $this->_getParam('new_mfg', false);
 
         $masterDevice = MasterDeviceMapper::getInstance()->find($masterDeviceId);
         $isAllowed    = ((!$masterDevice instanceof MasterDeviceModel || !$masterDevice->isSystemDevice || $this->_isAdmin) ? true : false);
@@ -339,6 +341,10 @@ class HardwareLibrary_ManageDevicesController extends Action
         {
             $this->view->modelName      = $masterDevice->modelName;
             $this->view->manufacturerId = $masterDevice->manufacturerId;
+        }
+        else {
+            $this->view->modelName      = $new_name;
+            $this->view->manufacturerId      = $new_mfg;
         }
 
         $isSelling = false;
