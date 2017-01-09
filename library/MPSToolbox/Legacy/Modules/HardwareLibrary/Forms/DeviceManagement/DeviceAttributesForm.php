@@ -202,7 +202,7 @@ class DeviceAttributesForm extends \My_Form_Form
         $launchDateElement = $this->createElement('DatePicker', 'launchDate', [
             'label'      => 'Launch Date',
             'decorators' => ['UiWidgetElement'],
-            'required'   => $this->_isAllowedToEditFields,
+            'required'   => false, //$this->_isAllowedToEditFields,
             'filters'    => ['StringTrim', 'StripTags'],
             'validators' => [
                 new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'),

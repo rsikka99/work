@@ -151,6 +151,27 @@ class HardwareLibrary_TonerController extends Action
         $this->_pageTitle = ['Printer Supplies'];
     }
 
+    public function expandYield($str) {
+        if (empty($str)) return null;
+        if (preg_match('#^(.+)ml$#i', $str, $match)) {
+            $str = trim($match[1]);
+        }
+        $str=preg_replace('#,(\d\d\d)#','$1',$str);
+        if (is_numeric($str)) {
+            return intval($str);
+        }
+        if (preg_match('#^(.+)m( |$)#i', $str, $match)) {
+            $f = floatval($match[1]);
+            return round(1000000 * $f);
+        }
+        if (preg_match('#^(.+)k( |$)#i', $str, $match)) {
+            $f = floatval($match[1]);
+            return round(1000 * $f);
+        }
+        error_log('cannot parse yield: '.$str);
+        return 0;
+    }
+
     /**
      * Loads the available toners form (really just the toner form) for
      * an ajax call
@@ -171,6 +192,30 @@ class HardwareLibrary_TonerController extends Action
         $this->view->isSystemDevice = !empty($toner) && $toner->isSystemDevice;
         $this->view->isAdmin = $isAdmin;
         $this->view->isAllowed = $isAllowed;
+
+        $new_mfg = $this->getParam('new_mfg');
+        $new_name = $this->getParam('new_name');
+        $new_yield = $this->getParam('new_yield');
+        $new_cost = $this->getParam('new_cost');
+        $new_type = $this->getParam('new_type');
+        $new_color = $this->getParam('new_color');
+        $new_color_str = $this->getParam('new_color_str');
+        if (!$toner && $new_mfg && $new_name) {
+            $toner = new TonerModel();
+            $toner->id = 0;
+            $toner->manufacturerId = $new_mfg;
+            $toner->sku = $new_name;
+            if (preg_match('#ml$#i',$new_yield)) {
+                $toner->mlYield = $this->expandYield($new_yield);
+            } else {
+                $toner->yield = $this->expandYield($new_yield);
+            }
+            $toner->cost = $new_cost;
+            $toner->type = $new_type;
+            $toner->tonerColorId = $new_color;
+            $toner->colorStr = $new_color_str;
+        }
+
         $form = new AvailableTonersForm($dealerId, $toner, null, $isAllowed);;
         $form->distributors=[];
         #--

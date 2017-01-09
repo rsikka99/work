@@ -188,6 +188,7 @@ class TonerService
                 $toner->name           = $data['name'];
                 $toner->weight         = $data['weight'];
                 $toner->UPC            = $data['UPC'];
+                $toner->colorStr       = $data['colorStr'];
 
                 if ($data['saveAndApproveHdn'] == 1)
                 {

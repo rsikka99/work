@@ -20,8 +20,15 @@ define([
 
 
         var settings = _.extend({
-            tonerId: 0
-        }, _.pick(options, ['tonerId', 'tonerConfigId']) || {});
+            tonerId: 0,
+            new_mfg: '',
+            new_name: '',
+            new_yield: '',
+            new_cost: '',
+            new_type: '',
+            new_color: '',
+            new_color_str: ''
+        }, _.pick(options, ['tonerId', 'new_mfg', 'new_name', 'new_yield', 'new_cost', 'new_type', 'new_color', 'new_color_str', 'tonerConfigId']) || {});
 
         /**
          * Create Modal
@@ -35,6 +42,13 @@ define([
          */
         this.$modal = $modal;
         this.tonerId = settings.tonerId;
+        this.new_mfg = settings.new_mfg;
+        this.new_name = settings.new_name;
+        this.new_yield = settings.new_yield;
+        this.new_cost = settings.new_cost;
+        this.new_type = settings.new_type;
+        this.new_color = settings.new_color;
+        this.new_color_str = settings.new_color_str;
         this.tonerConfigId = settings.tonerConfigId;
         this.isCreatingNewToner = (this.tonerId === 0);
 
@@ -83,7 +97,14 @@ define([
 
         $modal.load(that.urls.loadForm,
             {
-                tonerId: that.tonerId
+                tonerId: that.tonerId,
+                new_mfg: that.new_mfg,
+                new_name: that.new_name,
+                new_yield: that.new_yield,
+                new_cost: that.new_cost,
+                new_type: that.new_type,
+                new_color: that.new_color,
+                new_color_str: that.new_color_str
             },
             function ()
             {

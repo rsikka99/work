@@ -4,6 +4,10 @@ use Tangent\Controller\Action;
 
 class HardwareLibrary_SupplyMappingController extends Action {
 
+    private function strip_supply($s) {
+        return trim(strtoupper(str_replace('-','',preg_replace('/([#\/]\w+|\(m\))/i','',$s))));
+    }
+
     public function indexAction() {
         $dealerId = \MPSToolbox\Entities\DealerEntity::getDealerId();
         $this->_pageTitle    = 'Supply Mapping';
@@ -13,6 +17,10 @@ class HardwareLibrary_SupplyMappingController extends Action {
         $this->view->lines = [];
 
         $supplierId = $this->getParam('supplierId');
+
+        $count = 0;
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+        $page_size = 100;
 
         $and = "and (consumableManufacturerId not in (select `manufacturerId` from toner_vendor_manufacturers) or consumableManufacturerId in (select v.manufacturerId from dealer_toner_vendors v where v.dealerId={$dealerId}))\n";
         if ($dealerId==1) $and="";
@@ -36,20 +44,26 @@ class HardwareLibrary_SupplyMappingController extends Action {
             $supply_skus = [];
             $supply_names = [];
             foreach ($db->query('select id, manufacturerId, sku, name from base_product join base_printer_consumable using (id)') as $line) {
-                $n = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['sku']));
-                $supply_skus[$line['id']] = $n;
+                $supply_skus[$line['id']] = $this->strip_supply($line['sku']);
                 $supply_names[$line['id']] = [];
                 foreach (explode(',', $line['name']) as $e) {
-                    $supply_names[$line['id']][] = strtoupper(trim($e));
+                    $supply_names[$line['id']][] = $this->strip_supply($e);
                 }
             }
 
             $printers = [];
             $printer_names = [];
-            foreach ($db->query('select id, manufacturerId, sku, name from base_product join base_printer using (id)') as $line) {
+            foreach ($db->query('select id, manufacturerId, sku, name, synonyms from base_product join base_printer using (id)') as $line) {
                 $printers[$line['id']] = $line;
                 $name = strtoupper(str_replace(array(' ', '-', '/'), array('', '', ''), $line['name']));
                 $printer_names[$line['manufacturerId']][$name] = $line['id'];
+                $e = explode(',', $line['synonyms']);
+                foreach($e as $str) {
+                    $str = trim($str);
+                    if (!empty($str)) {
+                        $printer_names[$line['manufacturerId']][$str] = $line['id'];
+                    }
+                }
             }
 
             $compatible_printer_consumable = [];
@@ -58,30 +72,48 @@ class HardwareLibrary_SupplyMappingController extends Action {
             }
 
             $oem_printing_device_consumable = [];
+            $oem_printing_device_consumable_per_printer = [];
             foreach ($db->query('select * from oem_printing_device_consumable') as $line) {
                 $oem_printing_device_consumable[$line['printer_consumable']][] = $line['printing_device'];
+                $oem_printing_device_consumable_per_printer[$line['printing_device']][] = $line['printer_consumable'];
             }
+
+            $sql = "
+                select count(*)
+                from supplier_consumable
+                  join supplier_product using (supplierId, supplierSku)
+                  join base_product on supplier_product.baseProductId=base_product.id
+                where supplier_product.supplierId=?
+                {$and}
+            ";
+            $count = $db->query($sql, [$supplierId])->fetchColumn(0);
+
+            $limit = 'limit '.(($page-1)*$page_size).','.$page_size;
 
             $sql = "
                 select
                   `status`,
                   base_product.id,
                   supplier_consumable.type,
+                  supplier_consumable.yield,
                   consumableManufacturer as cmfg,
                   oemManufacturer as mfg,
                   oemSku,
                   base_product.sku,
+                  base_printer_consumable.cost,
+                  base_printer_cartridge.colorId,
+                  base_printer_cartridge.colorStr,
                   group_concat(concat(pr.manufacturerId,';',pr.model) SEPARATOR ';;') as cmp_pr
                 from supplier_consumable
                   join supplier_product using (supplierId, supplierSku)
-                  left join base_product on supplier_product.baseProductId=base_product.id
+                  join base_product on supplier_product.baseProductId=base_product.id
                     join base_printer_consumable using (id) left join base_printer_cartridge using (id)
                   left join supplier_consumable_compatible pr using (supplierId, supplierSku)
                 where supplier_product.supplierId=?
                 {$and}
                 group by supplierId, supplierSku
                 order by cmfg
-                limit 5
+                {$limit}
             ";
 
             $lines = [];
@@ -89,6 +121,7 @@ class HardwareLibrary_SupplyMappingController extends Action {
                 #--
                 $mfg = [];
                 $mfg_ids = [];
+                $mfg_names = $line['mfg'];
                 foreach (explode(',', $line['mfg']) as $str) {
                     $str = trim($str);
                     if (empty($str)) continue;
@@ -136,36 +169,28 @@ class HardwareLibrary_SupplyMappingController extends Action {
                         }
 
                         $oemFound = [];
+                        $foundOne = false;
                         foreach (explode(',', $line['oemSku']) as $str) {
                             $str = trim($str);
                             if (empty($str)) continue;
-                            $n = str_replace('-', '', preg_replace('/[#\/]\w\w\w/', '', $str));
+                            $n = $this->strip_supply($str);
                             $found = false;
                             foreach ($cmp as $cmp_oem_id) {
                                 $cmp_oem_sku = $supply_skus[$cmp_oem_id];
-                                if (strcasecmp($n, $cmp_oem_sku) == 0) {
+                                if ((strcasecmp($n, $cmp_oem_sku) == 0) || in_array($n, $supply_names[$cmp_oem_id])) {
                                     $found = $cmp_oem_id;
                                     $printer_supplies[] = $found;
+                                    $foundOne = true;
                                 }
                             }
                             $oemFound[$str] = $found;
                         }
                         foreach ($oemFound as $str=>$found) {
                             if ($found) {
-                                $oemSku[] = '<span class="found is-supply"><a href="javascript:;" onclick="editToner('.$found.'); return false;">'.str_replace(' ','&nbsp;',$str).'</a></span>';
+                                $oemSku[] = '<span class="found"><a href="javascript:;" onclick="editToner('.$found.'); return false;">'.str_replace(' ','&nbsp;',$str).'</a></span>';
                             } else {
-                                $is_name=false;
-                                foreach ($oemFound as $str1=>$found1) if ($found1) {
-                                    if (in_array(strtoupper($str), $supply_names[$found1])) {
-                                        $is_name=$found1;
-                                    }
-                                }
-                                if ($is_name) {
-                                    $oemSku[] = '<span class="found is-alias"><a href="javascript:;" onclick="editToner('.$is_name.'); return false;">'.str_replace(' ','&nbsp;',$str).'</a></span>';
-                                } else {
-                                    $oemSku[] = '<span class="not-found">' . str_replace(' ', '&nbsp;', $str) . '</span>';
-                                }
-                            }
+                                $oemSku[] = '<span class="not-found"><a href="javascript:;" onclick="unknown_supply(this); return false" data-id="'.$line['id'].'" data-mfg-ids="'.implode(',', $mfg_ids).'" data-mfg-id="'.current($mfg_ids).'" data-mfg-names="'.htmlentities($mfg_names, ENT_QUOTES).'" data-name="'.htmlentities($str, ENT_QUOTES).'" data-yield="'.$line['yield'].'" data-cost="'.$line['cost'].'" data-type="'.$line['type'].'" data-color="'.$line['colorId'].'" data-color-str="'.$line['colorStr'].'">' . str_replace(' ', '&nbsp;', $str) . '</a></span>';
+                             }
                         }
                         $line['oemSku'] = implode(' ',$oemSku);
                     }
@@ -188,6 +213,7 @@ class HardwareLibrary_SupplyMappingController extends Action {
                             }
                         }
                     }
+                    /**
                     foreach ($pr as $printer_id) {
                         if ($cmp_mfg == $printers[$printer_id]['manufacturerId']) {
                             $printer_model = strtoupper(str_replace(array(' ', '-', '/'), array('', '', ''), $printers[$printer_id]['name']));
@@ -195,12 +221,32 @@ class HardwareLibrary_SupplyMappingController extends Action {
                                 $found = $printer_id;
                             }
                         }
+                     }
+                     **/
+
+                    if (isset($printer_names[$cmp_mfg][$cmp_model_str])) {
+                        $printer_id = $printer_names[$cmp_mfg][$cmp_model_str];
+                        $found = in_array($printer_id, $pr) ? $printer_id : false;
                     }
+
                     if ($found) {
-                        $cmp_pr[] = '<span class="found">' . str_replace(' ', '&nbsp;', $manufacturer_names[$cmp_mfg].' '.$cmp_model) . '</span>';
+                        foreach ($printer_supplies as $supply_id) {
+                            if (!in_array($supply_id, $oem_printing_device_consumable_per_printer[$found])) {
+                                $found=false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if ($found) {
+                        $cmp_pr[] = '<span class="found"><a href="javascript:;" onclick="editDeviceModel('.$found.'); return false;">' . str_replace(' ', '&nbsp;', $manufacturer_names[$cmp_mfg].' '.$cmp_model) . '</a></span>';
                     } else {
                         if (isset($printer_names[$cmp_mfg][$cmp_model_str])) {
-                            $cmp_pr[] = '<span class="not-linked">' . str_replace(' ', '&nbsp;', $manufacturer_names[$cmp_mfg] . ' ' . $cmp_model) . '</span>';
+                            if (!empty($printer_supplies)) {
+                                $cmp_pr[] = '<span class="not-linked"><a href="javascript:;" onclick="link_device(this); return false;" data-supplies="' . implode(',', $printer_supplies) . '" data-device-id="' . $printer_names[$cmp_mfg][$cmp_model_str] . '" data-device-name="' . htmlentities($manufacturer_names[$cmp_mfg] . ' ' . $cmp_model, ENT_QUOTES) . '">' . str_replace(' ', '&nbsp;', $manufacturer_names[$cmp_mfg] . ' ' . $cmp_model) . '</a></span>';
+                            } else {
+                                $cmp_pr[] = '<span class="not-linked"><a href="javascript:;" onclick="editDeviceModel('.$printer_names[$cmp_mfg][$cmp_model_str].'); return false;">' . str_replace(' ', '&nbsp;', $manufacturer_names[$cmp_mfg] . ' ' . $cmp_model) . '</a></span>';
+                            }
                         } else {
                             $cmp_pr[] = '<span class="not-found"><a href="javascript:;" onclick="unknown_device(this); return false" data-supplies="'.implode(',', $printer_supplies).'" data-mfg-id="'.$cmp_mfg.'" data-mfg="'.$manufacturer_names[$cmp_mfg].'" data-model="'.htmlentities($cmp_model, ENT_QUOTES).'">' . str_replace(' ', '&nbsp;', $manufacturer_names[$cmp_mfg] . ' ' . $cmp_model) . '</a></span>';
                         }
@@ -212,6 +258,9 @@ class HardwareLibrary_SupplyMappingController extends Action {
             }
             $this->view->lines = $lines;
         }
+        $this->view->count = $count;
+        $this->view->page = $page;
+        $this->view->page_size = $page_size;
     }
 
     public function searchPrinterAction() {
@@ -220,12 +269,97 @@ class HardwareLibrary_SupplyMappingController extends Action {
         $q = $this->getParam('q');
         $results = [['id'=>0,'text'=>'Create a new device']];
 
-        $mfg_name = $db->query('select displayname from manufacturers where id='.intval($mfg))->fetchColumn(0);
-        foreach ($db->query("select id, name from base_product where manufacturerId=? and base_type='printer' and name like ?", [$mfg, '%'.$q.'%']) as $line) {
-            $results[] = ['id'=>$line['id'], 'text'=>$mfg_name.' '.$line['name']];
+        if (!empty($mfg) && !empty($q)) {
+            $mfg_name = $db->query('SELECT displayname FROM manufacturers WHERE id=' . intval($mfg))->fetchColumn(0);
+            foreach ($db->query("SELECT id, name FROM base_product WHERE manufacturerId=? AND base_type='printer' AND name LIKE ?", [$mfg, '%' . $q . '%']) as $line) {
+                $results[] = ['id' => $line['id'], 'text' => $mfg_name . ' ' . $line['name']];
+            }
         }
 
         $this->sendJson(['results'=>$results]);
+    }
+
+    public function addSynonymAction() {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $device = $this->getParam('device');
+        $synonym = $this->getParam('synonym');
+        $e = explode(',', $db->query('select synonyms from base_printer where id=?', [$device])->fetchColumn(0));
+        $new_arr = [];
+        foreach ($e as $s) {
+            $s = trim($s);
+            if (!empty($s)) {
+                $new_arr[] = $s;
+                if (strcasecmp($s, $synonym) == 0) $synonym = '';
+            }
+        }
+        if (!empty($synonym)) {
+            $new_arr[] = $synonym;
+        }
+        $new_str = implode(', ', $new_arr);
+
+        $db->query('update base_printer set synonyms = ? where id=?', [$new_str, $device]);
+        $this->sendJson(['ok'=>true]);
+    }
+
+    public function lookupSuppliesAction() {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $supplies = $this->getParam('supplies');
+        $result = [];
+        if (!empty($supplies)) {
+            $result = $db->query("
+                SELECT bp.id, concat(mfg.displayname,' ',bp.sku) AS name, tc.name AS color, pageYield AS yield
+                FROM base_product bp JOIN base_printer_consumable pc USING (id) LEFT JOIN base_printer_cartridge pr USING(id)
+                 JOIN manufacturers mfg ON bp.manufacturerId=mfg.id
+                 LEFT JOIN toner_colors tc ON pr.colorId=tc.id
+                 where bp.id in (".$supplies.")
+            ")->fetchAll();
+        }
+        $this->sendJson(['lines'=>$result]);
+    }
+
+    public function linkSuppliesAction() {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $device = $this->getParam('device');
+        $supplies = $this->getParam('supplies');
+        $userId = \MPSToolbox\Legacy\Services\NavigationService::$userId;
+        foreach ($supplies as $id) {
+            $db->query('REPLACE INTO oem_printing_device_consumable SET printing_device=?, printer_consumable=?, userId=?, isApproved=1', [
+                $device,
+                $id,
+                $userId,
+            ]);
+        }
+        $this->sendJson(['ok'=>true]);
+    }
+
+    public function searchSupplyAction() {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $mfg = $this->getParam('mfg');
+        $q = $this->getParam('q');
+        $results = [['id'=>0,'text'=>'Create a new supply']];
+
+        if (!empty($mfg) && !empty($q)) {
+            foreach ($db->query("
+              select base_product.id, concat(manufacturers.displayname,' ',base_product.sku) as `text`, base_product.name
+                from base_product
+                  join base_printer_consumable using (id)
+                  join manufacturers on base_product.manufacturerId=manufacturers.id
+                where
+                 manufacturerId in ({$mfg}) and (sku like :q or name like :q or replace(sku,'-','') like :q or replace(name,'-','') like :q)
+            ", ['q'=>'%' . $q . '%']) as $line) {
+                $results[] = ['id' => $line['id'], 'text' => $line['text'].($line['name'] ? ' ('.$line['name'].')':'')];
+            }
+        }
+
+        $this->sendJson(['results'=>$results]);
+    }
+
+    public function createLinkAction() {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $compatible = $this->getParam('compatible');
+        $oem = $this->getParam('oem');
+        $db->query('replace into compatible_printer_consumable set oem=?, compatible=?', [$oem, $compatible]);
+        $this->sendJson(['ok'=>true]);
     }
 
 }

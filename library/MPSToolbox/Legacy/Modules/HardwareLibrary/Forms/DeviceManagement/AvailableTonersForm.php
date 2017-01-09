@@ -125,6 +125,12 @@ class AvailableTonersForm extends \My_Form_Form
             'multiOptions' => $colorList
         ]);
 
+        $this->addElement('text', 'colorStr', [
+            'label'      => 'Color Description',
+            'required'   => false,
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
         $typeList = [];
         $db = \Zend_Db_Table::getDefaultAdapter();
         foreach ($db->query('select distinct(`type`) as t from base_printer_consumable order by t') as $row) $typeList[$row['t']] = $row['t'];

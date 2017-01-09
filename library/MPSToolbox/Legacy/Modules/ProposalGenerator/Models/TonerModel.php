@@ -118,6 +118,7 @@ class TonerModel extends My_Model_Abstract
     public $type = null;
     public $compatiblePrinters = null;
     public $mlYield = null;
+    public $colorStr = null;
 
     /**
      * @var ManufacturerModel
@@ -232,6 +233,7 @@ class TonerModel extends My_Model_Abstract
         if (isset($params->type) && !is_null($params->type)) $this->type = $params->type;
         if (isset($params->compatiblePrinters) && !is_null($params->compatiblePrinters)) $this->compatiblePrinters = $params->compatiblePrinters;
         if (isset($params->mlYield) && !is_null($params->mlYield)) $this->mlYield = $params->mlYield;
+        if (isset($params->colorStr) && !is_null($params->colorStr)) $this->colorStr = $params->colorStr;
     }
 
     public function __get($property) {
@@ -271,6 +273,7 @@ class TonerModel extends My_Model_Abstract
             "type"      => $this->type,
             "compatiblePrinters"      => $this->compatiblePrinters,
             "mlYield"      => $this->mlYield,
+            "colorStr"      => $this->colorStr,
         ];
     }
 
@@ -305,6 +308,7 @@ class TonerModel extends My_Model_Abstract
         return [
             "colorId"   => $this->tonerColorId,
             "mlYield"      => $this->mlYield,
+            "colorStr"      => $this->colorStr,
         ];
     }
 

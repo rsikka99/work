@@ -341,6 +341,7 @@ class HardwareLibrary_ManageDevicesController extends Action
         {
             $this->view->modelName      = $masterDevice->modelName;
             $this->view->manufacturerId = $masterDevice->manufacturerId;
+            $this->view->synonyms = $masterDevice->synonyms;
         }
         else {
             $this->view->modelName      = $new_name;
@@ -450,7 +451,8 @@ class HardwareLibrary_ManageDevicesController extends Action
                 );
 
                 if (!$postData['suppliesAndService']['isLeased'] && $tonerErrorMessages !== true) {
-                    $suppliesErrors['suppliesAndService']['errorMessages']['assignedTonersMistakes'] = $tonerErrorMessages;
+                    //disabled for now
+                    //$suppliesErrors['suppliesAndService']['errorMessages']['assignedTonersMistakes'] = $tonerErrorMessages;
                 }
             }
 
@@ -544,6 +546,7 @@ class HardwareLibrary_ManageDevicesController extends Action
                                     [
                                         "manufacturerId" => $manufacturerId,
                                         "modelName"      => $modelName,
+                                        "synonyms"      => $this->getParam('synonyms', ''),
                                         "sku"            => $this->getParam('sku', ''),
                                         "UPC"            => $this->getParam('UPC', ''),
                                         "weight"            => $this->getParam('weight', ''),
@@ -1238,7 +1241,8 @@ class HardwareLibrary_ManageDevicesController extends Action
             }
         }
 
-        $select_sql = "select base_product.id, manufacturerId, `type`, toner_colors.name as color, manufacturers.displayname as mfg, sku, pageYield, mlYield, device_list.json as device_json, _view_dist_stock_price_grouped.cost from base_product
+        $select_sql = "select base_product.id, manufacturerId, `type`, toner_colors.name as color, manufacturers.displayname as mfg, sku, pageYield, mlYield, device_list.json as device_json, _view_dist_stock_price_grouped.cost
+                from base_product
                 join base_printer_consumable using(id)
                 left join base_printer_cartridge using(id)
                 left join manufacturers on base_product.manufacturerId=manufacturers.id

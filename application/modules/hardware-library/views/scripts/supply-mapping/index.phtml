@@ -21,12 +21,6 @@
     .not-linked {
         background-color:#f0ad4e;
     }
-    .is-supply {
-        text-decoration:underline;
-    }
-    .is-alias {
-        font-style: italic;
-    }
 
 </style>
 <div class="container">
@@ -41,6 +35,12 @@
         </select>
     </p>
 
+    <hr>
+    <?php if ($this->count>$this->page_size) { ?>
+        <ul class="pagination">
+            <?php for ($i=1;$i<($this->count/$this->page_size);$i++) { ?><li <?= ($i==$this->page)?'class="active"':'' ?>><a href="/hardware-library/supply-mapping?supplierId=<?= $_GET['supplierId'] ?>&page=<?= $i ?>"><?= $i ?></a></li><?php } ?>
+        </ul>
+    <?php } ?>
     <hr>
 
     <table class="table">
@@ -57,7 +57,44 @@
 <?php } ?>
         </tbody>
     </table>
+    <hr>
+    <?php if ($this->count>$this->page_size) { ?>
+        <ul class="pagination">
+            <?php for ($i=1;$i<($this->count/$this->page_size);$i++) { ?><li <?= ($i==$this->page)?'class="active"':'' ?>><a href="/hardware-library/supply-mapping?supplierId=<?= $_GET['supplierId'] ?>&page=<?= $i ?>"><?= $i ?></a></li><?php } ?>
+        </ul>
+    <?php } ?>
 </div>
+
+<div class="modal" tabindex="-1" role="dialog" id="unknown-supply-modal" style="width:700px">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <table class="table">
+                    <colgroup>
+                        <col width="30%">
+                        <col width="60%">
+                        <col width="10%">
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <td id="unknown-supply-model"></td>
+                        <td id="unknown-supply-select"></td>
+                        <td id="unknown-supply-ok"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td id="unknown-supply-actions"></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <div class="modal" tabindex="-1" role="dialog" id="unknown-device-modal" style="width:600px">
     <div class="modal-dialog" role="document">
@@ -70,11 +107,16 @@
                         <col width="10%">
                     </colgroup>
                     <tbody>
-                        <tr>
-                            <td id="unknown-device-model"></td>
-                            <td id="unknown-device-select"></td>
-                            <td id="unknown-device-ok"></td>
-                        </tr>
+                    <tr>
+                        <td id="unknown-device-model"></td>
+                        <td id="unknown-device-select"></td>
+                        <td id="unknown-device-ok"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td id="unknown-device-actions"></td>
+                        <td></td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -85,14 +127,126 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div class="modal" tabindex="-1" role="dialog" id="link-device-modal" style="width:600px">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>
+                    Device:
+                    <strong id="link-device-name"></strong>
+                </p>
+                <p>
+                    Assign supplies:
+                </p>
+                <form id="link-device-form">
+                    <input type="hidden" name="device" value="" id="link-device-id">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Supply</th>
+                                <th>Color</th>
+                                <th>Yield</th>
+                            </tr>
+                        </thead>
+                        <tbody id="link-device-supplies"></tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="do_link_device()">OK</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script>
+    function unknown_supply(el) {
+        var $el = $(el);
+        $('#unknown-supply-model').text($el.attr('data-mfg-names')+' > '+$el.attr('data-name'));
+        $('#unknown-supply-select').html('<input type="text" class="form-control" id="unknown-supply-input">');
+        $('#unknown-supply-ok').html('');
+        $('#unknown-supply-actions').html('');
+        $('#unknown-supply-input').select2({
+            dropdownCssClass: "bigdrop",
+            ajax: {
+                url: "/hardware-library/supply-mapping/search-supply",
+                dataType: 'json',
+                quietMillis: 250,
+                cache: true,
+                data: function (term, page) { return { q: term, page: page, mfg:$el.attr('data-mfg-ids') }; },
+                results: function (data, page) { return data; }
+            }
+        }).change(function() {
+            var value = this.value;
+            if (value==0) {
+                $('#unknown-supply-ok').html('<button type="button" class="btn btn-default" id="unknown-supply-done">OK</button>');
+                $('#unknown-supply-done').click(function () {
+                    $('#unknown-supply-modal').modal('hide');
+                    newSupply($el.attr('data-id'), $el.attr('data-mfg-id'), $el.attr('data-name'), $el.attr('data-yield'), $el.attr('data-cost'), $el.attr('data-type'), $el.attr('data-color'), $el.attr('data-color-str'));
+                });
+            } else {
+                var showNameBtn = false; //$el.attr('data-can-be-name') == '1';
+                $('#unknown-supply-actions').html(
+                    '<button type="button" class="btn btn-default" id="unknown-supply-edit-supply">Edit Supply</button>' +
+                    '&nbsp;&nbsp;' +
+                    (showNameBtn ?
+                    '<button type="button" class="btn btn-default" id="unknown-supply-add-name">Add as name</button>' +
+                    '&nbsp;&nbsp;':'') +
+                    '<button type="button" class="btn btn-default" id="unknown-supply-create-link">Create link</button>'
+                );
+                $('#unknown-supply-edit-supply').click(function () {
+                    editToner(value);
+                });
+                $('#unknown-supply-create-link').click(function () {
+                    $.post('/hardware-library/supply-mapping/create-link', {compatible:$el.attr('data-id'), oem:value}, function(r) {
+                        window.location.href=window.location.href;
+                    });
+                });
+                //$('#unknown-supply-add-name').click(function () {
+                //    $.post('/hardware-library/supply-mapping/add-name', {supply:value, name:$el.attr('data-name')}, function(r) {
+                //        window.location.href=window.location.href;
+                //    });
+                //});
+            }
+        });
+        $('#unknown-supply-input').select2("search",$el.attr('data-name'));
+        $('#unknown-supply-modal').modal();
+    }
+
+    function do_link_device() {
+        var data = $('#link-device-form').serialize();
+        $.post('/hardware-library/supply-mapping/link-supplies', data, function(r) {
+            window.location.href=window.location.href;
+        });
+    }
+    function link_device(el) {
+        var $el = $(el);
+        $('#link-device-id').val($el.attr('data-device-id'));
+        $('#link-device-name').text($el.attr('data-device-name'));
+        $.post('/hardware-library/supply-mapping/lookup-supplies', { supplies: $el.attr('data-supplies') }, function(r) {
+            var tr='';
+            $.each(r.lines, function(i,line) {
+                tr += '<tr>' +
+                '<td><input type="checkbox" name="supplies[]" value="' + line.id + '"></td>' +
+                '<td>' + line.name + '</td>' +
+                '<td>' + line.color + '</td>' +
+                '<td>' + line.yield + '</td>' +
+                '</tr>';
+            });
+            $('#link-device-supplies').html(tr);
+            $('#link-device-modal').modal();
+        }, 'json');
+    }
+
     function unknown_device(el) {
         var $el = $(el);
         $('#unknown-device-model').text($el.attr('data-mfg')+' '+$el.attr('data-model'));
-        $('#unknown-device-select').html('<input type="text" class="form-control" id="unknown-device-input"></select>');
+        $('#unknown-device-select').html('<input type="text" class="form-control" id="unknown-device-input">');
         $('#unknown-device-ok').html('');
+        $('#unknown-device-actions').html('');
         $('#unknown-device-input').select2({
-            minimumInputLength: 3,
             dropdownCssClass: "bigdrop",
             ajax: {
                 url: "/hardware-library/supply-mapping/search-printer",
@@ -104,14 +258,29 @@
             }
         }).change(function() {
             var value = this.value;
-            $('#unknown-device-ok').html('<button type="button" class="btn btn-default" id="unknown-device-done">OK</button>');
-            $('#unknown-device-done').click(function() {
-                $('#unknown-device-modal').modal('hide');
-                if (value==0) {
+            if (value==0) {
+                $('#unknown-device-ok').html('<button type="button" class="btn btn-default" id="unknown-device-done">OK</button>');
+                $('#unknown-device-done').click(function () {
+                    $('#unknown-device-modal').modal('hide');
                     newDeviceModel($el.attr('data-mfg-id'), $el.attr('data-model'), $el.attr('data-supplies').split(','));
-                }
-            });
+                });
+            } else {
+                $('#unknown-device-actions').html(
+                    '<button type="button" class="btn btn-default" id="unknown-device-edit-device">Edit Device</button>' +
+                    '&nbsp;&nbsp;' +
+                    '<button type="button" class="btn btn-default" id="unknown-device-add-synonym">Add synonym</button>'
+                );
+                $('#unknown-device-edit-device').click(function () {
+                    editDeviceModel(value);
+                });
+                $('#unknown-device-add-synonym').click(function () {
+                    $.post('/hardware-library/supply-mapping/add-synonym', {device:value, synonym:$el.attr('data-model')}, function(r) {
+                        window.location.href=window.location.href;
+                    });
+                });
+            }
         });
+        $('#unknown-device-input').select2("search",$el.attr('data-model'));
         $('#unknown-device-modal').modal();
     }
 
@@ -132,6 +301,43 @@
                 window.location.href=window.location.href;
             });
             editDeviceModal.show();
+        });
+    }
+
+    function editDeviceModel(deviceId) {
+        require(['app/legacy/hardware-library/manage-devices/DeviceModal'], function (DeviceModal)
+        {
+            var editDeviceModal = new DeviceModal({
+                "deviceId"      : deviceId
+            });
+            $(editDeviceModal).on('DeviceModal.saved', function (event, masterDeviceId) {
+                window.location.href=window.location.href;
+            });
+            editDeviceModal.show();
+        });
+    }
+
+    function newSupply(product_id, new_mfg, new_name, new_yield, new_cost, new_type, new_color, new_color_str) {
+        require(['app/legacy/hardware-library/manage-devices/TonerForm'], function (TonerForm)
+        {
+            var tonerForm = new TonerForm({
+                new_mfg: new_mfg,
+                new_name: new_name,
+                new_yield: new_yield,
+                new_cost: new_cost,
+                new_type: new_type,
+                new_color: new_color,
+                new_color_str: new_color_str
+            });
+
+            $(tonerForm).on('toner-form.saved', function (event, tonerId)
+            {
+                $.post('/hardware-library/supply-mapping/create-link', {compatible:product_id, oem:tonerId}, function(r) {
+                    window.location.href=window.location.href;
+                });
+            });
+
+            tonerForm.show();
         });
     }
 

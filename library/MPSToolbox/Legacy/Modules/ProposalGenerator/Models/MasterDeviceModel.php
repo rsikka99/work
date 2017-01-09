@@ -59,6 +59,8 @@ class MasterDeviceModel extends My_Model_Abstract
      */
     public $modelName;
 
+    public $synonyms;
+
     /**
      * @var string
      */
@@ -332,6 +334,11 @@ class MasterDeviceModel extends My_Model_Abstract
             $this->modelName = $params->modelName;
         }
 
+        if (isset($params->synonyms) && !is_null($params->synonyms))
+        {
+            $this->synonyms = $params->synonyms;
+        }
+
         if (isset($params->sku) && !is_null($params->sku))
         {
             $this->sku = $params->sku;
@@ -487,6 +494,7 @@ class MasterDeviceModel extends My_Model_Abstract
             "userId"                              => $this->userId,
             "manufacturerId"                      => $this->manufacturerId,
             "modelName"                           => $this->modelName,
+            "synonyms"                           => $this->synonyms,
             "sku"                           => $this->sku,
             "imageUrl"                            => $this->imageUrl,
             "imageFile"                           => $this->imageFile,
@@ -551,7 +559,8 @@ class MasterDeviceModel extends My_Model_Abstract
 
     public function toPrinterData() {
         return [
-            "tech"                       => $this->tech,
+            "synonyms"                            => $this->synonyms,
+            "tech"                                => $this->tech,
             "tonerConfigId"                       => $this->tonerConfigId,
             "isCopier"                            => $this->isCopier,
             "isFax"                               => $this->isFax,

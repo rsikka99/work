@@ -308,6 +308,7 @@ define([
                 },
                 manufacturerId      : $("#manufacturerId").val(),
                 modelName           : $("#modelName").val(),
+                synonyms            : $("#synonyms").val(),
                 sku                 : $("#sku").val(),
                 weight              : $("#weight").val(),
                 UPC                 : $("#UPC").val(),
