@@ -9,7 +9,7 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h1 class="modal-title text-center">Device Management</h1>
+            <h1 class="modal-title text-center" id="my-title">Device Management</h1>
         </div>
         <div class="modal-body">
 
@@ -481,6 +481,10 @@ use MPSToolbox\Legacy\Modules\ProposalGenerator\Models\MasterDeviceModel;
                     <?php if ($this->isMasterDeviceAdministrator && $this->masterDevice instanceof MasterDeviceModel && $this->masterDevice->isSystemDevice == 0) : ?>
                         <span class="divider-vertical"></span>
                         <button class="btn btn-success js-save-and-approve-device-modal" type="button">Save and Approve</button>
+                    <?php endif; ?>
+                    <?php if ($this->isMasterDeviceAdministrator && $this->masterDevice instanceof MasterDeviceModel) : ?>
+                        <span class="divider-vertical"></span>
+                        <button class="btn btn-warning js-clone" type="button">Clone this device</button>
                     <?php endif; ?>
                 </li>
             </ul>

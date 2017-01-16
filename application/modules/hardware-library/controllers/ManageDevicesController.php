@@ -430,6 +430,13 @@ class HardwareLibrary_ManageDevicesController extends Action
             {
                 $modelAndManufacturerErrors['modelAndManufacturer']['errorMessages']['modelName'] = "Please enter a model name";
             }
+            #--
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $exists = $db->query("select id from base_product where base_type='printer' and name=?",[$modelName])->fetchColumn(0);
+            if ($exists && (!$masterDeviceId || ($masterDeviceId!=$exists))) {
+                $modelAndManufacturerErrors['modelAndManufacturer']['errorMessages']['modelName'] = "This model name already exists";
+            }
+            #--
 
 
             foreach ($postData as $key => $form)

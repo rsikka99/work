@@ -145,6 +145,14 @@ define([
                     deviceModalInstance.updateSupplies();
                 });
 
+                $modal.find('.js-clone').on('click', function ()
+                {
+                    $modal.find('.js-clone').hide();
+                    $modal.find('#my-title').text('Cloning: '+$modal.find('#modelName').val());
+                    $modal.find('#modelName').val('');
+                    deviceModalInstance.deviceId = 0;
+                });
+
                 $modal.find('.js-save-device-modal').on('click', function ()
                 {
                     deviceModalInstance.saveChanges(false);
