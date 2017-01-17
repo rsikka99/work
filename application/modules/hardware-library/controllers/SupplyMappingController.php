@@ -247,7 +247,7 @@ class HardwareLibrary_SupplyMappingController extends Action {
                                     break;
                                 }
                             }
-                            $found = $has_supply;
+                            if (!$has_supply) $found=false;
                         }
 
                         if ($found) {
