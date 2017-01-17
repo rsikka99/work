@@ -4,22 +4,24 @@
     .not-linked {
         border-radius: 3px;
         display:inline-block;
-        color:white;
         padding:5px;
     }
     .found a,
-    .not-found a,
-    .not-linked a {
+    .not-found a {
         color:white;
+    }
+    .not-linked a {
+        color:black;
     }
     .found {
         background-color:#00B000;
+        color:white;
     }
     .not-found {
         background-color:#B00000;
     }
     .not-linked {
-        background-color:#f0ad4e;
+        background-color: #ecf000;
     }
 
 </style>
@@ -35,10 +37,20 @@
         </select>
     </p>
 
+    <p>
+        <label>Manufacturer:</label>
+        <select class="form-control" onchange="window.location.href='/hardware-library/supply-mapping?supplierId=<?= @$_GET['supplierId'] ?>&manufacturer='+this.value">
+            <option></option>
+            <?php foreach ($this->manufacturers as $line) { ?>
+                <option <?= @$_GET['manufacturer']==$line['id']?'selected="selected"':'' ?> value="<?= $line['id'] ?>"><?= $line['displayname'] ?></option>
+            <?php } ?>
+        </select>
+    </p>
+
     <hr>
     <?php if ($this->count>$this->page_size) { ?>
         <ul class="pagination">
-            <?php for ($i=1;$i<($this->count/$this->page_size);$i++) { ?><li <?= ($i==$this->page)?'class="active"':'' ?>><a href="/hardware-library/supply-mapping?supplierId=<?= $_GET['supplierId'] ?>&page=<?= $i ?>"><?= $i ?></a></li><?php } ?>
+            <?php for ($i=1;$i<($this->count/$this->page_size);$i++) { ?><li <?= ($i==$this->page)?'class="active"':'' ?>><a href="/hardware-library/supply-mapping?supplierId=<?= $_GET['supplierId'] ?>&manufacturer=<?= $_GET['manufacturer'] ?>&page=<?= $i ?>"><?= $i ?></a></li><?php } ?>
         </ul>
     <?php } ?>
     <hr>
@@ -60,7 +72,7 @@
     <hr>
     <?php if ($this->count>$this->page_size) { ?>
         <ul class="pagination">
-            <?php for ($i=1;$i<($this->count/$this->page_size);$i++) { ?><li <?= ($i==$this->page)?'class="active"':'' ?>><a href="/hardware-library/supply-mapping?supplierId=<?= $_GET['supplierId'] ?>&page=<?= $i ?>"><?= $i ?></a></li><?php } ?>
+            <?php for ($i=1;$i<($this->count/$this->page_size);$i++) { ?><li <?= ($i==$this->page)?'class="active"':'' ?>><a href="/hardware-library/supply-mapping?supplierId=<?= $_GET['supplierId'] ?>&manufacturer=<?= $_GET['manufacturer'] ?>&page=<?= $i ?>"><?= $i ?></a></li><?php } ?>
         </ul>
     <?php } ?>
 </div>
@@ -271,6 +283,7 @@
                     '<button type="button" class="btn btn-default" id="unknown-device-add-synonym">Add synonym</button>'
                 );
                 $('#unknown-device-edit-device').click(function () {
+                    $('#unknown-device-modal').modal('hide');
                     editDeviceModel(value);
                 });
                 $('#unknown-device-add-synonym').click(function () {

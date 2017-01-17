@@ -20,7 +20,7 @@ class HardwareLibrary_SupplyMappingController extends Action {
 
         $count = 0;
         $page = isset($_GET['page']) ? $_GET['page'] : 1;
-        $page_size = 100;
+        $page_size = 30;
 
         $and = "and (consumableManufacturerId not in (select `manufacturerId` from toner_vendor_manufacturers) or consumableManufacturerId in (select v.manufacturerId from dealer_toner_vendors v where v.dealerId={$dealerId}))\n";
         if ($dealerId==1) $and="";
@@ -28,69 +28,88 @@ class HardwareLibrary_SupplyMappingController extends Action {
 
         if ($supplierId) {
 
-            $manufacturer_names = [];
-            $manufacturers = [];
-            foreach ($db->query('select * from manufacturers') as $line) {
-                $manufacturer_names[$line['id']] = $line['displayname'];
-                $n = strtoupper($line['fullname']);
-                $manufacturers[$n] = $line['id'];
-                if ($n=='HEWLETT-PACKARD') $manufacturers['HEWLETT PACKARD'] = $line['id'];
-                if ($n=='OKI') $manufacturers['OKIDATA'] = $line['id'];
-                if ($n=='COPYSTAR') $manufacturers['ROYAL COPYSTAR'] = $line['id'];
-                $n = strtoupper($line['displayname']);
-                $manufacturers[$n] = $line['id'];
-            }
+            $sql = "
+                select m.id, m.displayname
+                from supplier_consumable
+                  join supplier_product using (supplierId, supplierSku)
+                  join base_product on supplier_product.baseProductId=base_product.id
+                  join manufacturers m on supplier_consumable.oemManufacturerId=m.id
+                where supplier_product.supplierId=?
+                {$and}
+                group by displayname
+                order by displayname
+            ";
 
-            $supply_skus = [];
-            $supply_names = [];
-            foreach ($db->query('select id, manufacturerId, sku, name from base_product join base_printer_consumable using (id)') as $line) {
-                $supply_skus[$line['id']] = $this->strip_supply($line['sku']);
-                $supply_names[$line['id']] = [];
-                foreach (explode(',', $line['name']) as $e) {
-                    $supply_names[$line['id']][] = $this->strip_supply($e);
+            $this->view->manufacturers = $db->query($sql, [$supplierId]);
+            $selectedManufacturer = $this->getParam('manufacturer');
+
+            if ($selectedManufacturer) {
+
+                $manufacturer_names = [];
+                $manufacturers = [];
+                foreach ($db->query('SELECT * FROM manufacturers') as $line) {
+                    $manufacturer_names[$line['id']] = $line['displayname'];
+                    $n = strtoupper($line['fullname']);
+                    $manufacturers[$n] = $line['id'];
+                    if ($n == 'HEWLETT-PACKARD') $manufacturers['HEWLETT PACKARD'] = $line['id'];
+                    if ($n == 'OKI') $manufacturers['OKIDATA'] = $line['id'];
+                    if ($n == 'COPYSTAR') $manufacturers['ROYAL COPYSTAR'] = $line['id'];
+                    $n = strtoupper($line['displayname']);
+                    $manufacturers[$n] = $line['id'];
                 }
-            }
 
-            $printers = [];
-            $printer_names = [];
-            foreach ($db->query('select id, manufacturerId, sku, name, synonyms from base_product join base_printer using (id)') as $line) {
-                $printers[$line['id']] = $line;
-                $name = strtoupper(str_replace(array(' ', '-', '/'), array('', '', ''), $line['name']));
-                $printer_names[$line['manufacturerId']][$name] = $line['id'];
-                $e = explode(',', $line['synonyms']);
-                foreach($e as $str) {
-                    $str = trim($str);
-                    if (!empty($str)) {
-                        $printer_names[$line['manufacturerId']][$str] = $line['id'];
+                $supply_skus = [];
+                $supply_names = [];
+                foreach ($db->query('SELECT id, manufacturerId, sku, name FROM base_product JOIN base_printer_consumable USING (id)') as $line) {
+                    $supply_skus[$line['id']] = $this->strip_supply($line['sku']);
+                    $supply_names[$line['id']] = [];
+                    foreach (explode(',', $line['name']) as $e) {
+                        $supply_names[$line['id']][] = $this->strip_supply($e);
                     }
                 }
-            }
 
-            $compatible_printer_consumable = [];
-            foreach ($db->query('select * from compatible_printer_consumable') as $line) {
-                $compatible_printer_consumable[$line['compatible']][] = $line['oem'];
-            }
+                $printers = [];
+                $printer_names = [];
+                foreach ($db->query('SELECT id, manufacturerId, sku, name, synonyms FROM base_product JOIN base_printer USING (id)') as $line) {
+                    $printers[$line['id']] = $line;
+                    $name = strtoupper(str_replace(array(' ', '-', '/'), array('', '', ''), $line['name']));
+                    $printer_names[$line['manufacturerId']][$name] = $line['id'];
+                    $e = explode(',', $line['synonyms']);
+                    foreach ($e as $str) {
+                        $str = strtoupper(str_replace(array(' ', '-', '/'), array('', '', ''), trim($str)));
+                        if (!empty($str)) {
+                            $printer_names[$line['manufacturerId']][$str] = $line['id'];
+                        }
+                    }
+                }
 
-            $oem_printing_device_consumable = [];
-            $oem_printing_device_consumable_per_printer = [];
-            foreach ($db->query('select * from oem_printing_device_consumable') as $line) {
-                $oem_printing_device_consumable[$line['printer_consumable']][] = $line['printing_device'];
-                $oem_printing_device_consumable_per_printer[$line['printing_device']][] = $line['printer_consumable'];
-            }
+                $compatible_printer_consumable = [];
+                foreach ($db->query('SELECT * FROM compatible_printer_consumable') as $line) {
+                    $compatible_printer_consumable[$line['compatible']][] = $line['oem'];
+                }
 
-            $sql = "
+                $oem_printing_device_consumable = [];
+                $oem_printing_device_consumable_per_printer = [];
+                foreach ($db->query('SELECT * FROM oem_printing_device_consumable') as $line) {
+                    $oem_printing_device_consumable[$line['printer_consumable']][] = $line['printing_device'];
+                    $oem_printing_device_consumable_per_printer[$line['printing_device']][] = $line['printer_consumable'];
+                }
+
+                $sql = "
                 select count(*)
                 from supplier_consumable
                   join supplier_product using (supplierId, supplierSku)
                   join base_product on supplier_product.baseProductId=base_product.id
                 where supplier_product.supplierId=?
+                and oemManufacturerId=?
                 {$and}
             ";
-            $count = $db->query($sql, [$supplierId])->fetchColumn(0);
+                $count = $db->query($sql, [$supplierId, $selectedManufacturer])->fetchColumn(0);
 
-            $limit = 'limit '.(($page-1)*$page_size).','.$page_size;
+                $limit = 'limit ' . (($page - 1) * $page_size) . ',' . $page_size;
+                //$limit = 'limit 3,1';
 
-            $sql = "
+                $sql = "
                 select
                   `status`,
                   base_product.id,
@@ -110,153 +129,145 @@ class HardwareLibrary_SupplyMappingController extends Action {
                     join base_printer_consumable using (id) left join base_printer_cartridge using (id)
                   left join supplier_consumable_compatible pr using (supplierId, supplierSku)
                 where supplier_product.supplierId=?
+                and oemManufacturerId=?
                 {$and}
                 group by supplierId, supplierSku
                 order by cmfg
                 {$limit}
             ";
 
-            $lines = [];
-            foreach ($db->query($sql, [$supplierId]) as $line) {
-                #--
-                $mfg = [];
-                $mfg_ids = [];
-                $mfg_names = $line['mfg'];
-                foreach (explode(',', $line['mfg']) as $str) {
-                    $str = trim($str);
-                    if (empty($str)) continue;
-                    $n = strtoupper($str);
-                    if (isset($manufacturers[$n])) {
-                        $mfg_ids[] = $manufacturers[$n];
-                        $mfg[] = '<span class="found">'.str_replace(' ','&nbsp;',$str).'</span>';
-                    } else {
-                        $mfg[] = '<span class="not-found">'.str_replace(' ','&nbsp;',$str).'</span>';
-                    }
-                }
-                $line['mfg'] = implode(' ',$mfg);
-                #--
-                $printer_supplies = [];
-                switch ($line['status']) {
-                    case 'OEM' : {
-                        $printer_supplies[] = $line['id'];
-                        if ($line['oemSku']==$line['sku']) {
-                            $line['oemSku'] = '<span class="found is-supply">'.$line['oemSku'].'</span>';
+                $lines = [];
+                foreach ($db->query($sql, [$supplierId, $selectedManufacturer]) as $line) {
+                    #--
+                    $mfg = [];
+                    $mfg_ids = [];
+                    $mfg_names = $line['mfg'];
+                    foreach (explode(',', $line['mfg']) as $str) {
+                        $str = trim($str);
+                        if (empty($str)) continue;
+                        $n = strtoupper($str);
+                        if (isset($manufacturers[$n])) {
+                            $mfg_ids[] = $manufacturers[$n];
+                            $mfg[] = '<span class="found">' . str_replace(' ', '&nbsp;', $str) . '</span>';
                         } else {
+                            $mfg[] = '<span class="not-found">' . str_replace(' ', '&nbsp;', $str) . '</span>';
+                        }
+                    }
+                    $line['mfg'] = implode(' ', $mfg);
+                    #--
+                    $printer_supplies = [];
+                    switch ($line['status']) {
+                        case 'OEM' : {
+                            $printer_supplies[] = $line['id'];
+                            if ($line['oemSku'] == $line['sku']) {
+                                $line['oemSku'] = '<span class="found is-supply">' . $line['oemSku'] . '</span>';
+                            } else {
+                                $oemSku = [];
+                                $m = str_replace('-', '', preg_replace('/[#\/]\w\w\w/', '', $line['sku']));
+                                $names = $supply_names[$line['id']];
+                                foreach (explode(',', $line['oemSku']) as $str) {
+                                    $str = trim($str);
+                                    if (empty($str)) continue;
+                                    $n = str_replace('-', '', preg_replace('/[#\/]\w\w\w/', '', $str));
+                                    if (strcasecmp($n, $m) == 0) {
+                                        $oemSku[] = '<span class="found is-supply"><a href="javascript:;" onclick="editToner(' . $line['id'] . '); return false;">' . str_replace(' ', '&nbsp;', $str) . '</a></span>';
+                                    } else if (in_array(strtoupper($str), $names)) {
+                                        $oemSku[] = '<span class="found is-alias"><a href="javascript:;" onclick="editToner(' . $line['id'] . '); return false;">' . str_replace(' ', '&nbsp;', $str) . '</a></span>';
+                                    } else {
+                                        $oemSku[] = '<span class="not-found">' . str_replace(' ', '&nbsp;', $str) . '</span>';
+                                    }
+                                }
+                                $line['oemSku'] = implode(' ', $oemSku);
+                            }
+                            break;
+                        }
+                        default : {
                             $oemSku = [];
-                            $m = str_replace('-', '', preg_replace('/[#\/]\w\w\w/', '', $line['sku']));
-                            $names = $supply_names[$line['id']];
+                            $cmp = [];
+                            if (isset($compatible_printer_consumable[$line['id']])) {
+                                $cmp = $compatible_printer_consumable[$line['id']];
+                            }
+
+                            $oemFound = [];
+                            $foundOne = false;
                             foreach (explode(',', $line['oemSku']) as $str) {
                                 $str = trim($str);
                                 if (empty($str)) continue;
-                                $n = str_replace('-', '', preg_replace('/[#\/]\w\w\w/', '', $str));
-                                if (strcasecmp($n,$m)==0) {
-                                    $oemSku[] = '<span class="found is-supply"><a href="javascript:;" onclick="editToner('.$line['id'].'); return false;">'.str_replace(' ','&nbsp;',$str).'</a></span>';
-                                } else if (in_array(strtoupper($str), $names)) {
-                                    $oemSku[] = '<span class="found is-alias"><a href="javascript:;" onclick="editToner('.$line['id'].'); return false;">'.str_replace(' ','&nbsp;',$str).'</a></span>';
+                                $n = $this->strip_supply($str);
+                                $found = false;
+                                foreach ($cmp as $cmp_oem_id) {
+                                    $cmp_oem_sku = $supply_skus[$cmp_oem_id];
+                                    if ((strcasecmp($n, $cmp_oem_sku) == 0) || in_array($n, $supply_names[$cmp_oem_id])) {
+                                        $found = $cmp_oem_id;
+                                        $printer_supplies[] = $found;
+                                        $foundOne = true;
+                                    }
+                                }
+                                $oemFound[$str] = $found;
+                            }
+                            foreach ($oemFound as $str => $found) {
+                                if ($found) {
+                                    $oemSku[] = '<span class="found"><a href="javascript:;" onclick="editToner(' . $found . '); return false;">' . str_replace(' ', '&nbsp;', $str) . '</a></span>';
                                 } else {
-                                    $oemSku[] = '<span class="not-found">'.str_replace(' ','&nbsp;',$str).'</span>';
+                                    $oemSku[] = '<span class="not-found"><a href="javascript:;" onclick="unknown_supply(this); return false" data-id="' . $line['id'] . '" data-mfg-ids="' . implode(',', $mfg_ids) . '" data-mfg-id="' . current($mfg_ids) . '" data-mfg-names="' . htmlentities($mfg_names, ENT_QUOTES) . '" data-name="' . htmlentities($str, ENT_QUOTES) . '" data-yield="' . $line['yield'] . '" data-cost="' . $line['cost'] . '" data-type="' . $line['type'] . '" data-color="' . $line['colorId'] . '" data-color-str="' . $line['colorStr'] . '">' . str_replace(' ', '&nbsp;', $str) . '</a></span>';
                                 }
                             }
-                            $line['oemSku'] = implode(' ',$oemSku);
+                            $line['oemSku'] = implode(' ', $oemSku);
                         }
-                        break;
                     }
-                    default : {
-                        $oemSku = [];
-                        $cmp = [];
-                        if (isset($compatible_printer_consumable[$line['id']])) {
-                            $cmp = $compatible_printer_consumable[$line['id']];
-                        }
-
-                        $oemFound = [];
-                        $foundOne = false;
-                        foreach (explode(',', $line['oemSku']) as $str) {
-                            $str = trim($str);
-                            if (empty($str)) continue;
-                            $n = $this->strip_supply($str);
-                            $found = false;
-                            foreach ($cmp as $cmp_oem_id) {
-                                $cmp_oem_sku = $supply_skus[$cmp_oem_id];
-                                if ((strcasecmp($n, $cmp_oem_sku) == 0) || in_array($n, $supply_names[$cmp_oem_id])) {
-                                    $found = $cmp_oem_id;
-                                    $printer_supplies[] = $found;
-                                    $foundOne = true;
-                                }
-                            }
-                            $oemFound[$str] = $found;
-                        }
-                        foreach ($oemFound as $str=>$found) {
-                            if ($found) {
-                                $oemSku[] = '<span class="found"><a href="javascript:;" onclick="editToner('.$found.'); return false;">'.str_replace(' ','&nbsp;',$str).'</a></span>';
-                            } else {
-                                $oemSku[] = '<span class="not-found"><a href="javascript:;" onclick="unknown_supply(this); return false" data-id="'.$line['id'].'" data-mfg-ids="'.implode(',', $mfg_ids).'" data-mfg-id="'.current($mfg_ids).'" data-mfg-names="'.htmlentities($mfg_names, ENT_QUOTES).'" data-name="'.htmlentities($str, ENT_QUOTES).'" data-yield="'.$line['yield'].'" data-cost="'.$line['cost'].'" data-type="'.$line['type'].'" data-color="'.$line['colorId'].'" data-color-str="'.$line['colorStr'].'">' . str_replace(' ', '&nbsp;', $str) . '</a></span>';
-                             }
-                        }
-                        $line['oemSku'] = implode(' ',$oemSku);
-                    }
-                }
-                #--
-                $cmp_pr = [];
-                foreach (explode(';;', $line['cmp_pr']) as $str) {
-                    if (empty($str)) continue;
-                    list($cmp_mfg,$cmp_model) = explode(';',$str,2);
-                    $cmp_model_str = strtoupper(str_replace(array(' ','-','/'),array('','',''),$cmp_model));
-                    $found = false;
-                    $pr = [];
-                    if (isset($oem_printing_device_consumable[$line['id']])) $pr = $oem_printing_device_consumable[$line['id']];
-                    else if (isset($compatible_printer_consumable[$line['id']])) {
-                        foreach ($compatible_printer_consumable[$line['id']] as $cmp_oem_id) {
-                            if (isset($oem_printing_device_consumable[$cmp_oem_id])) {
-                                foreach ($oem_printing_device_consumable[$cmp_oem_id] as $printer_id) {
-                                    $pr[] = $printer_id;
+                    #--
+                    $cmp_pr = [];
+                    foreach (explode(';;', $line['cmp_pr']) as $str) {
+                        if (empty($str)) continue;
+                        list($cmp_mfg, $cmp_model) = explode(';', $str, 2);
+                        $cmp_model_str = strtoupper(str_replace(array(' ', '-', '/'), array('', '', ''), $cmp_model));
+                        $found = false;
+                        $pr = [];
+                        if (isset($oem_printing_device_consumable[$line['id']])) $pr = $oem_printing_device_consumable[$line['id']];
+                        else if (isset($compatible_printer_consumable[$line['id']])) {
+                            foreach ($compatible_printer_consumable[$line['id']] as $cmp_oem_id) {
+                                if (isset($oem_printing_device_consumable[$cmp_oem_id])) {
+                                    foreach ($oem_printing_device_consumable[$cmp_oem_id] as $printer_id) {
+                                        $pr[] = $printer_id;
+                                    }
                                 }
                             }
                         }
-                    }
-                    /**
-                    foreach ($pr as $printer_id) {
-                        if ($cmp_mfg == $printers[$printer_id]['manufacturerId']) {
-                            $printer_model = strtoupper(str_replace(array(' ', '-', '/'), array('', '', ''), $printers[$printer_id]['name']));
-                            if (strcasecmp($printer_model, $cmp_model_str)==0) {
-                                $found = $printer_id;
-                            }
-                        }
-                     }
-                     **/
 
-                    if (isset($printer_names[$cmp_mfg][$cmp_model_str])) {
-                        $printer_id = $printer_names[$cmp_mfg][$cmp_model_str];
-                        $found = in_array($printer_id, $pr) ? $printer_id : false;
-                    }
-
-                    if ($found) {
-                        foreach ($printer_supplies as $supply_id) {
-                            if (!in_array($supply_id, $oem_printing_device_consumable_per_printer[$found])) {
-                                $found=false;
-                                break;
-                            }
-                        }
-                    }
-
-                    if ($found) {
-                        $cmp_pr[] = '<span class="found"><a href="javascript:;" onclick="editDeviceModel('.$found.'); return false;">' . str_replace(' ', '&nbsp;', $manufacturer_names[$cmp_mfg].' '.$cmp_model) . '</a></span>';
-                    } else {
                         if (isset($printer_names[$cmp_mfg][$cmp_model_str])) {
-                            if (!empty($printer_supplies)) {
-                                $cmp_pr[] = '<span class="not-linked"><a href="javascript:;" onclick="link_device(this); return false;" data-supplies="' . implode(',', $printer_supplies) . '" data-device-id="' . $printer_names[$cmp_mfg][$cmp_model_str] . '" data-device-name="' . htmlentities($manufacturer_names[$cmp_mfg] . ' ' . $cmp_model, ENT_QUOTES) . '">' . str_replace(' ', '&nbsp;', $manufacturer_names[$cmp_mfg] . ' ' . $cmp_model) . '</a></span>';
-                            } else {
-                                $cmp_pr[] = '<span class="not-linked"><a href="javascript:;" onclick="editDeviceModel('.$printer_names[$cmp_mfg][$cmp_model_str].'); return false;">' . str_replace(' ', '&nbsp;', $manufacturer_names[$cmp_mfg] . ' ' . $cmp_model) . '</a></span>';
+                            $printer_id = $printer_names[$cmp_mfg][$cmp_model_str];
+                            $found = in_array($printer_id, $pr) ? $printer_id : false;
+                        }
+
+                        if ($found) {
+                            foreach ($printer_supplies as $supply_id) {
+                                if (!in_array($supply_id, $oem_printing_device_consumable_per_printer[$found])) {
+                                    $found = false;
+                                    break;
+                                }
                             }
+                        }
+
+                        if ($found) {
+                            $cmp_pr[] = '<span class="found"><a href="javascript:;" onclick="editDeviceModel(' . $found . '); return false;">' . str_replace(' ', '&nbsp;', $manufacturer_names[$cmp_mfg] . ' ' . $cmp_model) . '</a></span>';
                         } else {
-                            $cmp_pr[] = '<span class="not-found"><a href="javascript:;" onclick="unknown_device(this); return false" data-supplies="'.implode(',', $printer_supplies).'" data-mfg-id="'.$cmp_mfg.'" data-mfg="'.$manufacturer_names[$cmp_mfg].'" data-model="'.htmlentities($cmp_model, ENT_QUOTES).'">' . str_replace(' ', '&nbsp;', $manufacturer_names[$cmp_mfg] . ' ' . $cmp_model) . '</a></span>';
+                            if (isset($printer_names[$cmp_mfg][$cmp_model_str])) {
+                                if (!empty($printer_supplies)) {
+                                    $cmp_pr[] = '<span class="not-linked"><a href="javascript:;" onclick="link_device(this); return false;" data-supplies="' . implode(',', $printer_supplies) . '" data-device-id="' . $printer_names[$cmp_mfg][$cmp_model_str] . '" data-device-name="' . htmlentities($manufacturer_names[$cmp_mfg] . ' ' . $cmp_model, ENT_QUOTES) . '">' . str_replace(' ', '&nbsp;', $manufacturer_names[$cmp_mfg] . ' ' . $cmp_model) . '</a></span>';
+                                } else {
+                                    $cmp_pr[] = '<span class="not-linked"><a href="javascript:;" onclick="editDeviceModel(' . $printer_names[$cmp_mfg][$cmp_model_str] . '); return false;">' . str_replace(' ', '&nbsp;', $manufacturer_names[$cmp_mfg] . ' ' . $cmp_model) . '</a></span>';
+                                }
+                            } else {
+                                $cmp_pr[] = '<span class="not-found"><a href="javascript:;" onclick="unknown_device(this); return false" data-supplies="' . implode(',', $printer_supplies) . '" data-mfg-id="' . $cmp_mfg . '" data-mfg="' . $manufacturer_names[$cmp_mfg] . '" data-model="' . htmlentities($cmp_model, ENT_QUOTES) . '">' . str_replace(' ', '&nbsp;', $manufacturer_names[$cmp_mfg] . ' ' . $cmp_model) . '</a></span>';
+                            }
                         }
                     }
+                    $line['cmp_pr'] = implode(' ', $cmp_pr);
+                    #--
+                    $lines[] = $line;
                 }
-                $line['cmp_pr'] = implode(' ',$cmp_pr);
-                #--
-                $lines[] = $line;
+                $this->view->lines = $lines;
             }
-            $this->view->lines = $lines;
         }
         $this->view->count = $count;
         $this->view->page = $page;
