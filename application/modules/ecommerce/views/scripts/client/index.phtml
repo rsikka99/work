@@ -9,8 +9,10 @@ $contact = null;
 
 $tonerVendorList = \MPSToolbox\Legacy\Modules\ProposalGenerator\Mappers\TonerVendorManufacturerMapper::getInstance()->fetchAllForDealerDropdown();
 
-$clientOptions = [];
+$clientOptions1 = [];
+$clientOptions2 = [];
 foreach($this->clients as $client) {
+    /** @var \MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel $client */
     $clientName = $client->companyName;
     $contact = \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ContactMapper::getInstance()->getContactByClientId($client->id);
     if (empty($contact->email)) $clientName .= ' (1)';
@@ -20,7 +22,11 @@ foreach($this->clients as $client) {
         $monochromeRank = explode(',',$selectedClient->ecomMonochromeRank);
         $colorRank = explode(',',$selectedClient->ecomColorRank);
     }
-    $clientOptions[$client->id] = $clientName;
+    if ($client->webId) {
+        $clientOptions1[$client->id] = $clientName;
+    } else {
+        $clientOptions2[$client->id] = $clientName;
+    }
 }
 
 ?>
@@ -33,7 +39,12 @@ foreach($this->clients as $client) {
             <div class="col-sm-8">
                 <select class="form-control" onchange="window.location.href='?client='+this.value">
                     <option></option>
-                    <?php foreach($clientOptions as $id=>$clientName) { ?><option <?= $this->clientId==$id?'selected="selected"':'' ?> value="<?= $id ?>"><?= $clientName ?></option><?php } ?>
+                    <optgroup label="In Shopify">
+                        <?php foreach($clientOptions1 as $id=>$clientName) { ?><option <?= $this->clientId==$id?'selected="selected"':'' ?> value="<?= $id ?>"><?= $clientName ?></option><?php } ?>
+                    </optgroup>
+                    <optgroup label="Not In Shopify">
+                        <?php foreach($clientOptions2 as $id=>$clientName) { ?><option <?= $this->clientId==$id?'selected="selected"':'' ?> value="<?= $id ?>"><?= $clientName ?></option><?php } ?>
+                    </optgroup>
                 </select>
                 <?php if ($selectedClient) { ?>
                 <p>
