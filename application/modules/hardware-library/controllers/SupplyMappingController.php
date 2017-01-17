@@ -240,12 +240,14 @@ class HardwareLibrary_SupplyMappingController extends Action {
                         }
 
                         if ($found) {
+                            $has_supply=false;
                             foreach ($printer_supplies as $supply_id) {
-                                if (!in_array($supply_id, $oem_printing_device_consumable_per_printer[$found])) {
-                                    $found = false;
+                                if (in_array($supply_id, $oem_printing_device_consumable_per_printer[$found])) {
+                                    $has_supply = true;
                                     break;
                                 }
                             }
+                            $found = $has_supply;
                         }
 
                         if ($found) {
