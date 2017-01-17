@@ -217,7 +217,7 @@ class ClientMapper extends My_Model_Mapper_Abstract
      *
      * @return ClientModel[]
      */
-    public function fetchAll ($where = null, $order = null, $count = 150, $offset = null)
+    public function fetchAll ($where = null, $order = null, $count = 1500, $offset = null)
     {
         if ($order === null)
         {
