@@ -3013,7 +3013,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
             /* xxxx */
 
-            $this->populateCompatible($db, $skus, 137, $line['Item No.'], $imgUrl, '', null, null, $line['Price'], str_replace(',','', $line['Page Yield']), $oem_lines, 0, $line['Color']);
+            $this->populateCompatible($db, $skus, 137, $line['Item No.'], $imgUrl, '', null, null, trim($line['Price'],'$'), str_replace(',','', $line['Page Yield']), $oem_lines, 0, $line['Color']);
             #--
 
         }
