@@ -34,6 +34,7 @@ class DistributorUpdateService {
     private $remaining_product = [];
     private $supplier_product = [];
     private $supplier_price = [];
+    private $dealer_toner_attributes = [];
 
     private $compatibleStatements = [];
     private $supplierConsumableStatements = [];
@@ -220,6 +221,14 @@ _md5=:_md5
             $this->supplier_price[$line['supplierSku']] = $line['_md5'] ? $line['_md5'] : 'x';
         }
         $cursor->closeCursor();
+
+        $this->dealer_toner_attributes = [];
+        $cursor = $db->query('select tonerId, cost, dealerSku, sellPrice from dealer_toner_attributes where dealerId='.$this->dealerId);
+        while($line = $cursor->fetch()) {
+            $this->dealer_toner_attributes[$line['tonerId']] = $line;
+        }
+        $cursor->closeCursor();
+
 
         $cursor = null;
         gc_collect_cycles();
@@ -846,7 +855,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         }
     }
 
-    private function populateCompatible(\Zend_Db_Adapter_Abstract $db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $pageYield, $oem_lines, $mlYield=null, $colorStr=null) {
+    private function populateCompatible(\Zend_Db_Adapter_Abstract $db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $pageYield, $oem_lines, $mlYield=null, $colorStr=null, $sellPrice=null) {
         if (empty($this->compatibleStatements)) {
             $this->compatibleStatements['st1'] = $db->prepare("REPLACE INTO base_product SET userId=1, dateCreated=now(), isSystemProduct=1, imageUrl=?, base_type=?, manufacturerId=?, sku=?, name=?, weight=?, UPC=?");
             $this->compatibleStatements['st1a'] = $db->prepare("update base_product SET imageUrl=?, base_type=?, manufacturerId=?, sku=?, name=?, weight=?, UPC=? where id=?");
@@ -854,13 +863,14 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $this->compatibleStatements['st3'] = $db->prepare("REPLACE INTO base_printer_cartridge SET id=?, colorId=?, colorStr=?, mlYield=?");
             $this->compatibleStatements['st3a'] = $db->prepare("delete from base_printer_cartridge where id=?");
             $this->compatibleStatements['st4'] = $db->prepare("REPLACE INTO compatible_printer_consumable SET oem=?, compatible=?");
-            $this->compatibleStatements['st5'] = $db->prepare("REPLACE INTO dealer_toner_attributes SET tonerId=?, dealerId=?, cost=?, dealerSku=?");
+            $this->compatibleStatements['st5'] = $db->prepare("insert INTO dealer_toner_attributes SET tonerId=?, dealerId=?, cost=?, dealerSku=?, sellPrice=?");
+            $this->compatibleStatements['st5a'] = $db->prepare("update dealer_toner_attributes SET cost=?, dealerSku=?, sellPrice=? where tonerId=? and dealerId=?");
             $this->compatibleStatements['st6'] = $db->prepare("update supplier_product set baseProductId=? where supplierId=? and supplierSku=?");
         }
 
         if (!$comp_mfg_id) {
             error_log('comp_mfg_id?');
-            return;
+            return false;
         }
 
         $base_id = false;
@@ -897,7 +907,12 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $this->compatibleStatements['st4']->execute([$oem_line['id'], $base_id]);
         }
 
-        $this->compatibleStatements['st5']->execute([$base_id, $this->dealerId, $price, $supplierSku]);
+        if (isset($this->dealer_toner_attributes[$base_id])) {
+            $this->compatibleStatements['st5a']->execute([$price, $supplierSku, $sellPrice, $base_id, $this->dealerId]);
+        } else {
+            $this->compatibleStatements['st5']->execute([$base_id, $this->dealerId, $price, $supplierSku, $sellPrice]);
+            $this->dealer_toner_attributes[$base_id] = ['tonerId'=>$base_id, 'sellPrice'=>$sellPrice];
+        }
         $this->compatibleStatements['st6']->execute([$base_id, $this->supplierId, $supplierSku]);
         return $base_id;
     }
@@ -2911,6 +2926,9 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
             $manufacturerId = $manufacturers[$str];
 
+            $sell_price = trim($line['Price'],'$');
+            $price = 0.8 * $sell_price;
+
             $type = $line['Product Group'];
             if ($type=='Inkjet') $type='Inkjet Cartridge';
             if ($type=='Laser') $type='Laser Cartridge';
@@ -2940,7 +2958,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $price_data = [
                 'supplierSku'=>$line['Item No.'],
                 'dealerId'=>$this->dealerId,
-                'price'=>trim($line['Price'],'$'),
+                'price'=>$price,
                 'promotion'=>0,
             ];
 
@@ -3013,7 +3031,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
             /* xxxx */
 
-            $this->populateCompatible($db, $skus, 137, $line['Item No.'], $imgUrl, '', null, null, trim($line['Price'],'$'), str_replace(',','', $line['Page Yield']), $oem_lines, 0, $line['Color']);
+            $base_product_id = $this->populateCompatible($db, $skus, 137, $line['Item No.'], $imgUrl, '', null, null, $price, str_replace(',','', $line['Page Yield']), $oem_lines, 0, $line['Color'], $sell_price);
             #--
 
         }
