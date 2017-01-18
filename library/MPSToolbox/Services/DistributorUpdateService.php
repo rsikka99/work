@@ -49,6 +49,7 @@ class DistributorUpdateService {
     const SUPPLIER_CLOVER = 7;
     const SUPPLIER_ARLI = 8;
     const SUPPLIER_TECHDATA_SA = 9;
+    const SUPPLIER_QCFL = 10;
 
     /** @var  \Zend_Filter_Compress_Zip */
     private $zipAdapter;
@@ -276,6 +277,10 @@ _md5=:_md5
             }
             case self::SUPPLIER_TECHDATA_SA : {
                 $this->updateTechDataSA();
+                break;
+            }
+            case self::SUPPLIER_QCFL : {
+                $this->updateQcfl();
                 break;
             }
         }
@@ -2851,6 +2856,169 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
         echo time() - $this->timerStart."s\n";
         return true;
+    }
+
+    public function updateQcfl() {
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        $fp = fopen(APPLICATION_BASE_PATH . '/data/cache/'.$this->dealerSupplier['url'], 'rb');
+        if (!$fp) {
+            error_log('Cannot open '.APPLICATION_BASE_PATH . '/data/cache/'.$this->dealerSupplier['url']);
+            return;
+        }
+
+        $manufacturers = [];
+        foreach ($db->query('select * from manufacturers') as $line) {
+            $str = strtoupper($line['fullname']);
+            $manufacturers[$str] = $line['id'];
+            $str = strtoupper($line['displayname']);
+            $manufacturers[$str] = $line['id'];
+            if ($line['fullname']=='Imagistics') {
+                $manufacturers['PB/IMAG'] = $line['id'];
+            }
+            if ($line['fullname']=='PITNEY BOWES') {
+                $manufacturers['PITNEY BOW'] = $line['id'];
+            }
+            if ($line['fullname']=='Source Technologies') {
+                $manufacturers['SOURCETECH'] = $line['id'];
+            }
+        }
+
+        $colors = [];
+        foreach ($db->query('select * from toner_colors') as $line) {
+            $colors[$line['name']] = $line['id'];
+        }
+
+        $skus = [];
+        foreach ($db->query('select * from base_product p join base_printer_consumable c using(id) left join base_printer_cartridge a using(id)')->fetchAll() as $line) {
+            $sku = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['sku']));
+            $skus[$line['manufacturerId']][$sku] = $line;
+        }
+
+        $line = fgetcsv($fp);
+        $line = fgetcsv($fp);
+        $line = fgetcsv($fp);
+        $line = fgetcsv($fp);
+        $line = fgetcsv($fp);
+        $columns = fgetcsv($fp);
+
+        while($line = fgetcsv($fp)) {
+            $line = array_combine($columns, $line);
+            foreach ($line as $k=>$v) $line[$k] = trim($v);
+            $str = strtoupper($line['OEM']);
+            if (!isset($manufacturers[$str])) {
+                error_log('Mfg unknown: '.$line['OEM']);
+                continue;
+            }
+            $manufacturerId = $manufacturers[$str];
+
+            $type = $line['Product Group'];
+            if ($type=='Inkjet') $type='Inkjet Cartridge';
+            if ($type=='Laser') $type='Laser Cartridge';
+            if ($type=='Color Laser') $type='Laser Cartridge';
+
+            $product_data = [
+                'supplierSku'=>$line['Item No.'],
+                'manufacturer'=>$line['OEM'],
+                'manufacturerId'=>$manufacturerId,
+                'vpn'=>$line['OEM Item No.'],
+                'name'=>null,
+                'msrp'=>trim($line['MSRP'],'$'),
+                'weight'=>null,
+                'length'=>null,
+                'width'=>null,
+                'height'=>null,
+                'upc'=>null,
+                'description'=>$line['Machine Compatibility/Description'],
+                'package'=>null,
+                'isStock'=>1,
+                'qty'=>null,
+                'category'=>null,
+                'categoryId'=>null,
+                'dateCreated'=>null,
+            ];
+
+            $price_data = [
+                'supplierSku'=>$line['Item No.'],
+                'dealerId'=>$this->dealerId,
+                'price'=>trim($line['Price'],'$'),
+                'promotion'=>0,
+            ];
+
+            try {
+                $this->populate($product_data, $price_data);
+            } catch (\Exception $ex) {
+                var_dump($product_data);
+                die ('xxx '.$ex->getMessage());
+            }
+
+            $imgUrl = 'https://cdn.shopify.com/s/files/1/1603/0113/files/QCFL_lg_png24_1.png';
+
+            $this->populateSupplierConsumable(
+                $db,
+                $line['Item No.'],
+                'Compatible',
+                $line['OEM'],
+                $manufacturerId,
+                'QCFL',
+                137,
+                $line['OEM Item No.'],
+                $line['OEM Item No.'],
+                $type,
+                $line['Color'],
+                $line['Page Yield'],
+                null,
+                $imgUrl,
+                []
+            );
+
+            #--
+            $oem_lines = [];
+            $e = explode(',', $line['OEM Item No.']);
+            foreach ($e as $n) {
+                $n = str_replace('-', '', trim($n));
+                $n = preg_replace('#\(M\)$#','',$n);
+                if (empty($n)) continue;
+                if (isset($skus[$manufacturerId][$n])) {
+                    $oem_lines[] = $skus[$manufacturerId][$n];
+                }
+            }
+
+            /**/
+            if (empty($oem_lines)) {
+//                error_log('oem not found for compatible: '.print_r($line,true));
+                /**/
+                $oem_line_colorId=null;
+                $color = str_replace('DRUM, ','',$line['Color']);
+                if ($color=='DRUM') $color='';
+                if ($color=='Black Drum') $color='BLACK';
+                if ($color=='Tri-Color') $color='3 COLOR';
+                if ($color=='Photo Black') $color='BLACK';
+                if ($color=='MICR Black') $color='BLACK';
+                if (!empty($color)) {
+                    if (isset($colors[strtoupper($color)])) $oem_line_colorId = $colors[strtoupper($color)];
+                    else {
+                        echo "{$color}\n";
+                        $oem_line_colorId = 7;
+                    } //COLOR
+                }
+
+                $oem_lines = [[
+                    'base_type'=>$oem_line_colorId ? 'printer_cartridge':'printer_consumable',
+                    'weight'=>0,
+                    'quantity'=>1,
+                    'type'=>$type,
+                    'colorId'=>$oem_line_colorId,
+                ]];
+                /**/
+            }
+            /* xxxx */
+
+            $this->populateCompatible($db, $skus, 137, $line['Item No.'], $imgUrl, '', null, null, $line['Price'], str_replace(',','', $line['Page Yield']), $oem_lines, 0, $line['Color']);
+            #--
+
+        }
+
+        fclose($fp);
     }
 
 }
