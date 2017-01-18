@@ -282,7 +282,7 @@ class ClientService
         return $fmAudit;
     }
 
-    public function importFromFmaudit(array $ids, $csv_filename) {
+    public function importFromFmaudit(array $ids) {
         $dealerId = DealerEntity::getDealerId();
         $result = [];
         $inserted = false;
@@ -358,6 +358,8 @@ class ClientService
                     $client = new ClientModel();
                     $client->dealerId = $dealerId;
                     $client->companyName = $name;
+                    $client->monitoringEnabled = false;
+                    $client->deviceGroup = $name;
                     ClientMapper::getInstance()->insert($client);
                     $inserted = true;
                     $result[$client->id] = 'i';
@@ -394,7 +396,7 @@ class ClientService
         }
         if ($inserted) {
             $rmsUpdateService = new RmsUpdateService();
-            $rmsUpdateService->updateFmauditCsv($dealerId, $csv_filename);
+            $rmsUpdateService->updateFmauditData($dealerId);
         }
         return $result;
     }

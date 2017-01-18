@@ -415,13 +415,11 @@ class Dealermanagement_ClientController extends Action
 
                 case 8: { //FM Audit 4.x
                     $tree = [];
-                    $csv_filename = APPLICATION_BASE_PATH . '/data/cache/' . str_replace(' ','_',$dealer->dealerName) . '.csv';
-                    if (file_exists($csv_filename)) {
-                        $fp = fopen($csv_filename, 'rb');
-                        $cols = fgetcsv($fp);
+                    $db = Zend_Db_Table::getDefaultAdapter();
+                    $arr = $db->query('select * from fmaudit where dealerId=?', [$dealerId])->fetchAll();
+                    if (!empty($arr)) {
                         $accounts = [];
-                        while ($line = fgetcsv($fp)) {
-                            $line = array_combine($cols, $line);
+                        foreach ($arr as $line) {
                             if (!empty($line['Last Audit Date'])) {
                                 $accounts[$line['Account']] = isset($accounts[$line['Account']]) ? $accounts[$line['Account']] + 1 : 1;
                             }
@@ -440,7 +438,7 @@ class Dealermanagement_ClientController extends Action
                         }
                         echo '<div id="tree"></div><script> showTree(' . json_encode($tree) . '); </script>';
                     } else {
-                        echo '<div class="panel panel-danger">File not found: '.$csv_filename.'</div>';
+                        echo '<div class="panel panel-danger">No data found from fmaudit</div>';
                     }
 
                     break;
@@ -483,8 +481,7 @@ class Dealermanagement_ClientController extends Action
                     }
                     case 8: { //FM Audit 4.x
                         $service = new ClientService();
-                        $csv_filename = APPLICATION_BASE_PATH . '/data/cache/' . $dealer->dealerName . '.csv';
-                        $result = $service->importFromFmaudit(explode(';;', $ids), $csv_filename);
+                        $result = $service->importFromFmaudit(explode(';;', $ids));
                         break;
                     }
                     case 6: { //PrintFleet 3.x

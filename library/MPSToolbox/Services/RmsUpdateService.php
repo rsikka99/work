@@ -104,7 +104,41 @@ class RmsUpdateService {
                     exec('/usr/local/bin/xlsx2csv '.$xls_filename.' '.$csv_filename);
                 }
                 if (file_exists($csv_filename) && (filesize($csv_filename)>0)) {
-                    $this->updateFmauditCsv($dealer->id, $csv_filename);
+                    #--
+                    $db = \Zend_Db_Table::getDefaultAdapter();
+                    $db->query('delete from fmaudit where dealerId='.intval($dealer->id));
+                    $fields = [];
+                    foreach ($db->query('describe fmaudit') as $field) {
+                        $fields[] = $field['Field'];
+                    }
+                    $fp = fopen($csv_filename, 'rb');
+                    $columns = fgetcsv($fp);
+                    foreach ($columns as $column) {
+                        $column = trim($column);
+                        if (!empty($column)) {
+                            if (!in_array($column, $fields)) {
+                                $db->query('ALTER TABLE fmaudit ADD `' . $column . '` VARCHAR(255) NULL DEFAULT NULL');
+                                $fields[] = $column;
+                            }
+                        }
+                    }
+                    $sql = [];
+                    foreach ($fields as $field) {
+                        $sql[] = '`'.$field.'`=?';
+                    }
+                    $sql = 'insert into fmaudit set '.implode(', ', $sql);
+                    $st = $db->prepare($sql);
+                    while ($line = fgetcsv($fp)) {
+                        $line = array_combine($columns, $line);
+                        $line['dealerId'] = $dealer->id;
+                        $data = [];
+                        foreach ($fields as $field) {
+                            $data[] = $line[$field];
+                        }
+                        $st->execute($data);
+                    }
+                    #--
+                    $this->updateFmauditData($dealer->id);
                 }
             }
             $message->moveToMailBox('[Gmail]/archive');
@@ -266,22 +300,26 @@ class RmsUpdateService {
         }
     }
 
-    public function updateFmauditCsv($dealerId, $csv_filename) {
-        echo "processing report {$csv_filename}\n";
+    public function updateFmauditData($dealerId) {
+        //echo "processing report {$csv_filename}\n";
 
         $rmsRealtimeService = new RmsRealtimeService();
 
         $client_lookup = [];
         foreach ($this->getRmsClients() as $line) if ($line['dealerId']==$dealerId) {
             $clientName = $line['companyName'];
-            $client_lookup[$clientName] = $line;
+            $deviceGroup = $line['deviceGroup'];
+            if ($deviceGroup) {
+                $client_lookup[$deviceGroup] = $line;
+            } else {
+                $client_lookup[$clientName] = $line;
+            }
         }
 
         $toRmsUpdate = [];
 
-        $fp = fopen($csv_filename, 'rb');
-        $cols = fgetcsv($fp);
-        while($line =  fgetcsv($fp)) {
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        foreach ($db->query('select * from fmaudit where dealerId='.intval($dealerId)) as $line) {
             /**
              * array(17) {
             'Account' =>
@@ -320,7 +358,6 @@ class RmsUpdateService {
             string(0) ""
             }
              **/
-            $line = array_combine($cols, $line);
 
             if (preg_match('#(\d+)\/(\d+)\/(\d+)#', $line['Last Audit Date'], $m)) {
                 $line['Last Audit Date'] = "{$m[3]}-{$m[2]}-{$m[1]}";
@@ -411,7 +448,6 @@ class RmsUpdateService {
                 //echo "Client {$line['Account']} not found\n";
             }
         }
-        fclose($fp);
 
         foreach ($toRmsUpdate as $client) {
             echo "to RMS Update: {$client['companyName']}\n";

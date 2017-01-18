@@ -88,7 +88,7 @@ class ClientModel extends My_Model_Abstract
     public $industry = null;
 
     /** @var boolean */
-    public $monitoringEnabled = true;
+    public $monitoringEnabled = false;
 
     /**
      * @param array $params An array of data to populate the model with
