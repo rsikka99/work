@@ -188,8 +188,6 @@ class HardwareLibrary_SupplyMappingController extends Action {
                                 $cmp = $compatible_printer_consumable[$line['id']];
                             }
 
-                            $oemFound = [];
-                            $foundOne = false;
                             foreach (explode(',', $line['oemSku']) as $str) {
                                 $str = trim($str);
                                 if (empty($str)) continue;
@@ -200,14 +198,15 @@ class HardwareLibrary_SupplyMappingController extends Action {
                                     if ((strcasecmp($n, $cmp_oem_sku) == 0) || in_array($n, $supply_names[$cmp_oem_id])) {
                                         $found = $cmp_oem_id;
                                         $printer_supplies[] = $found;
-                                        $foundOne = true;
                                     }
                                 }
-                                $oemFound[$str] = $found;
-                            }
-                            foreach ($oemFound as $str => $found) {
+
                                 if ($found) {
-                                    $oemSku[] = '<span class="found"><a href="javascript:;" onclick="editToner(' . $found . '); return false;">' . str_replace(' ', '&nbsp;', $str) . '</a></span>';
+                                    if (empty($oem_printing_device_consumable[$found])) {
+                                        $oemSku[] = '<span class="not-linked"><a href="javascript:;" onclick="editToner(' . $found . '); return false;">' . str_replace(' ', '&nbsp;', $str) . '</a></span>';
+                                    } else {
+                                        $oemSku[] = '<span class="found"><a href="javascript:;" onclick="editToner(' . $found . '); return false;">' . str_replace(' ', '&nbsp;', $str) . '</a></span>';
+                                    }
                                 } else {
                                     $oemSku[] = '<span class="not-found"><a href="javascript:;" onclick="unknown_supply(this); return false" data-id="' . $line['id'] . '" data-mfg-ids="' . implode(',', $mfg_ids) . '" data-mfg-id="' . current($mfg_ids) . '" data-mfg-names="' . htmlentities($mfg_names, ENT_QUOTES) . '" data-name="' . htmlentities($str, ENT_QUOTES) . '" data-yield="' . $line['yield'] . '" data-cost="' . $line['cost'] . '" data-type="' . $line['type'] . '" data-color="' . $line['colorId'] . '" data-color-str="' . $line['colorStr'] . '">' . str_replace(' ', '&nbsp;', $str) . '</a></span>';
                                 }
