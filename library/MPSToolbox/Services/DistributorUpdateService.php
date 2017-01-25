@@ -2994,7 +2994,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $e = explode(',', $line['OEM Item No.']);
             foreach ($e as $n) {
                 $n = str_replace('-', '', trim($n));
-                $n = preg_replace('#\(M\)$#','',$n);
+                $n = preg_replace('#\((M|J)\)$#','',$n);
                 if (empty($n)) continue;
                 if (isset($skus[$manufacturerId][$n])) {
                     $oem_lines[] = $skus[$manufacturerId][$n];

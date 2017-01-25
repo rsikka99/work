@@ -5,7 +5,7 @@ use Tangent\Controller\Action;
 class HardwareLibrary_SupplyMappingController extends Action {
 
     private function strip_supply($s) {
-        return trim(strtoupper(str_replace('-','',preg_replace('/([#\/]\w+|\(m\))/i','',$s))));
+        return trim(strtoupper(str_replace('-','',preg_replace('/([#\/]\w+|\(m\)|\(j\))$/i','',$s))));
     }
 
     public function indexAction() {
