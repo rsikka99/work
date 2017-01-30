@@ -855,7 +855,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         }
     }
 
-    private function populateCompatible(\Zend_Db_Adapter_Abstract $db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $pageYield, $oem_lines, $mlYield=null, $colorStr=null, $sellPrice=null) {
+    private function populateCompatible(\Zend_Db_Adapter_Abstract $db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $pageYield, $oem_lines, $mlYield=null, $colorStr=null, $sellPrice=null, $type=null) {
         if (empty($this->compatibleStatements)) {
             $this->compatibleStatements['st1'] = $db->prepare("REPLACE INTO base_product SET userId=1, dateCreated=now(), isSystemProduct=1, imageUrl=?, base_type=?, manufacturerId=?, sku=?, name=?, weight=?, UPC=?");
             $this->compatibleStatements['st1a'] = $db->prepare("update base_product SET imageUrl=?, base_type=?, manufacturerId=?, sku=?, name=?, weight=?, UPC=? where id=?");
@@ -886,7 +886,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             if (!$weight) $weight = $oem_line['weight'];
             $this->compatibleStatements['st1']->execute([$imgUrl, $oem_line['base_type'], $comp_mfg_id, $supplierSku, $name, $weight, $upc]);
             $base_id = $db->lastInsertId();
-            $this->compatibleStatements['st2']->execute([$base_id, $price, $pageYield, $oem_line['quantity'], $oem_line['type']]);
+            $this->compatibleStatements['st2']->execute([$base_id, $price, $pageYield, $oem_line['quantity'], $type ? $type : $oem_line['type']]);
             if ($oem_line['colorId']) {
                 $this->compatibleStatements['st3']->execute([$base_id, $oem_line['colorId'], $colorStr, $mlYield]);
             }
@@ -894,7 +894,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $oem_line = current($oem_lines);
             if (!$weight) $weight = $oem_line['weight'];
             $this->compatibleStatements['st1a']->execute([$imgUrl, $oem_line['base_type'], $comp_mfg_id, $supplierSku, $name, $weight, $upc, $base_id]);
-            $this->compatibleStatements['st2']->execute([$base_id, $price, $pageYield, $oem_line['quantity'], $oem_line['type']]);
+            $this->compatibleStatements['st2']->execute([$base_id, $price, $pageYield, $oem_line['quantity'], $type ? $type : $oem_line['type']]);
             if ($oem_line['colorId']) {
                 $this->compatibleStatements['st3']->execute([$base_id, $oem_line['colorId'], $colorStr, $mlYield]);
             } else {
@@ -3031,7 +3031,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
             /* xxxx */
 
-            $base_product_id = $this->populateCompatible($db, $skus, 137, $line['Item No.'], $imgUrl, '', null, null, $price, str_replace(',','', $line['Page Yield']), $oem_lines, 0, $line['Color'], $sell_price);
+            $base_product_id = $this->populateCompatible($db, $skus, 137, $line['Item No.'], $imgUrl, '', null, null, $price, str_replace(',','', $line['Page Yield']), $oem_lines, 0, $line['Color'], $sell_price, $type);
             #--
 
         }
