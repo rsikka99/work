@@ -197,7 +197,7 @@ class DealerMapper extends My_Model_Mapper_Abstract
      *
      * @return DealerModel[]
      */
-    public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
+    public function fetchAll ($where = null, $order = ['dealerName'], $count = 99999, $offset = null)
     {
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
         $entries   = [];

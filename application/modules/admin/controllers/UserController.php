@@ -49,7 +49,7 @@ class Admin_UserController extends Action
     {
         $this->_pageTitle = ['Users', 'Create User'];
 
-        $dealerId = $this->getRequest()->getUserParam('id', false);
+        $dealerId = $this->getRequest()->getParam('dealerId');
 
         $db   = Zend_Db_Table_Abstract::getDefaultAdapter();
         $form = new UserForm(UserForm::MODE_CREATE, $dealerId);
