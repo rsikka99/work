@@ -11,7 +11,7 @@ class PriceLevelService {
         $id = $db->lastInsertId();
         if ($isDefault) {
             $db->query('update clients set priceLevelId='.intval($id).' where priceLevelId is null and dealerId='.intval($dealerId));
-            $db->query('update dealer_price_levels set isDeault=0 where dealerId=? and id<>?', [$dealerId, $id]);
+            $db->query('update dealer_price_levels set isDefault=0 where dealerId=? and id<>?', [$dealerId, $id]);
         }
         $this->shopifyUpdate($dealerId);
     }
