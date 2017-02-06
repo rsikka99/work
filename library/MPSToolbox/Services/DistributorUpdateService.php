@@ -864,7 +864,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $this->compatibleStatements['st3a'] = $db->prepare("delete from base_printer_cartridge where id=?");
             $this->compatibleStatements['st4'] = $db->prepare("REPLACE INTO compatible_printer_consumable SET oem=?, compatible=?");
             $this->compatibleStatements['st5'] = $db->prepare("insert INTO dealer_toner_attributes SET tonerId=?, dealerId=?, cost=?, dealerSku=?, sellPrice=?");
-            $this->compatibleStatements['st5a'] = $db->prepare("update dealer_toner_attributes SET cost=?, dealerSku=?, sellPrice=? where tonerId=? and dealerId=?");
+            $this->compatibleStatements['st5a'] = $db->prepare("update dealer_toner_attributes SET cost=?, dealerSku=? where tonerId=? and dealerId=?");
+            $this->compatibleStatements['st5b'] = $db->prepare("update dealer_toner_attributes SET cost=?, dealerSku=?, sellPrice=? where tonerId=? and dealerId=?");
             $this->compatibleStatements['st6'] = $db->prepare("update supplier_product set baseProductId=? where supplierId=? and supplierSku=?");
         }
 
@@ -908,7 +909,11 @@ Dealers: " . implode(', ', $affected_dealers) . "
         }
 
         if (isset($this->dealer_toner_attributes[$base_id])) {
-            $this->compatibleStatements['st5a']->execute([$price, $supplierSku, $sellPrice, $base_id, $this->dealerId]);
+            if (!$sellPrice) {
+                $this->compatibleStatements['st5a']->execute([$price, $supplierSku, $base_id, $this->dealerId]);
+            } else {
+                $this->compatibleStatements['st5b']->execute([$price, $supplierSku, $sellPrice, $base_id, $this->dealerId]);
+            }
         } else {
             $this->compatibleStatements['st5']->execute([$base_id, $this->dealerId, $price, $supplierSku, $sellPrice]);
             $this->dealer_toner_attributes[$base_id] = ['tonerId'=>$base_id, 'sellPrice'=>$sellPrice];
