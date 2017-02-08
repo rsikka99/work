@@ -195,8 +195,8 @@ class ClientMapper extends My_Model_Mapper_Abstract
      * @param $id
      * @return \MPSToolbox\Legacy\Modules\QuoteGenerator\Models\ClientModel
      */
-    public function fetchByRmsId($id) {
-        return $this->fetch(['deviceGroup=?'=>$id]);
+    public function fetchByRmsId($dealerId,$deviceGroup) {
+        return $this->fetch(['dealerId=?'=>$dealerId,'deviceGroup=?'=>$deviceGroup]);
     }
 
     public function findByName($dealerId, $name) {

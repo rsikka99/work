@@ -452,14 +452,15 @@ class ClientService
         $arr = [];
         $this->recursivePrintFleet($printFleet->groups(), $ids, $arr);
 
+        $dealerId = DealerEntity::getDealerId();
         $rmsUpdateService = new RmsUpdateService();
 
         foreach ($arr as $group) {
-            $client = ClientMapper::getInstance()->fetchByRmsId($group['id']);
+            $client = ClientMapper::getInstance()->fetchByRmsId($dealerId, $group['id']);
             $group_result='u';
             if (!$client) {
                 $client = new ClientModel();
-                $client->dealerId = DealerEntity::getDealerId();
+                $client->dealerId = $dealerId;
                 $client->deviceGroup = $group['id'];
                 $group_result='i';
             }
