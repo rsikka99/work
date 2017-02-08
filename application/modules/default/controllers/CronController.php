@@ -41,9 +41,11 @@ class Default_CronController extends \Tangent\Controller\Action {
 
             switch ($rmsProviderId) {
                 case 6: { // PrintFleet 3.x
-                    echo "updating PrintFleet client: {$client['clientId']}<br>\n";
-                    $devices = $service->updateFromPrintfleet($client['clientId'], new \MPSToolbox\Api\PrintFleet($client['rmsUri']), $client['deviceGroup']);
-                    $service->checkDevices($devices, $client, $settings->shopSettings);
+                    if (!empty($client['deviceGroup'])) {
+                        echo "updating PrintFleet client: {$client['clientId']}<br>\n";
+                        $devices = $service->updateFromPrintfleet($client['clientId'], new \MPSToolbox\Api\PrintFleet($client['rmsUri']), $client['deviceGroup']);
+                        $service->checkDevices($devices, $client, $settings->shopSettings);
+                    }
                     break;
                 }
                 case 9: { // Lexmark

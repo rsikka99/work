@@ -626,7 +626,7 @@ SELECT c.id as clientId, c.companyName, c.dealerId, c.deviceGroup, c.ecomMonochr
 FROM `clients` c
 JOIN `dealer_settings` ds ON c.dealerId = ds.dealerId
 JOIN `shop_settings` ss ON ds.shopSettingsId = ss.id
-WHERE ss.rmsUri is not null
+WHERE ss.rmsUri is not null and ss.rmsUri<>\'\'
 group by clientId
         ');
     }
