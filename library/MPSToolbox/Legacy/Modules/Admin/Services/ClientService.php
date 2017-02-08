@@ -408,22 +408,33 @@ class ClientService
         $result = [];
         foreach ($printers['PrinterDetails'] as $printer) {
             $assetTag = $printer['AssetTag'];
+
+            $pair = explode('-',$assetTag,2);
+            $lfmId = $pair[0];
+            $realGroupName = $pair[1];
+
             if ($assetTag && in_array($assetTag, $ids)) {
-                $client = ClientMapper::getInstance()->findByName($dealerId, $assetTag);
+                $client = ClientMapper::getInstance()->findByName($dealerId, $realGroupName);
+                if (!$client) {
+                    $client = ClientMapper::getInstance()->findByName($dealerId, $assetTag);
+                }
+                if (!$client) {
+                    $client = ClientMapper::getInstance()->fetchByRmsId($dealerId, $lfmId);
+                }
                 if (!$client) {
                     $client = ClientMapper::getInstance()->fetchByRmsId($dealerId, $assetTag);
                 }
                 if (!$client) {
                     $client = new ClientModel();
                     $client->dealerId = $dealerId;
-                    $client->companyName = $assetTag;
-                    $client->deviceGroup = $assetTag;
+                    $client->companyName = $realGroupName;
+                    $client->deviceGroup = $lfmId;
                     ClientMapper::getInstance()->insert($client);
                     $inserted = true;
                     $result[$client->id] = 'i';
                 } else {
-                    $client->companyName = $assetTag;
-                    $client->deviceGroup = $assetTag;
+                    $client->companyName = $realGroupName;
+                    $client->deviceGroup = $lfmId;
                     $result[$client->id] = 'u';
                     ClientMapper::getInstance()->save($client);
                 }

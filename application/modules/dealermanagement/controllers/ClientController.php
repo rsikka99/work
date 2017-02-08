@@ -396,11 +396,28 @@ class Dealermanagement_ClientController extends Action
                         }
 
                         foreach ($groups as $groupName=>$count) {
+
+                            $pair = explode('-',$groupName,2);
+                            $lfmId = $pair[0];
+                            $realGroupName = $pair[1];
+
                             $icon = 'glyphicon glyphicon glyphicon-user';
                             $state = ['expanded' => true];
                             foreach ($clients as $client) {
-                                if ($client->companyName == $groupName) {
-                                    $state['checked'] = true;
+                                if (!empty($client->deviceGroup)) {
+                                    if ($client->deviceGroup == $lfmId) {
+                                        $state['checked'] = true;
+                                    }
+                                    if ($client->deviceGroup == $realGroupName) {
+                                        $state['checked'] = true;
+                                    }
+                                    if ($client->deviceGroup == $groupName) {
+                                        $state['checked'] = true;
+                                    }
+                                } else {
+                                    if ($client->companyName == $realGroupName) {
+                                        $state['checked'] = true;
+                                    }
                                 }
                             }
 
