@@ -39,22 +39,26 @@ class Default_CronController extends \Tangent\Controller\Action {
                 $rmsProviderId = 6; //PrintFleet 3.x
             }
 
-            switch ($rmsProviderId) {
-                case 6: { // PrintFleet 3.x
-                    if (!empty($client['deviceGroup'])) {
-                        echo "updating PrintFleet client: {$client['clientId']}<br>\n";
-                        $devices = $service->updateFromPrintfleet($client['clientId'], new \MPSToolbox\Api\PrintFleet($client['rmsUri']), $client['deviceGroup']);
-                        $service->checkDevices($devices, $client, $settings->shopSettings);
+            try {
+                switch ($rmsProviderId) {
+                    case 6: { // PrintFleet 3.x
+                        if (!empty($client['deviceGroup'])) {
+                            echo "updating PrintFleet client: {$client['clientId']}<br>\n";
+                            $devices = $service->updateFromPrintfleet($client['clientId'], new \MPSToolbox\Api\PrintFleet($client['rmsUri']), $client['deviceGroup']);
+                            $service->checkDevices($devices, $client, $settings->shopSettings);
+                        }
+                        break;
                     }
-                    break;
+                    case 9: { // Lexmark
+                        echo "updating Lexmark client: {$client['clientId']}<br>\n";
+                        $url = parse_url($client['rmsUri']);
+                        $lfm = new \MPSToolbox\Api\LFM($url);
+                        $service->updateLfm($client['dealerId'], $lfm, $client['rmsGroup'], $client['deviceGroup'] ? $client['deviceGroup'] : $client['companyName']);
+                        break;
+                    }
                 }
-                case 9: { // Lexmark
-                    echo "updating Lexmark client: {$client['clientId']}<br>\n";
-                    $url = parse_url($client['rmsUri']);
-                    $lfm = new \MPSToolbox\Api\LFM($url);
-                    $service->updateLfm($client['dealerId'], $lfm, $client['rmsGroup'], $client['deviceGroup']?$client['deviceGroup']:$client['companyName']);
-                    break;
-                }
+            } catch (\Exception $ex) {
+                echo "updating client failed: {$client['clientId']}: ".$ex->getMessage()."<br>\n";
             }
         }
     }
