@@ -148,8 +148,7 @@ class RmsUpdateService {
     public function updateLfm($dealerId, LFM $lfm, $clientId, $onlyAssetTag=null) {
         $client_lookup = [];
         foreach ($this->getRmsClients() as $line) if ($line['dealerId']==$dealerId) {
-            $clientName = $line['companyName'];
-            $client_lookup[$clientName] = $line;
+            $client_lookup[$line['deviceGroup']] = $line;
         }
 
         $printers = $lfm->getPrintersForClient($clientId);
@@ -173,10 +172,14 @@ class RmsUpdateService {
         foreach ($printers['PrinterDetails'] as $printer) {
             $assetTag = $printer['AssetTag'];
             if (!$assetTag) continue;
-            if ($onlyAssetTag && ($onlyAssetTag!=$assetTag)) continue;
+            $pair = explode('-', $assetTag, 2);
+            $lfmId = $pair[0];
+
+            if ($onlyAssetTag && ($onlyAssetTag!=$assetTag) && ($onlyAssetTag!=$lfmId)) continue;
 
             $client=false;
             if (isset($client_lookup[$assetTag])) $client = $client_lookup[$assetTag];
+            else if (isset($client_lookup[$lfmId])) $client = $client_lookup[$lfmId];
             if (!$client) continue;
 
             $device_instance = RmsDeviceInstanceEntity::findOne($client['clientId'], $printer['IPAddress'], $printer['SerialNumber'], $printer['PrinterId']);

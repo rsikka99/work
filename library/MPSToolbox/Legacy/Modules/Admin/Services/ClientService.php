@@ -405,6 +405,7 @@ class ClientService
         $dealerId = DealerEntity::getDealerId();
         $printers = $lfm->getPrintersForClient($clientId);
         $inserted = false;
+        $updated = false;
         $result = [];
         foreach ($printers['PrinterDetails'] as $printer) {
             $assetTag = $printer['AssetTag'];
@@ -435,12 +436,13 @@ class ClientService
                 } else {
                     $client->companyName = $realGroupName;
                     $client->deviceGroup = $lfmId;
+                    $updated = true;
                     $result[$client->id] = 'u';
                     ClientMapper::getInstance()->save($client);
                 }
             }
         }
-        if ($inserted) {
+        if ($inserted || $updated) {
             $rmsUpdateService = new RmsUpdateService();
             $rmsUpdateService->updateLfm($dealerId, $lfm, $clientId);
         }
