@@ -46,6 +46,11 @@ class Ecommerce_ClientController extends Action
             $client = \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->find($this->view->clientId);
             $client->monitoringEnabled = intval($_GET['monitoringEnabled']);
             \MPSToolbox\Legacy\Modules\QuoteGenerator\Mappers\ClientMapper::getInstance()->save($client);
+            if ($client->monitoringEnabled) {
+                $service = new \MPSToolbox\Services\RmsUpdateService();
+                $client = $service->getRmsClient($this->view->clientId);
+                $service->rmsUpdate($client);
+            }
             $this->redirect('/ecommerce/client');
             return;
         }

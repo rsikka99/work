@@ -631,6 +631,17 @@ group by clientId
         ');
     }
 
+    public function getRmsClient($clientId) {
+        $db = \Zend_Db_Table::getDefaultAdapter();
+        return $db->fetchAll('
+SELECT c.id as clientId, c.companyName, c.dealerId, c.deviceGroup, c.ecomMonochromeRank, c.ecomColorRank, c.templateNum, c.monitoringEnabled, ss.rmsUri, ss.rmsGroup
+FROM `clients` c
+JOIN `dealer_settings` ds ON c.dealerId = ds.dealerId
+JOIN `shop_settings` ss ON ds.shopSettingsId = ss.id
+WHERE c.id = '.$clientId.'
+group by clientId
+        ');
+    }
 
     public function replaceRmsUpdate($data) {
         //'isLeased',
@@ -1070,6 +1081,42 @@ HTML;
         if ($client['monitoringEnabled'] && $sendEmail) {
             echo "sending email...\n";
             $this->sendEmail($client, $this);
+        }
+    }
+
+    public function rmsUpdate($client) {
+        echo "rms update {$client['clientId']}\n";
+
+        $settings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings($client['dealerId']);
+        $rmsProviderId = isset($providers[$client['dealerId']]) ? $providers[$client['dealerId']] : null;
+
+        if (preg_match('#email\=fmaudit\@tangentmtw\.com#',$settings->shopSettings->rmsUri)) {
+            $rmsProviderId = 8; //FM Audit 4.x
+        }
+        if (!empty($root) && preg_match('#^\w+-\w+-\w+-\w+-\w+$#', $root)) {
+            $rmsProviderId = 6; //PrintFleet 3.x
+        }
+
+        try {
+            switch ($rmsProviderId) {
+                case 6: { // PrintFleet 3.x
+                    if (!empty($client['deviceGroup'])) {
+                        echo "updating PrintFleet client: {$client['clientId']}<br>\n";
+                        $devices = $this->updateFromPrintfleet($client['clientId'], new \MPSToolbox\Api\PrintFleet($client['rmsUri']), $client['deviceGroup']);
+                        $this->checkDevices($devices, $client, $settings->shopSettings);
+                    }
+                    break;
+                }
+                case 9: { // Lexmark
+                    echo "updating Lexmark client: {$client['clientId']}<br>\n";
+                    $url = parse_url($client['rmsUri']);
+                    $lfm = new \MPSToolbox\Api\LFM($url);
+                    $this->updateLfm($client['dealerId'], $lfm, $client['rmsGroup'], $client['deviceGroup'] ? $client['deviceGroup'] : $client['companyName']);
+                    break;
+                }
+            }
+        } catch (\Exception $ex) {
+            echo "updating client failed: {$client['clientId']}: ".$ex->getMessage()."<br>\n";
         }
     }
 
