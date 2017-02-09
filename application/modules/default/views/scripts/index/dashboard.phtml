@@ -313,7 +313,7 @@ $hasRmsUpload = $rmsUpload instanceof RmsUploadEntity;
 
         </div>
     </div>
-    <?php if (My_Feature::canAccess(My_Feature::CLIENT_PRICING)) : ?>
+    <?php if (false && My_Feature::canAccess(My_Feature::CLIENT_PRICING)) : ?>
         <h3>Client Pricing</h3>
         <div>There are currently <?= ClientTonerOrderMapper::getInstance()->jqgridFetchAllForClient($this->selectedClientId, Zend_auth::getInstance()->getIdentity()->dealerId, null, 10000, 0, null, null, true); ?> SKUs that this client has pricing for.
             <a class="btn btn-xs btn-primary" href="<?= $this->url([], 'client.pricing'); ?>">Manage Client Pricing</a>
