@@ -17,13 +17,13 @@ class Ecommerce_QuotesController extends Action {
 
         $client = new \GuzzleHttp\Client([]);
 
-        $userId = \MPSToolbox\Legacy\Services\NavigationService::$userId;
+        $userId = $wu = \MPSToolbox\Legacy\Services\NavigationService::$userId;
         $roles = \MPSToolbox\Legacy\Modules\Admin\Mappers\UserRoleMapper::getInstance()->fetchAllRolesForUser($userId);
         foreach ($roles as $role) {
             if ($role->roleId==2) $userId=0; // Company Administrator
             if ($role->roleId==3) $userId=0; // Hardware & Pricing Administrator
         }
-        $url = 'http://quote.tangentmtw.com/api/mpstoolbox.php?shop='.$shop.'.myshopify.com&user='.$userId.'&'.http_build_query($_GET);
+        $url = 'http://quote.tangentmtw.com/api/mpstoolbox.php?shop='.$shop.'.myshopify.com&wu='.$wu.'&user='.$userId.'&'.http_build_query($_GET);
         if ($this->getRequest()->getMethod()=='POST') {
             $response = $client->post($url, [ 'form_params'=>$_POST ]);
         } else {
