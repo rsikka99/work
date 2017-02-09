@@ -54,6 +54,7 @@ if ($is_root) $selectedClientId = 0;
         <thead>
             <tr>
                 <th></th>
+                <th></th>
                 <th>Raw Device Name</th>
                 <th>Model</th>
                 <th>IP Address</th>
@@ -74,7 +75,9 @@ if ($is_root) $selectedClientId = 0;
         <tr><td><i class="fa fa-fw fa-warning text-warning"></i></td><td>Device is mapped but no monitoring data has been received for a week or longer</td><td>Investigate why this device is stale</td></tr>
         <tr><td><i class="fa fa-fw fa-wrench text-danger"></i></td><td>Device is not mapped to a device model</td><td>Map the device</td></tr>
         <tr><td><i class="fa fa-fw fa-bars text-danger"></i></td><td>Device is mapped but there is no cost available for at least one of the supplies, or no supplies are defined</td><td>Enter your costs for the supplies</td></tr>
-        <tr><td><i class="fa fa-fw fa-remove"></i></td><td>Device is ignored</td><td>No action required</td></tr>
+        <tr><td><i class="fa fa-fw fa-remove"></i></td><td>Device is ignored (supply monitoring is off)</td><td>No action required</td></tr>
+        <tr><td><i class="fa fa-fw fa-eye"></i></td><td>Device is visible in the Supply Cupboard</td><td>No action required</td></tr>
+        <tr><td><i class="fa fa-fw fa-eye-slash" style="color:red"></i></td><td>Device is hidden from the Supply Cupboard</td><td>No action required</td></tr>
         <tr><td><i class="fa fa-fw fa-info-circle text-info"></i></td><td>Click this icon for more information about the device</td><td></td></tr>
         </tbody>
     </table>
@@ -92,7 +95,7 @@ if ($is_root) $selectedClientId = 0;
         }
         function doMap(id, name) {
             var tr = '<tr>';
-            tr+= '<td colspan="2"><i class="fa fa-fw"></i>&nbsp;'+name+'</td>';
+            tr+= '<td colspan="3"><i class="fa fa-fw"></i>&nbsp;'+name+'</td>';
             tr+= '<td colspan="3">' +
                 '<table style="width:100%">' +
                     '<tr>' +
@@ -136,6 +139,16 @@ if ($is_root) $selectedClientId = 0;
         }
         function ignoreSingle(id) {
             $.post('/ecommerce/device/ajax-ignore-single', {client:<?= $selectedClientId ?>, instance:id}, function(response) {
+                reloadMe();
+            }, 'json');
+        }
+        function hide(id) {
+            $.post('/ecommerce/device/ajax-hide', {client:<?= $selectedClientId ?>, instance:id}, function(response) {
+                reloadMe();
+            }, 'json');
+        }
+        function unhide(id) {
+            $.post('/ecommerce/device/ajax-hide', {client:<?= $selectedClientId ?>, instance:id, reverse:true}, function(response) {
                 reloadMe();
             }, 'json');
         }
@@ -213,6 +226,7 @@ if ($is_root) $selectedClientId = 0;
             window.dt_table = $('#my-table').DataTable({
                 "columns": [
                     {data: 'icon'},
+                    {data: 'hidden'},
                     {data: 'raw'},
                     {data: 'model'},
                     {data: 'ipAddress'},

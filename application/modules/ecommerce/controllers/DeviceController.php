@@ -96,6 +96,21 @@ class Ecommerce_DeviceController extends Action
         $this->sendJson(['ok'=>true]);
     }
 
+    public function ajaxHideAction() {
+        $clientId = $this->getRequest()->getParam('client');
+        $instanceId = $this->getRequest()->getParam('instance');
+        $reverse = $this->getRequest()->getParam('reverse');
+        /** @var \MPSToolbox\Entities\RmsDeviceInstanceEntity $instance */
+        $instance = \MPSToolbox\Entities\RmsDeviceInstanceEntity::find($instanceId);
+        if ($this->is_root()) $clientId = $instance->getClient()->getId();
+        if ($instance) {
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $st = $db->prepare('UPDATE rms_device_instances SET `hidden`='.($reverse?'0':'1').' where clientId=:clientId and id=:id');
+            $st->execute(['clientId'=>$clientId, 'id'=>$instanceId]);
+        }
+        $this->sendJson(['ok'=>true]);
+    }
+
     public function ajaxTodoAction() {
         $this->view->RenderNavbarNav();
         $client = App_View_Helper_RenderNavbarNav::getIncompleteClientSettings();
@@ -195,6 +210,9 @@ where `ignore`=0 and clientId in (select id from clients where dealerId in (sele
                 </ul>';
             }
 
+            $hidden = '<a href="javascript:;" title="Hide" onclick="hide('.$line['id'].')"><i class="fa fa-fw fa-eye"></i></a>';
+            if ($line['hidden']) $hidden = '<a href="javascript:;" title="Unhide" onclick="unhide('.$line['id'].')" style="color:red"><i class="fa fa-fw fa-eye-slash"></i></a>';
+
             $fullDeviceName = '<a href="javascript:;" onclick="showDetailsModal('.$line['id'].')"><i class="fa fa-fw fa-info-circle text-info"></i></a>&nbsp;' . $fullDeviceName;
 
             $template='<span id="template-'.$line['id'].'" data-value="'.$line['email_template'].'"><span onclick="selectTemplate('.$line['id'].')" style="cursor:pointer">'.($line['email_template']?$line['email_template']:'Client').'</span></span>';
@@ -202,6 +220,7 @@ where `ignore`=0 and clientId in (select id from clients where dealerId in (sele
             $result['data'][] = [
                 'DT_RowId'=>'tr-'.$line['id'],
                 'icon'=>$icon,
+                'hidden'=>$hidden,
                 'model'=>$fullDeviceName,
                 'raw'=>$line['rawDeviceName'],
                 'ipAddress'=>$line['ipAddress'],

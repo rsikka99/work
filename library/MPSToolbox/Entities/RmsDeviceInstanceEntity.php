@@ -59,6 +59,12 @@ class RmsDeviceInstanceEntity extends BaseEntity {
      */
     private $ignore = 0;
 
+    /**
+     * @Column(type="boolean", name="`hidden`")
+     * @var boolean
+     */
+    private $hidden = 0;
+
     /** @Column(type="integer") */
     private $email_template = 0;
 
@@ -286,7 +292,7 @@ class RmsDeviceInstanceEntity extends BaseEntity {
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getIgnore()
     {
@@ -294,12 +300,30 @@ class RmsDeviceInstanceEntity extends BaseEntity {
     }
 
     /**
-     * @param mixed $ignore
+     * @param boolean $ignore
      */
     public function setIgnore($ignore)
     {
         $this->ignore = $ignore;
     }
+
+    /**
+     * @return boolean
+     */
+    public function getHidden()
+    {
+        return $this->hidden;
+    }
+
+    /**
+     * @param boolean $hidden
+     */
+    public function setHidden($hidden)
+    {
+        $this->hidden = $hidden;
+    }
+
+
 
     /**
      * @return mixed
