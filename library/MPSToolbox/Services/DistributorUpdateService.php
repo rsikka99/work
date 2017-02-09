@@ -1488,7 +1488,12 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $upc = $line['UPC Code'];
             $price = $line['Price'];
             $yield = $line['Page Yield'];
-            $this->populateCompatible($db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $yield, $oem_lines);
+
+            $type = null;
+            if ($line['Type']=='MICR') $type='MICR';
+
+            //populateCompatible(\Zend_Db_Adapter_Abstract $db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $pageYield, $oem_lines, $mlYield=null, $colorStr=null, $sellPrice=null, $type=null) {
+            $this->populateCompatible($db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $yield, $oem_lines, null, null, null, $type);
 
             $i++;
         }
