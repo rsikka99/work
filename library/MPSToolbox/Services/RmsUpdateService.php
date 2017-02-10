@@ -902,8 +902,11 @@ group by clientId
                 $device->getMasterDevice()->getManufacturer()->getDisplayname(),
                 $device->getMasterDevice()->getModelName()
             );
+
             $location = '';
             if ($device->getLocation()) $location="Location: <b>{$device->getLocation()}</b><br>\n";
+            $assetId = '';
+            if ($device->getAssetId()) $assetId="Asset ID: <b>{$device->getAssetId()}</b><br>\n";
 
             $color = $device->getToner()->getTonerColor()->getName();
 
@@ -944,6 +947,7 @@ group by clientId
     Serial Number: <b>{$device->getSerialNumber()}</b><br>
     IP Address: <b>{$device->getIpAddress()}</b><br>
     {$location}
+    {$assetId}
     Toner Level {$color}: <b>{$device->getTonerLevel()}%</b><br>
     Estimated Monthly Page Volume: <b>{$ampv}</b><br>
     Estimated time left until toner reaches {$shopSettings->thresholdPercent}%: <b>{$device->getDaysLeft()}</b> days
