@@ -2947,7 +2947,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $product_data = [
                 'supplierSku'=>$line['Item No.'],
                 'manufacturer'=>$line['OEM'],
-                'manufacturerId'=>$manufacturerId,
+                'manufacturerId'=>137, //$manufacturerId, <<<< Qcfl (137) is the manufacturer
                 'vpn'=>$line['OEM Item No.'],
                 'name'=>null,
                 'msrp'=>trim($line['MSRP'],'$'),
