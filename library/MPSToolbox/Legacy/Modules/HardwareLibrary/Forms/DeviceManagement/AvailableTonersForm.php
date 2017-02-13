@@ -179,6 +179,20 @@ class AvailableTonersForm extends \My_Form_Form
             'disabled' => !$this->_isAllowedToEditFields,
         ]);
 
+        $this->addElement('text', 'otherSkus', [
+            'label'      => 'Other Skus',
+            'required'   => false,
+            'maxlength'  => 255,
+            'filters'    => ['StringTrim', 'StripTags'],
+            'validators' => [
+                [
+                    'validator' => 'StringLength',
+                    'options'   => [1, 255],
+                ]
+            ],
+            'disabled' => !$this->_isAllowedToEditFields,
+        ]);
+
         $this->addElement('text', 'name', [
             'label'      => 'Product Name',
             'required'   => false,

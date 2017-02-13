@@ -114,6 +114,7 @@ class TonerModel extends My_Model_Abstract
      * @var string
      */
     public $name = '';
+    public $otherSkus = '';
 
     public $type = null;
     public $compatiblePrinters = null;
@@ -234,6 +235,7 @@ class TonerModel extends My_Model_Abstract
         if (isset($params->compatiblePrinters) && !is_null($params->compatiblePrinters)) $this->compatiblePrinters = $params->compatiblePrinters;
         if (isset($params->mlYield) && !is_null($params->mlYield)) $this->mlYield = $params->mlYield;
         if (isset($params->colorStr) && !is_null($params->colorStr)) $this->colorStr = $params->colorStr;
+        if (isset($params->otherSkus) && !is_null($params->otherSkus)) $this->otherSkus = $params->otherSkus;
     }
 
     public function __get($property) {
@@ -274,6 +276,7 @@ class TonerModel extends My_Model_Abstract
             "compatiblePrinters"      => $this->compatiblePrinters,
             "mlYield"      => $this->mlYield,
             "colorStr"      => $this->colorStr,
+            "otherSkus"      => $this->otherSkus,
         ];
     }
 
@@ -284,6 +287,7 @@ class TonerModel extends My_Model_Abstract
             "userId"         => $this->userId,
             "isSystemProduct" => $this->isSystemDevice,
             "sku"            => $this->sku,
+            "otherSkus"            => $this->otherSkus,
             "name"           => $this->name,
             "manufacturerId" => $this->manufacturerId,
             "imageUrl"       => $this->imageUrl,
