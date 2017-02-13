@@ -17,7 +17,6 @@ defined('DATA_PATH') || define('DATA_PATH', APPLICATION_BASE_PATH . '/data');
 defined('PUBLIC_PATH') || define('PUBLIC_PATH', APPLICATION_BASE_PATH . '/public');
 defined('ASSETS_PATH') || define('ASSETS_PATH', APPLICATION_BASE_PATH . '/assets');
 
-
 /**
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.
