@@ -83,6 +83,13 @@ $toner = $form->getView()->toner;
                             <?= $this->RenderFormElementErrors($form->getElement('sku')) ?>
                         </div>
 
+                        <div class="form-group <?= ($form->getElement('otherSkus')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
+                            <?= $this->RenderFormLabel($form->getElement('otherSkus')) ?>
+                            <?= $this->RenderFormText($form->getElement('otherSkus')) ?>
+                            <?= $this->RenderFormDescription($form->getElement('otherSkus')) ?>
+                            <?= $this->RenderFormElementErrors($form->getElement('otherSkus')) ?>
+                        </div>
+
                         <div class="form-group <?= ($form->getElement('cost')->hasErrors()) ? 'has-error has-feedback' : '' ?>">
                             <?= $this->RenderFormLabel($form->getElement('cost')) ?>
                             <?= $this->RenderFormText($form->getElement('cost'), [], \MPSToolbox\Services\CurrencyService::getSymbol()) ?>
