@@ -22,8 +22,6 @@ class Default_CronController extends \Tangent\Controller\Action {
         $service = new \MPSToolbox\Services\RmsUpdateService();
 
         $clients = $service->getRmsClients();
-        $providers = $service->getDealerRmsProviders();
-
         foreach ($clients as $client) if (!empty($client['rmsUri'])) {
             if ($onlyClientId && ($onlyClientId!=$client['clientId'])) continue;
 

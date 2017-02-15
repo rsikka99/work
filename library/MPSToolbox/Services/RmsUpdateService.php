@@ -1095,12 +1095,14 @@ HTML;
         echo "rms update {$client['clientId']}\n";
 
         $settings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings($client['dealerId']);
+
+        $providers = $this->getDealerRmsProviders();
         $rmsProviderId = isset($providers[$client['dealerId']]) ? $providers[$client['dealerId']] : null;
 
         if (preg_match('#email\=fmaudit\@tangentmtw\.com#',$settings->shopSettings->rmsUri)) {
             $rmsProviderId = 8; //FM Audit 4.x
         }
-        if (!empty($root) && preg_match('#^\w+-\w+-\w+-\w+-\w+$#', $root)) {
+        if (preg_match('#^\w+-\w+-\w+-\w+-\w+$#', $settings->shopSettings->rmsGroup)) {
             $rmsProviderId = 6; //PrintFleet 3.x
         }
 
