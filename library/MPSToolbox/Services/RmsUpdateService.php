@@ -794,6 +794,17 @@ group by clientId
         }
 
         $toner = current($tonerOptions);
+        $lowest_price_per_page = null;
+        foreach ($tonerOptions as $tonerOption) {
+            /** @var $tonerOption TonerEntity */
+            if ($tonerOption->getYield()>0) {
+                $price_per_page = $tonerService->getTonerPrice($tonerOption->getId()) / $tonerOption->getYield();
+                if (!$lowest_price_per_page || ($price_per_page<$lowest_price_per_page)) {
+                    $toner = $tonerOption;
+                    $lowest_price_per_page = $price_per_page;
+                }
+            }
+        }
 
         /** @var \MPSToolbox\Entities\DeviceNeedsTonerEntity $deviceNeedsToner */
         $deviceNeedsToner = \MPSToolbox\Entities\DeviceNeedsTonerEntity::find([
