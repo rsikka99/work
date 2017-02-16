@@ -4,10 +4,6 @@ use Tangent\Controller\Action;
 
 class HardwareLibrary_SupplyMappingController extends Action {
 
-    private function strip_supply($s) {
-        return trim(strtoupper(str_replace('-','',preg_replace('/([#\/]\w+|\(m\)|\(j\))$/i','',$s))));
-    }
-
     public function indexAction() {
         $dealerId = \MPSToolbox\Entities\DealerEntity::getDealerId();
         $this->_pageTitle    = 'Supply Mapping';
@@ -43,6 +39,8 @@ class HardwareLibrary_SupplyMappingController extends Action {
             $this->view->manufacturers = $db->query($sql, [$supplierId]);
             $selectedManufacturer = $this->getParam('manufacturer');
 
+            $distributorUpdateService = new \MPSToolbox\Services\DistributorUpdateService();
+
             if ($selectedManufacturer) {
 
                 $manufacturer_names = [];
@@ -58,13 +56,12 @@ class HardwareLibrary_SupplyMappingController extends Action {
                     $manufacturers[$n] = $line['id'];
                 }
 
+                $supply_lookup = [];
                 $supply_skus = [];
-                $supply_names = [];
-                foreach ($db->query('SELECT id, manufacturerId, sku, name FROM base_product JOIN base_printer_consumable USING (id)') as $line) {
-                    $supply_skus[$line['id']] = $this->strip_supply($line['sku']);
-                    $supply_names[$line['id']] = [];
-                    foreach (explode(',', $line['name']) as $e) {
-                        $supply_names[$line['id']][] = $this->strip_supply($e);
+                foreach ($db->query('SELECT id, manufacturerId, sku, otherSkus FROM base_product JOIN base_printer_consumable USING (id)') as $line) {
+                    $supply_skus[$line['id']] = $distributorUpdateService->strip_sku($line['sku']);
+                    foreach ($distributorUpdateService->lookup_skus($line) as $sku) {
+                        $supply_lookup[$line['manufacturerId']][$sku] = $line['id'];
                     }
                 }
 
@@ -163,18 +160,24 @@ class HardwareLibrary_SupplyMappingController extends Action {
                                 $line['oemSku'] = '<span class="found is-supply">' . $line['oemSku'] . '</span>';
                             } else {
                                 $oemSku = [];
-                                $m = str_replace('-', '', preg_replace('/[#\/]\w\w\w/', '', $line['sku']));
-                                $names = $supply_names[$line['id']];
+                                $m = $distributorUpdateService->strip_sku($line['sku']);
                                 foreach (explode(',', $line['oemSku']) as $str) {
-                                    $str = trim($str);
-                                    if (empty($str)) continue;
-                                    $n = str_replace('-', '', preg_replace('/[#\/]\w\w\w/', '', $str));
+                                    $n = $distributorUpdateService->strip_sku($str);
                                     if (strcasecmp($n, $m) == 0) {
                                         $oemSku[] = '<span class="found is-supply"><a href="javascript:;" onclick="editToner(' . $line['id'] . '); return false;">' . str_replace(' ', '&nbsp;', $str) . '</a></span>';
-                                    } else if (in_array(strtoupper($str), $names)) {
-                                        $oemSku[] = '<span class="found is-alias"><a href="javascript:;" onclick="editToner(' . $line['id'] . '); return false;">' . str_replace(' ', '&nbsp;', $str) . '</a></span>';
                                     } else {
-                                        $oemSku[] = '<span class="not-found">' . str_replace(' ', '&nbsp;', $str) . '</span>';
+                                        $found = false;
+                                        foreach ($mfg_ids as $mfg_id) {
+                                            if (isset($supply_lookup[$mfg_id][$n])) {
+                                                $found = true;
+                                            }
+                                        }
+
+                                        if ($found) {
+                                            $oemSku[] = '<span class="found is-alias"><a href="javascript:;" onclick="editToner(' . $line['id'] . '); return false;">' . str_replace(' ', '&nbsp;', $str) . '</a></span>';
+                                        } else {
+                                            $oemSku[] = '<span class="not-found">' . str_replace(' ', '&nbsp;', $str) . '</span>';
+                                        }
                                     }
                                 }
                                 $line['oemSku'] = implode(' ', $oemSku);
@@ -191,13 +194,21 @@ class HardwareLibrary_SupplyMappingController extends Action {
                             foreach (explode(',', $line['oemSku']) as $str) {
                                 $str = trim($str);
                                 if (empty($str)) continue;
-                                $n = $this->strip_supply($str);
+                                $n = $distributorUpdateService->strip_sku($str);
                                 $found = false;
-                                foreach ($cmp as $cmp_oem_id) {
-                                    $cmp_oem_sku = $supply_skus[$cmp_oem_id];
-                                    if ((strcasecmp($n, $cmp_oem_sku) == 0) || in_array($n, $supply_names[$cmp_oem_id])) {
-                                        $found = $cmp_oem_id;
+                                foreach ($mfg_ids as $mfg_id) {
+                                    if (isset($supply_lookup[$mfg_id][$n])) {
+                                        $found = $supply_lookup[$mfg_id][$n];
                                         $printer_supplies[] = $found;
+                                    }
+                                }
+                                if (!$found) {
+                                    foreach ($cmp as $cmp_oem_id) {
+                                        $cmp_oem_sku = $supply_skus[$cmp_oem_id];
+                                        if (strcasecmp($n, $cmp_oem_sku) == 0) {
+                                            $found = $cmp_oem_id;
+                                            $printer_supplies[] = $found;
+                                        }
                                     }
                                 }
 
