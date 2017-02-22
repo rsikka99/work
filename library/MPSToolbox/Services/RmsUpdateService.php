@@ -794,6 +794,17 @@ group by clientId
         }
 
         $toner = current($tonerOptions);
+        $lowest_price_per_page = null;
+        foreach ($tonerOptions as $tonerOption) {
+            /** @var $tonerOption TonerEntity */
+            if ($tonerOption->getYield()>0) {
+                $price_per_page = $tonerService->getTonerPrice($tonerOption->getId()) / $tonerOption->getYield();
+                if (!$lowest_price_per_page || ($price_per_page<$lowest_price_per_page)) {
+                    $toner = $tonerOption;
+                    $lowest_price_per_page = $price_per_page;
+                }
+            }
+        }
 
         /** @var \MPSToolbox\Entities\DeviceNeedsTonerEntity $deviceNeedsToner */
         $deviceNeedsToner = \MPSToolbox\Entities\DeviceNeedsTonerEntity::find([
@@ -1095,12 +1106,14 @@ HTML;
         echo "rms update {$client['clientId']}\n";
 
         $settings = \MPSToolbox\Settings\Entities\DealerSettingsEntity::getDealerSettings($client['dealerId']);
+
+        $providers = $this->getDealerRmsProviders();
         $rmsProviderId = isset($providers[$client['dealerId']]) ? $providers[$client['dealerId']] : null;
 
         if (preg_match('#email\=fmaudit\@tangentmtw\.com#',$settings->shopSettings->rmsUri)) {
             $rmsProviderId = 8; //FM Audit 4.x
         }
-        if (!empty($root) && preg_match('#^\w+-\w+-\w+-\w+-\w+$#', $root)) {
+        if (preg_match('#^\w+-\w+-\w+-\w+-\w+$#', $settings->shopSettings->rmsGroup)) {
             $rmsProviderId = 6; //PrintFleet 3.x
         }
 

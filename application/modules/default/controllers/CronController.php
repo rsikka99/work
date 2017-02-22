@@ -22,8 +22,6 @@ class Default_CronController extends \Tangent\Controller\Action {
         $service = new \MPSToolbox\Services\RmsUpdateService();
 
         $clients = $service->getRmsClients();
-        $providers = $service->getDealerRmsProviders();
-
         foreach ($clients as $client) if (!empty($client['rmsUri'])) {
             if ($onlyClientId && ($onlyClientId!=$client['clientId'])) continue;
 
@@ -33,7 +31,7 @@ class Default_CronController extends \Tangent\Controller\Action {
 
     public function distributorsAction() {
         set_time_limit(0);
-        ini_set('memory_limit','512M');
+        ini_set('memory_limit','768M');
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_helper->layout->disableLayout();
 

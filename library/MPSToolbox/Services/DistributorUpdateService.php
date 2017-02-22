@@ -25,11 +25,12 @@ class DistributorUpdateService {
     /** @var  \PDOStatement */
     private $base_product_statement;
     /** @var  \PDOStatement */
-    private $sku_statement;
+    private $upc_weight_statement;
 
     private $dealerSupplier;
     private $supplierId;
     private $dealerId;
+    private $consumable_skus;
 
     private $remaining_product = [];
     private $supplier_product = [];
@@ -77,6 +78,31 @@ class DistributorUpdateService {
         }
         error_log('cannot parse yield: '.$str);
         return 0;
+    }
+
+    public function strip_sku($s) {
+        if (empty($s)) return null;
+        $s = strtolower(trim($s));
+        if (empty($s)) return null;
+        if ((strpos($s, '#')!==false) || (strpos($s, '-')!==false) || (strpos($s, ' ')!==false)) {
+            return array_shift(explode('#', str_replace(['-', ' '], ['', ''], $s)));
+        }
+        return $s;
+    }
+
+    public function lookup_skus($line) {
+        $result = [];
+        $sku = $this->strip_sku($line['sku']);
+        if (!empty($sku)) {
+            $result[] = $sku;
+        }
+        if (!empty($line['otherSkus'])) {
+            foreach (explode(',', $line['otherSkus']) as $otherSku) {
+                $otherSku = $this->strip_sku($otherSku);
+                if (!empty($otherSku)) $result[] = $otherSku;
+            }
+        }
+        return $result;
     }
 
     /**
@@ -198,7 +224,7 @@ _md5=:_md5
 
 
         $this->base_product_statement = $db->prepare('update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?');
-        $this->sku_statement = $db->prepare('update base_product set sku=(select vpn from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?');
+        $this->upc_weight_statement = $db->prepare('update base_product set upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?');
 
         #--
         $this->supplier_product = [];
@@ -228,6 +254,15 @@ _md5=:_md5
             $this->dealer_toner_attributes[$line['tonerId']] = $line;
         }
         $cursor->closeCursor();
+
+        #--
+        $this->consumable_skus = [];
+        foreach ($db->query('select * from base_product p join base_printer_consumable c using(id) left join base_printer_cartridge a using(id)')->fetchAll() as $line) {
+            foreach ($this->lookup_skus($line) as $sku) {
+                $this->consumable_skus[$line['manufacturerId']][$sku] = $line;
+            }
+        }
+        #--
 
 
         $cursor = null;
@@ -483,12 +518,6 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
         $oem_cartridges = [];
 
-        $skus = [];
-        foreach ($db->query('select * from base_product p join base_printer_consumable c using(id) left join base_printer_cartridge a using(id)')->fetchAll() as $line) {
-            $sku = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['sku']));
-            $skus[$line['manufacturerId']][$sku] = $line;
-        }
-
         $rename_statement = $db->prepare('update base_product set name=?, sku=? where id=?');
         while ($line = fgetcsv($fp, null, "\t")) {
             while (count($line) > count($columns)) {
@@ -714,11 +743,11 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $found=false;
                 foreach ($e as $n) {
                     $n = trim($n);
-                    if (isset($skus[$oem_mfg_id][$n]) && ($skus[$oem_mfg_id][$n]['yield']==$pageYield)) {
+                    if (isset($this->consumable_skus[$oem_mfg_id][$n]) && ($this->consumable_skus[$oem_mfg_id][$n]['yield']==$pageYield)) {
                         $found=true;
                         if ($n!=$vpn) {
-                            echo "nnnnnnnnn {$n} : {$vpn} : {$skus[$oem_mfg_id][$n]['id']}\n";
-                            $rename_statement->execute([$name, $vpn, $skus[$oem_mfg_id][$n]['id']]);
+                            echo "nnnnnnnnn {$n} : {$vpn} : {$this->consumable_skus[$oem_mfg_id][$n]['id']}\n";
+                            $rename_statement->execute([$name, $vpn, $this->consumable_skus[$oem_mfg_id][$n]['id']]);
                         }
                     }
                 }
@@ -785,8 +814,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 foreach ($e as $n) {
                     $n = str_replace('-', '', trim($n));
                     if (empty($n)) continue;
-                    if (isset($skus[$manufacturerId][$n])) {
-                        $oem_lines[] = $skus[$manufacturerId][$n];
+                    if (isset($this->consumable_skus[$manufacturerId][$n])) {
+                        $oem_lines[] = $this->consumable_skus[$manufacturerId][$n];
                     }
                 }
 
@@ -810,7 +839,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 }
                 /* xxxx */
 
-                $this->populateCompatible($db, $skus, $consumableManufacturerId, $supplierSku, $imgUrl, $name, $weight, null, $line['Price'], $pageYield, $oem_lines, $mlYield, $color);
+                $this->populateCompatible($db, $consumableManufacturerId, $supplierSku, $imgUrl, $name, $weight, null, $line['Price'], $pageYield, $oem_lines, $mlYield, $color);
             }
             #---
             if (($status=='OEM') && $is_consumable) {
@@ -855,7 +884,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
         }
     }
 
-    private function populateCompatible(\Zend_Db_Adapter_Abstract $db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $pageYield, $oem_lines, $mlYield=null, $colorStr=null, $sellPrice=null, $type=null) {
+    private function populateCompatible(\Zend_Db_Adapter_Abstract $db, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $pageYield, $oem_lines, $mlYield=null, $colorStr=null, $sellPrice=null, $type=null) {
         if (empty($this->compatibleStatements)) {
             $this->compatibleStatements['st1'] = $db->prepare("REPLACE INTO base_product SET userId=1, dateCreated=now(), isSystemProduct=1, imageUrl=?, base_type=?, manufacturerId=?, sku=?, name=?, weight=?, UPC=?");
             $this->compatibleStatements['st1a'] = $db->prepare("update base_product SET imageUrl=?, base_type=?, manufacturerId=?, sku=?, name=?, weight=?, UPC=? where id=?");
@@ -876,10 +905,10 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
         $base_id = false;
         $str = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$supplierSku));
-        if (isset($skus[$comp_mfg_id][$supplierSku])) {
-            $base_id = $skus[$comp_mfg_id][$supplierSku]['id'];
-        } else if (isset($skus[$comp_mfg_id][$str])) {
-            $base_id = $skus[$comp_mfg_id][$str]['id'];
+        if (isset($this->consumable_skus[$comp_mfg_id][$supplierSku])) {
+            $base_id = $this->consumable_skus[$comp_mfg_id][$supplierSku]['id'];
+        } else if (isset($this->consumable_skus[$comp_mfg_id][$str])) {
+            $base_id = $this->consumable_skus[$comp_mfg_id][$str]['id'];
         }
 
         if (!$base_id) {
@@ -978,7 +1007,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             'Long Description', // Detailed item description. Same as short description if detailed description not available.
         ];
 
-        $skus = [];
+        $dh_skus = [];
 
         gc_collect_cycles();
         echo "1. ".round(memory_get_usage()/(1024*1024))." MB\n";
@@ -999,8 +1028,6 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
             foreach ($line as $k=>$v) $line[$k] = trim($v);
 
-            $vpn = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['Manuf.Item Number']));
-
             $manufacturerId = null;
             foreach ($manufacturers as $reg=>$id) {
                 if (preg_match($reg, $line['Vendor Name'])) {
@@ -1012,7 +1039,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 'supplierSku'=>$line['D&H Item Number'],
                 'manufacturer'=>$line['Vendor Name'],
                 'manufacturerId'=>$manufacturerId,
-                'vpn'=>$vpn,
+                'vpn'=>$line['Manuf.Item Number'],
                 'name'=>$line['Short Description'],
                 'msrp'=>null,
                 'weight'=>0.453592 * floatval($line['Weight']),
@@ -1045,7 +1072,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 die ('xxx '.$ex->getMessage());
             }
 
-            $skus[$manufacturerId][$vpn] = $line['D&H Item Number'];
+            $vpn = $this->strip_sku($line['Manuf.Item Number']);
+            $dh_skus[$manufacturerId][$vpn] = $line['D&H Item Number'];
             unset($this->remaining_product[$line['D&H Item Number']]);
         }
 
@@ -1054,20 +1082,18 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
         $this->deleteRemainingProducts();
 
-        $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, weight, UPC from base_product");
+        $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, otherSkus, weight, UPC from base_product");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
             $manufacturerId = $line['manufacturerId'];
-            $sku = $line['sku'];
-            if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
-                $sku = $match[1];
-            }
-            if (isset($skus[$manufacturerId][$sku])) {
-                $supplierSku = $skus[$manufacturerId][$sku];
-                //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
-                $this->base_product_statement->execute([$line['id'], $supplierSku]);
-                if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
-                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
-                    $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
+            foreach ($this->lookup_skus($line) as $sku) {
+                if (isset($dh_skus[$manufacturerId][$sku])) {
+                    $supplierSku = $dh_skus[$manufacturerId][$sku];
+                    //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
+                    $this->base_product_statement->execute([$line['id'], $supplierSku]);
+                    if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
+                        //update base_product set upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
+                        $this->upc_weight_statement->execute([$supplierSku, $supplierSku, $line['id']]);
+                    }
                 }
             }
         }
@@ -1120,7 +1146,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $prefixes[$line['prefix']] = $line['manufacturerId'];
         }
 
-        $skus = [];
+        $arli_skus = [];
 
         gc_collect_cycles();
         echo "1. ".round(memory_get_usage()/(1024*1024))." MB\n";
@@ -1136,10 +1162,10 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
             $manufacturerId = null;
 
-            $vpn = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['Item Number']));
+            $item_number = $line['Item Number'];
             foreach ($prefixes as $prefix=>$mfg) {
-                if (strpos($vpn, $prefix)===0) {
-                    $vpn = substr($vpn,3);
+                if (strpos($item_number, $prefix)===0) {
+                    $vpn = substr($item_number,3);
                     $manufacturerId = $mfg;
                 }
             }
@@ -1151,7 +1177,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 'supplierSku'=>$line['Item Number'],
                 'manufacturer'=>$line['prodline'],
                 'manufacturerId'=>$manufacturerId,
-                'vpn'=>$vpn,
+                'vpn'=>$item_number,
                 'name'=>$line['Product Description'],
                 'msrp'=>$line['SRP-List'],
                 'weight'=>0.453592 * floatval($line['Weight']),
@@ -1184,7 +1210,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 die ('xxx '.$ex->getMessage());
             }
 
-            $skus[$manufacturerId][$vpn] = $line['Item Number'];
+            $vpn = $this->strip_sku($item_number);
+            $arli_skus[$manufacturerId][$vpn] = $line['Item Number'];
             unset($this->remaining_product[$line['Item Number']]);
         }
 
@@ -1194,20 +1221,18 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
         $this->deleteRemainingProducts();
 
-        $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, weight, UPC from base_product");
+        $cursor = $db->query("select base_product.id, base_product.manufacturerId, sku, otherSkus, weight, UPC from base_product");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
             $manufacturerId = $line['manufacturerId'];
-            $sku = $line['sku'];
-            if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
-                $sku = $match[1];
-            }
-            if (isset($skus[$manufacturerId][$sku])) {
-                $supplierSku = $skus[$manufacturerId][$sku];
-                //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
-                $this->base_product_statement->execute([$line['id'], $supplierSku]);
-                if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
-                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
-                    $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
+            foreach ($this->lookup_skus($line) as $sku) {
+                if (isset($arli_skus[$manufacturerId][$sku])) {
+                    $supplierSku = $arli_skus[$manufacturerId][$sku];
+                    //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
+                    $this->base_product_statement->execute([$line['id'], $supplierSku]);
+                    if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
+                        //update base_product set upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
+                        $this->upc_weight_statement->execute([$supplierSku, $supplierSku, $line['id']]);
+                    }
                 }
             }
         }
@@ -1245,12 +1270,6 @@ Dealers: " . implode(', ', $affected_dealers) . "
             if ($n=='ITOCHU') $manufacturers['C. ITOH'] = $line['id'];
             if ($n=='ITOCHU') $manufacturers['C.ITOH'] = $line['id'];
             if ($n=='ITOCHU') $manufacturers['C ITOH'] = $line['id'];
-        }
-
-        $skus = [];
-        foreach ($db->query('select * from base_product p join base_printer_consumable c using(id) left join base_printer_cartridge a using(id)')->fetchAll() as $line) {
-            $sku = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['sku']));
-            $skus[$line['manufacturerId']][$sku] = $line;
         }
 
         $fp = fopen($csv_filename,'rb');
@@ -1471,8 +1490,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 if (preg_match('#^(.+)\([A-Z]\)$#', $n, $match)) {
                     $n = $match[1];
                 }
-                if (isset($skus[$oem_mfg_id][$n])) {
-                    $oem_lines[] = $skus[$oem_mfg_id][$n];
+                if (isset($this->consumable_skus[$oem_mfg_id][$n])) {
+                    $oem_lines[] = $this->consumable_skus[$oem_mfg_id][$n];
                 }
             }
             if (empty($oem_lines)) {
@@ -1492,8 +1511,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $type = null;
             if ($line['Type']=='MICR') $type='MICR';
 
-            //populateCompatible(\Zend_Db_Adapter_Abstract $db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $pageYield, $oem_lines, $mlYield=null, $colorStr=null, $sellPrice=null, $type=null) {
-            $this->populateCompatible($db, $skus, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $yield, $oem_lines, null, null, null, $type);
+            //populateCompatible(\Zend_Db_Adapter_Abstract $db, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $pageYield, $oem_lines, $mlYield=null, $colorStr=null, $sellPrice=null, $type=null) {
+            $this->populateCompatible($db, $comp_mfg_id, $supplierSku, $imgUrl, $name, $weight, $upc, $price, $yield, $oem_lines, null, null, null, $type);
 
             $i++;
         }
@@ -1503,6 +1522,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
         $this->total_result['products_total'] = $i;
     }
+
     private function updateGenuine() {
         $base_uri = trim($this->dealerSupplier['url'], '/');
 
@@ -1640,12 +1660,6 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $colors = [];
             foreach ($db->query('select * from toner_colors') as $line) {
                 $colors[$line['name']] = $line['id'];
-            }
-
-            $skus = [];
-            foreach ($db->query('select * from base_product p join base_printer_consumable c using(id) left join base_printer_cartridge a using(id)')->fetchAll() as $line) {
-                $sku = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['sku']));
-                $skus[$line['manufacturerId']][$sku] = $line;
             }
 
             $cols = fgetcsv($fp);
@@ -1814,8 +1828,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 foreach (explode(',', $line['oem']) as $n) {
                     $n = str_replace('-','',trim($n));
                     if (empty($n)) continue;
-                    if (isset($skus[$oem_mfg_id][$n])) {
-                        $oem_lines[] = $skus[$oem_mfg_id][$n];
+                    if (isset($this->consumable_skus[$oem_mfg_id][$n])) {
+                        $oem_lines[] = $this->consumable_skus[$oem_mfg_id][$n];
                     }
                 }
 
@@ -1849,7 +1863,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $upc = $line['upc'];
                 $price = $line['cust_price'];
                 $yield = $line['yield'];
-                $this->populateCompatible($db, $skus, $comp_mfg_id, $line['sku'], $imgUrl, $name, $weight, $upc, $price, $yield, $oem_lines, null, $line['colour']);
+                $this->populateCompatible($db, $comp_mfg_id, $line['sku'], $imgUrl, $name, $weight, $upc, $price, $yield, $oem_lines, null, $line['colour']);
 
                 $i++;
             }
@@ -1936,6 +1950,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $manufacturers[$line['displayname'].'%'] = $line['id'];
         }
         $manufacturer_lookup = [];
+
+        $techdata_skus = [];
 
         $i=0;$j=0;
         $table = new Table($txt_filename);
@@ -2106,7 +2122,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 die ('xxx '.$ex->getMessage());
             }
 
-            $skus[$manufacturerId][$vpn] = $part_num;
+            $techdata_skus[$manufacturerId][$vpn] = $part_num;
             unset($this->remaining_product[$part_num]);
         }
 
@@ -2117,22 +2133,19 @@ Dealers: " . implode(', ', $affected_dealers) . "
         gc_collect_cycles();
         echo "5. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
-        //xxx
-        $cursor = $db->query("select id, manufacturerId, sku, weight, UPC from base_product");
+        $cursor = $db->query("select id, manufacturerId, sku, otherSkus, weight, UPC from base_product");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
             $manufacturerId = $line['manufacturerId'];
-            $sku = $line['sku'];
-            if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
-                $sku = $match[1];
-            }
-            if (isset($skus[$manufacturerId][$sku])) {
-                $supplierSku = $skus[$manufacturerId][$sku];
-                //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
-                $this->base_product_statement->execute([$line['id'], $supplierSku]);
-                #if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
+            foreach ($this->lookup_skus($line) as $sku) {
+                if (isset($techdata_skus[$manufacturerId][$sku])) {
+                    $supplierSku = $techdata_skus[$manufacturerId][$sku];
+                    //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
+                    $this->base_product_statement->execute([$line['id'], $supplierSku]);
+                    #if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
                     //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
-                #    $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
-                #}
+                    #    $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
+                    #}
+                }
             }
         }
         $cursor->closeCursor();
@@ -2374,8 +2387,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $this->base_product_statement->execute([$line['id'], $matnr]);
                 $toner_count += $this->base_product_statement->rowCount();
                 if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
-                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
-                    $this->sku_statement->execute([$matnr, $matnr, $matnr, $line['id']]);
+                    //update base_product set upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
+                    $this->upc_weight_statement->execute([$matnr, $matnr, $line['id']]);
                     $weight_count += $this->sku_statement->rowCount();
                 }
             }
@@ -2395,7 +2408,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $matnr = $category_mattnr['PERIPHERA']['PRINTERSP'][$manufacturerId][$sku];
                 $this->base_product_statement->execute([$line['id'], $matnr]);
                 if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
-                    $this->sku_statement->execute([$matnr, $matnr, $matnr, $line['id']]);
+                    $this->upc_weight_statement->execute([$matnr, $matnr, $line['id']]);
                 }
             }
         }
@@ -2536,7 +2549,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $manufacturers[$line['name']] = $line['manufacturerId'];
         }
 
-        $skus = [];
+        $synnex_skus = [];
 
         //ignore header line
         fgetcsv($fp, null, '~');
@@ -2574,15 +2587,13 @@ Dealers: " . implode(', ', $affected_dealers) . "
             $manufacturerId = null;
             if (isset($manufacturers[$line['Manufacturer_Name']])) $manufacturerId = $manufacturers[$line['Manufacturer_Name']];
 
-            $vpn = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['Manufacturer_Part']));
-
             $sku_Created_Date = \DateTime::createFromFormat('Ymd', $line['SKU_Created_Date']);
 
             $product_data = [
                 'supplierSku'=>$line['SYNNEX_SKU'],
                 'manufacturer'=>$line['Manufacturer_Name'],
                 'manufacturerId'=>$manufacturerId,
-                'vpn'=>$vpn,
+                'vpn'=>$line['Manufacturer_Part'],
                 'name'=>$line['Part_Description'],
                 'msrp'=>$line['MSRP'],
                 'weight'=>0.453592 * floatval($line['Ship_Weight']),
@@ -2632,9 +2643,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 die ('xxx '.$ex->getMessage());
             }
 
-            #$cat = substr($line['SYNNEX_CAT_Code'], 0, 6);
-            #$skus[$cat][$manufacturerId][$vpn] = $line['SYNNEX_SKU'];
-            $skus[$manufacturerId][$vpn] = $line['SYNNEX_SKU'];
+            $vpn = $this->strip_sku($line['Manufacturer_Part']);
+            $synnex_skus[$manufacturerId][$vpn] = $line['SYNNEX_SKU'];
 
             unset($this->remaining_product[$line['SYNNEX_SKU']]);
         }
@@ -2646,48 +2656,22 @@ Dealers: " . implode(', ', $affected_dealers) . "
         gc_collect_cycles();
         echo "5. ".round(memory_get_usage()/(1024*1024))." MB\n";
 
-        //xxx
-        $cursor = $db->query("select id, manufacturerId, sku, weight, UPC from base_product");
+        $cursor = $db->query("select id, manufacturerId, sku, otherSkus, weight, UPC from base_product");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
             $manufacturerId = $line['manufacturerId'];
-            $sku = $line['sku'];
-            if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
-                $sku = $match[1];
-            }
-            if (isset($skus[$manufacturerId][$sku])) {
-                $supplierSku = $skus[$manufacturerId][$sku];
-                //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
-                $this->base_product_statement->execute([$line['id'], $supplierSku]);
-                if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
-                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
-                    $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
-                }
-            }
-        }
-        $cursor->closeCursor();
-
-        /**
-        $cursor = $db->query("select * from base_product where base_type='printer'");
-        while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
-            $manufacturerId = $line['manufacturerId'];
-            $sku = $line['sku'];
-            if (!$sku) continue;
-
-            if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
-                $sku = $match[1];
-            }
-            foreach (['009053','009058','009059','009060'] as $n) {
-                if (isset($skus[$n][$manufacturerId][$sku])) {
-                    $supplierSku = $skus[$n][$manufacturerId][$sku];
+            foreach ($this->lookup_skus($line) as $sku) {
+                if (isset($synnex_skus[$manufacturerId][$sku])) {
+                    $supplierSku = $synnex_skus[$manufacturerId][$sku];
+                    //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
                     $this->base_product_statement->execute([$line['id'], $supplierSku]);
                     if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
-                        $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
+                        //update base_product set upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
+                        $this->upc_weight_statement->execute([$supplierSku, $supplierSku, $line['id']]);
                     }
                 }
             }
         }
         $cursor->closeCursor();
-        **/
 
         gc_collect_cycles();
         echo "6. ".round(memory_get_usage()/(1024*1024))." MB\n";
@@ -2766,7 +2750,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
 'SUBSTITUTE_PART_NUMBER', // - 7 Positions, Alphanumeric, followed by 5 spaces; (Blank Field)=No substitute part number
         ];
 
-        $skus = [];
+        $ingram_skus = [];
 
         gc_collect_cycles();
         echo "1. ".round(memory_get_usage()/(1024*1024))." MB\n";
@@ -2798,8 +2782,6 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 case 'A':
                 case 'C':
                 {
-                    $vpn = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['VENDOR_PART_NUMBER']));
-
                     $manufacturerId = null;
                     foreach ($manufacturers as $reg=>$id) {
                         if (preg_match($reg, $line['VENDOR_NAME'])) {
@@ -2811,7 +2793,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
                         'supplierSku'=>$line['INGRAM_PART_NUMBER'],
                         'manufacturer'=>$line['VENDOR_NAME'],
                         'manufacturerId'=>$manufacturerId,
-                        'vpn'=>$vpn,
+                        'vpn'=>$line['VENDOR_PART_NUMBER'],
                         'name'=>null,
                         'msrp'=>$line['RETAIL_PRICE'],
                         'weight'=>0.453592 * floatval($line['WEIGHT']),
@@ -2843,7 +2825,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
                         die ('xxx '.$ex->getMessage());
                     }
 
-                    $skus[$manufacturerId][$vpn] = $line['INGRAM_PART_NUMBER'];
+                    $vpn = $this->strip_sku($line['VENDOR_PART_NUMBER']);
+                    $ingram_skus[$manufacturerId][$vpn] = $line['INGRAM_PART_NUMBER'];
 
                     unset($this->remaining_product[$line['INGRAM_PART_NUMBER']]);
                     break;
@@ -2856,20 +2839,18 @@ Dealers: " . implode(', ', $affected_dealers) . "
 
         $this->deleteRemainingProducts();
 
-        $cursor = $db->query("select id, manufacturerId, sku, weight, UPC from base_product");
+        $cursor = $db->query("select id, manufacturerId, sku, otherSkus, weight, UPC from base_product");
         while ($line=$cursor->fetch(\PDO::FETCH_ASSOC)) {
             $manufacturerId = $line['manufacturerId'];
-            $sku = $line['sku'];
-            if (preg_match('/^(.+)[#\/]\w\w\w$/', $sku, $match)) {
-                $sku = $match[1];
-            }
-            if (isset($skus[$manufacturerId][$sku])) {
-                $supplierSku = $skus[$manufacturerId][$sku];
-                //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
-                $this->base_product_statement->execute([$line['id'], $supplierSku]);
-                if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
-                    //update base_product set sku=(select vpn from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
-                    $this->sku_statement->execute([$supplierSku, $supplierSku, $supplierSku, $line['id']]);
+            foreach ($this->lookup_skus($line) as $sku) {
+                if (isset($ingram_skus[$manufacturerId][$sku])) {
+                    $supplierSku = $ingram_skus[$manufacturerId][$sku];
+                    //update supplier_product set baseProductId=? where `supplierId`='.$this->supplierId.' and `supplierSku`=?
+                    $this->base_product_statement->execute([$line['id'], $supplierSku]);
+                    if (empty($line['sku']) || empty($line['weight']) || empty($line['UPC'])) {
+                        //update base_product set upc=(select upc from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?), weight=(select weight from supplier_product where `supplierId`='.$this->supplierId.' and `supplierSku`=?) where id=?
+                        $this->upc_weight_statement->execute([$supplierSku, $supplierSku, $line['id']]);
+                    }
                 }
             }
         }
@@ -2911,12 +2892,6 @@ Dealers: " . implode(', ', $affected_dealers) . "
         $colors = [];
         foreach ($db->query('select * from toner_colors') as $line) {
             $colors[$line['name']] = $line['id'];
-        }
-
-        $skus = [];
-        foreach ($db->query('select * from base_product p join base_printer_consumable c using(id) left join base_printer_cartridge a using(id)')->fetchAll() as $line) {
-            $sku = str_replace('-','',preg_replace('/[#\/]\w\w\w/','',$line['sku']));
-            $skus[$line['manufacturerId']][$sku] = $line;
         }
 
         $line = fgetcsv($fp);
@@ -3006,8 +2981,8 @@ Dealers: " . implode(', ', $affected_dealers) . "
                 $n = str_replace('-', '', trim($n));
                 $n = preg_replace('#\((M|J)\)$#','',$n);
                 if (empty($n)) continue;
-                if (isset($skus[$manufacturerId][$n])) {
-                    $oem_lines[] = $skus[$manufacturerId][$n];
+                if (isset($this->consumable_skus[$manufacturerId][$n])) {
+                    $oem_lines[] = $this->consumable_skus[$manufacturerId][$n];
                 }
             }
 
@@ -3041,7 +3016,7 @@ Dealers: " . implode(', ', $affected_dealers) . "
             }
             /* xxxx */
 
-            $base_product_id = $this->populateCompatible($db, $skus, 137, $line['Item No.'], $imgUrl, '', null, null, $price, str_replace(',','', $line['Page Yield']), $oem_lines, 0, $line['Color'], $sell_price, $type);
+            $base_product_id = $this->populateCompatible($db, 137, $line['Item No.'], $imgUrl, '', null, null, $price, str_replace(',','', $line['Page Yield']), $oem_lines, 0, $line['Color'], $sell_price, $type);
             #--
 
         }
